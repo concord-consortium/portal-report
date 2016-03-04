@@ -1,0 +1,49 @@
+@import "variables";
+
+.report-app {
+  margin: 0;
+  padding: 0;
+  color: #3f3f3f;
+  font: 100% verdana, helvetica, sans-serif;
+
+  .header {
+    background: #bddfdf;
+    width: 100%;
+    height: 100px;
+
+    .header-content {
+      width: @report-width;
+      min-width: @min-report-width;
+      height: 100%;
+      margin: 0 auto;
+
+      .logo {
+        height: 65%;
+        margin: 1.15em 0 0;
+      }
+      .status {
+        float: right;
+        margin: 1em;
+        font-size: 0.75em;
+      }
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .clear-fix {
+    clear: both;
+  }
+
+  a {
+    color: #479492;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      color: #da5936;
+    }
+  }
+}

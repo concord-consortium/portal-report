@@ -1,0 +1,70 @@
+@import "variables";
+
+.report {
+  width: @report-width;
+  min-width: @min-report-width;
+  background: #fff;
+  height: auto;
+  min-height: 100%;
+  margin: 0 auto;
+
+  .report-header {
+    margin-top: 1em;
+    margin-bottom: 1em;
+
+    h1, .controls {
+      display: inline-block;
+    }
+    .controls {
+      float: right;
+      a {
+        margin: 0 0.5em;
+      }
+    }
+  }
+
+  h1, h2, h3, h5 {
+    margin-bottom: 1em;
+  }
+  h1 {
+    margin-bottom: .5em;
+    text-transform: uppercase;
+    color: #777;
+    font-size: 1em;
+    font-weight: normal;
+  }
+  h2 {
+    font-size: 1.25em;
+    margin-top: 0;
+    margin-bottom: .25em;
+  }
+  h3 {
+    color: #86b355;
+    font-size: 1em;
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+  h4 {
+    color: #da5936;
+    font-size: 1em;
+    font-weight: normal;
+    margin-left: 1em;
+    padding: 1em;
+  }
+  h5 {
+    background: #8cbbb8;
+    color: #fff;
+    font-size: 1em;
+    font-weight: normal;
+    margin: -1em -1em .5em -1em;
+    padding: 1em;
+  }
+  h5 input[type=checkbox] {
+    margin-right: .5em;
+  }
+  h6 {
+    font-size: 1em;
+    font-weight: normal;
+    margin-bottom: .5em;
+  }
+}

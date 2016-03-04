@@ -1,0 +1,31 @@
+.lightbox-overlay {
+  background: rgba(0,0,0,0.85);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .lightbox-content {
+    z-index: 1001;
+    cursor: default;
+    max-width: 94%;
+    max-height: 94%;
+    overflow: hidden;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: #eee;
+    font-size: 25px;
+    font-weight: bold;
+    vertical-align: top;
+  }
+}

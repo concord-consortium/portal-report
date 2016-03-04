@@ -1,0 +1,38 @@
+@correctColor: #75a643;
+@defColor: #999;
+
+table.multiple-choice-details {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  color: @defColor;
+
+  tr {
+    background: #f3f3f3;
+  }
+
+  td {
+    padding: 1em;
+    border-bottom: solid 2px #fff;
+  }
+
+  td.number {
+    width: 3em;
+  }
+
+  .bar-container {
+    width: 65%;
+  }
+
+  .bar {
+    height: 1.3em;
+    background: @defColor;
+  }
+
+  .correct {
+    color: @correctColor;
+    .bar {
+      background: @correctColor;
+    }
+  }
+}

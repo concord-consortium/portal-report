@@ -1,0 +1,552 @@
+{
+  "report": {
+    "id": 18,
+    "type": "Investigation",
+    "name": "Test Sequence",
+    "children": [
+      {
+        "id": 29,
+        "type": "Activity",
+        "name": "Test Activity 1 (sequence part)",
+        "children": [
+          {
+            "id": 68,
+            "type": "Section",
+            "name": "Test Activity 1 (sequence part) Section",
+            "children": [
+              {
+                "id": 242,
+                "type": "Page",
+                "name": "1",
+                "children": [
+                  {
+                    "id": 116,
+                    "name": "Multiple Choice Question element",
+                    "description": "description ...",
+                    "prompt": "why does ...",
+                    "enable_rationale": false,
+                    "rationale_prompt": "Explain your choice. Give specific examples.",
+                    "allow_multiple_selection": null,
+                    "is_required": false,
+                    "key": "Embeddable::MultipleChoice|116",
+                    "type": "Embeddable::MultipleChoice",
+                    "children": [
+                      {
+                        "answer": [
+                          {
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|116",
+                        "student_id": 13,
+                        "student_name": "John 1"
+                      },
+                      {
+                        "answer": [
+                          {
+                            "choice": "a",
+                            "is_correct": null
+                          },
+                          {
+                            "choice": "b",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|116",
+                        "student_id": 14,
+                        "student_name": "John 2"
+                      },
+                      {
+                        "answer": [
+                          {
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|116",
+                        "student_id": 15,
+                        "student_name": "John 3"
+                      },
+                      {
+                        "student_id": 16,
+                        "student_name": "John 4",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      }
+                    ],
+                    "choices": [
+                      {
+                        "id": 421,
+                        "choice": "a",
+                        "is_correct": true
+                      },
+                      {
+                        "id": 422,
+                        "choice": "b",
+                        "is_correct": false
+                      },
+                      {
+                        "id": 423,
+                        "choice": "c",
+                        "is_correct": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": 252,
+                    "name": "Open Response Question",
+                    "description": "What is the purpose of this question ...?",
+                    "prompt": "why does ...",
+                    "default_response": "",
+                    "rows": 5,
+                    "columns": 32,
+                    "font_size": 12,
+                    "is_required": false,
+                    "key": "Embeddable::OpenResponse|252",
+                    "type": "Embeddable::OpenResponse",
+                    "children": [
+                      {
+                        "answer": "j1 answer",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|252",
+                        "student_id": 13,
+                        "student_name": "John 1"
+                      },
+                      {
+                        "answer": "j2 answer",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|252",
+                        "student_id": 14,
+                        "student_name": "John 2"
+                      },
+                      {
+                        "answer": "j3 answer",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|252",
+                        "student_id": 15,
+                        "student_name": "John 3"
+                      },
+                      {
+                        "student_id": 16,
+                        "student_name": "John 4",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "type": "Activity",
+        "name": "Test Activity 2 (sequence part)",
+        "children": [
+          {
+            "id": 69,
+            "type": "Section",
+            "name": "Test Activity 2 (sequence part) Section",
+            "children": [
+              {
+                "id": 243,
+                "type": "Page",
+                "name": "1",
+                "children": [
+                  {
+                    "id": 117,
+                    "name": "Multiple Choice Question element",
+                    "description": "description ...",
+                    "prompt": "why does ...",
+                    "enable_rationale": false,
+                    "rationale_prompt": "Explain your choice. Give specific examples.",
+                    "allow_multiple_selection": null,
+                    "is_required": false,
+                    "key": "Embeddable::MultipleChoice|117",
+                    "type": "Embeddable::MultipleChoice",
+                    "children": [
+                      {
+                        "answer": [
+                          {
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|117",
+                        "student_id": 13,
+                        "student_name": "John 1"
+                      },
+                      {
+                        "answer": [
+                          {
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|117",
+                        "student_id": 14,
+                        "student_name": "John 2"
+                      },
+                      {
+                        "answer": [
+                          {
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|117",
+                        "student_id": 15,
+                        "student_name": "John 3"
+                      },
+                      {
+                        "student_id": 16,
+                        "student_name": "John 4",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      }
+                    ],
+                    "choices": [
+                      {
+                        "id": 424,
+                        "choice": "a",
+                        "is_correct": null
+                      },
+                      {
+                        "id": 425,
+                        "choice": "b",
+                        "is_correct": null
+                      },
+                      {
+                        "id": 426,
+                        "choice": "c",
+                        "is_correct": null
+                      }
+                    ]
+                  },
+                  {
+                    "id": 253,
+                    "name": "Open Response Question",
+                    "description": "What is the purpose of this question ...?",
+                    "prompt": "why does ...",
+                    "default_response": "",
+                    "rows": 5,
+                    "columns": 32,
+                    "font_size": 12,
+                    "is_required": false,
+                    "key": "Embeddable::OpenResponse|253",
+                    "type": "Embeddable::OpenResponse",
+                    "children": [
+                      {
+                        "answer": "j1 answer",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|253",
+                        "student_id": 13,
+                        "student_name": "John 1"
+                      },
+                      {
+                        "answer": "j2 answer!",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|253",
+                        "student_id": 14,
+                        "student_name": "John 2"
+                      },
+                      {
+                        "answer": "j3 answer!",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|253",
+                        "student_id": 15,
+                        "student_name": "John 3"
+                      },
+                      {
+                        "student_id": 16,
+                        "student_name": "John 4",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": 244,
+                "type": "Page",
+                "name": "2",
+                "children": [
+                  {
+                    "id": 12,
+                    "name": "Embeddable::ImageQuestion element",
+                    "prompt": "why does ...",
+                    "drawing_prompt": null,
+                    "is_required": false,
+                    "key": "Embeddable::ImageQuestion|12",
+                    "type": "Embeddable::ImageQuestion",
+                    "children": [
+                      {
+                        "answer": {
+                          "image_url": "http://localhost:9000/dataservice/blobs/2.blob/28451ee4df7311e5a473b8e856344904",
+                          "note": "j1 snapshot notes"
+                        },
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 13,
+                        "student_name": "John 1"
+                      },
+                      {
+                        "answer": {
+                          "image_url": "http://localhost:9000/dataservice/blobs/3.blob/6389dbd4df7811e59c24b8e856344904",
+                          "note": "j2 note"
+                        },
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 14,
+                        "student_name": "John 2"
+                      },
+                      {
+                        "answer": {
+                          "image_url": "http://localhost:9000/dataservice/blobs/1.blob/2330df24df6911e5bed4b8e856344904",
+                          "note": ""
+                        },
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 15,
+                        "student_name": "John 3"
+                      },
+                      {
+                        "answer": {
+                          "image_url": "http://localhost:9000/dataservice/blobs/5.blob/4574a3fcdfde11e5b8efb8e856344904",
+                          "note": ""
+                        },
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 16,
+                        "student_name": "John 4"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 7,
+                    "name": "Labbook album",
+                    "description": "description ...",
+                    "width": 600,
+                    "height": 500,
+                    "url": null,
+                    "display_in_iframe": true,
+                    "key": "Embeddable::Iframe|7",
+                    "type": "Embeddable::Iframe",
+                    "children": [
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7",
+                        "student_id": 13,
+                        "student_name": "John 1",
+                        "display_in_iframe": true,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7",
+                        "student_id": 14,
+                        "student_name": "John 2",
+                        "display_in_iframe": true,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "student_id": 15,
+                        "student_name": "John 3",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      },
+                      {
+                        "student_id": 16,
+                        "student_name": "John 4",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "type": "Activity",
+        "name": "Test activity 3 (sequence part)",
+        "children": [
+          {
+            "id": 70,
+            "type": "Section",
+            "name": "Test activity 3 (sequence part) Section",
+            "children": [
+              {
+                "id": 245,
+                "type": "Page",
+                "name": "1",
+                "children": [
+                  {
+                    "id": 13,
+                    "name": "Embeddable::ImageQuestion element",
+                    "prompt": "why does ...",
+                    "drawing_prompt": "",
+                    "is_required": false,
+                    "key": "Embeddable::ImageQuestion|13",
+                    "type": "Embeddable::ImageQuestion",
+                    "children": [
+                      {
+                        "answer": {
+                          "image_url": "http://localhost:9000/dataservice/blobs/6.blob/db3ab318dfde11e59688b8e856344904",
+                          "note": "123"
+                        },
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|13",
+                        "student_id": 16,
+                        "student_name": "John 4"
+                      },
+                      {
+                        "student_id": 13,
+                        "student_name": "John 1",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      },
+                      {
+                        "student_id": 14,
+                        "student_name": "John 2",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      },
+                      {
+                        "student_id": 15,
+                        "student_name": "John 3",
+                        "answer": null,
+                        "type": "NoAnswer"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "class": {
+    "name": "test",
+    "students": [
+      {
+        "id": 13,
+        "name": "John 1",
+        "started_offering": true
+      },
+      {
+        "id": 14,
+        "name": "John 2",
+        "started_offering": true
+      },
+      {
+        "id": 15,
+        "name": "John 3",
+        "started_offering": true
+      },
+      {
+        "id": 16,
+        "name": "John 4",
+        "started_offering": true
+      },
+      {
+        "id": 18,
+        "name": "John 5",
+        "started_offering": false
+      }
+    ]
+  },
+  "visibility_filter": {
+    "active": false,
+    "questions": [
+      "Embeddable::MultipleChoice|116",
+      "Embeddable::MultipleChoice|117",
+      "Embeddable::OpenResponse|252",
+      "Embeddable::OpenResponse|253"
+    ]
+  },
+  "anonymous_report": false,
+  "is_offering_external": true
+}
