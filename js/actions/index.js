@@ -60,13 +60,45 @@ export function setQuestionSelected(key, value) {
 }
 
 export function showSelectedQuestions() {
-  return {type: SHOW_SELECTED_QUESTIONS}
+  return (dispatch, getState) => {
+    dispatch({
+      type: SHOW_SELECTED_QUESTIONS,
+      // Send data to server. See: remote-action-middleware.js
+      remote: {
+        data: {
+          visibility_filter: {
+            active: true,
+            questions: getState().getIn(['visibilityFilter', 'selectedQuestions']).toJS()
+          }
+        }
+      }
+    })
+  }
 }
 
 export function showAllQuestions() {
-  return {type: SHOW_ALL_QUESTIONS}
+  return {
+    type: SHOW_ALL_QUESTIONS,
+    // Send data to server. See: remote-action-middleware.js
+    remote: {
+      data: {
+        visibility_filter: {
+          active: false
+        }
+      }
+    }
+  }
 }
 
 export function setAnonymous(value) {
-  return {type: SET_ANONYMOUS, value}
+  return {
+    type: SET_ANONYMOUS,
+    value,
+    // Send data to server. See: remote-action-middleware.js
+    remote: {
+      data: {
+        anonymous_report: value
+      }
+    }
+  }
 }

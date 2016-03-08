@@ -4,7 +4,7 @@ import Report from '../components/report'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    isAnonymous: state.getIn(['students', 'anonymous'])
+    isAnonymous: state.getIn(['students', 'anonymous']),
   }
 }
 

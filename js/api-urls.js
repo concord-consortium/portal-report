@@ -11,7 +11,6 @@ const urlParams = (() => {
   return params
 })()
 
-// Report URL is provided as GET parameter. Other URLS are automatically generated.
+// Report URL is provided as an URL parameter.
 export const REPORT_URL = urlParams['reportUrl']
-export const REPORT_FILTER_URL = `${REPORT_URL}/filter`
-export const REPORT_ANONYMOUS_URL = `${REPORT_URL}/anonymous`
+export const TOKEN = urlParams['token']
