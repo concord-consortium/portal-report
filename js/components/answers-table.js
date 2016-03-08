@@ -29,7 +29,7 @@ export default class AnswersTable extends Component {
             <th>Response</th>
             <th className='select-header'>Select</th>
           </tr>
-          {answers.map(answer => <AnswerRow key={answer.studentId} answer={answer}/>)}
+          {answers.map(answer => <AnswerRow key={answer.get('studentId')} answer={answer}/>)}
         </tbody>
       </table>
     )
@@ -38,10 +38,10 @@ export default class AnswersTable extends Component {
 
 const AnswerRow = ({answer}) => (
   <tr>
-    <td>{answer.student.name}</td>
+    <td>{answer.getIn(['student', 'name'])}</td>
     <td><AnswerBody answer={answer}/></td>
     <td>
-      {answer.type !== 'NoAnswer' ?
+      {answer.get('type') !== 'NoAnswer' ?
         <div>
           <input type='checkbox'/>
           <Button className='select-answer'>Compare/project</Button>
@@ -53,7 +53,7 @@ const AnswerRow = ({answer}) => (
 )
 
 const AnswerBody = ({answer}) => {
-  const AComponent = AnswerComponent[answer.type]
+  const AComponent = AnswerComponent[answer.get('type')]
   if (!AComponent) {
     return <div>Answer type not supported.</div>
   }

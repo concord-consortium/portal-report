@@ -7,7 +7,7 @@ export default class MultipleChoiceAnswer extends Component {
     const { answer } = this.props
     return (
       <div>
-        {answer.answer.map(a => a.choice).join(', ')}
+        {answer.get('answer').map(a => a.get('choice')).join(', ')}
       </div>
     )
   }

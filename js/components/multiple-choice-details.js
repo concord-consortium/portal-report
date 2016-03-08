@@ -28,12 +28,14 @@ function getChoicesStats(choices, answers) {
 @pureRender
 export default class MultipleChoiceDetails extends Component {
   get choices() {
-    // Add fake, no-answer, choice.
-    return [...this.props.question.choices, {choice: 'No response', noAnswer: true}]
+    const choices = this.props.question.get('choices').toJS()
+    // Add fake, no-answer choice.
+    choices.push({choice: 'No response', noAnswer: true})
+    return choices
   }
 
   get answers() {
-    return this.props.question.children
+    return this.props.question.get('children').toJS()
   }
 
   render() {

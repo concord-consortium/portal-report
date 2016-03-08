@@ -13,7 +13,7 @@ export default class IframeAnswer extends Component {
 
   toggleIframe(event) {
     const { answer } = this.props
-    if (answer.displayInIframe) {
+    if (answer.get('displayInIframe')) {
       // If displayInIframe == true, we won't follow the link.
       event.preventDefault()
       this.setState({iframeVisible: !this.state.iframeVisible})
@@ -22,7 +22,7 @@ export default class IframeAnswer extends Component {
 
   renderLink() {
     const { answer } = this.props
-    return <a href={answer.answer} onClick={this.toggleIframe} target='_blank'>View work</a>
+    return <a href={answer.get('answer')} onClick={this.toggleIframe} target='_blank'>View work</a>
   }
 
   renderIframe() {
@@ -30,9 +30,9 @@ export default class IframeAnswer extends Component {
     return (
         <div>
           <div><a href='#' onClick={this.toggleIframe}>Hide</a></div>
-          <iframe src={answer.answer}
-                  width={answer.width || '300px'}
-                  height={answer.height || '300px'}
+          <iframe src={answer.get('answer')}
+                  width={answer.get('width') || '300px'}
+                  height={answer.get('height') || '300px'}
                   style={{border: 'none', marginTop: '0.5em'}}>
           </iframe>
         </div>

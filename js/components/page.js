@@ -7,12 +7,11 @@ export default class Page extends Component {
   render() {
     const { page } = this.props
     return (
-      <div className={`page ${page.visible ? '' : 'hidden'}`}>
-        <h4>Page: {page.name}</h4>
+      <div className={`page ${page.get('visible') ? '' : 'hidden'}`}>
+        <h4>Page: {page.get('name')}</h4>
         <div>
-          {page.children.map((question, idx) => {
-              const id = question.type + question.id
-              return <Question key={id} question={question} number={idx + 1}/>
+          {page.get('children').map((question, idx) => {
+              return <Question key={question.get('key')} question={question} number={idx + 1}/>
           })}
         </div>
       </div>

@@ -7,10 +7,10 @@ export default class Section extends Component {
   render() {
     const { section } = this.props
     return (
-      <div className={`section ${section.visible ? '' : 'hidden'}`}>
-        <span className={section.nameHidden ? 'hidden' : ''}>{section.name}</span>
+      <div className={`section ${section.get('visible') ? '' : 'hidden'}`}>
+        <span className={section.get('nameHidden') ? 'hidden' : ''}>{section.get('name')}</span>
         <div>
-          {section.children.map(p => <Page key={p.id} page={p}/>)}
+          {section.get('children').map(p => <Page key={p.get('id')} page={p}/>)}
         </div>
       </div>
     )

@@ -15,22 +15,24 @@ export default class ImageAnswer extends Component {
 
   renderImageLightbox() {
     const { answer } = this.props
+    const imgAnswer = answer.get('answer')
     return (
       <Lightbox onOverlayClick={() => this.setState({lightboxActive: false})}>
-        <img src={answer.answer.imageUrl}/>
-        <div style={{color: '#fff', fontWeight: 'bold'}}>{answer.student.name}</div>
-        <div style={{color: '#fff'}}>{answer.answer.note}</div>
+        <img src={imgAnswer.get('imageUrl')}/>
+        <div style={{color: '#fff', fontWeight: 'bold'}}>{answer.getIn(['student', 'name'])}</div>
+        <div style={{color: '#fff'}}>{imgAnswer.get('note')}</div>
       </Lightbox>
     )
   }
 
   render() {
     const { answer } = this.props
+    const imgAnswer = answer.get('answer')
     return (
       <div>
         <div className='image-answer'>
-          <img src={answer.answer.imageUrl} onClick={() => this.setState({lightboxActive: true})}/>
-          <div>{answer.answer.note}</div>
+          <img src={imgAnswer.get('imageUrl')} onClick={() => this.setState({lightboxActive: true})}/>
+          <div>{imgAnswer.get('note')}</div>
         </div>
         {this.state.lightboxActive ? this.renderImageLightbox() : ''}
       </div>

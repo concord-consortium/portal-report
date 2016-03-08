@@ -29,17 +29,17 @@ export default class Question extends Component {
 
   handleCheckboxChange(event) {
     const { question, onSelectChange } = this.props
-    onSelectChange(question.key, event.target.checked)
+    onSelectChange(question.get('key'), event.target.checked)
   }
 
   render() {
     const { question, number } = this.props
     const { answersVisible } = this.state
     return (
-      <div className={`question ${question.visible ? '' : 'hidden'}`}>
+      <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
         <div className='question-header'>
           <h5>
-            <input type='checkbox' checked={question.selected} onChange={this.handleCheckboxChange}/>
+            <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
             Question #{number}
             <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
               {answersVisible ? 'Hide responses' : 'Show responses'}
@@ -50,14 +50,14 @@ export default class Question extends Component {
         <div className='details-container'>
           <QuestionDetails question={question}/>
         </div>
-        {answersVisible ? <AnswersTable answers={question.children}/> : ''}
+        {answersVisible ? <AnswersTable answers={question.get('children')}/> : ''}
       </div>
     )
   }
 }
 
 const QuestionDetails = ({question}) => {
-  const QComponent = QuestionComponent[question.type]
+  const QComponent = QuestionComponent[question.get('type')]
   if (!QComponent) {
     return <span></span>
   }

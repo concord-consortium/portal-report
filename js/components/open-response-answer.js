@@ -7,7 +7,7 @@ export default class OpenResponseAnswer extends Component {
     const { answer } = this.props
     return (
       <div>
-        {answer.answer}
+        {answer.get('answer')}
       </div>
     )
   }

@@ -6,19 +6,19 @@ import '../../css/question-summary.less'
 @pureRender
 export default class QuestionSummary extends Component {
   get prompt() {
-    return this.props.question.prompt || this.props.question.name
+    return this.props.question.get('prompt') || this.props.question.get('name')
   }
 
   get answered() {
-    return this.props.question.children.filter(a => a.type !== 'NoAnswer').length
+    return this.props.question.get('children').filter(a => a.type !== 'NoAnswer').size
   }
 
   get notAnswered() {
-    return this.props.question.children.filter(a => a.type === 'NoAnswer').length
+    return this.props.question.get('children').filter(a => a.type === 'NoAnswer').size
   }
 
   get total() {
-    return this.props.question.children.length
+    return this.props.question.get('children').size
   }
 
   render() {

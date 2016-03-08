@@ -20,9 +20,9 @@ function renderImage(src, legend, key) {
 export default class ImageQuestionDetails extends Component {
   get images() {
     const { question } = this.props
-    return question.children.filter(a => a.answer !== null).map(a => {
-      return renderImage(a.answer.imageUrl, a.student.name, a.student.id)
-    })
+    return question.get('children').filter(a => a.get('answer') !== null).map(a => {
+      return renderImage(a.getIn(['answer', 'imageUrl']), a.getIn(['student', 'name']), a.getIn(['student', 'id']))
+    }).toJS()
   }
 
   render() {

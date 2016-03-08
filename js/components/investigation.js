@@ -8,9 +8,9 @@ export default class Investigation extends Component {
     const { investigation } = this.props
     return (
       <div className='investigation'>
-        <h2>{investigation.name}</h2>
+        <h2>{investigation.get('name')}</h2>
         <div>
-          {investigation.children.map(a => <Activity key={a.id} activity={a}/>)}
+          {investigation.get('children').map(a => <Activity key={a.get('id')} activity={a}/>)}
         </div>
       </div>
     )
