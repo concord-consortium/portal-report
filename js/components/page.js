@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import QuestionContainer from '../containers/question'
+import Question from '../containers/question'
 
 @pureRender
 export default class Page extends Component {
   render() {
-    const { pageJSON, hidden } = this.props
+    const { page } = this.props
     return (
-      <div className={`page ${hidden ? 'hidden' : ''}`}>
-        <h4>Page: {pageJSON.name}</h4>
+      <div className={`page ${page.visible ? '' : 'hidden'}`}>
+        <h4>Page: {page.name}</h4>
         <div>
-          {pageJSON.children.map((question, idx) => {
+          {page.children.map((question, idx) => {
               const id = question.type + question.id
-              return <QuestionContainer key={id} questionJSON={question} number={idx + 1}/>
+              return <Question key={id} question={question} number={idx + 1}/>
           })}
         </div>
       </div>

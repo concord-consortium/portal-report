@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import { connect } from 'react-redux'
-import { selectReport, fetchDataIfNeeded, invalidateData } from '../actions'
+import { selectReport, fetchDataIfNeeded, invalidateData,
+         showSelectedQuestions, showAllQuestions, setAnonymous } from '../actions'
 import Button from '../components/button'
-import ReportContainer from './report'
+import Investigation from '../components/investigation'
+import reportTree from '../core/report-tree'
 import ccLogoSrc from '../../img/cc-logo.png'
 
 import '../../css/app.less'
+import '../../css/report.less'
 
 @pureRender
 class App extends Component {
@@ -16,21 +19,22 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchDataIfNeeded())
+    const { fetchDataIfNeeded } = this.props
+    fetchDataIfNeeded()
   }
   
   handleRefreshClick(e) {
     e.preventDefault()
 
-    const { dispatch } = this.props
-    dispatch(invalidateData())
-    dispatch(fetchDataIfNeeded())
+    const { invalidateData, fetchDataIfNeeded } = this.props
+    invalidateData()
+    fetchDataIfNeeded()
   }
 
   render() {
-    const { reportName, reportJSON, isFetching, lastUpdated } = this.props
-    const isEmpty = !reportJSON
+    const { clazzName, report, isFetching, lastUpdated, isAnonymous,
+            showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
+    const isEmpty = !report
     return (
       <div className='report-app'>
         <div className='header'>
@@ -50,7 +54,19 @@ class App extends Component {
         {isEmpty ?
           (isFetching ? <h2>Loading...</h2> : <h2>Empty.</h2>) :
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <ReportContainer reportJSON={reportJSON} reportName={reportName}/>
+            <div className='report'>
+              <div className='report-header'>
+                <h1>
+                  Report for: {clazzName}
+                </h1>
+                <div className='controls'>
+                  <Button onClick={showSelectedQuestions}>Show selected</Button>
+                  <Button onClick={showAllQuestions}>Show all</Button>
+                  <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
+                </div>
+              </div>
+              <Investigation investigation={report}/>
+            </div>
           </div>
         }
       </div>
@@ -64,9 +80,20 @@ function mapStateToProps(state) {
   return {
     isFetching: data.get('isFetching'),
     lastUpdated: data.get('lastUpdated'),
-    reportJSON: report.get('reportJSON'),
-    reportName: report.get('name'),
+    clazzName: report ? report.get('clazzName') : '',
+    isAnonymous: report ? report.get('anonymousReport') : false,
+    report: report ? reportTree(report) : null
   }
 }
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
+    invalidateData: () => dispatch(invalidateData()),
+    showSelectedQuestions: () => dispatch(showSelectedQuestions()),
+    showAllQuestions: () => dispatch(showAllQuestions()),
+    setAnonymous: (value) => dispatch(setAnonymous(value))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

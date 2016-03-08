@@ -52,10 +52,6 @@
                           {
                             "choice": "a",
                             "is_correct": null
-                          },
-                          {
-                            "choice": "b",
-                            "is_correct": null
                           }
                         ],
                         "answered": true,
@@ -541,12 +537,9 @@
   "visibility_filter": {
     "active": false,
     "questions": [
-      "Embeddable::MultipleChoice|116",
-      "Embeddable::MultipleChoice|117",
-      "Embeddable::OpenResponse|252",
-      "Embeddable::OpenResponse|253"
+      "Embeddable::MultipleChoice|116"
     ]
   },
-  "anonymous_report": false,
+  "anonymous_report": true,
   "is_offering_external": true
 }

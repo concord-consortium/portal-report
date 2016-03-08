@@ -1,11 +1,8 @@
-import { Map, Set } from 'immutable'
+import Immutable, { Map, Set } from 'immutable'
 import {
   REQUEST_DATA, RECEIVE_DATA, INVALIDATE_DATA, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS } from '../actions'
-
-// Note that raw data obtained from server has JSON suffix, so it's clear it's not ImmutableJS structure.
-// It's static data, so it doesn't make sense to convert it back into ImmutableJS objects
-// and complicate regular, "dumb" components.
+import transformJSONResponse from '../core/transform-json-response'
 
 function data(state = Map(), action) {
   switch (action.type) {
@@ -22,66 +19,38 @@ function data(state = Map(), action) {
   }
 }
 
-function report(state = Map(), action) {
+function report(state = null, action) {
   switch (action.type) {
     case RECEIVE_DATA:
-      const data = action.data
+      const data = transformJSONResponse(action.data)
       return Map({
-        isExternalActivity: data.is_offering_external,
-        name: data.class.name,
-        // Raw data from server.
-        reportJSON: Object.freeze(data.report)
-      })
-    default:
-      return state
-  }
-}
-
-function visibilityFilter(state = Map(), action) {
-  switch (action.type) {
-    case RECEIVE_DATA:
-      const data = action.data.visibility_filter
-      return Map({
-        active: data.active,
-        visibleQuestions: Set(data.questions),
-        selectedQuestions: Set(data.questions)
+        students: Immutable.fromJS(data.entities.students),
+        investigations: Immutable.fromJS(data.entities.investigations),
+        activities: Immutable.fromJS(data.entities.activities),
+        sections: Immutable.fromJS(data.entities.sections),
+        pages: Immutable.fromJS(data.entities.pages),
+        questions: Immutable.fromJS(data.entities.questions),
+        answers: Immutable.fromJS(data.entities.answers),
+        clazzName: data.result.class.name,
+        visibilityFilterActive: data.result.visibilityFilter.active,
+        anonymousReport: data.result.anonymousReport,
+        hideSectionNames: data.result.isOfferingExternal
       })
     case SET_QUESTION_SELECTED:
-      const selQuestions = state.get('selectedQuestions')
-      const { key, value } = action
-      return state.set('selectedQuestions', value ? selQuestions.add(key) : selQuestions.delete(key))
+      return state.setIn(['questions', action.key, 'selected'], action.value)
     case SHOW_SELECTED_QUESTIONS:
-      return state.set('visibleQuestions', state.get('selectedQuestions'))
-                  .set('active', true)
-    case SHOW_ALL_QUESTIONS:
-      return state.set('active', false)
-    default:
-      return state
-  }
-}
-
-function students(state = Map(), action) {
-  // Reduce list of students into Map(ID -> name).
-  const getStudentNames = (studentsJSON, anonymous) => {
-    return studentsJSON.reduce((map, studentJSON, index) => {
-      return map.set(studentJSON.id, anonymous ? `Student ${index}` : studentJSON.name)
-    }, Map())
-  }
-  switch (action.type) {
-    case RECEIVE_DATA:
-      const data = action.data
-      return Map({
-        // Raw data from server.
-        studentsJSON: Object.freeze(data.class.students),
-        anonymous: data.anonymous_report,
-        studentName: getStudentNames(data.class.students, data.anonymous_report)
+      // For each question: visible = selected
+      return state.withMutations(state => {
+        state.set('visibilityFilterActive', true)
+        state.get('questions').forEach((value, key) => {
+          state = state.setIn(['questions', key, 'visible'], state.getIn(['questions', key, 'selected']))
+        })
+        return state
       })
+    case SHOW_ALL_QUESTIONS:
+      return state.set('visibilityFilterActive', false)
     case SET_ANONYMOUS:
-      return state.set('anonymous', action.value)
-                  // Theoretically we wouldn't have to regenerate this map, we could just use  `anonymous` flag.
-                  // However this approach makes it a bit more bulletproof, any code that needs to get student name
-                  // will simply work, it wouldn't have to worry about the flag value.
-                  .set('studentName', getStudentNames(state.get('studentsJSON'), action.value))
+      return state.set('anonymousReport', action.value)
     default:
       return state
   }
@@ -90,8 +59,6 @@ function students(state = Map(), action) {
 export default function reducer(state = Map(), action) {
   return Map({
     data: data(state.get('data'), action),
-    report: report(state.get('report'), action),
-    visibilityFilter: visibilityFilter(state.get('visibilityFilter'), action),
-    students: students(state.get('students'), action)
+    report: report(state.get('report'), action)
   })
 }

@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import { REPORT_URL } from './api-urls'
+import { REPORT_URL } from './api'
 
 export default store => next => action => {
   const remote = action.remote
@@ -10,7 +10,7 @@ export default store => next => action => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body:  JSON.stringify(remote.data)
+      body: JSON.stringify(remote.data)
     })
   }
   return next(action);

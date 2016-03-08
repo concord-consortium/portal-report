@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import SectionContainer from '../containers/section'
+import Section from './section'
 
 @pureRender
 export default class Activity extends Component {
   render() {
-    const { activityJSON, hidden } = this.props
+    const { activity } = this.props
     return (
-      <div className={`activity ${hidden ? 'hidden' : ''}`}>
-        <h3>{activityJSON.name}</h3>
+      <div className={`activity ${activity.visible ? '' : 'hidden'}`}>
+        <h3>{activity.name}</h3>
         <div>
-          {activityJSON.children.map(s => <SectionContainer key={s.id} sectionJSON={s}/>)}
+          {activity.children.map(s => <Section key={s.id} section={s}/>)}
         </div>
       </div>
     )

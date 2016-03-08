@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import fakeData from 'json!../data/report.json'
-import { REPORT_URL } from '../api-urls'
+import { REPORT_URL } from '../api'
 
 export const INVALIDATE_DATA = 'INVALIDATE_DATA'
 export const REQUEST_DATA = 'REQUEST_DATA'
@@ -34,7 +34,7 @@ function fetchData() {
         .then(response => response.json())
         .then(json => dispatch(receiveData(json)))
     } else {
-      setTimeout(() => dispatch(receiveData(fakeData)), 1000)
+      setTimeout(() => dispatch(receiveData(fakeData)), 500)
     }
   }
 }
@@ -61,6 +61,8 @@ export function setQuestionSelected(key, value) {
 
 export function showSelectedQuestions() {
   return (dispatch, getState) => {
+    const questionsMap = getState().getIn(['report', 'questions'])
+    const selectedQuestionKeys = [...questionsMap.values()].filter(q => q.get('selected')).map(q => q.get('key'))
     dispatch({
       type: SHOW_SELECTED_QUESTIONS,
       // Send data to server. See: remote-action-middleware.js
@@ -68,7 +70,7 @@ export function showSelectedQuestions() {
         data: {
           visibility_filter: {
             active: true,
-            questions: getState().getIn(['visibilityFilter', 'selectedQuestions']).toJS()
+            questions: selectedQuestionKeys
           }
         }
       }

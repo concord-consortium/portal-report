@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import PageContainer from '../containers/page'
+import Page from './page'
 
 @pureRender
 export default class Section extends Component {
   render() {
-    const { sectionJSON, hidden, nameHidden } = this.props
+    const { section } = this.props
     return (
-      <div className={`section ${hidden ? 'hidden' : ''}`}>
-        <span className={nameHidden ? 'hidden' : ''}>{sectionJSON.name}</span>
+      <div className={`section ${section.visible ? '' : 'hidden'}`}>
+        <span className={section.nameHidden ? 'hidden' : ''}>{section.name}</span>
         <div>
-          {sectionJSON.children.map(p => <PageContainer key={p.id} pageJSON={p}/>)}
+          {section.children.map(p => <Page key={p.id} page={p}/>)}
         </div>
       </div>
     )

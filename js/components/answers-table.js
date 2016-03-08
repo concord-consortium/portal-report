@@ -6,7 +6,6 @@ import MultipleChoiceAnswer from './multiple-choice-answer'
 import ImageAnswer from './image-answer'
 import IframeAnswer from './iframe-answer'
 import NoAnswer from './no-answer'
-import StudentName from '../containers/student-name'
 
 import '../../css/answers.less'
 
@@ -21,7 +20,7 @@ const AnswerComponent = {
 @pureRender
 export default class AnswersTable extends Component {
   render() {
-    const { answersJSON, hidden } = this.props
+    const { answers, hidden } = this.props
     return (
       <table className={`answers ${hidden ? 'hidden' : ''}`}>
         <tbody>
@@ -30,19 +29,19 @@ export default class AnswersTable extends Component {
             <th>Response</th>
             <th className='select-header'>Select</th>
           </tr>
-          {answersJSON.map(answerJSON => <AnswerRow key={answerJSON.student_id} answerJSON={answerJSON}/>)}
+          {answers.map(answer => <AnswerRow key={answer.studentId} answer={answer}/>)}
         </tbody>
       </table>
     )
   }
 }
 
-const AnswerRow = ({answerJSON}) => (
+const AnswerRow = ({answer}) => (
   <tr>
-    <td><StudentName id={answerJSON.student_id}/></td>
-    <td><AnswerBody answerJSON={answerJSON}/></td>
+    <td>{answer.student.name}</td>
+    <td><AnswerBody answer={answer}/></td>
     <td>
-      {answerJSON.type !== 'NoAnswer' ?
+      {answer.type !== 'NoAnswer' ?
         <div>
           <input type='checkbox'/>
           <Button className='select-answer'>Compare/project</Button>
@@ -53,10 +52,10 @@ const AnswerRow = ({answerJSON}) => (
   </tr>
 )
 
-const AnswerBody = ({answerJSON}) => {
-  const AComponent = AnswerComponent[answerJSON.type]
+const AnswerBody = ({answer}) => {
+  const AComponent = AnswerComponent[answer.type]
   if (!AComponent) {
     return <div>Answer type not supported.</div>
   }
-  return <AComponent answerJSON={answerJSON}/>
+  return <AComponent answer={answer}/>
 }

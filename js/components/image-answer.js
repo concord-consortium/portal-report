@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Lightbox from './lightbox'
-import StudentName from '../containers/student-name'
 
 import '../../css/image-answer.less'
 
@@ -15,23 +14,23 @@ export default class ImageAnswer extends Component {
   }
 
   renderImageLightbox() {
-    const { answerJSON } = this.props
+    const { answer } = this.props
     return (
       <Lightbox onOverlayClick={() => this.setState({lightboxActive: false})}>
-        <img src={answerJSON.answer.image_url}/>
-        <div style={{color: '#fff', fontWeight: 'bold'}}><StudentName id={answerJSON.student_id}/></div>
-        <div style={{color: '#fff'}}>{answerJSON.answer.note}</div>
+        <img src={answer.answer.imageUrl}/>
+        <div style={{color: '#fff', fontWeight: 'bold'}}>{answer.student.name}</div>
+        <div style={{color: '#fff'}}>{answer.answer.note}</div>
       </Lightbox>
     )
   }
 
   render() {
-    const { answerJSON } = this.props
+    const { answer } = this.props
     return (
       <div>
         <div className='image-answer'>
-          <img src={answerJSON.answer.image_url} onClick={() => this.setState({lightboxActive: true})}/>
-          <div>{answerJSON.answer.note}</div>
+          <img src={answer.answer.imageUrl} onClick={() => this.setState({lightboxActive: true})}/>
+          <div>{answer.answer.note}</div>
         </div>
         {this.state.lightboxActive ? this.renderImageLightbox() : ''}
       </div>

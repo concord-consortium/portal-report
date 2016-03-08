@@ -3,21 +3,21 @@ import pureRender from 'pure-render-decorator'
 
 import '../../css/multiple-choice-details.less'
 
-function noAnswer(answerJSON) {
-  return answerJSON.answer === null
+function noAnswer(answer) {
+  return answer.answer === null
 }
 
-function answerIncludeChoice(answerJSON, choiceJSON) {
-  return !noAnswer(answerJSON) && answerJSON.answer.find(a => a.choice === choiceJSON.choice)
+function answerIncludeChoice(answer, choice) {
+  return !noAnswer(answer) && answer.answer.find(a => a.choice === choice.choice)
 }
 
 function getChoicesStats(choices, answers) {
   let stats = {}
-  const answersFlat = answers.reduce((res, answerJSON) => res.concat(answerJSON.answer), [])
-  choices.forEach((choiceJSON) => {
-    const filterFunc = choiceJSON.noAnswer ? noAnswer : ansJSON => answerIncludeChoice(ansJSON, choiceJSON)
+  const answersFlat = answers.reduce((res, answer) => res.concat(answer.answer), [])
+  choices.forEach((choice) => {
+    const filterFunc = choice.noAnswer ? noAnswer : ans => answerIncludeChoice(ans, choice)
     const count = answers.filter(filterFunc).length
-    stats[choiceJSON.choice] = {
+    stats[choice.choice] = {
       count,
       percent: (count / answersFlat.length * 100).toFixed(1)
     }
@@ -29,11 +29,11 @@ function getChoicesStats(choices, answers) {
 export default class MultipleChoiceDetails extends Component {
   get choices() {
     // Add fake, no-answer, choice.
-    return [...this.props.questionJSON.choices, {choice: 'No response', noAnswer: true}]
+    return [...this.props.question.choices, {choice: 'No response', noAnswer: true}]
   }
 
   get answers() {
-    return this.props.questionJSON.children
+    return this.props.question.children
   }
 
   render() {
@@ -41,9 +41,9 @@ export default class MultipleChoiceDetails extends Component {
     return (
       <table className='multiple-choice-details'>
         <tbody>
-          {this.choices.map((choiceJSON, idx) => {
-            const { choice, is_correct } = choiceJSON
-            return <ChoiceRow key={idx} idx={idx} choice={choice} isCorrect={is_correct}
+          {this.choices.map((choiceDesc, idx) => {
+            const { choice, isCorrect } = choiceDesc
+            return <ChoiceRow key={idx} idx={idx} choice={choice} isCorrect={isCorrect}
                               percent={stats[choice].percent} count={stats[choice].count}/>
           })}
         </tbody>
