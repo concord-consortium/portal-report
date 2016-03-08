@@ -30,16 +30,15 @@ module.exports = {
         loader: 'url-loader?limit=8192'
       },
       {
-        test: /\.(eot|ttf|woff|svg)$/,
-        loader: 'url-loader?limit=1'
+        // Support ?123 suffix, e.g. ../fonts/m4d-icons.eot?3179539#iefix in react-responsive-carousel.less
+        test: /\.(eot|ttf|woff|svg)(\?.*)?$/,
+        loader: 'url-loader?limit=8192'
       }
     ]
   },
   plugins: [
     new CopyWebpackPlugin([
-      {from: 'public'},
-      // Fonts used by react-responsive-carousel
-      {from: 'node_modules/react-responsive-carousel/styles/font', to: 'styles/font'}
+      {from: 'public'}
     ])
   ]
 };

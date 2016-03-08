@@ -3,7 +3,7 @@ import pureRender from 'pure-render-decorator'
 import { Carousel } from 'react-responsive-carousel'
 import StudentName from '../containers/student-name'
 
-import '../../node_modules/react-responsive-carousel/styles/carousel.css'
+import '../../css/react-responsive-carousel.css'
 import '../../css/image-question-details.less'
 
 function renderImage(img) {
