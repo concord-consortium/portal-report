@@ -31,10 +31,35 @@ class App extends Component {
     fetchDataIfNeeded()
   }
 
-  render() {
-    const { clazzName, report, isFetching, lastUpdated, isAnonymous,
+  renderLoadingStatus() {
+    const { isFetching } = this.props
+    return <div className='loading-status'><h2>{isFetching ? 'Loading...' : 'Report data download failed'}</h2></div>
+  }
+
+  renderReport() {
+    const { clazzName, report, isFetching, isAnonymous,
             showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
-    const isEmpty = !report
+    return (
+      <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+        <div className='report'>
+          <div className='report-header'>
+            <h1>
+              Report for: {clazzName}
+            </h1>
+            <div className='controls'>
+              <Button onClick={showSelectedQuestions}>Show selected</Button>
+              <Button onClick={showAllQuestions}>Show all</Button>
+              <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
+            </div>
+          </div>
+          <Investigation investigation={report}/>
+        </div>
+      </div>
+    )
+  }
+
+  render() {
+    const { report, isFetching, lastUpdated } = this.props
     return (
       <div className='report-app'>
         <div className='header'>
@@ -51,24 +76,7 @@ class App extends Component {
             </div>
           </div>
         </div>
-        {isEmpty ?
-          (isFetching ? <h2>Loading...</h2> : <h2>Empty.</h2>) :
-          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <div className='report'>
-              <div className='report-header'>
-                <h1>
-                  Report for: {clazzName}
-                </h1>
-                <div className='controls'>
-                  <Button onClick={showSelectedQuestions}>Show selected</Button>
-                  <Button onClick={showAllQuestions}>Show all</Button>
-                  <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
-                </div>
-              </div>
-              <Investigation investigation={report}/>
-            </div>
-          </div>
-        }
+        {!report ? this.renderLoadingStatus() : this.renderReport()}
       </div>
     )
   }

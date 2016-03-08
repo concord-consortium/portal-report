@@ -26,13 +26,25 @@ function receiveData(json) {
   }
 }
 
+function checkStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response
+  } else {
+    var error = new Error(response.statusText)
+    error.response = response
+    throw error
+  }
+}
+
 function fetchData() {
   return dispatch => {
     dispatch(requestData())
     if (REPORT_URL) {
       return fetch(REPORT_URL)
+        .then(checkStatus)
         .then(response => response.json())
         .then(json => dispatch(receiveData(json)))
+        .catch(error => dispatch(receiveData(null)))
     } else {
       setTimeout(() => dispatch(receiveData(fakeData)), 500)
     }

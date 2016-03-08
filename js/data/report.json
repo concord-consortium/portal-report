@@ -44,8 +44,7 @@
                         "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|116",
-                        "student_id": 13,
-                        "student_name": "John 1"
+                        "student_id": 15
                       },
                       {
                         "answer": [
@@ -60,8 +59,7 @@
                         "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|116",
-                        "student_id": 14,
-                        "student_name": "John 2"
+                        "student_id": 13
                       },
                       {
                         "answer": [
@@ -76,14 +74,13 @@
                         "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|116",
-                        "student_id": 15,
-                        "student_name": "John 3"
+                        "student_id": 14
                       },
                       {
                         "student_id": 16,
-                        "student_name": "John 4",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::MultipleChoice|116"
                       }
                     ],
                     "choices": [
@@ -118,14 +115,22 @@
                     "type": "Embeddable::OpenResponse",
                     "children": [
                       {
+                        "answer": "j3 answer",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|252",
+                        "student_id": 15
+                      },
+                      {
                         "answer": "j1 answer",
                         "answered": true,
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
                         "embeddable_key": "Embeddable::OpenResponse|252",
-                        "student_id": 13,
-                        "student_name": "John 1"
+                        "student_id": 13
                       },
                       {
                         "answer": "j2 answer",
@@ -134,24 +139,13 @@
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
                         "embeddable_key": "Embeddable::OpenResponse|252",
-                        "student_id": 14,
-                        "student_name": "John 2"
-                      },
-                      {
-                        "answer": "j3 answer",
-                        "answered": true,
-                        "submitted": true,
-                        "question_required": false,
-                        "type": "Embeddable::OpenResponse",
-                        "embeddable_key": "Embeddable::OpenResponse|252",
-                        "student_id": 15,
-                        "student_name": "John 3"
+                        "student_id": 14
                       },
                       {
                         "student_id": 16,
-                        "student_name": "John 4",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::OpenResponse|252"
                       }
                     ]
                   }
@@ -201,8 +195,7 @@
                         "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|117",
-                        "student_id": 13,
-                        "student_name": "John 1"
+                        "student_id": 15
                       },
                       {
                         "answer": [
@@ -217,8 +210,7 @@
                         "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|117",
-                        "student_id": 14,
-                        "student_name": "John 2"
+                        "student_id": 13
                       },
                       {
                         "answer": [
@@ -233,14 +225,13 @@
                         "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|117",
-                        "student_id": 15,
-                        "student_name": "John 3"
+                        "student_id": 14
                       },
                       {
                         "student_id": 16,
-                        "student_name": "John 4",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::MultipleChoice|117"
                       }
                     ],
                     "choices": [
@@ -275,14 +266,22 @@
                     "type": "Embeddable::OpenResponse",
                     "children": [
                       {
+                        "answer": "j3 answer!",
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|253",
+                        "student_id": 15
+                      },
+                      {
                         "answer": "j1 answer",
                         "answered": true,
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
                         "embeddable_key": "Embeddable::OpenResponse|253",
-                        "student_id": 13,
-                        "student_name": "John 1"
+                        "student_id": 13
                       },
                       {
                         "answer": "j2 answer!",
@@ -291,24 +290,13 @@
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
                         "embeddable_key": "Embeddable::OpenResponse|253",
-                        "student_id": 14,
-                        "student_name": "John 2"
-                      },
-                      {
-                        "answer": "j3 answer!",
-                        "answered": true,
-                        "submitted": true,
-                        "question_required": false,
-                        "type": "Embeddable::OpenResponse",
-                        "embeddable_key": "Embeddable::OpenResponse|253",
-                        "student_id": 15,
-                        "student_name": "John 3"
+                        "student_id": 14
                       },
                       {
                         "student_id": 16,
-                        "student_name": "John 4",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::OpenResponse|253"
                       }
                     ]
                   }
@@ -330,7 +318,19 @@
                     "children": [
                       {
                         "answer": {
-                          "image_url": "http://localhost:9000/dataservice/blobs/2.blob/28451ee4df7311e5a473b8e856344904",
+                          "image_url": "http://lorempixel.com/600/600/nature/",
+                          "note": ""
+                        },
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 15
+                      },
+                      {
+                        "answer": {
+                          "image_url": "http://lorempixel.com/600/600/cats/",
                           "note": "j1 snapshot notes"
                         },
                         "answered": true,
@@ -338,12 +338,11 @@
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
                         "embeddable_key": "Embeddable::ImageQuestion|12",
-                        "student_id": 13,
-                        "student_name": "John 1"
+                        "student_id": 13
                       },
                       {
                         "answer": {
-                          "image_url": "http://localhost:9000/dataservice/blobs/3.blob/6389dbd4df7811e59c24b8e856344904",
+                          "image_url": "http://lorempixel.com/600/600/sports/",
                           "note": "j2 note"
                         },
                         "answered": true,
@@ -351,12 +350,11 @@
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
                         "embeddable_key": "Embeddable::ImageQuestion|12",
-                        "student_id": 14,
-                        "student_name": "John 2"
+                        "student_id": 14
                       },
                       {
                         "answer": {
-                          "image_url": "http://localhost:9000/dataservice/blobs/1.blob/2330df24df6911e5bed4b8e856344904",
+                          "image_url": "http://lorempixel.com/600/600/city/",
                           "note": ""
                         },
                         "answered": true,
@@ -364,21 +362,7 @@
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
                         "embeddable_key": "Embeddable::ImageQuestion|12",
-                        "student_id": 15,
-                        "student_name": "John 3"
-                      },
-                      {
-                        "answer": {
-                          "image_url": "http://localhost:9000/dataservice/blobs/5.blob/4574a3fcdfde11e5b8efb8e856344904",
-                          "note": ""
-                        },
-                        "answered": true,
-                        "submitted": true,
-                        "question_required": false,
-                        "type": "Embeddable::ImageQuestion",
-                        "embeddable_key": "Embeddable::ImageQuestion|12",
-                        "student_id": 16,
-                        "student_name": "John 4"
+                        "student_id": 16
                       }
                     ]
                   },
@@ -401,7 +385,6 @@
                         "type": "Embeddable::Iframe",
                         "embeddable_key": "Embeddable::Iframe|7",
                         "student_id": 13,
-                        "student_name": "John 1",
                         "display_in_iframe": true,
                         "width": 600,
                         "height": 500
@@ -414,22 +397,21 @@
                         "type": "Embeddable::Iframe",
                         "embeddable_key": "Embeddable::Iframe|7",
                         "student_id": 14,
-                        "student_name": "John 2",
                         "display_in_iframe": true,
                         "width": 600,
                         "height": 500
                       },
                       {
                         "student_id": 15,
-                        "student_name": "John 3",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::Iframe|7"
                       },
                       {
                         "student_id": 16,
-                        "student_name": "John 4",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::Iframe|7"
                       }
                     ]
                   }
@@ -465,7 +447,7 @@
                     "children": [
                       {
                         "answer": {
-                          "image_url": "http://localhost:9000/dataservice/blobs/6.blob/db3ab318dfde11e59688b8e856344904",
+                          "image_url": "http://lorempixel.com/600/600/nature/",
                           "note": "123"
                         },
                         "answered": true,
@@ -473,26 +455,25 @@
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
                         "embeddable_key": "Embeddable::ImageQuestion|13",
-                        "student_id": 16,
-                        "student_name": "John 4"
+                        "student_id": 16
                       },
                       {
                         "student_id": 13,
-                        "student_name": "John 1",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::ImageQuestion|13"
                       },
                       {
                         "student_id": 14,
-                        "student_name": "John 2",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::ImageQuestion|13"
                       },
                       {
                         "student_id": 15,
-                        "student_name": "John 3",
                         "answer": null,
-                        "type": "NoAnswer"
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::ImageQuestion|13"
                       }
                     ]
                   }
@@ -540,6 +521,6 @@
       "Embeddable::MultipleChoice|116"
     ]
   },
-  "anonymous_report": true,
+  "anonymous_report": false,
   "is_offering_external": true
 }

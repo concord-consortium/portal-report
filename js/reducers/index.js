@@ -22,6 +22,7 @@ function data(state = Map(), action) {
 function report(state = null, action) {
   switch (action.type) {
     case RECEIVE_DATA:
+      if (action.data === null) return null
       const data = transformJSONResponse(action.data)
       return Map({
         students: Immutable.fromJS(data.entities.students),
