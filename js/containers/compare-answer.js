@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { setAnswerSelectedForCompare } from '../actions'
 
 @pureRender
-export class SelectAnswerForCompareCheckbox extends Component {
+export class CompareAnswerCheckbox extends Component {
   render() {
     const { answer, onChange } = this.props
     return (
@@ -14,11 +14,22 @@ export class SelectAnswerForCompareCheckbox extends Component {
   }
 }
 
+export class CompareAnswerRmLink extends Component {
+  render() {
+    const { answer, onChange, children } = this.props
+    return (
+      <a onClick={(e) => onChange(answer.get('key'), false)}>{children}</a>
+    )
+  }
+}
+
+// AddLink would be simple too, but there is no use case for it yet.
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onChange: (key, value) => dispatch(setAnswerSelectedForCompare(key, value))
   }
 }
 
-const SelectAnswerForCompare = connect(null, mapDispatchToProps)(SelectAnswerForCompareCheckbox)
-export default SelectAnswerForCompare
+export const CompareAnswerCheckboxContainer = connect(null, mapDispatchToProps)(CompareAnswerCheckbox)
+export const CompareAnswerRmLinkContainer = connect(null, mapDispatchToProps)(CompareAnswerRmLink)

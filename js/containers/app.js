@@ -65,7 +65,7 @@ class App extends Component {
   renderCompareView() {
     const { compareViewAnswers, hideCompareView } = this.props
     return (
-      <Modal show={!!compareViewAnswers} bsStyle='compare-view' onHide={hideCompareView}>
+      <Modal show={!!compareViewAnswers && compareViewAnswers.size > 0} bsStyle='compare-view' onHide={hideCompareView}>
         <Modal.Body>
           {compareViewAnswers ? <CompareView answers={compareViewAnswers}/> : null}
         </Modal.Body>

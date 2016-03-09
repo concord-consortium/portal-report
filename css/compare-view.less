@@ -12,19 +12,35 @@
     margin: 5px;
     padding: 5px;
     background: #fff;
+    
+    &.highlighted {
+      background: rgb(254, 233, 170);
+    }
+    &.hidden {
+      display: none;
+    }
   }
 
   .answer {
     margin-top: 0.5em;
   }
 
-  /* Center images in image question answers */
+  .controls {
+    float: right;
+    font-size: 0.7em;
+  }
+
+  /* Modify style of particular answers INSIDE compare view: */
   .image-answer img {
+    /* Image answer is bigger and centered. */
     display: block;
     margin: 0 auto;
+    width: auto;
+    max-width: 500px;
   }
 
   .iframe-answer iframe {
+    /* Iframe is smaller and centered. */
     max-width: 500px;
     max-height: 500px;
     display: block;

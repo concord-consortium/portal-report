@@ -22,5 +22,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-const ShowCompare = connect(null, mapDispatchToProps)(ShowCompareButton)
-export default ShowCompare
+const ShowCompareContainer = connect(null, mapDispatchToProps)(ShowCompareButton)
+export default ShowCompareContainer

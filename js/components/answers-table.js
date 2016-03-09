@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Answer from './answer'
-import SelectAnswerForCompare from '../containers/select-answer-for-compare'
-import ShowCompare from '../containers/show-compare'
+import { CompareAnswerCheckboxContainer } from '../containers/compare-answer'
+import ShowCompareContainer from '../containers/show-compare'
 
 import '../../css/answers.less'
-
 
 @pureRender
 export default class AnswersTable extends Component {
@@ -33,8 +32,8 @@ const AnswerRow = ({answer}) => (
     <td>
       {answer.get('type') !== 'NoAnswer' ?
         <div>
-          <SelectAnswerForCompare answer={answer}/>
-          <ShowCompare answer={answer}/>
+          <CompareAnswerCheckboxContainer answer={answer}/>
+          <ShowCompareContainer answer={answer}/>
         </div>
         :
         ''}

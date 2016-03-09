@@ -55,6 +55,12 @@ function report(state = null, action) {
     case SET_ANONYMOUS:
       return state.set('anonymousReport', action.value)
     case SET_ANSWER_SELECTED_FOR_COMPARE:
+      const compareViewAns = state.get('compareViewAnswers')
+      if (compareViewAns) {
+        // If compare view is open and user unselect given answer, remove it from the compare set too.
+        // It's possible, as there is "Remove" link in the compare view.
+        state = state.set('compareViewAnswers', compareViewAns.delete(action.key))
+      }
       return state.setIn(['answers', action.key, 'selectedForCompare'], action.value)
     case SHOW_COMPARE_VIEW:
       const selectedAnswerKeys = state.get('answers')
