@@ -30,7 +30,7 @@ export default class ImageQuestionDetails extends Component {
     this.saveSelectedAnswer = this.saveSelectedAnswer.bind(this)
   }
 
-  openModal(imageIndex) {
+  openModal() {
     this.setState({modalOpen: true})
   }
 
@@ -38,22 +38,23 @@ export default class ImageQuestionDetails extends Component {
     this.setState({modalOpen: false})
   }
 
-  // I'm surprised that we need to save selected answer, but otherwise it seems to lose its state each time
-  // we re-render. I don't know why, but it seems quite easy and it was the best react carousel I've found. ;)
   saveSelectedAnswer(index) {
     this.setState({selectedAnswer: index})
   }
 
   get images() {
     const { question } = this.props
-    return question.get('children').filter(a => a.get('answer') !== null).map(a => {
+    return question.get('children').filter(a => a.get('answer') !== null)
+  }
+
+  renderImages() {
+    return this.images.map(a => {
       return renderImage(a.getIn(['answer', 'imageUrl']), a.getIn(['student', 'name']), a.getIn(['student', 'id']))
     }).toJS()
   }
 
   get selectedAnswerProps() {
-    const { question } = this.props
-    return question.get('children').get(this.state.selectedAnswer)
+    return this.images.get(this.state.selectedAnswer)
   }
 
   render() {
@@ -61,7 +62,7 @@ export default class ImageQuestionDetails extends Component {
       <div className='image-question-details'>
         <Carousel axis='horizontal' selectedItem={this.state.selectedAnswer} onChange={this.saveSelectedAnswer}
                   showIndicators={false} showThumbs={true} showArrows={true} onClickItem={this.openModal}>
-          {this.images}
+          {this.renderImages()}
         </Carousel>
         <ImageAnswerModal answer={this.selectedAnswerProps} show={this.state.modalOpen} onHide={this.hideModal}/>
       </div>
