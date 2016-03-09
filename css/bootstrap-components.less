@@ -15,14 +15,13 @@
   padding: 5px;
 }
 
-
-/* Resize content to fit the dialog */
-.modal-body > * {
-  width: 588px;
+.modal-dialog {
+  width: 75%;
 }
 
-.modal-lg .modal-body > * {
-  width: 888px;
+/* Resize content to fit the dialog. Bootstrap doesn't do it, so images can overflow the modal dialog. */
+.modal-body > * {
+  max-width: 100%;
 }
 
 .modal-footer {

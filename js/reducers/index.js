@@ -1,7 +1,9 @@
 import Immutable, { Map, Set } from 'immutable'
 import {
   REQUEST_DATA, RECEIVE_DATA, INVALIDATE_DATA, SET_ANONYMOUS,
-  SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS } from '../actions'
+  SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
+  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW} from '../actions'
+
 import transformJSONResponse from '../core/transform-json-response'
 
 function data(state = Map(), action) {
@@ -52,6 +54,16 @@ function report(state = null, action) {
       return state.set('visibilityFilterActive', false)
     case SET_ANONYMOUS:
       return state.set('anonymousReport', action.value)
+    case SET_ANSWER_SELECTED_FOR_COMPARE:
+      return state.setIn(['answers', action.key, 'selectedForCompare'], action.value)
+    case SHOW_COMPARE_VIEW:
+      const selectedAnswerKeys = state.get('answers')
+                                      .filter(a => a.get('selectedForCompare') && a.get('embeddableKey') === action.embeddableKey)
+                                      .map(a => a.get('key'))
+                                      .values()
+      return state.set('compareViewAnswers', Set(selectedAnswerKeys))
+    case HIDE_COMPARE_VIEW:
+      return state.set('compareViewAnswers', null)
     default:
       return state
   }

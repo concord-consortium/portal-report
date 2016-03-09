@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import { connect } from 'react-redux'
-import { selectReport, fetchDataIfNeeded, invalidateData,
+import { selectReport, fetchDataIfNeeded, invalidateData, hideCompareView,
          showSelectedQuestions, showAllQuestions, setAnonymous } from '../actions'
+import { Modal } from 'react-bootstrap'
 import Button from '../components/button'
+import CompareView from '../components/compare-view'
 import Investigation from '../components/investigation'
-import reportTree from '../core/report-tree'
 import ccLogoSrc from '../../img/cc-logo.png'
+// (...)Data functions accept some state and return data in a form suitable for 'dumb' components.
+import reportData from '../core/report-data'
+import compareViewData from '../core/compare-view-data'
 
 import '../../css/app.less'
 import '../../css/report.less'
@@ -58,8 +62,19 @@ class App extends Component {
     )
   }
 
+  renderCompareView() {
+    const { compareViewAnswers, hideCompareView } = this.props
+    return (
+      <Modal show={!!compareViewAnswers} bsStyle='compare-view' onHide={hideCompareView}>
+        <Modal.Body>
+          {compareViewAnswers ? <CompareView answers={compareViewAnswers}/> : null}
+        </Modal.Body>
+      </Modal>
+    )
+  }
+
   render() {
-    const { report, isFetching, lastUpdated } = this.props
+    const { report, isFetching, lastUpdated, compareView } = this.props
     return (
       <div className='report-app'>
         <div className='header'>
@@ -76,7 +91,8 @@ class App extends Component {
             </div>
           </div>
         </div>
-        {!report ? this.renderLoadingStatus() : this.renderReport()}
+        {report ? this.renderReport() : this.renderLoadingStatus()}
+        {this.renderCompareView()}
       </div>
     )
   }
@@ -84,13 +100,15 @@ class App extends Component {
 
 function mapStateToProps(state) {
   const data = state.get('data')
-  const report = state.get('report')
+  const reportState = state.get('report')
+  const compareViewAnswers = reportState && reportState.get('compareViewAnswers')
   return {
     isFetching: data.get('isFetching'),
     lastUpdated: data.get('lastUpdated'),
-    clazzName: report ? report.get('clazzName') : '',
-    isAnonymous: report ? report.get('anonymousReport') : false,
-    report: report ? reportTree(report) : null
+    clazzName: reportState ? reportState.get('clazzName') : '',
+    isAnonymous: reportState ? reportState.get('anonymousReport') : false,
+    report: reportState ? reportData(reportState) : null,
+    compareViewAnswers: compareViewAnswers ? compareViewData(reportState) : null
   }
 }
 
@@ -100,7 +118,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     invalidateData: () => dispatch(invalidateData()),
     showSelectedQuestions: () => dispatch(showSelectedQuestions()),
     showAllQuestions: () => dispatch(showAllQuestions()),
-    setAnonymous: (value) => dispatch(setAnonymous(value))
+    setAnonymous: (value) => dispatch(setAnonymous(value)),
+    hideCompareView: () => dispatch(hideCompareView())
   }
 }
 

@@ -10,7 +10,7 @@ export default class ImageAnswerModal extends Component {
     return (
       <Modal show={show} onHide={onHide}>
         <Modal.Body>
-          <img src={answer.getIn(['answer', 'imageUrl'])}/>
+          <img src={answer.getIn(['answer', 'imageUrl'])} style={{display: 'block', margin: '0 auto'}}/>
         </Modal.Body>
         <Modal.Footer>
           <div style={{fontWeight: 'bold'}}>{answer.getIn(['student', 'name'])}</div>

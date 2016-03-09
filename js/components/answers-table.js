@@ -1,21 +1,11 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import Button from './button'
-import OpenResponseAnswer from './open-response-answer'
-import MultipleChoiceAnswer from './multiple-choice-answer'
-import ImageAnswer from './image-answer'
-import IframeAnswer from './iframe-answer'
-import NoAnswer from './no-answer'
+import Answer from './answer'
+import SelectAnswerForCompare from '../containers/select-answer-for-compare'
+import ShowCompare from '../containers/show-compare'
 
 import '../../css/answers.less'
 
-const AnswerComponent = {
-  'Embeddable::OpenResponse': OpenResponseAnswer,
-  'Embeddable::MultipleChoice': MultipleChoiceAnswer,
-  'Embeddable::ImageQuestion': ImageAnswer,
-  'Embeddable::Iframe': IframeAnswer,
-  'NoAnswer': NoAnswer
-}
 
 @pureRender
 export default class AnswersTable extends Component {
@@ -39,23 +29,15 @@ export default class AnswersTable extends Component {
 const AnswerRow = ({answer}) => (
   <tr>
     <td>{answer.getIn(['student', 'name'])}</td>
-    <td><AnswerBody answer={answer}/></td>
+    <td><Answer answer={answer}/></td>
     <td>
       {answer.get('type') !== 'NoAnswer' ?
         <div>
-          <input type='checkbox'/>
-          <Button className='select-answer'>Compare/project</Button>
+          <SelectAnswerForCompare answer={answer}/>
+          <ShowCompare answer={answer}/>
         </div>
         :
         ''}
     </td>
   </tr>
 )
-
-const AnswerBody = ({answer}) => {
-  const AComponent = AnswerComponent[answer.get('type')]
-  if (!AComponent) {
-    return <div>Answer type not supported.</div>
-  }
-  return <AComponent answer={answer}/>
-}

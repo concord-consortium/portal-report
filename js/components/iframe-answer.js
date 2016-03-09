@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 
+import '../../css/iframe-answer.less'
+
 @pureRender
 export default class IframeAnswer extends Component {
   constructor(props) {
@@ -26,10 +28,10 @@ export default class IframeAnswer extends Component {
   }
 
   renderIframe() {
-    const { answer } = this.props
+    const { answer, alwaysOpen } = this.props
     return (
         <div>
-          <div><a href='#' onClick={this.toggleIframe}>Hide</a></div>
+          {!alwaysOpen ? <div><a href='#' onClick={this.toggleIframe}>Hide</a></div> : ''}
           <iframe src={answer.get('answer')}
                   width={answer.get('width') || '300px'}
                   height={answer.get('height') || '300px'}
@@ -40,10 +42,11 @@ export default class IframeAnswer extends Component {
   }
 
   render() {
+    const { alwaysOpen } = this.props
     const { iframeVisible } = this.state
     return (
-      <div>
-        {iframeVisible ? this.renderIframe() : this.renderLink()}
+      <div className='iframe-answer'>
+        {iframeVisible || alwaysOpen ? this.renderIframe() : this.renderLink()}
       </div>
     )
   }

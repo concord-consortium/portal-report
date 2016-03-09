@@ -9,6 +9,9 @@ export const SET_ANONYMOUS = 'SET_ANONYMOUS'
 export const SET_QUESTION_SELECTED = 'SET_QUESTION_SELECTED'
 export const SHOW_SELECTED_QUESTIONS = 'SHOW_SELECTED_QUESTIONS'
 export const SHOW_ALL_QUESTIONS = 'SHOW_ALL_QUESTIONS'
+export const SET_ANSWER_SELECTED_FOR_COMPARE = 'SET_ANSWER_SELECTED_FOR_COMPARE'
+export const SHOW_COMPARE_VIEW = 'SHOW_COMPARE_VIEW'
+export const HIDE_COMPARE_VIEW = 'HIDE_COMPARE_VIEW'
 
 function requestData() {
   return {type: REQUEST_DATA}
@@ -115,4 +118,16 @@ export function setAnonymous(value) {
       }
     }
   }
+}
+
+export function setAnswerSelectedForCompare(key, value) {
+  return {type: SET_ANSWER_SELECTED_FOR_COMPARE, key, value}
+}
+
+export function showCompareView(embeddableKey) {
+  return {type: SHOW_COMPARE_VIEW, embeddableKey}
+}
+
+export function hideCompareView() {
+  return {type: HIDE_COMPARE_VIEW}
 }
