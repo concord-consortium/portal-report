@@ -1,0 +1,30 @@
+/* Add minimal number of bootstrap styles. Add more as you're using more components from react-bootstrap. */
+@import "variables";
+
+@import '~bootstrap/less/variables.less';
+@import '~bootstrap/less/mixins.less';
+@import '~bootstrap/less/component-animations.less';
+@import '~bootstrap/less/modals.less';
+
+.modal-content {
+  color: @color;
+  font: @font;
+}
+
+.modal-dialog .modal-body {
+  padding: 5px;
+}
+
+
+/* Resize content to fit the dialog */
+.modal-body > * {
+  width: 588px;
+}
+
+.modal-lg .modal-body > * {
+  width: 888px;
+}
+
+.modal-footer {
+  text-align: left;
+}

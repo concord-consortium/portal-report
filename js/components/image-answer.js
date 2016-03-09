@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import Lightbox from './lightbox'
+import { Modal } from 'react-bootstrap'
 
 import '../../css/image-answer.less'
 
@@ -16,12 +16,17 @@ export default class ImageAnswer extends Component {
   renderImageLightbox() {
     const { answer } = this.props
     const imgAnswer = answer.get('answer')
+
     return (
-      <Lightbox onOverlayClick={() => this.setState({lightboxActive: false})}>
-        <img src={imgAnswer.get('imageUrl')}/>
-        <div style={{color: '#fff', fontWeight: 'bold'}}>{answer.getIn(['student', 'name'])}</div>
-        <div style={{color: '#fff'}}>{imgAnswer.get('note')}</div>
-      </Lightbox>
+      <Modal show={this.state.lightboxActive} onHide={() => this.setState({lightboxActive: false})}>
+        <Modal.Body>
+          <img src={imgAnswer.get('imageUrl')}/>
+        </Modal.Body>
+        <Modal.Footer>
+          <div style={{fontWeight: 'bold'}}>{answer.getIn(['student', 'name'])}</div>
+          <div>{imgAnswer.get('note')}</div>
+        </Modal.Footer>
+      </Modal>
     )
   }
 
@@ -34,7 +39,7 @@ export default class ImageAnswer extends Component {
           <img src={imgAnswer.get('imageUrl')} onClick={() => this.setState({lightboxActive: true})}/>
           <div>{imgAnswer.get('note')}</div>
         </div>
-        {this.state.lightboxActive ? this.renderImageLightbox() : ''}
+        {this.renderImageLightbox()}
       </div>
     )
   }

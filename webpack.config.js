@@ -31,7 +31,7 @@ module.exports = {
       },
       {
         // Support ?123 suffix, e.g. ../fonts/m4d-icons.eot?3179539#iefix in react-responsive-carousel.less
-        test: /\.(eot|ttf|woff|svg)(\?.*)?$/,
+        test: /\.(eot|ttf|woff|woff2|svg)((\?|\#).*)?$/,
         loader: 'url-loader?limit=8192'
       }
     ]
