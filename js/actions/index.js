@@ -5,6 +5,7 @@ import { REPORT_URL } from '../api'
 export const INVALIDATE_DATA = 'INVALIDATE_DATA'
 export const REQUEST_DATA = 'REQUEST_DATA'
 export const RECEIVE_DATA = 'RECEIVE_DATA'
+export const RECEIVE_ERROR = 'RECEIVE_ERROR'
 export const SET_ANONYMOUS = 'SET_ANONYMOUS'
 export const SET_QUESTION_SELECTED = 'SET_QUESTION_SELECTED'
 export const SHOW_SELECTED_QUESTIONS = 'SHOW_SELECTED_QUESTIONS'
@@ -29,6 +30,14 @@ function receiveData(json) {
   }
 }
 
+function receiveError(response) {
+  return {
+    type: RECEIVE_ERROR,
+    response: response,
+    receivedAt: Date.now()
+  }
+}
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
@@ -47,9 +56,9 @@ function fetchData() {
         .then(checkStatus)
         .then(response => response.json())
         .then(json => dispatch(receiveData(json)))
-        .catch(error => dispatch(receiveData(null)))
+        .catch(error => dispatch(receiveError(error.response)))
     } else {
-      setTimeout(() => dispatch(receiveData(fakeData)), 500)
+      setTimeout(() => dispatch(receiveData(fakeData)), 1000)
     }
   }
 }

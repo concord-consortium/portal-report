@@ -7,6 +7,8 @@ import { Modal } from 'react-bootstrap'
 import Button from '../components/button'
 import CompareView from '../components/compare-view'
 import Investigation from '../components/investigation'
+import DataFetchError from '../components/data-fetch-error'
+import LoadingIcon from '../components/loading-icon'
 import ccLogoSrc from '../../img/cc-logo.png'
 // (...)Data functions accept some state and return data in a form suitable for 'dumb' components.
 import reportData from '../core/report-data'
@@ -35,29 +37,32 @@ class App extends Component {
     fetchDataIfNeeded()
   }
 
-  renderLoadingStatus() {
-    const { isFetching } = this.props
-    return <div className='loading-status'><h2>{isFetching ? 'Loading...' : 'Report data download failed'}</h2></div>
+  renderStatusBar() {
+    const { isFetching, lastUpdated } = this.props
+    return (
+      <div className='status'>
+        {lastUpdated && <span>Last updated at {new Date(lastUpdated).toLocaleTimeString()} </span>}
+        {!isFetching && <Button onClick={this.handleRefreshClick}>Refresh</Button>}
+      </div>
+    )
   }
 
   renderReport() {
-    const { clazzName, report, isFetching, isAnonymous,
+    const { clazzName, report, isAnonymous,
             showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
     return (
-      <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-        <div className='report'>
-          <div className='report-header'>
-            <h1>
-              Report for: {clazzName}
-            </h1>
-            <div className='controls'>
-              <Button onClick={showSelectedQuestions}>Show selected</Button>
-              <Button onClick={showAllQuestions}>Show all</Button>
-              <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
-            </div>
+      <div>
+        <div className='report-header'>
+          <h1>
+            Report for: {clazzName}
+          </h1>
+          <div className='controls'>
+            <Button onClick={showSelectedQuestions}>Show selected</Button>
+            <Button onClick={showAllQuestions}>Show all</Button>
+            <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
           </div>
-          <Investigation investigation={report}/>
         </div>
+        <Investigation investigation={report}/>
       </div>
     )
   }
@@ -65,34 +70,30 @@ class App extends Component {
   renderCompareView() {
     const { compareViewAnswers, hideCompareView } = this.props
     return (
-      <Modal show={!!compareViewAnswers && compareViewAnswers.size > 0} bsStyle='compare-view' onHide={hideCompareView}>
+      <Modal show={compareViewAnswers && compareViewAnswers.size > 0} bsStyle='compare-view' onHide={hideCompareView}>
         <Modal.Body>
-          {compareViewAnswers ? <CompareView answers={compareViewAnswers}/> : null}
+          {compareViewAnswers && <CompareView answers={compareViewAnswers}/>}
         </Modal.Body>
       </Modal>
     )
   }
 
   render() {
-    const { report, isFetching, lastUpdated, compareView } = this.props
+    const { report, error, isFetching } = this.props
     return (
       <div className='report-app'>
         <div className='header'>
           <div className='header-content'>
             <img src={ccLogoSrc} className='logo'/>
-            <div className='status'>
-              {lastUpdated &&
-                <span>
-                  Last updated at {new Date(lastUpdated).toLocaleTimeString()}
-                  {' '}
-                </span>
-              }
-              {!isFetching && <Button onClick={this.handleRefreshClick}>Refresh</Button>}
-            </div>
+            {this.renderStatusBar()}
           </div>
         </div>
-        {report ? this.renderReport() : this.renderLoadingStatus()}
-        {this.renderCompareView()}
+        <div className='report' style={{ opacity: isFetching ? 0.3 : 1 }}>
+          {report && this.renderReport()}
+          {error && <DataFetchError error={error}/>}
+          {this.renderCompareView()}
+        </div>
+        {isFetching && <LoadingIcon/>}
       </div>
     )
   }
@@ -105,10 +106,11 @@ function mapStateToProps(state) {
   return {
     isFetching: data.get('isFetching'),
     lastUpdated: data.get('lastUpdated'),
-    clazzName: reportState ? reportState.get('clazzName') : '',
-    isAnonymous: reportState ? reportState.get('anonymousReport') : false,
-    report: reportState ? reportData(reportState) : null,
-    compareViewAnswers: compareViewAnswers ? compareViewData(reportState) : null
+    error: data.get('error'),
+    clazzName: reportState && reportState.get('clazzName'),
+    isAnonymous: reportState && reportState.get('anonymousReport'),
+    report: reportState && reportData(reportState),
+    compareViewAnswers: compareViewAnswers && compareViewData(reportState)
   }
 }
 

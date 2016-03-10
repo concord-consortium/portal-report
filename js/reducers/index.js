@@ -1,6 +1,6 @@
 import Immutable, { Map, Set } from 'immutable'
 import {
-  REQUEST_DATA, RECEIVE_DATA, INVALIDATE_DATA, SET_ANONYMOUS,
+  REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW} from '../actions'
 
@@ -15,6 +15,12 @@ function data(state = Map(), action) {
     case RECEIVE_DATA:
       return state.set('isFetching', false)
                   .set('didInvalidate', false)
+                  .set('error', null)
+                  .set('lastUpdated', action.receivedAt)
+    case RECEIVE_ERROR:
+      return state.set('isFetching', false)
+                  .set('didInvalidate', false)
+                  .set('error', action.response)
                   .set('lastUpdated', action.receivedAt)
     default:
       return state
@@ -24,7 +30,6 @@ function data(state = Map(), action) {
 function report(state = null, action) {
   switch (action.type) {
     case RECEIVE_DATA:
-      if (action.data === null) return null
       const data = transformJSONResponse(action.data)
       return Map({
         students: Immutable.fromJS(data.entities.students),
