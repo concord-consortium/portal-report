@@ -42,7 +42,7 @@ class App extends Component {
     return (
       <div className='status'>
         {lastUpdated && <span>Last updated at {new Date(lastUpdated).toLocaleTimeString()} </span>}
-        {!isFetching && <Button onClick={this.handleRefreshClick}>Refresh</Button>}
+        {<Button onClick={this.handleRefreshClick} disabled={isFetching}>Refresh</Button>}
       </div>
     )
   }

@@ -30,7 +30,7 @@ function data(state = Map(), action) {
 function report(state = null, action) {
   switch (action.type) {
     case RECEIVE_DATA:
-      const data = transformJSONResponse(action.data)
+      const data = transformJSONResponse(action.response)
       return Map({
         students: Immutable.fromJS(data.entities.students),
         investigations: Immutable.fromJS(data.entities.investigations),

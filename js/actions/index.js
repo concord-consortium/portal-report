@@ -1,6 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import fakeData from 'json!../data/report.json'
-import { REPORT_URL } from '../api'
+import { fetchReportData } from '../api'
 
 export const INVALIDATE_DATA = 'INVALIDATE_DATA'
 export const REQUEST_DATA = 'REQUEST_DATA'
@@ -14,18 +13,24 @@ export const SET_ANSWER_SELECTED_FOR_COMPARE = 'SET_ANSWER_SELECTED_FOR_COMPARE'
 export const SHOW_COMPARE_VIEW = 'SHOW_COMPARE_VIEW'
 export const HIDE_COMPARE_VIEW = 'HIDE_COMPARE_VIEW'
 
+// When fetch succeeds, receiveData action will be called with the response object (json in this case).
+// REQUEST_DATA action will be processed by the reducer immediately.
+// See: api-middleware.js
 function requestData() {
-  return {type: REQUEST_DATA}
+  return {
+    type: REQUEST_DATA,
+    callAPI: {
+      type: 'fetchReportData',
+      successAction: receiveData,
+      errorAction: receiveError
+    }
+  }
 }
 
-export function invalidateData() {
-  return {type: INVALIDATE_DATA}
-}
-
-function receiveData(json) {
+function receiveData(response) {
   return {
     type: RECEIVE_DATA,
-    data: json,
+    response: response,
     receivedAt: Date.now()
   }
 }
@@ -35,31 +40,6 @@ function receiveError(response) {
     type: RECEIVE_ERROR,
     response: response,
     receivedAt: Date.now()
-  }
-}
-
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response
-  } else {
-    var error = new Error(response.statusText)
-    error.response = response
-    throw error
-  }
-}
-
-function fetchData() {
-  return dispatch => {
-    dispatch(requestData())
-    if (REPORT_URL) {
-      return fetch(REPORT_URL)
-        .then(checkStatus)
-        .then(response => response.json())
-        .then(json => dispatch(receiveData(json)))
-        .catch(error => dispatch(receiveError(error.response)))
-    } else {
-      setTimeout(() => dispatch(receiveData(fakeData)), 1000)
-    }
   }
 }
 
@@ -74,9 +54,13 @@ function shouldFetchData(state) {
 export function fetchDataIfNeeded() {
   return (dispatch, getState) => {
     if (shouldFetchData(getState())) {
-      return dispatch(fetchData())
+      return dispatch(requestData())
     }
   }
+}
+
+export function invalidateData() {
+  return {type: INVALIDATE_DATA}
 }
 
 export function setQuestionSelected(key, value) {
@@ -89,8 +73,9 @@ export function showSelectedQuestions() {
     const selectedQuestionKeys = [...questionsMap.values()].filter(q => q.get('selected')).map(q => q.get('key'))
     dispatch({
       type: SHOW_SELECTED_QUESTIONS,
-      // Send data to server. See: remote-action-middleware.js
-      remote: {
+      // Send data to server. Don't care about success or failure. See: api-middleware.js
+      callAPI: {
+        type: 'updateReportSettings',
         data: {
           visibility_filter: {
             active: true,
@@ -105,8 +90,9 @@ export function showSelectedQuestions() {
 export function showAllQuestions() {
   return {
     type: SHOW_ALL_QUESTIONS,
-    // Send data to server. See: remote-action-middleware.js
-    remote: {
+    // Send data to server. Don't care about success or failure. See: api-middleware.js
+    callAPI: {
+      type: 'updateReportSettings',
       data: {
         visibility_filter: {
           active: false
@@ -120,8 +106,9 @@ export function setAnonymous(value) {
   return {
     type: SET_ANONYMOUS,
     value,
-    // Send data to server. See: remote-action-middleware.js
-    remote: {
+    // Send data to server. Don't care about success or failure. See: api-middleware.js
+    callAPI: {
+      type: 'updateReportSettings',
       data: {
         anonymous_report: value
       }
