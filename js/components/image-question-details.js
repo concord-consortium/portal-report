@@ -44,7 +44,7 @@ export default class ImageQuestionDetails extends Component {
 
   get images() {
     const { question } = this.props
-    return question.get('children').filter(a => a.get('answer') !== null)
+    return question.get('responses').filter(a => a.get('answer') !== null)
   }
 
   renderImages() {

@@ -42,7 +42,7 @@ export default function transformJSONResponse(json) {
     children: arrayOf(question)
   })
   question.define({
-    children: arrayOf(answer)
+    responses: arrayOf(answer)
   })
 
   const reportType = camelizedJson.report.type

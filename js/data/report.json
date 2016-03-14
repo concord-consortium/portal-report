@@ -30,7 +30,7 @@
                     "is_required": false,
                     "key": "Embeddable::MultipleChoice|116",
                     "type": "Embeddable::MultipleChoice",
-                    "children": [
+                    "responses": [
                       {
                         "answer": [
                           {
@@ -117,7 +117,7 @@
                     "is_required": false,
                     "key": "Embeddable::OpenResponse|252",
                     "type": "Embeddable::OpenResponse",
-                    "children": [
+                    "responses": [
                       {
                         "answer": "j3 answer",
                         "answered": true,
@@ -185,7 +185,7 @@
                     "is_required": false,
                     "key": "Embeddable::MultipleChoice|117",
                     "type": "Embeddable::MultipleChoice",
-                    "children": [
+                    "responses": [
                       {
                         "answer": [
                           {
@@ -268,7 +268,7 @@
                     "is_required": false,
                     "key": "Embeddable::OpenResponse|253",
                     "type": "Embeddable::OpenResponse",
-                    "children": [
+                    "responses": [
                       {
                         "answer": "j3 answer!",
                         "answered": true,
@@ -319,7 +319,7 @@
                     "is_required": false,
                     "key": "Embeddable::ImageQuestion|12",
                     "type": "Embeddable::ImageQuestion",
-                    "children": [
+                    "responses": [
                       {
                         "answer": {
                           "image_url": "https://unsplash.it/600/600?image=100",
@@ -380,7 +380,7 @@
                     "display_in_iframe": true,
                     "key": "Embeddable::Iframe|7",
                     "type": "Embeddable::Iframe",
-                    "children": [
+                    "responses": [
                       {
                         "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
                         "answered": true,
@@ -448,7 +448,7 @@
                     "is_required": false,
                     "key": "Embeddable::ImageQuestion|13",
                     "type": "Embeddable::ImageQuestion",
-                    "children": [
+                    "responses": [
                       {
                         "answer": {
                           "image_url": "https://unsplash.it/600/600?image=110",
