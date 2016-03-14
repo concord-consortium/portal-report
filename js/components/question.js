@@ -50,7 +50,7 @@ export default class Question extends Component {
         <div className='details-container'>
           <QuestionDetails question={question}/>
         </div>
-        {answersVisible ? <AnswersTable answers={question.get('children')}/> : ''}
+        {answersVisible ? <AnswersTable answers={question.get('responses')}/> : ''}
       </div>
     )
   }
