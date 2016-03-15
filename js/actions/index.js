@@ -5,6 +5,7 @@ export const INVALIDATE_DATA = 'INVALIDATE_DATA'
 export const REQUEST_DATA = 'REQUEST_DATA'
 export const RECEIVE_DATA = 'RECEIVE_DATA'
 export const RECEIVE_ERROR = 'RECEIVE_ERROR'
+export const SET_TYPE = 'SET_TYPE'
 export const SET_ANONYMOUS = 'SET_ANONYMOUS'
 export const SET_QUESTION_SELECTED = 'SET_QUESTION_SELECTED'
 export const SHOW_SELECTED_QUESTIONS = 'SHOW_SELECTED_QUESTIONS'
@@ -99,6 +100,13 @@ export function showAllQuestions() {
         }
       }
     }
+  }
+}
+
+export function setType(value) {
+  return {
+    type: SET_TYPE,
+    value
   }
 }
 

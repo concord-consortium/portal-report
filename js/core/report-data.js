@@ -1,9 +1,15 @@
+import { Map } from 'immutable'
+
 // Generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // It includes all the properties provided by API + calculates a few additional ones.
 export default function reportData(reportState) {
+  return reportState.set('investigation', investigation(reportState))
+}
+
+export function investigation(state) {
   // There is always only one investigation.
-  const investigation = reportState.get('investigations').values().next().value
-  return investigation.set('children', investigation.get('children').map(id => activity(reportState, id)))
+  const investigation = state.get('investigations').values().next().value
+  return investigation.set('children', investigation.get('children').map(id => activity(state, id)))
 }
 
 export function activity(state, id) {
@@ -48,9 +54,5 @@ export function answer(state, key) {
 }
 
 export function student(state, id) {
-  const student = state.get('students').get(id.toString())
-  if (state.get('anonymousReport')) {
-    return student.set('name', 'Student ' + student.get('id'))
-  }
-  return student
+  return state.get('students').get(id.toString())
 }

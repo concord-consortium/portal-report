@@ -66,6 +66,7 @@ export default function transformJSONResponse(json) {
   }
   applyVisibilityFilter(response.entities.questions, response.result.visibilityFilter)
   copyAnswerKeysToObjects(response.entities.answers)
+  saveStudentsRealNames(response.entities.students)
   return response
 }
 
@@ -84,5 +85,12 @@ function applyVisibilityFilter(questions, visibilityFilter) {
 function copyAnswerKeysToObjects(answers) {
   Object.keys(answers).forEach(key => {
     answers[key].key = key
+  })
+}
+
+// Provide additional property in student hash, it's useful for anonymization.
+function saveStudentsRealNames(students) {
+  Object.values(students).forEach(student => {
+    student.realName = student.name
   })
 }

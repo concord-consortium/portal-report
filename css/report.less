@@ -12,15 +12,23 @@
     margin-top: 1em;
     margin-bottom: 1em;
 
-    h1, .controls {
-      display: inline-block;
-    }
     .controls {
+      display: inline-block;
       float: right;
-      a {
+
+      a, select {
         margin: 0 0.5em;
       }
+
+      select {
+        display: inline-block;
+        width: auto;
+      }
     }
+  }
+
+  .report-content {
+    margin-bottom: 4em;
   }
 
   h1, h2, h3, h5 {
@@ -50,21 +58,5 @@
     font-weight: normal;
     margin-left: 1em;
     padding: 1em;
-  }
-  h5 {
-    background: #8cbbb8;
-    color: #fff;
-    font-size: 1em;
-    font-weight: normal;
-    margin: -1em -1em .5em -1em;
-    padding: 1em;
-  }
-  h5 input[type=checkbox] {
-    margin-right: .5em;
-  }
-  h6 {
-    font-size: 1em;
-    font-weight: normal;
-    margin-bottom: .5em;
   }
 }

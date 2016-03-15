@@ -1,9 +1,26 @@
 .question {
   box-shadow: 1px 1px 4px rgba(102, 102, 102, .5);
-  min-height: 200px;
   padding: 1em;
   margin: 0 auto 1em auto;
   position: relative;
+
+  .question-header {
+    background: #8cbbb8;
+    color: #fff;
+    font-size: 1em;
+    font-weight: normal;
+    margin: -1em -1em .5em -1em;
+    padding: 1em;
+
+    input[type=checkbox] {
+      margin-right: .5em;
+    }
+  }
+
+  .prompt {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
 
   .answers-toggle {
     float: right;

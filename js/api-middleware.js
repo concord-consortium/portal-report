@@ -1,4 +1,4 @@
-import { fetchReportData, updateReportSettings } from './api'
+import { fetchReportData, updateReportSettings, APIError } from './api'
 
 // This middleware is executed only if action includes .callAPI object.
 // It calls API action defined in callAPI.type.
@@ -9,7 +9,13 @@ export default store => next => action => {
     const { type, data, successAction, errorAction } = action.callAPI
     callApi(type, data)
       .then(response => successAction && next(successAction(response)))
-      .catch(error => errorAction && next(errorAction(error.response)))
+      .catch(error => {
+        if (error instanceof APIError && errorAction) {
+          return next(errorAction(error.response))
+        }
+        // Remember to throw original error, as otherwise we would swallow every kind of error.
+        throw error
+      })
   }
   return next(action)
 }

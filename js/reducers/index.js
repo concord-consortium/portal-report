@@ -1,6 +1,6 @@
 import Immutable, { Map, Set } from 'immutable'
 import {
-  REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_ANONYMOUS,
+  REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_TYPE, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW} from '../actions'
 
@@ -27,23 +27,26 @@ function data(state = Map(), action) {
   }
 }
 
-function report(state = null, action) {
+const INITIAL_REPORT_STATE = Map({
+  type: 'class'
+})
+function report(state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
       const data = transformJSONResponse(action.response)
-      return Map({
-        students: Immutable.fromJS(data.entities.students),
-        investigations: Immutable.fromJS(data.entities.investigations),
-        activities: Immutable.fromJS(data.entities.activities),
-        sections: Immutable.fromJS(data.entities.sections),
-        pages: Immutable.fromJS(data.entities.pages),
-        questions: Immutable.fromJS(data.entities.questions),
-        answers: Immutable.fromJS(data.entities.answers),
-        clazzName: data.result.class.name,
-        visibilityFilterActive: data.result.visibilityFilter.active,
-        anonymousReport: data.result.anonymousReport,
-        hideSectionNames: data.result.isOfferingExternal
-      })
+      return state.set('students', Immutable.fromJS(data.entities.students))
+                  .set('investigations', Immutable.fromJS(data.entities.investigations))
+                  .set('activities', Immutable.fromJS(data.entities.activities))
+                  .set('sections', Immutable.fromJS(data.entities.sections))
+                  .set('pages', Immutable.fromJS(data.entities.pages))
+                  .set('questions', Immutable.fromJS(data.entities.questions))
+                  .set('answers', Immutable.fromJS(data.entities.answers))
+                  .set('clazzName', data.result.class.name)
+                  .set('visibilityFilterActive', data.result.visibilityFilter.active)
+                  .set('anonymous', data.result.anonymousReport)
+                  .set('hideSectionNames', data.result.isOfferingExterna)
+    case SET_TYPE:
+      return state.set('type', action.value)
     case SET_QUESTION_SELECTED:
       return state.setIn(['questions', action.key, 'selected'], action.value)
     case SHOW_SELECTED_QUESTIONS:
@@ -58,7 +61,10 @@ function report(state = null, action) {
     case SHOW_ALL_QUESTIONS:
       return state.set('visibilityFilterActive', false)
     case SET_ANONYMOUS:
-      return state.set('anonymousReport', action.value)
+      let idx = 1
+      const newStudents = state.get('students').map(s => s.set('name', action.value ? `Student ${idx++}` : s.get('realName')))
+      return state.set('anonymous', action.value)
+                  .set('students', newStudents)
     case SET_ANSWER_SELECTED_FOR_COMPARE:
       const compareViewAns = state.get('compareViewAnswers')
       if (compareViewAns) {

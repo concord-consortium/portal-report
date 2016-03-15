@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import { connect } from 'react-redux'
 import { selectReport, fetchDataIfNeeded, invalidateData, hideCompareView,
-         showSelectedQuestions, showAllQuestions, setAnonymous } from '../actions'
+         showSelectedQuestions, showAllQuestions, setType, setAnonymous } from '../actions'
 import { Modal } from 'react-bootstrap'
 import Button from '../components/button'
 import CompareView from '../components/compare-view'
-import Investigation from '../components/investigation'
+import Report from '../components/report'
 import DataFetchError from '../components/data-fetch-error'
 import LoadingIcon from '../components/loading-icon'
 import ccLogoSrc from '../../img/cc-logo.png'
@@ -15,7 +15,6 @@ import reportData from '../core/report-data'
 import compareViewData from '../core/compare-view-data'
 
 import '../../css/app.less'
-import '../../css/report.less'
 
 @pureRender
 class App extends Component {
@@ -48,23 +47,9 @@ class App extends Component {
   }
 
   renderReport() {
-    const { clazzName, report, isAnonymous,
-            showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
-    return (
-      <div>
-        <div className='report-header'>
-          <h1>
-            Report for: {clazzName}
-          </h1>
-          <div className='controls'>
-            <Button onClick={showSelectedQuestions}>Show selected</Button>
-            <Button onClick={showAllQuestions}>Show all</Button>
-            <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
-          </div>
-        </div>
-        <Investigation investigation={report}/>
-      </div>
-    )
+    const { report, showSelectedQuestions, showAllQuestions, setType, setAnonymous } = this.props
+    return <Report report={report} showSelectedQuestions={showSelectedQuestions} showAllQuestions={showAllQuestions}
+                   setType={setType} setAnonymous={setAnonymous}/>
   }
 
   renderCompareView() {
@@ -103,13 +88,12 @@ function mapStateToProps(state) {
   const data = state.get('data')
   const reportState = state.get('report')
   const compareViewAnswers = reportState && reportState.get('compareViewAnswers')
+  const dataDownloaded = !!data.get('lastUpdated')
   return {
     isFetching: data.get('isFetching'),
     lastUpdated: data.get('lastUpdated'),
     error: data.get('error'),
-    clazzName: reportState && reportState.get('clazzName'),
-    isAnonymous: reportState && reportState.get('anonymousReport'),
-    report: reportState && reportData(reportState),
+    report: dataDownloaded && reportData(reportState),
     compareViewAnswers: compareViewAnswers && compareViewData(reportState)
   }
 }
@@ -120,7 +104,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     invalidateData: () => dispatch(invalidateData()),
     showSelectedQuestions: () => dispatch(showSelectedQuestions()),
     showAllQuestions: () => dispatch(showAllQuestions()),
-    setAnonymous: (value) => dispatch(setAnonymous(value)),
+    setType: value => dispatch(setType(value)),
+    setAnonymous: value => dispatch(setAnonymous(value)),
     hideCompareView: () => dispatch(hideCompareView())
   }
 }
