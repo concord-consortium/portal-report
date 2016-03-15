@@ -44,7 +44,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
                   .set('clazzName', data.result.class.name)
                   .set('visibilityFilterActive', data.result.visibilityFilter.active)
                   .set('anonymous', data.result.anonymousReport)
-                  .set('hideSectionNames', data.result.isOfferingExterna)
+                  .set('hideSectionNames', data.result.isOfferingExternal)
     case SET_TYPE:
       return state.set('type', action.value)
     case SET_QUESTION_SELECTED:
