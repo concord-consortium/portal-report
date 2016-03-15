@@ -6,12 +6,14 @@
   font: @font;
   margin: 0;
   padding: 0;
+  @media print {
+    font-size: 10pt !important;
+  }
 
   .header {
     background: #bddfdf;
     width: 100%;
     height: 100px;
-
     @media print {
       display: none;
     }
