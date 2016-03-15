@@ -19,7 +19,7 @@ export default class QuestionForStudent extends Component {
   render() {
     const { question, student, number } = this.props
     const studentId = student.get('id')
-    const answer = question.get('responses').filter(a => a.get('studentId') === studentId).first()
+    const answer = question.get('answers').filter(a => a.get('studentId') === studentId).first()
     return (
       <div className={`question for-student ${question.get('visible') ? '' : 'hidden'}`}>
         <div className='question-header'>

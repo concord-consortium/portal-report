@@ -35,7 +35,7 @@ export default class MultipleChoiceDetails extends Component {
   }
 
   get answers() {
-    return this.props.question.get('responses').toJS()
+    return this.props.question.get('answers').toJS()
   }
 
   render() {
