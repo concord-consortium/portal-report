@@ -41,6 +41,7 @@ export default class Report extends Component {
             <Button onClick={showSelectedQuestions}>Show selected</Button>
             <Button onClick={showAllQuestions}>Show all</Button>
             <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
+            <Button onClick={() => window.print()}>Print</Button>
           </div>
         </div>
         {report.get('type') === 'class' ? this.renderClassReport() : this.renderStudentReport()}

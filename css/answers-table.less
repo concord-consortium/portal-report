@@ -1,13 +1,19 @@
-table.answers {
+.answers-table {
   width: 100%;
   text-align: left;
   border-collapse: collapse;
   font-size: .9em;
   margin-top: 2em;
+  @media print {
+    margin-top: 1em;
+  }
   
   th, td {
     padding: 1em;
     border-bottom: solid 2px #fff;
+    @media print {
+      padding: 0.2em;
+    }
   }
 
   th {
@@ -26,6 +32,15 @@ table.answers {
 
   .select-header {
     width: 10em;
+    @media print {
+      display: none;
+    }
+  }
+
+  .select-answer-column {
+    @media print {
+      display: none;
+    }
   }
 
   a.select-answer {

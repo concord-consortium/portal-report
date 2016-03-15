@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Page from './page'
 
+import '../../css/section.less'
+
 @pureRender
 export default class Section extends Component {
   render() {

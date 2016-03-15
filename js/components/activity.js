@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Section from './section'
 
+import '../../css/activity.less'
+
 @pureRender
 export default class Activity extends Component {
   render() {

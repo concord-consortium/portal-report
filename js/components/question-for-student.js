@@ -21,7 +21,7 @@ export default class QuestionForStudent extends Component {
     const studentId = student.get('id')
     const answer = question.get('responses').filter(a => a.get('studentId') === studentId).first()
     return (
-      <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
+      <div className={`question for-student ${question.get('visible') ? '' : 'hidden'}`}>
         <div className='question-header'>
           <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
           Question #{number}

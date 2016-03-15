@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Activity from './activity'
 
+import '../../css/investigation.less'
+
 @pureRender
 export default class Investigation extends Component {
   render() {
