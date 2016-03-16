@@ -31,10 +31,15 @@ const INITIAL_REPORT_STATE = Map({
   type: 'class'
 })
 function report(state = INITIAL_REPORT_STATE, action) {
+  let idx = 1
   switch (action.type) {
     case RECEIVE_DATA:
       const data = transformJSONResponse(action.response)
-      return state.set('students', Immutable.fromJS(data.entities.students))
+      const anonymous = data.result.anonymousReport
+      // student names must be rewritten if report is loaded as anonmyous.
+      const students = Immutable.fromJS(data.entities.students)
+        .map(s => s.set('name', anonymous ? `Student ${idx++}` : s.get('realName')))
+      return state.set('students', students)
                   .set('investigations', Immutable.fromJS(data.entities.investigations))
                   .set('activities', Immutable.fromJS(data.entities.activities))
                   .set('sections', Immutable.fromJS(data.entities.sections))
@@ -61,7 +66,6 @@ function report(state = INITIAL_REPORT_STATE, action) {
     case SHOW_ALL_QUESTIONS:
       return state.set('visibilityFilterActive', false)
     case SET_ANONYMOUS:
-      let idx = 1
       const newStudents = state.get('students').map(s => s.set('name', action.value ? `Student ${idx++}` : s.get('realName')))
       return state.set('anonymous', action.value)
                   .set('students', newStudents)
