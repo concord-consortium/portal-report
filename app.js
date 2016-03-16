@@ -612,7 +612,7 @@
 /* 46 */
 /***/ function(module, exports) {
 
-	var core = module.exports = {version: '2.1.4'};
+	var core = module.exports = {version: '2.1.5'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
@@ -3040,7 +3040,7 @@
 	// 20.3.3.1 / 15.9.4.4 Date.now()
 	var $export = __webpack_require__(50);
 
-	$export($export.S, 'Date', {now: function(){ return +new Date; }});
+	$export($export.S, 'Date', {now: function(){ return new Date().getTime(); }});
 
 /***/ },
 /* 194 */
@@ -3049,10 +3049,11 @@
 	var DateProto    = Date.prototype
 	  , INVALID_DATE = 'Invalid Date'
 	  , TO_STRING    = 'toString'
-	  , $toString    = DateProto[TO_STRING];
+	  , $toString    = DateProto[TO_STRING]
+	  , getTime      = DateProto.getTime;
 	if(new Date(NaN) + '' != INVALID_DATE){
 	  __webpack_require__(59)(DateProto, TO_STRING, function toString(){
-	    var value = +this;
+	    var value = getTime.call(this);
 	    return value === value ? $toString.call(this) : INVALID_DATE;
 	  });
 	}
@@ -3064,7 +3065,8 @@
 	'use strict';
 	// 20.3.4.36 / 15.9.5.43 Date.prototype.toISOString()
 	var $export = __webpack_require__(50)
-	  , fails   = __webpack_require__(49);
+	  , fails   = __webpack_require__(49)
+	  , getTime = Date.prototype.getTime;
 
 	var lz = function(num){
 	  return num > 9 ? num : '0' + num;
@@ -3077,7 +3079,7 @@
 	  new Date(NaN).toISOString();
 	})), 'Date', {
 	  toISOString: function toISOString(){
-	    if(!isFinite(this))throw RangeError('Invalid time value');
+	    if(!isFinite(getTime.call(this)))throw RangeError('Invalid time value');
 	    var d = this
 	      , y = d.getUTCFullYear()
 	      , m = d.getUTCMilliseconds()
@@ -4065,6 +4067,7 @@
 	  , TypeError          = global.TypeError
 	  , process            = global.process
 	  , $Promise           = global[PROMISE]
+	  , process            = global.process
 	  , isNode             = classof(process) == 'process'
 	  , empty              = function(){ /* empty */ }
 	  , Internal, GenericPromiseCapability, Wrapper;
@@ -4122,6 +4125,7 @@
 	      var handler = ok ? reaction.ok : reaction.fail
 	        , resolve = reaction.resolve
 	        , reject  = reaction.reject
+	        , domain  = reaction.domain
 	        , result, then;
 	      try {
 	        if(handler){
@@ -4129,7 +4133,12 @@
 	            if(promise._h == 2)onHandleUnhandled(promise);
 	            promise._h = 1;
 	          }
-	          result = handler === true ? value : handler(value);
+	          if(handler === true)result = value;
+	          else {
+	            if(domain)domain.enter();
+	            result = handler(value);
+	            if(domain)domain.exit();
+	          }
 	          if(result === reaction.promise){
 	            reject(TypeError('Promise-chain cycle'));
 	          } else if(then = isThenable(result)){
@@ -4248,9 +4257,10 @@
 	  Internal.prototype = __webpack_require__(245)($Promise.prototype, {
 	    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
 	    then: function then(onFulfilled, onRejected){
-	      var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
-	      reaction.ok   = typeof onFulfilled == 'function' ? onFulfilled : true;
-	      reaction.fail = typeof onRejected == 'function' && onRejected;
+	      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
+	      reaction.ok     = typeof onFulfilled == 'function' ? onFulfilled : true;
+	      reaction.fail   = typeof onRejected == 'function' && onRejected;
+	      reaction.domain = isNode ? process.domain : undefined;
 	      this._c.push(reaction);
 	      if(this._a)this._a.push(reaction);
 	      if(this._s)notify(this, false);
@@ -4470,17 +4480,11 @@
 	  , head, last, notify;
 
 	var flush = function(){
-	  var parent, domain, fn;
-	  if(isNode && (parent = process.domain)){
-	    process.domain = null;
-	    parent.exit();
-	  }
+	  var parent, fn;
+	  if(isNode && (parent = process.domain))parent.exit();
 	  while(head){
-	    domain = head.domain;
-	    fn     = head.fn;
-	    if(domain)domain.enter();
+	    fn = head.fn;
 	    fn(); // <- currently we use it only for Promise - try / catch not required
-	    if(domain)domain.exit();
 	    head = head.next;
 	  } last = undefined;
 	  if(parent)parent.enter();
@@ -4493,11 +4497,11 @@
 	  };
 	// browsers with MutationObserver
 	} else if(Observer){
-	  var toggle = 1
+	  var toggle = true
 	    , node   = document.createTextNode('');
 	  new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
 	  notify = function(){
-	    node.data = toggle = -toggle;
+	    node.data = toggle = !toggle;
 	  };
 	// environments with maybe non-completely correct, but existent Promise
 	} else if(Promise && Promise.resolve){
@@ -4518,7 +4522,7 @@
 	}
 
 	module.exports = function(fn){
-	  var task = {fn: fn, next: undefined, domain: isNode && process.domain};
+	  var task = {fn: fn, next: undefined};
 	  if(last)last.next = task;
 	  if(!head){
 	    head = task;
@@ -29087,7 +29091,7 @@
 /* 516 */
 /***/ function(module, exports) {
 
-	var core = module.exports = {version: '2.1.4'};
+	var core = module.exports = {version: '2.1.5'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
@@ -31357,6 +31361,7 @@
 	  , TypeError          = global.TypeError
 	  , process            = global.process
 	  , $Promise           = global[PROMISE]
+	  , process            = global.process
 	  , isNode             = classof(process) == 'process'
 	  , empty              = function(){ /* empty */ }
 	  , Internal, GenericPromiseCapability, Wrapper;
@@ -31414,6 +31419,7 @@
 	      var handler = ok ? reaction.ok : reaction.fail
 	        , resolve = reaction.resolve
 	        , reject  = reaction.reject
+	        , domain  = reaction.domain
 	        , result, then;
 	      try {
 	        if(handler){
@@ -31421,7 +31427,12 @@
 	            if(promise._h == 2)onHandleUnhandled(promise);
 	            promise._h = 1;
 	          }
-	          result = handler === true ? value : handler(value);
+	          if(handler === true)result = value;
+	          else {
+	            if(domain)domain.enter();
+	            result = handler(value);
+	            if(domain)domain.exit();
+	          }
 	          if(result === reaction.promise){
 	            reject(TypeError('Promise-chain cycle'));
 	          } else if(then = isThenable(result)){
@@ -31540,9 +31551,10 @@
 	  Internal.prototype = __webpack_require__(612)($Promise.prototype, {
 	    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
 	    then: function then(onFulfilled, onRejected){
-	      var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
-	      reaction.ok   = typeof onFulfilled == 'function' ? onFulfilled : true;
-	      reaction.fail = typeof onRejected == 'function' && onRejected;
+	      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
+	      reaction.ok     = typeof onFulfilled == 'function' ? onFulfilled : true;
+	      reaction.fail   = typeof onRejected == 'function' && onRejected;
+	      reaction.domain = isNode ? process.domain : undefined;
 	      this._c.push(reaction);
 	      if(this._a)this._a.push(reaction);
 	      if(this._s)notify(this, false);
@@ -31793,17 +31805,11 @@
 	  , head, last, notify;
 
 	var flush = function(){
-	  var parent, domain, fn;
-	  if(isNode && (parent = process.domain)){
-	    process.domain = null;
-	    parent.exit();
-	  }
+	  var parent, fn;
+	  if(isNode && (parent = process.domain))parent.exit();
 	  while(head){
-	    domain = head.domain;
-	    fn     = head.fn;
-	    if(domain)domain.enter();
+	    fn = head.fn;
 	    fn(); // <- currently we use it only for Promise - try / catch not required
-	    if(domain)domain.exit();
 	    head = head.next;
 	  } last = undefined;
 	  if(parent)parent.enter();
@@ -31816,11 +31822,11 @@
 	  };
 	// browsers with MutationObserver
 	} else if(Observer){
-	  var toggle = 1
+	  var toggle = true
 	    , node   = document.createTextNode('');
 	  new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
 	  notify = function(){
-	    node.data = toggle = -toggle;
+	    node.data = toggle = !toggle;
 	  };
 	// environments with maybe non-completely correct, but existent Promise
 	} else if(Promise && Promise.resolve){
@@ -31841,7 +31847,7 @@
 	}
 
 	module.exports = function(fn){
-	  var task = {fn: fn, next: undefined, domain: isNode && process.domain};
+	  var task = {fn: fn, next: undefined};
 	  if(last)last.next = task;
 	  if(!head){
 	    head = task;
@@ -31916,7 +31922,7 @@
 											"is_required": false,
 											"key": "Embeddable::MultipleChoice|116",
 											"type": "Embeddable::MultipleChoice",
-											"responses": [
+											"answers": [
 												{
 													"answer": [
 														{
@@ -32003,7 +32009,7 @@
 											"is_required": false,
 											"key": "Embeddable::OpenResponse|252",
 											"type": "Embeddable::OpenResponse",
-											"responses": [
+											"answers": [
 												{
 													"answer": "j3 answer",
 													"answered": true,
@@ -32071,7 +32077,7 @@
 											"is_required": false,
 											"key": "Embeddable::MultipleChoice|117",
 											"type": "Embeddable::MultipleChoice",
-											"responses": [
+											"answers": [
 												{
 													"answer": [
 														{
@@ -32154,7 +32160,7 @@
 											"is_required": false,
 											"key": "Embeddable::OpenResponse|253",
 											"type": "Embeddable::OpenResponse",
-											"responses": [
+											"answers": [
 												{
 													"answer": "j3 answer!",
 													"answered": true,
@@ -32205,7 +32211,7 @@
 											"is_required": false,
 											"key": "Embeddable::ImageQuestion|12",
 											"type": "Embeddable::ImageQuestion",
-											"responses": [
+											"answers": [
 												{
 													"answer": {
 														"image_url": "https://unsplash.it/600/600?image=100",
@@ -32266,7 +32272,7 @@
 											"display_in_iframe": true,
 											"key": "Embeddable::Iframe|7",
 											"type": "Embeddable::Iframe",
-											"responses": [
+											"answers": [
 												{
 													"answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
 													"answered": true,
@@ -32334,7 +32340,7 @@
 											"is_required": false,
 											"key": "Embeddable::ImageQuestion|13",
 											"type": "Embeddable::ImageQuestion",
-											"responses": [
+											"answers": [
 												{
 													"answer": {
 														"image_url": "https://unsplash.it/600/600?image=110",
@@ -56645,7 +56651,7 @@
 	        ),
 	        _react2.default.createElement(_questionSummary2.default, { question: question }),
 	        _react2.default.createElement(QuestionDetails, { question: question }),
-	        answersVisible ? _react2.default.createElement(_answersTable2.default, { answers: question.get('responses') }) : ''
+	        answersVisible ? _react2.default.createElement(_answersTable2.default, { answers: question.get('answers') }) : ''
 	      );
 	    }
 	  }]);
@@ -56777,7 +56783,7 @@
 	  }, {
 	    key: 'answers',
 	    get: function get() {
-	      return this.props.question.get('responses').toJS();
+	      return this.props.question.get('answers').toJS();
 	    }
 	  }]);
 	  return MultipleChoiceDetails;
@@ -56987,7 +56993,7 @@
 	    get: function get() {
 	      var question = this.props.question;
 
-	      return question.get('responses').filter(function (a) {
+	      return question.get('answers').filter(function (a) {
 	        return a.get('answer') !== null;
 	      });
 	    }
@@ -58194,21 +58200,21 @@
 	  }, {
 	    key: 'answered',
 	    get: function get() {
-	      return this.props.question.get('responses').filter(function (a) {
+	      return this.props.question.get('answers').filter(function (a) {
 	        return a.type !== 'NoAnswer';
 	      }).size;
 	    }
 	  }, {
 	    key: 'notAnswered',
 	    get: function get() {
-	      return this.props.question.get('responses').filter(function (a) {
+	      return this.props.question.get('answers').filter(function (a) {
 	        return a.type === 'NoAnswer';
 	      }).size;
 	    }
 	  }, {
 	    key: 'total',
 	    get: function get() {
-	      return this.props.question.get('responses').size;
+	      return this.props.question.get('answers').size;
 	    }
 	  }]);
 	  return QuestionSummary;
@@ -58640,7 +58646,7 @@
 	      var number = _props2.number;
 
 	      var studentId = student.get('id');
-	      var answer = question.get('responses').filter(function (a) {
+	      var answer = question.get('answers').filter(function (a) {
 	        return a.get('studentId') === studentId;
 	      }).first();
 	      return _react2.default.createElement(
@@ -59225,7 +59231,7 @@
 	function question(state, key) {
 	  var question = state.get('questions').get(key.toString());
 	  // Sort answers by student name, so views don't have to care about it.
-	  return question.set('responses', question.get('responses').map(function (key) {
+	  return question.set('answers', question.get('answers').map(function (key) {
 	    return answer(state, key);
 	  }).sortBy(function (a) {
 	    return a.getIn(['student', 'name']);
@@ -59823,7 +59829,7 @@
 	    children: (0, _normalizr.arrayOf)(question)
 	  });
 	  question.define({
-	    responses: (0, _normalizr.arrayOf)(answer)
+	    answers: (0, _normalizr.arrayOf)(answer)
 	  });
 
 	  var reportType = camelizedJson.report.type;
