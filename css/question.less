@@ -1,13 +1,56 @@
 .question {
   box-shadow: 1px 1px 4px rgba(102, 102, 102, .5);
-  min-height: 200px;
   padding: 1em;
   margin: 0 auto 1em auto;
   position: relative;
+
+  @media print {
+    box-shadow: none;
+    padding: 0.2em;
+    margin-bottom: 0.4em;
+    border: 0.5px solid #ccc;
+    padding-left: 0.7em;
+  }
+
+  &.for-student {
+    @media print {
+      page-break-inside: avoid;
+    }
+  }
+
+  .question-header {
+    background: #8cbbb8;
+    color: #fff;
+    font-size: 1em;
+    font-weight: normal;
+    margin: -1em -1em .5em -1em;
+    padding: 1em;
+    @media print {
+      padding: 0;
+      margin: 0;
+      background: none;
+      color: #000;
+    }
+
+    input[type=checkbox] {
+      margin-right: .5em;
+      @media print {
+        display: none;
+      }
+    }
+  }
+
+  .prompt {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
 
   .answers-toggle {
     float: right;
     font-size: 0.85em;
     color: #fff;
+    @media print {
+      display: none;
+    }
   }
 }

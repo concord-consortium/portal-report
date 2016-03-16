@@ -14,6 +14,9 @@ table.multiple-choice-details {
   td {
     padding: 1em;
     border-bottom: solid 2px #fff;
+    @media print {
+      padding: 0.2em;
+    }
   }
 
   td.number {
@@ -26,7 +29,10 @@ table.multiple-choice-details {
 
   .bar {
     height: 1.3em;
-    background: @defColor;
+    background-color: @defColor;
+    @media print {
+      background-color: @defColor !important;
+    }
   }
 
   .correct {

@@ -15,7 +15,7 @@ const AnswerComponent = {
 }
 
 @pureRender
-export default class AnswersTable extends Component {
+export default class Answer extends Component {
   render() {
     const { answer, alwaysOpen } = this.props
     const AComponent = AnswerComponent[answer.get('type')]
