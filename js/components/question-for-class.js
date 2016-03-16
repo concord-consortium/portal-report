@@ -46,7 +46,7 @@ export default class QuestionForClass extends Component {
         </div>
         <QuestionSummary question={question}/>
         <QuestionDetails question={question}/>
-        {answersVisible ? <AnswersTable answers={question.get('responses')}/> : ''}
+        {answersVisible ? <AnswersTable answers={question.get('answers')}/> : ''}
       </div>
     )
   }

@@ -10,15 +10,15 @@ export default class QuestionSummary extends Component {
   }
 
   get answered() {
-    return this.props.question.get('responses').filter(a => a.type !== 'NoAnswer').size
+    return this.props.question.get('answers').filter(a => a.type !== 'NoAnswer').size
   }
 
   get notAnswered() {
-    return this.props.question.get('responses').filter(a => a.type === 'NoAnswer').size
+    return this.props.question.get('answers').filter(a => a.type === 'NoAnswer').size
   }
 
   get total() {
-    return this.props.question.get('responses').size
+    return this.props.question.get('answers').size
   }
 
   render() {
