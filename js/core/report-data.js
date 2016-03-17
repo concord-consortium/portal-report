@@ -43,9 +43,7 @@ export function question(state, key) {
   const question = state.get('questions').get(key.toString())
                   // Sort answers by student name, so views don't have to care about it.
   return question.set('answers', question.get('answers').map(key => answer(state, key))
-                                                          .sortBy(a => a.getIn(['student', 'name'])))
-                 // Question is visible if it's selected or visibility filter is inactive.
-                 .set('visible', question.get('visible') || !state.get('visibilityFilterActive'))
+                                                        .sortBy(a => a.getIn(['student', 'name'])))
 }
 
 export function answer(state, key) {
