@@ -86,13 +86,14 @@ class App extends Component {
 
 function mapStateToProps(state) {
   const data = state.get('data')
+  const error = data.get('error')
   const reportState = state.get('report')
   const compareViewAnswers = reportState && reportState.get('compareViewAnswers')
-  const dataDownloaded = !!data.get('lastUpdated')
+  const dataDownloaded = !error && !!data.get('lastUpdated')
   return {
     isFetching: data.get('isFetching'),
     lastUpdated: data.get('lastUpdated'),
-    error: data.get('error'),
+    error: error,
     report: dataDownloaded && reportData(reportState),
     compareViewAnswers: compareViewAnswers && compareViewData(reportState)
   }
