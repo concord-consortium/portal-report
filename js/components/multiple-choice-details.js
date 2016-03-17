@@ -14,12 +14,15 @@ function answerIncludeChoice(answer, choice) {
 function getChoicesStats(choices, answers) {
   let stats = {}
   const answersFlat = answers.reduce((res, answer) => res.concat(answer.answer), [])
+  const totalAnswers = answersFlat.length
   choices.forEach((choice) => {
     const filterFunc = choice.noAnswer ? noAnswer : ans => answerIncludeChoice(ans, choice)
     const count = answers.filter(filterFunc).length
+    // avoid division by zero:
+    const percent = totalAnswers === 0 ? 0 : count / totalAnswers * 100
     stats[choice.choice] = {
       count,
-      percent: (count / answersFlat.length * 100).toFixed(1)
+      percent: (percent).toFixed(1)
     }
   })
   return stats
