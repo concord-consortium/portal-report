@@ -27,6 +27,25 @@ function data(state = Map(), action) {
   }
 }
 
+function setAnonymous(state, anonymous) {
+  let idx = 1
+  const newStudents = state.get('students').map(s => s.set('name', anonymous ? `Student ${idx++}` : s.get('realName')))
+  return state.set('anonymous', anonymous)
+              .set('students', newStudents)
+}
+
+function setVisibilityFilterActive(state, filterActive) {
+  return state.withMutations(state => {
+    state.set('visibilityFilterActive', filterActive)
+    state.get('questions').forEach((value, key) => {
+      const questionSelected = state.getIn(['questions', key, 'selected'])
+      // Question is visible if it's selected or visibility filter is inactive.
+      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive)
+    })
+    return state
+  })
+}
+
 const INITIAL_REPORT_STATE = Map({
   type: 'class'
 })
@@ -34,37 +53,28 @@ function report(state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
       const data = transformJSONResponse(action.response)
-      return state.set('students', Immutable.fromJS(data.entities.students))
-                  .set('investigations', Immutable.fromJS(data.entities.investigations))
-                  .set('activities', Immutable.fromJS(data.entities.activities))
-                  .set('sections', Immutable.fromJS(data.entities.sections))
-                  .set('pages', Immutable.fromJS(data.entities.pages))
-                  .set('questions', Immutable.fromJS(data.entities.questions))
-                  .set('answers', Immutable.fromJS(data.entities.answers))
-                  .set('clazzName', data.result.class.name)
-                  .set('visibilityFilterActive', data.result.visibilityFilter.active)
-                  .set('anonymous', data.result.anonymousReport)
-                  .set('hideSectionNames', data.result.isOfferingExternal)
+      state = state.set('students', Immutable.fromJS(data.entities.students))
+                   .set('investigations', Immutable.fromJS(data.entities.investigations))
+                   .set('activities', Immutable.fromJS(data.entities.activities))
+                   .set('sections', Immutable.fromJS(data.entities.sections))
+                   .set('pages', Immutable.fromJS(data.entities.pages))
+                   .set('questions', Immutable.fromJS(data.entities.questions))
+                   .set('answers', Immutable.fromJS(data.entities.answers))
+                   .set('clazzName', data.result.class.name)
+                   .set('hideSectionNames', data.result.isOfferingExternal)
+      state = setAnonymous(state, data.result.anonymousReport)
+      state = setVisibilityFilterActive(state, data.result.visibilityFilter.active)
+      return state
     case SET_TYPE:
       return state.set('type', action.value)
     case SET_QUESTION_SELECTED:
       return state.setIn(['questions', action.key, 'selected'], action.value)
     case SHOW_SELECTED_QUESTIONS:
-      // For each question: visible = selected
-      return state.withMutations(state => {
-        state.set('visibilityFilterActive', true)
-        state.get('questions').forEach((value, key) => {
-          state = state.setIn(['questions', key, 'visible'], state.getIn(['questions', key, 'selected']))
-        })
-        return state
-      })
+      return setVisibilityFilterActive(state, true)
     case SHOW_ALL_QUESTIONS:
-      return state.set('visibilityFilterActive', false)
+      return setVisibilityFilterActive(state, false)
     case SET_ANONYMOUS:
-      let idx = 1
-      const newStudents = state.get('students').map(s => s.set('name', action.value ? `Student ${idx++}` : s.get('realName')))
-      return state.set('anonymous', action.value)
-                  .set('students', newStudents)
+      return setAnonymous(state, action.value)
     case SET_ANSWER_SELECTED_FOR_COMPARE:
       const compareViewAns = state.get('compareViewAnswers')
       if (compareViewAns) {
