@@ -1,3 +1,5 @@
+![build-status](https://travis-ci.org/concord-consortium/portal-report.svg?branch=master)
+
 # portal-report
 
 [Portal](https://github.com/concord-consortium/rigse) report for teachers.
@@ -49,6 +51,12 @@ Additional, useful resources:
 * I would try to make sure that each component specifies all its necessary styles to look reasonably good and it doesn't depend on styles defined somewhere else (e.g. in parent components). Parent components or global styles could be used to theme components, but they should work just fine without them too.
 * When you modify the component style, please check how it looks while printed.
 
-## License 
+## Test
+There are two scripts defined in `package.json`: `test` and `test:watch`.  These commands can be run from the terminal using the syntax `npm run test` and `npm run test:watch` respectively. The former script run the mocha test suite one time. The latter watches `test/**/*.js?x` files for changes, and runs the given test suite when the file changes.
+
+ These tests were setup using [this tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html#unit-testing-support) as a guide.  They use [mocha](https://mochajs.org/), [chai](http://chaijs.com/api/bdd/), and [react test utils](https://facebook.github.io/react/docs/test-utils.html).
+
+
+## License
 
 [MIT](https://github.com/concord-consortium/grasp-seasons/blob/master/LICENSE)
