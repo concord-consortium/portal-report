@@ -6,7 +6,11 @@ import '../../css/question-summary.less'
 @pureRender
 export default class QuestionSummary extends Component {
   get prompt() {
-    return this.props.question.get('prompt') || this.props.question.get('name')
+    const prompt = this.props.question.get('prompt') || this.props.question.get('name')
+    // see discussion here: https://facebook.github.io/react/tips/dangerously-set-inner-html.html
+    // Note that prompts have had tags removed on the portal side. HTML entities are passed through though,
+    // (eg: `&deg;`) and we would like to render them here.
+    return {__html: prompt}
   }
 
   get answered() {
@@ -24,9 +28,7 @@ export default class QuestionSummary extends Component {
   render() {
     return (
       <div className='question-summary'>
-        <div className='prompt'>
-          {this.prompt}
-        </div>
+        <div className='prompt' dangerouslySetInnerHTML={this.prompt}/>
         <div className='stats'>
           <div><strong>Answered:</strong> {this.answered}</div>
           <div><strong>Not answered:</strong> {this.notAnswered}</div>

@@ -23,7 +23,7 @@
                     "id": 116,
                     "name": "Multiple Choice Question element",
                     "description": "description ...",
-                    "prompt": "why does ...",
+                    "prompt": "why does the temperature stay at 99&deg;",
                     "enable_rationale": false,
                     "rationale_prompt": "Explain your choice. Give specific examples.",
                     "allow_multiple_selection": null,
