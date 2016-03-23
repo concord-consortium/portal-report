@@ -28852,13 +28852,14 @@
 
 	function mapStateToProps(state) {
 	  var data = state.get('data');
+	  var error = data.get('error');
 	  var reportState = state.get('report');
 	  var compareViewAnswers = reportState && reportState.get('compareViewAnswers');
-	  var dataDownloaded = !!data.get('lastUpdated');
+	  var dataDownloaded = !error && !!data.get('lastUpdated');
 	  return {
 	    isFetching: data.get('isFetching'),
 	    lastUpdated: data.get('lastUpdated'),
-	    error: data.get('error'),
+	    error: error,
 	    report: dataDownloaded && (0, _reportData2.default)(reportState),
 	    compareViewAnswers: compareViewAnswers && (0, _compareViewData2.default)(reportState)
 	  };
@@ -31915,7 +31916,7 @@
 											"id": 116,
 											"name": "Multiple Choice Question element",
 											"description": "description ...",
-											"prompt": "why does ...",
+											"prompt": "why does the temperature stay at 99&deg;",
 											"enable_rationale": false,
 											"rationale_prompt": "Explain your choice. Give specific examples.",
 											"allow_multiple_selection": null,
@@ -56731,14 +56732,17 @@
 	  var answersFlat = answers.reduce(function (res, answer) {
 	    return res.concat(answer.answer);
 	  }, []);
+	  var totalAnswers = answersFlat.length;
 	  choices.forEach(function (choice) {
 	    var filterFunc = choice.noAnswer ? noAnswer : function (ans) {
 	      return answerIncludeChoice(ans, choice);
 	    };
 	    var count = answers.filter(filterFunc).length;
+	    // avoid division by zero:
+	    var percent = totalAnswers === 0 ? 0 : count / totalAnswers * 100;
 	    stats[choice.choice] = {
 	      count: count,
-	      percent: (count / answersFlat.length * 100).toFixed(1)
+	      percent: percent.toFixed(1)
 	    };
 	  });
 	  return stats;
@@ -58147,11 +58151,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'question-summary' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'prompt' },
-	          this.prompt
-	        ),
+	        _react2.default.createElement('div', { className: 'prompt', dangerouslySetInnerHTML: this.prompt }),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'stats' },
@@ -58195,21 +58195,25 @@
 	  }, {
 	    key: 'prompt',
 	    get: function get() {
-	      return this.props.question.get('prompt') || this.props.question.get('name');
+	      var prompt = this.props.question.get('prompt') || this.props.question.get('name');
+	      // see discussion here: https://facebook.github.io/react/tips/dangerously-set-inner-html.html
+	      // Note that prompts have had tags removed on the portal side. HTML entities are passed through though,
+	      // (eg: `&deg;`) and we would like to render them here.
+	      return { __html: prompt };
 	    }
 	  }, {
 	    key: 'answered',
 	    get: function get() {
-	      return this.props.question.get('answers').filter(function (a) {
+	      return this.props.question.get('answers').toJS().filter(function (a) {
 	        return a.type !== 'NoAnswer';
-	      }).size;
+	      }).length;
 	    }
 	  }, {
 	    key: 'notAnswered',
 	    get: function get() {
-	      return this.props.question.get('answers').filter(function (a) {
+	      return this.props.question.get('answers').toJS().filter(function (a) {
 	        return a.type === 'NoAnswer';
-	      }).size;
+	      }).length;
 	    }
 	  }, {
 	    key: 'total',
@@ -59235,9 +59239,7 @@
 	    return answer(state, key);
 	  }).sortBy(function (a) {
 	    return a.getIn(['student', 'name']);
-	  }))
-	  // Question is visible if it's selected or visibility filter is inactive.
-	  .set('visible', question.get('visible') || !state.get('visibilityFilterActive'));
+	  }));
 	}
 
 	function answer(state, key) {
@@ -59692,6 +59694,26 @@
 	  }
 	}
 
+	function setAnonymous(state, anonymous) {
+	  var idx = 1;
+	  var newStudents = state.get('students').map(function (s) {
+	    return s.set('name', anonymous ? 'Student ' + idx++ : s.get('realName'));
+	  });
+	  return state.set('anonymous', anonymous).set('students', newStudents);
+	}
+
+	function setVisibilityFilterActive(state, filterActive) {
+	  return state.withMutations(function (state) {
+	    state.set('visibilityFilterActive', filterActive);
+	    state.get('questions').forEach(function (value, key) {
+	      var questionSelected = state.getIn(['questions', key, 'selected']);
+	      // Question is visible if it's selected or visibility filter is inactive.
+	      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive);
+	    });
+	    return state;
+	  });
+	}
+
 	var INITIAL_REPORT_STATE = (0, _immutable.Map)({
 	  type: 'class'
 	});
@@ -59702,28 +59724,20 @@
 	  switch (action.type) {
 	    case _actions.RECEIVE_DATA:
 	      var data = (0, _transformJsonResponse2.default)(action.response);
-	      return state.set('students', _immutable2.default.fromJS(data.entities.students)).set('investigations', _immutable2.default.fromJS(data.entities.investigations)).set('activities', _immutable2.default.fromJS(data.entities.activities)).set('sections', _immutable2.default.fromJS(data.entities.sections)).set('pages', _immutable2.default.fromJS(data.entities.pages)).set('questions', _immutable2.default.fromJS(data.entities.questions)).set('answers', _immutable2.default.fromJS(data.entities.answers)).set('clazzName', data.result.class.name).set('visibilityFilterActive', data.result.visibilityFilter.active).set('anonymous', data.result.anonymousReport).set('hideSectionNames', data.result.isOfferingExternal);
+	      state = state.set('students', _immutable2.default.fromJS(data.entities.students)).set('investigations', _immutable2.default.fromJS(data.entities.investigations)).set('activities', _immutable2.default.fromJS(data.entities.activities)).set('sections', _immutable2.default.fromJS(data.entities.sections)).set('pages', _immutable2.default.fromJS(data.entities.pages)).set('questions', _immutable2.default.fromJS(data.entities.questions)).set('answers', _immutable2.default.fromJS(data.entities.answers)).set('clazzName', data.result.class.name).set('hideSectionNames', data.result.isOfferingExternal);
+	      state = setAnonymous(state, data.result.anonymousReport);
+	      state = setVisibilityFilterActive(state, data.result.visibilityFilter.active);
+	      return state;
 	    case _actions.SET_TYPE:
 	      return state.set('type', action.value);
 	    case _actions.SET_QUESTION_SELECTED:
 	      return state.setIn(['questions', action.key, 'selected'], action.value);
 	    case _actions.SHOW_SELECTED_QUESTIONS:
-	      // For each question: visible = selected
-	      return state.withMutations(function (state) {
-	        state.set('visibilityFilterActive', true);
-	        state.get('questions').forEach(function (value, key) {
-	          state = state.setIn(['questions', key, 'visible'], state.getIn(['questions', key, 'selected']));
-	        });
-	        return state;
-	      });
+	      return setVisibilityFilterActive(state, true);
 	    case _actions.SHOW_ALL_QUESTIONS:
-	      return state.set('visibilityFilterActive', false);
+	      return setVisibilityFilterActive(state, false);
 	    case _actions.SET_ANONYMOUS:
-	      var idx = 1;
-	      var newStudents = state.get('students').map(function (s) {
-	        return s.set('name', action.value ? 'Student ' + idx++ : s.get('realName'));
-	      });
-	      return state.set('anonymous', action.value).set('students', newStudents);
+	      return setAnonymous(state, action.value);
 	    case _actions.SET_ANSWER_SELECTED_FOR_COMPARE:
 	      var compareViewAns = state.get('compareViewAnswers');
 	      if (compareViewAns) {
