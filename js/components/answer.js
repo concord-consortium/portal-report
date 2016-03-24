@@ -18,6 +18,11 @@ const AnswerComponent = {
 export default class Answer extends Component {
   render() {
     const { answer, alwaysOpen } = this.props
+    if (typeof answer === 'undefined') {
+      // TODO:  This should be set, but in the case of sequences
+      // it seems its not. TBD later.
+      return <div>No response</div>
+    }
     const AComponent = AnswerComponent[answer.get('type')]
     if (!AComponent) {
       return <div>Answer type not supported.</div>
