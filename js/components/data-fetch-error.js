@@ -7,7 +7,7 @@ import '../../css/data-fetch-error.less'
 export default class DataFetchError extends Component {
   renderUnauthorized() {
    return <div>
-      Your are not authorized to access report data. Your access token might have expired.
+      You are not authorized to access report data. Your access token might have expired.
       Please go back to Portal and launch report again.
     </div>
   }
