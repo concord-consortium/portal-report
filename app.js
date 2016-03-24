@@ -56029,6 +56029,7 @@
 	      var setAnonymous = _props.setAnonymous;
 
 	      var isAnonymous = report.get('anonymous');
+	      var showSelectedDisabled = !report.get('has_selected_questions');
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -56040,7 +56041,7 @@
 	            { className: 'controls' },
 	            _react2.default.createElement(
 	              _button2.default,
-	              { onClick: showSelectedQuestions },
+	              { onClick: showSelectedQuestions, disabled: showSelectedDisabled },
 	              'Show selected'
 	            ),
 	            _react2.default.createElement(
@@ -58936,7 +58937,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        'Your are not authorized to access report data. Your access token might have expired. Please go back to Portal and launch report again.'
+	        'You are not authorized to access report data. Your access token might have expired. Please go back to Portal and launch report again.'
 	      );
 	    }
 	  }, {
@@ -59662,6 +59663,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _keys = __webpack_require__(945);
+
+	var _keys2 = _interopRequireDefault(_keys);
+
 	exports.default = reducer;
 
 	var _immutable = __webpack_require__(864);
@@ -59670,7 +59676,7 @@
 
 	var _actions = __webpack_require__(588);
 
-	var _transformJsonResponse = __webpack_require__(945);
+	var _transformJsonResponse = __webpack_require__(948);
 
 	var _transformJsonResponse2 = _interopRequireDefault(_transformJsonResponse);
 
@@ -59704,11 +59710,12 @@
 
 	function setVisibilityFilterActive(state, filterActive) {
 	  return state.withMutations(function (state) {
+	    var noneSelected = !state.get('has_selected_questions');
 	    state.set('visibilityFilterActive', filterActive);
 	    state.get('questions').forEach(function (value, key) {
 	      var questionSelected = state.getIn(['questions', key, 'selected']);
-	      // Question is visible if it's selected or visibility filter is inactive.
-	      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive);
+	      // Question is visible if it's selected, visibility filter is inactive, or none are selected
+	      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive || noneSelected);
 	    });
 	    return state;
 	  });
@@ -59717,6 +59724,20 @@
 	var INITIAL_REPORT_STATE = (0, _immutable.Map)({
 	  type: 'class'
 	});
+
+	function setHasSelectedQuestions(state) {
+	  var questions = state.get('questions').toJS();
+	  var found = (0, _keys2.default)(questions).filter(function (key) {
+	    return questions[key].selected === true;
+	  });
+	  if (found.length > 0) {
+	    state = state.set('has_selected_questions', true);
+	  } else {
+	    state = state.set('has_selected_questions', false);
+	  }
+	  return state;
+	}
+
 	function report() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_REPORT_STATE : arguments[0];
 	  var action = arguments[1];
@@ -59727,11 +59748,13 @@
 	      state = state.set('students', _immutable2.default.fromJS(data.entities.students)).set('investigations', _immutable2.default.fromJS(data.entities.investigations)).set('activities', _immutable2.default.fromJS(data.entities.activities)).set('sections', _immutable2.default.fromJS(data.entities.sections)).set('pages', _immutable2.default.fromJS(data.entities.pages)).set('questions', _immutable2.default.fromJS(data.entities.questions)).set('answers', _immutable2.default.fromJS(data.entities.answers)).set('clazzName', data.result.class.name).set('hideSectionNames', data.result.isOfferingExternal);
 	      state = setAnonymous(state, data.result.anonymousReport);
 	      state = setVisibilityFilterActive(state, data.result.visibilityFilter.active);
+	      state = setHasSelectedQuestions(state);
 	      return state;
 	    case _actions.SET_TYPE:
 	      return state.set('type', action.value);
 	    case _actions.SET_QUESTION_SELECTED:
-	      return state.setIn(['questions', action.key, 'selected'], action.value);
+	      state = state.setIn(['questions', action.key, 'selected'], action.value);
+	      return setHasSelectedQuestions(state);
 	    case _actions.SHOW_SELECTED_QUESTIONS:
 	      return setVisibilityFilterActive(state, true);
 	    case _actions.SHOW_ALL_QUESTIONS:
@@ -59774,13 +59797,40 @@
 /* 945 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = { "default": __webpack_require__(946), __esModule: true };
+
+/***/ },
+/* 946 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(947);
+	module.exports = __webpack_require__(516).Object.keys;
+
+/***/ },
+/* 947 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(506)
+	  , $keys    = __webpack_require__(548);
+
+	__webpack_require__(514)('keys', function(){
+	  return function keys(it){
+	    return $keys(toObject(it));
+	  };
+	});
+
+/***/ },
+/* 948 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _keys = __webpack_require__(946);
+	var _keys = __webpack_require__(945);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
@@ -59895,33 +59945,6 @@
 	    student.realName = student.name;
 	  });
 	}
-
-/***/ },
-/* 946 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(947), __esModule: true };
-
-/***/ },
-/* 947 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(948);
-	module.exports = __webpack_require__(516).Object.keys;
-
-/***/ },
-/* 948 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 19.1.2.14 Object.keys(O)
-	var toObject = __webpack_require__(506)
-	  , $keys    = __webpack_require__(548);
-
-	__webpack_require__(514)('keys', function(){
-	  return function keys(it){
-	    return $keys(toObject(it));
-	  };
-	});
 
 /***/ },
 /* 949 */
