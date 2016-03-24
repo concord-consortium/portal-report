@@ -70,11 +70,12 @@ export default class Report extends Component {
   render() {
     const { report, showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
     const isAnonymous = report.get('anonymous')
+    const showSelectedDisabled = !report.get('has_selected_questions')
     return (
       <div>
         <div className='report-header'>
           <div className='controls'>
-            <Button onClick={showSelectedQuestions}>Show selected</Button>
+            <Button onClick={showSelectedQuestions} disabled={showSelectedDisabled}>Show selected</Button>
             <Button onClick={showAllQuestions}>Show all</Button>
             <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
             <Button onClick={this.printStudentReports}>Print student reports</Button>
