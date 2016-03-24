@@ -55100,6 +55100,15 @@
 	      var answer = _props.answer;
 	      var alwaysOpen = _props.alwaysOpen;
 
+	      if (typeof answer === 'undefined') {
+	        // TODO:  This should be set, but in the case of sequences
+	        // it seems its not. TBD later.
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          'No response'
+	        );
+	      }
 	      var AComponent = AnswerComponent[answer.get('type')];
 	      if (!AComponent) {
 	        return _react2.default.createElement(
@@ -58664,13 +58673,16 @@
 	          'Question #',
 	          number
 	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'prompt' },
-	          question.get('prompt') || question.get('name')
-	        ),
+	        _react2.default.createElement('div', { className: 'prompt', dangerouslySetInnerHTML: this.prompt }),
 	        _react2.default.createElement(_answer2.default, { answer: answer })
 	      );
+	    }
+	  }, {
+	    key: 'prompt',
+	    get: function get() {
+	      // see discussion here: https://facebook.github.io/react/tips/dangerously-set-inner-html.html
+	      var prompt = this.props.question.get('prompt') || this.props.question.get('name');
+	      return { __html: prompt };
 	    }
 	  }]);
 	  return QuestionForStudent;
