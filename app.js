@@ -31915,6 +31915,7 @@
 										{
 											"id": 116,
 											"name": "Multiple Choice Question element",
+											"question_number": 1,
 											"description": "description ...",
 											"prompt": "why does the temperature stay at 99&deg;",
 											"enable_rationale": false,
@@ -32001,6 +32002,7 @@
 										{
 											"id": 252,
 											"name": "Open Response Question",
+											"question_number": 2,
 											"description": "What is the purpose of this question ...?",
 											"prompt": "why does ...",
 											"default_response": "",
@@ -32070,6 +32072,7 @@
 										{
 											"id": 117,
 											"name": "Multiple Choice Question element",
+											"question_number": 1,
 											"description": "description ...",
 											"prompt": "why does ...",
 											"enable_rationale": false,
@@ -32152,6 +32155,7 @@
 										{
 											"id": 253,
 											"name": "Open Response Question",
+											"question_number": 2,
 											"description": "What is the purpose of this question ...?",
 											"prompt": "why does ...",
 											"default_response": "",
@@ -32207,6 +32211,7 @@
 										{
 											"id": 12,
 											"name": "Embeddable::ImageQuestion element",
+											"question_number": 3,
 											"prompt": "why does ...",
 											"drawing_prompt": null,
 											"is_required": false,
@@ -32266,6 +32271,7 @@
 										{
 											"id": 7,
 											"name": "Labbook album",
+											"question_number": 4,
 											"description": "description ...",
 											"width": 600,
 											"height": 500,
@@ -32336,6 +32342,7 @@
 										{
 											"id": 13,
 											"name": "Embeddable::ImageQuestion element",
+											"question_number": 1,
 											"prompt": "why does ...",
 											"drawing_prompt": "",
 											"is_required": false,
@@ -56038,7 +56045,7 @@
 	      var setAnonymous = _props.setAnonymous;
 
 	      var isAnonymous = report.get('anonymous');
-	      var showSelectedDisabled = !report.get('has_selected_questions');
+	      var showSelectedDisabled = report.get('noSelection');
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -56653,7 +56660,7 @@
 	          { className: 'question-header' },
 	          _react2.default.createElement('input', { type: 'checkbox', checked: question.get('selected'), onChange: this.handleCheckboxChange }),
 	          'Question #',
-	          number,
+	          question.get('questionNumber'),
 	          _react2.default.createElement(
 	            'a',
 	            { className: 'answers-toggle', onClick: this.toggleAnswersVisibility },
@@ -59675,11 +59682,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _keys = __webpack_require__(945);
-
-	var _keys2 = _interopRequireDefault(_keys);
-
 	exports.default = reducer;
 
 	var _immutable = __webpack_require__(864);
@@ -59688,7 +59690,7 @@
 
 	var _actions = __webpack_require__(588);
 
-	var _transformJsonResponse = __webpack_require__(948);
+	var _transformJsonResponse = __webpack_require__(945);
 
 	var _transformJsonResponse2 = _interopRequireDefault(_transformJsonResponse);
 
@@ -59722,12 +59724,12 @@
 
 	function setVisibilityFilterActive(state, filterActive) {
 	  return state.withMutations(function (state) {
-	    var noneSelected = !state.get('has_selected_questions');
+	    var noSelection = state.get('noSelection');
 	    state.set('visibilityFilterActive', filterActive);
 	    state.get('questions').forEach(function (value, key) {
 	      var questionSelected = state.getIn(['questions', key, 'selected']);
 	      // Question is visible if it's selected, visibility filter is inactive, or none are selected
-	      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive || noneSelected);
+	      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive || noSelection);
 	    });
 	    return state;
 	  });
@@ -59737,17 +59739,11 @@
 	  type: 'class'
 	});
 
-	function setHasSelectedQuestions(state) {
-	  var questions = state.get('questions').toJS();
-	  var found = (0, _keys2.default)(questions).filter(function (key) {
-	    return questions[key].selected === true;
+	function setNoSelection(state) {
+	  var selectedQs = state.get('questions').filter(function (question, id) {
+	    return question.get('selected') === true;
 	  });
-	  if (found.length > 0) {
-	    state = state.set('has_selected_questions', true);
-	  } else {
-	    state = state.set('has_selected_questions', false);
-	  }
-	  return state;
+	  return state.set('noSelection', selectedQs.size === 0);
 	}
 
 	function report() {
@@ -59759,14 +59755,14 @@
 	      var data = (0, _transformJsonResponse2.default)(action.response);
 	      state = state.set('students', _immutable2.default.fromJS(data.entities.students)).set('investigations', _immutable2.default.fromJS(data.entities.investigations)).set('activities', _immutable2.default.fromJS(data.entities.activities)).set('sections', _immutable2.default.fromJS(data.entities.sections)).set('pages', _immutable2.default.fromJS(data.entities.pages)).set('questions', _immutable2.default.fromJS(data.entities.questions)).set('answers', _immutable2.default.fromJS(data.entities.answers)).set('clazzName', data.result.class.name).set('hideSectionNames', data.result.isOfferingExternal);
 	      state = setAnonymous(state, data.result.anonymousReport);
+	      state = setNoSelection(state);
 	      state = setVisibilityFilterActive(state, data.result.visibilityFilter.active);
-	      state = setHasSelectedQuestions(state);
 	      return state;
 	    case _actions.SET_TYPE:
 	      return state.set('type', action.value);
 	    case _actions.SET_QUESTION_SELECTED:
 	      state = state.setIn(['questions', action.key, 'selected'], action.value);
-	      return setHasSelectedQuestions(state);
+	      return setNoSelection(state);
 	    case _actions.SHOW_SELECTED_QUESTIONS:
 	      return setVisibilityFilterActive(state, true);
 	    case _actions.SHOW_ALL_QUESTIONS:
@@ -59809,40 +59805,13 @@
 /* 945 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(946), __esModule: true };
-
-/***/ },
-/* 946 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(947);
-	module.exports = __webpack_require__(516).Object.keys;
-
-/***/ },
-/* 947 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// 19.1.2.14 Object.keys(O)
-	var toObject = __webpack_require__(506)
-	  , $keys    = __webpack_require__(548);
-
-	__webpack_require__(514)('keys', function(){
-	  return function keys(it){
-	    return $keys(toObject(it));
-	  };
-	});
-
-/***/ },
-/* 948 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _keys = __webpack_require__(945);
+	var _keys = __webpack_require__(946);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
@@ -59957,6 +59926,33 @@
 	    student.realName = student.name;
 	  });
 	}
+
+/***/ },
+/* 946 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(947), __esModule: true };
+
+/***/ },
+/* 947 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(948);
+	module.exports = __webpack_require__(516).Object.keys;
+
+/***/ },
+/* 948 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(506)
+	  , $keys    = __webpack_require__(548);
+
+	__webpack_require__(514)('keys', function(){
+	  return function keys(it){
+	    return $keys(toObject(it));
+	  };
+	});
 
 /***/ },
 /* 949 */
