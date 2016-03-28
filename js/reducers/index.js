@@ -36,12 +36,12 @@ function setAnonymous(state, anonymous) {
 
 function setVisibilityFilterActive(state, filterActive) {
   return state.withMutations(state => {
-    const noneSelected = !state.get('has_selected_questions')
+    const noSelection = state.get('noSelection')
     state.set('visibilityFilterActive', filterActive)
     state.get('questions').forEach((value, key) => {
       const questionSelected = state.getIn(['questions', key, 'selected'])
       // Question is visible if it's selected, visibility filter is inactive, or none are selected
-      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive || noneSelected)
+      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive || noSelection)
     })
     return state
   })
@@ -51,15 +51,9 @@ const INITIAL_REPORT_STATE = Map({
   type: 'class'
 })
 
-function setHasSelectedQuestions(state) {
-  const questions = state.get('questions').toJS()
-  let found = Object.keys(questions).filter(key => questions[key].selected === true)
-  if (found.length > 0){
-    state = state.set('has_selected_questions', true)
-  } else {
-    state = state.set('has_selected_questions', false)
-  }
-  return state
+function setNoSelection(state) {
+  const selectedQs = state.get('questions').filter((question,id) => question.get('selected') === true)
+  return state.set('noSelection', selectedQs.size === 0)
 }
 
 function report(state = INITIAL_REPORT_STATE, action) {
@@ -76,14 +70,14 @@ function report(state = INITIAL_REPORT_STATE, action) {
                    .set('clazzName', data.result.class.name)
                    .set('hideSectionNames', data.result.isOfferingExternal)
       state = setAnonymous(state, data.result.anonymousReport)
+      state = setNoSelection(state)
       state = setVisibilityFilterActive(state, data.result.visibilityFilter.active)
-      state = setHasSelectedQuestions(state)
       return state
     case SET_TYPE:
       return state.set('type', action.value)
     case SET_QUESTION_SELECTED:
       state = state.setIn(['questions', action.key, 'selected'], action.value)
-      return setHasSelectedQuestions(state)
+      return setNoSelection(state)
     case SHOW_SELECTED_QUESTIONS:
       return setVisibilityFilterActive(state, true)
     case SHOW_ALL_QUESTIONS:

@@ -70,7 +70,7 @@ export default class Report extends Component {
   render() {
     const { report, showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
     const isAnonymous = report.get('anonymous')
-    const showSelectedDisabled = !report.get('has_selected_questions')
+    const showSelectedDisabled = report.get('noSelection')
     return (
       <div>
         <div className='report-header'>
