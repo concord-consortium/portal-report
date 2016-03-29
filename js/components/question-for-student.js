@@ -16,6 +16,13 @@ export default class QuestionForStudent extends Component {
     onSelectChange(question.get('key'), event.target.checked)
   }
 
+
+  get prompt() {
+    // see discussion here: https://facebook.github.io/react/tips/dangerously-set-inner-html.html
+    const prompt = this.props.question.get('prompt') || this.props.question.get('name')
+    return {__html: prompt}
+  }
+
   render() {
     const { question, student, number } = this.props
     const studentId = student.get('id')
@@ -26,7 +33,7 @@ export default class QuestionForStudent extends Component {
           <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
           Question #{number}
         </div>
-        <div className='prompt'>{question.get('prompt') || question.get('name')}</div>
+        <div className='prompt' dangerouslySetInnerHTML={this.prompt}/>
         <Answer answer={answer}/>
       </div>
     )

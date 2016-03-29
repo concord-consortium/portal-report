@@ -5,6 +5,8 @@ import {
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW} from '../actions'
 
 import transformJSONResponse from '../core/transform-json-response'
+import { noSelection } from '../calculations'
+
 
 function data(state = Map(), action) {
   switch (action.type) {
@@ -36,11 +38,12 @@ function setAnonymous(state, anonymous) {
 
 function setVisibilityFilterActive(state, filterActive) {
   return state.withMutations(state => {
+
     state.set('visibilityFilterActive', filterActive)
     state.get('questions').forEach((value, key) => {
       const questionSelected = state.getIn(['questions', key, 'selected'])
-      // Question is visible if it's selected or visibility filter is inactive.
-      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive)
+      // Question is visible if it's selected, visibility filter is inactive, or none are selected
+      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive || noSelection(state))
     })
     return state
   })
@@ -49,6 +52,9 @@ function setVisibilityFilterActive(state, filterActive) {
 const INITIAL_REPORT_STATE = Map({
   type: 'class'
 })
+
+
+
 function report(state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
