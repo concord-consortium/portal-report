@@ -4,6 +4,7 @@ import Investigation from './investigation'
 import Button from './button'
 
 import '../../css/report.less'
+import { noSelection } from '../calculations'
 
 @pureRender
 export default class Report extends Component {
@@ -70,7 +71,7 @@ export default class Report extends Component {
   render() {
     const { report, showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
     const isAnonymous = report.get('anonymous')
-    const showSelectedDisabled = report.get('noSelection')
+    const showSelectedDisabled = noSelection(report)
     return (
       <div>
         <div className='report-header'>
