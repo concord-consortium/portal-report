@@ -33,13 +33,13 @@ export default class QuestionForClass extends Component {
   }
 
   render() {
-    const { question, number } = this.props
+    const { question } = this.props
     const { answersVisible } = this.state
     return (
       <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
         <div className='question-header'>
           <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
-          Question #{number}
+          Question #{question.get('questionNumber')}
           <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
             {answersVisible ? 'Hide responses' : 'Show responses'}
           </a>
