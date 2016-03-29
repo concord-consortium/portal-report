@@ -12,8 +12,8 @@ export default class Page extends Component {
       <div className={`page ${page.get('visible') ? '' : 'hidden'}`}>
         <h4>Page: {page.get('name')}</h4>
         <div>
-          {page.get('children').map((question, idx) => {
-              return <Question key={question.get('key')} question={question} number={idx + 1} reportFor={reportFor}/>
+          {page.get('children').map((question) => {
+              return <Question key={question.get('key')} question={question} reportFor={reportFor}/>
           })}
         </div>
       </div>

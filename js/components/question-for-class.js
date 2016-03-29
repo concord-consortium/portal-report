@@ -33,7 +33,7 @@ export default class QuestionForClass extends Component {
   }
 
   render() {
-    const { question, number } = this.props
+    const { question } = this.props
     const { answersVisible } = this.state
     return (
       <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>

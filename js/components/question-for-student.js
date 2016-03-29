@@ -24,14 +24,14 @@ export default class QuestionForStudent extends Component {
   }
 
   render() {
-    const { question, student, number } = this.props
+    const { question, student } = this.props
     const studentId = student.get('id')
     const answer = question.get('answers').filter(a => a.get('studentId') === studentId).first()
     return (
       <div className={`question for-student ${question.get('visible') ? '' : 'hidden'}`}>
         <div className='question-header'>
           <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
-          Question #{number}
+          Question #{question.get('questionNumber')}
         </div>
         <div className='prompt' dangerouslySetInnerHTML={this.prompt}/>
         <Answer answer={answer}/>
