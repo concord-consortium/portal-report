@@ -16,8 +16,9 @@ export default class Report extends Component {
 
   renderClassReport() {
     const { report } = this.props
+    const className  = report.get('type') == 'class' ? 'report-content' : 'report-content hidden'
     return (
-      <div className='report-content'>
+      <div className={className}>
         <h1>Report for: {report.get('clazzName')}</h1>
         <Investigation investigation={report.get('investigation')} reportFor={'class'}/>
       </div>
@@ -26,8 +27,9 @@ export default class Report extends Component {
 
   renderStudentReports() {
     const { report } = this.props
+    const className  = report.get('type') ==='student' ? 'report-content' : 'report-content hidden'
     return [...report.get('students').values()].filter(s => s.get('startedOffering')).map(s =>
-      <div key={s.get('id')} className='report-content'>
+      <div key={s.get('id')} className={className}>
         <h1>Report for: {s.get('name')}</h1>
         <Investigation investigation={report.get('investigation')} reportFor={s}/>
       </div>
@@ -82,7 +84,8 @@ export default class Report extends Component {
             <Button onClick={this.printStudentReports}>Print student reports</Button>
           </div>
         </div>
-        {report.get('type') === 'class' ? this.renderClassReport() : this.renderStudentReports()}
+        {this.renderClassReport()}
+        {this.renderStudentReports()}
       </div>
     )
   }
