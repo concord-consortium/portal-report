@@ -65,7 +65,7 @@ export default function transformJSONResponse(json) {
     }
   }
   applyVisibilityFilter(response.entities.questions, response.result.visibilityFilter)
-  copyAnswerKeysToObjects(response.entities.answers)
+  copyAnswerKeysToObjects(response.entities.answers || [])
   saveStudentsRealNames(response.entities.students)
   return response
 }
