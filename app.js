@@ -55959,9 +55959,10 @@
 	    value: function renderClassReport() {
 	      var report = this.props.report;
 
+	      var className = report.get('type') == 'class' ? 'report-content' : 'report-content hidden';
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'report-content' },
+	        { className: className },
 	        _react2.default.createElement(
 	          'h1',
 	          null,
@@ -55976,12 +55977,13 @@
 	    value: function renderStudentReports() {
 	      var report = this.props.report;
 
+	      var className = report.get('type') === 'student' ? 'report-content' : 'report-content hidden';
 	      return [].concat((0, _toConsumableArray3.default)(report.get('students').values())).filter(function (s) {
 	        return s.get('startedOffering');
 	      }).map(function (s) {
 	        return _react2.default.createElement(
 	          'div',
-	          { key: s.get('id'), className: 'report-content' },
+	          { key: s.get('id'), className: className },
 	          _react2.default.createElement(
 	            'h1',
 	            null,
@@ -56081,7 +56083,8 @@
 	            )
 	          )
 	        ),
-	        report.get('type') === 'class' ? this.renderClassReport() : this.renderStudentReports()
+	        this.renderClassReport(),
+	        this.renderStudentReports()
 	      );
 	    }
 	  }]);
@@ -58890,7 +58893,7 @@
 
 
 	// module
-	exports.push([module.id, ".report {\n  width: 85%;\n  min-width: 30em;\n  background: #fff;\n  height: auto;\n  min-height: 100%;\n  margin: 0 auto;\n}\n.report .report-header {\n  margin-top: 1em;\n  margin-bottom: 1em;\n}\n.report .report-header .controls {\n  display: inline-block;\n  float: right;\n}\n@media print {\n  .report .report-header .controls {\n    display: none;\n  }\n}\n.report .report-header .controls a,\n.report .report-header .controls select {\n  margin: 0 0.5em;\n}\n.report .report-header .controls select {\n  display: inline-block;\n  width: auto;\n}\n.report .report-content {\n  margin-bottom: 4em;\n}\n@media print {\n  .report .report-content {\n    margin-bottom: 2em;\n    page-break-after: always;\n  }\n}\n.report .report-content h1 {\n  margin-bottom: .5em;\n  text-transform: uppercase;\n  color: #777;\n  font-size: 1em;\n  font-weight: normal;\n}\n@media print {\n  .report .report-content h1 {\n    color: #000;\n    font-size: 1.5em;\n    font-weight: bold;\n  }\n}\n", ""]);
+	exports.push([module.id, ".report {\n  width: 85%;\n  min-width: 30em;\n  background: #fff;\n  height: auto;\n  min-height: 100%;\n  margin: 0 auto;\n}\n.report .report-header {\n  margin-top: 1em;\n  margin-bottom: 1em;\n}\n.report .report-header .controls {\n  display: inline-block;\n  float: right;\n}\n@media print {\n  .report .report-header .controls {\n    display: none;\n  }\n}\n.report .report-header .controls a,\n.report .report-header .controls select {\n  margin: 0 0.5em;\n}\n.report .report-header .controls select {\n  display: inline-block;\n  width: auto;\n}\n.report .report-content {\n  margin-bottom: 4em;\n}\n@media print {\n  .report .report-content {\n    margin-bottom: 2em;\n    page-break-after: always;\n  }\n}\n.report .report-content h1 {\n  margin-bottom: .5em;\n  text-transform: uppercase;\n  color: #777;\n  font-size: 1em;\n  font-weight: normal;\n}\n@media print {\n  .report .report-content h1 {\n    color: #000;\n    font-size: 1.5em;\n    font-weight: bold;\n  }\n}\n.report .report-content.hidden {\n  display: none;\n}\n", ""]);
 
 	// exports
 
