@@ -14,6 +14,12 @@ export default class Report extends Component {
     this.printMediaQueryListener = this.printMediaQueryListener.bind(this)
   }
 
+  componentDidMount() {
+    const { report } = this.props
+    const investigation = report.get('investigation')
+    document.title = `${investigation.get('name')} Report for ${report.get('clazzName')}`
+  }
+
   renderClassReport() {
     const { report } = this.props
     const className  = report.get('type') == 'class' ? 'report-content' : 'report-content hidden'
