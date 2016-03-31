@@ -27,6 +27,28 @@ webpack-dev-server
 ```
 and open http://localhost:8080/ or http://localhost:8080/webpack-dev-server/ (auto-reload after each code change).
 
+## Test
+There are two scripts defined in `package.json`: `test` and `test:watch`.  These commands can be run from the terminal using the syntax `npm run test` and `npm run test:watch` respectively. The former script run the mocha test suite one time. The latter watches `test/**/*.js?x` files for changes, and runs the given test suite when the file changes.
+
+ These tests were setup using [this tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html#unit-testing-support) as a guide.  They use [mocha](https://mochajs.org/), [chai](http://chaijs.com/api/bdd/), and [react test utils](https://facebook.github.io/react/docs/test-utils.html).
+
+## Deployment
+
+#### Github Pages:
+You can build a simple github page deployment by following these steps:
+1. prepare the destination directory: `rm -rf ./dist`
+1. clone the gh-pages branch to dist: `git clone -b gh-pages git@github.com:concord-consortium/portal-report.git dist`
+1. build: `webpack`
+1. add the files and commit: `cd dist; git add .; git commit -m "gh-pages build"`
+1. push the changes to github: `git push`
+
+#### Travis S3 Deployment:
+Travis automatically builds and deploys branches and tags. A simple `git push` initiate a deployment of the current branch to amazon S3. Once completed the build we be available at `http://portal-report.concord.org/branch/<branchname>`.  The production branch deploys to [http://portal-report.concord.org/](http://portal-report.concord.org/branch/master/)
+
+#### Manual S3 Deployment
+If you want to do a manual deployment, put your S3 credentials in `.env` and copy `s3_deploy.sh` to a local git-ignored script. Fill in missing ENV vars, and then run that script.
+
+
 ### Frameworks, conventions
 
 This app is built using [React](https://facebook.github.io/react/), [Redux](http://redux.js.org/) and [ImmutableJS](https://facebook.github.io/immutable-js/). If you are not familiar with one of these, take a look at [this great tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html). It also uses lots of ES6 syntax, so it might be good to review it first. Semicolons are discussable, but I've decided to follow Redux examples style.
@@ -51,10 +73,6 @@ Additional, useful resources:
 * I would try to make sure that each component specifies all its necessary styles to look reasonably good and it doesn't depend on styles defined somewhere else (e.g. in parent components). Parent components or global styles could be used to theme components, but they should work just fine without them too.
 * When you modify the component style, please check how it looks while printed.
 
-## Test
-There are two scripts defined in `package.json`: `test` and `test:watch`.  These commands can be run from the terminal using the syntax `npm run test` and `npm run test:watch` respectively. The former script run the mocha test suite one time. The latter watches `test/**/*.js?x` files for changes, and runs the given test suite when the file changes.
-
- These tests were setup using [this tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html#unit-testing-support) as a guide.  They use [mocha](https://mochajs.org/), [chai](http://chaijs.com/api/bdd/), and [react test utils](https://facebook.github.io/react/docs/test-utils.html).
 
 
 ## License
