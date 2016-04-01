@@ -6,12 +6,14 @@ import ImageAnswerModal from './image-answer-modal'
 import '../../css/react-responsive-carousel.css'
 import '../../css/image-question-details.less'
 
-function renderImage(src, legend, key) {
+function renderImage(src, legend, key, note) {
   return (
     <div key={key}>
       <img src={src}/>
       <p className='legend'>
         {legend}
+        <br/>
+        <em>{note}</em>
       </p>
     </div>
   )
@@ -53,7 +55,7 @@ export default class ImageQuestionDetails extends Component {
 
   renderImages() {
     return this.images.map(a => {
-      return renderImage(a.getIn(['answer', 'imageUrl']), a.getIn(['student', 'name']), a.getIn(['student', 'id']))
+      return renderImage(a.getIn(['answer', 'imageUrl']), a.getIn(['student', 'name']), a.getIn(['student', 'id']), a.getIn(['answer', 'note']))
     }).toJS()
   }
 

@@ -20,7 +20,7 @@ export default class ImageAnswer extends Component {
       <div>
         <div className='image-answer'>
           <img src={imgAnswer.get('imageUrl')} onClick={() => this.setState({modalOpen: true})}/>
-          <div>{imgAnswer.get('note')}</div>
+          <div className='image-answer-note'>{imgAnswer.get('note')}</div>
         </div>
         <ImageAnswerModal answer={answer} show={this.state.modalOpen} onHide={() => this.setState({modalOpen: false})}/>
       </div>
