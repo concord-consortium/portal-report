@@ -8,7 +8,7 @@ rvm:
 install:
   - travis_retry gem install s3_website -v 2.12.3
   - travis_retry npm install
-before_script: WEBPACK_OPTIMIZE=true webpack
+before_script: webpack
 script:
   - "npm run test"
   - ./s3_deploy.sh
