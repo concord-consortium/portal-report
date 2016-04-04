@@ -65,13 +65,29 @@ export function invalidateData() {
 }
 
 export function setQuestionSelected(key, value) {
-  return {type: SET_QUESTION_SELECTED, key, value}
+  return (dispatch, getState) => {
+    const questionsMap = getState().getIn(['report', 'questions'])
+    // the questionsMap represents the previous state of the checkboxes so the filter needs to special case the current key
+    const selectedQuestionKeys = [...questionsMap.values()].filter(q => q.get('key') === key ? value : q.get('selected')).map(q => q.get('key'))
+    dispatch({
+      type: SET_QUESTION_SELECTED,
+      key, value,
+      // Send data to server. Don't care about success or failure. See: api-middleware.js
+      callAPI: {
+        type: 'updateReportSettings',
+        data: {
+          visibility_filter: {
+            questions: selectedQuestionKeys
+          }
+        }
+      }
+    })
+  }
 }
 
 export function showSelectedQuestions() {
   return (dispatch, getState) => {
     const questionsMap = getState().getIn(['report', 'questions'])
-    const selectedQuestionKeys = [...questionsMap.values()].filter(q => q.get('selected')).map(q => q.get('key'))
     dispatch({
       type: SHOW_SELECTED_QUESTIONS,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
@@ -79,8 +95,7 @@ export function showSelectedQuestions() {
         type: 'updateReportSettings',
         data: {
           visibility_filter: {
-            active: true,
-            questions: selectedQuestionKeys
+            active: true
           }
         }
       }
