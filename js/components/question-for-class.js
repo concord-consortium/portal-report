@@ -23,6 +23,7 @@ export default class QuestionForClass extends Component {
     }
     this.toggleAnswersVisibility = this.toggleAnswersVisibility.bind(this)
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
+    this.handleStickyStateChange = this.handleStickyStateChange.bind(this)
   }
 
   toggleAnswersVisibility() {
@@ -38,20 +39,30 @@ export default class QuestionForClass extends Component {
     this.setState({isSticky: isSticky})
   }
 
+  renderQuestionHeader() {
+    const { question, investigationName, activityName, sectionName, pageName } = this.props
+    const { isSticky } = this.state
+    if (isSticky) {
+      // the sectionName is not used for now
+      return <span>{[investigationName, activityName, `Page: ${pageName}`].join(' › ')} › Question #{question.get('questionNumber')}</span>
+    }
+    else {
+      return <span>Question #{question.get('questionNumber')}</span>
+    }
+  }
+
   render() {
     const { question } = this.props
-    const { answersVisible, isSticky } = this.state
+    const { answersVisible } = this.state
     return (
       <StickyContainer>
         <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
-          <Sticky className="sticky-question-header" onStickyStateChange={this.handleStickyStateChange.bind(this)}>
-            <div className={`question-header ${isSticky ? 'stuck-question-header' : ''}`}>
-              <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
-              Question #{question.get('questionNumber')}
-              <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
-                {answersVisible ? 'Hide responses' : 'Show responses'}
-              </a>
-            </div>
+          <Sticky className="question-header" onStickyStateChange={this.handleStickyStateChange}>
+            <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
+            { this.renderQuestionHeader() }
+            <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
+              {answersVisible ? 'Hide responses' : 'Show responses'}
+            </a>
           </Sticky>
           <QuestionSummary question={question}/>
           <QuestionDetails question={question}/>

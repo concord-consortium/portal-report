@@ -1,6 +1,6 @@
 .question {
   box-shadow: 1px 1px 4px rgba(102, 102, 102, .5);
-  padding: 1em;
+  padding: 0 1em 1em 1em;
   margin: 0 auto 1em auto;
   position: relative;
 
@@ -18,13 +18,9 @@
     }
   }
 
-  .sticky-question-header {
-    top: 10px !important;
-    z-index: 10000;
-  }
-
-  .stuck-question-header {
+  .sticky {
     background: #eb8723 !important;
+    z-index: 10000;
   }
 
   .question-header {
@@ -32,7 +28,7 @@
     color: #fff;
     font-size: 1em;
     font-weight: normal;
-    margin: -1em -1em .5em -1em;
+    margin: 0 -1em .5em -1em;
     padding: 1em;
     @media print {
       padding: 0;
