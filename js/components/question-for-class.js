@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { StickyContainer, Sticky } from 'react-sticky'
 import pureRender from 'pure-render-decorator'
 import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
@@ -17,10 +18,12 @@ export default class QuestionForClass extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      answersVisible: false
+      answersVisible: false,
+      isSticky: false
     }
     this.toggleAnswersVisibility = this.toggleAnswersVisibility.bind(this)
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
+    this.handleStickyStateChange = this.handleStickyStateChange.bind(this)
   }
 
   toggleAnswersVisibility() {
@@ -32,22 +35,40 @@ export default class QuestionForClass extends Component {
     onSelectChange(question.get('key'), event.target.checked)
   }
 
+  handleStickyStateChange(isSticky) {
+    this.setState({isSticky: isSticky})
+  }
+
+  renderQuestionHeader() {
+    const { question, investigationName, activityName, sectionName, pageName } = this.props
+    const { isSticky } = this.state
+    if (isSticky) {
+      // the sectionName is not used for now
+      return <span>{[investigationName, activityName, `Page: ${pageName}`].join(' › ')} › Question #{question.get('questionNumber')}</span>
+    }
+    else {
+      return <span>Question #{question.get('questionNumber')}</span>
+    }
+  }
+
   render() {
     const { question } = this.props
     const { answersVisible } = this.state
     return (
-      <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
-        <div className='question-header'>
-          <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
-          Question #{question.get('questionNumber')}
-          <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
-            {answersVisible ? 'Hide responses' : 'Show responses'}
-          </a>
+      <StickyContainer>
+        <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
+          <Sticky className="question-header" onStickyStateChange={this.handleStickyStateChange}>
+            <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
+            { this.renderQuestionHeader() }
+            <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
+              {answersVisible ? 'Hide responses' : 'Show responses'}
+            </a>
+          </Sticky>
+          <QuestionSummary question={question}/>
+          <QuestionDetails question={question}/>
+          {answersVisible ? <AnswersTable answers={question.get('answers')}/> : ''}
         </div>
-        <QuestionSummary question={question}/>
-        <QuestionDetails question={question}/>
-        {answersVisible ? <AnswersTable answers={question.get('answers')}/> : ''}
-      </div>
+      </StickyContainer>
     )
   }
 }

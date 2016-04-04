@@ -8,11 +8,12 @@ import '../../css/investigation.less'
 export default class Investigation extends Component {
   render() {
     const { investigation, reportFor } = this.props
+    const investigationName = investigation.get('name')
     return (
       <div className='investigation'>
-        <h2>{investigation.get('name')}</h2>
+        <h2>{investigationName}</h2>
         <div>
-          {investigation.get('children').map(a => <Activity key={a.get('id')} activity={a} reportFor={reportFor}/>)}
+          {investigation.get('children').map(a => <Activity key={a.get('id')} activity={a} reportFor={reportFor} investigationName={investigationName}/>)}
         </div>
       </div>
     )

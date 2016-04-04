@@ -1,6 +1,6 @@
 .question {
   box-shadow: 1px 1px 4px rgba(102, 102, 102, .5);
-  padding: 1em;
+  padding: 0 1em 1em 1em;
   margin: 0 auto 1em auto;
   position: relative;
 
@@ -18,12 +18,17 @@
     }
   }
 
+  .sticky {
+    background: #eb8723 !important;
+    z-index: 10000;
+  }
+
   .question-header {
     background: #8cbbb8;
     color: #fff;
     font-size: 1em;
     font-weight: normal;
-    margin: -1em -1em .5em -1em;
+    margin: 0 -1em .5em -1em;
     padding: 1em;
     @media print {
       padding: 0;
