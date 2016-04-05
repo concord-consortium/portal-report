@@ -1,6 +1,7 @@
 import { normalize, Schema, arrayOf } from 'normalizr'
 import humps from 'humps'
 
+const DEFAULT_REPORT_FOR = 'class'
 // Transforms deeply nested structure of report:
 // {
 //  "report": {
@@ -64,6 +65,7 @@ export default function transformJSONResponse(json) {
       }
     }
   }
+  response.type  = camelizedJson.reportFor || DEFAULT_REPORT_FOR
   applyVisibilityFilter(response.entities.questions, response.result.visibilityFilter)
   copyAnswerKeysToObjects(response.entities.answers || [])
   saveStudentsRealNames(response.entities.students)
