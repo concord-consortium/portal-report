@@ -49,7 +49,7 @@ class App extends Component {
   renderReport() {
     const { report, showSelectedQuestions, showAllQuestions, setNowShowing, setAnonymous } = this.props
     return <Report report={report}
-                   howSelectedQuestions={showSelectedQuestions}
+                   showSelectedQuestions={showSelectedQuestions}
                    showAllQuestions={showAllQuestions}
                    setNowShowing={setNowShowing} setAnonymous={setAnonymous}/>
   }
