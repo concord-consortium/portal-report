@@ -30694,17 +30694,33 @@
 	}
 
 	function setQuestionSelected(key, value) {
-	  return { type: SET_QUESTION_SELECTED, key: key, value: value };
+	  return function (dispatch, getState) {
+	    var questionsMap = getState().getIn(['report', 'questions']);
+	    // the questionsMap represents the previous state of the checkboxes so the filter needs to special case the current key
+	    var selectedQuestionKeys = [].concat((0, _toConsumableArray3.default)(questionsMap.values())).filter(function (q) {
+	      return q.get('key') === key ? value : q.get('selected');
+	    }).map(function (q) {
+	      return q.get('key');
+	    });
+	    dispatch({
+	      type: SET_QUESTION_SELECTED,
+	      key: key, value: value,
+	      // Send data to server. Don't care about success or failure. See: api-middleware.js
+	      callAPI: {
+	        type: 'updateReportSettings',
+	        data: {
+	          visibility_filter: {
+	            questions: selectedQuestionKeys
+	          }
+	        }
+	      }
+	    });
+	  };
 	}
 
 	function showSelectedQuestions() {
 	  return function (dispatch, getState) {
 	    var questionsMap = getState().getIn(['report', 'questions']);
-	    var selectedQuestionKeys = [].concat((0, _toConsumableArray3.default)(questionsMap.values())).filter(function (q) {
-	      return q.get('selected');
-	    }).map(function (q) {
-	      return q.get('key');
-	    });
 	    dispatch({
 	      type: SHOW_SELECTED_QUESTIONS,
 	      // Send data to server. Don't care about success or failure. See: api-middleware.js
@@ -30712,8 +30728,7 @@
 	        type: 'updateReportSettings',
 	        data: {
 	          visibility_filter: {
-	            active: true,
-	            questions: selectedQuestionKeys
+	            active: true
 	          }
 	        }
 	      }
@@ -59676,7 +59691,7 @@
 
 
 	// module
-	exports.push([module.id, ".question {\n  box-shadow: 1px 1px 4px rgba(102, 102, 102, 0.5);\n  padding: 0 1em 1em 1em;\n  margin: 0 auto 1em auto;\n  position: relative;\n}\n@media print {\n  .question {\n    box-shadow: none;\n    padding: 0.2em;\n    margin-bottom: 0.4em;\n    border: 0.5px solid #ccc;\n    padding-left: 0.7em;\n  }\n}\n@media print {\n  .question.for-student {\n    page-break-inside: avoid;\n  }\n}\n.question .sticky {\n  background: #eb8723 !important;\n  z-index: 10000;\n}\n.question .question-header {\n  background: #8cbbb8;\n  color: #fff;\n  font-size: 1em;\n  font-weight: normal;\n  margin: 0 -1em 0.5em -1em;\n  padding: 1em;\n}\n@media print {\n  .question .question-header {\n    padding: 0;\n    margin: 0;\n    background: none;\n    color: #000;\n  }\n}\n.question .question-header input[type=checkbox] {\n  margin-right: .5em;\n}\n@media print {\n  .question .question-header input[type=checkbox] {\n    display: none;\n  }\n}\n.question .prompt {\n  font-weight: bold;\n  margin-bottom: 0.5em;\n}\n.question .answers-toggle {\n  float: right;\n  font-size: 0.85em;\n  color: #fff;\n}\n@media print {\n  .question .answers-toggle {\n    display: none;\n  }\n}\n", ""]);
+	exports.push([module.id, ".question {\n  box-shadow: 1px 1px 4px rgba(102, 102, 102, 0.5);\n  padding: 0 1em 1em 1em;\n  margin: 0 auto 1em auto;\n  position: relative;\n}\n@media print {\n  .question {\n    box-shadow: none;\n    padding: 0.2em;\n    margin-bottom: 0.4em;\n    border: 0.5px solid #ccc;\n    padding-left: 0.7em;\n  }\n}\n@media print {\n  .question.for-student {\n    page-break-inside: avoid;\n  }\n}\n.question .sticky {\n  background: #eb8723 !important;\n  z-index: 1020;\n}\n.question .question-header {\n  background: #8cbbb8;\n  color: #fff;\n  font-size: 1em;\n  font-weight: normal;\n  margin: 0 -1em 0.5em -1em;\n  padding: 1em;\n}\n@media print {\n  .question .question-header {\n    padding: 0;\n    margin: 0;\n    background: none;\n    color: #000;\n  }\n}\n.question .question-header input[type=checkbox] {\n  margin-right: .5em;\n}\n@media print {\n  .question .question-header input[type=checkbox] {\n    display: none;\n  }\n}\n.question .prompt {\n  font-weight: bold;\n  margin-bottom: 0.5em;\n}\n.question .answers-toggle {\n  float: right;\n  font-size: 0.85em;\n  color: #fff;\n}\n@media print {\n  .question .answers-toggle {\n    display: none;\n  }\n}\n", ""]);
 
 	// exports
 
