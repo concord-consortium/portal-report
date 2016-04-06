@@ -71,8 +71,9 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set('hideSectionNames', data.result.isOfferingExternal)
         .set('type', data.type)
         .set('nowShowing', data.type)
+        .set('hideControls', data.result.hideControls)
       state = setAnonymous(state, data.result.anonymousReport)
-      state = setVisibilityFilterActive(state, data.result.visibilityFilter.active)
+      state = setVisibilityFilterActive(state, data.result.visibilityFilter.active && !data.result.hideControls)
       return state
     case SET_NOW_SHOWING:
       return state.set('nowShowing', action.value)

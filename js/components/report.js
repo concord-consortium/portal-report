@@ -44,6 +44,26 @@ export default class Report extends Component {
     )
   }
 
+  renderControls(){
+    const { report, showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
+    const isAnonymous = report.get('anonymous')
+    const showSelectedDisabled = noSelection(report)
+    const hideControls = report.get('hideControls')
+    if (!hideControls) {
+      return(
+        <div className='controls'>
+          <Button onClick={showSelectedQuestions} disabled={showSelectedDisabled}>Show selected</Button>
+          <Button onClick={showAllQuestions}>Show all</Button>
+          <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
+          <Button onClick={this.printStudentReports}>Print student reports</Button>
+        </div>
+      )
+    }
+    else {
+      return("")
+    }
+  }
+
   printStudentReports() {
     // Change report style to "per student" style.
     const { setNowShowing } = this.props
@@ -80,18 +100,10 @@ export default class Report extends Component {
   }
 
   render() {
-    const { report, showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
-    const isAnonymous = report.get('anonymous')
-    const showSelectedDisabled = noSelection(report)
     return (
       <div>
         <div className='report-header'>
-          <div className='controls'>
-            <Button onClick={showSelectedQuestions} disabled={showSelectedDisabled}>Show selected</Button>
-            <Button onClick={showAllQuestions}>Show all</Button>
-            <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
-            <Button onClick={this.printStudentReports}>Print student reports</Button>
-          </div>
+          {this.renderControls()}
         </div>
         {this.renderClassReport()}
         {this.renderStudentReports()}

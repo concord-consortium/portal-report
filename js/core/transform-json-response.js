@@ -66,6 +66,7 @@ export default function transformJSONResponse(json) {
     }
   }
   response.type  = camelizedJson.reportFor || DEFAULT_REPORT_FOR
+  response.hideControls = camelizedJson.hideControls || false
   applyVisibilityFilter(response.entities.questions, response.result.visibilityFilter)
   copyAnswerKeysToObjects(response.entities.answers || [])
   saveStudentsRealNames(response.entities.students)

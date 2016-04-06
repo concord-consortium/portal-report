@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import Question from '../containers/question'
+import Question from '../components/question'
 
 import '../../css/page.less'
 
