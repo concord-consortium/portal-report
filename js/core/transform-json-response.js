@@ -78,8 +78,13 @@ function applyVisibilityFilter(questions, visibilityFilter) {
     question.visible = false
   })
   visibilityFilter.questions.forEach(key => {
-    questions[key].selected = true
-    questions[key].visible = true
+    // in some cases, we will only be looking at a subset of questions,
+    // for example when viewing the activity report for a sequence.
+    // There may not be a question for the key. Check first.
+    if (questions[key]) {
+      questions[key].selected = true
+      questions[key].visible = true
+    }
   })
 }
 
