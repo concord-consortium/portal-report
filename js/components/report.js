@@ -22,7 +22,8 @@ export default class Report extends Component {
 
   renderClassReport() {
     const { report } = this.props
-    const className  = report.get('type') == 'class' ? 'report-content' : 'report-content hidden'
+    const nowShowing = report.get('nowShowing')
+    const className  = nowShowing === 'class' ? 'report-content' : 'report-content hidden'
     return (
       <div className={className}>
         <h1>Report for: {report.get('clazzName')}</h1>
@@ -33,7 +34,8 @@ export default class Report extends Component {
 
   renderStudentReports() {
     const { report } = this.props
-    const className  = report.get('type') ==='student' ? 'report-content' : 'report-content hidden'
+    const nowShowing = report.get('nowShowing')
+    const className  = nowShowing ==='student' ? 'report-content' : 'report-content hidden'
     return [...report.get('students').values()].filter(s => s.get('startedOffering')).map(s =>
       <div key={s.get('id')} className={className}>
         <h1>Report for: {s.get('name')}</h1>
@@ -44,8 +46,8 @@ export default class Report extends Component {
 
   printStudentReports() {
     // Change report style to "per student" style.
-    const { setType } = this.props
-    setType('student')
+    const { setNowShowing } = this.props
+    setNowShowing('student')
     // setTimeout is necessary, as and re-render is async. Not the nicest way, but it's simple and self-contained.
     setTimeout(() => window.print(), 1)
     this.setupAfterPrintListener()
@@ -53,8 +55,9 @@ export default class Report extends Component {
 
   afterPrint() {
     // Go back to the default report style ("per class").
-    const { setType } = this.props
-    setType('class')
+    const { setNowShowing, report } = this.props
+    const type = report.get('type')
+    setNowShowing(type)
     this.cleanupAfterPrintListener()
   }
 

@@ -1,6 +1,6 @@
 import Immutable, { Map, Set } from 'immutable'
 import {
-  REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_TYPE, SET_ANONYMOUS,
+  REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW} from '../actions'
 
@@ -59,20 +59,23 @@ function report(state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
       const data = transformJSONResponse(action.response)
-      state = state.set('students', Immutable.fromJS(data.entities.students))
-                   .set('investigations', Immutable.fromJS(data.entities.investigations))
-                   .set('activities', Immutable.fromJS(data.entities.activities))
-                   .set('sections', Immutable.fromJS(data.entities.sections))
-                   .set('pages', Immutable.fromJS(data.entities.pages))
-                   .set('questions', Immutable.fromJS(data.entities.questions))
-                   .set('answers', Immutable.fromJS(data.entities.answers))
-                   .set('clazzName', data.result.class.name)
-                   .set('hideSectionNames', data.result.isOfferingExternal)
+      state = state
+        .set('students', Immutable.fromJS(data.entities.students))
+        .set('investigations', Immutable.fromJS(data.entities.investigations))
+        .set('activities', Immutable.fromJS(data.entities.activities))
+        .set('sections', Immutable.fromJS(data.entities.sections))
+        .set('pages', Immutable.fromJS(data.entities.pages))
+        .set('questions', Immutable.fromJS(data.entities.questions))
+        .set('answers', Immutable.fromJS(data.entities.answers))
+        .set('clazzName', data.result.class.name)
+        .set('hideSectionNames', data.result.isOfferingExternal)
+        .set('type', data.type)
+        .set('nowShowing', data.type)
       state = setAnonymous(state, data.result.anonymousReport)
       state = setVisibilityFilterActive(state, data.result.visibilityFilter.active)
       return state
-    case SET_TYPE:
-      return state.set('type', action.value)
+    case SET_NOW_SHOWING:
+      return state.set('nowShowing', action.value)
     case SET_QUESTION_SELECTED:
       return state.setIn(['questions', action.key, 'selected'], action.value)
     case SHOW_SELECTED_QUESTIONS:

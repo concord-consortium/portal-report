@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import { connect } from 'react-redux'
 import { selectReport, fetchDataIfNeeded, invalidateData, hideCompareView,
-         showSelectedQuestions, showAllQuestions, setType, setAnonymous } from '../actions'
+         showSelectedQuestions, showAllQuestions, setNowShowing, setAnonymous } from '../actions'
 import { Modal } from 'react-bootstrap'
 import Button from '../components/button'
 import CompareView from '../components/compare-view'
@@ -47,9 +47,11 @@ class App extends Component {
   }
 
   renderReport() {
-    const { report, showSelectedQuestions, showAllQuestions, setType, setAnonymous } = this.props
-    return <Report report={report} showSelectedQuestions={showSelectedQuestions} showAllQuestions={showAllQuestions}
-                   setType={setType} setAnonymous={setAnonymous}/>
+    const { report, showSelectedQuestions, showAllQuestions, setNowShowing, setAnonymous } = this.props
+    return <Report report={report}
+                   showSelectedQuestions={showSelectedQuestions}
+                   showAllQuestions={showAllQuestions}
+                   setNowShowing={setNowShowing} setAnonymous={setAnonymous}/>
   }
 
   renderCompareView() {
@@ -105,7 +107,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     invalidateData: () => dispatch(invalidateData()),
     showSelectedQuestions: () => dispatch(showSelectedQuestions()),
     showAllQuestions: () => dispatch(showAllQuestions()),
-    setType: value => dispatch(setType(value)),
+    setNowShowing: value => dispatch(setNowShowing(value)),
     setAnonymous: value => dispatch(setAnonymous(value)),
     hideCompareView: () => dispatch(hideCompareView())
   }
