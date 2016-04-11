@@ -16,8 +16,11 @@ export default class Report extends Component {
 
   componentDidMount() {
     const { report } = this.props
+    const nowShowing = report.get('nowShowing')
+    const student = report.get('students').first().get('name')
+    const title = nowShowing === 'class' ? `Report for ${report.get('clazzName')}` : `Report for ${student}`
     const investigation = report.get('investigation')
-    document.title = `${investigation.get('name')} Report for ${report.get('clazzName')}`
+    document.title = `${investigation.get('name')} ${title}`
   }
 
   renderClassReport() {
@@ -47,6 +50,8 @@ export default class Report extends Component {
   renderControls(){
     const { report, showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
     const isAnonymous = report.get('anonymous')
+    const nowShowing = report.get('nowShowing')
+    const buttonText = (nowShowing === 'class') ? "Print student reports" : "Print"
     const showSelectedDisabled = noSelection(report)
     const hideControls = report.get('hideControls')
     if (!hideControls) {
@@ -55,7 +60,7 @@ export default class Report extends Component {
           <Button onClick={showSelectedQuestions} disabled={showSelectedDisabled}>Show selected</Button>
           <Button onClick={showAllQuestions}>Show all</Button>
           <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
-          <Button onClick={this.printStudentReports}>Print student reports</Button>
+          <Button onClick={this.printStudentReports}>{buttonText}</Button>
         </div>
       )
     }
