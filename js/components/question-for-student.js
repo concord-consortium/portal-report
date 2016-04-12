@@ -1,21 +1,11 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Answer from './answer'
-
+import SelectionCheckbox from '../containers/selection-checkbox'
 import '../../css/question.less'
 
 @pureRender
 export default class QuestionForStudent extends Component {
-  constructor(props) {
-    super(props)
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
-  }
-
-  handleCheckboxChange(event) {
-    const { question, onSelectChange } = this.props
-    onSelectChange(question.get('key'), event.target.checked)
-  }
-
 
   get prompt() {
     // see discussion here: https://facebook.github.io/react/tips/dangerously-set-inner-html.html
@@ -30,7 +20,7 @@ export default class QuestionForStudent extends Component {
     return (
       <div className={`question for-student ${question.get('visible') ? '' : 'hidden'}`}>
         <div className='question-header'>
-          <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
+          <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')} />
           Question #{question.get('questionNumber')}
         </div>
         <div className='prompt' dangerouslySetInnerHTML={this.prompt}/>

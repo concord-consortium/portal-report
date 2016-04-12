@@ -5,6 +5,7 @@ import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
 import QuestionSummary from './question-summary'
 import AnswersTable from './answers-table'
+import SelectionCheckbox from '../containers/selection-checkbox'
 
 import '../../css/question.less'
 
@@ -22,17 +23,11 @@ export default class QuestionForClass extends Component {
       isSticky: false
     }
     this.toggleAnswersVisibility = this.toggleAnswersVisibility.bind(this)
-    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
     this.handleStickyStateChange = this.handleStickyStateChange.bind(this)
   }
 
   toggleAnswersVisibility() {
     this.setState({answersVisible: !this.state.answersVisible})
-  }
-
-  handleCheckboxChange(event) {
-    const { question, onSelectChange } = this.props
-    onSelectChange(question.get('key'), event.target.checked)
   }
 
   handleStickyStateChange(isSticky) {
@@ -58,7 +53,7 @@ export default class QuestionForClass extends Component {
       <StickyContainer>
         <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
           <Sticky className="question-header" onStickyStateChange={this.handleStickyStateChange}>
-            <input type='checkbox' checked={question.get('selected')} onChange={this.handleCheckboxChange}/>
+            <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')} />
             { this.renderQuestionHeader() }
             <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
               {answersVisible ? 'Hide responses' : 'Show responses'}

@@ -534,5 +534,6 @@
     ]
   },
   "anonymous_report": false,
-  "is_offering_external": true
+  "is_offering_external": true,
+  "hide_controls": false
 }
