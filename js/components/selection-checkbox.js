@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import Answer from './answer'
-
-import '../../css/question.less'
 
 @pureRender
 export default class SelectionCheckbox extends Component {
@@ -12,12 +9,12 @@ export default class SelectionCheckbox extends Component {
 
 
   onChange(evt) {
-    const {questionKey, onSelectChange} = this.props
-    onSelectChange(questionKey, evt.target.checked)
+    const {questionKey, setQuestionSelected} = this.props
+    setQuestionSelected(questionKey, evt.target.checked)
   }
 
   render() {
-    const { selected, hideControls } = this.props
+    const {selected, hideControls} = this.props
     if (hideControls) {
       return null
     }
