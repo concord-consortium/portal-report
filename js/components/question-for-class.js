@@ -75,15 +75,19 @@ export default class QuestionForClass extends Component {
     const { question } = this.props
     const { answersVisible } = this.state
     return (
-      <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
-        { this.renderQuestionHeader() }
-        <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
-          {answersVisible ? 'Hide responses' : 'Show responses'}
-        </a>
-
-        <QuestionSummary question={question}/>
-        <QuestionDetails question={question}/>
-        {answersVisible ? <AnswersTable answers={question.get('answers')}/> : ''}
+      <div>
+        <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
+          <div className="question-header">
+            <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')}/>
+            { this.renderQuestionHeader() }
+            <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
+              {answersVisible ? 'Hide responses' : 'Show responses'}
+            </a>
+          </div>
+          <QuestionSummary question={question}/>
+          <QuestionDetails question={question}/>
+          {answersVisible ? <AnswersTable answers={question.get('answers')}/> : ''}
+        </div>
       </div>
     )
   }
