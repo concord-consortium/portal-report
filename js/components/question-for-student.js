@@ -3,15 +3,10 @@ import pureRender from 'pure-render-decorator'
 import Answer from './answer'
 import SelectionCheckbox from '../containers/selection-checkbox'
 import '../../css/question.less'
+import Prompt from './prompt'
 
 @pureRender
 export default class QuestionForStudent extends Component {
-
-  get prompt() {
-    // see discussion here: https://facebook.github.io/react/tips/dangerously-set-inner-html.html
-    const prompt = this.props.question.get('prompt') || this.props.question.get('name')
-    return {__html: prompt}
-  }
 
   render() {
     const { question, student } = this.props
@@ -23,7 +18,7 @@ export default class QuestionForStudent extends Component {
           <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')} />
           Question #{question.get('questionNumber')}
         </div>
-        <div className='prompt' dangerouslySetInnerHTML={this.prompt}/>
+        <Prompt question={question} />
         <Answer answer={answer}/>
       </div>
     )

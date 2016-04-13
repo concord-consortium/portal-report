@@ -321,7 +321,7 @@
                     "name": "Embeddable::ImageQuestion element",
                     "question_number": 3,
                     "prompt": "why does ...",
-                    "drawing_prompt": null,
+                    "drawing_prompt": "draw a picture of seagull",
                     "is_required": false,
                     "key": "Embeddable::ImageQuestion|12",
                     "type": "Embeddable::ImageQuestion",
