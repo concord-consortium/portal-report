@@ -6,15 +6,22 @@ import ImageAnswerModal from './image-answer-modal'
 import '../../css/react-responsive-carousel.css'
 import '../../css/image-question-details.less'
 
-function renderImage(src, legend, key, note) {
+
+function renderNote(note) {
+  if (note && note.length > 0) {
+    return <div className="note">{note} </div>
+  }
+  return ""
+}
+function renderImage(src, author, key, note) {
+  const className = (note && note.length > 0) ? "horizontal-slide-container" : "vertical-slide-container"
   return (
-    <div key={key}>
+    <div className="horizontal-slide-container"  key={key}>
+      <div className="info">
+        <div className="author">{author} </div>
+        {renderNote(note)}
+      </div>
       <img src={src}/>
-      <p className='legend'>
-        {legend}
-        <br/>
-        <em>{note}</em>
-      </p>
     </div>
   )
 }
