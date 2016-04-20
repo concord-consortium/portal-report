@@ -14,14 +14,12 @@ function renderNote(note) {
   return ""
 }
 function renderImage(src, author, key, note) {
-  const className = (note && note.length > 0) ? "horizontal-slide-container" : "vertical-slide-container"
+  const className = (note && note.length > 0) ? "slide-container" : "slide-container vertical"
   return (
-    <div className="horizontal-slide-container"  key={key}>
-      <div className="info">
-        <div className="author">{author} </div>
-        {renderNote(note)}
-      </div>
+    <div className={className} key={key}>
       <img src={src}/>
+      <div className="author">{author} </div>
+      {renderNote(note)}
     </div>
   )
 }
