@@ -4,6 +4,7 @@ import Activity from './activity'
 import Sticky from 'react-stickynode';
 import '../../css/investigation.less'
 
+@pureRender
 export default class Investigation extends Component {
   render() {
     const { investigation, reportFor } = this.props

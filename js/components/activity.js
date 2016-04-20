@@ -4,9 +4,10 @@ import Section from './section'
 import Sticky from 'react-stickynode';
 import '../../css/activity.less'
 
+@pureRender
 export default class Activity extends Component {
   render() {
-    const { activity, reportFor, investigationName } = this.props
+    const { activity, reportFor} = this.props
     const activityName = activity.get('name')
     return (
       <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
@@ -14,7 +15,7 @@ export default class Activity extends Component {
           <h3>{activityName}</h3>
         </Sticky>
         <div>
-          {activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor} investigationName={investigationName} activityName={activityName} />)}
+          {activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor}/>)}
         </div>
       </div>
     )

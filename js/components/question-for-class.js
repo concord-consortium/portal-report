@@ -35,41 +35,11 @@ export default class QuestionForClass extends Component {
   }
 
   renderQuestionHeader() {
-    const { question, investigationName, activityName, sectionName, pageName } = this.props
-    //const { isSticky } = this.state  TODO: Put this back in when we can make it look like the mockup.
-    // see https://www.pivotaltracker.com/story/show/117576881 & https://www.pivotaltracker.com/story/show/115343939
-    // http://static.concord.org/home/emcelroy/report/index5.html
-    const { isSticky } = false
-    if (isSticky) {
-      // the sectionName is not used for now
-      return <span>{[investigationName, activityName, `Page: ${pageName}`].join(' › ')} › Question #{question.get('questionNumber')}</span>
-    }
-    else {
-      return <span>Question #{question.get('questionNumber')}</span>
-    }
+    const { question } = this.props
+    return <span>Question #{question.get('questionNumber')}</span>
   }
 
-  // TODO: Temporarily removed (see notes in above TODO)
-  renderSticky() {
-    const { question } = this.props
-    const { answersVisible } = this.state
-    return (
-      <StickyContainer>
-        <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
-          <Sticky className="question-header" onStickyStateChange={this.handleStickyStateChange}>
-            <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')}/>
-            { this.renderQuestionHeader() }
-            <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
-              {answersVisible ? 'Hide responses' : 'Show responses'}
-            </a>
-          </Sticky>
-          <QuestionSummary question={question}/>
-          <QuestionDetails question={question}/>
-          {answersVisible ? <AnswersTable answers={question.get('answers')}/> : ''}
-        </div>
-      </StickyContainer>
-    )
-  }
+
 
   render() {
     const { question } = this.props
