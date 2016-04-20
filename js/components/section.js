@@ -4,9 +4,10 @@ import Page from './page'
 import Sticky from 'react-stickynode';
 import '../../css/section.less'
 
+@pureRender
 export default class Section extends Component {
   render() {
-    const { section, reportFor, investigationName, activityName } = this.props
+    const { section, reportFor } = this.props
     const sectionName = section.get('name')
     return (
       <div className={`section ${section.get('visible') ? '' : 'hidden'}`}>
@@ -14,7 +15,7 @@ export default class Section extends Component {
           {sectionName}
         </Sticky>
         <div>
-          {section.get('children').map(p => <Page key={p.get('id')} page={p} reportFor={reportFor} investigationName={investigationName} activityName={activityName} sectionName={sectionName} />)}
+          {section.get('children').map(p => <Page key={p.get('id')} page={p} reportFor={reportFor}/>)}
         </div>
       </div>
     )
