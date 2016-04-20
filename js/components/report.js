@@ -4,6 +4,8 @@ import Investigation from './investigation'
 import Button from './button'
 
 import '../../css/report.less'
+import Sticky from 'react-stickynode';
+
 import { noSelection } from '../calculations'
 
 @pureRender
@@ -23,13 +25,26 @@ export default class Report extends Component {
     document.title = `${investigation.get('name')} ${title}`
   }
 
+  renderReportHeader(clazzName) {
+    return (
+      <Sticky top={0} className="main" activeClass="active">
+        <div className="report-header">
+          <div className="title">
+            <h1>Report for: {clazzName}</h1>
+          </div>
+          {this.renderControls()}
+        </div>
+      </Sticky>
+    )
+  }
+
   renderClassReport() {
     const { report } = this.props
     const nowShowing = report.get('nowShowing')
     const className  = nowShowing === 'class' ? 'report-content' : 'report-content hidden'
     return (
       <div className={className}>
-        <h1>Report for: {report.get('clazzName')}</h1>
+        {this.renderReportHeader(report.get('clazzName'))}
         <Investigation investigation={report.get('investigation')} reportFor={'class'}/>
       </div>
     )
@@ -37,11 +52,11 @@ export default class Report extends Component {
 
   renderStudentReports() {
     const { report } = this.props
-    const nowShowing = report.get('nowShowing')
-    const className  = nowShowing ==='student' ? 'report-content' : 'report-content hidden'
+    const nowShowing = report.get('nowShowing') === 'student'
+    const className  = nowShowing ? 'report-content' : 'report-content hidden'
     return [...report.get('students').values()].filter(s => s.get('startedOffering')).map(s =>
       <div key={s.get('id')} className={className}>
-        <h1>Report for: {s.get('name')}</h1>
+        {this.renderReportHeader(s.get('name'))}
         <Investigation investigation={report.get('investigation')} reportFor={s}/>
       </div>
     )
@@ -107,9 +122,6 @@ export default class Report extends Component {
   render() {
     return (
       <div>
-        <div className='report-header'>
-          {this.renderControls()}
-        </div>
         {this.renderClassReport()}
         {this.renderStudentReports()}
       </div>
