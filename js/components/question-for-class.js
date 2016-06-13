@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { StickyContainer, Sticky } from 'react-sticky'
 import pureRender from 'pure-render-decorator'
 import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
@@ -19,27 +18,19 @@ export default class QuestionForClass extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      answersVisible: false,
-      isSticky: false
+      answersVisible: false
     }
     this.toggleAnswersVisibility = this.toggleAnswersVisibility.bind(this)
-    this.handleStickyStateChange = this.handleStickyStateChange.bind(this)
   }
 
   toggleAnswersVisibility() {
     this.setState({answersVisible: !this.state.answersVisible})
   }
 
-  handleStickyStateChange(isSticky) {
-    this.setState({isSticky: isSticky})
-  }
-
   renderQuestionHeader() {
     const { question } = this.props
     return <span>Question #{question.get('questionNumber')}</span>
   }
-
-
 
   render() {
     const { question } = this.props
