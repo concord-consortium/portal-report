@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Prompt from './prompt'
+import FeedbackPanel from './feedback-panel'
+
 import '../../css/question-summary.less'
 
 @pureRender
@@ -29,6 +31,7 @@ export default class QuestionSummary extends Component {
           <div><strong>Answered:</strong> {this.answered}</div>
           <div><strong>Not answered:</strong> {this.notAnswered}</div>
           <div><strong>Total:</strong> {this.total}</div>
+          <FeedbackPanel question={this.props.question}/>
         </div>
         <div className='clear-fix'></div>
       </div>

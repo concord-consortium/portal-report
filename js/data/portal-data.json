@@ -1,0 +1,288 @@
+{
+  "report": {
+    "id": 11,
+    "type": "Activity",
+    "name": "Test Tracked Questions",
+    "children": [{
+      "id": 48,
+      "type": "Section",
+      "name": "Test Tracked Questions Section",
+      "children": [{
+        "id": 399,
+        "type": "Page",
+        "name": "1",
+        "children": [{
+          "id": 43,
+          "name": "The most important thing ...",
+          "description": "description ...",
+          "prompt": "<p>The most important thing we did today in class was...</p>",
+          "enable_rationale": false,
+          "rationale_prompt": "Explain your choice. Give specific examples.",
+          "allow_multiple_selection": null,
+          "is_required": false,
+          "key": "Embeddable::MultipleChoice|43",
+          "type": "Embeddable::MultipleChoice",
+          "question_number": 1,
+          "answers": [{
+            "answer": [{
+              "id": 149,
+              "choice": "Drew Conclusions",
+              "is_correct": null
+            }],
+            "feedbacks": [{
+              "answer": [{
+                "choice_id": 148,
+                "answer": "Performed Investigations",
+                "correct": null,
+                "feedback": null
+              }],
+              "answer_key": "Saveable::MultipleChoiceAnswer|10",
+              "score": null,
+              "feedback": null,
+              "has_been_reviewed": false
+            }, {
+              "answer": [{
+                "choice_id": 147,
+                "answer": "Asked questions",
+                "correct": null,
+                "feedback": null
+              }],
+              "answer_key": "Saveable::MultipleChoiceAnswer|15",
+              "score": null,
+              "feedback": null,
+              "has_been_reviewed": false
+            }, {
+              "answer": [{
+                "choice_id": 149,
+                "answer": "Drew Conclusions",
+                "correct": null,
+                "feedback": null
+              }],
+              "answer_key": "Saveable::MultipleChoiceAnswer|16",
+              "score": null,
+              "feedback": null,
+              "has_been_reviewed": false
+            }],
+            "answered": true,
+            "submitted": true,
+            "question_required": false,
+            "needs_review": true,
+            "score": null,
+            "feedback": null,
+            "is_correct": true,
+            "type": "Embeddable::MultipleChoice",
+            "embeddable_key": "Embeddable::MultipleChoice|43",
+            "student_id": 1
+          }, {
+            "answer": [{
+              "id": 147,
+              "choice": "Asked questions",
+              "is_correct": null
+            }],
+            "feedbacks": [{
+              "answer": [{
+                "choice_id": 147,
+                "answer": "Asked questions",
+                "correct": null,
+                "feedback": null
+              }],
+              "answer_key": "Saveable::MultipleChoiceAnswer|11",
+              "score": null,
+              "feedback": null,
+              "has_been_reviewed": false
+            }],
+            "answered": true,
+            "submitted": true,
+            "question_required": false,
+            "needs_review": true,
+            "score": null,
+            "feedback": null,
+            "is_correct": true,
+            "type": "Embeddable::MultipleChoice",
+            "embeddable_key": "Embeddable::MultipleChoice|43",
+            "student_id": 2
+          }, {
+            "answer": [{
+              "id": 148,
+              "choice": "Performed Investigations",
+              "is_correct": null
+            }],
+            "feedbacks": [{
+              "answer": [{
+                "choice_id": 148,
+                "answer": "Performed Investigations",
+                "correct": null,
+                "feedback": null
+              }],
+              "answer_key": "Saveable::MultipleChoiceAnswer|18",
+              "score": null,
+              "feedback": null,
+              "has_been_reviewed": false
+            }],
+            "answered": true,
+            "submitted": true,
+            "question_required": false,
+            "needs_review": true,
+            "score": null,
+            "feedback": null,
+            "is_correct": true,
+            "type": "Embeddable::MultipleChoice",
+            "embeddable_key": "Embeddable::MultipleChoice|43",
+            "student_id": 3
+          }, {
+            "student_id": 4,
+            "answer": null,
+            "type": "NoAnswer",
+            "embeddable_key": "Embeddable::MultipleChoice|43"
+          }],
+          "feedback_enabled": true,
+          "score_enabled": false,
+          "max_score": 0,
+          "choices": [{
+            "id": 147,
+            "choice": "Asked questions",
+            "is_correct": null
+          }, {
+            "id": 148,
+            "choice": "Performed Investigations",
+            "is_correct": null
+          }, {
+            "id": 149,
+            "choice": "Drew Conclusions",
+            "is_correct": null
+          }]
+        }, {
+          "id": 20,
+          "name": "Embeddable::ImageQuestion element",
+          "prompt": "<p><strong>This is my question about something or other.</strong></p>",
+          "drawing_prompt": "<p>Look at that cute dog. Just look.</p>",
+          "is_required": false,
+          "key": "Embeddable::ImageQuestion|20",
+          "type": "Embeddable::ImageQuestion",
+          "question_number": 2,
+          "answers": [{
+            "student_id": 1,
+            "answer": null,
+            "type": "NoAnswer",
+            "embeddable_key": "Embeddable::ImageQuestion|20"
+          }, {
+            "student_id": 2,
+            "answer": null,
+            "type": "NoAnswer",
+            "embeddable_key": "Embeddable::ImageQuestion|20"
+          }, {
+            "student_id": 3,
+            "answer": null,
+            "type": "NoAnswer",
+            "embeddable_key": "Embeddable::ImageQuestion|20"
+          }, {
+            "student_id": 4,
+            "answer": null,
+            "type": "NoAnswer",
+            "embeddable_key": "Embeddable::ImageQuestion|20"
+          }],
+          "feedback_enabled": true,
+          "score_enabled": false,
+          "max_score": 0
+        }]
+      }, {
+        "id": 400,
+        "type": "Page",
+        "name": "2",
+        "children": [{
+          "id": 111,
+          "name": "Open Response Question",
+          "description": "What is the purpose of this question ...?",
+          "prompt": "Thanks for playing",
+          "default_response": "",
+          "rows": 5,
+          "columns": 32,
+          "font_size": 12,
+          "is_required": false,
+          "key": "Embeddable::OpenResponse|111",
+          "type": "Embeddable::OpenResponse",
+          "question_number": 3,
+          "answers": [{
+            "answer": "Yes!",
+            "feedbacks": [{
+              "answer": "Yes!",
+              "answer_key": "Saveable::OpenResponseAnswer|234",
+              "score": null,
+              "feedback": null,
+              "has_been_reviewed": false
+            }],
+            "answered": true,
+            "submitted": true,
+            "question_required": false,
+            "needs_review": true,
+            "score": null,
+            "feedback": null,
+            "type": "Embeddable::OpenResponse",
+            "embeddable_key": "Embeddable::OpenResponse|111",
+            "student_id": 1
+          }, {
+            "answer": "Blarg blarg dude",
+            "feedbacks": [{
+              "answer": "Blarg blarg dude",
+              "answer_key": "Saveable::OpenResponseAnswer|235",
+              "score": null,
+              "feedback": null,
+              "has_been_reviewed": false
+            }],
+            "answered": true,
+            "submitted": true,
+            "question_required": false,
+            "needs_review": true,
+            "score": null,
+            "feedback": null,
+            "type": "Embeddable::OpenResponse",
+            "embeddable_key": "Embeddable::OpenResponse|111",
+            "student_id": 2
+          }, {
+            "student_id": 3,
+            "answer": null,
+            "type": "NoAnswer",
+            "embeddable_key": "Embeddable::OpenResponse|111"
+          }, {
+            "student_id": 4,
+            "answer": null,
+            "type": "NoAnswer",
+            "embeddable_key": "Embeddable::OpenResponse|111"
+          }],
+          "feedback_enabled": true,
+          "score_enabled": false,
+          "max_score": 0
+        }]
+      }]
+    }]
+  },
+  "report_version": "1.0.1",
+  "report_for": "class",
+  "class": {
+    "name": "My Class",
+    "students": [{
+      "id": 3,
+      "name": "Mr Big",
+      "started_offering": true
+    }, {
+      "id": 4,
+      "name": "Linden Paessel",
+      "started_offering": false
+    }, {
+      "id": 1,
+      "name": "Student User 2",
+      "started_offering": true
+    }, {
+      "id": 2,
+      "name": "ada paessel",
+      "started_offering": true
+    }]
+  },
+  "visibility_filter": {
+    "active": true,
+    "questions": []
+  },
+  "anonymous_report": false,
+  "is_offering_external": true,
+  "hide_controls": null
+}

@@ -13,6 +13,8 @@ export const SHOW_ALL_QUESTIONS = 'SHOW_ALL_QUESTIONS'
 export const SET_ANSWER_SELECTED_FOR_COMPARE = 'SET_ANSWER_SELECTED_FOR_COMPARE'
 export const SHOW_COMPARE_VIEW = 'SHOW_COMPARE_VIEW'
 export const HIDE_COMPARE_VIEW = 'HIDE_COMPARE_VIEW'
+export const SHOW_FEEDBACK = 'SHOW_FEEDBACK'
+export const UPDATE_FEEDBACK = 'UPDATE_FEEDBACK'
 
 // When fetch succeeds, receiveData action will be called with the response object (json in this case).
 // REQUEST_DATA action will be processed by the reducer immediately.
@@ -149,4 +151,12 @@ export function showCompareView(embeddableKey) {
 
 export function hideCompareView() {
   return {type: HIDE_COMPARE_VIEW}
+}
+
+export function showFeedbackView(embeddableKey) {
+  return {type: SHOW_FEEDBACK, embeddableKey}
+}
+
+export function updateFeedback(answerKey, feedback) {
+  return {type: UPDATE_FEEDBACK, answerKey, feedback}
 }

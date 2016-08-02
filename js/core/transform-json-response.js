@@ -30,6 +30,7 @@ export default function transformJSONResponse(json) {
   const question = new Schema('questions', {idAttribute: (q) => q.key})
   // Answers don't have unique ID so generate it. Embeddable key + student ID works.
   const answer = new Schema('answers', {idAttribute: (a) => `${a.embeddableKey}-${a.studentId}`})
+  const feedback = new Schema('feedbacks', {idAttribute: (a) => a.answerKey})
   investigation.define({
     children: arrayOf(activity)
   })
@@ -44,6 +45,9 @@ export default function transformJSONResponse(json) {
   })
   question.define({
     answers: arrayOf(answer)
+  })
+  answer.define({
+    feedbacks: arrayOf(feedback)
   })
 
   const reportType = camelizedJson.report.type
