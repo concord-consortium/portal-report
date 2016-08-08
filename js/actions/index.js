@@ -15,6 +15,7 @@ export const SHOW_COMPARE_VIEW = 'SHOW_COMPARE_VIEW'
 export const HIDE_COMPARE_VIEW = 'HIDE_COMPARE_VIEW'
 export const SHOW_FEEDBACK = 'SHOW_FEEDBACK'
 export const UPDATE_FEEDBACK = 'UPDATE_FEEDBACK'
+export const ENABLE_FEEDBACK = 'ENABLE_FEEDBACK'
 
 // When fetch succeeds, receiveData action will be called with the response object (json in this case).
 // REQUEST_DATA action will be processed by the reducer immediately.
@@ -159,4 +160,8 @@ export function showFeedbackView(embeddableKey) {
 
 export function updateFeedback(answerKey, feedback) {
   return {type: UPDATE_FEEDBACK, answerKey, feedback}
+}
+
+export function enableFeedback(embeddableKey, feedbackFlags) {
+  return {type: ENABLE_FEEDBACK, embeddableKey, feedbackFlags}
 }

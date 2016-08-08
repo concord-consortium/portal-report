@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
 import Prompt from './prompt'
-import FeedbackPanel from './feedback-panel'
+import FeedbackPanel from '../containers/feedback-panel'
 
 import '../../css/question-summary.less'
 

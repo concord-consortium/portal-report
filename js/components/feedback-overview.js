@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
+import '../../css/feedback-overview.less'
 
 @pureRender
 export default class FeedbackOverview extends Component {
@@ -10,14 +11,16 @@ export default class FeedbackOverview extends Component {
     const numFeedbackGiven = this.props.numFeedbackGiven
     return (
       <div className="feedback-overview">
-        <dl>
-          <dt>Students awaiting feedback</dt>
-          <dd>{numNeedsFeedback}</dd>
-          <dt>Students scored/provided feedback</dt>
-          <dd>{numFeedbackGiven}</dd>
-          <dt>Students with no answer</dt>
-          <dd>{numNoAnswers}</dd>
-        </dl>
+        <div>
+          <span className="label">Students awaiting feedback</span>
+          <span className="value">{numNeedsFeedback}</span>
+        </div><div>
+          <span className="label">Students scored/provided feedback</span>
+          <span className="value">{numFeedbackGiven}</span>
+        </div><div>
+          <span className="label">Students with no answer</span>
+          <span className="value">{numNoAnswers}</span>
+        </div>
       </div>
     )
   }

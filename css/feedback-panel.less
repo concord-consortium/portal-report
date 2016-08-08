@@ -6,46 +6,59 @@
   top: 0px;
   bottom: 0px;
   background-color: hsla(0, 0, 0, 0.90);
-  z-index: 100;
+  z-index: 5000;
 }
 .page {
   .feedback-panel {
     position: fixed;
-    z-index: 101;
+    z-index: 5001;
     top: 100px;
     left: 40px;
     right: 40px;
     bottom: 40px;
     background-color: white;
-    padding: 1rem;
+    padding: 2rem;
     opacity: 1;
+    display: flex;
+    flex-direction: column;
 
+    .feedback-header {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+    }
     .feedback-options {
       background: #eee;
-      clear: right;
       font-size: .8em;
-      float: right;
-      margin-top: -1.25em;
       padding: 10px 15px;
-      width: 15%;
-    }
-
-    .feedback-overview {
-      clear: left;
-      margin: 2.5em 0 .75em;
+      align-self: flex-end;
+      h3 {
+        color: #3f3f3f;
+        font-size: 1em;
+        margin-bottom: .25em;
+      }
     }
 
     .feedback-filters {
       background: #666;
       color: #fff;
       font-size: .8em;
-      margin-bottom: 0;
-      padding: 10px 15px;
+      padding: 10px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      input, select {
+        margin-left: 10px;
+      }
     }
 
     .feedback-rows-wrapper {
-      height: 400px;
       overflow: auto;
+      border: solid 1px #777;
+      border-top: none;
+      height: 400px;
     }
 
     .feedback-for-students {
@@ -55,39 +68,23 @@
 
     .feedback-row {
       background: #f6f6f6;
-      clear: both;
+      width: 100%;
       font-size: .9em;
       overflow: hidden;
       padding: 10px 15px;
+      display: flex;
+      flex-direction: row;
       &:nth-child(even) {
         background: #f0f0f0;
       }
     }
 
     .student-answer {
-      float: left;
       width: 48%;
     }
 
     .feedback-interface {
-      float: right;
       width: 50%;
-    }
-
-    dl {
-      margin-top: .75em;
-      overflow: hidden;
-      position: relative;
-      right: auto;
-      top: auto;
-    }
-
-    dt {
-      float: left;
-      margin: 0 0 .25em;
-      clear: both;
-      font-size: .8em;
-      font-weight: bold;
     }
 
     .max-score-input {
@@ -124,6 +121,11 @@
       box-shadow: 0 3px 0 #e16a3e;
     }
 
+    a.cc-button {
+      align-self: flex-end;
+      margin-right: 0px;
+    }
+
     h1 {
       font-size: .9em;
       margin-bottom: 0;
@@ -151,10 +153,15 @@
     }
 
     label {
-      display: inherit;
+      display: inline-block;
+      margin-left: 0.5em;
       max-width: inherit;
       margin-bottom: inherit;
       font-weight: inherit;
+      &.max-score {
+        margin-left: 1.5em;
+        margin-right: 0.5em;
+      }
     }
 
     textarea {

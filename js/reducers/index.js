@@ -2,7 +2,7 @@ import Immutable, { Map, Set } from 'immutable'
 import {
   REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
-  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, UPDATE_FEEDBACK, SHOW_FEEDBACK} from '../actions'
+  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, UPDATE_FEEDBACK, ENABLE_FEEDBACK} from '../actions'
 
 import transformJSONResponse from '../core/transform-json-response'
 import { noSelection } from '../calculations'
@@ -59,6 +59,11 @@ function updateFeedback(state, action) {
   return state.mergeIn(['feedbacks', answerKey], feedback)
 }
 
+function enableFeedback(state, action) {
+  const {embeddableKey, feedbackFlags} = action
+  return state.mergeIn(['questions', embeddableKey], feedbackFlags)
+}
+
 function report(state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
@@ -108,6 +113,8 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state.set('compareViewAnswers', null)
     case UPDATE_FEEDBACK:
       return updateFeedback(state, action)
+    case ENABLE_FEEDBACK:
+      return enableFeedback(state, action)
     default:
       return state
   }
