@@ -63,6 +63,16 @@ export function fetchDataIfNeeded() {
   }
 }
 
+function mappedCopy(src, fieldMappings) {
+  const dst = {}
+  var key, dstKey
+  for (key in src) {
+    dstKey = fieldMappings[key] || key
+    dst[dstKey] = src[key]
+  }
+  return dst
+}
+
 export function invalidateData() {
   return {type: INVALIDATE_DATA}
 }
@@ -159,9 +169,41 @@ export function showFeedbackView(embeddableKey) {
 }
 
 export function updateFeedback(answerKey, feedback) {
-  return {type: UPDATE_FEEDBACK, answerKey, feedback}
+  const feedbackData = mappedCopy(feedback, {})
+  feedbackData.answer_key = answerKey
+  return {
+    type: UPDATE_FEEDBACK,
+    answerKey,
+    feedback,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        feedback: feedbackData
+      }
+    }
+
+  }
 }
 
+
 export function enableFeedback(embeddableKey, feedbackFlags) {
-  return {type: ENABLE_FEEDBACK, embeddableKey, feedbackFlags}
+  const mappings = {
+    feedbackEnabled: 'enable_text_feedback',
+    scoreEnabled: 'enable_score',
+    maxScore: 'max_score'
+  }
+  const feedbackSettings = mappedCopy(feedbackFlags, mappings)
+  feedbackSettings.embeddable_key = embeddableKey
+
+  return {
+    type: ENABLE_FEEDBACK,
+    embeddableKey,
+    feedbackFlags,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        feedback_opts: feedbackSettings
+      }
+    }
+  }
 }
