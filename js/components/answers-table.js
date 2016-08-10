@@ -16,6 +16,7 @@ export default class AnswersTable extends Component {
           <tr>
             <th className='student-header'>Student</th>
             <th>Response</th>
+            <th>Score</th>
             <th className='select-header'>Select</th>
           </tr>
           {answers.map(answer => <AnswerRow key={answer.get('studentId')} answer={answer}/>)}
@@ -28,7 +29,10 @@ export default class AnswersTable extends Component {
 const AnswerRow = ({answer}) => (
   <tr>
     <td>{answer.getIn(['student', 'name'])}</td>
-    <td><Answer answer={answer}/></td>
+    <td>
+      <Answer answer={answer}/>
+    </td>
+    <td></td>
     <td className='select-answer-column'>
       {answer.get('type') !== 'NoAnswer' ?
         <div>

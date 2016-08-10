@@ -169,7 +169,7 @@ export function showFeedbackView(embeddableKey) {
 }
 
 export function updateFeedback(answerKey, feedback) {
-  const feedbackData = mappedCopy(feedback, {})
+  const feedbackData = mappedCopy(feedback, {hasBeenReviewed: 'has_been_reviewed'})
   feedbackData.answer_key = answerKey
   return {
     type: UPDATE_FEEDBACK,
