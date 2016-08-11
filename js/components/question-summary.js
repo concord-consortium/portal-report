@@ -24,13 +24,18 @@ export default class QuestionSummary extends Component {
 
   render() {
     const { question } = this.props
+    const notAnsweredDiv = (<div><strong>Not answered:</strong> {this.notAnswered}</div>)
+
+    // These aren't stats have been removed, but its possibly they will go back in.
+    // const answeredDiv = (<div><strong>Answered:</strong> {this.answered}</div>)
+    // const totalDiv = (<div><strong>Total:</strong> {this.total}</div>)
     return (
       <div className='question-summary'>
         <Prompt question={question} />
         <div className='stats'>
-          <div><strong>Answered:</strong> {this.answered}</div>
-          <div><strong>Not answered:</strong> {this.notAnswered}</div>
-          <div><strong>Total:</strong> {this.total}</div>
+
+          {this.notAnswered > 0 ? notAnsweredDiv : ""}
+
           <FeedbackPanel question={this.props.question}/>
         </div>
         <div className='clear-fix'></div>
