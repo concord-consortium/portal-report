@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import pureRender from 'pure-render-decorator'
-import Answer from './answer'
-import { CompareAnswerCheckboxContainer } from '../containers/compare-answer'
-import ShowCompareContainer from '../containers/show-compare'
+import Answer from '../components/answer'
+import { CompareAnswerCheckboxContainer } from './compare-answer'
+import ShowCompareContainer from './show-compare'
 import { connect } from 'react-redux'
 
 import '../../css/answers-table.less'

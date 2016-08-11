@@ -22,7 +22,7 @@ export default class QuestionForStudent extends Component {
         </div>
         <Prompt question={question} />
         <Answer answer={answer}/>
-        <Feedback answer={answer} question={question} for="student"/>
+        <Feedback answer={answer} question={question} htmlFor="student"/>
       </div>
     )
   }

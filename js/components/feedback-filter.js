@@ -10,23 +10,28 @@ export default class FeedbackFilter extends Component {
     const onlyNeedReview     = this.props.showOnlyNeedReview
 
     const showAll = !onlyNeedReview
-    const pullDownOptions    = this.props.studentNames.push("Select a student …")
+    const pullDownOptions    = this.props.students.push(
+      {
+        realName: "Select a student …",
+        id: -1,
+        answer: null
+      })
     return (
       <div className="feedback-filters">
         <div>
           Show:
           <input id="needsReview" type="radio" name="groupType" value="needs review" checked={onlyNeedReview} onChange={makeOnlyNeedReview}/>
-          <label for="needsReview"> Students that need review</label>
+          <label htmlFor="needsReview"> Students that need review</label>
 
 
 
           <input id="all" type="radio" name="groupType" value="all" checked={showAll} onChange={makeShowAll}/>
-          <label for="all"> All students </label>
+          <label htmlFor="all"> All students </label>
         </div>
         <div>
           Jump to
           <select>
-            {pullDownOptions.map( (i) => <option value={i}>{i}</option>)}
+            {pullDownOptions.map( (i) => <option key={i.id} value={i.id}>{i.realName}</option>)}
           </select>
         </div>
       </div>

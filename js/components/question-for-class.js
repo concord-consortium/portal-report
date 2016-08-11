@@ -3,7 +3,7 @@ import pureRender from 'pure-render-decorator'
 import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
 import QuestionSummary from './question-summary'
-import AnswersTable from './answers-table'
+import AnswersTable from '../containers/answers-table'
 import SelectionCheckbox from '../containers/selection-checkbox'
 
 import '../../css/question.less'
@@ -35,6 +35,11 @@ export default class QuestionForClass extends Component {
   render() {
     const { question } = this.props
     const { answersVisible } = this.state
+    const answers = question.get('answers').sortBy( (a) =>
+      (a.getIn(['student', 'lastName']) + a.getIn(['student', 'firstName'])).toLowerCase()
+    )
+
+
     return (
       <div>
         <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
@@ -47,7 +52,7 @@ export default class QuestionForClass extends Component {
           </div>
           <QuestionSummary question={question}/>
           <QuestionDetails question={question}/>
-          {answersVisible ? <AnswersTable question={question} answers={question.get('answers')}/> : ''}
+          {answersVisible ? <AnswersTable question={question} answers={answers}/> : ''}
         </div>
       </div>
     )

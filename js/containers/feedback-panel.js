@@ -76,11 +76,14 @@ class FeedbackPanel extends Component {
     const prompt        = question.get('prompt')
     const number        = question.get('questionNumber')
     const answers       = question.get('answers')
-    const realAnswers   = answers.filter(a => a.get('type') != 'NoAnswer')
-    const needingFeedback =  realAnswers.filter( a => ! this.answerIsMarkedComplete(a) )
+      .sortBy( (a) =>
+        (a.getIn(['student', 'lastName']) + a.getIn(['student', 'firstName'])).toLowerCase()
+      )
 
+    const realAnswers     = answers.filter(a => a.get('type') != 'NoAnswer')
+    const needingFeedback = realAnswers.filter( a => ! this.answerIsMarkedComplete(a) )
 
-    const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : realAnswers
+    const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers
     const numAnswers       = realAnswers.count()
     const numNoAnswers     = answers.count() - realAnswers.count()
     var   numNeedsFeedback = needingFeedback.count()
@@ -90,7 +93,13 @@ class FeedbackPanel extends Component {
     const feedbackEnabled = question.get('feedbackEnabled')
     const maxScore = question.get('maxScore')
 
-    const studentNames = answers.map( a => a.get('student').get('realName'))
+    const studentsPulldown = filteredAnswers.map( (a) => {
+      return {
+        realName: a.getIn(['student', 'realName']),
+        id: a.getIn(['student','id']),
+        answer: a,
+      }
+    })
     if((!scoreEnabled) && (!feedbackEnabled)) {
       numNeedsFeedback = 0
       numFeedbackGiven = 0
@@ -122,11 +131,11 @@ class FeedbackPanel extends Component {
               <h3>Feedback Type</h3>
 
               <input id="feedbackEnabled" type="checkbox" checked={feedbackEnabled} onChange={this.enableText}/>
-              <label for="feedbackEnabled"> Give Written Feedback</label>
+              <label htmlFor="feedbackEnabled"> Give Written Feedback</label>
               <br/>
 
               <input id="scoreEnabled" checked={scoreEnabled} type="checkbox" onChange={this.enableScore}/>
-              <label for="scoreEnabled">Give Score</label>
+              <label htmlFor="scoreEnabled">Give Score</label>
               <br/>
               { scoreEnabled ?
                 <div>
