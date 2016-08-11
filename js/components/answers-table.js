@@ -18,12 +18,12 @@ class AnswersTable extends Component {
   render() {
     const {question, answers, hidden} = this.props
     const getLatestFeedback = this.getLatestFeedback.bind(this)
+    const anonymous = this.props.anonymous
+    const scoreEnabled = (!anonymous) && question.get("scoreEnabled")
+    const feedbackEnabled = (!anonymous) && question.get("feedbackEnabled")
 
-    const scoreEnabled = question.get("scoreEnabled")
-    const feedbackEnabled = question.get("feedbackEnabled")
-
-    const feedbackTH = feedbackEnabled ?  <th>Feedback</th> : ""
-    const scoreTH = scoreEnabled ?  <th>Score</th> : ""
+    const feedbackTH = feedbackEnabled ?  <th>Feedback</th> : null
+    const scoreTH = scoreEnabled ?  <th>Score</th> : null
     return (
       <table className={`answers-table ${hidden ? 'hidden' : ''}`}>
         <tbody>
@@ -55,8 +55,8 @@ function AnswerRow ({answer, feedback, showScore, showFeedback}) {
   const hasAnswer =  answer.get("type") !== "NoAnswer"
   const score = feedback && feedback.get("score")
   const textFeedback = feedback && feedback.get("feedback")
-  const scoreTD = showScore ? <td className="score">{score}</td> : ""
-  const feedbackTD = showFeedback ? <td className="feedback">{textFeedback}</td> : ""
+  const scoreTD = showScore ? <td className="score">{score}</td> : null
+  const feedbackTD = showFeedback ? <td className="feedback">{textFeedback}</td> : null
   const compareDIV =  hasAnswer ?
     <div>
       <CompareAnswerCheckboxContainer answer={answer}/>
@@ -79,7 +79,10 @@ function AnswerRow ({answer, feedback, showScore, showFeedback}) {
 
 
 function mapStateToProps(state) {
-  return { feedbacks: state.getIn(["report","feedbacks"]) }
+  return {
+    feedbacks: state.getIn(["report","feedbacks"]),
+    anonymous: state.getIn(["report","anonymous"])
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
