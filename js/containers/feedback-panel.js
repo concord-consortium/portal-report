@@ -99,7 +99,10 @@ class FeedbackPanel extends Component {
 
     if (!showing) { return (
       <div className="feedback-container">
-        <FeedbackButton needsReviewCount={numNeedsFeedback} showFeedback={this.showFeedback}/>
+        <FeedbackButton
+          feedbackEnabled={feedbackEnabled || scoreEnabled}
+          needsReviewCount={numNeedsFeedback}
+          showFeedback={this.showFeedback}/>
       </div>
     )}
     return (
