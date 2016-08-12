@@ -5,6 +5,7 @@ import FeedbackFilter from '../components/feedback-filter'
 import FeedbackOverview from '../components/feedback-overview'
 import FeedbackRow from '../components/feedback-row'
 import FeedbackButton from '../components/feedback-button'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 import { connect } from 'react-redux'
 import { updateFeedback, enableFeedback} from '../actions'
@@ -151,13 +152,14 @@ class FeedbackPanel extends Component {
           <FeedbackFilter
             showOnlyNeedReview={this.state.showOnlyNeedReview}
             makeOnlyNeedReview={this.makeOnlyNeedReview}
-            studentNames={studentNames}
+            students={studentsPulldown}
             makeShowAll={this.makeShowAll}
           />
 
 
           <div className="feedback-rows-wrapper">
             <div className="feedback-for-students">
+              <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
               { filteredAnswers.map(answer =>
                   <FeedbackRow
                     answer={answer}
@@ -170,6 +172,7 @@ class FeedbackPanel extends Component {
                     showOnlyNeedsRiew={this.state.showOnlyNeedReview}
                   />
               )}
+              </ReactCSSTransitionGroup>
             </div>
           </div>
 

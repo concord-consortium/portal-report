@@ -64,6 +64,27 @@
     .feedback-for-students {
       height: auto;
       width: 100%;
+      .answer-enter {
+        opacity: 0.01;
+        max-height: 0px;
+      }
+
+      .answer-enter.answer-enter-active {
+        opacity: 1;
+        max-height: 600px;
+        transition: 400ms ease;
+      }
+
+      .answer-leave {
+        opacity: 1;
+        max-height: 600px;
+      }
+
+      .answer-leave.answer-leave-active {
+        opacity: 0.1;
+        max-height: 0px;
+        transition: 400ms ease;
+      }
     }
 
     .feedback-row {
