@@ -130,6 +130,7 @@ class FeedbackPanel extends Component {
         <FeedbackButton
           feedbackEnabled={feedbackEnabled || scoreEnabled}
           needsReviewCount={numNeedsFeedback}
+          disabled={numAnswers < 1}
           showFeedback={this.showFeedback}/>
       </div>
     )}
