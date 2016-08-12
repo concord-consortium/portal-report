@@ -30,8 +30,8 @@ export default class FeedbackFilter extends Component {
         </div>
         <div>
           Jump to
-          <select>
-            {pullDownOptions.map( (i) => <option key={i.id} value={i.id}>{i.realName}</option>)}
+          <select onChange={this.props.studentSelected}>
+            {pullDownOptions.map( (i,index) => <option key={i.id} value={index}>{i.realName}</option>)}
           </select>
         </div>
       </div>

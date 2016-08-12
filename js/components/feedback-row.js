@@ -82,8 +82,7 @@ export default class FeedbackRow extends Component {
     return (
       <div className="feedback-row">
         <div className="student-answer">
-          {/*<h3>{name}</h3>*/}
-          <h4>{name}'s Answer</h4>
+          <h3>{name}'s Answer</h3>
           <p>{realAnswer}</p>
         </div>
         <div className="feedback-interface">

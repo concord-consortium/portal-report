@@ -107,6 +107,21 @@
     .feedback-interface {
       width: 50%;
     }
+    .feedback-content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      font-size: 11pt;
+      input, textarea { font-family: inherit; font-size: inherit;}
+      input { margin: 0.2em }
+      div {
+        margin-right: 1em;
+        margin-top: 0.5em;
+      }
+      .score {
+        input { width: 3em; text-align: right;}
+      }
+    }
 
     .max-score-input {
       width: 35px;
@@ -162,14 +177,16 @@
 
     h3 {
       color: #3a878b;
-      font-size: 1.15em;
+      font-size: 1rem;
       font-weight: bold;
+      margin: 1rem 0px;
+      text-transform: capitalize;
     }
 
     h4 {
       color: #777;
       font-weight: bold;
-      margin: 1em 0 .5em;
+      margin: 1rem 0px;
       padding: 0px;
     }
 
@@ -190,7 +207,8 @@
       font: .9em verdana, helvetica, sans-serif;
       margin-bottom: .25em;
       padding: 1%;
-      width: 97%;
+      width: 95%;
+      height: 5em;
     }
   }
 }

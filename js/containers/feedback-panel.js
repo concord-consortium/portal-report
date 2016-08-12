@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import ReactDom from 'react-dom'
+
 import pureRender from 'pure-render-decorator'
 import Button from '../components/button'
 import FeedbackFilter from '../components/feedback-filter'
@@ -17,18 +19,20 @@ class FeedbackPanel extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showOnlyNeedReview: false,
+      showOnlyNeedReview: true,
       showFeedbackPanel: false
     }
 
     this.makeOnlyNeedReview = this.makeOnlyNeedReview.bind(this)
-    this.makeShowAll        = this.makeShowAll.bind(this)
+    this.makeShowAll  = this.makeShowAll.bind(this)
     this.showFeedback = this.showFeedback.bind(this)
     this.hideFeedback = this.hideFeedback.bind(this)
     this.answerIsMarkedComplete = this.answerIsMarkedComplete.bind(this)
     this.enableText  = this.enableText.bind(this)
     this.enableScore = this.enableScore.bind(this)
     this.setMaxScore = this.setMaxScore.bind(this)
+    this.scrollStudentIntoView = this.scrollStudentIntoView.bind(this)
+    this.studentRowRef = this.studentRowRef.bind(this)
   }
 
 
@@ -69,6 +73,20 @@ class FeedbackPanel extends Component {
   setMaxScore(event) {
     const value = parseInt(event.target.value) || null
     this.props.enableFeedback(this.props.question.get('key'), {maxScore: value})
+  }
+
+  studentRowRef(index){
+    return `student-row-${index}`
+  }
+
+  scrollStudentIntoView(eventProxy) {
+    const index = eventProxy.target.value
+    const ref = this.studentRowRef(index)
+    const itemComponent = this.refs[ref]
+    if (itemComponent) {
+      const domNode = ReactDom.findDOMNode(itemComponent)
+      domNode.scrollIntoView()
+    }
   }
 
   render() {
@@ -151,6 +169,7 @@ class FeedbackPanel extends Component {
 
           <FeedbackFilter
             showOnlyNeedReview={this.state.showOnlyNeedReview}
+            studentSelected={this.scrollStudentIntoView}
             makeOnlyNeedReview={this.makeOnlyNeedReview}
             students={studentsPulldown}
             makeShowAll={this.makeShowAll}
@@ -160,9 +179,10 @@ class FeedbackPanel extends Component {
           <div className="feedback-rows-wrapper">
             <div className="feedback-for-students">
               <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
-              { filteredAnswers.map(answer =>
+              { filteredAnswers.map((answer, i) =>
                   <FeedbackRow
                     answer={answer}
+                    ref={this.studentRowRef(i)}
                     key={answer.get('key')}
                     scoreEnabled={scoreEnabled}
                     feedbackEnabled={feedbackEnabled}
