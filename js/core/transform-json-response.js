@@ -1,5 +1,6 @@
 import { normalize, Schema, arrayOf } from 'normalizr'
 import humps from 'humps'
+import migrate from './migrations'
 
 const DEFAULT_REPORT_FOR = 'class'
 // Transforms deeply nested structure of report:
@@ -51,7 +52,7 @@ export default function transformJSONResponse(json) {
   })
 
   const reportType = camelizedJson.report.type
-  const response = normalize(camelizedJson, {
+  const response = normalize(migrate(camelizedJson), {
     report: reportType === 'Investigation' ? investigation : activity,
     'class': {
       students: arrayOf(student)
