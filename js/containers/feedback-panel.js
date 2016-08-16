@@ -57,7 +57,7 @@ class FeedbackPanel extends Component {
   }
 
   answerIsMarkedComplete(answer) {
-    const feedbackId = answer.get('feedbacks').last() && answer.get('feedbacks').last()
+    const feedbackId = answer.get('feedbacks') && answer.get('feedbacks').last()
     const feedback = this.props.feedbacks.get(feedbackId)
     return feedback && feedback.get("hasBeenReviewed")
   }
@@ -89,6 +89,17 @@ class FeedbackPanel extends Component {
     }
   }
 
+  renderGettingStarted() {
+    return(
+      <div className="gettingStarted">
+        <div className="explainer">
+          To start, choose the type of feedback you want to leave in the Feedback Type settings above.
+        </div>
+        <div className="arrow">⤴</div>
+      </div>
+    )
+  }
+
   render() {
     const question      = this.props.question
     const showing       = this.state.showFeedbackPanel
@@ -112,6 +123,7 @@ class FeedbackPanel extends Component {
     const feedbackEnabled = question.get('feedbackEnabled')
     const maxScore = question.get('maxScore')
 
+    const showGettingStarted = (!scoreEnabled) && (!feedbackEnabled)
     const studentsPulldown = filteredAnswers.map( (a) => {
       return {
         realName: a.getIn(['student', 'realName']),
@@ -119,6 +131,7 @@ class FeedbackPanel extends Component {
         answer: a,
       }
     })
+
     if((!scoreEnabled) && (!feedbackEnabled)) {
       numNeedsFeedback = 0
       numFeedbackGiven = 0
@@ -138,14 +151,16 @@ class FeedbackPanel extends Component {
       <div className="feedback-container">
         <div className="lightbox-background" />
         <div className="feedback-panel">
-          <h1>Feedback: Question {number}</h1>
-          <h2 dangerouslySetInnerHTML={ {__html: prompt} }/>
           <div className="feedback-header">
-            <FeedbackOverview
-              numNoAnswers={numNoAnswers}
-              numFeedbackGiven={numFeedbackGiven}
-              numNeedsFeedback={numNeedsFeedback}
-            />
+            <div className="left">
+              <h1>Feedback: Question {number}</h1>
+              <h2 dangerouslySetInnerHTML={ {__html: prompt} }/>
+              <FeedbackOverview
+                numNoAnswers={numNoAnswers}
+                numFeedbackGiven={numFeedbackGiven}
+                numNeedsFeedback={numNeedsFeedback}
+              />
+            </div>
 
             <div className="feedback-options">
               <h3>Feedback Type</h3>
@@ -163,43 +178,45 @@ class FeedbackPanel extends Component {
                   <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
                 </div> : ""
               }
-
-
             </div>
           </div>
 
-          <FeedbackFilter
-            showOnlyNeedReview={this.state.showOnlyNeedReview}
-            studentSelected={this.scrollStudentIntoView}
-            makeOnlyNeedReview={this.makeOnlyNeedReview}
-            students={studentsPulldown}
-            makeShowAll={this.makeShowAll}
-          />
+          <div className="main-feedback">
+            <FeedbackFilter
+              showOnlyNeedReview={this.state.showOnlyNeedReview}
+              studentSelected={this.scrollStudentIntoView}
+              makeOnlyNeedReview={this.makeOnlyNeedReview}
+              students={studentsPulldown}
+              makeShowAll={this.makeShowAll}
+              disable={showGettingStarted}
+            />
 
-
-          <div className="feedback-rows-wrapper">
-            <div className="feedback-for-students">
-              <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
-              { filteredAnswers.map((answer, i) =>
-                  <FeedbackRow
-                    answer={answer}
-                    ref={this.studentRowRef(i)}
-                    key={answer.get('key')}
-                    scoreEnabled={scoreEnabled}
-                    feedbackEnabled={feedbackEnabled}
-                    maxScore={maxScore}
-                    feedbacks={this.props.feedbacks}
-                    updateFeedback={this.props.updateFeedback}
-                    showOnlyNeedsRiew={this.state.showOnlyNeedReview}
-                  />
-              )}
-              </ReactCSSTransitionGroup>
+            <div className="feedback-rows-wrapper">
+              { showGettingStarted ?  this.renderGettingStarted() : ""}
+              <div className="feedback-for-students">
+                <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
+                { filteredAnswers.map((answer, i) =>
+                    <FeedbackRow
+                      answer={answer}
+                      ref={this.studentRowRef(i)}
+                      key={answer.get('key')}
+                      scoreEnabled={scoreEnabled}
+                      feedbackEnabled={feedbackEnabled}
+                      maxScore={maxScore}
+                      feedbacks={this.props.feedbacks}
+                      updateFeedback={this.props.updateFeedback}
+                      showOnlyNeedsRiew={this.state.showOnlyNeedReview}
+                    />
+                )}
+                </ReactCSSTransitionGroup>
+              </div>
             </div>
           </div>
-
-          <Button onClick = {this.hideFeedback}>Done</Button>
+          <div className="footer">
+            <Button onClick = {this.hideFeedback}>Done</Button>
+          </div>
         </div>
-        </div>
+      </div>
 
     )
   }

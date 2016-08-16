@@ -11,7 +11,7 @@ import '../../css/answers-table.less'
 class AnswersTable extends Component {
 
   getLatestFeedback(answer) {
-    const feedbackKey = answer.get('feedbacks').last()
+    const feedbackKey = answer.get('feedbacks') && answer.get('feedbacks').last()
     return this.props.feedbacks.get(feedbackKey)
   }
 

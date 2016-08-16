@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import Answer from './answer'
+
 import pureRender from 'pure-render-decorator'
 
 @pureRender
@@ -52,11 +54,11 @@ export default class FeedbackRow extends Component {
       </div>
     )
   }
-  renderComplete(answerKey, answered, complete) {
+
+  renderComplete(answerKey, complete) {
     return(
       <div className="feedback-complete">
         <input
-          disabled={!answered}
           checked={complete}
           type="checkbox"
           onChange={(e) => this.completeChange(e, answerKey)}/>
@@ -64,36 +66,45 @@ export default class FeedbackRow extends Component {
     </div>
     )
   }
-  render() {
-    const answer           = this.props.answer
-    const name             = answer.get('student').get('realName')
-    const answered         = answer.get('answered')  || false
+
+
+  renderFeedbackSection(answer) {
     const allFeedbacks     = this.props.feedbacks
     const feedbackRecords  = answer.get('feedbacks').map( feedbackKey => allFeedbacks.get(feedbackKey))
     const feedbackRecord   = feedbackRecords.last()
-    const answerKey        = feedbackRecord ? feedbackRecord.get('answerKey')        : null
-    const feedback         = feedbackRecord ? feedbackRecord.get('feedback')         : "(no feedback)"
-    const score            = feedbackRecord ? parseInt(feedbackRecord.get('score')) || ""            : 0
-    const complete         = feedbackRecord ? feedbackRecord.get('hasBeenReviewed')  : false
-    const disableFeedback  = (!feedbackRecord) || complete
-    const realAnswer       = answer.get('answer')
+    const answerKey        = feedbackRecord ? feedbackRecord.get('answerKey')             : null
+    const feedback         = feedbackRecord ? feedbackRecord.get('feedback')              : "(no feedback)"
+    const score            = feedbackRecord ? parseInt(feedbackRecord.get('score')) || "" : 0
+
     const scoreEnabled     = this.props.scoreEnabled
     const feedbackEnabled  = this.props.feedbackEnabled
+    const complete         = feedbackRecord ? feedbackRecord.get('hasBeenReviewed')  : false
+    const disableFeedback  = (!feedbackRecord) || complete
+
+    return (
+      <div className="feedback-interface">
+        <h4>Your Feedback</h4>
+        <div className="feedback-content">
+          { feedbackEnabled ? this.renderFeedbackForm(answerKey, disableFeedback, feedback) :  ""}
+          { scoreEnabled ? this.renderScore(answerKey, disableFeedback, score) : "" }
+          { feedbackEnabled || scoreEnabled ? this.renderComplete(answerKey, complete) : ""}
+        </div>
+      </div>
+    )
+  }
+
+  render() {
+    const answer           = this.props.answer
+    const answered         = answer.get('answered') || false
+    const name             = answer.get('student').get('realName')
+
     return (
       <div className="feedback-row">
         <div className="student-answer">
           <h3>{name}'s Answer</h3>
-          <p>{realAnswer}</p>
+          <Answer answer={answer} alwaysOpen={true} />
         </div>
-        <div className="feedback-interface">
-          <h4>Your Feedback</h4>
-          <div className="feedback-content">
-            { feedbackEnabled ? this.renderFeedbackForm(answerKey, disableFeedback, feedback) : "" }
-            { scoreEnabled ? this.renderScore(answerKey, disableFeedback, score) : "" }
-            { feedbackEnabled || scoreEnabled ? this.renderComplete(answerKey, answered, complete) : ""}
-
-          </div>
-        </div>
+        { answered ? this.renderFeedbackSection(answer) : null }
       </div>
     )
   }

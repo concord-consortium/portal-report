@@ -21,7 +21,7 @@ class Feedback extends Component {
   }
 
   getLatestFeedback() {
-    const feedbackKey = this.props.answer.get('feedbacks').last()
+    const feedbackKey = this.props.answer.get('feedbacks') && this.props.answer.get('feedbacks').last()
     return this.props.feedbacks.get(feedbackKey)
   }
 

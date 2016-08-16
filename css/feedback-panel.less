@@ -10,6 +10,10 @@
 }
 .page {
   .feedback-panel {
+    div {
+      overflow: hidden;
+    }
+
     position: fixed;
     z-index: 5001;
     top: 100px;
@@ -23,46 +27,70 @@
     flex-direction: column;
 
     .feedback-header {
+      margin: 0px;
       display: flex;
       flex-direction: row;
       width: 100%;
+      flex-grow: 0;
+      flex-shrink: 0;
       justify-content: space-between;
+
+      .left {
+        display: flex;
+        flex-direction: column;
+
+        h1 {
+          font-size: .9em;
+          margin-bottom: 0px;
+        }
+
+        h2 {
+          color: #da5936;
+          float: left;
+          font-size: 1.35em;
+          font-weight: normal;
+          margin: 0px;
+        }
+      }
     }
+
     .feedback-options {
+      margin: 0px;
       background: #eee;
       font-size: .8em;
       padding: 10px 15px;
       align-self: flex-end;
+      flex-grow: 0;
+      flex-shrink: 0;
       h3 {
         color: #3f3f3f;
         font-size: 1em;
+        margin: 0px;
         margin-bottom: .25em;
       }
     }
 
-    .feedback-filters {
-      background: #666;
-      color: #fff;
-      font-size: .8em;
-      padding: 10px;
+    .main-feedback {
+      width: 100%;
+      flex-grow: 1;
+      flex-shrink: 1;
+      align-self: flex-end;
+      position: relative;
+      margin-top: 1em;
       display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: space-between;
-      input, select {
-        margin-left: 10px;
-      }
+      flex-direction: column;
     }
 
     .feedback-rows-wrapper {
-      overflow: auto;
+      overflow-y: scroll;
+      max-height: 400px;
       border: solid 1px #777;
       border-top: none;
-      height: 400px;
+      flex-grow: 1;
+      flex-shrink: 1;
     }
 
     .feedback-for-students {
-      height: auto;
       width: 100%;
       .answer-enter {
         opacity: 0.01;
@@ -89,7 +117,6 @@
 
     .feedback-row {
       background: #f6f6f6;
-      width: 100%;
       font-size: .9em;
       overflow: hidden;
       padding: 10px 15px;
@@ -100,6 +127,30 @@
       }
     }
 
+    .gettingStarted {
+      position: relative;
+      z-index: 5001;
+      height: 100%;
+      background-color: #222;
+      color: #fff;
+      padding: 2rem;
+      padding-top: 0px;
+      opacity: 0.9;
+      display: flex;
+      flex-direction: row;
+      .explainer {
+        font-size: 20pt;
+        width: 70%;
+        text-align: center;
+      }
+      .arrow {
+        font-size: 80pt;
+        line-height: 1em;
+      }
+    }
+
+
+
     .student-answer {
       width: 48%;
     }
@@ -107,12 +158,19 @@
     .feedback-interface {
       width: 50%;
     }
+
     .feedback-content {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
       font-size: 11pt;
-      input, textarea { font-family: inherit; font-size: inherit;}
+      input, textarea {
+        font-family: inherit;
+        font-size: inherit;
+        &[disabled] {
+          opacity: 0.4;
+        }
+      }
       input { margin: 0.2em }
       div {
         margin-right: 1em;
@@ -140,21 +198,26 @@
       width: 50%;
     }
 
-    .cc-button {
-      float: right;
-      margin: .75em 25px .75em 0;
-      border: none;
-      color: #fff !important;
-      cursor: pointer;
-      display: block;
-      font-family: lato, arial, helvetica, sans-serif;
-      font-size: .9em;
-      font-weight: normal;
-      padding: .3125em .625em;
-      text-align: center;
-      text-decoration: none;
-      border-radius: .1875em;
-      box-shadow: 0 3px 0 #e16a3e;
+    .footer {
+      height: 40px;
+      flex-grow: 0;
+      flex-shrink: 0;
+      .cc-button {
+        float: right;
+        margin: .75em 25px .75em 0;
+        border: none;
+        color: #fff !important;
+        cursor: pointer;
+        display: block;
+        font-family: lato, arial, helvetica, sans-serif;
+        font-size: .9em;
+        font-weight: normal;
+        padding: .3125em .625em;
+        text-align: center;
+        text-decoration: none;
+        border-radius: .1875em;
+        box-shadow: 0 3px 0 #e16a3e;
+      }
     }
 
     a.cc-button {
@@ -162,18 +225,6 @@
       margin-right: 0px;
     }
 
-    h1 {
-      font-size: .9em;
-      margin-bottom: 0;
-    }
-
-    h2 {
-      color: #da5936;
-      float: left;
-      font-size: 1.35em;
-      font-weight: normal;
-      width: 80%;
-    }
 
     h3 {
       color: #3a878b;
@@ -209,6 +260,7 @@
       padding: 1%;
       width: 95%;
       height: 5em;
+
     }
   }
 }
