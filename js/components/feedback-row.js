@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Answer from './answer'
+import FeedbackBox from './feedback-box'
 
 import pureRender from 'pure-render-decorator'
 
@@ -12,7 +13,6 @@ export default class FeedbackRow extends Component {
       disableComplete: true
     }
     this.scoreChange = this.scoreChange.bind(this)
-    this.feedbackChange = this.feedbackChange.bind(this)
     this.completeChange = this.completeChange.bind(this)
     this.changeFeedback = this.changeFeedback.bind(this)
   }
@@ -26,9 +26,6 @@ export default class FeedbackRow extends Component {
     this.changeFeedback(answerKey, {score: value})
   }
 
-  feedbackChange(e, answerKey) {
-    this.changeFeedback(answerKey, {feedback: e.target.value})
-  }
 
   completeChange(e, answerKey) {
     this.changeFeedback(answerKey, {hasBeenReviewed: e.target.checked})
@@ -36,11 +33,12 @@ export default class FeedbackRow extends Component {
 
   renderFeedbackForm(answerKey, disableFeedback, feedback) {
     return  (
-      <textarea
+      <FeedbackBox
         rows="10"
         cols="20"
         disabled={disableFeedback}
-        onChange={(e) => this.feedbackChange(e, answerKey)} value={feedback} />
+        onChange={(textValue) => this.changeFeedback(answerKey, {feedback: textValue})}
+        initialFeedback={feedback} />
     )
   }
 
@@ -50,7 +48,7 @@ export default class FeedbackRow extends Component {
         Score
         <input
           disabled={disableFeedback}
-          onChange={(e) => this.scoreChange(e, answerKey) } value={score}/>
+          onChange={(e) => this.scoreChange(e, answerKey) } defaultValue={score}/>
       </div>
     )
   }
