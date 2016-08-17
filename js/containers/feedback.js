@@ -67,7 +67,6 @@ class Feedback extends Component {
     const noFeedbackMessage = this.props.answer.get('answered') ?
       "No Feedback yet." :
       "Not answered yet."
-
     if (feedbackDisabled) {
       return (<div className={`${className} disabled`}>No feedback yet.</div>)
     }
@@ -89,7 +88,7 @@ class Feedback extends Component {
 
 
 function mapStateToProps(state) {
-  return { feedbacks: state.getIn(['report','feedbacks']) }
+  return { feedbacks: state.get('feedbacks') }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

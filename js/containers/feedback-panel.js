@@ -224,7 +224,7 @@ class FeedbackPanel extends Component {
 
 
 function mapStateToProps(state) {
-  return { feedbacks: state.getIn(['report','feedbacks']) }
+  return { feedbacks: state.get('feedbacks')}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

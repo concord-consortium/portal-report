@@ -80,7 +80,7 @@ function AnswerRow ({answer, feedback, showScore, showFeedback}) {
 
 function mapStateToProps(state) {
   return {
-    feedbacks: state.getIn(["report","feedbacks"]),
+    feedbacks: state.get("feedbacks"),
     anonymous: state.getIn(["report","anonymous"])
   }
 }
