@@ -10,7 +10,7 @@ export default class FeedbackBox extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: props.initialFeedback
+      value: props.initialFeedback || ""
     }
     this.updateText = this.updateText.bind(this)
   }
