@@ -9,6 +9,15 @@
   display: flex;
   &.disabled { display: none; }
   .feedback-section {
-    h1 { display: inline; margin-right: 0.5em;}
+    h1 { display: inline; margin-right: 0.5em; font-size: 1em;}
+  }
+}
+
+@media print {
+  .report .answer-feedback .feedback-section  h1 {
+    display: inline;
+    margin-right: 0.5em;
+    font-size: 1em;
+    font-weight: normal;
   }
 }
