@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import fakeData from 'json!./data/report.json'
+import fakeData from './data/report.json'
 
 const urlParams = (() => {
   const query = window.location.search.substring(1)

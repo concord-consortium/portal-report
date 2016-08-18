@@ -25,6 +25,10 @@ module.exports = {
         loader: 'style!css!less!autoprefixer'
       },
       {
+        test: /\.json$/,
+        loader: "json-loader"
+      },
+      {
         test: /\.(png|jpg|gif)$/,
         // inline base64 URLs for <=8k images, direct URLs for the rest
         loader: 'url-loader?limit=8192'
