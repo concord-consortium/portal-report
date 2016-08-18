@@ -105,10 +105,7 @@ class FeedbackPanel extends Component {
     const showing       = this.state.showFeedbackPanel
     const prompt        = question.get('prompt')
     const number        = question.get('questionNumber')
-    const answers       = question.get('answers')
-      .sortBy( (a) =>
-        (a.getIn(['student', 'lastName']) + a.getIn(['student', 'firstName'])).toLowerCase()
-      )
+    const answers       = this.props.answers
 
     const realAnswers     = answers.filter(a => a.get('type') != 'NoAnswer')
     const needingFeedback = realAnswers.filter( a => ! this.answerIsMarkedComplete(a) )
@@ -116,8 +113,8 @@ class FeedbackPanel extends Component {
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers
     const numAnswers       = realAnswers.count()
     const numNoAnswers     = answers.count() - realAnswers.count()
-    var   numNeedsFeedback = needingFeedback.count()
-    var   numFeedbackGiven = numAnswers - numNeedsFeedback
+    let   numNeedsFeedback = needingFeedback.count()
+    let   numFeedbackGiven = numAnswers - numNeedsFeedback
 
     const scoreEnabled = question.get('scoreEnabled')
     const feedbackEnabled = question.get('feedbackEnabled')

@@ -50,7 +50,7 @@ export default class QuestionForClass extends Component {
               {answersVisible ? 'Hide responses' : 'Show responses'}
             </a>
           </div>
-          <QuestionSummary question={question}/>
+          <QuestionSummary question={question} answers={answers}/>
           <QuestionDetails question={question}/>
           {answersVisible ? <AnswersTable question={question} answers={answers}/> : ''}
         </div>

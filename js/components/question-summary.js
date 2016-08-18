@@ -36,7 +36,7 @@ export default class QuestionSummary extends Component {
 
           {this.notAnswered > 0 ? notAnsweredDiv : ""}
 
-          <FeedbackPanel question={this.props.question}/>
+          <FeedbackPanel question={this.props.question} answers={this.props.answers}/>
         </div>
         <div className='clear-fix'></div>
       </div>
