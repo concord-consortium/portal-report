@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Answer from './answer'
 import FeedbackBox from './feedback-box'
+import ScoreBox from './score-box'
 
 import pureRender from 'pure-render-decorator'
 
@@ -42,14 +43,12 @@ export default class FeedbackRow extends Component {
     )
   }
 
-  renderScore(answerKey, disableFeedback, score) {
+  renderScore(answerKey, disableScore, score) {
     return(
-      <div className="score">
-        Score
-        <input
-          disabled={disableFeedback}
-          onChange={(e) => this.scoreChange(e, answerKey) } defaultValue={score}/>
-      </div>
+      <ScoreBox
+        disabled={disableScore}
+        onChange={(value) => this.changeFeedback(answerKey, {score: value})}
+        initialScore={score} />
     )
   }
 
@@ -92,9 +91,9 @@ export default class FeedbackRow extends Component {
   }
 
   render() {
-    const answer           = this.props.answer
-    const answered         = answer.get('answered') || false
-    const name             = answer.get('student').get('realName')
+    const answer   = this.props.answer
+    const answered = answer.get('answered') || false
+    const name     = answer.get('student').get('realName')
 
     return (
       <div className="feedback-row">
