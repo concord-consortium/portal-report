@@ -13,7 +13,7 @@ export default function feedbackReducer(state = INITIAL_FEEDBACK_STATE, action) 
   switch (action.type) {
     case RECEIVE_DATA:
       const data = transformJSONResponse(action.response)
-      return Immutable.fromJS(data.entities.feedbacks)
+      return Immutable.fromJS(data.entities.feedbacks || {})
     case UPDATE_FEEDBACK:
       return updateFeedback(state, action)
     default:
