@@ -114,9 +114,9 @@ class FeedbackPanel extends PureComponent {
     let   numNeedsFeedback = needingFeedback.count()
     let   numFeedbackGiven = numAnswers - numNeedsFeedback
 
-    const scoreEnabled = question.get('scoreEnabled')
-    const feedbackEnabled = question.get('feedbackEnabled')
-    const maxScore = question.get('maxScore')
+    const scoreEnabled = question.get('scoreEnabled') || false
+    const feedbackEnabled = question.get('feedbackEnabled') || false
+    const maxScore = question.get('maxScore') || 0
 
     const showGettingStarted = (!scoreEnabled) && (!feedbackEnabled)
     const studentsPulldown = filteredAnswers.map( (a) => {
