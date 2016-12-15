@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import { Set } from 'immutable'
 import Answer from './answer'
 import { CompareAnswerRmLinkContainer } from '../containers/compare-answer'
 
 import '../../css/compare-view.less'
 
-export default class CompareView extends Component {
+export default class CompareView extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

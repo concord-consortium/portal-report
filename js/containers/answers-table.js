@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import Answer from '../components/answer'
 import { CompareAnswerCheckboxContainer } from './compare-answer'
 import ShowCompareContainer from './show-compare'
@@ -7,8 +6,7 @@ import { connect } from 'react-redux'
 
 import '../../css/answers-table.less'
 
-@pureRender
-class AnswersTable extends Component {
+class AnswersTable extends PureComponent {
 
   getLatestFeedback(answer) {
     const feedbackKey = answer.get('feedbacks') && answer.get('feedbacks').last()

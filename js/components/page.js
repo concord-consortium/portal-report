@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import Question from '../components/question'
 import Sticky from 'react-stickynode';
 import '../../css/page.less'
 
-@pureRender
-export default class Page extends Component {
+export default class Page extends PureComponent {
   render() {
     const { page, reportFor } = this.props
     const pageName = page.get('name')

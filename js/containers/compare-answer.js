@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { setAnswerSelectedForCompare } from '../actions'
 
-@pureRender
-export class CompareAnswerCheckbox extends Component {
+export class CompareAnswerCheckbox extends PureComponent {
   render() {
     const { answer, onChange } = this.props
     return (
@@ -14,7 +12,7 @@ export class CompareAnswerCheckbox extends Component {
   }
 }
 
-export class CompareAnswerRmLink extends Component {
+export class CompareAnswerRmLink extends PureComponent {
   render() {
     const { answer, onChange, children } = this.props
     return (

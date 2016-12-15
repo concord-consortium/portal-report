@@ -1,8 +1,6 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
-@pureRender
-export default class Prompt extends Component {
+export default class Prompt extends PureComponent {
 
   renderPrompt() {
     const prompt = this.props.question.get('prompt')

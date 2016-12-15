@@ -1,12 +1,10 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Answer from './answer'
 import FeedbackBox from './feedback-box'
 import ScoreBox from './score-box'
 
-import pureRender from 'pure-render-decorator'
 
-@pureRender
-export default class FeedbackRow extends Component {
+export default class FeedbackRow extends PureComponent {
 
   constructor(props) {
     super(props)

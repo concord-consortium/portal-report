@@ -1,12 +1,9 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 
 import '../../css/answer-feedback.less'
 
-
-@pureRender
-class Feedback extends Component {
+class Feedback extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}

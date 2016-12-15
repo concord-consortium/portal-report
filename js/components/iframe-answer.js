@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
 import '../../css/iframe-answer.less'
 
-@pureRender
-export default class IframeAnswer extends Component {
+export default class IframeAnswer extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
 import QuestionSummary from './question-summary'
@@ -13,8 +12,7 @@ const QuestionComponent = {
   'Embeddable::ImageQuestion': ImageQuestionDetails
 }
 
-@pureRender
-export default class QuestionForClass extends Component {
+export default class QuestionForClass extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

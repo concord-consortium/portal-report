@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
 import '../../css/feedback-filters.less'
 
-@pureRender
-export default class FeedbackFilter extends Component {
+
+export default class FeedbackFilter extends PureComponent {
 
   render() {
     const makeOnlyNeedReview = this.props.makeOnlyNeedReview

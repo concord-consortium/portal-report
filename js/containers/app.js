@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { selectReport, fetchDataIfNeeded, invalidateData, hideCompareView,
          showSelectedQuestions, showAllQuestions, setNowShowing, setAnonymous } from '../actions'
@@ -16,8 +15,7 @@ import compareViewData from '../core/compare-view-data'
 
 import '../../css/app.less'
 
-@pureRender
-class App extends Component {
+class App extends PureComponent {
   constructor(props) {
     super(props)
     this.handleRefreshClick = this.handleRefreshClick.bind(this)

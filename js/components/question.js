@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import QuestionForClass from './question-for-class'
 import QuestionForStudent from './question-for-student'
 
-@pureRender
-export default class Question extends Component {
+export default class Question extends PureComponent {
   render() {
     const { question, reportFor} = this.props
     if (reportFor === 'class') {

@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import ReactDom from 'react-dom'
 
-import pureRender from 'pure-render-decorator'
 import Button from '../components/button'
 import FeedbackFilter from '../components/feedback-filter'
 import FeedbackOverview from '../components/feedback-overview'
@@ -14,8 +13,7 @@ import { updateFeedback, enableFeedback} from '../actions'
 
 import '../../css/feedback-panel.less'
 
-@pureRender
-class FeedbackPanel extends Component {
+class FeedbackPanel extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

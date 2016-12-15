@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
 import '../../css/feedback-button.less'
 
 
-@pureRender
-export default class FeedbackButton extends Component {
+export default class FeedbackButton extends PureComponent {
 
   render() {
     const {disabled, feedbackEnabled, needsReviewCount, showFeedback} = this.props

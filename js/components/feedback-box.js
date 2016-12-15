@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-import pureRender from 'pure-render-decorator'
 
 const UPDATE_INTERVAL = 1000
 
-@pureRender
-export default class FeedbackBox extends Component {
+export default class FeedbackBox extends PureComponent {
 
   constructor(props) {
     super(props)

@@ -1,8 +1,6 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
-@pureRender
-export default class MultipleChoiceAnswer extends Component {
+export default class MultipleChoiceAnswer extends PureComponent {
   render() {
     const { answer } = this.props
     return (

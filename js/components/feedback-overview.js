@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import '../../css/feedback-overview.less'
 
-@pureRender
-export default class FeedbackOverview extends Component {
+export default class FeedbackOverview extends PureComponent {
 
   render() {
     const numNoAnswers     = this.props.numNoAnswers

@@ -1,12 +1,10 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import Prompt from './prompt'
 import FeedbackPanel from '../containers/feedback-panel'
 
 import '../../css/question-summary.less'
 
-@pureRender
-export default class QuestionSummary extends Component {
+export default class QuestionSummary extends PureComponent {
 
 
 

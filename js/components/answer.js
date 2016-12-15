@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import OpenResponseAnswer from './open-response-answer'
 import MultipleChoiceAnswer from './multiple-choice-answer'
 import ImageAnswer from './image-answer'
@@ -14,8 +13,7 @@ const AnswerComponent = {
   'NoAnswer': NoAnswer
 }
 
-@pureRender
-export default class Answer extends Component {
+export default class Answer extends PureComponent {
   render() {
     const { answer, alwaysOpen } = this.props
     if (typeof answer === 'undefined') {
