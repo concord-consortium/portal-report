@@ -1,6 +1,11 @@
 import fetch from 'isomorphic-fetch'
 import fakeData from './data/report.json'
 
+const warn = (message) => {
+  if (console && typeof console.warn == 'function') {
+    console.warn(message);
+  }
+}
 const urlParams = (() => {
   const query = window.location.search.substring(1)
   const rawVars = query.split("&")
@@ -30,15 +35,21 @@ export function fetchReportData() {
 }
 
 export function updateReportSettings(data) {
-  return fetch(REPORT_URL, {
-    method: 'put',
-    headers: {
-      'Authorization': AUTH_HEADER,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data)
-  })
+  if (REPORT_URL) {
+    return fetch(REPORT_URL, {
+      method: 'put',
+      headers: {
+        'Authorization': AUTH_HEADER,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    })
+  }
+  else {
+    warn("No REPORT_URL. Faking put method.");
+    return new Promise(resolve => {})
+  }
 }
 
 export class APIError {
