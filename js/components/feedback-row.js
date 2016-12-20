@@ -21,7 +21,7 @@ export default class FeedbackRow extends PureComponent {
   }
 
   scoreChange(e, answerKey) {
-    const value = parseInt(e.target.value) || null
+    const value = parseInt(e.target.value) || 0
     this.changeFeedback(answerKey, {score: value})
   }
 
@@ -69,7 +69,7 @@ export default class FeedbackRow extends PureComponent {
     const feedbackRecord   = feedbackRecords.last()
     const answerKey        = feedbackRecord ? feedbackRecord.get('answerKey')             : null
     const feedback         = feedbackRecord ? feedbackRecord.get('feedback')              : "(no feedback)"
-    const score            = feedbackRecord ? parseInt(feedbackRecord.get('score')) || "" : 0
+    const score            = parseInt(feedbackRecord.get('score')) || 0
 
     const scoreEnabled     = this.props.scoreEnabled
     const feedbackEnabled  = this.props.feedbackEnabled

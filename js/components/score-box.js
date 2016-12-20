@@ -7,7 +7,7 @@ export default class ScoreBox extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      value: props.initialScore || ""
+      value: props.initialScore || 0
     }
     this.updateText = this.updateText.bind(this)
   }
@@ -19,7 +19,7 @@ export default class ScoreBox extends PureComponent {
   }
 
   validateValue(v) {
-    return parseInt(v) || ""
+    return parseInt(v) || 0
   }
 
   updateText(e) {
