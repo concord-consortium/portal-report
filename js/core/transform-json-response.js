@@ -1,5 +1,6 @@
 import { normalize, Schema, arrayOf } from 'normalizr'
 import humps from 'humps'
+import migrate from './migrations'
 
 const DEFAULT_REPORT_FOR = 'class'
 // Transforms deeply nested structure of report:
@@ -30,6 +31,7 @@ export default function transformJSONResponse(json) {
   const question = new Schema('questions', {idAttribute: (q) => q.key})
   // Answers don't have unique ID so generate it. Embeddable key + student ID works.
   const answer = new Schema('answers', {idAttribute: (a) => `${a.embeddableKey}-${a.studentId}`})
+  const feedback = new Schema('feedbacks', {idAttribute: (a) => a.answerKey})
   investigation.define({
     children: arrayOf(activity)
   })
@@ -45,9 +47,12 @@ export default function transformJSONResponse(json) {
   question.define({
     answers: arrayOf(answer)
   })
+  answer.define({
+    feedbacks: arrayOf(feedback)
+  })
 
   const reportType = camelizedJson.report.type
-  const response = normalize(camelizedJson, {
+  const response = normalize(migrate(camelizedJson), {
     report: reportType === 'Investigation' ? investigation : activity,
     'class': {
       students: arrayOf(student)

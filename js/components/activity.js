@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import Section from './section'
 import Sticky from 'react-stickynode';
 import '../../css/activity.less'
 
-@pureRender
-export default class Activity extends Component {
+export default class Activity extends PureComponent {
   render() {
     const { activity, reportFor} = this.props
     const activityName = activity.get('name')

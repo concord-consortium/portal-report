@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import Investigation from './investigation'
 import Button from './button'
 
@@ -8,8 +7,7 @@ import Sticky from 'react-stickynode';
 
 import { noSelection } from '../calculations'
 
-@pureRender
-export default class Report extends Component {
+export default class Report extends PureComponent {
   constructor(props) {
     super(props)
     this.printStudentReports = this.printStudentReports.bind(this)

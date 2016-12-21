@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import ImageAnswerModal from './image-answer-modal'
 
 import '../../css/image-answer.less'
 
-@pureRender
-export default class ImageAnswer extends Component {
+export default class ImageAnswer extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

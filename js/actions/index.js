@@ -13,6 +13,9 @@ export const SHOW_ALL_QUESTIONS = 'SHOW_ALL_QUESTIONS'
 export const SET_ANSWER_SELECTED_FOR_COMPARE = 'SET_ANSWER_SELECTED_FOR_COMPARE'
 export const SHOW_COMPARE_VIEW = 'SHOW_COMPARE_VIEW'
 export const HIDE_COMPARE_VIEW = 'HIDE_COMPARE_VIEW'
+export const SHOW_FEEDBACK = 'SHOW_FEEDBACK'
+export const UPDATE_FEEDBACK = 'UPDATE_FEEDBACK'
+export const ENABLE_FEEDBACK = 'ENABLE_FEEDBACK'
 
 // When fetch succeeds, receiveData action will be called with the response object (json in this case).
 // REQUEST_DATA action will be processed by the reducer immediately.
@@ -58,6 +61,16 @@ export function fetchDataIfNeeded() {
       return dispatch(requestData())
     }
   }
+}
+
+function mappedCopy(src, fieldMappings) {
+  const dst = {}
+  var key, dstKey
+  for (key in src) {
+    dstKey = fieldMappings[key] || key
+    dst[dstKey] = src[key]
+  }
+  return dst
 }
 
 export function invalidateData() {
@@ -149,4 +162,48 @@ export function showCompareView(embeddableKey) {
 
 export function hideCompareView() {
   return {type: HIDE_COMPARE_VIEW}
+}
+
+export function showFeedbackView(embeddableKey) {
+  return {type: SHOW_FEEDBACK, embeddableKey}
+}
+
+export function updateFeedback(answerKey, feedback) {
+  const feedbackData = mappedCopy(feedback, {hasBeenReviewed: 'has_been_reviewed'})
+  feedbackData.answer_key = answerKey
+  return {
+    type: UPDATE_FEEDBACK,
+    answerKey,
+    feedback,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        feedback: feedbackData
+      }
+    }
+
+  }
+}
+
+
+export function enableFeedback(embeddableKey, feedbackFlags) {
+  const mappings = {
+    feedbackEnabled: 'enable_text_feedback',
+    scoreEnabled: 'enable_score',
+    maxScore: 'max_score'
+  }
+  const feedbackSettings = mappedCopy(feedbackFlags, mappings)
+  feedbackSettings.embeddable_key = embeddableKey
+
+  return {
+    type: ENABLE_FEEDBACK,
+    embeddableKey,
+    feedbackFlags,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        feedback_opts: feedbackSettings
+      }
+    }
+  }
 }

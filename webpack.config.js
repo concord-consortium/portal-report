@@ -18,11 +18,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style!css!autoprefixer'
+        loaders: [
+          'style-loader',
+          'css-loader?importLoaders=1',
+          'postcss-loader'
+        ]
       },
       {
         test: /\.less$/,
-        loader: 'style!css!less!autoprefixer'
+        loader: 'style!css!less!'
+      },
+      {
+        test: /\.json$/,
+        loader: "json-loader"
       },
       {
         test: /\.(png|jpg|gif)$/,

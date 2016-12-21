@@ -1,4 +1,5 @@
 {
+  "report_version": "1.0.1",
   "report_for": "class",
   "report": {
     "id": 18,
@@ -45,6 +46,14 @@
                           }
                         ],
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-1",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "is_correct": true,
@@ -60,6 +69,14 @@
                           }
                         ],
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-2",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "is_correct": true,
@@ -75,6 +92,14 @@
                           }
                         ],
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-3",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "is_correct": true,
@@ -124,6 +149,14 @@
                       {
                         "answer": "j3 answer",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-4",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
@@ -133,6 +166,14 @@
                       {
                         "answer": "j1 answer",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-5",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
@@ -142,6 +183,14 @@
                       {
                         "answer": "j2 answer",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-6",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
@@ -198,6 +247,14 @@
                           }
                         ],
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-7",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "is_correct": true,
@@ -213,6 +270,14 @@
                           }
                         ],
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-8",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "is_correct": true,
@@ -228,6 +293,14 @@
                           }
                         ],
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-9",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "is_correct": true,
@@ -277,6 +350,14 @@
                       {
                         "answer": "j3 answer!",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-10",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
@@ -286,6 +367,14 @@
                       {
                         "answer": "j1 answer",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-11",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
@@ -295,6 +384,14 @@
                       {
                         "answer": "j2 answer!",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-12",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::OpenResponse",
@@ -332,6 +429,14 @@
                           "note": ""
                         },
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
@@ -344,6 +449,14 @@
                           "note": "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control."
                         },
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
@@ -356,6 +469,14 @@
                           "note": "j2 note"
                         },
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-15",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
@@ -368,6 +489,14 @@
                           "note": ""
                         },
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-16",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
@@ -391,6 +520,14 @@
                       {
                         "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-17",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::Iframe",
@@ -403,6 +540,14 @@
                       {
                         "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-18",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::Iframe",
@@ -463,6 +608,14 @@
                           "note": "123"
                         },
                         "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "FAKE_ANSWER_KEY-19",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::ImageQuestion",
@@ -503,26 +656,36 @@
       {
         "id": 13,
         "name": "John Jenkins",
+        "first_name": "John",
+        "last_name": "Jenkins",
         "started_offering": true
       },
       {
         "id": 14,
         "name": "Jenna Armstrong",
+        "first_name": "Jenna",
+        "last_name": "Armstrong",
         "started_offering": true
       },
       {
         "id": 15,
         "name": "Amy Galloway",
+        "first_name": "Amy",
+        "last_name": "Galloway",
         "started_offering": true
       },
       {
         "id": 16,
         "name": "John Ross",
+        "first_name": "John",
+        "last_name": "Ross",
         "started_offering": true
       },
       {
         "id": 18,
         "name": "Kate Crosby",
+        "first_name": "Kate",
+        "last_name": "Crosby",
         "started_offering": false
       }
     ]

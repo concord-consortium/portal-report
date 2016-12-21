@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { showCompareView } from '../actions'
 import Button from '../components/button'
 
-@pureRender
-export class ShowCompareButton extends Component {
+export class ShowCompareButton extends PureComponent {
   render() {
     const { answer, onClick } = this.props
     return (

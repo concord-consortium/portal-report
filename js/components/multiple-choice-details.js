@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
 import '../../css/multiple-choice-details.less'
 
@@ -28,8 +27,7 @@ function getChoicesStats(choices, answers) {
   return stats
 }
 
-@pureRender
-export default class MultipleChoiceDetails extends Component {
+export default class MultipleChoiceDetails extends PureComponent {
   get choices() {
     const choices = this.props.question.get('choices').toJS()
     // Add fake, no-answer choice.

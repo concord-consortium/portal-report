@@ -1,6 +1,7 @@
 .answers-table {
   width: 100%;
   text-align: left;
+  vertical-align: top;
   border-collapse: collapse;
   font-size: .9em;
   margin-top: 2em;
@@ -24,6 +25,15 @@
 
   td {
     background: #f3f3f3;
+    &.score {
+      font-size: 9pt;
+      font-weight: bold;
+    }
+    &.feedback {
+      font-size: 9pt;
+      font-style: italic;
+    }
+
   }
 
   .student-header {

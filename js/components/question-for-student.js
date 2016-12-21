@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import Answer from './answer'
 import SelectionCheckbox from '../containers/selection-checkbox'
+import Feedback from '../containers/feedback'
+
 import '../../css/question.less'
 import Prompt from './prompt'
 
-@pureRender
-export default class QuestionForStudent extends Component {
+export default class QuestionForStudent extends PureComponent {
 
   render() {
     const { question, student } = this.props
@@ -20,6 +20,7 @@ export default class QuestionForStudent extends Component {
         </div>
         <Prompt question={question} />
         <Answer answer={answer}/>
+        <Feedback answer={answer} question={question} htmlFor="student"/>
       </div>
     )
   }

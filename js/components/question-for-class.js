@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
 import QuestionSummary from './question-summary'
-import AnswersTable from './answers-table'
+import AnswersTable from '../containers/answers-table'
 import SelectionCheckbox from '../containers/selection-checkbox'
 
 import '../../css/question.less'
@@ -13,8 +12,7 @@ const QuestionComponent = {
   'Embeddable::ImageQuestion': ImageQuestionDetails
 }
 
-@pureRender
-export default class QuestionForClass extends Component {
+export default class QuestionForClass extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,6 +33,11 @@ export default class QuestionForClass extends Component {
   render() {
     const { question } = this.props
     const { answersVisible } = this.state
+    const answers = question.get('answers').sortBy( (a) =>
+      (a.getIn(['student', 'lastName']) + a.getIn(['student', 'firstName'])).toLowerCase()
+    )
+
+
     return (
       <div>
         <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
@@ -45,9 +48,9 @@ export default class QuestionForClass extends Component {
               {answersVisible ? 'Hide responses' : 'Show responses'}
             </a>
           </div>
-          <QuestionSummary question={question}/>
+          <QuestionSummary question={question} answers={answers}/>
           <QuestionDetails question={question}/>
-          {answersVisible ? <AnswersTable answers={question.get('answers')}/> : ''}
+          {answersVisible ? <AnswersTable question={question} answers={answers}/> : ''}
         </div>
       </div>
     )

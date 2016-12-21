@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
 import '../../css/data-fetch-error.less'
 
-@pureRender
-export default class DataFetchError extends Component {
+export default class DataFetchError extends PureComponent {
   renderUnauthorized() {
    return <div>
       You are not authorized to access report data. Your access token might have expired.

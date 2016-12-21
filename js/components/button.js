@@ -1,10 +1,8 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 
 import '../../css/button.less'
 
-@pureRender
-export default class Button extends Component {
+export default class Button extends PureComponent {
   constructor(props) {
     super(props)
     this.handleClick = this.handleClick.bind(this)

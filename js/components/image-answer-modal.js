@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
-import pureRender from 'pure-render-decorator'
+import React, { PureComponent } from 'react'
 import { Modal } from 'react-bootstrap'
 
-@pureRender
-export default class ImageAnswerModal extends Component {
+export default class ImageAnswerModal extends PureComponent {
 
   componentDidMount() {
     window.addEventListener('click', this.windowClicked.bind(this), true)
