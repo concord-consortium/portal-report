@@ -36,6 +36,26 @@ function addFeedback(dataMap) {
   handleQuestion(dataMap.report)
 }
 
+function addPageUrl(dataMap) {
+  const pageType = "Page"
+  const report = dataMap.report
+  const defaultUrl = null
+  const processPage = function (item) {
+    if (!item.url) {
+      item.url = defaultUrl
+    }
+  }
+  const processChildren = function (item) {
+    if (item.children) {
+      item.children.forEach((child) => processChildren(child))
+    }
+    if (item.type === pageType) {
+      processPage(item)
+    }
+  }
+  processChildren(report)
+}
+
 const migrations = [
   { version: '1.0.0',
     migrations:[]
@@ -45,6 +65,12 @@ const migrations = [
     migrations:[
       addStudentNames,
       addFeedback
+    ]
+  },
+  {
+    version: '1.0.2',
+    migrations:[
+      addPageUrl
     ]
   }
 ]

@@ -3,6 +3,7 @@ import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
 import QuestionSummary from './question-summary'
 import AnswersTable from '../containers/answers-table'
+import MaybeLink from './maybe-link'
 import SelectionCheckbox from '../containers/selection-checkbox'
 
 import '../../css/question.less'
@@ -26,8 +27,14 @@ export default class QuestionForClass extends PureComponent {
   }
 
   renderQuestionHeader() {
-    const { question } = this.props
-    return <span>Question #{question.get('questionNumber')}</span>
+    const { question, url } = this.props
+    return (
+      <span className="page-link">
+        <MaybeLink url={url}>
+          <span> Question #{question.get('questionNumber')} </span>
+        </MaybeLink>
+      </span>
+    )
   }
 
   render() {
