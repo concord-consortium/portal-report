@@ -8,7 +8,8 @@ export default class Page extends PureComponent {
   render() {
     const { page, reportFor } = this.props
     const pageName = page.get('name')
-    const url =  page.get('url')
+    const showLinks = reportFor == 'class'
+    const url = showLinks ? page.get('url') : null
     return (
       <div className={`page ${page.get('visible') ? '' : 'hidden'}`}>
         <Sticky top={80}>
@@ -20,7 +21,7 @@ export default class Page extends PureComponent {
         </Sticky>
         <div>
           {page.get('children').map((question) => {
-              return <Question key={question.get('key')} question={question} reportFor={reportFor} url={page.get('url')} />
+              return <Question key={question.get('key')} question={question} reportFor={reportFor} url={url} />
           })}
         </div>
       </div>
