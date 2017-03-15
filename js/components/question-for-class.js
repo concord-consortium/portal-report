@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react'
 import MultipleChoiceDetails from './multiple-choice-details'
 import ImageQuestionDetails from './image-question-details'
 import QuestionSummary from './question-summary'
+import QuestionHeader from './question-header'
 import AnswersTable from '../containers/answers-table'
-import MaybeLink from './maybe-link'
 import SelectionCheckbox from '../containers/selection-checkbox'
 
 import '../../css/question.less'
@@ -26,31 +26,19 @@ export default class QuestionForClass extends PureComponent {
     this.setState({answersVisible: !this.state.answersVisible})
   }
 
-  renderQuestionHeader() {
-    const { question, url } = this.props
-    return (
-      <span className="page-link">
-        <MaybeLink url={url}>
-          <span> Question #{question.get('questionNumber')} </span>
-        </MaybeLink>
-      </span>
-    )
-  }
-
   render() {
-    const { question } = this.props
+    const { question, url } = this.props
     const { answersVisible } = this.state
-    const answers = question.get('answers').sortBy( (a) =>
+    const answers = question.get('answers').sortBy(a =>
       (a.getIn(['student', 'lastName']) + a.getIn(['student', 'firstName'])).toLowerCase()
     )
-
 
     return (
       <div>
         <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
           <div className="question-header">
             <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')}/>
-            { this.renderQuestionHeader() }
+            <QuestionHeader question={question} url={url}/>
             <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
               {answersVisible ? 'Hide responses' : 'Show responses'}
             </a>
