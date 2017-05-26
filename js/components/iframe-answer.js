@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import InteractiveIframe from './interactive-iframe'
 
 import '../../css/iframe-answer.less'
 
@@ -27,14 +28,23 @@ export default class IframeAnswer extends PureComponent {
 
   renderIframe() {
     const { answer, alwaysOpen } = this.props
+    let url
+    let state
+    // There are two supported answer types handled by iframe question: simple link or interactive state.
+    if (answer.get('answerType') === 'Saveable::ExternalLinkUrl') {
+      // Answer field is just the reportable URL. We don't need any state.
+      url = answer.get('answer')
+      state = null
+    } else if (answer.get('answerType') === 'Saveable::InteractiveState') {
+      // URL field is provided together with answer. Answer field is a state that will be passed
+      // to the iframe using iframe-phone.
+      url = answer.get('url')
+      state = answer.get('answer')
+    }
     return (
         <div>
           {!alwaysOpen ? <div><a href='#' onClick={this.toggleIframe}>Hide</a></div> : ''}
-          <iframe src={answer.get('answer')}
-                  width={answer.get('width') || '300px'}
-                  height={answer.get('height') || '300px'}
-                  style={{border: 'none', marginTop: '0.5em'}}>
-          </iframe>
+          <InteractiveIframe src={url} state={state} width={answer.get('width')} height={answer.get('height')}/>
         </div>
       )
   }
@@ -44,7 +54,7 @@ export default class IframeAnswer extends PureComponent {
     const { iframeVisible } = this.state
     return (
       <div className='iframe-answer'>
-        {iframeVisible || alwaysOpen ? this.renderIframe() : this.renderLink()}
+        {(iframeVisible || alwaysOpen) ? this.renderIframe() : this.renderLink()}
       </div>
     )
   }
