@@ -2,11 +2,12 @@ language:
   - node_js
   - ruby
 node_js:
-  - 5
+  - 6
 rvm:
   - 2.2.0
 install:
   - travis_retry gem install s3_website -v 2.12.3
+  - travis_retry yarn
   - travis_retry npm install
 before_script: webpack
 script:
