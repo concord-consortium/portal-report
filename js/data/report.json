@@ -1,5 +1,5 @@
 {
-  "report_version": "1.0.2",
+  "report_version": "1.0.3",
   "report_for": "class",
   "report": {
     "id": 18,
@@ -10,6 +10,22 @@
         "id": 29,
         "type": "Activity",
         "name": "Test Activity 1 (sequence part)",
+        "enable_text_feedback": true,
+        "score_type": "NO_SCORE",
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "feedbacks": [
+              {
+                "feedback-key": "FAKE_FEEDBACK_KEY-1",
+                "score": null,
+                "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]
+          }
+        ],
         "children": [
           {
             "id": 68,
@@ -216,6 +232,23 @@
         "id": 30,
         "type": "Activity",
         "name": "Test Activity 2 (sequence part)",
+        "enable_text_feedback": true,
+        "score_type": "NO_SCORE",
+        "enable_auto_score": true,
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "feedbacks": [
+              {
+                "feedback-key": "FAKE_FEEDBACK_KEY-1",
+                "score": null,
+                "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]
+          }
+        ],
         "children": [
           {
             "id": 69,
@@ -584,6 +617,22 @@
         "id": 31,
         "type": "Activity",
         "name": "Test activity 3 (sequence part)",
+        "enable_text_feedback": true,
+        "score_type": "NO_SCORE",
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "feedbacks": [
+              {
+                "feedback-key": "FAKE_FEEDBACK_KEY-1",
+                "score": null,
+                "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]
+          }
+        ],
         "children": [
           {
             "id": 70,
