@@ -10,8 +10,8 @@
         "id": 29,
         "type": "Activity",
         "name": "Test Activity 1 (sequence part)",
-        "enable_text_feedback": true,
-        "score_type": "NO_SCORE",
+        "enable_text_feedback": false,
+        "score_type": "NO_SCORING",
         "max_score": 10,
         "activity_feedback":[
           {
@@ -233,7 +233,7 @@
         "type": "Activity",
         "name": "Test Activity 2 (sequence part)",
         "enable_text_feedback": true,
-        "score_type": "NO_SCORE",
+        "score_type": "NO_SCORING",
         "enable_auto_score": true,
         "max_score": 10,
         "activity_feedback":[
@@ -618,7 +618,7 @@
         "type": "Activity",
         "name": "Test activity 3 (sequence part)",
         "enable_text_feedback": true,
-        "score_type": "NO_SCORE",
+        "score_type": "NO_SCORING",
         "max_score": 10,
         "activity_feedback":[
           {

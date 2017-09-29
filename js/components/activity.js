@@ -30,27 +30,21 @@ export default class Activity extends PureComponent {
     })
   }
 
+  // "enable_text_feedback": true,
+  // "enable_score": true,
+  // "enable_auto_score": true,
+  // "max_score": 10,
+
   render() {
     const { activity, reportFor} = this.props
     const activityName = activity.get('name')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
-    const enableFeedback = function (feedbackFlags) {
-      this.setState(feedbackFlags)
-    }.bind(this);
-    const showText = this.state.showText
-    const showScore = this.state.showScore
-    const maxScore = this.state.maxScore
-
     const feedbackPanel = this.state.showFeedbackPanel
       ?
         <ActivityFeedbackPanel
           hide={hideFeedback }
-          enableFeedback={enableFeedback}
-          showScore={showScore}
-          showText={showText}
-          maxScore={maxScore}
-          activity = {activity}
+          activity={activity}
         />
       :
         ""
