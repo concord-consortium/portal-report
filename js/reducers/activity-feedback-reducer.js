@@ -1,4 +1,4 @@
-import Immutable, { Map } from 'immutable'
+import Immutable, { Map, fromJS} from 'immutable'
 import { RECEIVE_DATA, UPDATE_ACTIVITY_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK } from '../actions'
 import transformJSONResponse from '../core/transform-json-response'
 const INITIAL_ACTIVITY_FEEDBACK_STATE = Map({})
@@ -12,15 +12,26 @@ function setActivityFeedbackForStudent(state, activityId, studentId, feedback) {
 }
 
 function updateActivityFeedback(state, action) {
-  const {answerKey, feedback} = action
-  return state.mergeIn([answerKey], feedback)
+  const {activityFeedbackKey, feedback} = action
+  const [activityId, studentId] = activityFeedbackKey.split('-')
+  const record = state.get(activityFeedbackKey) ||  fromJS({
+    studentId:parseInt(studentId), // TODO: string or int ?
+    key: activityFeedbackKey,
+    feedbacks:[{
+      feedback:null,
+      hasBeenReviewed:false,
+      score:null
+    }]
+  })
+  return state.set(activityFeedbackKey, record.mergeIn(["feedbacks",0], feedback))
 }
 
 export  function activityFeedbackReducer(state = INITIAL_ACTIVITY_FEEDBACK_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
       const data = transformJSONResponse(action.response)
-      return Immutable.fromJS(data.entities.activityFeedbacks || {})
+      const feedbacks =  Immutable.fromJS(data.entities.activityFeedbacks || {})
+      return feedbacks
     case UPDATE_ACTIVITY_FEEDBACK:
       return updateActivityFeedback(state, action)
     default:

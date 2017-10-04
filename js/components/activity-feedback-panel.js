@@ -10,6 +10,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ReactTooltip from 'react-tooltip'
 import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback} from '../actions'
+import { activityFeedbacks } from '../core/activity-feedback-data'
 
 import {RadioGroup, Radio} from 'react-radio-group'
 
@@ -33,7 +34,7 @@ class ActivityFeedbackPanel extends PureComponent {
     }
     this.makeOnlyNeedReview = this.makeOnlyNeedReview.bind(this)
     this.makeShowAll  = this.makeShowAll.bind(this)
-    this.answerIsMarkedComplete = this.answerIsMarkedComplete.bind(this)
+    this.feedbackIsMarkedComplete = this.feedbackIsMarkedComplete.bind(this)
     this.enableText  = this.enableText.bind(this)
     this.setMaxScore = this.setMaxScore.bind(this)
     this.scrollStudentIntoView = this.scrollStudentIntoView.bind(this)
@@ -48,9 +49,8 @@ class ActivityFeedbackPanel extends PureComponent {
     this.setState({showOnlyNeedReview: false})
   }
 
-  answerIsMarkedComplete(answer) {
-    const feedbackId = answer.get('feedbacks') && answer.get('feedbacks').last()
-    const feedback = this.props.feedbacks.get(feedbackId)
+  feedbackIsMarkedComplete(_feedback) {
+    const feedback = _feedback.get('feedbacks') && _feedback.get('feedbacks').last()
     return feedback && feedback.get("hasBeenReviewed")
   }
 
@@ -89,56 +89,6 @@ class ActivityFeedbackPanel extends PureComponent {
     )
   }
 
-  fakeStudentFeedbacks() {
-    return fromJS([
-      {
-        key: "act-1",
-        student: {
-          realName: "Joe Doe",
-          id: 1
-        },
-        feedbacks: [
-          {
-            answerKey: "x-1",
-            feedback: "good work",
-            score: "2",
-            hasBeenReviewed: false
-          }
-        ]
-      },
-      {
-        key: "act-2",
-        student: {
-          realName: "Linden Paessel",
-          id: 2
-        },
-        feedbacks: [
-          {
-            answerKey: "x-2",
-            feedback: "good work Linden",
-            score: "1",
-            hasBeenReviewed: false
-          }
-        ]
-      },
-      {
-        key: "act-3",
-        student: {
-          realName: "Ada Paessel",
-          id: 3
-        },
-        feedbacks: [
-          {
-            answerKey: "x-3",
-            feedback: "good work Ada",
-            score: "5",
-            hasBeenReviewed: false
-          }
-        ]
-      }
-    ])
-  }
-
   render() {
     const { activity }  = this.props;
     const prompt = activity.get("name")
@@ -147,7 +97,10 @@ class ActivityFeedbackPanel extends PureComponent {
     const maxScore = activity.get("maxScore")
     const disabled = false
     const numNeedsFeedback = 10
-    const studenActivityFeedbacks = this.fakeStudentFeedbacks()
+    const feedbacks = this.props.feedbacks
+    const needingFeedback = feedbacks.filter( f => ! this.feedbackIsMarkedComplete(f))
+    const filteredFeedbacks = this.state.showOnlyNeedReview ? needingFeedback : feedbacks
+
     const showGettingStarted = (scoreType === NO_SCORE) && (!showText)
 
     const changeScoreType = function (newV){
@@ -161,14 +114,13 @@ class ActivityFeedbackPanel extends PureComponent {
       }
     }.bind(this);
 
-    const studentsPulldown = studenActivityFeedbacks.map( (a) => {
+    const studentsPulldown = filteredFeedbacks.map( (f) => {
       return {
-        realName: a.getIn(['student', 'realName']),
-        id: a.getIn(['student','id']),
-        answer: a,
+        realName: f.getIn(['student', 'realName']),
+        id: f.getIn(['student','id']),
+        answer: f,
       }
     })
-
     return (
       <div className="feedback-container">
         <div className="lightbox-background" />
@@ -206,13 +158,13 @@ class ActivityFeedbackPanel extends PureComponent {
                   <span className="tooltip" data-tip data-for="AUTOMATIC_SCORE"> {AUTOMATIC_SCORE_L} </span>
                 </div>
 
-                <ReactTooltip id="NO_SCORE" place="top" type="dark" delayShow="500">
+                <ReactTooltip id="NO_SCORE" place="top" type="dark" delayShow={500}>
                   No activity level score.
                 </ReactTooltip>
-                <ReactTooltip id="MANUAL_SCORE" place="top" type="dark" delayShow="500">
+                <ReactTooltip id="MANUAL_SCORE" place="top" type="dark" delayShow={500}>
                   Provide your own activity level score.
                 </ReactTooltip>
-                <ReactTooltip id="AUTOMATIC_SCORE" place="top" type="dark" delayShow="500">
+                <ReactTooltip id="AUTOMATIC_SCORE" place="top" type="dark" delayShow={500}>
                   Sum scores from individual questions.
                 </ReactTooltip>
               </RadioGroup>
@@ -241,7 +193,7 @@ class ActivityFeedbackPanel extends PureComponent {
               { showGettingStarted ?  this.renderGettingStarted() : ""}
               <div className="feedback-for-students">
                 <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
-                { studenActivityFeedbacks.map((studentActivityFeedback, i) =>
+                { filteredFeedbacks.map((studentActivityFeedback, i) =>
                     <FeedbackRow
                       studentActivityFeedback = {studentActivityFeedback}
                       ref={this.studentRowRef(i)}
@@ -249,7 +201,7 @@ class ActivityFeedbackPanel extends PureComponent {
                       scoreEnabled={scoreType === MANUAL_SCORE}
                       feedbackEnabled={showText}
                       maxScore={maxScore}
-                      updateActivityFeedback={this.props.updateActivityFeedback}
+                      updateFeedback={this.props.updateActivityFeedback}
                       showOnlyNeedsRiew={this.state.showOnlyNeedReview}
                     />
                 )}
@@ -268,8 +220,12 @@ class ActivityFeedbackPanel extends PureComponent {
 }
 
 
-function mapStateToProps(state) {
-  return { feedbacks: state.get('feedbacks')}
+function mapStateToProps(state, ownProps) {
+  const actId = ownProps.activity.get('id')
+  const feedbacks = activityFeedbacks(state, actId)
+  return {
+    feedbacks: feedbacks
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

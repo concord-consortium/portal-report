@@ -18,7 +18,6 @@
             "student_id": 15,
             "feedbacks": [
               {
-                "feedback-key": "FAKE_FEEDBACK_KEY-1",
                 "score": null,
                 "feedback": null,
                 "has_been_reviewed": false
@@ -241,7 +240,6 @@
             "student_id": 15,
             "feedbacks": [
               {
-                "feedback-key": "FAKE_FEEDBACK_KEY-1",
                 "score": null,
                 "feedback": null,
                 "has_been_reviewed": false
@@ -625,7 +623,6 @@
             "student_id": 15,
             "feedbacks": [
               {
-                "feedback-key": "FAKE_FEEDBACK_KEY-1",
                 "score": null,
                 "feedback": null,
                 "has_been_reviewed": false

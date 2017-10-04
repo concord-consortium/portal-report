@@ -210,6 +210,22 @@ export function enableFeedback(embeddableKey, feedbackFlags) {
   }
 }
 
+export function updateActivityFeedback(activityFeedbackKey, feedback) {
+  const feedbackData = mappedCopy(feedback, {hasBeenReviewed: 'has_been_reviewed'})
+  feedbackData.feedback_key = activityFeedbackKey
+  return {
+    type: UPDATE_ACTIVITY_FEEDBACK,
+    activityFeedbackKey,
+    feedback
+    // callAPI: {
+    //   type: 'updateActivityFeedback',
+    //   data: {
+    //     feedback: feedbackData
+    //   }
+    // }
+  }
+}
+
 export function enableActivityFeedback(activityId, feedbackFlags) {
   // const mappings = {
   //   feedbackEnabled: 'enable_text_feedback',

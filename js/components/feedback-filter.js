@@ -12,7 +12,7 @@ export default class FeedbackFilter extends PureComponent {
 
     const showAll = !onlyNeedReview
     const disable = this.props.disable
-    const pullDownOptions    = this.props.students.push(
+    const pullDownOptions    = this.props.students.unshift(
       {
         realName: "Select a student …",
         id: -1,

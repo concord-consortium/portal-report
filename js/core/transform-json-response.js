@@ -39,7 +39,7 @@ export default function transformJSONResponse(json) {
     idAttribute: (a) => a.answerKey
   })
 
-  const activityFeedback = new schema.Entity('activityfeedbacks', {}, {
+  const activityFeedback = new schema.Entity('activityFeedbacks', {}, {
     idAttribute: (value, parent) => `${parent.id}-${value.studentId}`
   })
 
@@ -86,6 +86,7 @@ export default function transformJSONResponse(json) {
   response.hideControls = camelizedJson.hideControls || false
   applyVisibilityFilter(response.entities.questions, response.result.visibilityFilter)
   copyAnswerKeysToObjects(response.entities.answers || [])
+  copyAnswerKeysToObjects(response.entities.activityFeedbacks || [])
   saveStudentsRealNames(response.entities.students)
   return response
 }

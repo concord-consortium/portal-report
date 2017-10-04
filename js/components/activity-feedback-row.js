@@ -66,7 +66,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     const allFeedbacks     = this.props.feedbacks
     const feedbackRecords  = studentFeedback.get('feedbacks')
     const feedbackRecord   = feedbackRecords.last()
-    const answerKey        = feedbackRecord ? feedbackRecord.get('answerKey')             : null
+    const activityFeedbackKey  = studentFeedback.get('key')
     const feedback         = feedbackRecord ? feedbackRecord.get('feedback')              : "(no feedback)"
     const score            = parseInt(feedbackRecord ? feedbackRecord.get('score') : "0")
 
@@ -79,9 +79,9 @@ export default class ActivityFeedbackRow extends PureComponent {
       <div className="feedback-interface">
         <h4>Your Feedback</h4>
         <div className="feedback-content">
-          { feedbackEnabled ? this.renderFeedbackForm(answerKey, disableFeedback, feedback) :  ""}
-          { scoreEnabled ? this.renderScore(answerKey, disableFeedback, score) : "" }
-          { feedbackEnabled || scoreEnabled ? this.renderComplete(answerKey, complete) : ""}
+          { feedbackEnabled ? this.renderFeedbackForm(activityFeedbackKey, disableFeedback, feedback) :  ""}
+          { scoreEnabled ? this.renderScore(activityFeedbackKey, disableFeedback, score) : "" }
+          { feedbackEnabled || scoreEnabled ? this.renderComplete(activityFeedbackKey, complete) : ""}
         </div>
       </div>
     )
