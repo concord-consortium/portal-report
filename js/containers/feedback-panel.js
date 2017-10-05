@@ -79,7 +79,7 @@ class FeedbackPanel extends PureComponent {
 
   scrollStudentIntoView(eventProxy) {
     const index = eventProxy.target.value
-    const ref = this.studentRowRef(index)
+    const ref = this.studentRowRef(index-1)
     const itemComponent = this.refs[ref]
     if (itemComponent) {
       const domNode = ReactDom.findDOMNode(itemComponent)
