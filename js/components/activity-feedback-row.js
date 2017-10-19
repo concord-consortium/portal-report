@@ -16,8 +16,9 @@ export default class ActivityFeedbackRow extends PureComponent {
     this.changeFeedback = this.changeFeedback.bind(this)
   }
 
-  changeFeedback(answerKey, feedback) {
-    this.props.updateFeedback(answerKey, feedback)
+  changeFeedback(answerKey, newData) {
+    const oldData = this.fieldValues()
+    this.props.updateFeedback(answerKey, Object.assign({}, oldData, newData))
   }
 
   scoreChange(e, answerKey) {
@@ -61,19 +62,27 @@ export default class ActivityFeedbackRow extends PureComponent {
     )
   }
 
+  fieldValues() {
+    const studentActivityFeedback  = this.props.studentActivityFeedback
+    const feedbackRecord           = studentActivityFeedback.get('feedbacks').first()
+    return {
+      learnerId:          this.props.studentActivityFeedback.get("learnerId"),
+      activityFeedbackId: this.props.activityFeedbackId,
+      score:              parseInt(feedbackRecord ? feedbackRecord.get('score') : "0"),
+      feedback:           feedbackRecord ? feedbackRecord.get('feedback') : "(no feedback)",
+      complete:           feedbackRecord ? feedbackRecord.get('hasBeenReviewed')  : false
+    }
+  }
 
   renderFeedbackSection(studentFeedback) {
-    const allFeedbacks     = this.props.feedbacks
-    const feedbackRecords  = studentFeedback.get('feedbacks')
-    const feedbackRecord   = feedbackRecords.last()
     const activityFeedbackKey  = studentFeedback.get('key')
-    const feedback         = feedbackRecord ? feedbackRecord.get('feedback')              : "(no feedback)"
-    const score            = parseInt(feedbackRecord ? feedbackRecord.get('score') : "0")
+
+    const {feedback, score, complete, learnerId}  = this.fieldValues()
 
     const scoreEnabled     = this.props.scoreEnabled
     const feedbackEnabled  = this.props.feedbackEnabled
-    const complete         = feedbackRecord ? feedbackRecord.get('hasBeenReviewed')  : false
-    const disableFeedback  = (!feedbackRecord) || complete
+
+    const disableFeedback  = (!learnerId) || complete
 
     return (
       <div className="feedback-interface">

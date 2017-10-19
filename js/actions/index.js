@@ -211,39 +211,43 @@ export function enableFeedback(embeddableKey, feedbackFlags) {
 }
 
 export function updateActivityFeedback(activityFeedbackKey, feedback) {
-  const feedbackData = mappedCopy(feedback, {hasBeenReviewed: 'has_been_reviewed'})
+  const feedbackData = mappedCopy(feedback, {
+    hasBeenReviewed: 'has_been_reviewed',
+    activityFeedbackId: 'activity_feedback_id',
+    learnerId: 'learner_id',
+    feedback: 'text_feedback'
+  })
   feedbackData.feedback_key = activityFeedbackKey
   return {
     type: UPDATE_ACTIVITY_FEEDBACK,
     activityFeedbackKey,
-    feedback
-    // callAPI: {
-    //   type: 'updateActivityFeedback',
-    //   data: {
-    //     feedback: feedbackData
-    //   }
-    // }
+    feedback,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        activity_feedback: feedbackData
+      }
+    }
   }
 }
 
 export function enableActivityFeedback(activityId, feedbackFlags) {
-  // const mappings = {
-  //   feedbackEnabled: 'enable_text_feedback',
-  //   scoreEnabled: 'enable_score',
-  //   maxScore: 'max_score'
-  // }
-  // const feedbackSettings = mappedCopy(feedbackFlags, mappings)
-  // feedbackSettings.embeddable_key = embeddableKey
+  const mappings = {
+    enableTextFeedback: 'enable_text_feedback',
+    scoreType: 'score_type',
+    maxScore: 'max_score',
+    activityFeedbackId: 'activity_feedback_id'
+  }
+  const feedbackSettings = mappedCopy(feedbackFlags, mappings)
   return {
     type: ENABLE_ACTIVITY_FEEDBACK,
     activityId,
-    feedbackFlags
-    // TOOD:  We probably want to update the server at some point.
-    // callAPI: {
-    //   type: 'updateReportSettings',
-    //   data: {
-    //     feedback_opts: feedbackSettings
-    //   }
-    // }
+    feedbackFlags,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        actvity_feedback_opts: feedbackSettings
+      }
+    }
   }
 }

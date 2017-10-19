@@ -18,13 +18,13 @@ import '../../css/feedback-panel.less'
 import '../../css/tooltip.less'
 
 const NO_SCORE_L        = "No scoring"
-const NO_SCORE          = "NO_SCORING"
+const NO_SCORE          = "none"
 
 const MANUAL_SCORE_L    = "Manual Scoring"
-const MANUAL_SCORE      = "MANUAL_SCORE"
+const MANUAL_SCORE      = "manual"
 
 const AUTOMATIC_SCORE_L = "Automatic Scoring"
-const AUTOMATIC_SCORE   = "AUTOMATIC_SCORING"
+const AUTOMATIC_SCORE   = "auto"
 
 class ActivityFeedbackPanel extends PureComponent {
   constructor(props) {
@@ -37,6 +37,7 @@ class ActivityFeedbackPanel extends PureComponent {
     this.feedbackIsMarkedComplete = this.feedbackIsMarkedComplete.bind(this)
     this.enableText  = this.enableText.bind(this)
     this.setMaxScore = this.setMaxScore.bind(this)
+    this.changeScoreType = this.changeScoreType.bind(this)
     this.scrollStudentIntoView = this.scrollStudentIntoView.bind(this)
     this.studentRowRef = this.studentRowRef.bind(this)
   }
@@ -50,18 +51,29 @@ class ActivityFeedbackPanel extends PureComponent {
   }
 
   feedbackIsMarkedComplete(_feedback) {
-    const feedback = _feedback.get('feedbacks') && _feedback.get('feedbacks').last()
+    const feedback = _feedback.get('feedbacks') && _feedback.get('feedbacks').first()
     return feedback && feedback.get("hasBeenReviewed")
   }
 
   enableText(event) {
-    this.props.enableActivityFeedback(this.props.activity.get('id'), {enableTextFeedback: event.target.checked})
+    const activityId = this.props.activity.get('id')
+    const activityFeedbackId = this.props.activity.get('activityFeedbackId')
+    this.props.enableActivityFeedback(activityId, {activityFeedbackId: activityFeedbackId, enableTextFeedback: event.target.checked})
   }
 
 
   setMaxScore(event) {
     const value = parseInt(event.target.value) || null
-    this.props.enableActivityFeedback(tnis.props.activity.get('id'), {maxScore: value})
+    const activityId = this.props.activity.get('id')
+    const activityFeedbackId = this.props.activity.get('activityFeedbackId')
+    this.props.enableActivityFeedback(activityId, {activityFeedbackId: activityFeedbackId, maxScore: value})
+  }
+
+  changeScoreType(newV) {
+    const activityId = this.props.activity.get('id').toString()
+    const activityFeedbackId = this.props.activity.get('activityFeedbackId')
+    const newFlags = {activityFeedbackId: activityFeedbackId, scoreType: newV}
+    this.props.enableActivityFeedback(activityId, newFlags);
   }
 
   studentRowRef(index){
@@ -95,6 +107,7 @@ class ActivityFeedbackPanel extends PureComponent {
     const scoreType = activity.get("scoreType") || NO_SCORE
     const showText = activity.get("enableTextFeedback")
     const maxScore = activity.get("maxScore")
+    const activityFeedbackId = activity.get('activityFeedbackId')
     const disabled = false
     const numNeedsFeedback = 10
     const feedbacks = this.props.feedbacks
@@ -102,11 +115,6 @@ class ActivityFeedbackPanel extends PureComponent {
     const filteredFeedbacks = this.state.showOnlyNeedReview ? needingFeedback : feedbacks
 
     const showGettingStarted = (scoreType === NO_SCORE) && (!showText)
-
-    const changeScoreType = function (newV){
-      const newFlags = {scoreType: newV}
-      this.props.enableActivityFeedback(this.props.activity.get('id').toString(), newFlags);
-    }.bind(this)
 
     const hide = function() {
       if(this.props.hide) {
@@ -143,7 +151,7 @@ class ActivityFeedbackPanel extends PureComponent {
               <RadioGroup
                 name="scoreType"
                 selectedValue={scoreType}
-                onChange={changeScoreType}
+                onChange={this.changeScoreType}
               >
                 <div>
                   <Radio  value={NO_SCORE} />
@@ -193,17 +201,20 @@ class ActivityFeedbackPanel extends PureComponent {
               { showGettingStarted ?  this.renderGettingStarted() : ""}
               <div className="feedback-for-students">
                 <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
-                { filteredFeedbacks.map((studentActivityFeedback, i) =>
-                    <FeedbackRow
+                { filteredFeedbacks.map((studentActivityFeedback, i) => {
+                    const studentId = studentActivityFeedback.get('studentId')
+                    return <FeedbackRow
                       studentActivityFeedback = {studentActivityFeedback}
-                      ref={this.studentRowRef(i)}
-                      key={studentActivityFeedback.get('key')}
+                      activityFeedbackId = { activityFeedbackId }
+                      key={ `${activityFeedbackId}-${studentId}`}
+                      ref={elm => this.studentRowRef(i)}
                       scoreEnabled={scoreType === MANUAL_SCORE}
                       feedbackEnabled={showText}
                       maxScore={maxScore}
                       updateFeedback={this.props.updateActivityFeedback}
-                      showOnlyNeedsRiew={this.state.showOnlyNeedReview}
+                      showOnlyNeedReview={this.state.showOnlyNeedReview}
                     />
+                  }
                 )}
                 </ReactCSSTransitionGroup>
               </div>
