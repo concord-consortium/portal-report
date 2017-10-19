@@ -14,7 +14,7 @@ function setActivityFeedbackForStudent(state, activityId, studentId, feedback) {
 function updateActivityFeedback(state, action) {
   const {activityFeedbackKey, feedback} = action
   const [activityId, studentId] = activityFeedbackKey.split('-')
-  const record = state.get(activityFeedbackKey) || {
+  const record = state.get(activityFeedbackKey) || fromJS({
     studentId:parseInt(studentId),
     key: activityFeedbackKey,
     feedbacks:[{
@@ -22,7 +22,7 @@ function updateActivityFeedback(state, action) {
       hasBeenReviewed:false,
       score:0
     }]
-  }
+  })
   return state.set(activityFeedbackKey, record.mergeIn(["feedbacks",0], feedback))
 }
 

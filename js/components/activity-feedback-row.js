@@ -101,17 +101,35 @@ export default class ActivityFeedbackRow extends PureComponent {
     const student = studentActivityFeedback.get("student")
     const name = student.get("realName")
     const link = "http://google.com/"
+    const learnerId = studentActivityFeedback.get("learnerId")
+    const linkToWork =
+      <a href={link} target="_blank">
+        Open {name}'s report
+      </a>
+    const noLinkToWork =
+      <p>
+        This user hasn't started yet
+      </p>
+
+    const _link = learnerId
+      ? linkToWork
+      : noLinkToWork
+
+    const noFeedbackSection = noLinkToWork
+
+    const feedback = learnerId
+      ? this.renderFeedbackSection(studentActivityFeedback)
+      : noFeedbackSection
+
     return (
       <div className="feedback-row">
         <div className="student-answer">
           <h3>{name}'s work</h3>
           <p>
-            <a href={link} target="_blank">
-              Open {name}'s report
-            </a>
+            {_link}
           </p>
         </div>
-        {this.renderFeedbackSection(studentActivityFeedback)}
+        {feedback}
       </div>
     )
   }

@@ -8,14 +8,16 @@
     "children": [
       {
         "id": 29,
+        "activity_feedback_id": 29,
         "type": "Activity",
         "name": "Test Activity 1 (sequence part)",
         "enable_text_feedback": false,
-        "score_type": "NO_SCORING",
+        "score_type": "none",
         "max_score": 10,
         "activity_feedback":[
           {
             "student_id": 15,
+            "learner_id": 215,
             "feedbacks": [
               {
                 "score": null,
@@ -229,19 +231,30 @@
       },
       {
         "id": 30,
+        "activity_feedback_id": 30,
         "type": "Activity",
         "name": "Test Activity 2 (sequence part)",
         "enable_text_feedback": true,
-        "score_type": "NO_SCORING",
+        "score_type": "none",
         "enable_auto_score": true,
         "max_score": 10,
         "activity_feedback":[
           {
             "student_id": 15,
+            "learner_id": 215,
             "feedbacks": [
               {
                 "score": null,
                 "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]},{
+            "student_id": 16,
+            "learner_id": 216,
+            "feedbacks": [
+              {
+                "score": 10,
+                "feedback": "good",
                 "has_been_reviewed": false
               }
             ]
@@ -613,18 +626,29 @@
       },
       {
         "id": 31,
+        "activity_feedback_id": 31,
         "type": "Activity",
         "name": "Test activity 3 (sequence part)",
         "enable_text_feedback": true,
-        "score_type": "NO_SCORING",
+        "score_type": "none",
         "max_score": 10,
         "activity_feedback":[
           {
             "student_id": 15,
+            "learner_id": 215,
             "feedbacks": [
               {
                 "score": null,
                 "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]},{
+            "student_id": 16,
+            "learner_id": 216,
+            "feedbacks": [
+              {
+                "score": 1,
+                "feedback": "Boo",
                 "has_been_reviewed": false
               }
             ]
