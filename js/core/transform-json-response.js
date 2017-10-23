@@ -1,6 +1,7 @@
 import { normalize, schema } from 'normalizr'
 import humps from 'humps'
 import migrate from './migrations'
+import queryString from 'query-string'
 
 const DEFAULT_REPORT_FOR = 'class'
 // Transforms deeply nested structure of report:
@@ -88,6 +89,7 @@ export default function transformJSONResponse(json) {
   copyAnswerKeysToObjects(response.entities.answers || [])
   copyAnswerKeysToObjects(response.entities.activityFeedbacks || [])
   saveStudentsRealNames(response.entities.students)
+  urlParamOverrides(response)
   return response
 }
 
@@ -119,4 +121,18 @@ function saveStudentsRealNames(students) {
   Object.values(students).forEach(student => {
     student.realName = student.name
   })
+}
+
+function urlParamOverrides(response) {
+  const {reportFor, studentId} = queryString.parse(window.location.search)
+  if (reportFor) {
+    response.type  = reportFor
+  }
+  if (studentId && reportFor =="student") {
+    response.studentId = studentId
+    response.hideControls = true;
+    if(response.result) {
+      response.result.hideControls = true;
+    }
+  }
 }

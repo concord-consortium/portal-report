@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import Section from './section'
 import Sticky from 'react-stickynode';
 import FeedbackButton from './feedback-button';
-import ActivityFeedbackPanel from './activity-feedback-panel';
+import ActivityFeedbackPanel from '../containers/activity-feedback-panel';
 import '../../css/activity.less'
 
 export default class Activity extends PureComponent {
@@ -30,17 +30,12 @@ export default class Activity extends PureComponent {
     })
   }
 
-  // "enable_text_feedback": true,
-  // "enable_score": true,
-  // "enable_auto_score": true,
-  // "max_score": 10,
-
   render() {
     const { activity, reportFor} = this.props
     const activityName = activity.get('name')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
-    const feedbackPanel = this.state.showFeedbackPanel
+    const feedbackPanel = (reportFor == "class" && this.state.showFeedbackPanel)
       ?
         <ActivityFeedbackPanel
           hide={hideFeedback }
@@ -49,17 +44,23 @@ export default class Activity extends PureComponent {
       :
         ""
 
+    const feedbackButton = reportFor == "class"
+      ?
+      <span className="feedback">
+        <FeedbackButton
+          text="Provide overall feedback"
+          showFeedback={showFeedback}
+        />
+      </span>
+      :
+        ""
+
     return (
       <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
         <Sticky top={60}>
           <div>
             <h3>{activityName} </h3>
-            <span className="feedback">
-              <FeedbackButton
-                text="Provide overall feedback"
-                showFeedback={showFeedback}
-                />
-            </span>
+            { feedbackButton }
           </div>
         </Sticky>
         <div>

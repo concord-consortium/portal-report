@@ -3,14 +3,6 @@ import { RECEIVE_DATA, UPDATE_ACTIVITY_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK } from
 import transformJSONResponse from '../core/transform-json-response'
 const INITIAL_ACTIVITY_FEEDBACK_STATE = Map({})
 
-function setActivityFeedbackSeetings(state, activityId, settings) {
-
-}
-
-function setActivityFeedbackForStudent(state, activityId, studentId, feedback) {
-
-}
-
 function updateActivityFeedback(state, action) {
   const {activityFeedbackKey, feedback} = action
   const [activityId, studentId] = activityFeedbackKey.split('-')

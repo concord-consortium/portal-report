@@ -51,12 +51,22 @@ export default class Report extends PureComponent {
   renderStudentReports() {
     const { report } = this.props
     const nowShowing = report.get('nowShowing') === 'student'
+    const selectedStudentId = report.get('selectedStudentId')
     const className  = nowShowing ? 'report-content' : 'report-content hidden'
-    return [...report.get('students').values()].filter(s => s.get('startedOffering')).map(s =>
-      <div key={s.get('id')} className={className}>
-        {this.renderReportHeader(s.get('name'))}
-        <Investigation investigation={report.get('investigation')} reportFor={s}/>
-      </div>
+    let selectStudents = s => true
+    const startedOffering = s => s.get('startedOffering')
+    if(selectedStudentId) {
+      const id = parseInt(selectedStudentId)
+      selectStudents = (student) => id == student.get('id')
+    }
+    return [...report.get('students').values()]
+      .filter(startedOffering)
+      .filter(selectStudents)
+      .map(s =>
+        <div key={s.get('id')} className={className}>
+          {this.renderReportHeader(s.get('name'))}
+          <Investigation investigation={report.get('investigation')} reportFor={s}/>
+        </div>
     )
   }
 

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import Answer from './answer'
 import FeedbackBox from './feedback-box'
 import ScoreBox from './score-box'
-
+import StudentReportLink from './student-report-link'
 
 export default class ActivityFeedbackRow extends PureComponent {
 
@@ -102,20 +102,11 @@ export default class ActivityFeedbackRow extends PureComponent {
     const name = student.get("realName")
     const link = "http://google.com/"
     const learnerId = studentActivityFeedback.get("learnerId")
-    const linkToWork =
-      <a href={link} target="_blank">
-        Open {name}'s report
-      </a>
-    const noLinkToWork =
+
+    const noFeedbackSection =
       <p>
         This user hasn't started yet
       </p>
-
-    const _link = learnerId
-      ? linkToWork
-      : noLinkToWork
-
-    const noFeedbackSection = noLinkToWork
 
     const feedback = learnerId
       ? this.renderFeedbackSection(studentActivityFeedback)
@@ -126,7 +117,7 @@ export default class ActivityFeedbackRow extends PureComponent {
         <div className="student-answer">
           <h3>{name}'s work</h3>
           <p>
-            {_link}
+            <StudentReportLink student={student} started={learnerId} />
           </p>
         </div>
         {feedback}
