@@ -36,7 +36,7 @@ class Activity extends PureComponent {
     const activityName = activity.get('name')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
-    const needsReviewCount = this.props.numFeedbsacksNeedingReview
+    const needsReviewCount = this.props.numFeedbacksNeedingReview
     const feedbackEnabled = (activity.get('scoreType') != 'none') || activity.get('enableTextFeedback')
 
     const feedbackPanel = (reportFor == "class" && this.state.showFeedbackPanel)
@@ -82,8 +82,8 @@ function mapStateToProps(state, ownProps) {
   const actId = ownProps.activity.get('id')
   const feedbacks = getActivityFeedbacks(state, actId)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-  const numFeedbsacksNeedingReview =feedbacksNeedingReview.size
-  return { feedbacks, feedbacksNeedingReview, numFeedbsacksNeedingReview }
+  const numFeedbacksNeedingReview =feedbacksNeedingReview.size
+  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {return {}}

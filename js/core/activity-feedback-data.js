@@ -50,6 +50,11 @@ export function getFeedbacksNeedingReview(feedbacks) {
     .filter( f => hasLearner(f))
 }
 
+export function getFeedbacksNotAnswered(feedbacks) {
+  return feedbacks
+    .filter( f => ! hasLearner(f))
+}
+
 export function getActivityFeedbacks(state, activityId) {
   const students = state.getIn(['report','students']).sortBy(s => s.get('lastName'))
   const activity = state.getIn(['report','activities', activityId.toString()])

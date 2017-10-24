@@ -9,7 +9,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ReactTooltip from 'react-tooltip'
 import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback} from '../actions'
-import { getActivityFeedbacks, getFeedbacksNeedingReview } from '../core/activity-feedback-data'
+import { getActivityFeedbacks, getFeedbacksNeedingReview, getFeedbacksNotAnswered} from '../core/activity-feedback-data'
 
 import {RadioGroup, Radio} from 'react-radio-group'
 
@@ -67,6 +67,9 @@ class ActivityFeedbackPanel extends PureComponent {
     const activityId = this.props.activity.get('id').toString()
     const activityFeedbackId = this.props.activity.get('activityFeedbackId')
     const newFlags = {activityFeedbackId: activityFeedbackId, scoreType: newV}
+    if(newV != NO_SCORE) {
+      this.setState({lastScoreType: newV})
+    }
     this.props.enableActivityFeedback(activityId, newFlags);
   }
 
@@ -96,19 +99,31 @@ class ActivityFeedbackPanel extends PureComponent {
   }
 
   render() {
-    const { activity }  = this.props;
+    const {
+      feedbacks,
+      activity,
+      feedbacksNeedingReview,
+      numFeedbacksGivenReview,
+      numFeedbacksNeedingReview,
+      notAnswerd,
+    }  = this.props;
+    const numNotAnswered = notAnswerd.size
     const prompt = activity.get("name")
     const scoreType = activity.get("scoreType") || NO_SCORE
     const showText = activity.get("enableTextFeedback")
     const maxScore = activity.get("maxScore")
     const activityFeedbackId = activity.get('activityFeedbackId')
-    const disabled = false
-    const numNeedsFeedback = 10
-    const feedbacks = this.props.feedbacks
-    const feedbacksNeedingReview = this.props.feedbacksNeedingReview
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks
-
+    const scoreEnabled = (scoreType != NO_SCORE)
     const showGettingStarted = (scoreType === NO_SCORE) && (!showText)
+    const scoreClassName = scoreEnabled ? "enabled" : "disabled"
+    const toggleScoreEnabled = () => {
+      if(scoreEnabled) {
+        this.changeScoreType(NO_SCORE)
+      } else {
+        this.changeScoreType(this.state.lastScoreType || MANUAL_SCORE)
+      }
+    }
 
     const hide = function() {
       if(this.props.hide) {
@@ -129,12 +144,11 @@ class ActivityFeedbackPanel extends PureComponent {
         <div className="feedback-panel">
           <div className="feedback-header">
             <div className="left">
-              <h1>Feedback: Activity NAME </h1>
-              <h2 dangerouslySetInnerHTML={ {__html: prompt} }/>
+              <h2>{prompt} </h2>
               <FeedbackOverview
-                numNoAnswers={4}
-                numFeedbackGiven={4}
-                numNeedsFeedback={numNeedsFeedback}
+                numNoAnswers={numNotAnswered}
+                numFeedbackGiven={numFeedbacksGivenReview}
+                numNeedsFeedback={numFeedbacksNeedingReview}
               />
             </div>
 
@@ -142,42 +156,48 @@ class ActivityFeedbackPanel extends PureComponent {
               <input id="feedbackEnabled" type="checkbox" checked={showText} onChange={this.enableText}/>
               <label htmlFor="feedbackEnabled">Provide written feedback</label>
               <br/>
-              <RadioGroup
-                name="scoreType"
-                selectedValue={scoreType}
-                onChange={this.changeScoreType}
-              >
-                <div>
-                  <Radio  value={NO_SCORE} />
-                  <span className="tooltip" data-tip data-for="NO_SCORE"> {NO_SCORE_L} </span>
-                </div>
-                <div>
-                  <Radio value={MANUAL_SCORE} />
-                  <span className="tooltip" data-tip data-for="MANUAL_SCORE"> {MANUAL_SCORE_L} </span>
-                </div>
-                <div>
-                  <Radio value={AUTOMATIC_SCORE} />
-                  <span className="tooltip" data-tip data-for="AUTOMATIC_SCORE"> {AUTOMATIC_SCORE_L} </span>
-                </div>
-
-                <ReactTooltip id="NO_SCORE" place="top" type="dark" delayShow={500}>
-                  No activity level score.
-                </ReactTooltip>
-                <ReactTooltip id="MANUAL_SCORE" place="top" type="dark" delayShow={500}>
-                  Provide your own activity level score.
-                </ReactTooltip>
-                <ReactTooltip id="AUTOMATIC_SCORE" place="top" type="dark" delayShow={500}>
-                  Sum scores from individual questions.
-                </ReactTooltip>
-              </RadioGroup>
-
+              <input id="giveScore" name="giveScore" type="checkbox" checked={scoreEnabled} onChange={toggleScoreEnabled}/>
+              <label htmlFor="giveScore">Give Score</label>
               <br/>
-              { (scoreType == MANUAL_SCORE) ?
-                <div>
-                  <label className="max-score">Max. Score</label>
-                  <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
-                </div> : ""
-              }
+              <div className={scoreClassName} style={{marginLeft:'1em'}}>
+                <RadioGroup
+                  name="scoreType"
+                  selectedValue={scoreType}
+                  onChange={this.changeScoreType}
+                >
+                  <div>
+                    <Radio value={MANUAL_SCORE} />
+                    <span className="tooltip" data-tip data-for="MANUAL_SCORE"> {MANUAL_SCORE_L} </span>
+                  </div>
+                  <div>
+                    <Radio value={AUTOMATIC_SCORE} />
+                    <span className="tooltip" data-tip data-for="AUTOMATIC_SCORE"> {AUTOMATIC_SCORE_L} </span>
+                  </div>
+
+                  <ReactTooltip id="NO_SCORE" place="top" type="dark" delayShow={500}>
+                    No activity level score.
+                  </ReactTooltip>
+                  <ReactTooltip id="MANUAL_SCORE" place="top" type="dark" delayShow={500}>
+                    Provide your own activity level score.
+                  </ReactTooltip>
+                  <ReactTooltip id="AUTOMATIC_SCORE" place="top" type="dark" delayShow={500}>
+                    Sum scores from individual questions.
+                  </ReactTooltip>
+                </RadioGroup>
+
+                { (scoreType == MANUAL_SCORE)
+                  ?
+                    <div>
+                      <label className="max-score">Max. Score</label>
+                      <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
+                    </div>
+                  :
+                    <div>
+                      <label className="max-score disabled">Max. Score</label>
+                      <input className="max-score-input disabled" disabled={true} value={maxScore} onChange={this.setMaxScore}/>
+                    </div>
+                }
+              </div>
             </div>
           </div>
 
@@ -229,7 +249,11 @@ function mapStateToProps(state, ownProps) {
   const actId = ownProps.activity.get('id')
   const feedbacks = getActivityFeedbacks(state, actId)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-  return { feedbacks, feedbacksNeedingReview }
+  const numFeedbacksNeedingReview =feedbacksNeedingReview.size
+  const notAnswerd = getFeedbacksNotAnswered(feedbacks)
+  const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - notAnswerd.size
+
+  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
