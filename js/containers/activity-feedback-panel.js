@@ -9,7 +9,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ReactTooltip from 'react-tooltip'
 import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback} from '../actions'
-import { activityFeedbacks } from '../core/activity-feedback-data'
+import { getActivityFeedbacks, getFeedbacksNeedingReview } from '../core/activity-feedback-data'
 
 import {RadioGroup, Radio} from 'react-radio-group'
 
@@ -33,7 +33,6 @@ class ActivityFeedbackPanel extends PureComponent {
     }
     this.makeOnlyNeedReview = this.makeOnlyNeedReview.bind(this)
     this.makeShowAll  = this.makeShowAll.bind(this)
-    this.feedbackIsMarkedComplete = this.feedbackIsMarkedComplete.bind(this)
     this.enableText  = this.enableText.bind(this)
     this.setMaxScore = this.setMaxScore.bind(this)
     this.changeScoreType = this.changeScoreType.bind(this)
@@ -49,10 +48,6 @@ class ActivityFeedbackPanel extends PureComponent {
     this.setState({showOnlyNeedReview: false})
   }
 
-  feedbackIsMarkedComplete(_feedback) {
-    const feedback = _feedback.get('feedbacks') && _feedback.get('feedbacks').first()
-    return feedback && feedback.get("hasBeenReviewed")
-  }
 
   enableText(event) {
     const activityId = this.props.activity.get('id')
@@ -110,8 +105,8 @@ class ActivityFeedbackPanel extends PureComponent {
     const disabled = false
     const numNeedsFeedback = 10
     const feedbacks = this.props.feedbacks
-    const needingFeedback = feedbacks.filter( f => ! this.feedbackIsMarkedComplete(f))
-    const filteredFeedbacks = this.state.showOnlyNeedReview ? needingFeedback : feedbacks
+    const feedbacksNeedingReview = this.props.feedbacksNeedingReview
+    const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks
 
     const showGettingStarted = (scoreType === NO_SCORE) && (!showText)
 
@@ -232,10 +227,9 @@ class ActivityFeedbackPanel extends PureComponent {
 
 function mapStateToProps(state, ownProps) {
   const actId = ownProps.activity.get('id')
-  const feedbacks = activityFeedbacks(state, actId)
-  return {
-    feedbacks: feedbacks
-  }
+  const feedbacks = getActivityFeedbacks(state, actId)
+  const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
+  return { feedbacks, feedbacksNeedingReview }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -246,4 +240,3 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivityFeedbackPanel)
-// export default ActivityFeedbackPanel

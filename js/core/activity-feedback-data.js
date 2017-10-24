@@ -35,7 +35,22 @@ function addRealName(student) {
   return student.set('realName', `${student.get('firstName')} ${student.get('lastName')}`)
 }
 
-export function activityFeedbacks(state, activityId) {
+function feedbackIsMarkedComplete(_feedback) {
+  const feedback = _feedback.get('feedbacks') && _feedback.get('feedbacks').first()
+  return feedback && feedback.get("hasBeenReviewed")
+}
+
+function hasLearner(feedback) {
+  return feedback.get("learnerId")
+}
+
+export function getFeedbacksNeedingReview(feedbacks) {
+  return feedbacks
+    .filter( f => ! feedbackIsMarkedComplete(f))
+    .filter( f => hasLearner(f))
+}
+
+export function getActivityFeedbacks(state, activityId) {
   const students = state.getIn(['report','students']).sortBy(s => s.get('lastName'))
   const activity = state.getIn(['report','activities', activityId.toString()])
   const result = students.map( s => activityFeedbackFor(state, activity, s))

@@ -1,18 +1,19 @@
 import React, { PureComponent } from 'react'
-import Section from './section'
+import { connect } from 'react-redux'
 import Sticky from 'react-stickynode';
+
+import Section from './section'
 import FeedbackButton from './feedback-button';
 import ActivityFeedbackPanel from '../containers/activity-feedback-panel';
+import { getActivityFeedbacks, getFeedbacksNeedingReview } from '../core/activity-feedback-data'
+
 import '../../css/activity.less'
 
-export default class Activity extends PureComponent {
+class Activity extends PureComponent {
   constructor(props) {
     super()
     this.state = {
-      showFeedbackPanel: false,
-      showText: false,
-      showScore: false,
-      maxScore: 10
+      showFeedbackPanel: false
     }
     this.showFeedback = this.showFeedback.bind(this)
     this.hideFeedback = this.hideFeedback.bind(this)
@@ -35,6 +36,9 @@ export default class Activity extends PureComponent {
     const activityName = activity.get('name')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
+    const needsReviewCount = this.props.numFeedbsacksNeedingReview
+    const feedbackEnabled = (activity.get('scoreType') != 'none') || activity.get('enableTextFeedback')
+
     const feedbackPanel = (reportFor == "class" && this.state.showFeedbackPanel)
       ?
         <ActivityFeedbackPanel
@@ -49,6 +53,8 @@ export default class Activity extends PureComponent {
       <span className="feedback">
         <FeedbackButton
           text="Provide overall feedback"
+          needsReviewCount={needsReviewCount}
+          feedbackEnabled={feedbackEnabled}
           showFeedback={showFeedback}
         />
       </span>
@@ -71,3 +77,15 @@ export default class Activity extends PureComponent {
     )
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  const actId = ownProps.activity.get('id')
+  const feedbacks = getActivityFeedbacks(state, actId)
+  const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
+  const numFeedbsacksNeedingReview =feedbacksNeedingReview.size
+  return { feedbacks, feedbacksNeedingReview, numFeedbsacksNeedingReview }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {return {}}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Activity)
