@@ -20,9 +20,9 @@
             "learner_id": 215,
             "feedbacks": [
               {
-                "score": null,
-                "feedback": null,
-                "has_been_reviewed": false
+                "score": 10,
+                "feedback": "good",
+                "has_been_reviewed": true
               }
             ]
           }
@@ -49,27 +49,25 @@
                     "rationale_prompt": "Explain your choice. Give specific examples.",
                     "allow_multiple_selection": null,
                     "is_required": false,
+                    "feedback_enabled": true,
+                    "score_enabled": true,
                     "key": "Embeddable::MultipleChoice|116",
                     "type": "Embeddable::MultipleChoice",
                     "answers": [
                       {
                         "answer": [
                           {
-                            "choice": "a",
-                            "is_correct": null
-                          },
-                          {
-                            "choice": "b",
+                            "choice": "c",
                             "is_correct": null
                           }
                         ],
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-1",
-                            "score": null,
-                            "feedback": null,
-                            "has_been_reviewed": false
+                            "answer_key": "Embeddable::MultipleChoice|116-15",
+                            "score": 10,
+                            "feedback": "great job",
+                            "has_been_reviewed": true
                           }
                         ],
                         "submitted": true,
