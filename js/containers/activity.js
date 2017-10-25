@@ -2,9 +2,10 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import Sticky from 'react-stickynode';
 
-import Section from './section'
-import FeedbackButton from './feedback-button';
-import ActivityFeedbackPanel from '../containers/activity-feedback-panel';
+import Section from '../components/section'
+import FeedbackButton from '../components/feedback-button';
+import ActivityFeedbackForStudent from '../components/activity-feedback-for-student'
+import ActivityFeedbackPanel from './activity-feedback-panel';
 import { getActivityFeedbacks, getFeedbacksNeedingReview, getComputedMaxScore} from '../core/activity-feedback-data'
 
 import '../../css/activity.less'
@@ -50,16 +51,19 @@ class Activity extends PureComponent {
 
     const feedbackButton = reportFor == "class"
       ?
-      <span className="feedback">
-        <FeedbackButton
-          text="Provide overall feedback"
-          needsReviewCount={needsReviewCount}
-          feedbackEnabled={feedbackEnabled}
-          showFeedback={showFeedback}
-        />
-      </span>
+        <span className="feedback">
+          <FeedbackButton
+            text="Provide overall feedback"
+            needsReviewCount={needsReviewCount}
+            feedbackEnabled={feedbackEnabled}
+            showFeedback={showFeedback}
+          />
+        </span>
       :
-        ""
+        <ActivityFeedbackForStudent
+          student={this.props.reportFor}
+          feedbacks ={this.props.feedbacks}
+        />
 
     return (
       <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
@@ -84,7 +88,6 @@ function mapStateToProps(state, ownProps) {
   const computedMaxScore = getComputedMaxScore(state,actId)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
   const numFeedbacksNeedingReview =feedbacksNeedingReview.size
-
   return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview }
 }
 
