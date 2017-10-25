@@ -55,6 +55,42 @@ export function getFeedbacksNotAnswered(feedbacks) {
     .filter( f => ! hasLearner(f))
 }
 
+
+export function getQuestions(state, activityId) {
+  const report = state.get('report')
+  const activity = state.getIn(['report','activities', activityId.toString()])
+
+  // activity → sections → pages → questions
+  return activity.get('children')
+    .map(sectionId => report.getIn(['sections', sectionId.toString()]))
+    .map(section   => section.get('children'))
+    .flatten()
+    .map(pageId    => report.getIn(['pages', pageId.toString()]))
+    .map(page      => page.get('children'))
+    .flatten()
+    .map(key       => report.getIn(['questions', key.toString()]))
+}
+
+export function getStudentScores(state, questions, studentId) {
+  const report = state.get('report')
+  const answers = questions.map( q => q.get('answers'))
+    .flatten()
+    .map(answerId => report.getIn(['answers', answerId]))
+    // .groupBy(a => a.get('studentId'))
+    // .map(answer => answer.get('feedbacks'))
+    // .flatten()
+    // .map(feedbackId => state.getIn(['feedbacks',feedbackId]))
+    // // .map(feedback => feedback.get('score') || 0)
+  debugger
+  return true
+}
+
+export function getComputedMaxScore(questions) {
+  return questions
+    .map(question  => question.get('maxScore') || 0)
+    .reduce( (total, score) => total + score)
+}
+
 export function getActivityFeedbacks(state, activityId) {
   const students = state.getIn(['report','students']).sortBy(s => s.get('lastName'))
   const activity = state.getIn(['report','activities', activityId.toString()])

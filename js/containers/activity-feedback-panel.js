@@ -9,7 +9,14 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import ReactTooltip from 'react-tooltip'
 import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback} from '../actions'
-import { getActivityFeedbacks, getFeedbacksNeedingReview, getFeedbacksNotAnswered} from '../core/activity-feedback-data'
+import {
+  getActivityFeedbacks,
+  getFeedbacksNeedingReview,
+  getFeedbacksNotAnswered,
+  getComputedMaxScore,
+  getQuestions,
+  getStudentScore
+} from '../core/activity-feedback-data'
 
 import {RadioGroup, Radio} from 'react-radio-group'
 
@@ -69,6 +76,9 @@ class ActivityFeedbackPanel extends PureComponent {
     const newFlags = {activityFeedbackId: activityFeedbackId, scoreType: newV}
     if(newV != NO_SCORE) {
       this.setState({lastScoreType: newV})
+    }
+    if(newV == AUTOMATIC_SCORE) {
+      newFlags.maxScore = this.props.computedMaxScore;
     }
     this.props.enableActivityFeedback(activityId, newFlags);
   }
@@ -252,8 +262,10 @@ function mapStateToProps(state, ownProps) {
   const numFeedbacksNeedingReview =feedbacksNeedingReview.size
   const notAnswerd = getFeedbacksNotAnswered(feedbacks)
   const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - notAnswerd.size
-
-  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd}
+  const questions = getQuestions(state, actId)
+  const computedMaxScore = getComputedMaxScore(questions)
+  // const studentScore = getStudentScore(state, questions, 10)
+  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

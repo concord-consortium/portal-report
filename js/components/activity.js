@@ -5,7 +5,7 @@ import Sticky from 'react-stickynode';
 import Section from './section'
 import FeedbackButton from './feedback-button';
 import ActivityFeedbackPanel from '../containers/activity-feedback-panel';
-import { getActivityFeedbacks, getFeedbacksNeedingReview } from '../core/activity-feedback-data'
+import { getActivityFeedbacks, getFeedbacksNeedingReview, getComputedMaxScore} from '../core/activity-feedback-data'
 
 import '../../css/activity.less'
 
@@ -81,8 +81,10 @@ class Activity extends PureComponent {
 function mapStateToProps(state, ownProps) {
   const actId = ownProps.activity.get('id')
   const feedbacks = getActivityFeedbacks(state, actId)
+  const computedMaxScore = getComputedMaxScore(state,actId)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
   const numFeedbacksNeedingReview =feedbacksNeedingReview.size
+
   return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview }
 }
 
