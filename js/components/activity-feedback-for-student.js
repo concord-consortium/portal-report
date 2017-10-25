@@ -7,11 +7,20 @@ export default class ActivityFeedbackForStudent extends PureComponent {
 
   render() {
     const student = this.props.student
-    const feedback = this.props.feedbacks
+    let feedback = {
+      hasBeenReviewed: false,
+      score:0,
+      feedback:""
+    }
+    const _feedbacks = this.props.feedbacks
       .find( (f) => f.get('studentId') == student.get('id'))
-      .get('feedbacks')
-      .first()
-      .toJS()
+
+    if(_feedbacks){
+      const fblist = _feedbacks.get('feedbacks')
+      if(fblist && fblist.size > 0) {
+        feedback = fblist.first().toJS()
+      }
+    }
 
     const showFeedback = (feedback && feedback.hasBeenReviewed)
 
