@@ -170,30 +170,40 @@ class ActivityFeedbackPanel extends PureComponent {
               <label htmlFor="giveScore">Give Score</label>
               <br/>
               <div className={scoreClassName} style={{marginLeft:'1em'}}>
-                <RadioGroup
-                  name="scoreType"
-                  selectedValue={scoreType}
-                  onChange={this.changeScoreType}
-                >
-                  <div>
-                    <Radio value={MANUAL_SCORE} />
-                    <span className="tooltip" data-tip data-for="MANUAL_SCORE"> {MANUAL_SCORE_L} </span>
-                  </div>
-                  <div>
-                    <Radio value={AUTOMATIC_SCORE} />
-                    <span className="tooltip" data-tip data-for="AUTOMATIC_SCORE"> {AUTOMATIC_SCORE_L} </span>
-                  </div>
+                {/*
+                ******************************************************************************************
+                ** This feature had to be put on ice, because automatic scoring was incomplete.
+                ** TODO: Resusitate this feature by viewing thsese PT Stories:
+                ** https://www.pivotaltracker.com/story/show/151224400
+                ** https://www.pivotaltracker.com/story/show/152085045
+                ** NP 2017-10-25
+                ******************************************************************************************
 
-                  <ReactTooltip id="NO_SCORE" place="top" type="dark" delayShow={500}>
-                    No activity level score.
-                  </ReactTooltip>
-                  <ReactTooltip id="MANUAL_SCORE" place="top" type="dark" delayShow={500}>
-                    Provide your own activity level score.
-                  </ReactTooltip>
-                  <ReactTooltip id="AUTOMATIC_SCORE" place="top" type="dark" delayShow={500}>
-                    Sum scores from individual questions.
-                  </ReactTooltip>
-                </RadioGroup>
+                  <RadioGroup
+                    name="scoreType"
+                    selectedValue={scoreType}
+                    onChange={this.changeScoreType}
+                  >
+                    <div>
+                      <Radio value={MANUAL_SCORE} />
+                      <span className="tooltip" data-tip data-for="MANUAL_SCORE"> {MANUAL_SCORE_L} </span>
+                    </div>
+                    <div>
+                      <Radio value={AUTOMATIC_SCORE} />
+                      <span className="tooltip" data-tip data-for="AUTOMATIC_SCORE"> {AUTOMATIC_SCORE_L} </span>
+                    </div>
+
+                    <ReactTooltip id="NO_SCORE" place="top" type="dark" delayShow={500}>
+                      No activity level score.
+                    </ReactTooltip>
+                    <ReactTooltip id="MANUAL_SCORE" place="top" type="dark" delayShow={500}>
+                      Provide your own activity level score.
+                    </ReactTooltip>
+                    <ReactTooltip id="AUTOMATIC_SCORE" place="top" type="dark" delayShow={500}>
+                      Sum scores from individual questions.
+                    </ReactTooltip>
+                  </RadioGroup>
+                */}
 
                 { (scoreType == MANUAL_SCORE)
                   ?
@@ -263,8 +273,18 @@ function mapStateToProps(state, ownProps) {
   const notAnswerd = getFeedbacksNotAnswered(feedbacks)
   const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - notAnswerd.size
   const questions = getQuestions(state, actId)
-  const computedMaxScore = getComputedMaxScore(questions)
+  /*
+  *****************************************************************************************
+  ** This feature had to be put on ice, because automatic scoring was incomplete.
+  ** TODO: Resusitate this feature by viewing thsese PT Stories:
+  ** https://www.pivotaltracker.com/story/show/151224400
+  ** https://www.pivotaltracker.com/story/show/152085045
+  ** NP 2017-10-25  (remap computedMaxScore and studentScore when ready to restart  …)
+  *****************************************************************************************
+  // const computedMaxScore = getComputedMaxScore(questions)
   // const studentScore = getStudentScore(state, questions, 10)
+  */
+  const computedMaxScore = 20
   return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore}
 }
 
