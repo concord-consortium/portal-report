@@ -159,7 +159,7 @@ class FeedbackPanel extends PureComponent {
 
             <div className="feedback-options">
               <h3>Feedback Type</h3>
-
+              <br/>
               <input id="feedbackEnabled" type="checkbox" checked={feedbackEnabled} onChange={this.enableText}/>
               <label htmlFor="feedbackEnabled"> Give Written Feedback</label>
               <br/>
