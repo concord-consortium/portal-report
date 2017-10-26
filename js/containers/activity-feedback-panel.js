@@ -203,9 +203,8 @@ class ActivityFeedbackPanel extends PureComponent {
                       Sum scores from individual questions.
                     </ReactTooltip>
                   </RadioGroup>
-                */}
 
-                { (scoreType == MANUAL_SCORE)
+                  { (scoreType == MANUAL_SCORE)
                   ?
                     <div>
                       <label className="max-score">Max. Score</label>
@@ -217,6 +216,13 @@ class ActivityFeedbackPanel extends PureComponent {
                       <input className="max-score-input disabled" disabled={true} value={maxScore} onChange={this.setMaxScore}/>
                     </div>
                 }
+                */}
+
+                  <div>
+                    <label className="max-score">Max. Score</label>
+                    <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
+                  </div>
+
               </div>
             </div>
           </div>

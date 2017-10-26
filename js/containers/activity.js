@@ -33,12 +33,14 @@ class Activity extends PureComponent {
   }
 
   render() {
-    const { activity, reportFor} = this.props
+    const { activity, reportFor, needsReviewCount, feedbacks} = this.props
     const activityName = activity.get('name')
+    const showText = activity.get('enableTextFeedback')
+    const scoreType = activity.get('scoreType')
+    const showScore = (scoreType != 'none')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
-    const needsReviewCount = this.props.numFeedbacksNeedingReview
-    const feedbackEnabled = (activity.get('scoreType') != 'none') || activity.get('enableTextFeedback')
+    const feedbackEnabled = showScore || showText
 
     const feedbackPanel = (reportFor == "class" && this.state.showFeedbackPanel)
       ?
@@ -61,8 +63,11 @@ class Activity extends PureComponent {
         </span>
       :
         <ActivityFeedbackForStudent
-          student={this.props.reportFor}
-          feedbacks ={this.props.feedbacks}
+          student={reportFor}
+          feedbacks ={feedbacks}
+          showScore = {showScore}
+          showText = {showText}
+          feedbackEnabled = {feedbackEnabled}
         />
 
     return (
