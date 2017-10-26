@@ -15,7 +15,7 @@ import {
   getFeedbacksNotAnswered,
   getComputedMaxScore,
   getQuestions,
-  getStudentScore
+  calculateStudentScores
 } from '../core/activity-feedback-data'
 
 import {RadioGroup, Radio} from 'react-radio-group'
@@ -116,15 +116,17 @@ class ActivityFeedbackPanel extends PureComponent {
       numFeedbacksGivenReview,
       numFeedbacksNeedingReview,
       notAnswerd,
+      autoScores,
+      computedMaxScore
     }  = this.props;
     const numNotAnswered = notAnswerd.size
     const prompt = activity.get("name")
     const scoreType = activity.get("scoreType") || NO_SCORE
     const showText = activity.get("enableTextFeedback")
-    const maxScore = activity.get("maxScore")
     const activityFeedbackId = activity.get('activityFeedbackId')
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks
     const scoreEnabled = (scoreType != NO_SCORE)
+    const maxScore = scoreType == "auto" ? computedMaxScore : activity.get("maxScore")
     const showGettingStarted = (scoreType === NO_SCORE) && (!showText)
     const scoreClassName = scoreEnabled ? "enabled" : "disabled"
     const toggleScoreEnabled = () => {
@@ -170,17 +172,6 @@ class ActivityFeedbackPanel extends PureComponent {
               <label htmlFor="giveScore">Give Score</label>
               <br/>
               <div className={scoreClassName} style={{marginLeft:'1em'}}>
-                {/*
-                ******************************************************************************************
-                ** This feature had to be put on ice, because automatic scoring was incomplete.
-                ** TODO: Resusitate this feature by viewing thsese PT Stories:
-                ** https://www.pivotaltracker.com/story/show/151224400
-                ** https://www.pivotaltracker.com/story/show/152085045
-                ** This work is *mostly* complete in this branch:
-                ** https://github.com/concord-consortium/portal-report/tree/add-auto-scores-to-activity-feedback
-                ** NP 2017-10-25
-                ******************************************************************************************
-
                   <RadioGroup
                     name="scoreType"
                     selectedValue={scoreType}
@@ -218,13 +209,6 @@ class ActivityFeedbackPanel extends PureComponent {
                       <input className="max-score-input disabled" disabled={true} value={maxScore} onChange={this.setMaxScore}/>
                     </div>
                 }
-                */}
-
-                  <div>
-                    <label className="max-score">Max. Score</label>
-                    <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
-                  </div>
-
               </div>
             </div>
           </div>
@@ -250,7 +234,8 @@ class ActivityFeedbackPanel extends PureComponent {
                       activityFeedbackId = { activityFeedbackId }
                       key={ `${activityFeedbackId}-${studentId}`}
                       ref={elm => this.studentRowRef(i)}
-                      scoreEnabled={scoreType === MANUAL_SCORE}
+                      scoreType={scoreType}
+                      autoScore={autoScores.get(studentId)}
                       feedbackEnabled={showText}
                       maxScore={maxScore}
                       updateFeedback={this.props.updateActivityFeedback}
@@ -281,20 +266,10 @@ function mapStateToProps(state, ownProps) {
   const notAnswerd = getFeedbacksNotAnswered(feedbacks)
   const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - notAnswerd.size
   const questions = getQuestions(state, actId)
-  /******************************************************************************************
-  ** This feature had to be put on ice, because automatic scoring was incomplete.
-  ** TODO: Resusitate this feature by viewing thsese PT Stories:
-  ** https://www.pivotaltracker.com/story/show/151224400
-  ** https://www.pivotaltracker.com/story/show/152085045
-  ** This work is *mostly* complete in this branch:
-  ** https://github.com/concord-consortium/portal-report/tree/add-auto-scores-to-activity-feedback
-  ** NP 2017-10-25
-  ******************************************************************************************
-  // const computedMaxScore = getComputedMaxScore(questions)
-  // const studentScore = getStudentScore(state, questions, 10)
-  */
-  const computedMaxScore = 20
-  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore}
+  const computedMaxScore = getComputedMaxScore(questions)
+  const autoScores = calculateStudentScores(state, questions)
+
+  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore, autoScores}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

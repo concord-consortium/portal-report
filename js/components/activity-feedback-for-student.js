@@ -19,12 +19,13 @@ export default class ActivityFeedbackForStudent extends PureComponent {
   }
 
   renderScoreSection(feedback) {
-    const { showScore } = this.props
+    const { showScore, maxScore, autoScore } = this.props
+    const score = autoScore || feedback.score
     if(showScore) {
       return(
         <div className="feedback-section score">
           <h1>Overall Score:</h1>
-          <span className="score">{feedback.score}</span>
+          <span className="score">{feedback.score} / {maxScore} </span>
         </div>
       )
     }

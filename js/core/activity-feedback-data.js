@@ -71,6 +71,28 @@ export function getQuestions(state, activityId) {
     .map(key       => report.getIn(['questions', key.toString()]))
 }
 
+export function calculateStudentScores(state, questions) {
+  const report = state.get('report')
+
+  const getFeedbackScore = (feedbackId) => {
+    const score = state.getIn(['feedbacks', feedbackId, 'score'])
+    return score || 0
+  }
+
+
+  const scores = questions.map( q => q.get('answers'))
+    .flatten()
+    .map(answerId => report.getIn(['answers', answerId]))
+    .groupBy(answer => answer.get('studentId'))
+    .map(studentAnswer => studentAnswer
+      .filter(ans => ans.get('feedbacks'))
+      .map(ans => ans.get('feedbacks').last())
+      .map( feedbackId => getFeedbackScore(feedbackId))
+    )
+    const sums = scores.map(s => s.reduce( (sum,v) => (sum||0) + v))
+  return sums
+}
+
 export function getComputedMaxScore(questions) {
   return questions
     .map(question  => question.get('maxScore') || 0)

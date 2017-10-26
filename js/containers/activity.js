@@ -6,7 +6,13 @@ import Section from '../components/section'
 import FeedbackButton from '../components/feedback-button';
 import ActivityFeedbackForStudent from '../components/activity-feedback-for-student'
 import ActivityFeedbackPanel from './activity-feedback-panel';
-import { getActivityFeedbacks, getFeedbacksNeedingReview, getComputedMaxScore} from '../core/activity-feedback-data'
+import {
+  getActivityFeedbacks,
+  getQuestions,
+  getFeedbacksNeedingReview,
+  getComputedMaxScore,
+  calculateStudentScores
+} from '../core/activity-feedback-data'
 
 import '../../css/activity.less'
 
@@ -33,11 +39,19 @@ class Activity extends PureComponent {
   }
 
   render() {
-    const { activity, reportFor, feedbacksNeedingReview, feedbacks} = this.props
-    const needsReviewCount = (feedbacksNeedingReview && feedbacksNeedingReview.size) || 0
+    const {
+      activity,
+      reportFor,
+      needsReviewCount,
+      feedbacks,
+      computedMaxScore,
+      autoScores
+    } = this.props
     const activityName = activity.get('name')
     const showText = activity.get('enableTextFeedback')
     const scoreType = activity.get('scoreType')
+    const _maxScore = activity.get('maxScore')
+    const maxScore  = scoreType == 'auto' ? computedMaxScore : _maxScore
     const showScore = (scoreType != 'none')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
@@ -67,7 +81,9 @@ class Activity extends PureComponent {
           student={reportFor}
           feedbacks ={feedbacks}
           showScore = {showScore}
+          maxScore = {maxScore}
           showText = {showText}
+          autoScore = { scoreType == "auto" ? autoScores.get(reportFor) : null}
           feedbackEnabled = {feedbackEnabled}
         />
 
@@ -91,10 +107,12 @@ class Activity extends PureComponent {
 function mapStateToProps(state, ownProps) {
   const actId = ownProps.activity.get('id')
   const feedbacks = getActivityFeedbacks(state, actId)
-  const computedMaxScore = getComputedMaxScore(state,actId)
+  const questions = getQuestions(state, actId)
+  const computedMaxScore = getComputedMaxScore(questions)
+  const autoScores = calculateStudentScores(state, questions)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
   const numFeedbacksNeedingReview =feedbacksNeedingReview.size
-  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview }
+  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, autoScores, computedMaxScore}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {return {}}
