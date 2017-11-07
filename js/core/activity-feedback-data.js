@@ -71,20 +71,6 @@ export function getQuestions(state, activityId) {
     .map(key       => report.getIn(['questions', key.toString()]))
 }
 
-export function getStudentScores(state, questions, studentId) {
-  const report = state.get('report')
-  const answers = questions.map( q => q.get('answers'))
-    .flatten()
-    .map(answerId => report.getIn(['answers', answerId]))
-    // .groupBy(a => a.get('studentId'))
-    // .map(answer => answer.get('feedbacks'))
-    // .flatten()
-    // .map(feedbackId => state.getIn(['feedbacks',feedbackId]))
-    // // .map(feedback => feedback.get('score') || 0)
-  debugger
-  return true
-}
-
 export function getComputedMaxScore(questions) {
   return questions
     .map(question  => question.get('maxScore') || 0)

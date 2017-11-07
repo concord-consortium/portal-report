@@ -36,9 +36,7 @@ function addFeedback(dataMap) {
   handleQuestion(dataMap.report)
 }
 
-function addActivityFeedback(dataMap) {
-  console.log("TODO: addActivityFeedback")
-}
+function addActivityFeedback(dataMap) {}
 
 function addPageUrl(dataMap) {
   const pageType = "Page"
