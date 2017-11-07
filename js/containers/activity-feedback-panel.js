@@ -176,6 +176,8 @@ class ActivityFeedbackPanel extends PureComponent {
                 ** TODO: Resusitate this feature by viewing thsese PT Stories:
                 ** https://www.pivotaltracker.com/story/show/151224400
                 ** https://www.pivotaltracker.com/story/show/152085045
+                ** This work is *mostly* complete in this branch:
+                ** https://github.com/concord-consortium/portal-report/tree/add-auto-scores-to-activity-feedback
                 ** NP 2017-10-25
                 ******************************************************************************************
 
@@ -279,14 +281,15 @@ function mapStateToProps(state, ownProps) {
   const notAnswerd = getFeedbacksNotAnswered(feedbacks)
   const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - notAnswerd.size
   const questions = getQuestions(state, actId)
-  /*
-  *****************************************************************************************
+  /******************************************************************************************
   ** This feature had to be put on ice, because automatic scoring was incomplete.
   ** TODO: Resusitate this feature by viewing thsese PT Stories:
   ** https://www.pivotaltracker.com/story/show/151224400
   ** https://www.pivotaltracker.com/story/show/152085045
-  ** NP 2017-10-25  (remap computedMaxScore and studentScore when ready to restart  …)
-  *****************************************************************************************
+  ** This work is *mostly* complete in this branch:
+  ** https://github.com/concord-consortium/portal-report/tree/add-auto-scores-to-activity-feedback
+  ** NP 2017-10-25
+  ******************************************************************************************
   // const computedMaxScore = getComputedMaxScore(questions)
   // const studentScore = getStudentScore(state, questions, 10)
   */
