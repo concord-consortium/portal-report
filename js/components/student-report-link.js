@@ -12,14 +12,18 @@ export default class StudentReportLink extends PureComponent {
     const student_id = student.get('id')
     const name = student.get('name')
     const link = studentReporturl(student_id)
-    const linkToWork =
+
+    const linkToWork = (
       <a href={link} target="_blank">
         Open {name}'s report
       </a>
-    const noLinkToWork =
-      <p>
+    )
+
+    const noLinkToWork = (
+      <span>
         {name} hasn't started yet
-      </p>
+      </span>
+    )
 
     if(started) {
       return linkToWork
