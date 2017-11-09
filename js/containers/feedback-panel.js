@@ -193,7 +193,7 @@ class FeedbackPanel extends PureComponent {
                 { filteredAnswers.map((answer, i) =>
                     <FeedbackRow
                       answer={answer}
-                      ref={this.studentRowRef(i)}
+                      ref={() => this.studentRowRef(i)}
                       key={answer.get('key')}
                       scoreEnabled={scoreEnabled}
                       feedbackEnabled={feedbackEnabled}
