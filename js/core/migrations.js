@@ -36,6 +36,8 @@ function addFeedback(dataMap) {
   handleQuestion(dataMap.report)
 }
 
+function addActivityFeedback(dataMap) {}
+
 function addPageUrl(dataMap) {
   const pageType = "Page"
   const report = dataMap.report
@@ -71,6 +73,12 @@ const migrations = [
     version: '1.0.2',
     migrations:[
       addPageUrl
+    ]
+  },
+  {
+    version: '1.0.3',
+    migrations:[
+      addActivityFeedback
     ]
   }
 ]

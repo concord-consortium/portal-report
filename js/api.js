@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import fakeData from './data/report.json'
+import queryString from 'query-string'
 
 const warn = (message) => {
   if (console && typeof console.warn == 'function') {
@@ -7,16 +8,7 @@ const warn = (message) => {
   }
 }
 const urlParams = (() => {
-  const query = window.location.search.substring(1)
-  const rawVars = query.split("&")
-  let params = {}
-  rawVars.forEach((v) => {
-    let arr = v.split("=")
-    let pair = arr.splice(0, 1);
-    pair.push(arr.join("="));
-    params[pair[0]] = decodeURIComponent(pair[1])
-  })
-  return params
+  return  queryString.parse(window.location.search)
 })()
 
 // Report URL and auth tokens are provided as an URL parameters.

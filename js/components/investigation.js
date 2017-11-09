@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import Activity from './activity'
+import Activity from '../containers/activity.js'
 import Sticky from 'react-stickynode';
 import '../../css/investigation.less'
 

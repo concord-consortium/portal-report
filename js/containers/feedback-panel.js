@@ -79,7 +79,7 @@ class FeedbackPanel extends PureComponent {
 
   scrollStudentIntoView(eventProxy) {
     const index = eventProxy.target.value
-    const ref = this.studentRowRef(index)
+    const ref = this.studentRowRef(index-1)
     const itemComponent = this.refs[ref]
     if (itemComponent) {
       const domNode = ReactDom.findDOMNode(itemComponent)
@@ -159,7 +159,7 @@ class FeedbackPanel extends PureComponent {
 
             <div className="feedback-options">
               <h3>Feedback Type</h3>
-
+              <br/>
               <input id="feedbackEnabled" type="checkbox" checked={feedbackEnabled} onChange={this.enableText}/>
               <label htmlFor="feedbackEnabled"> Give Written Feedback</label>
               <br/>
@@ -193,7 +193,7 @@ class FeedbackPanel extends PureComponent {
                 { filteredAnswers.map((answer, i) =>
                     <FeedbackRow
                       answer={answer}
-                      ref={this.studentRowRef(i)}
+                      ref={() => this.studentRowRef(i)}
                       key={answer.get('key')}
                       scoreEnabled={scoreEnabled}
                       feedbackEnabled={feedbackEnabled}

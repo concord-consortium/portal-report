@@ -892,7 +892,7 @@ clap@^1.0.9:
   dependencies:
     chalk "^1.1.3"
 
-classnames@^2.0.0, classnames@^2.2.5:
+classnames@^2.0.0, classnames@^2.2.0, classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
@@ -1216,6 +1216,10 @@ debug@^2.2.0, debug@^2.6.6, debug@^2.6.8:
 decamelize@^1.0.0, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
+
+decode-uri-component@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
 
 deep-diff@0.3.4:
   version "0.3.4"
@@ -2485,11 +2489,9 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
-normalizr@^2.0.0:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-2.3.1.tgz#ac12d771ce1fe6a43094c3d828caada4ed9a4540"
-  dependencies:
-    lodash "^4.17.2"
+normalizr@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-3.2.3.tgz#88755c64de418b040fa6ad1329b2de5c3250ac49"
 
 npmlog@^4.0.2:
   version "4.1.2"
@@ -3020,6 +3022,14 @@ query-string@^4.1.0:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
+query-string@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-5.0.0.tgz#fbdf7004b4d2aff792f9871981b7a2794f555947"
+  dependencies:
+    decode-uri-component "^0.2.0"
+    object-assign "^4.1.0"
+    strict-uri-encode "^1.0.0"
+
 querystring-es3@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
@@ -3124,6 +3134,12 @@ react-prop-types@^0.4.0:
   dependencies:
     warning "^3.0.0"
 
+react-radio-group@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-radio-group/-/react-radio-group-3.0.2.tgz#b1f1c67f8ef95a988287cdb3c687ec41a9ced8c6"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-redux@^5.0.1:
   version "5.0.6"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.6.tgz#23ed3a4f986359d68b5212eaaa681e60d6574946"
@@ -3143,7 +3159,7 @@ react-responsive-carousel@^3.0.10:
     prop-types "^15.5.8"
     react-easy-swipe "^0.0.13"
 
-react-stickynode@^1.0.19:
+react-stickynode@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-stickynode/-/react-stickynode-1.3.1.tgz#de2f37958cb7be54f168ae754fb72caef8660a04"
   dependencies:
@@ -3151,6 +3167,13 @@ react-stickynode@^1.0.19:
     prop-types "^15.5.8"
     react-addons-shallow-compare "^0.14.2 || ^15.0.0"
     subscribe-ui-event "^1.0.0"
+
+react-tooltip@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-3.3.0.tgz#51c08ae0221075e2c43d83cd47fc78466612df7d"
+  dependencies:
+    classnames "^2.2.0"
+    prop-types "^15.5.8"
 
 react-transition-group@^1.2.0:
   version "1.2.0"

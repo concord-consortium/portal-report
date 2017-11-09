@@ -1,5 +1,5 @@
 {
-  "report_version": "1.0.2",
+  "report_version": "1.0.3",
   "report_for": "class",
   "report": {
     "id": 18,
@@ -8,8 +8,25 @@
     "children": [
       {
         "id": 29,
+        "activity_feedback_id": 29,
         "type": "Activity",
         "name": "Test Activity 1 (sequence part)",
+        "enable_text_feedback": false,
+        "score_type": "none",
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "learner_id": 215,
+            "feedbacks": [
+              {
+                "score": 10,
+                "feedback": "good",
+                "has_been_reviewed": true
+              }
+            ]
+          }
+        ],
         "children": [
           {
             "id": 68,
@@ -32,27 +49,25 @@
                     "rationale_prompt": "Explain your choice. Give specific examples.",
                     "allow_multiple_selection": null,
                     "is_required": false,
+                    "feedback_enabled": true,
+                    "score_enabled": true,
                     "key": "Embeddable::MultipleChoice|116",
                     "type": "Embeddable::MultipleChoice",
                     "answers": [
                       {
                         "answer": [
                           {
-                            "choice": "a",
-                            "is_correct": null
-                          },
-                          {
-                            "choice": "b",
+                            "choice": "c",
                             "is_correct": null
                           }
                         ],
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-1",
-                            "score": null,
-                            "feedback": null,
-                            "has_been_reviewed": false
+                            "answer_key": "Embeddable::MultipleChoice|116-15",
+                            "score": 10,
+                            "feedback": "great job",
+                            "has_been_reviewed": true
                           }
                         ],
                         "submitted": true,
@@ -214,8 +229,35 @@
       },
       {
         "id": 30,
+        "activity_feedback_id": 30,
         "type": "Activity",
         "name": "Test Activity 2 (sequence part)",
+        "enable_text_feedback": true,
+        "score_type": "none",
+        "enable_auto_score": true,
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "learner_id": 215,
+            "feedbacks": [
+              {
+                "score": null,
+                "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]},{
+            "student_id": 16,
+            "learner_id": 216,
+            "feedbacks": [
+              {
+                "score": 10,
+                "feedback": "good",
+                "has_been_reviewed": false
+              }
+            ]
+          }
+        ],
         "children": [
           {
             "id": 69,
@@ -582,8 +624,34 @@
       },
       {
         "id": 31,
+        "activity_feedback_id": 31,
         "type": "Activity",
         "name": "Test activity 3 (sequence part)",
+        "enable_text_feedback": true,
+        "score_type": "none",
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "learner_id": 215,
+            "feedbacks": [
+              {
+                "score": null,
+                "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]},{
+            "student_id": 16,
+            "learner_id": 216,
+            "feedbacks": [
+              {
+                "score": 1,
+                "feedback": "Boo",
+                "has_been_reviewed": false
+              }
+            ]
+          }
+        ],
         "children": [
           {
             "id": 70,

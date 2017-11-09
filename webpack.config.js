@@ -44,6 +44,7 @@ module.exports = {
       }
     ]
   },
+  devtool: "source-map",
   plugins: [
     new CopyWebpackPlugin([
       {from: 'public'}

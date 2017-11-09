@@ -6,6 +6,7 @@ import '../../css/feedback-button.less'
 export default class FeedbackButton extends PureComponent {
 
   render() {
+    const text = this.props.text || "Provide Feedback"
     const {disabled, feedbackEnabled, needsReviewCount, showFeedback} = this.props
 
     const circleText = needsReviewCount > 0 ? needsReviewCount : "✔"
@@ -20,7 +21,7 @@ export default class FeedbackButton extends PureComponent {
         <div className={countClassName}>
           {counterDiv}
         </div>
-        Provide Feedback
+          {text}
       </div>
     )
   }

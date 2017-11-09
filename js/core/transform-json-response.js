@@ -1,6 +1,7 @@
-import { normalize, Schema, arrayOf } from 'normalizr'
+import { normalize, schema } from 'normalizr'
 import humps from 'humps'
 import migrate from './migrations'
+import queryString from 'query-string'
 
 const DEFAULT_REPORT_FOR = 'class'
 // Transforms deeply nested structure of report:
@@ -23,39 +24,51 @@ const DEFAULT_REPORT_FOR = 'class'
 export default function transformJSONResponse(json) {
   const camelizedJson = humps.camelizeKeys(json)
 
-  const student = new Schema('students')
-  const investigation = new Schema('investigations')
-  const activity = new Schema('activities')
-  const section = new Schema('sections')
-  const page = new Schema('pages')
-  const question = new Schema('questions', {idAttribute: (q) => q.key})
+  const student = new schema.Entity('students')
+  const investigation = new schema.Entity('investigations')
+  const activity = new schema.Entity('activities')
+  const section = new schema.Entity('sections')
+  const page = new schema.Entity('pages')
+  const question = new schema.Entity('questions', {}, {
+    idAttribute: (q) => q.key
+  })
   // Answers don't have unique ID so generate it. Embeddable key + student ID works.
-  const answer = new Schema('answers', {idAttribute: (a) => `${a.embeddableKey}-${a.studentId}`})
-  const feedback = new Schema('feedbacks', {idAttribute: (a) => a.answerKey})
+  const answer = new schema.Entity('answers', {}, {
+    idAttribute: (a) => `${a.embeddableKey}-${a.studentId}`
+  })
+  const feedback = new schema.Entity('feedbacks', {}, {
+    idAttribute: (a) => a.answerKey
+  })
+
+  const activityFeedback = new schema.Entity('activityFeedbacks', {}, {
+    idAttribute: (value, parent) => `${parent.id}-${value.studentId}`
+  })
+
   investigation.define({
-    children: arrayOf(activity)
+    children:[ activity ]
   })
   activity.define({
-    children: arrayOf(section)
+    children: [ section ],
+    activityFeedback: [ activityFeedback ]
   })
   section.define({
-    children: arrayOf(page)
+    children: [ page ]
   })
   page.define({
-    children: arrayOf(question)
+    children: [ question ]
   })
   question.define({
-    answers: arrayOf(answer)
+    answers: [ answer ]
   })
   answer.define({
-    feedbacks: arrayOf(feedback)
+    feedbacks: [ feedback ]
   })
 
   const reportType = camelizedJson.report.type
   const response = normalize(migrate(camelizedJson), {
     report: reportType === 'Investigation' ? investigation : activity,
     'class': {
-      students: arrayOf(student)
+      students: [ student ]
     }
   })
   // Post-process response:
@@ -74,7 +87,9 @@ export default function transformJSONResponse(json) {
   response.hideControls = camelizedJson.hideControls || false
   applyVisibilityFilter(response.entities.questions, response.result.visibilityFilter)
   copyAnswerKeysToObjects(response.entities.answers || [])
+  copyAnswerKeysToObjects(response.entities.activityFeedbacks || [])
   saveStudentsRealNames(response.entities.students)
+  urlParamOverrides(response)
   return response
 }
 
@@ -106,4 +121,18 @@ function saveStudentsRealNames(students) {
   Object.values(students).forEach(student => {
     student.realName = student.name
   })
+}
+
+function urlParamOverrides(response) {
+  const {reportFor, studentId} = queryString.parse(window.location.search)
+  if (reportFor) {
+    response.type  = reportFor
+  }
+  if (studentId && reportFor =="student") {
+    response.studentId = studentId
+    response.hideControls = true;
+    if(response.result) {
+      response.result.hideControls = true;
+    }
+  }
 }

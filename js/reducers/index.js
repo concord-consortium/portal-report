@@ -2,10 +2,10 @@ import Immutable, { Map, Set} from 'immutable'
 import {
   REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
-  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK} from '../actions'
+  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK} from '../actions'
 
 import feedbackReducer from './feedback-reducer'
-
+import { activityFeedbackReducer } from './activity-feedback-reducer'
 import transformJSONResponse from '../core/transform-json-response'
 import { noSelection } from '../calculations'
 
@@ -57,6 +57,11 @@ function enableFeedback(state, action) {
   return state.mergeIn(['questions', embeddableKey], feedbackFlags)
 }
 
+function enableActivityFeedback(state, action) {
+  const {activityId, feedbackFlags} = action
+  const nextState = state.mergeIn(['activities', activityId.toString()], feedbackFlags)
+  return nextState
+}
 
 const INITIAL_REPORT_STATE = Map({
   type: 'class'
@@ -79,6 +84,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set('hideSectionNames', data.result.isOfferingExternal)
         .set('type', data.type)
         .set('nowShowing', data.type)
+        .set('selectedStudentId', data.studentId)
         .set('hideControls', data.result.hideControls)
       state = setAnonymous(state, data.result.anonymousReport)
       state = setVisibilityFilterActive(state, data.result.visibilityFilter.active && !data.result.hideControls)
@@ -111,6 +117,8 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state.set('compareViewAnswers', null)
     case ENABLE_FEEDBACK:
       return enableFeedback(state, action)
+    case ENABLE_ACTIVITY_FEEDBACK:
+    return enableActivityFeedback(state, action)
     default:
       return state
   }
@@ -120,6 +128,7 @@ export default function reducer(state = Map(), action) {
   return Map({
     data: data(state.get('data'), action),
     report: report(state.get('report'), action),
-    feedbacks: feedbackReducer(state.get('feedbacks'), action)
+    feedbacks: feedbackReducer(state.get('feedbacks'), action),
+    activityFeedbacks: activityFeedbackReducer(state.get('activityFeedbacks'), action)
   })
 }

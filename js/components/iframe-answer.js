@@ -49,12 +49,16 @@ export default class IframeAnswer extends PureComponent {
       )
   }
 
+  displayInIframe() {
+    return (this.props.displayInIframe && this.state.iframeVisible) || (this.props.displayInIframe && this.props.alwaysOpen)
+  }
+
   render() {
     const { alwaysOpen } = this.props
     const { iframeVisible } = this.state
     return (
       <div className='iframe-answer'>
-        {(iframeVisible || alwaysOpen) ? this.renderIframe() : this.renderLink()}
+        { this.displayInIframe() ? this.renderIframe() : this.renderLink()}
       </div>
     )
   }

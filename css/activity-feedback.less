@@ -1,0 +1,43 @@
+.activity {
+  .activity-feedback {
+    .feedback {
+      font-style: italic;
+      font-size: 9pt;
+      color: hsl(176, 26%, 14%);
+      padding: 1em;
+      margin: 0em;
+      margin-top: 5px;
+      background-color: #e5e5e5;
+      justify-content: space-between;
+      display: flex;
+      &.noFeedback {
+        background-color: inherit;
+        color: inherit;
+        padding: 0em;
+      }
+      &.disabled { display: none; }
+      .feedback-section {
+        h1 { display: inline; margin-right: 0.5em; font-size: 1em;}
+      }
+    }
+  }
+}
+
+// for sticky-top navigation
+.active {
+  .activity-feedback {
+    margin-right: 5em;
+    .feedback {
+      padding: 2px;
+    }
+  }
+}
+
+@media print {
+  .report .activity-feedback .feedback-section  h1 {
+    display: inline;
+    margin-right: 0.5em;
+    font-size: 1em;
+    font-weight: normal;
+  }
+}

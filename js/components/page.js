@@ -12,7 +12,7 @@ export default class Page extends PureComponent {
     const url = showLinks ? page.get('url') : null
     return (
       <div className={`page ${page.get('visible') ? '' : 'hidden'}`}>
-        <Sticky top={80}>
+        <Sticky top={100}>
           <h4>
             <MaybeLink url={url}>
               <span>Page: {pageName}</span>

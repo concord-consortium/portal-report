@@ -16,6 +16,8 @@ export const HIDE_COMPARE_VIEW = 'HIDE_COMPARE_VIEW'
 export const SHOW_FEEDBACK = 'SHOW_FEEDBACK'
 export const UPDATE_FEEDBACK = 'UPDATE_FEEDBACK'
 export const ENABLE_FEEDBACK = 'ENABLE_FEEDBACK'
+export const UPDATE_ACTIVITY_FEEDBACK = 'UPDATE_ACTIVITY_FEEDBACK'
+export const ENABLE_ACTIVITY_FEEDBACK = 'ENABLE_ACTIVITY_FEEDBACK'
 
 // When fetch succeeds, receiveData action will be called with the response object (json in this case).
 // REQUEST_DATA action will be processed by the reducer immediately.
@@ -203,6 +205,48 @@ export function enableFeedback(embeddableKey, feedbackFlags) {
       type: 'updateReportSettings',
       data: {
         feedback_opts: feedbackSettings
+      }
+    }
+  }
+}
+
+export function updateActivityFeedback(activityFeedbackKey, feedback) {
+  const feedbackData = mappedCopy(feedback, {
+    hasBeenReviewed: 'has_been_reviewed',
+    activityFeedbackId: 'activity_feedback_id',
+    learnerId: 'learner_id',
+    feedback: 'text_feedback'
+  })
+  feedbackData.feedback_key = activityFeedbackKey
+  return {
+    type: UPDATE_ACTIVITY_FEEDBACK,
+    activityFeedbackKey,
+    feedback,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        activity_feedback: feedbackData
+      }
+    }
+  }
+}
+
+export function enableActivityFeedback(activityId, feedbackFlags) {
+  const mappings = {
+    enableTextFeedback: 'enable_text_feedback',
+    scoreType: 'score_type',
+    maxScore: 'max_score',
+    activityFeedbackId: 'activity_feedback_id'
+  }
+  const feedbackSettings = mappedCopy(feedbackFlags, mappings)
+  return {
+    type: ENABLE_ACTIVITY_FEEDBACK,
+    activityId,
+    feedbackFlags,
+    callAPI: {
+      type: 'updateReportSettings',
+      data: {
+        actvity_feedback_opts: feedbackSettings
       }
     }
   }
