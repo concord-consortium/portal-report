@@ -789,7 +789,7 @@
                     "display_in_iframe": true,
                     "key": "Embeddable::Iframe|1022",
                     "type": "Embeddable::Iframe",
-                    "question_number": 1,
+                    "question_number": 7,
                     "answers": [
                       {
                         "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Trial\\\",\\\"readOnly\\\":true,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Description\\\",\\\"readOnly\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature A (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature B (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"something\\\",\\\"3\\\",\\\"2\\\"],[\\\"b\\\",\\\"else\\\",\\\"1.5\\\",\\\"3\\\"],[\\\"c\\\",\\\"more\\\",\\\"0.5\\\",\\\"1\\\"]]}\"}",
