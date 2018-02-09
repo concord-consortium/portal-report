@@ -23,7 +23,9 @@ export default class IframeAnswer extends PureComponent {
 
   renderLink() {
     const { answer } = this.props
-    return <a href={answer.get('answer')} onClick={this.toggleIframe} target='_blank'>View work</a>
+    let decorator =
+      answer.get('displayInIframe') ? '' : <span className="pr-icon-external-link"/>
+    return <a href={answer.get('answer')} onClick={this.toggleIframe} target='_blank'>View Work {decorator}</a>
   }
 
   renderIframe() {
@@ -40,6 +42,11 @@ export default class IframeAnswer extends PureComponent {
       // to the iframe using iframe-phone.
       url = answer.get('url')
       state = answer.get('answer')
+    } else if (! answer.get('answerType') ){
+      // handle case where answer type is not set this would happen with an portal previous
+      // to 1.21.0
+      url = answer.get('answer')
+      state = null
     }
     return (
         <div>
@@ -49,16 +56,21 @@ export default class IframeAnswer extends PureComponent {
       )
   }
 
-  displayInIframe() {
-    return (this.props.displayInIframe && this.state.iframeVisible) || (this.props.displayInIframe && this.props.alwaysOpen)
+  shouldRenderIframe() {
+    const { answer, alwaysOpen } = this.props
+    const { iframeVisible } = this.state
+
+    if (answer.get('displayInIframe')) {
+      return iframeVisible || alwaysOpen
+    } else {
+      return false
+    }
   }
 
   render() {
-    const { alwaysOpen } = this.props
-    const { iframeVisible } = this.state
     return (
       <div className='iframe-answer'>
-        { this.displayInIframe() ? this.renderIframe() : this.renderLink()}
+        {this.shouldRenderIframe() ? this.renderIframe() : this.renderLink()}
       </div>
     )
   }

@@ -455,7 +455,7 @@
               {
                 "id": 244,
                 "type": "Page",
-                "name": "2",
+                "name": "Image Question, LabBooks, and Interactives",
                 "url": "http://authoring.concord.org/activities/802/pages/4543",
                 "children": [
                   {
@@ -551,9 +551,89 @@
                     ]
                   },
                   {
-                    "id": 7,
-                    "name": "Labbook album",
+                    "id": 7000,
+                    "name": "Labbook album ",
                     "question_number": 4,
+                    "description": "description ...",
+                    "width": 600,
+                    "height": 500,
+                    "url": null,
+                    "display_in_iframe": true,
+                    "key": "Embeddable::Iframe|7-1",
+                    "type": "Embeddable::Iframe",
+                    "answers": [
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
+                        "answered": true,
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks":[
+                          {
+                            "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
+                            "answer_key": "FAKE_ANSWER_KEY-17-1",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7-1",
+                        "student_id": 13,
+                        "display_in_iframe": true,
+                        "url": null,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
+                        "answered": true,
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks":[
+                          {
+                            "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
+                            "answer_key": "FAKE_ANSWER_KEY-18-1",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7-1",
+                        "student_id": 14,
+                        "display_in_iframe": true,
+                        "url": null,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|7"
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|7"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 7,
+                    "name": "Labbook report from before Portal 1.21.0",
+                    "question_number": 5,
                     "description": "description ...",
                     "width": 600,
                     "height": 500,
@@ -615,6 +695,159 @@
                         "embeddable_key": "Embeddable::Iframe|7"
                       }
                     ]
+                  },
+                  {
+                    "id": 1245,
+                    "name": "CODAP example, should not show iframe in report",
+                    "description": "description ...",
+                    "width": 576,
+                    "height": 435,
+                    "url": "https://document-store.concord.org/v2/documents/31165/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Fstaging%2F&buttonText=Launch",
+                    "display_in_iframe": false,
+                    "key": "Embeddable::Iframe|1245",
+                    "type": "Embeddable::Iframe",
+                    "question_number": 6,
+                    "answers": [
+                      {
+                        "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks": [
+                          {
+                            "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                            "answer_key": "Saveable::ExternalLinkUrl|1408",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|1245",
+                        "student_id": 13,
+                        "display_in_iframe": false,
+                        "url": "https://document-store.concord.org/v2/documents/31165/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Fstaging%2F&buttonText=Launch",
+                        "width": 576,
+                        "height": 435
+                      },
+                      {
+                        "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks": [
+                          {
+                            "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                            "answer_key": "Saveable::ExternalLinkUrl|1410",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|1245",
+                        "student_id": 14,
+                        "display_in_iframe": false,
+                        "url": "https://document-store.concord.org/v2/documents/31165/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Fstaging%2F&buttonText=Launch",
+                        "width": 576,
+                        "height": 435
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      }
+                    ],
+                    "feedback_enabled": false,
+                    "score_enabled": false,
+                    "max_score": 0
+                  },
+                  {
+                    "id": 1022,
+                    "name": "table that saves state and has report view",
+                    "description": "table that saves state and has report view",
+                    "width": 576,
+                    "height": 435,
+                    "url": "https://concord-consortium.github.io/table-interactive/",
+                    "display_in_iframe": true,
+                    "key": "Embeddable::Iframe|1022",
+                    "type": "Embeddable::Iframe",
+                    "question_number": 1,
+                    "answers": [
+                      {
+                        "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Trial\\\",\\\"readOnly\\\":true,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Description\\\",\\\"readOnly\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature A (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature B (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"something\\\",\\\"3\\\",\\\"2\\\"],[\\\"b\\\",\\\"else\\\",\\\"1.5\\\",\\\"3\\\"],[\\\"c\\\",\\\"more\\\",\\\"0.5\\\",\\\"1\\\"]]}\"}",
+                        "answer_type": "Saveable::InteractiveState",
+                        "feedbacks": [
+                          {
+                            "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Trial\\\",\\\"readOnly\\\":true,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Description\\\",\\\"readOnly\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature A (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature B (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"something\\\",\\\"3\\\",\\\"2\\\"],[\\\"b\\\",\\\"else\\\",\\\"1.5\\\",\\\"3\\\"],[\\\"c\\\",\\\"more\\\",\\\"0.5\\\",\\\"1\\\"]]}\"}",
+                            "answer_key": "Saveable::InteractiveState|7",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|1022",
+                        "student_id": 13,
+                        "display_in_iframe": true,
+                        "url": "https://concord-consortium.github.io/table-interactive/",
+                        "width": 576,
+                        "height": 435
+                      },
+                      {
+                        "student_id": 14,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      }
+                    ],
+                    "feedback_enabled": false,
+                    "score_enabled": false,
+                    "max_score": 0
                   }
                 ]
               }
