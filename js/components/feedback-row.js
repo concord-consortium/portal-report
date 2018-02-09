@@ -97,7 +97,7 @@ export default class FeedbackRow extends PureComponent {
       <div className="feedback-row">
         <div className="student-answer">
           <h3>{name}'s Answer</h3>
-          <Answer answer={answer} alwaysOpen={true} />
+          <Answer answer={answer} />
         </div>
         { answered ? this.renderFeedbackSection(answer) : null }
       </div>
@@ -105,4 +105,3 @@ export default class FeedbackRow extends PureComponent {
   }
 
 }
-
