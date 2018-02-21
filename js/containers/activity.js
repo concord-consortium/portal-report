@@ -33,7 +33,8 @@ class Activity extends PureComponent {
   }
 
   render() {
-    const { activity, reportFor, needsReviewCount, feedbacks} = this.props
+    const { activity, reportFor, feedbacksNeedingReview, feedbacks} = this.props
+    const needsReviewCount = (feedbacksNeedingReview && feedbacksNeedingReview.size) || 0
     const activityName = activity.get('name')
     const showText = activity.get('enableTextFeedback')
     const scoreType = activity.get('scoreType')

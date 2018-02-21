@@ -69,7 +69,7 @@ export default class ActivityFeedbackRow extends PureComponent {
       learnerId:          this.props.studentActivityFeedback.get("learnerId"),
       activityFeedbackId: this.props.activityFeedbackId,
       score:              parseInt(feedbackRecord ? feedbackRecord.get('score') : "0"),
-      feedback:           feedbackRecord ? feedbackRecord.get('feedback') : "(no feedback)",
+      feedback:           feedbackRecord ? feedbackRecord.get('feedback') : "",
       complete:           feedbackRecord ? feedbackRecord.get('hasBeenReviewed')  : false
     }
   }
