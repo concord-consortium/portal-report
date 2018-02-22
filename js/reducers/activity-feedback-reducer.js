@@ -18,6 +18,11 @@ function updateActivityFeedback(state, action) {
   return state.set(activityFeedbackKey, record.mergeIn(["feedbacks",0], feedback))
 }
 
+function markAnswersNeedReview(state, action) {
+  // Mark all keys in our state, and set `hasBeenReviewed: false`
+  return state.map(value => value.setIn(['feedbacks', 0, 'hasBeenReviewed'], false))
+}
+
 export  function activityFeedbackReducer(state = INITIAL_ACTIVITY_FEEDBACK_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
@@ -26,6 +31,8 @@ export  function activityFeedbackReducer(state = INITIAL_ACTIVITY_FEEDBACK_STATE
       return feedbacks
     case UPDATE_ACTIVITY_FEEDBACK:
       return updateActivityFeedback(state, action)
+    case ENABLE_ACTIVITY_FEEDBACK:
+      return markAnswersNeedReview(state, action)
     default:
       return state
   }
