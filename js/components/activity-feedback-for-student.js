@@ -25,7 +25,7 @@ export default class ActivityFeedbackForStudent extends PureComponent {
       return(
         <div className="feedback-section score">
           <h1>Overall Score:</h1>
-          <span className="score">{feedback.score} / {maxScore} </span>
+          <span className="score">{score} / {maxScore} </span>
         </div>
       )
     }

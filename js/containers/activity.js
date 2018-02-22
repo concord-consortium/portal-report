@@ -83,7 +83,7 @@ class Activity extends PureComponent {
           showScore = {showScore}
           maxScore = {maxScore}
           showText = {showText}
-          autoScore = { scoreType == "auto" ? autoScores.get(reportFor) : null}
+          autoScore = { scoreType == "auto" ? autoScores.get(reportFor.get('id')) : null}
           feedbackEnabled = {feedbackEnabled}
         />
 
