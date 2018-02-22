@@ -118,7 +118,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
     case ENABLE_FEEDBACK:
       return enableFeedback(state, action)
     case ENABLE_ACTIVITY_FEEDBACK:
-    return enableActivityFeedback(state, action)
+      return enableActivityFeedback(state, action)
     default:
       return state
   }

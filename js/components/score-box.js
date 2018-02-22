@@ -12,6 +12,21 @@ export default class ScoreBox extends PureComponent {
     this.updateText = this.updateText.bind(this)
   }
 
+  setValue(props) {
+    const { initialScore } = props;
+    this.setState({
+      value: initialScore || 0
+    })
+  }
+
+  componentDidMount() {
+    this.setValue(this.props)
+  }
+
+  componentWillUpdate(nextProps) {
+    this.setValue(nextProps)
+  }
+
   clearUpdateTimer() {
     if(this.updateTimer) {
       clearTimeout(this.updateTimer)
