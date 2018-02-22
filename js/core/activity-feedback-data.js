@@ -76,7 +76,9 @@ export function calculateStudentScores(state, questions) {
 
   const getFeedbackScore = (feedbackId) => {
     const score = state.getIn(['feedbacks', feedbackId, 'score'])
-    return score || 0
+    const reviewed = state.getIn(['feedbacks', feedbackId, 'hasBeenReviewed'])
+    const computedScore = reviewed ? (score || 0) : 0
+    return computedScore
   }
 
 

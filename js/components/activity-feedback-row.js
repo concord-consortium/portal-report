@@ -107,7 +107,7 @@ export default class ActivityFeedbackRow extends PureComponent {
 
     const noFeedbackSection =
       <p>
-        This user hasn't started yet
+        This user hasn't finished yet.
       </p>
 
     const feedback = learnerId
