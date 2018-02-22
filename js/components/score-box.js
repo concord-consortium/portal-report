@@ -6,31 +6,7 @@ export default class ScoreBox extends PureComponent {
 
   constructor(props) {
     super(props)
-    this.state = {
-      value: props.initialScore || 0
-    }
     this.updateText = this.updateText.bind(this)
-  }
-
-  setValue(props) {
-    const { initialScore } = props;
-    this.setState({
-      value: initialScore || 0
-    })
-  }
-
-  componentDidMount() {
-    this.setValue(this.props)
-  }
-
-  componentWillUpdate(nextProps) {
-    this.setValue(nextProps)
-  }
-
-  clearUpdateTimer() {
-    if(this.updateTimer) {
-      clearTimeout(this.updateTimer)
-    }
   }
 
   validateValue(v) {
@@ -39,9 +15,7 @@ export default class ScoreBox extends PureComponent {
 
   updateText(e) {
     const value = e.target.value
-    this.clearUpdateTimer()
-    this.setState({value: this.validateValue(value)})
-    this.updateTimer = setTimeout( ()=> this.props.onChange(this.state.value), this.props.updateInterval || UPDATE_INTERVAL)
+    this.props.onChange(this.validateValue(value))
   }
 
   render() {
@@ -51,7 +25,7 @@ export default class ScoreBox extends PureComponent {
         <input
           disabled={this.props.disabled }
           onChange={this.updateText }
-          value={this.state.value}
+          value={this.props.score}
         />
       </div>
     )

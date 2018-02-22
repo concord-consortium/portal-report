@@ -46,7 +46,7 @@ export default class ActivityFeedbackRow extends PureComponent {
       <ScoreBox
         disabled={disableScore}
         onChange={(value) => this.changeFeedback(answerKey, {score: value})}
-        initialScore={score} />
+        score={score} />
     )
   }
 
