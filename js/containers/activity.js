@@ -111,8 +111,8 @@ function mapStateToProps(state, ownProps) {
   const computedMaxScore = getComputedMaxScore(questions)
   const autoScores = calculateStudentScores(state, questions)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-  const numFeedbacksNeedingReview =feedbacksNeedingReview.size
-  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, autoScores, computedMaxScore}
+  const needsReviewCount =feedbacksNeedingReview.size
+  return { feedbacks, feedbacksNeedingReview, needsReviewCount, autoScores, computedMaxScore}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {return {}}
