@@ -234,7 +234,6 @@
         "name": "Test Activity 2 (sequence part)",
         "enable_text_feedback": true,
         "score_type": "none",
-        "enable_auto_score": true,
         "max_score": 10,
         "activity_feedback":[
           {
