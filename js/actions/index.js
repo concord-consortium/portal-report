@@ -191,6 +191,7 @@ export function updateFeedback(answerKey, feedback) {
 export function enableFeedback(embeddableKey, feedbackFlags) {
   const mappings = {
     feedbackEnabled: 'enable_text_feedback',
+    rubricEnabled: 'rubric_enabled',
     scoreEnabled: 'enable_score',
     maxScore: 'max_score'
   }

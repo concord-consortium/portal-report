@@ -1,12 +1,10 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react' // eslint-disable-line
 import '../../css/feedback-overview.less'
 
 export default class FeedbackOverview extends PureComponent {
 
   render() {
-    const numNoAnswers     = this.props.numNoAnswers
-    const numNeedsFeedback = this.props.numNeedsFeedback
-    const numFeedbackGiven = this.props.numFeedbackGiven
+    const { numNoAnswers, numNeedsFeedback, numFeedbackGiven } = this.props
     return (
       <div className="feedback-overview">
         <div>
