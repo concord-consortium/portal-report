@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import Answer from './answer'
+import RubricBox from "./rubric-box"
 import FeedbackBox from './feedback-box'
 import ScoreBox from './score-box'
 import StudentReportLink from './student-report-link'
@@ -22,7 +22,7 @@ export default class ActivityFeedbackRow extends PureComponent {
   }
 
   scoreChange(e, answerKey) {
-    const value = parseInt(e.target.value) || 0
+    const value = parseInt(e.target.value, 10) || 0
     this.changeFeedback(answerKey, {score: value})
   }
 
@@ -65,7 +65,8 @@ export default class ActivityFeedbackRow extends PureComponent {
   fieldValues() {
     const { studentActivityFeedback }  = this.props
     const feedbackRecord  = studentActivityFeedback.get('feedbacks').first()
-    let scoreString, feedback = ""
+    let scoreString = ""
+    let feedback = ""
     let complete = false
     if (feedbackRecord) {
       scoreString = feedbackRecord.get('score')
@@ -75,11 +76,11 @@ export default class ActivityFeedbackRow extends PureComponent {
     const score = parseInt(scoreString, 10) || 0
 
     return {
-      learnerId:          this.props.studentActivityFeedback.get("learnerId"),
-      activityFeedbackId: this.props.activityFeedbackId,
-      score:              score,
-      feedback:           feedback,
-      complete:           complete
+      score,
+      feedback,
+      complete,
+      learnerId: this.props.studentActivityFeedback.get("learnerId"),
+      activityFeedbackId: this.props.activityFeedbackId
     }
   }
 
@@ -87,31 +88,47 @@ export default class ActivityFeedbackRow extends PureComponent {
     const activityFeedbackKey  = studentFeedback.get('key')
 
     const {feedback, score, complete, learnerId }  = this.fieldValues()
-    const { feedbackEnabled, scoreType, autoScore} = this.props
+    const {useRubric, feedbackEnabled, scoreType, autoScore} = this.props
     const scoreEnabled     = scoreType != 'none'
     const automaticScoring = scoreType == 'auto'
 
-    const disableFeedback  = (!learnerId) || complete
-    const disableScore     = (disableFeedback || automaticScoring )
+    const disableFeedback  = !learnerId || complete
+    const disableScore     = disableFeedback || automaticScoring
     const scoreToRender    = automaticScoring ? autoScore : score
 
     return (
       <div className="feedback-interface">
         <h4>Your Feedback</h4>
         <div className="feedback-content">
-          { feedbackEnabled ? this.renderFeedbackForm(activityFeedbackKey, disableFeedback, feedback) :  ""}
-          { scoreEnabled ? this.renderScore(activityFeedbackKey, disableScore, scoreToRender) : "" }
-          { feedbackEnabled || scoreEnabled ? this.renderComplete(activityFeedbackKey, complete) : ""}
+          {
+            useRubric
+              ? <RubricBox rubric={this.props.rubric} />
+              : null
+          }
+          {
+            feedbackEnabled
+              ? this.renderFeedbackForm(activityFeedbackKey, disableFeedback, feedback)
+              :  ""
+          }
+          {
+            scoreEnabled
+              ? this.renderScore(activityFeedbackKey, disableScore, scoreToRender)
+              : ""
+          }
+          {
+            feedbackEnabled || scoreEnabled || useRubric
+              ? this.renderComplete(activityFeedbackKey, complete)
+              : ""
+          }
         </div>
       </div>
     )
   }
 
   render() {
-    const studentActivityFeedback  = this.props.studentActivityFeedback
+    const { studentActivityFeedback } = this.props
     const student = studentActivityFeedback.get("student")
     const name = student.get("realName")
-    const link = "http://google.com/"
     const learnerId = studentActivityFeedback.get("learnerId")
 
     const noFeedbackSection =
@@ -135,6 +152,4 @@ export default class ActivityFeedbackRow extends PureComponent {
       </div>
     )
   }
-
 }
-

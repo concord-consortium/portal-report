@@ -167,6 +167,7 @@ class ActivityFeedbackPanel extends PureComponent {
                       scoreType={scoreType}
                       autoScore={autoScores.get(studentId)}
                       feedbackEnabled={showText}
+                      useRubric={useRubric}
                       maxScore={maxScore}
                       updateFeedback={this.props.updateActivityFeedback}
                       showOnlyNeedReview={this.state.showOnlyNeedReview}

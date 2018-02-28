@@ -13,6 +13,8 @@
         "name": "Test Activity 1 (sequence part)",
         "enable_text_feedback": false,
         "score_type": "none",
+        "use_rubric": false,
+        "rubric_url": "http://foo.bar",
         "max_score": 10,
         "activity_feedback":[
           {
