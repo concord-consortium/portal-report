@@ -82,7 +82,9 @@ export function calculateStudentScores(state, questions) {
   }
 
 
-  const scores = questions.map( q => q.get('answers'))
+  const scores = questions
+    .filter(question => question.get('scoreEnabled'))
+    .map( q => q.get('answers'))
     .flatten()
     .map(answerId => report.getIn(['answers', answerId]))
     .groupBy(answer => answer.get('studentId'))
@@ -97,8 +99,9 @@ export function calculateStudentScores(state, questions) {
 
 export function getComputedMaxScore(questions) {
   return questions
+    .filter(question => question.get('scoreEnabled'))
     .map(question  => question.get('maxScore') || 0)
-    .reduce( (total, score) => total + score)
+    .reduce( (total, score) => total + score) || 0
 }
 
 export function getActivityFeedbacks(state, activityId) {
