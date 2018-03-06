@@ -14,7 +14,8 @@ import {
   getFeedbacksNotAnswered,
   getComputedMaxScore,
   getQuestions,
-  calculateStudentScores
+  calculateStudentScores,
+  getActivityRubric
 } from '../core/activity-feedback-data'
 import '../../css/feedback-panel.less'
 import '../../css/tooltip.less'
@@ -94,7 +95,8 @@ class ActivityFeedbackPanel extends PureComponent {
       numFeedbacksNeedingReview,
       notAnswerd,
       autoScores,
-      computedMaxScore
+      computedMaxScore,
+      rubric
     }  = this.props;
     const numNotAnswered = notAnswerd.size
     const prompt = activity.get("name")
@@ -168,6 +170,7 @@ class ActivityFeedbackPanel extends PureComponent {
                       autoScore={autoScores.get(studentId)}
                       feedbackEnabled={showText}
                       useRubric={useRubric}
+                      rubric={rubric}
                       maxScore={maxScore}
                       updateFeedback={this.props.updateActivityFeedback}
                       showOnlyNeedReview={this.state.showOnlyNeedReview}
@@ -199,8 +202,8 @@ function mapStateToProps(state, ownProps) {
   const questions = getQuestions(state, actId)
   const computedMaxScore = getComputedMaxScore(questions)
   const autoScores = calculateStudentScores(state, questions)
-
-  return { feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore, autoScores}
+  const rubric = getActivityRubric(state, actId);
+  return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore, autoScores}
 }
 
 const mapDispatchToProps = (dispatch) => {

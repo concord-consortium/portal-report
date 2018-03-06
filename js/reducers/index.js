@@ -5,6 +5,7 @@ import {
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK} from '../actions'
 
 import feedbackReducer from './feedback-reducer'
+import { rubricReducer } from './rubric-reducer'
 import { activityFeedbackReducer } from './activity-feedback-reducer'
 import transformJSONResponse from '../core/transform-json-response'
 import { noSelection } from '../calculations'
@@ -129,6 +130,7 @@ export default function reducer(state = Map(), action) {
     data: data(state.get('data'), action),
     report: report(state.get('report'), action),
     feedbacks: feedbackReducer(state.get('feedbacks'), action),
+    rubrics: rubricReducer(state.get('rubrics'), action),
     activityFeedbacks: activityFeedbackReducer(state.get('activityFeedbacks'), action)
   })
 }
