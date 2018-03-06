@@ -93,7 +93,7 @@ export function calculateStudentScores(state, questions) {
       .map(ans => ans.get('feedbacks').last())
       .map( feedbackId => getFeedbackScore(feedbackId))
     )
-    const sums = scores.map(s => s.reduce( (sum,v) => (sum||0) + v))
+    const sums = scores.map(s => s.reduce( (sum,v) => sum + v, 0))
   return sums
 }
 
@@ -101,7 +101,7 @@ export function getComputedMaxScore(questions) {
   return questions
     .filter(question => question.get('scoreEnabled'))
     .map(question  => question.get('maxScore') || 0)
-    .reduce( (total, score) => total + score) || 0
+    .reduce( (total, score) => total + score, 0)
 }
 
 export function getActivityFeedbacks(state, activityId) {
