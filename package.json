@@ -41,6 +41,7 @@
     "postcss-loader": "^1.2.1",
     "react-addons-test-utils": "^15.3.0",
     "redux-mock-store": "^1.1.4",
+    "standard": "^11.0.0",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.14",
