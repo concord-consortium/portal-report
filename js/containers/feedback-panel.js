@@ -9,12 +9,12 @@ import FeedbackButton from '../components/feedback-button'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 import { connect } from 'react-redux'
-import { updateFeedback, enableFeedback} from '../actions'
+import { updateFeedback, enableFeedback } from '../actions'
 
 import '../../css/feedback-panel.less'
 
 class FeedbackPanel extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       showOnlyNeedReview: true,
@@ -22,62 +22,61 @@ class FeedbackPanel extends PureComponent {
     }
 
     this.makeOnlyNeedReview = this.makeOnlyNeedReview.bind(this)
-    this.makeShowAll  = this.makeShowAll.bind(this)
+    this.makeShowAll = this.makeShowAll.bind(this)
     this.showFeedback = this.showFeedback.bind(this)
     this.hideFeedback = this.hideFeedback.bind(this)
     this.answerIsMarkedComplete = this.answerIsMarkedComplete.bind(this)
-    this.enableText  = this.enableText.bind(this)
+    this.enableText = this.enableText.bind(this)
     this.enableScore = this.enableScore.bind(this)
     this.setMaxScore = this.setMaxScore.bind(this)
     this.scrollStudentIntoView = this.scrollStudentIntoView.bind(this)
     this.studentRowRef = this.studentRowRef.bind(this)
   }
 
-
-  makeOnlyNeedReview() {
+  makeOnlyNeedReview () {
     this.setState({showOnlyNeedReview: true})
   }
 
-  makeShowAll() {
+  makeShowAll () {
     this.setState({showOnlyNeedReview: false})
   }
 
-  showFeedback() {
+  showFeedback () {
     this.setState({
       showFeedbackPanel: true
     })
   }
 
-  hideFeedback() {
+  hideFeedback () {
     this.setState({
       showFeedbackPanel: false
     })
   }
 
-  answerIsMarkedComplete(answer) {
+  answerIsMarkedComplete (answer) {
     const feedbackId = answer.get('feedbacks') && answer.get('feedbacks').last()
     const feedback = this.props.feedbacks.get(feedbackId)
-    return feedback && feedback.get("hasBeenReviewed")
+    return feedback && feedback.get('hasBeenReviewed')
   }
 
-  enableText(event) {
+  enableText (event) {
     this.props.enableFeedback(this.props.question.get('key'), {feedbackEnabled: event.target.checked})
   }
 
-  enableScore(event) {
+  enableScore (event) {
     this.props.enableFeedback(this.props.question.get('key'), {scoreEnabled: event.target.checked})
   }
 
-  setMaxScore(event) {
+  setMaxScore (event) {
     const value = parseInt(event.target.value, 10) || null
     this.props.enableFeedback(this.props.question.get('key'), {maxScore: value})
   }
 
-  studentRowRef(index) {
+  studentRowRef (index) {
     return `student-row-${index}`
   }
 
-  scrollStudentIntoView(eventProxy) {
+  scrollStudentIntoView (eventProxy) {
     const index = eventProxy.target.value
     const ref = this.studentRowRef(index - 1)
     const itemComponent = this.refs[ref]
@@ -87,31 +86,31 @@ class FeedbackPanel extends PureComponent {
     }
   }
 
-  renderGettingStarted() {
-    return(
-      <div className="gettingStarted">
-        <div className="explainer">
+  renderGettingStarted () {
+    return (
+      <div className='gettingStarted'>
+        <div className='explainer'>
           To start, choose the type of feedback you want to leave in the Feedback Type settings above.
         </div>
-        <div className="arrow">⤴</div>
+        <div className='arrow'>⤴</div>
       </div>
     )
   }
 
-  render() {
+  render () {
     const { question, answers } = this.props
-    const showing       = this.state.showFeedbackPanel
-    const prompt        = question.get('prompt')
-    const number        = question.get('questionNumber')
+    const showing = this.state.showFeedbackPanel
+    const prompt = question.get('prompt')
+    const number = question.get('questionNumber')
 
-    const realAnswers     = answers.filter(a => a.get('type') != 'NoAnswer')
+    const realAnswers = answers.filter(a => a.get('type') !== 'NoAnswer')
     const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a))
 
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers
-    const numAnswers       = realAnswers.count()
-    const numNoAnswers     = answers.count() - realAnswers.count()
-    let   numNeedsFeedback = needingFeedback.count()
-    let   numFeedbackGiven = numAnswers - numNeedsFeedback
+    const numAnswers = realAnswers.count()
+    const numNoAnswers = answers.count() - realAnswers.count()
+    let numNeedsFeedback = needingFeedback.count()
+    let numFeedbackGiven = numAnswers - numNeedsFeedback
 
     const scoreEnabled = question.get('scoreEnabled') || false
     const feedbackEnabled = question.get('feedbackEnabled') || false
@@ -122,34 +121,33 @@ class FeedbackPanel extends PureComponent {
       return {
         realName: a.getIn(['student', 'realName']),
         id: a.getIn(['student', 'id']),
-        answer: a,
+        answer: a
       }
     })
 
-    if(!scoreEnabled && !feedbackEnabled) {
+    if (!scoreEnabled && !feedbackEnabled) {
       numNeedsFeedback = 0
       numFeedbackGiven = 0
     }
 
-
     if (!showing) {
       return (
-        <div className="feedback-container">
+        <div className='feedback-container'>
           <FeedbackButton
             feedbackEnabled={feedbackEnabled || scoreEnabled}
             needsReviewCount={numNeedsFeedback}
             disabled={numAnswers < 1}
-            showFeedback={this.showFeedback}/>
+            showFeedback={this.showFeedback} />
         </div>)
     }
     return (
-      <div className="feedback-container">
-        <div className="lightbox-background" />
-        <div className="feedback-panel">
-          <div className="feedback-header">
-            <div className="left">
+      <div className='feedback-container'>
+        <div className='lightbox-background' />
+        <div className='feedback-panel'>
+          <div className='feedback-header'>
+            <div className='left'>
               <h1>Feedback: Question {number}</h1>
-              <h2 dangerouslySetInnerHTML={ {__html: prompt} }/>
+              <h2 dangerouslySetInnerHTML={{__html: prompt}} />
               <FeedbackOverview
                 numNoAnswers={numNoAnswers}
                 numFeedbackGiven={numFeedbackGiven}
@@ -157,28 +155,27 @@ class FeedbackPanel extends PureComponent {
               />
             </div>
 
-            <div className="feedback-options">
+            <div className='feedback-options'>
               <h3>Feedback Type</h3>
-              <br/>
-              <input id="feedbackEnabled" type="checkbox" checked={feedbackEnabled} onChange={this.enableText}/>
-              <label htmlFor="feedbackEnabled"> Give Written Feedback</label>
-              <br/>
+              <br />
+              <input id='feedbackEnabled' type='checkbox' checked={feedbackEnabled} onChange={this.enableText} />
+              <label htmlFor='feedbackEnabled'> Give Written Feedback</label>
+              <br />
 
-              <input id="scoreEnabled" checked={scoreEnabled} type="checkbox" onChange={this.enableScore}/>
-              <label htmlFor="scoreEnabled">Give Score</label>
-              <br/>
+              <input id='scoreEnabled' checked={scoreEnabled} type='checkbox' onChange={this.enableScore} />
+              <label htmlFor='scoreEnabled'>Give Score</label>
+              <br />
               { scoreEnabled
-                ?
-                  <div>
-                    <label className="max-score">Max. Score</label>
-                    <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
-                  </div>
-                : ""
+                ? <div>
+                  <label className='max-score'>Max. Score</label>
+                  <input className='max-score-input' value={maxScore} onChange={this.setMaxScore} />
+                </div>
+                : ''
               }
             </div>
           </div>
 
-          <div className="main-feedback">
+          <div className='main-feedback'>
             <FeedbackFilter
               showOnlyNeedReview={this.state.showOnlyNeedReview}
               studentSelected={this.scrollStudentIntoView}
@@ -188,11 +185,11 @@ class FeedbackPanel extends PureComponent {
               disable={showGettingStarted}
             />
 
-            <div className="feedback-rows-wrapper">
-              { showGettingStarted ?  this.renderGettingStarted() : ""}
-              <div className="feedback-for-students">
-                <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
-                { filteredAnswers.map((answer, i) =>
+            <div className='feedback-rows-wrapper'>
+              { showGettingStarted ? this.renderGettingStarted() : ''}
+              <div className='feedback-for-students'>
+                <ReactCSSTransitionGroup transitionName='answer' transitionEnterTimeout={400} transitionLeaveTimeout={300}>
+                  { filteredAnswers.map((answer, i) =>
                     <FeedbackRow
                       answer={answer}
                       ref={() => this.studentRowRef(i)}
@@ -204,13 +201,13 @@ class FeedbackPanel extends PureComponent {
                       updateFeedback={this.props.updateFeedback}
                       showOnlyNeedsRiew={this.state.showOnlyNeedReview}
                     />
-                )}
+                  )}
                 </ReactCSSTransitionGroup>
               </div>
             </div>
           </div>
-          <div className="footer">
-            <Button onClick = {this.hideFeedback}>Done</Button>
+          <div className='footer'>
+            <Button onClick={this.hideFeedback}>Done</Button>
           </div>
         </div>
       </div>
@@ -219,15 +216,14 @@ class FeedbackPanel extends PureComponent {
   }
 }
 
-
-function mapStateToProps(state) {
-  return { feedbacks: state.get('feedbacks')}
+function mapStateToProps (state) {
+  return { feedbacks: state.get('feedbacks') }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateFeedback: (answerKey, feedback) => dispatch(updateFeedback(answerKey, feedback)),
-    enableFeedback: (embeddableKey, feedbackFlags)  => dispatch(enableFeedback(embeddableKey, feedbackFlags)),
+    enableFeedback: (embeddableKey, feedbackFlags) => dispatch(enableFeedback(embeddableKey, feedbackFlags))
   }
 }
 

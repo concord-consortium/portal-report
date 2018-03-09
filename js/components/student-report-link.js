@@ -1,20 +1,15 @@
 import React, { PureComponent } from 'react'
 import studentReporturl from '../util/student-report-url'
 
-
 export default class StudentReportLink extends PureComponent {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
+  render () {
     const {student, started} = this.props
-    const student_id = student.get('id')
+    const studentId = student.get('id')
     const name = student.get('name')
-    const link = studentReporturl(student_id)
+    const link = studentReporturl(studentId)
 
     const linkToWork = (
-      <a href={link} target="_blank">
+      <a href={link} target='_blank'>
         Open {name}'s report
       </a>
     )
@@ -25,7 +20,7 @@ export default class StudentReportLink extends PureComponent {
       </span>
     )
 
-    if(started) {
+    if (started) {
       return linkToWork
     }
 

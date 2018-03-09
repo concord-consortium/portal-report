@@ -7,7 +7,7 @@ import FeedbackOptions from '../components/feedback-options'
 import FeedbackRow from '../components/activity-feedback-row'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
-import { updateActivityFeedback, enableActivityFeedback} from '../actions'
+import { updateActivityFeedback, enableActivityFeedback } from '../actions'
 import {
   getActivityFeedbacks,
   getFeedbacksNeedingReview,
@@ -22,50 +22,50 @@ import '../../css/tooltip.less'
 import {
   NO_SCORE,
   AUTOMATIC_SCORE
-} from "../util/scoring-constants"
+} from '../util/scoring-constants'
 
 class ActivityFeedbackPanel extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
-      showOnlyNeedReview: true,
+      showOnlyNeedReview: true
     }
     this.makeOnlyNeedReview = this.makeOnlyNeedReview.bind(this)
-    this.makeShowAll  = this.makeShowAll.bind(this)
+    this.makeShowAll = this.makeShowAll.bind(this)
     this.changeScoreType = this.changeScoreType.bind(this)
     this.scrollStudentIntoView = this.scrollStudentIntoView.bind(this)
     this.studentRowRef = this.studentRowRef.bind(this)
   }
 
-  makeOnlyNeedReview() {
+  makeOnlyNeedReview () {
     this.setState({showOnlyNeedReview: true})
   }
 
-  makeShowAll() {
+  makeShowAll () {
     this.setState({showOnlyNeedReview: false})
   }
 
-  changeScoreType(newV) {
+  changeScoreType (newV) {
     const activityId = this.props.activity.get('id').toString()
     const activityFeedbackId = this.props.activity.get('activityFeedbackId')
     const newFlags = {
       activityFeedbackId,
       scoreType: newV
     }
-    if(newV != NO_SCORE) {
+    if (newV !== NO_SCORE) {
       this.setState({lastScoreType: newV})
     }
-    if(newV == AUTOMATIC_SCORE) {
-      newFlags.maxScore = this.props.computedMaxScore;
+    if (newV === AUTOMATIC_SCORE) {
+      newFlags.maxScore = this.props.computedMaxScore
     }
-    this.props.enableActivityFeedback(activityId, newFlags);
+    this.props.enableActivityFeedback(activityId, newFlags)
   }
 
-  studentRowRef(index) {
+  studentRowRef (index) {
     return `student-row-${index}`
   }
 
-  scrollStudentIntoView(eventProxy) {
+  scrollStudentIntoView (eventProxy) {
     const index = eventProxy.target.value
     const ref = this.studentRowRef(index - 1)
     const itemComponent = this.refs[ref]
@@ -75,18 +75,18 @@ class ActivityFeedbackPanel extends PureComponent {
     }
   }
 
-  renderGettingStarted() {
-    return(
-      <div className="gettingStarted">
-        <div className="explainer">
+  renderGettingStarted () {
+    return (
+      <div className='gettingStarted'>
+        <div className='explainer'>
           To start, choose the type of feedback you want to leave in the Feedback Type settings above.
         </div>
-        <div className="arrow">⤴</div>
+        <div className='arrow'>⤴</div>
       </div>
     )
   }
 
-  render() {
+  render () {
     const {
       feedbacks,
       activity,
@@ -97,36 +97,36 @@ class ActivityFeedbackPanel extends PureComponent {
       autoScores,
       computedMaxScore,
       rubric
-    }  = this.props;
+    } = this.props
     const numNotAnswered = notAnswerd.size
-    const prompt = activity.get("name")
-    const scoreType = activity.get("scoreType") || NO_SCORE
-    const showText = activity.get("enableTextFeedback")
-    const useRubric = activity.get("useRubric")
+    const prompt = activity.get('name')
+    const scoreType = activity.get('scoreType') || NO_SCORE
+    const showText = activity.get('enableTextFeedback')
+    const useRubric = activity.get('useRubric')
     const activityFeedbackId = activity.get('activityFeedbackId')
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks
-    const maxScore = scoreType == "auto" ? computedMaxScore : activity.get("maxScore")
+    const maxScore = scoreType === AUTOMATIC_SCORE ? computedMaxScore : activity.get('maxScore')
     const showGettingStarted = scoreType === NO_SCORE && !showText && !useRubric
 
-    const hide = function() {
-      if(this.props.hide) {
-        this.props.hide();
+    const hide = function () {
+      if (this.props.hide) {
+        this.props.hide()
       }
-    }.bind(this);
+    }.bind(this)
 
     const studentsPulldown = filteredFeedbacks.map((f) => {
       return {
         realName: f.getIn(['student', 'realName']),
         id: f.getIn(['student', 'id']),
-        answer: f,
+        answer: f
       }
     })
     return (
-      <div className="feedback-container">
-        <div className="lightbox-background" />
-        <div className="feedback-panel">
-          <div className="feedback-header">
-            <div className="left">
+      <div className='feedback-container'>
+        <div className='lightbox-background' />
+        <div className='feedback-panel'>
+          <div className='feedback-header'>
+            <div className='left'>
               <h2>{prompt} </h2>
               <FeedbackOverview
                 numNoAnswers={numNotAnswered}
@@ -145,7 +145,7 @@ class ActivityFeedbackPanel extends PureComponent {
 
           </div>
 
-          <div className="main-feedback">
+          <div className='main-feedback'>
             <FeedbackFilter
               showOnlyNeedReview={this.state.showOnlyNeedReview}
               studentSelected={this.scrollStudentIntoView}
@@ -155,17 +155,17 @@ class ActivityFeedbackPanel extends PureComponent {
               disable={showGettingStarted}
             />
 
-            <div className="feedback-rows-wrapper">
-              { showGettingStarted ?  this.renderGettingStarted() : ""}
-              <div className="feedback-for-students">
-                <ReactCSSTransitionGroup transitionName="answer" transitionEnterTimeout={400} transitionLeaveTimeout={300}>
-                { filteredFeedbacks.map((studentActivityFeedback, i) => {
+            <div className='feedback-rows-wrapper'>
+              { showGettingStarted ? this.renderGettingStarted() : ''}
+              <div className='feedback-for-students'>
+                <ReactCSSTransitionGroup transitionName='answer' transitionEnterTimeout={400} transitionLeaveTimeout={300}>
+                  { filteredFeedbacks.map((studentActivityFeedback, i) => {
                     const studentId = studentActivityFeedback.get('studentId')
                     return <FeedbackRow
-                      studentActivityFeedback = {studentActivityFeedback}
-                      activityFeedbackId = { activityFeedbackId }
-                      key={ `${activityFeedbackId}-${studentId}`}
-                      ref={ () => this.studentRowRef(i)}
+                      studentActivityFeedback={studentActivityFeedback}
+                      activityFeedbackId={activityFeedbackId}
+                      key={`${activityFeedbackId}-${studentId}`}
+                      ref={() => this.studentRowRef(i)}
                       scoreType={scoreType}
                       autoScore={autoScores.get(studentId)}
                       feedbackEnabled={showText}
@@ -176,13 +176,13 @@ class ActivityFeedbackPanel extends PureComponent {
                       showOnlyNeedReview={this.state.showOnlyNeedReview}
                     />
                   }
-                )}
+                  )}
                 </ReactCSSTransitionGroup>
               </div>
             </div>
           </div>
-          <div className="footer">
-            <Button onClick = {hide}>Done</Button>
+          <div className='footer'>
+            <Button onClick={hide}>Done</Button>
           </div>
         </div>
       </div>
@@ -191,8 +191,7 @@ class ActivityFeedbackPanel extends PureComponent {
   }
 }
 
-
-function mapStateToProps(state, ownProps) {
+function mapStateToProps (state, ownProps) {
   const actId = ownProps.activity.get('id')
   const feedbacks = getActivityFeedbacks(state, actId)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
@@ -202,15 +201,15 @@ function mapStateToProps(state, ownProps) {
   const questions = getQuestions(state, actId)
   const computedMaxScore = getComputedMaxScore(questions)
   const autoScores = calculateStudentScores(state, questions)
-  const rubric = getActivityRubric(state, actId);
-  return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore, autoScores}
+  const rubric = getActivityRubric(state, actId)
+  return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore, autoScores }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateActivityFeedback: (answerKey, feedback) => dispatch(updateActivityFeedback(answerKey, feedback)),
 
-    enableActivityFeedback: (activityKey, feedbackFlags)  => dispatch(enableActivityFeedback(activityKey, feedbackFlags)),
+    enableActivityFeedback: (activityKey, feedbackFlags) => dispatch(enableActivityFeedback(activityKey, feedbackFlags))
   }
 }
 

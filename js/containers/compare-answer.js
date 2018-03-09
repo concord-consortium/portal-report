@@ -3,17 +3,17 @@ import { connect } from 'react-redux'
 import { setAnswerSelectedForCompare } from '../actions'
 
 export class CompareAnswerCheckbox extends PureComponent {
-  render() {
+  render () {
     const { answer, onChange } = this.props
     return (
       <input type='checkbox' checked={answer.get('selectedForCompare')}
-                             onChange={(e) => onChange(answer.get('key'), e.target.checked)}/>
+        onChange={(e) => onChange(answer.get('key'), e.target.checked)} />
     )
   }
 }
 
 export class CompareAnswerRmLink extends PureComponent {
-  render() {
+  render () {
     const { answer, onChange, children } = this.props
     return (
       <a onClick={(e) => onChange(answer.get('key'), false)}>{children}</a>

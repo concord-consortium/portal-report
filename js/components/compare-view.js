@@ -6,20 +6,20 @@ import { CompareAnswerRmLinkContainer } from '../containers/compare-answer'
 import '../../css/compare-view.less'
 
 export default class CompareView extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       highlighted: Set()
     }
   }
 
-  answerClassName(answer) {
+  answerClassName (answer) {
     const { highlighted } = this.state
     const key = answer.get('key')
     return `answer-wrapper ${highlighted.has(key) ? 'highlighted' : ''}`
   }
 
-  toggleHighlight(answer) {
+  toggleHighlight (answer) {
     const { highlighted } = this.state
     const key = answer.get('key')
     const isHighlighted = highlighted.has(key)
@@ -27,7 +27,7 @@ export default class CompareView extends PureComponent {
     this.setState({highlighted: newHighlightedSet})
   }
 
-  render() {
+  render () {
     const { answers } = this.props
     return (
       <div className='compare-view'>
@@ -43,7 +43,7 @@ export default class CompareView extends PureComponent {
                 </div>
               </div>
               <div className='answer'>
-                <Answer answer={a} alwaysOpen={true}/>
+                <Answer answer={a} alwaysOpen />
               </div>
             </div>
           )}

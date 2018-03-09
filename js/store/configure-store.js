@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
 import apiMiddleware from '../api-middleware'
 import rootReducer from '../reducers'
+// import createLogger from 'redux-logger'
 
-export default function configureStore(initialState) {
+export default function configureStore (initialState) {
   return createStore(
     rootReducer,
     initialState,

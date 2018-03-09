@@ -14,7 +14,7 @@ const AnswerComponent = {
 }
 
 export default class Answer extends PureComponent {
-  render() {
+  render () {
     const { answer, alwaysOpen } = this.props
     if (typeof answer === 'undefined') {
       // TODO:  This should be set, but in the case of sequences
@@ -25,6 +25,6 @@ export default class Answer extends PureComponent {
     if (!AComponent) {
       return <div>Answer type not supported.</div>
     }
-    return <AComponent answer={answer} alwaysOpen={alwaysOpen}/>
+    return <AComponent answer={answer} alwaysOpen={alwaysOpen} />
   }
 }

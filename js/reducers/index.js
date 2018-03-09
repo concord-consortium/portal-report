@@ -10,8 +10,7 @@ import { activityFeedbackReducer } from './activity-feedback-reducer'
 import transformJSONResponse from '../core/transform-json-response'
 import { noSelection } from '../calculations'
 
-
-function data(state = Map(), action) {
+function data (state = Map(), action) {
   switch (action.type) {
     case INVALIDATE_DATA:
       return state.set('didInvalidate', true)
@@ -19,29 +18,28 @@ function data(state = Map(), action) {
       return state.set('isFetching', true)
     case RECEIVE_DATA:
       return state.set('isFetching', false)
-                  .set('didInvalidate', false)
-                  .set('error', null)
-                  .set('lastUpdated', action.receivedAt)
+        .set('didInvalidate', false)
+        .set('error', null)
+        .set('lastUpdated', action.receivedAt)
     case RECEIVE_ERROR:
       return state.set('isFetching', false)
-                  .set('didInvalidate', false)
-                  .set('error', action.response)
-                  .set('lastUpdated', action.receivedAt)
+        .set('didInvalidate', false)
+        .set('error', action.response)
+        .set('lastUpdated', action.receivedAt)
     default:
       return state
   }
 }
 
-function setAnonymous(state, anonymous) {
+function setAnonymous (state, anonymous) {
   let idx = 1
   const newStudents = state.get('students').map(s => s.set('name', anonymous ? `Student ${idx++}` : s.get('realName')))
   return state.set('anonymous', anonymous)
-              .set('students', newStudents)
+    .set('students', newStudents)
 }
 
-function setVisibilityFilterActive(state, filterActive) {
+function setVisibilityFilterActive (state, filterActive) {
   return state.withMutations(state => {
-
     state.set('visibilityFilterActive', filterActive)
     state.get('questions').forEach((value, key) => {
       const questionSelected = state.getIn(['questions', key, 'selected'])
@@ -52,13 +50,12 @@ function setVisibilityFilterActive(state, filterActive) {
   })
 }
 
-
-function enableFeedback(state, action) {
+function enableFeedback (state, action) {
   const {embeddableKey, feedbackFlags} = action
   return state.mergeIn(['questions', embeddableKey], feedbackFlags)
 }
 
-function enableActivityFeedback(state, action) {
+function enableActivityFeedback (state, action) {
   const {activityId, feedbackFlags} = action
   const nextState = state.mergeIn(['activities', activityId.toString()], feedbackFlags)
   return nextState
@@ -68,8 +65,7 @@ const INITIAL_REPORT_STATE = Map({
   type: 'class'
 })
 
-
-function report(state = INITIAL_REPORT_STATE, action) {
+function report (state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
       const data = transformJSONResponse(action.response)
@@ -110,9 +106,9 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state.setIn(['answers', action.key, 'selectedForCompare'], action.value)
     case SHOW_COMPARE_VIEW:
       const selectedAnswerKeys = state.get('answers')
-                                      .filter(a => a.get('selectedForCompare') && a.get('embeddableKey') === action.embeddableKey)
-                                      .map(a => a.get('key'))
-                                      .values()
+        .filter(a => a.get('selectedForCompare') && a.get('embeddableKey') === action.embeddableKey)
+        .map(a => a.get('key'))
+        .values()
       return state.set('compareViewAnswers', Set(selectedAnswerKeys))
     case HIDE_COMPARE_VIEW:
       return state.set('compareViewAnswers', null)
@@ -125,7 +121,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
   }
 }
 
-export default function reducer(state = Map(), action) {
+export default function reducer (state = Map(), action) {
   return Map({
     data: data(state.get('data'), action),
     report: report(state.get('report'), action),

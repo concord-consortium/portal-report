@@ -2,15 +2,15 @@ import React, { PureComponent } from 'react'
 
 import '../../css/multiple-choice-details.less'
 
-function noAnswer(answer) {
+function noAnswer (answer) {
   return answer.answer === null
 }
 
-function answerIncludeChoice(answer, choice) {
+function answerIncludeChoice (answer, choice) {
   return !noAnswer(answer) && answer.answer.find(a => a.choice === choice.choice)
 }
 
-function getChoicesStats(choices, answers) {
+function getChoicesStats (choices, answers) {
   let stats = {}
   const answersFlat = answers.reduce((res, answer) => res.concat(answer.answer), [])
   const totalAnswers = answersFlat.length
@@ -28,18 +28,18 @@ function getChoicesStats(choices, answers) {
 }
 
 export default class MultipleChoiceDetails extends PureComponent {
-  get choices() {
+  get choices () {
     const choices = this.props.question.get('choices').toJS()
     // Add fake, no-answer choice.
     choices.push({choice: 'No response', noAnswer: true})
     return choices
   }
 
-  get answers() {
+  get answers () {
     return this.props.question.get('answers').toJS()
   }
 
-  render() {
+  render () {
     const stats = getChoicesStats(this.choices, this.answers)
     return (
       <table className='multiple-choice-details'>
@@ -47,7 +47,7 @@ export default class MultipleChoiceDetails extends PureComponent {
           {this.choices.map((choiceDesc, idx) => {
             const { choice, isCorrect } = choiceDesc
             return <ChoiceRow key={idx} idx={idx} choice={choice} isCorrect={isCorrect}
-                              percent={stats[choice].percent} count={stats[choice].count}/>
+              percent={stats[choice].percent} count={stats[choice].count} />
           })}
         </tbody>
       </table>
@@ -58,7 +58,7 @@ export default class MultipleChoiceDetails extends PureComponent {
 const ChoiceRow = ({idx, choice, isCorrect, percent, count}) => (
   <tr className={isCorrect ? 'correct' : ''}>
     <td>{idx}. {choice}</td>
-    <td className='bar-container'><div className='bar' style={{width: percent + '%'}}></div></td>
+    <td className='bar-container'><div className='bar' style={{width: percent + '%'}} /></td>
     <td className='number'>{percent}%</td>
     <td className='number'>{count}</td>
   </tr>

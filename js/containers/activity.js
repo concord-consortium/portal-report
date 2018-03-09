@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import Sticky from 'react-stickynode';
+import Sticky from 'react-stickynode'
 
 import Section from '../components/section'
-import FeedbackButton from '../components/feedback-button';
+import FeedbackButton from '../components/feedback-button'
 import ActivityFeedbackForStudent from '../components/activity-feedback-for-student'
-import ActivityFeedbackPanel from './activity-feedback-panel';
+import ActivityFeedbackPanel from './activity-feedback-panel'
 import {
   getActivityFeedbacks,
   getQuestions,
@@ -17,7 +17,7 @@ import {
 import '../../css/activity.less'
 
 class Activity extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super()
     this.state = {
       showFeedbackPanel: false
@@ -26,19 +26,19 @@ class Activity extends PureComponent {
     this.hideFeedback = this.hideFeedback.bind(this)
   }
 
-  showFeedback() {
+  showFeedback () {
     this.setState({
       showFeedbackPanel: true
     })
   }
 
-  hideFeedback() {
+  hideFeedback () {
     this.setState({
       showFeedbackPanel: false
     })
   }
 
-  render() {
+  render () {
     const {
       activity,
       reportFor,
@@ -51,41 +51,37 @@ class Activity extends PureComponent {
     const showText = activity.get('enableTextFeedback')
     const scoreType = activity.get('scoreType')
     const _maxScore = activity.get('maxScore')
-    const maxScore  = scoreType == 'auto' ? computedMaxScore : _maxScore
-    const showScore = (scoreType != 'none')
+    const maxScore = scoreType === 'auto' ? computedMaxScore : _maxScore
+    const showScore = (scoreType !== 'none')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
     const feedbackEnabled = showScore || showText
 
-    const feedbackPanel = (reportFor == "class" && this.state.showFeedbackPanel)
-      ?
-        <ActivityFeedbackPanel
-          hide={hideFeedback }
-          activity={activity}
-        />
-      :
-        ""
+    const feedbackPanel = (reportFor === 'class' && this.state.showFeedbackPanel)
+      ? <ActivityFeedbackPanel
+        hide={hideFeedback}
+        activity={activity}
+      />
+      : ''
 
-    const feedbackButton = reportFor == "class"
-      ?
-        <span className="feedback">
-          <FeedbackButton
-            text="Provide overall feedback"
-            needsReviewCount={needsReviewCount}
-            feedbackEnabled={feedbackEnabled}
-            showFeedback={showFeedback}
-          />
-        </span>
-      :
-        <ActivityFeedbackForStudent
-          student={reportFor}
-          feedbacks ={feedbacks}
-          showScore = {showScore}
-          maxScore = {maxScore}
-          showText = {showText}
-          autoScore = { scoreType == "auto" ? autoScores.get(reportFor.get('id')) : null}
-          feedbackEnabled = {feedbackEnabled}
+    const feedbackButton = reportFor === 'class'
+      ? <span className='feedback'>
+        <FeedbackButton
+          text='Provide overall feedback'
+          needsReviewCount={needsReviewCount}
+          feedbackEnabled={feedbackEnabled}
+          showFeedback={showFeedback}
         />
+      </span>
+      : <ActivityFeedbackForStudent
+        student={reportFor}
+        feedbacks={feedbacks}
+        showScore={showScore}
+        maxScore={maxScore}
+        showText={showText}
+        autoScore={scoreType === 'auto' ? autoScores.get(reportFor.get('id')) : null}
+        feedbackEnabled={feedbackEnabled}
+      />
 
     return (
       <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
@@ -97,24 +93,24 @@ class Activity extends PureComponent {
         </Sticky>
         <div>
           {feedbackPanel}
-          {activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor}/>)}
+          {activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor} />)}
         </div>
       </div>
     )
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps (state, ownProps) {
   const actId = ownProps.activity.get('id')
   const feedbacks = getActivityFeedbacks(state, actId)
   const questions = getQuestions(state, actId)
   const computedMaxScore = getComputedMaxScore(questions)
   const autoScores = calculateStudentScores(state, questions)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-  const needsReviewCount =feedbacksNeedingReview.size
-  return { feedbacks, feedbacksNeedingReview, needsReviewCount, autoScores, computedMaxScore}
+  const needsReviewCount = feedbacksNeedingReview.size
+  return { feedbacks, feedbacksNeedingReview, needsReviewCount, autoScores, computedMaxScore }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {return {}}
+const mapDispatchToProps = (dispatch, ownProps) => { return {} }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Activity)

@@ -4,23 +4,23 @@ import ImageAnswerModal from './image-answer-modal'
 import '../../css/image-answer.less'
 
 export default class ImageAnswer extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       modalOpen: false
     }
   }
 
-  render() {
+  render () {
     const { answer } = this.props
     const imgAnswer = answer.get('answer')
     return (
       <div>
         <div className='image-answer'>
-          <img src={imgAnswer.get('imageUrl')} onClick={() => this.setState({modalOpen: true})}/>
+          <img src={imgAnswer.get('imageUrl')} onClick={() => this.setState({modalOpen: true})} />
           <div className='image-answer-note'>{imgAnswer.get('note')}</div>
         </div>
-        <ImageAnswerModal answer={answer} show={this.state.modalOpen} onHide={() => this.setState({modalOpen: false})}/>
+        <ImageAnswerModal answer={answer} show={this.state.modalOpen} onHide={() => this.setState({modalOpen: false})} />
       </div>
     )
   }

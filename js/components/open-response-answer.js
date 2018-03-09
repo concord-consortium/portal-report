@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 
 export default class OpenResponseAnswer extends PureComponent {
-  render() {
+  render () {
     const { answer } = this.props
     return (
       <div>

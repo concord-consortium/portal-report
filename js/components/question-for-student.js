@@ -8,7 +8,7 @@ import '../../css/question.less'
 import Prompt from './prompt'
 
 export default class QuestionForStudent extends PureComponent {
-  render() {
+  render () {
     const { question, url, student } = this.props
     const studentId = student.get('id')
     const answer = question.get('answers').filter(a => a.get('studentId') === studentId).first()
@@ -16,11 +16,11 @@ export default class QuestionForStudent extends PureComponent {
       <div className={`question for-student ${question.get('visible') ? '' : 'hidden'}`}>
         <div className='question-header'>
           <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')} />
-          <QuestionHeader question={question} url={url}/>
+          <QuestionHeader question={question} url={url} />
         </div>
-        <Prompt question={question}/>
-        <Answer answer={answer}/>
-        <Feedback answer={answer} question={question} htmlFor="student"/>
+        <Prompt question={question} />
+        <Answer answer={answer} />
+        <Feedback answer={answer} question={question} htmlFor='student' />
       </div>
     )
   }

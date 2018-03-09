@@ -7,21 +7,20 @@ import { connect } from 'react-redux'
 import '../../css/answers-table.less'
 
 class AnswersTable extends PureComponent {
-
-  getLatestFeedback(answer) {
+  getLatestFeedback (answer) {
     const feedbackKey = answer.get('feedbacks') && answer.get('feedbacks').last()
     return this.props.feedbacks.get(feedbackKey)
   }
 
-  render() {
+  render () {
     const {question, answers, hidden} = this.props
     const getLatestFeedback = this.getLatestFeedback.bind(this)
     const anonymous = this.props.anonymous
-    const scoreEnabled = (!anonymous) && question.get("scoreEnabled")
-    const feedbackEnabled = (!anonymous) && question.get("feedbackEnabled")
+    const scoreEnabled = (!anonymous) && question.get('scoreEnabled')
+    const feedbackEnabled = (!anonymous) && question.get('feedbackEnabled')
 
-    const feedbackTH = feedbackEnabled ?  <th>Feedback</th> : null
-    const scoreTH = scoreEnabled ?  <th>Score</th> : null
+    const feedbackTH = feedbackEnabled ? <th>Feedback</th> : null
+    const scoreTH = scoreEnabled ? <th>Score</th> : null
     return (
       <table className={`answers-table ${hidden ? 'hidden' : ''}`}>
         <tbody>
@@ -32,16 +31,16 @@ class AnswersTable extends PureComponent {
             {scoreTH}
             <th className='select-header'>Select</th>
           </tr>
-          {answers.map(function(answer) {
-              const feedback = getLatestFeedback(answer)
-              return (<AnswerRow
-                key={answer.get('studentId')}
-                answer={answer}
-                feedback={feedback}
-                showFeedback={feedbackEnabled}
-                showScore={scoreEnabled}
-              />)
-            }
+          {answers.map(function (answer) {
+            const feedback = getLatestFeedback(answer)
+            return (<AnswerRow
+              key={answer.get('studentId')}
+              answer={answer}
+              feedback={feedback}
+              showFeedback={feedbackEnabled}
+              showScore={scoreEnabled}
+            />)
+          }
           )}
         </tbody>
       </table>
@@ -50,36 +49,35 @@ class AnswersTable extends PureComponent {
 }
 
 function AnswerRow ({answer, feedback, showScore, showFeedback}) {
-  const hasAnswer =  answer.get("type") !== "NoAnswer"
-  const score = feedback && feedback.get("score")
-  const textFeedback = feedback && feedback.get("feedback")
-  const scoreTD = showScore ? <td className="score">{score}</td> : null
-  const feedbackTD = showFeedback ? <td className="feedback">{textFeedback}</td> : null
-  const compareDIV =  hasAnswer ?
-    <div>
-      <CompareAnswerCheckboxContainer answer={answer}/>
-      <ShowCompareContainer answer={answer}/>
+  const hasAnswer = answer.get('type') !== 'NoAnswer'
+  const score = feedback && feedback.get('score')
+  const textFeedback = feedback && feedback.get('feedback')
+  const scoreTD = showScore ? <td className='score'>{score}</td> : null
+  const feedbackTD = showFeedback ? <td className='feedback'>{textFeedback}</td> : null
+  const compareDIV = hasAnswer
+    ? <div>
+      <CompareAnswerCheckboxContainer answer={answer} />
+      <ShowCompareContainer answer={answer} />
     </div>
-    : ""
+    : ''
 
-   return (
-      <tr>
-        <td>{answer.getIn(["student", "name"])}</td>
-        <td> <Answer answer={answer}/> </td>
-        {feedbackTD}
-        {scoreTD}
-        <td className="select-answer-column">
-          {compareDIV}
-        </td>
-      </tr>
-    )
+  return (
+    <tr>
+      <td>{answer.getIn(['student', 'name'])}</td>
+      <td> <Answer answer={answer} /> </td>
+      {feedbackTD}
+      {scoreTD}
+      <td className='select-answer-column'>
+        {compareDIV}
+      </td>
+    </tr>
+  )
 }
 
-
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
-    feedbacks: state.get("feedbacks"),
-    anonymous: state.getIn(["report","anonymous"])
+    feedbacks: state.get('feedbacks'),
+    anonymous: state.getIn(['report', 'anonymous'])
   }
 }
 

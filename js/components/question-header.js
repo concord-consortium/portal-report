@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react'
 import MaybeLink from './maybe-link'
 
 export default class QuestionHeader extends PureComponent {
-
-  get questionName() {
+  get questionName () {
     // Provide question name only for the iframe question type.
     const { question } = this.props
     if (question.get('type') === 'Embeddable::Iframe') {
@@ -12,10 +11,10 @@ export default class QuestionHeader extends PureComponent {
     return ''
   }
 
-  render() {
-    const { question, url} = this.props
+  render () {
+    const { question, url } = this.props
     return (
-      <span className="page-link">
+      <span className='page-link'>
         <MaybeLink url={url}>
           <span>Question #{question.get('questionNumber')}{this.questionName}</span>
         </MaybeLink>

@@ -14,7 +14,7 @@ const QuestionComponent = {
 }
 
 export default class QuestionForClass extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       answersVisible: false
@@ -22,11 +22,11 @@ export default class QuestionForClass extends PureComponent {
     this.toggleAnswersVisibility = this.toggleAnswersVisibility.bind(this)
   }
 
-  toggleAnswersVisibility() {
+  toggleAnswersVisibility () {
     this.setState({answersVisible: !this.state.answersVisible})
   }
 
-  render() {
+  render () {
     const { question, url } = this.props
     const { answersVisible } = this.state
     const answers = question.get('answers').sortBy(a =>
@@ -36,16 +36,16 @@ export default class QuestionForClass extends PureComponent {
     return (
       <div>
         <div className={`question ${question.get('visible') ? '' : 'hidden'}`}>
-          <div className="question-header">
-            <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')}/>
-            <QuestionHeader question={question} url={url}/>
+          <div className='question-header'>
+            <SelectionCheckbox selected={question.get('selected')} questionKey={question.get('key')} />
+            <QuestionHeader question={question} url={url} />
             <a className='answers-toggle' onClick={this.toggleAnswersVisibility}>
               {answersVisible ? 'Hide responses' : 'Show responses'}
             </a>
           </div>
-          <QuestionSummary question={question} answers={answers}/>
-          <QuestionDetails question={question}/>
-          {answersVisible ? <AnswersTable question={question} answers={answers}/> : ''}
+          <QuestionSummary question={question} answers={answers} />
+          <QuestionDetails question={question} />
+          {answersVisible ? <AnswersTable question={question} answers={answers} /> : ''}
         </div>
       </div>
     )
@@ -55,7 +55,7 @@ export default class QuestionForClass extends PureComponent {
 const QuestionDetails = ({question}) => {
   const QComponent = QuestionComponent[question.get('type')]
   if (!QComponent) {
-    return <span></span>
+    return <span />
   }
-  return <QComponent question={question}/>
+  return <QComponent question={question} />
 }

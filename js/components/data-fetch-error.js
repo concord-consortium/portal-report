@@ -3,14 +3,14 @@ import React, { PureComponent } from 'react'
 import '../../css/data-fetch-error.less'
 
 export default class DataFetchError extends PureComponent {
-  renderUnauthorized() {
-   return <div>
+  renderUnauthorized () {
+    return <div>
       You are not authorized to access report data. Your access token might have expired.
       Please go back to Portal and launch report again.
     </div>
   }
 
-  renderGenericInfo(error) {
+  renderGenericInfo (error) {
     return (
       <div>
         <div>URL: {error.url}</div>
@@ -20,8 +20,8 @@ export default class DataFetchError extends PureComponent {
     )
   }
 
-  renderError(error) {
-    switch(error.status) {
+  renderError (error) {
+    switch (error.status) {
       case 401:
         return this.renderUnauthorized()
       default:
@@ -29,7 +29,7 @@ export default class DataFetchError extends PureComponent {
     }
   }
 
-  render() {
+  render () {
     const { error } = this.props
     return (
       <div className='data-fetch-error'>

@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { selectReport, fetchDataIfNeeded, invalidateData, hideCompareView,
-         showSelectedQuestions, showAllQuestions, setNowShowing, setAnonymous } from '../actions'
+import {
+  fetchDataIfNeeded, invalidateData, hideCompareView,
+  showSelectedQuestions, showAllQuestions, setNowShowing,
+  setAnonymous } from '../actions'
 import { Modal } from 'react-bootstrap'
 import Button from '../components/button'
 import CompareView from '../components/compare-view'
@@ -16,17 +18,17 @@ import compareViewData from '../core/compare-view-data'
 import '../../css/app.less'
 
 class App extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { fetchDataIfNeeded } = this.props
     fetchDataIfNeeded()
   }
-  
-  handleRefreshClick(e) {
+
+  handleRefreshClick (e) {
     e.preventDefault()
 
     const { invalidateData, fetchDataIfNeeded } = this.props
@@ -34,7 +36,7 @@ class App extends PureComponent {
     fetchDataIfNeeded()
   }
 
-  renderStatusBar() {
+  renderStatusBar () {
     const { isFetching, lastUpdated } = this.props
     return (
       <div className='status'>
@@ -44,47 +46,47 @@ class App extends PureComponent {
     )
   }
 
-  renderReport() {
+  renderReport () {
     const { report, showSelectedQuestions, showAllQuestions, setNowShowing, setAnonymous } = this.props
     return <Report report={report}
-                   showSelectedQuestions={showSelectedQuestions}
-                   showAllQuestions={showAllQuestions}
-                   setNowShowing={setNowShowing} setAnonymous={setAnonymous}/>
+      showSelectedQuestions={showSelectedQuestions}
+      showAllQuestions={showAllQuestions}
+      setNowShowing={setNowShowing} setAnonymous={setAnonymous} />
   }
 
-  renderCompareView() {
+  renderCompareView () {
     const { compareViewAnswers, hideCompareView } = this.props
     return (
       <Modal show={compareViewAnswers && compareViewAnswers.size > 0} bsStyle='compare-view' onHide={hideCompareView}>
         <Modal.Body>
-          {compareViewAnswers && <CompareView answers={compareViewAnswers}/>}
+          {compareViewAnswers && <CompareView answers={compareViewAnswers} />}
         </Modal.Body>
       </Modal>
     )
   }
 
-  render() {
+  render () {
     const { report, error, isFetching } = this.props
     return (
       <div className='report-app'>
         <div className='header'>
           <div className='header-content'>
-            <img src={ccLogoSrc} className='logo'/>
+            <img src={ccLogoSrc} className='logo' />
             {this.renderStatusBar()}
           </div>
         </div>
         <div className='report' style={{ opacity: isFetching ? 0.3 : 1 }}>
           {report && this.renderReport()}
-          {error && <DataFetchError error={error}/>}
+          {error && <DataFetchError error={error} />}
           {this.renderCompareView()}
         </div>
-        {isFetching && <LoadingIcon/>}
+        {isFetching && <LoadingIcon />}
       </div>
     )
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   const data = state.get('data')
   const error = data.get('error')
   const reportState = state.get('report')

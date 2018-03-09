@@ -1,18 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { renderIntoDocument, findRenderedDOMComponentWithClass } from 'react-addons-test-utils';
-import {expect} from 'chai';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { renderIntoDocument, findRenderedDOMComponentWithClass } from 'react-addons-test-utils'
+import {expect} from 'chai'
 import {List, Map, fromJS} from 'immutable'
 import {Provider} from 'react-redux'
 import configureStore from 'redux-mock-store'
 
 const mockStore = configureStore()
 
-import QuestionSummary from '../../js/components/question-summary';
+import QuestionSummary from '../../js/components/question-summary'
 
 describe('QuestionSummary', () => {
-  const prompt    = "Why is the sky blue?"
-  const answers   = fromJS([
+  const prompt = "Why is the sky blue?"
+  const answers = fromJS([
     {type: 'Embeddable::MultipleChoice'},
     {type: 'NoAnswer'},
     {type: 'Embeddable::OpenResponse'}

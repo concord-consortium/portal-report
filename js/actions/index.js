@@ -1,6 +1,4 @@
-import fetch from 'isomorphic-fetch'
-import { fetchReportData } from '../api'
-import { requestRubric } from "./load-rubric";
+import { requestRubric } from './load-rubric'
 export const INVALIDATE_DATA = 'INVALIDATE_DATA'
 export const REQUEST_DATA = 'REQUEST_DATA'
 export const RECEIVE_DATA = 'RECEIVE_DATA'
@@ -22,7 +20,7 @@ export const ENABLE_ACTIVITY_FEEDBACK = 'ENABLE_ACTIVITY_FEEDBACK'
 // When fetch succeeds, receiveData action will be called with the response object (json in this case).
 // REQUEST_DATA action will be processed by the reducer immediately.
 // See: api-middleware.js
-function requestData() {
+function requestData () {
   return (dispatch, getState) => {
     dispatch({
       type: REQUEST_DATA,
@@ -31,22 +29,22 @@ function requestData() {
         successAction: receiveData,
         errorAction: receiveError
       }
-    });
+    })
   }
 }
 
-function receiveData(response) {
+function receiveData (response) {
   return (dispatch, getState) => {
     dispatch({
       type: RECEIVE_DATA,
       response: response,
       receivedAt: Date.now()
-    });
+    })
     dispatch(requestRubric())
-  };
+  }
 }
 
-function receiveError(response) {
+function receiveError (response) {
   return {
     type: RECEIVE_ERROR,
     response: response,
@@ -54,7 +52,7 @@ function receiveError(response) {
   }
 }
 
-function shouldFetchData(state) {
+function shouldFetchData (state) {
   const data = state.get('data')
   if (data.get('isFetching')) {
     return false
@@ -62,7 +60,7 @@ function shouldFetchData(state) {
   return data.get('didInvalidate') || !data.get('lastUpdated')
 }
 
-export function fetchDataIfNeeded() {
+export function fetchDataIfNeeded () {
   return (dispatch, getState) => {
     if (shouldFetchData(getState())) {
       return dispatch(requestData())
@@ -70,7 +68,7 @@ export function fetchDataIfNeeded() {
   }
 }
 
-function mappedCopy(src, fieldMappings) {
+function mappedCopy (src, fieldMappings) {
   const dst = {}
   var key, dstKey
   for (key in src) {
@@ -80,18 +78,19 @@ function mappedCopy(src, fieldMappings) {
   return dst
 }
 
-export function invalidateData() {
+export function invalidateData () {
   return {type: INVALIDATE_DATA}
 }
 
-export function setQuestionSelected(key, value) {
+export function setQuestionSelected (key, value) {
   return (dispatch, getState) => {
     const questionsMap = getState().getIn(['report', 'questions'])
     // the questionsMap represents the previous state of the checkboxes so the filter needs to special case the current key
     const selectedQuestionKeys = [...questionsMap.values()].filter(q => q.get('key') === key ? value : q.get('selected')).map(q => q.get('key'))
     dispatch({
       type: SET_QUESTION_SELECTED,
-      key, value,
+      key,
+      value,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
       callAPI: {
         type: 'updateReportSettings',
@@ -105,9 +104,8 @@ export function setQuestionSelected(key, value) {
   }
 }
 
-export function showSelectedQuestions() {
+export function showSelectedQuestions () {
   return (dispatch, getState) => {
-    const questionsMap = getState().getIn(['report', 'questions'])
     dispatch({
       type: SHOW_SELECTED_QUESTIONS,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
@@ -123,7 +121,7 @@ export function showSelectedQuestions() {
   }
 }
 
-export function showAllQuestions() {
+export function showAllQuestions () {
   return {
     type: SHOW_ALL_QUESTIONS,
     // Send data to server. Don't care about success or failure. See: api-middleware.js
@@ -138,14 +136,14 @@ export function showAllQuestions() {
   }
 }
 
-export function setNowShowing(value) {
+export function setNowShowing (value) {
   return {
     type: SET_NOW_SHOWING,
     value
   }
 }
 
-export function setAnonymous(value) {
+export function setAnonymous (value) {
   return {
     type: SET_ANONYMOUS,
     value,
@@ -159,23 +157,23 @@ export function setAnonymous(value) {
   }
 }
 
-export function setAnswerSelectedForCompare(key, value) {
+export function setAnswerSelectedForCompare (key, value) {
   return {type: SET_ANSWER_SELECTED_FOR_COMPARE, key, value}
 }
 
-export function showCompareView(embeddableKey) {
+export function showCompareView (embeddableKey) {
   return {type: SHOW_COMPARE_VIEW, embeddableKey}
 }
 
-export function hideCompareView() {
+export function hideCompareView () {
   return {type: HIDE_COMPARE_VIEW}
 }
 
-export function showFeedbackView(embeddableKey) {
+export function showFeedbackView (embeddableKey) {
   return {type: SHOW_FEEDBACK, embeddableKey}
 }
 
-export function updateFeedback(answerKey, feedback) {
+export function updateFeedback (answerKey, feedback) {
   const feedbackData = mappedCopy(feedback, {hasBeenReviewed: 'has_been_reviewed'})
   feedbackData.answer_key = answerKey
   return {
@@ -192,8 +190,7 @@ export function updateFeedback(answerKey, feedback) {
   }
 }
 
-
-export function enableFeedback(embeddableKey, feedbackFlags) {
+export function enableFeedback (embeddableKey, feedbackFlags) {
   const mappings = {
     feedbackEnabled: 'enable_text_feedback',
     rubricEnabled: 'rubric_enabled',
@@ -216,7 +213,7 @@ export function enableFeedback(embeddableKey, feedbackFlags) {
   }
 }
 
-export function updateActivityFeedback(activityFeedbackKey, feedback) {
+export function updateActivityFeedback (activityFeedbackKey, feedback) {
   const feedbackData = mappedCopy(feedback, {
     hasBeenReviewed: 'has_been_reviewed',
     activityFeedbackId: 'activity_feedback_id',
@@ -237,7 +234,7 @@ export function updateActivityFeedback(activityFeedbackKey, feedback) {
   }
 }
 
-export function enableActivityFeedback(activityId, feedbackFlags) {
+export function enableActivityFeedback (activityId, feedbackFlags) {
   const mappings = {
     enableTextFeedback: 'enable_text_feedback',
     scoreType: 'score_type',

@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react'
 import Question from '../components/question'
 import MaybeLink from '../components/maybe-link'
-import Sticky from 'react-stickynode';
+import Sticky from 'react-stickynode'
 import '../../css/page.less'
 
 export default class Page extends PureComponent {
-  render() {
+  render () {
     const { page, reportFor } = this.props
     const pageName = page.get('name')
-    const showLinks = reportFor == 'class'
+    const showLinks = reportFor === 'class'
     const url = showLinks ? page.get('url') : null
     return (
       <div className={`page ${page.get('visible') ? '' : 'hidden'}`}>
@@ -21,7 +21,7 @@ export default class Page extends PureComponent {
         </Sticky>
         <div>
           {page.get('children').map((question) => {
-              return <Question key={question.get('key')} question={question} reportFor={reportFor} url={url} />
+            return <Question key={question.get('key')} question={question} reportFor={reportFor} url={url} />
           })}
         </div>
       </div>

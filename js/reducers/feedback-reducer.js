@@ -4,8 +4,8 @@ import transformJSONResponse from '../core/transform-json-response'
 
 const INITIAL_FEEDBACK_STATE = Map({})
 
-export default function feedbackReducer(state = INITIAL_FEEDBACK_STATE, action) {
-  function updateFeedback(state, action) {
+export default function feedbackReducer (state = INITIAL_FEEDBACK_STATE, action) {
+  function updateFeedback (state, action) {
     const {answerKey, feedback} = action
     return state.mergeIn([answerKey], feedback)
   }

@@ -5,22 +5,19 @@ import FeedbackPanel from '../containers/feedback-panel'
 import '../../css/question-summary.less'
 
 export default class QuestionSummary extends PureComponent {
-
-
-
-  get answered() {
+  get answered () {
     return this.props.answers.toJS().filter(a => a.type !== 'NoAnswer').length
   }
 
-  get notAnswered() {
+  get notAnswered () {
     return this.props.answers.toJS().filter(a => a.type === 'NoAnswer').length
   }
 
-  get total() {
+  get total () {
     return this.props.answers.size
   }
 
-  render() {
+  render () {
     const { question } = this.props
     const notAnsweredDiv = (<div><strong>Not answered:</strong> {this.notAnswered}</div>)
 
@@ -32,11 +29,11 @@ export default class QuestionSummary extends PureComponent {
         <Prompt question={question} />
         <div className='stats'>
 
-          {this.notAnswered > 0 ? notAnsweredDiv : ""}
+          {this.notAnswered > 0 ? notAnsweredDiv : ''}
 
-          <FeedbackPanel question={this.props.question} answers={this.props.answers}/>
+          <FeedbackPanel question={this.props.question} answers={this.props.answers} />
         </div>
-        <div className='clear-fix'></div>
+        <div className='clear-fix' />
       </div>
     )
   }

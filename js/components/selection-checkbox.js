@@ -1,21 +1,16 @@
 import React, { PureComponent } from 'react'
 
 export default class SelectionCheckbox extends PureComponent {
-  constructor(props) {
-    super(props)
-  }
-
-
-  onChange(evt) {
+  onChange (evt) {
     const {questionKey, setQuestionSelected} = this.props
     setQuestionSelected(questionKey, evt.target.checked)
   }
 
-  render() {
+  render () {
     const {selected, hideControls} = this.props
     if (hideControls) {
       return null
     }
-    return(<input type='checkbox' checked={selected} onChange={this.onChange.bind(this)}/>)
+    return (<input type='checkbox' checked={selected} onChange={this.onChange.bind(this)} />)
   }
 }
