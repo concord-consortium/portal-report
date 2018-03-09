@@ -110,3 +110,10 @@ export function getActivityFeedbacks(state, activityId) {
   const result = students.map( s => activityFeedbackFor(state, activity, s))
   return students.map( s => activityFeedbackFor(state, activity, addRealName(s))).toList()
 }
+
+export function getActivityRubric(state, activityId) {
+  const activity = state.getIn(['report','activities', activityId.toString()])
+  const rubricUrl = activity.get('rubricUrl');
+  const rubric =  state.getIn(['rubrics', rubricUrl]);
+  return rubric;
+}

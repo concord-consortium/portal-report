@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from 'react' // eslint-disable-line
 import ReactDom from 'react-dom'
 
 import Button from '../components/button'
@@ -69,17 +69,17 @@ class FeedbackPanel extends PureComponent {
   }
 
   setMaxScore(event) {
-    const value = parseInt(event.target.value) || null
+    const value = parseInt(event.target.value, 10) || null
     this.props.enableFeedback(this.props.question.get('key'), {maxScore: value})
   }
 
-  studentRowRef(index){
+  studentRowRef(index) {
     return `student-row-${index}`
   }
 
   scrollStudentIntoView(eventProxy) {
     const index = eventProxy.target.value
-    const ref = this.studentRowRef(index-1)
+    const ref = this.studentRowRef(index - 1)
     const itemComponent = this.refs[ref]
     if (itemComponent) {
       const domNode = ReactDom.findDOMNode(itemComponent)
@@ -99,14 +99,13 @@ class FeedbackPanel extends PureComponent {
   }
 
   render() {
-    const question      = this.props.question
+    const { question, answers } = this.props
     const showing       = this.state.showFeedbackPanel
     const prompt        = question.get('prompt')
     const number        = question.get('questionNumber')
-    const answers       = this.props.answers
 
     const realAnswers     = answers.filter(a => a.get('type') != 'NoAnswer')
-    const needingFeedback = realAnswers.filter( a => ! this.answerIsMarkedComplete(a) )
+    const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a))
 
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers
     const numAnswers       = realAnswers.count()
@@ -118,30 +117,31 @@ class FeedbackPanel extends PureComponent {
     const feedbackEnabled = question.get('feedbackEnabled') || false
     const maxScore = question.get('maxScore') || 0
 
-    const showGettingStarted = (!scoreEnabled) && (!feedbackEnabled)
-    const studentsPulldown = filteredAnswers.map( (a) => {
+    const showGettingStarted = !scoreEnabled && !feedbackEnabled
+    const studentsPulldown = filteredAnswers.map((a) => {
       return {
         realName: a.getIn(['student', 'realName']),
-        id: a.getIn(['student','id']),
+        id: a.getIn(['student', 'id']),
         answer: a,
       }
     })
 
-    if((!scoreEnabled) && (!feedbackEnabled)) {
+    if(!scoreEnabled && !feedbackEnabled) {
       numNeedsFeedback = 0
       numFeedbackGiven = 0
     }
 
 
-    if (!showing) { return (
-      <div className="feedback-container">
-        <FeedbackButton
-          feedbackEnabled={feedbackEnabled || scoreEnabled}
-          needsReviewCount={numNeedsFeedback}
-          disabled={numAnswers < 1}
-          showFeedback={this.showFeedback}/>
-      </div>
-    )}
+    if (!showing) {
+      return (
+        <div className="feedback-container">
+          <FeedbackButton
+            feedbackEnabled={feedbackEnabled || scoreEnabled}
+            needsReviewCount={numNeedsFeedback}
+            disabled={numAnswers < 1}
+            showFeedback={this.showFeedback}/>
+        </div>)
+    }
     return (
       <div className="feedback-container">
         <div className="lightbox-background" />
@@ -167,11 +167,13 @@ class FeedbackPanel extends PureComponent {
               <input id="scoreEnabled" checked={scoreEnabled} type="checkbox" onChange={this.enableScore}/>
               <label htmlFor="scoreEnabled">Give Score</label>
               <br/>
-              { scoreEnabled ?
-                <div>
-                  <label className="max-score">Max. Score</label>
-                  <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
-                </div> : ""
+              { scoreEnabled
+                ?
+                  <div>
+                    <label className="max-score">Max. Score</label>
+                    <input className="max-score-input" value={maxScore} onChange={this.setMaxScore}/>
+                  </div>
+                : ""
               }
             </div>
           </div>
@@ -222,7 +224,7 @@ function mapStateToProps(state) {
   return { feedbacks: state.get('feedbacks')}
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     updateFeedback: (answerKey, feedback) => dispatch(updateFeedback(answerKey, feedback)),
     enableFeedback: (embeddableKey, feedbackFlags)  => dispatch(enableFeedback(embeddableKey, feedbackFlags)),

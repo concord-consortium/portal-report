@@ -13,6 +13,8 @@
         "name": "Test Activity 1 (sequence part)",
         "enable_text_feedback": false,
         "score_type": "none",
+        "use_rubric": false,
+        "rubric_url": "https://jsonblob.com/api/jsonBlob/04ef35c9-2186-11e8-8521-3152b2a8394e",
         "max_score": 10,
         "activity_feedback":[
           {

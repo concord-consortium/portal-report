@@ -8,6 +8,7 @@ export default function configureStore(initialState) {
   return createStore(
     rootReducer,
     initialState,
-    applyMiddleware(thunkMiddleware, apiMiddleware /*, createLogger() */)
+    // apiMiddleware can now use thunk when calling `next()`
+    applyMiddleware(apiMiddleware, thunkMiddleware) //, createLogger())
   )
 }
