@@ -22,7 +22,10 @@ const DEFAULT_REPORT_FOR = 'class'
 // into normalized form where objects are grouped by ID.
 // See: https://github.com/gaearon/normalizr
 export default function transformJSONResponse (json) {
-  const camelizedJson = humps.camelizeKeys(json)
+  const camelizedJson = humps.camelizeKeys(json,
+    // don't convert keys that are only upercase letters and numbers.
+    // This is useful for rubric keys for example "C2" and "R1"
+    (key, convert) => /^[A-Z0-9_]+$/.test(key) ? key : convert(key))
 
   const student = new schema.Entity('students')
   const investigation = new schema.Entity('investigations')

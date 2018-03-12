@@ -5,10 +5,28 @@ export default class RubricBox extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {}
+    this.updateSelection = this.updateSelection.bind(this)
+  }
+
+  updateSelection (evt, critId, ratingId) {
+    const { rubric, rubricChange, rubricFeedback } = this.props
+    const change = {}
+    const rating = rubric.ratings.find((r) => r.id === ratingId)
+    const criteria = rubric.criteria.find((c) => c.id === critId)
+    const score = rating.score
+    const label = rating.label
+    change[critId] = {
+      id: ratingId,
+      score: score,
+      label: label,
+      description: criteria.ratingDescriptions[ratingId]
+    }
+    const newFeedback = Object.assign({}, rubricFeedback, change)
+    rubricChange(newFeedback)
   }
 
   render () {
-    const {rubric} = this.props
+    const { rubric, rubricFeedback, learnerId } = this.props
     if (!rubric) { return null } else {
       return (
         <div className='rubric-box'>
@@ -29,13 +47,23 @@ export default class RubricBox extends PureComponent {
                       <td>{crit.description}</td>
                       {
                         rubric.ratings.map((rating) => {
+                          const critId = crit.id
+                          const ratingId = rating.id
+                          const radioButtonKey = `${critId}-${ratingId}`
+                          const checked = rubricFeedback &&
+                            rubricFeedback[critId] &&
+                            rubricFeedback[critId].id === ratingId
+
                           return (
-                            <td key={rating.id}>
+                            <td key={radioButtonKey}>
                               <div className='center'>
                                 <input
-                                  name={crit.id}
+                                  name={`${learnerId}_${critId}`}
                                   type='radio'
-                                  id='rating.id' />
+                                  checked={checked}
+                                  value={ratingId}
+                                  onChange={(e) => this.updateSelection(e, critId, ratingId)}
+                                  id={radioButtonKey} />
                               </div>
                             </td>
                           )

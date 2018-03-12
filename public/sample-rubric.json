@@ -1,0 +1,46 @@
+{
+    "id": "RBK1",
+    "formatVersion": "1.0.0",
+    "version": "12",
+    "updatedMsUTC": 1519424087822,
+    "originUrl": "http://concord.org/rubrics/RBK1.json",
+    "scoreUsingPoints": false,
+    "showRatingDescriptions": false,
+    "criteria": [
+        {
+            "id": "C1",
+            "description": "Use mathematical and/or computational representations to support explanations of factors that affect carrying capacity of ecosystems at different scales. ",
+            "ratingDescriptions": {
+                "R1": "Not meeting expected goals.",
+                "R2": "Approaching proficiency.",
+                "R3": "Exhibiting proficiency."
+            }
+        },
+        {
+            "id": "C2",
+            "description": "Develop a model to illustrate the role of photosynthesis and cellular respiration in the cycling of carbon among the biosphere, atmosphere, hydrosphere, and geosphere.",
+            "ratingDescriptions": {
+                "R1": "Not meeting expected goals.",
+                "R2": "Approaching proficiency.",
+                "R3": "Exhibiting proficiency."
+            }
+        }
+    ],
+    "ratings": [
+        {
+            "id": "R1",
+            "label": "Beginning",
+            "score": 1
+        },
+        {
+            "id": "R2",
+            "label": "Developing",
+            "score": 2
+        },
+        {
+            "id": "R3",
+            "label": "Proficient",
+            "score": 3
+        }
+    ]
+}
