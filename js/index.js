@@ -6,11 +6,11 @@ import App from './containers/app'
 import configureStore from './store/configure-store'
 
 const store = configureStore()
-window.store = store;
+window.store = store
 
 render(
   <Provider store={store}>
-    <App/>
+    <App />
   </Provider>,
   document.getElementById('app')
 )

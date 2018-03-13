@@ -21,8 +21,8 @@ export default store => next => action => {
   return next(action)
 }
 
-function callApi(type, data) {
-  switch(type) {
+function callApi (type, data) {
+  switch (type) {
     case 'fetchReportData':
       return fetchReportData()
     case 'updateReportSettings':
