@@ -218,7 +218,8 @@ export function updateActivityFeedback (activityFeedbackKey, feedback) {
     hasBeenReviewed: 'has_been_reviewed',
     activityFeedbackId: 'activity_feedback_id',
     learnerId: 'learner_id',
-    feedback: 'text_feedback'
+    feedback: 'text_feedback',
+    rubricFeedback: 'rubric_feedback'
   })
   feedbackData.feedback_key = activityFeedbackKey
   return {
@@ -239,7 +240,8 @@ export function enableActivityFeedback (activityId, feedbackFlags) {
     enableTextFeedback: 'enable_text_feedback',
     scoreType: 'score_type',
     maxScore: 'max_score',
-    activityFeedbackId: 'activity_feedback_id'
+    activityFeedbackId: 'activity_feedback_id',
+    useRubric: 'use_rubric'
   }
   const feedbackSettings = mappedCopy(feedbackFlags, mappings)
   return {

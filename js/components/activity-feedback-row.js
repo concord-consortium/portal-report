@@ -13,11 +13,13 @@ export default class ActivityFeedbackRow extends PureComponent {
     this.scoreChange = this.scoreChange.bind(this)
     this.completeChange = this.completeChange.bind(this)
     this.changeFeedback = this.changeFeedback.bind(this)
+    this.rubricChange = this.rubricChange.bind(this)
   }
 
   changeFeedback (answerKey, newData) {
     const oldData = this.fieldValues()
-    this.props.updateFeedback(answerKey, Object.assign({}, oldData, newData))
+    const newRecord = Object.assign({}, oldData, newData)
+    this.props.updateFeedback(answerKey, newRecord)
   }
 
   scoreChange (e, answerKey) {
@@ -27,6 +29,10 @@ export default class ActivityFeedbackRow extends PureComponent {
 
   completeChange (e, answerKey) {
     this.changeFeedback(answerKey, {hasBeenReviewed: e.target.checked})
+  }
+
+  rubricChange (answerKey, rubricFeedback) {
+    this.changeFeedback(answerKey, {rubricFeedback})
   }
 
   renderFeedbackForm (answerKey, disableFeedback, feedback) {
@@ -64,30 +70,29 @@ export default class ActivityFeedbackRow extends PureComponent {
   fieldValues () {
     const { studentActivityFeedback } = this.props
     const feedbackRecord = studentActivityFeedback.get('feedbacks').first()
-    let scoreString = ''
-    let feedback = ''
-    let complete = false
-    if (feedbackRecord) {
-      scoreString = feedbackRecord.get('score')
-      feedback = feedbackRecord.get('feedback')
-      complete = feedbackRecord.get('hasBeenReviewed')
-    }
-    const score = parseInt(scoreString, 10) || 0
+    const recordJS = feedbackRecord
+      ? feedbackRecord.toJS()
+      : {}
+    let {score, feedback, hasBeenReviewed, rubricFeedback} = recordJS
+    score = score || ''
+    score = parseInt(score, 10) || 0
+    feedback = feedback || ''
+    rubricFeedback = rubricFeedback || {}
 
     return {
       score,
       feedback,
-      complete,
+      rubricFeedback,
+      complete: hasBeenReviewed,
       learnerId: this.props.studentActivityFeedback.get('learnerId'),
       activityFeedbackId: this.props.activityFeedbackId
     }
   }
 
   renderFeedbackSection (studentFeedback) {
+    const { feedback, score, complete, learnerId, rubricFeedback } = this.fieldValues()
+    const { useRubric, feedbackEnabled, scoreType, autoScore } = this.props
     const activityFeedbackKey = studentFeedback.get('key')
-
-    const { feedback, score, complete, learnerId } = this.fieldValues()
-    const {useRubric, feedbackEnabled, scoreType, autoScore} = this.props
     const scoreEnabled = scoreType !== 'none'
     const automaticScoring = scoreType === 'auto'
 
@@ -101,7 +106,11 @@ export default class ActivityFeedbackRow extends PureComponent {
         <div className='feedback-content'>
           {
             useRubric
-              ? <RubricBox rubric={this.props.rubric} />
+              ? <RubricBox
+                learnerId={learnerId}
+                rubric={this.props.rubric}
+                rubricFeedback={rubricFeedback}
+                rubricChange={(rubricFeedback) => this.rubricChange(activityFeedbackKey, rubricFeedback)} />
               : null
           }
           {

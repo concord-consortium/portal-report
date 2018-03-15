@@ -13,8 +13,8 @@
         "name": "Test Activity 1 (sequence part)",
         "enable_text_feedback": false,
         "score_type": "none",
-        "use_rubric": false,
-        "rubric_url": "https://jsonblob.com/api/jsonBlob/04ef35c9-2186-11e8-8521-3152b2a8394e",
+        "use_rubric": true,
+        "rubric_url": "sample-rubric.json",
         "max_score": 10,
         "activity_feedback":[
           {
@@ -24,7 +24,21 @@
               {
                 "score": 10,
                 "feedback": "good",
-                "has_been_reviewed": true
+                "has_been_reviewed": false,
+                "rubric_feedback": {
+                  "C1": {
+                    "id": "R1",
+                    "score": 1,
+                    "label": "Beginning",
+                    "description": "Not meeting expected goals."
+                    },
+                    "C2": {
+                    "id": "R2",
+                    "score": 2,
+                    "label": "Developing",
+                    "description": "Approaching proficiency."
+                    }
+                }
               }
             ]
           }
@@ -53,6 +67,7 @@
                     "is_required": false,
                     "feedback_enabled": true,
                     "score_enabled": true,
+                    "max_score": 10,
                     "key": "Embeddable::MultipleChoice|116",
                     "type": "Embeddable::MultipleChoice",
                     "answers": [
@@ -778,7 +793,7 @@
                     ],
                     "feedback_enabled": false,
                     "score_enabled": false,
-                    "max_score": 0
+                    "max_score": 10
                   },
                   {
                     "id": 1022,
@@ -848,7 +863,7 @@
                     ],
                     "feedback_enabled": false,
                     "score_enabled": false,
-                    "max_score": 0
+                    "max_score": 10
                   }
                 ]
               }
@@ -862,7 +877,7 @@
         "type": "Activity",
         "name": "Test activity 3 (sequence part)",
         "enable_text_feedback": true,
-        "score_type": "none",
+        "score_type": "manual",
         "max_score": 10,
         "activity_feedback":[
           {
