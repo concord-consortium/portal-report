@@ -18,8 +18,7 @@ export function rubricReducer (state = INITIAL_RUBRIC_STATE, action) {
       return state
     case LOAD_RUBRIC:
       const {url, rubric} = action
-      return state.set(url, rubric)
-
+      return state.set(url, Map(rubric))
     default:
       return state
   }
