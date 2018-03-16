@@ -4,29 +4,44 @@ import { enableActivityFeedback } from './index'
 export const LOAD_RUBRIC = 'LOAD_RUBRIC'
 export const REQUEST_RUBRIC = 'REQUEST_RUBRIC'
 
+const rubricUrlCache = {}
+
+const notInCache = (url) => {
+  return (!rubricUrlCache[url])
+}
+
 const exists = (immutable, fieldName) => {
   const value = immutable.get(fieldName)
   return (value && value.length && value.length > 0) ||
          (value && value.size && value.size > 0)
 }
 
-const urlCache = {}
+/*
+  addRubric is called after we have received the rubric
+  data by making a request to rubricUrl. We cache the response
+  and also update the portal activity feedback settings to include
+  the complete json for the rubric.
+*/
 const addRubric = (data) => {
   const {url, rubric} = data
   return (dispatch, getState) => {
     const activities = getState().getIn(['report', 'activities'])
-    const updatable = activities
+
+    // Activities from the portal without rubric _content_.
+    // If the activities specify a rubricUrl and that url is
+    // the same as we just received prepare to update the portal
+    const needToSaveRubricActs = activities
       .filter(act => !exists(act, 'rubric'))
       .filter(act => act.get('rubricUrl') === url)
 
-    urlCache[url] = rubric
+    rubricUrlCache[url] = rubric
     dispatch({
       type: LOAD_RUBRIC,
       url,
       rubric
     })
 
-    updatable.forEach(act => {
+    needToSaveRubricActs.forEach(act => {
       const activityId = act.get('id')
       const activityFeedbackId = act.get('activityFeedbackId')
       const feedbackFlags = {
@@ -34,15 +49,14 @@ const addRubric = (data) => {
         rubric,
         rubricUrl: url
       }
+      // Event will trigger API call that will update the rubric in the portal.
       dispatch(enableActivityFeedback(activityId, feedbackFlags))
     })
   }
 }
 
-const notInCache = (url) => {
-  return (!urlCache[url])
-}
-
+// The api-middlewear calls this function when we need
+// to load rubric in from a rubricUrl.
 export function loadRubric (data) {
   const isUrl = (string) => string && string.length && string.length > 0
   const rubricUrl = data
@@ -60,7 +74,7 @@ export function loadRubric (data) {
             reject(e)
           })
       } else {
-        resolve({rubricUrl, rubric: urlCache[rubricUrl]})
+        resolve({rubricUrl, rubric: rubricUrlCache[rubricUrl]})
       }
     } else {
       resolve({})
@@ -76,6 +90,8 @@ export function requestRubric () {
     const withoutRubric = activities.filter(act => !exists(act, 'rubric'))
     const needingFetch = withoutRubric.filter(act => exists(act, 'rubricUrl'))
 
+    // We load existing rubric (in complete activites) into the store
+    // and into the rubricUrlCache ...
     withRubric.forEach(a => {
       dispatch({
         type: LOAD_RUBRIC,
@@ -84,6 +100,7 @@ export function requestRubric () {
       })
     })
 
+    // Make requests for all the missing rubric
     needingFetch.map(a => a.get('rubricUrl'))
       .forEach((u) => {
         dispatch({
