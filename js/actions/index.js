@@ -1,4 +1,4 @@
-import { requestRubric } from './load-rubric'
+import { requestRubric } from './rubric'
 export const INVALIDATE_DATA = 'INVALIDATE_DATA'
 export const REQUEST_DATA = 'REQUEST_DATA'
 export const RECEIVE_DATA = 'RECEIVE_DATA'

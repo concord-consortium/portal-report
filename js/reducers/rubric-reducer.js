@@ -1,6 +1,6 @@
 import { Map } from 'immutable'
 import { RECEIVE_DATA } from '../actions/index'
-import { LOAD_RUBRIC, REQUEST_RUBRIC } from '../actions/load-rubric'
+import { LOAD_RUBRIC, REQUEST_RUBRIC } from '../actions/rubric'
 
 const INITIAL_RUBRIC_STATE = Map({})
 
