@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import Sticky from 'react-stickynode'
-
 import Section from '../components/section'
 import FeedbackButton from '../components/feedback-button'
 import ActivityFeedbackForStudent from '../components/activity-feedback-for-student'
@@ -11,7 +10,8 @@ import {
   getQuestions,
   getFeedbacksNeedingReview,
   getComputedMaxScore,
-  calculateStudentScores
+  calculateStudentScores,
+  getActivityRubric
 } from '../core/activity-feedback-data'
 
 import '../../css/activity.less'
@@ -45,7 +45,8 @@ class Activity extends PureComponent {
       needsReviewCount,
       feedbacks,
       computedMaxScore,
-      autoScores
+      autoScores,
+      rubric
     } = this.props
     const activityName = activity.get('name')
     const showText = activity.get('enableTextFeedback')
@@ -65,8 +66,8 @@ class Activity extends PureComponent {
       />
       : ''
 
-    const feedbackButton = reportFor === 'class'
-      ? <span className='feedback'>
+    let feedbackButton =
+      <span className='feedback'>
         <FeedbackButton
           text='Provide overall feedback'
           needsReviewCount={needsReviewCount}
@@ -74,16 +75,25 @@ class Activity extends PureComponent {
           showFeedback={showFeedback}
         />
       </span>
-      : <ActivityFeedbackForStudent
-        student={reportFor}
-        feedbacks={feedbacks}
-        showScore={showScore}
-        maxScore={maxScore}
-        showText={showText}
-        useRubric={useRubric}
-        autoScore={scoreType === 'auto' ? autoScores.get(reportFor.get('id')) : null}
-        feedbackEnabled={feedbackEnabled}
-      />
+
+    if (reportFor !== 'class') {
+      const autoScore = scoreType === 'auto'
+        ? autoScores.get(reportFor.get('id'))
+        : null
+
+      feedbackButton =
+        <ActivityFeedbackForStudent
+          student={reportFor}
+          feedbacks={feedbacks}
+          showScore={showScore}
+          maxScore={maxScore}
+          showText={showText}
+          useRubric={useRubric}
+          rubric={rubric}
+          autoScore={autoScore}
+          feedbackEnabled={feedbackEnabled}
+        />
+    }
 
     return (
       <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
@@ -110,7 +120,8 @@ function mapStateToProps (state, ownProps) {
   const autoScores = calculateStudentScores(state, questions)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
   const needsReviewCount = feedbacksNeedingReview.size
-  return { feedbacks, feedbacksNeedingReview, needsReviewCount, autoScores, computedMaxScore }
+  const rubric = getActivityRubric(state, actId)
+  return { feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => { return {} }

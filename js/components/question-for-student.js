@@ -20,7 +20,7 @@ export default class QuestionForStudent extends PureComponent {
         </div>
         <Prompt question={question} />
         <Answer answer={answer} />
-        <Feedback answer={answer} question={question} htmlFor='student' />
+        <Feedback answer={answer} student={student} question={question} htmlFor='student' />
       </div>
     )
   }

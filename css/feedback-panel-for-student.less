@@ -6,8 +6,16 @@
     border-radius: 0.5em;
     background-color: hsl(0,0%, 95%);
     max-width: 500px;
-    box-shadow: 1px 1px 3px hsla(0,0%, 50%, 0.5); 
+    width: 50vw;
+    box-shadow: 1px 1px 3px hsla(0,0%, 50%, 0.5);
     font-weight: lighter;
+    font-size: 10pt;
+    @media print {
+      font-size: 9pt;
+      background-color: white;
+      border-radius: 0px;
+      box-shadow: none;
+    }
     .heading {
       color: hsl(0,0%,50%);
       font-weight: bold;

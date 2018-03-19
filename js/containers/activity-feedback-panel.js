@@ -4,7 +4,7 @@ import Button from '../components/button'
 import FeedbackFilter from '../components/feedback-filter'
 import FeedbackOverview from '../components/feedback-overview'
 import FeedbackOptions from '../components/feedback-options'
-import FeedbackRow from '../components/activity-feedback-row'
+import ActivityFeedbackRow from '../components/activity-feedback-row'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback } from '../actions'
@@ -161,7 +161,7 @@ class ActivityFeedbackPanel extends PureComponent {
                 <ReactCSSTransitionGroup transitionName='answer' transitionEnterTimeout={400} transitionLeaveTimeout={300}>
                   { filteredFeedbacks.map((studentActivityFeedback, i) => {
                     const studentId = studentActivityFeedback.get('studentId')
-                    return <FeedbackRow
+                    return <ActivityFeedbackRow
                       studentActivityFeedback={studentActivityFeedback}
                       activityFeedbackId={activityFeedbackId}
                       key={`${activityFeedbackId}-${studentId}`}
