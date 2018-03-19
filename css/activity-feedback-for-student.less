@@ -1,0 +1,45 @@
+.activity-feedback {
+  display: flex;
+  justify-content: flex-end;
+  .actFeedbackPanel {
+    padding: 0.5em;
+    border-radius: 0.5em;
+    background-color: hsl(0,0%, 95%);
+    max-width: 500px;
+    box-shadow: 1px 1px 3px hsla(0,0%, 50%, 0.5); 
+    font-weight: lighter;
+    .heading {
+      color: hsl(0,0%,50%);
+      font-weight: bold;
+    }
+    div {
+      font-family: helvetica, arial, sans-serif;
+      margin-bottom: 0.8em;
+    }
+    .score {
+      text-align: right;
+      margin-bottom: 0px;
+      .scoreLabel {
+        color: hsl(0,0%,50%);
+        font-weight: bold;
+      }
+    }
+    .rating { font-weight: normal;}
+  }
+
+}
+
+.active {
+  .actFeedbackPanel {
+    display: none;
+  }
+}
+
+@media print {
+  .report .activity-feedback .feedback-section  h1 {
+    display: inline;
+    margin-right: 0.5em;
+    font-size: 1em;
+    font-weight: normal;
+  }
+}

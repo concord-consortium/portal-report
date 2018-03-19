@@ -53,6 +53,7 @@ class Activity extends PureComponent {
     const _maxScore = activity.get('maxScore')
     const maxScore = scoreType === 'auto' ? computedMaxScore : _maxScore
     const showScore = (scoreType !== 'none')
+    const useRubric = activity.get('useRubric')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
     const feedbackEnabled = showScore || showText
@@ -79,6 +80,7 @@ class Activity extends PureComponent {
         showScore={showScore}
         maxScore={maxScore}
         showText={showText}
+        useRubric={useRubric}
         autoScore={scoreType === 'auto' ? autoScores.get(reportFor.get('id')) : null}
         feedbackEnabled={feedbackEnabled}
       />

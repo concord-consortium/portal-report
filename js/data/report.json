@@ -11,8 +11,8 @@
         "activity_feedback_id": 29,
         "type": "Activity",
         "name": "Test Activity 1 (sequence part)",
-        "enable_text_feedback": false,
-        "score_type": "none",
+        "enable_text_feedback": true,
+        "score_type": "manual",
         "use_rubric": true,
         "rubric_url": "sample-rubric.json",
         "max_score": 10,
@@ -22,9 +22,9 @@
             "learner_id": 215,
             "feedbacks": [
               {
-                "score": 10,
+                "score": 9,
                 "feedback": "good",
-                "has_been_reviewed": false,
+                "has_been_reviewed": true,
                 "rubric_feedback": {
                   "C1": {
                     "id": "R1",
