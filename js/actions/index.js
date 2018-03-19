@@ -235,7 +235,7 @@ export function updateActivityFeedback (activityFeedbackKey, feedback) {
   }
 }
 
-export function enableActivityFeedback (activityId, feedbackFlags) {
+export function enableActivityFeedback (activityId, feedbackFlags, invalidatePreviousFeedback = true) {
   const mappings = {
     enableTextFeedback: 'enable_text_feedback',
     scoreType: 'score_type',
@@ -247,6 +247,7 @@ export function enableActivityFeedback (activityId, feedbackFlags) {
   return {
     type: ENABLE_ACTIVITY_FEEDBACK,
     activityId,
+    invalidatePreviousFeedback,
     feedbackFlags,
     callAPI: {
       type: 'updateReportSettings',
