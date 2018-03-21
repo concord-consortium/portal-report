@@ -23,6 +23,7 @@ import {
   NO_SCORE,
   AUTOMATIC_SCORE
 } from '../util/scoring-constants'
+import { truncate } from '../util/misc'
 
 class ActivityFeedbackPanel extends PureComponent {
   constructor (props) {
@@ -99,7 +100,7 @@ class ActivityFeedbackPanel extends PureComponent {
       rubric
     } = this.props
     const numNotAnswered = notAnswerd.size
-    const prompt = activity.get('name')
+    const prompt = truncate(activity.get('name') || '', 200)
     const scoreType = activity.get('scoreType') || NO_SCORE
     const showText = activity.get('enableTextFeedback')
     const useRubric = activity.get('useRubric')
@@ -125,16 +126,13 @@ class ActivityFeedbackPanel extends PureComponent {
       <div className='feedback-container'>
         <div className='lightbox-background' />
         <div className='feedback-panel'>
-          <div className='feedback-header'>
-            <div className='left'>
-              <h2>{prompt} </h2>
-              <FeedbackOverview
-                numNoAnswers={numNotAnswered}
-                numFeedbackGiven={numFeedbacksGivenReview}
-                numNeedsFeedback={numFeedbacksNeedingReview}
-              />
-            </div>
-
+          <div className='prompt' dangerouslySetInnerHTML={{ __html: prompt }} />
+          <div className='feedback-header tall'>
+            <FeedbackOverview
+              numNoAnswers={numNotAnswered}
+              numFeedbackGiven={numFeedbacksGivenReview}
+              numNeedsFeedback={numFeedbacksNeedingReview}
+            />
             <FeedbackOptions
               activity={this.props.activity}
               scoreEnabled={this.state.scoreEnabled}
@@ -142,7 +140,6 @@ class ActivityFeedbackPanel extends PureComponent {
               enableActivityFeedback={this.props.enableActivityFeedback}
               computedMaxScore={this.props.computedMaxScore}
             />
-
           </div>
 
           <div className='main-feedback'>

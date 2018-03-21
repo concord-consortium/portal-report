@@ -58,11 +58,11 @@ export default class ActivityFeedbackRow extends PureComponent {
   renderComplete (answerKey, complete) {
     return (
       <div className='feedback-complete'>
+        <span>Feedback Complete</span>
         <input
           checked={complete}
           type='checkbox'
           onChange={(e) => this.completeChange(e, answerKey)} />
-        Feedback Complete
       </div>
     )
   }
@@ -121,12 +121,12 @@ export default class ActivityFeedbackRow extends PureComponent {
           {
             scoreEnabled
               ? this.renderScore(activityFeedbackKey, disableScore, scoreToRender)
-              : ''
+              : null
           }
           {
             feedbackEnabled || scoreEnabled || useRubric
               ? this.renderComplete(activityFeedbackKey, complete)
-              : ''
+              : null
           }
         </div>
       </div>

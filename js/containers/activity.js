@@ -98,7 +98,7 @@ class Activity extends PureComponent {
     return (
       <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
         <Sticky top={60}>
-          <div>
+          <div className='act-header'>
             <h3>{activityName} </h3>
             { feedbackButton }
           </div>
