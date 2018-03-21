@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-
+import FeedbackPanelForStudent from '../components/feedback-panel-for-student'
 import '../../css/answer-feedback.less'
 
 class Feedback extends PureComponent {
@@ -56,26 +56,31 @@ class Feedback extends PureComponent {
   }
 
   render () {
-    const forWho = this.props.for || '' // student or teacher
-    const className = `answer-feedback ${forWho}`
+    const {student} = this.props
+    const showScore = this.scoreEnabled()
+    const showText = this.feedbackEnabled()
+    const feedbackEnabled = showText || showScore
+    const maxScore = this.props.question.get('maxScore')
     const feedback = this.getLatestFeedback()
-    const feedbackDisabled = !(this.feedbackEnabled() || this.scoreEnabled())
+    const score = feedback && feedback.get('score')
+    const textFeedback = feedback && feedback.get('feedback')
     const hasBeenReviewed = feedback && feedback.get('hasBeenReviewed')
-    const noFeedbackMessage = this.props.answer.get('answered')
-      ? 'No Feedback yet.'
-      : 'Not answered yet.'
-    if (feedbackDisabled) {
-      return (<div className={`${className} disabled`}>No feedback yet.</div>)
-    } else if (hasBeenReviewed) {
-      return (
-        <div className={className}>
-          {this.renderFeedback(feedback)}
-          {this.renderScore(feedback)}
-        </div>
-      )
-    } else {
-      return (<div className={className}>{noFeedbackMessage}</div>)
-    }
+    return (
+      <FeedbackPanelForStudent
+        student={student}
+        showScore={showScore}
+        maxScore={maxScore}
+        feedbackEnabled={feedbackEnabled}
+        showText={showText}
+        textFeedback={textFeedback}
+        score={score}
+        hasBeenReviewed={hasBeenReviewed}
+        useRubric={false}
+        rubric={null}
+        autoScore={false}
+        isOverall={false}
+      />
+    )
   }
 }
 

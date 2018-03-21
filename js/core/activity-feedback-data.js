@@ -109,6 +109,9 @@ export function getActivityFeedbacks (state, activityId) {
 export function getActivityRubric (state, activityId) {
   const activity = state.getIn(['report', 'activities', activityId.toString()])
   const rubricUrl = activity.get('rubricUrl')
-  const rubric = state.getIn(['rubrics', rubricUrl]).toJS()
-  return rubric
+  const rubric = state.getIn(['rubrics', rubricUrl])
+  if (rubric) {
+    return rubric.toJS ? rubric.toJS() : rubric
+  }
+  return null
 }

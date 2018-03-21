@@ -1,44 +1,21 @@
 import React, { PureComponent } from 'react'
-
-import '../../css/activity-feedback.less'
+import FeedbackPanelForStudent from '../components/feedback-panel-for-student'
 
 export default class ActivityFeedbackForStudent extends PureComponent {
-  renderTextSection (feedback) {
-    const { showText } = this.props
-    if (showText) {
-      return (
-        <div className='feedback-section written-feedback'>
-          <h1>Overall Feedback:</h1>
-          <span>{feedback.feedback}</span>
-        </div>
-      )
-    }
-    return <div />
-  }
-
-  renderScoreSection (feedback) {
-    const { showScore, maxScore, autoScore } = this.props
-    const score = autoScore || feedback.score
-    if (showScore) {
-      return (
-        <div className='feedback-section score'>
-          <h1>Overall Score:</h1>
-          <span className='score'>{score} / {maxScore} </span>
-        </div>
-      )
-    }
-    return <div />
-  }
-
   render () {
-    const {student, feedbacks, feedbackEnabled} = this.props
-    if (!feedbackEnabled) { return <div /> }
-
-    let feedback = {
-      hasBeenReviewed: false,
-      score: 0,
-      feedback: ''
-    }
+    const {
+      student,
+      feedbacks,
+      feedbackEnabled,
+      useRubric,
+      rubric,
+      showScore,
+      maxScore,
+      showText,
+      autoScore
+    } = this.props
+    let feedback = null
+    if (!feedbackEnabled) { return null }
     const _feedbacks = feedbacks
       .find((f) => f.get('studentId') === student.get('id'))
 
@@ -48,25 +25,28 @@ export default class ActivityFeedbackForStudent extends PureComponent {
         feedback = fblist.first().toJS()
       }
     }
-
     const showFeedback = (feedback && feedback.hasBeenReviewed)
-
-    const feedbackDiv =
-      <div className='feedback'>
-        { this.renderTextSection(feedback) }
-        { this.renderScoreSection(feedback) }
-      </div>
-
-    const noFeedbackDiv =
-      <div className='feedback noFeedback'>
-        No overall feedback yet.
-      </div>
-
-    const displayDiv = showFeedback ? feedbackDiv : noFeedbackDiv
+    const score = autoScore == null
+      ? feedback && feedback.score
+      : autoScore
+    const textFeedback = feedback && feedback.feedback
+    const hasBeenReviewed = feedback && feedback.hasBeenReviewed
+    const rubricFeedback = feedback && feedback.rubricFeedback
     return (
-      <div className='activity-feedback'>
-        { displayDiv }
-      </div>
-    )
+      <FeedbackPanelForStudent
+        student={student}
+        showScore={showScore}
+        maxScore={maxScore}
+        feedbackEnabled={showFeedback}
+        showText={showText}
+        textFeedback={textFeedback}
+        score={score}
+        hasBeenReviewed={hasBeenReviewed}
+        useRubric={useRubric}
+        rubric={rubric}
+        rubricFeedback={rubricFeedback}
+        autoScore={autoScore}
+        isOverall
+      />)
   }
 }

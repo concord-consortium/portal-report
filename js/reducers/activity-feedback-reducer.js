@@ -33,7 +33,10 @@ export function activityFeedbackReducer (state = INITIAL_ACTIVITY_FEEDBACK_STATE
     case UPDATE_ACTIVITY_FEEDBACK:
       return updateActivityFeedback(state, action)
     case ENABLE_ACTIVITY_FEEDBACK:
-      return markAnswersNeedReview(state, action)
+      if (action.invalidatePreviousFeedback) {
+        return markAnswersNeedReview(state, action)
+      }
+      return state
     default:
       return state
   }

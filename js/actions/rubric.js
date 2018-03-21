@@ -50,7 +50,8 @@ const addRubric = (data) => {
         rubricUrl: url
       }
       // Event will trigger API call that will update the rubric in the portal.
-      dispatch(enableActivityFeedback(activityId, feedbackFlags))
+      // Doesn't require that we invalidate student answers though.
+      dispatch(enableActivityFeedback(activityId, feedbackFlags, false))
     })
   }
 }
