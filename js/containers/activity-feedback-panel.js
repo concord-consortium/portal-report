@@ -102,6 +102,7 @@ class ActivityFeedbackPanel extends PureComponent {
     const numNotAnswered = notAnswerd.size
     const prompt = truncate(activity.get('name') || '', 200)
     const scoreType = activity.get('scoreType') || NO_SCORE
+    const activityId = activity.get('id')
     const showText = activity.get('enableTextFeedback')
     const useRubric = activity.get('useRubric')
     const activityFeedbackId = activity.get('activityFeedbackId')
@@ -167,6 +168,7 @@ class ActivityFeedbackPanel extends PureComponent {
                       autoScore={autoScores.get(studentId)}
                       feedbackEnabled={showText}
                       useRubric={useRubric}
+                      activityId={activityId}
                       rubric={rubric}
                       maxScore={maxScore}
                       updateFeedback={this.props.updateActivityFeedback}
