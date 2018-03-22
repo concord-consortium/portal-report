@@ -4,13 +4,13 @@
   "report": {
     "id": 18,
     "type": "Investigation",
-    "name": "Test Sequence",
+    "name": "HAS Climate module: What is the future of Earth's climate? 2018 edition.",
     "children": [
       {
         "id": 29,
         "activity_feedback_id": 29,
         "type": "Activity",
-        "name": "Test Activity 1 (sequence part)",
+        "name": "Test Activity 1: Constructing an argument: climate as imported with long title.",
         "enable_text_feedback": true,
         "score_type": "manual",
         "use_rubric": true,
@@ -47,12 +47,12 @@
           {
             "id": 68,
             "type": "Section",
-            "name": "Test Activity 1 (sequence part) Section",
+            "name": "Activity 1: Constructing an argument: climate",
             "children": [
               {
                 "id": 242,
                 "type": "Page",
-                "name": "1",
+                "name": "What will Earth's climates be in the future?\n\n\nWhat will Earth's climates be in the future?\n\nWhat will Earth's climates be in the future?",
                 "url": "http://authoring.concord.org/activities/802/pages/4532/",
                 "children": [
                   {
@@ -60,7 +60,7 @@
                     "name": "Multiple Choice Question element",
                     "question_number": 1,
                     "description": "description ...",
-                    "prompt": "why does the temperature stay at 99&deg;",
+                    "prompt": "There are four sets of lines on the graph: two for temperature change and two for total solar irradiance. \n\nTwo of the lines show the yearly readings, and the other two show the 11 year average of those readings\n\nWhat is the average temperature change  reading (in °C) for the year 2000?\n\n\nThere are four sets of lines on the graph: two for temperature change and two for total solar irradiance. \n\nTwo of the lines show the yearly readings, and the other two show the 11 year average of those readings\n\nWhat is the average temperature change  reading (in °C) for the year 2000?\n\n\nThere are four sets of lines on the graph: two for temperature change and two for total solar irradiance. \n\nTwo of the lines show the yearly readings, and the other two show the 11 year average of those readings\n\nWhat is the average temperature change  reading (in °C) for the year 2000?",
                     "enable_rationale": false,
                     "rationale_prompt": "Explain your choice. Give specific examples.",
                     "allow_multiple_selection": null,

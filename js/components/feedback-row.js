@@ -50,11 +50,11 @@ export default class FeedbackRow extends PureComponent {
   renderComplete (answerKey, complete) {
     return (
       <div className='feedback-complete'>
+        <span> Feedback Complete </span>
         <input
           checked={complete}
           type='checkbox'
           onChange={(e) => this.completeChange(e, answerKey)} />
-        Feedback Complete
       </div>
     )
   }

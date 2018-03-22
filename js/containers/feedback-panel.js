@@ -7,7 +7,7 @@ import FeedbackOverview from '../components/feedback-overview'
 import FeedbackRow from '../components/feedback-row'
 import FeedbackButton from '../components/feedback-button'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-
+import { truncate } from '../util/misc'
 import { connect } from 'react-redux'
 import { updateFeedback, enableFeedback } from '../actions'
 
@@ -34,11 +34,11 @@ class FeedbackPanel extends PureComponent {
   }
 
   makeOnlyNeedReview () {
-    this.setState({showOnlyNeedReview: true})
+    this.setState({ showOnlyNeedReview: true })
   }
 
   makeShowAll () {
-    this.setState({showOnlyNeedReview: false})
+    this.setState({ showOnlyNeedReview: false })
   }
 
   showFeedback () {
@@ -60,16 +60,16 @@ class FeedbackPanel extends PureComponent {
   }
 
   enableText (event) {
-    this.props.enableFeedback(this.props.question.get('key'), {feedbackEnabled: event.target.checked})
+    this.props.enableFeedback(this.props.question.get('key'), { feedbackEnabled: event.target.checked })
   }
 
   enableScore (event) {
-    this.props.enableFeedback(this.props.question.get('key'), {scoreEnabled: event.target.checked})
+    this.props.enableFeedback(this.props.question.get('key'), { scoreEnabled: event.target.checked })
   }
 
   setMaxScore (event) {
     const value = parseInt(event.target.value, 10) || null
-    this.props.enableFeedback(this.props.question.get('key'), {maxScore: value})
+    this.props.enableFeedback(this.props.question.get('key'), { maxScore: value })
   }
 
   studentRowRef (index) {
@@ -100,9 +100,8 @@ class FeedbackPanel extends PureComponent {
   render () {
     const { question, answers } = this.props
     const showing = this.state.showFeedbackPanel
-    const prompt = question.get('prompt')
+    const prompt = truncate(question.get('prompt') || '', 200)
     const number = question.get('questionNumber')
-
     const realAnswers = answers.filter(a => a.get('type') !== 'NoAnswer')
     const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a))
 
@@ -144,17 +143,14 @@ class FeedbackPanel extends PureComponent {
       <div className='feedback-container'>
         <div className='lightbox-background' />
         <div className='feedback-panel'>
+          <h1>Feedback: Question {number}</h1>
+          <div className='prompt' dangerouslySetInnerHTML={{ __html: prompt }} />
           <div className='feedback-header'>
-            <div className='left'>
-              <h1>Feedback: Question {number}</h1>
-              <h2 dangerouslySetInnerHTML={{__html: prompt}} />
-              <FeedbackOverview
-                numNoAnswers={numNoAnswers}
-                numFeedbackGiven={numFeedbackGiven}
-                numNeedsFeedback={numNeedsFeedback}
-              />
-            </div>
-
+            <FeedbackOverview
+              numNoAnswers={numNoAnswers}
+              numFeedbackGiven={numFeedbackGiven}
+              numNeedsFeedback={numNeedsFeedback}
+            />
             <div className='feedback-options'>
               <h3>Feedback Type</h3>
               <br />
@@ -165,7 +161,7 @@ class FeedbackPanel extends PureComponent {
               <input id='scoreEnabled' checked={scoreEnabled} type='checkbox' onChange={this.enableScore} />
               <label htmlFor='scoreEnabled'>Give Score</label>
               <br />
-              { scoreEnabled
+              {scoreEnabled
                 ? <div>
                   <label className='max-score'>Max. Score</label>
                   <input className='max-score-input' value={maxScore} onChange={this.setMaxScore} />
@@ -186,10 +182,10 @@ class FeedbackPanel extends PureComponent {
             />
 
             <div className='feedback-rows-wrapper'>
-              { showGettingStarted ? this.renderGettingStarted() : ''}
+              {showGettingStarted ? this.renderGettingStarted() : ''}
               <div className='feedback-for-students'>
                 <ReactCSSTransitionGroup transitionName='answer' transitionEnterTimeout={400} transitionLeaveTimeout={300}>
-                  { filteredAnswers.map((answer, i) =>
+                  {filteredAnswers.map((answer, i) =>
                     <FeedbackRow
                       answer={answer}
                       ref={() => this.studentRowRef(i)}
