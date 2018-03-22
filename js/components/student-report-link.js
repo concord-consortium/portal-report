@@ -3,10 +3,10 @@ import studentReporturl from '../util/student-report-url'
 
 export default class StudentReportLink extends PureComponent {
   render () {
-    const {student, started} = this.props
+    const {student, started, activityId} = this.props
     const studentId = student.get('id')
     const name = student.get('name')
-    const link = studentReporturl(studentId)
+    const link = studentReporturl(studentId, activityId)
 
     const linkToWork = (
       <a href={link} target='_blank'>
