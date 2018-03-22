@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import RubricBox from '../components/rubric-box'
-import FeedbackPanelFroStudent from '../components/feedback-panel-for-student'
+import FeedbackPanelForStudent from '../components/feedback-panel-for-student'
 
 const sampleRubric = {
   'id': 'RBK1',
@@ -101,7 +101,7 @@ class RubricTest extends PureComponent {
             rubricFeedback={rubricFeedback}
             rubricChange={updateFeedback}
             learnerId={learnerId} />
-          <FeedbackPanelFroStudent
+          <FeedbackPanelForStudent
             textFeedback='Great work!'
             score={10}
             maxScore={10}
