@@ -31,6 +31,7 @@ class ActivityFeedbackPanel extends PureComponent {
     this.state = {
       showOnlyNeedReview: true
     }
+    this.studentRowRefs = {}
     this.makeOnlyNeedReview = this.makeOnlyNeedReview.bind(this)
     this.makeShowAll = this.makeShowAll.bind(this)
     this.changeScoreType = this.changeScoreType.bind(this)
@@ -69,7 +70,7 @@ class ActivityFeedbackPanel extends PureComponent {
   scrollStudentIntoView (eventProxy) {
     const index = eventProxy.target.value
     const ref = this.studentRowRef(index - 1)
-    const itemComponent = this.refs[ref]
+    const itemComponent = this.studentRowRefs[ref]
     if (itemComponent) {
       const domNode = ReactDom.findDOMNode(itemComponent)
       domNode.scrollIntoView()
@@ -162,7 +163,7 @@ class ActivityFeedbackPanel extends PureComponent {
                       studentActivityFeedback={studentActivityFeedback}
                       activityFeedbackId={activityFeedbackId}
                       key={`${activityFeedbackId}-${studentId}`}
-                      ref={() => this.studentRowRef(i)}
+                      ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row }}
                       scoreType={scoreType}
                       autoScore={autoScores.get(studentId)}
                       feedbackEnabled={showText}
