@@ -12,11 +12,18 @@ export default class FeedbackPanelForStudent extends PureComponent {
     const rFeedbacks = Object.keys(rubricFeedback).map((key) => {
       const criteria = rubric.criteria.find((c) => c.id === key)
       const rFeedback = rubricFeedback[key]
+      const ratingDescription = (
+        rubric.showRatingDescriptions &&
+        criteria.ratingDescriptions &&
+        criteria.ratingDescriptions[rFeedback.id]
+      )
+        ? ` (${criteria.ratingDescriptions[rFeedback.id]})`
+        : ''
       if (criteria && rFeedback) {
         return (
           <div className='criterion' key={key}>
             <span className='description'>{criteria.description}</span>
-            <span className='rating'> – {rFeedback.label}</span>
+            <span className='rating'> – {rFeedback.label}{ratingDescription}</span>
           </div>
         )
       }
