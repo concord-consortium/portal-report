@@ -54,19 +54,17 @@ export default class RubricBox extends PureComponent {
                             rubricFeedback[critId] &&
                             rubricFeedback[critId].id === ratingId
                           const ratingDescription = (
-                            rubric.showRatingDescriptions &&
                             crit.ratingDescriptions &&
                             crit.ratingDescriptions[ratingId]
                           ) || null
                           return (
-                            <td key={radioButtonKey}>
+                            <td key={radioButtonKey} title={ratingDescription}>
                               <div className='center'>
                                 <input
                                   name={`${learnerId}_${critId}`}
                                   type='radio'
                                   checked={checked}
                                   value={ratingId}
-                                  title={ratingDescription}
                                   onChange={(e) => this.updateSelection(e, critId, ratingId)}
                                   id={radioButtonKey} />
                               </div>
