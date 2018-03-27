@@ -5,6 +5,8 @@ import Section from '../components/section'
 import FeedbackButton from '../components/feedback-button'
 import ActivityFeedbackForStudent from '../components/activity-feedback-for-student'
 import ActivityFeedbackPanel from './activity-feedback-panel'
+import SummaryIndicator from '../components/summary-indicator'
+
 import {
   getActivityFeedbacks,
   getQuestions,
@@ -46,7 +48,9 @@ class Activity extends PureComponent {
       feedbacks,
       computedMaxScore,
       autoScores,
-      rubric
+      rubric,
+      rubricFeedbacks,
+      scores
     } = this.props
     const activityName = activity.get('name')
     const showText = activity.get('enableTextFeedback')
@@ -73,6 +77,14 @@ class Activity extends PureComponent {
           needsReviewCount={needsReviewCount}
           feedbackEnabled={feedbackEnabled}
           showFeedback={showFeedback}
+        />
+        <SummaryIndicator
+          scores={scores}
+          maxScore={maxScore}
+          useRubric={useRubric}
+          showScore={showScore}
+          rubricFeedbacks={rubricFeedbacks}
+          rubric={rubric}
         />
       </span>
 
@@ -121,7 +133,19 @@ function mapStateToProps (state, ownProps) {
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
   const needsReviewCount = feedbacksNeedingReview.size
   const rubric = getActivityRubric(state, actId)
-  return { feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
+  const scores = feedbacks
+    .flatMap(f => f.get('feedbacks')
+      .filter(f => f.get('hasBeenReviewed'))
+      .map(f2 => f2.get('score')))
+    .filter(x => x)
+    .toJS()
+  const rubricFeedbacks = feedbacks
+    .flatMap(f => f.get('feedbacks')
+      .filter(f => f.get('hasBeenReviewed'))
+      .map(f2 => f2.get('rubricFeedback')))
+    .filter(x => x)
+    .toJS()
+  return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => { return {} }
