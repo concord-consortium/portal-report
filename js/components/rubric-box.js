@@ -40,7 +40,7 @@ export default class RubricBox extends PureComponent {
           <table>
             <thead>
               <tr>
-                <th key='xxx'> Aspects of Proficiency</th>
+                <th key='Proficiency'> Aspects of Proficiency</th>
                 {
                   rubric.ratings.map((rating) => <th key={rating.id}>{rating.label}</th>)
                 }

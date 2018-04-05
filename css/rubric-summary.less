@@ -1,0 +1,59 @@
+
+.rubric-summary {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  .rubric-row {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    border: 0.3px solid white;
+  }
+  .rubric-lightbox-wrapper {
+    position: fixed;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: hsla(0, 0%, 10%, 0.5);
+    .rubric-lightbox {
+      background-color: hsla(0, 0%, 100%, 1);
+      width: 50vw;
+      .closebox {
+        z-index: 11;
+        top: -0.5em;
+        position: relative;
+        right: -0.5em;
+        float: right;
+        border-radius: 1em;
+        text-align: center;
+        font-size: 24pt;
+        height: 1em;
+        width: 1em;
+        overflow: hidden;
+        background-color: white;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid black
+      }
+      .rubic-summary{
+        // height: 50vh;
+        margin: 2em;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        font-size: 12pt;
+      }
+    }
+
+  }
+}
