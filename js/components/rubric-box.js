@@ -27,9 +27,16 @@ export default class RubricBox extends PureComponent {
 
   render () {
     const { rubric, rubricFeedback, learnerId } = this.props
+    const linkLabel = 'Scoring Guide'
+    const referenceLink = rubric.referenceURL
+      ? <div className='reference-link'>
+        <a href={rubric.referenceURL} target='_blank'> {linkLabel}
+        </a></div>
+      : null
     if (!rubric) { return null } else {
       return (
         <div className='rubric-box'>
+          {referenceLink}
           <table>
             <thead>
               <tr>
