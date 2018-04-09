@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable'
-
+import { MAX_SCORE_DEFAULT } from '../util/scoring-constants'
 function keyFor (activity, student) {
   return `${activity.get('id')}-${student.get('id')}`
 }
@@ -96,7 +96,7 @@ export function calculateStudentScores (state, questions) {
 export function getComputedMaxScore (questions) {
   return questions
     .filter(question => question.get('scoreEnabled'))
-    .map(question => question.get('maxScore') || 0)
+    .map(question => question.get('maxScore') || MAX_SCORE_DEFAULT)
     .reduce((total, score) => total + score, 0)
 }
 

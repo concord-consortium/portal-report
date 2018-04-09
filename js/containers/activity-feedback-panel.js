@@ -108,7 +108,9 @@ class ActivityFeedbackPanel extends PureComponent {
     const useRubric = activity.get('useRubric')
     const activityFeedbackId = activity.get('activityFeedbackId')
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks
-    const maxScore = scoreType === AUTOMATIC_SCORE ? computedMaxScore : activity.get('maxScore')
+    const maxScore = scoreType === AUTOMATIC_SCORE
+      ? computedMaxScore
+      : activity.get('maxScore')
     const showGettingStarted = scoreType === NO_SCORE && !showText && !useRubric
 
     const hide = function () {

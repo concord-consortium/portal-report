@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react' // eslint-disable-line
 import { RadioGroup, Radio } from 'react-radio-group'
 import ReactTooltip from 'react-tooltip'
-
 import '../../css/feedback-panel.less'
 import '../../css/tooltip.less'
-
+import NumericTextField from './numeric-text-field'
 import {
   NO_SCORE,
   MANUAL_SCORE_L,
   MANUAL_SCORE,
   AUTOMATIC_SCORE_L,
-  AUTOMATIC_SCORE
+  AUTOMATIC_SCORE,
+  MAX_SCORE_DEFAULT
 } from '../util/scoring-constants'
 
 export default class FeedbackOptions extends PureComponent {
@@ -43,8 +43,7 @@ export default class FeedbackOptions extends PureComponent {
       })
   }
 
-  setMaxScore (event) {
-    const value = parseInt(event.target.value, 10) || null
+  setMaxScore (value) {
     const activityId = this.props.activity.get('id')
     const activityFeedbackId = this.props.activity.get('activityFeedbackId')
     this.props.enableActivityFeedback(activityId, {
@@ -159,11 +158,15 @@ export default class FeedbackOptions extends PureComponent {
           { scoreType === MANUAL_SCORE
             ? <div>
               <label className='max-score'>Max. Score</label>
-              <input className='max-score-input' value={maxScore} onChange={this.setMaxScore} />
+              <NumericTextField
+                className='max-score-input'
+                value={maxScore}
+                default={MAX_SCORE_DEFAULT}
+                onChange={this.setMaxScore} />
             </div>
             : <div>
               <label className='max-score disabled'>Max. Score</label>
-              <input className='max-score-input disabled' disabled value={maxScore} onChange={this.setMaxScore} />
+              <input className='max-score-input disabled' disabled value={maxScore} />
             </div>
           }
         </div>
