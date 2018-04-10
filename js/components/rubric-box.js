@@ -26,6 +26,7 @@ export default class RubricBox extends PureComponent {
   }
 
   renderLearnerRating (crit, rating, learnerId, rubricFeedback) {
+    const {disabled} = this.props
     const critId = crit.id
     const ratingId = rating.id
     const radioButtonKey = `${critId}-${ratingId}`
@@ -45,6 +46,7 @@ export default class RubricBox extends PureComponent {
             checked={checked}
             value={ratingId}
             onChange={(e) => this.updateSelection(e, critId, ratingId)}
+            disabled={disabled}
             id={radioButtonKey} />
         </div>
       </td>
@@ -77,6 +79,8 @@ export default class RubricBox extends PureComponent {
     const linkLabel = 'Scoring Guide'
     const { ratings, criteria, referenceURL } = rubric
     const referenceLink = referenceURL
+    // learnerID indicates we are displaying a user (not a summary)
+    const isSummaryView = !learnerId
       ? <div className='reference-link'>
         <a href={referenceURL} target='_blank'> {linkLabel}
         </a></div>
@@ -89,7 +93,11 @@ export default class RubricBox extends PureComponent {
             <tr>
               <th key='Proficiency'> Aspects of Proficiency</th>
               {
-                rubric.ratings.map((rating) => <th key={rating.id}>{rating.label}</th>)
+                rubric.ratings.map((rating) => {
+                  const label = rating.label
+                  const score = rubric.scoreUsingPoints && rating.score ? `(${rating.score})` : ''
+                  return <th key={rating.id}>{label} {score}</th>
+                })
               }
             </tr>
           </thead>
@@ -99,9 +107,9 @@ export default class RubricBox extends PureComponent {
                 return (
                   <tr key={crit.id}>
                     <td>{crit.description}</td>
-                    { learnerId
-                      ? ratings.map(rating => this.renderLearnerRating(crit, rating, learnerId, rubricFeedback))
-                      : ratings.map((rating, ratingIndex) => this.renderSummaryRating(crit, critIndex, rating, ratingIndex, ratings.length))
+                    { isSummaryView
+                      ? ratings.map((rating, ratingIndex) => this.renderSummaryRating(crit, critIndex, rating, ratingIndex, ratings.length))
+                      : ratings.map(rating => this.renderLearnerRating(crit, rating, learnerId, rubricFeedback))
                     }
 
                   </tr>
@@ -112,6 +120,5 @@ export default class RubricBox extends PureComponent {
         </table>
       </div>
     )
-
   }
 }

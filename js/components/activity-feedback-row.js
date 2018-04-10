@@ -108,6 +108,7 @@ export default class ActivityFeedbackRow extends PureComponent {
             useRubric
               ? <RubricBox
                 learnerId={learnerId}
+                disabled={complete}
                 rubric={rubric}
                 rubricFeedback={rubricFeedback}
                 rubricChange={(rubricFeedback) => this.rubricChange(activityFeedbackKey, rubricFeedback)} />
