@@ -62,7 +62,6 @@ const genRFeedbacks = (rubric, numAnswers) => {
     })
     answers.push(answer)
   }
-  console.dir(answers)
   return answers
 }
 class RubricTest extends PureComponent {
@@ -79,12 +78,10 @@ class RubricTest extends PureComponent {
   render () {
     const { learnerId, rubric, rubricFeedback, hasBug, rubricText } = this.state
     const updateFeedback = (rf) => {
-      console.dir(rf)
       this.setState({rubricFeedback: rf})
     }
     const updateRubric = (e) => {
       const value = e.target.value
-      console.dir(value)
       this.setState({rubricText: value})
       try {
         const newRubric = JSON.parse(value)

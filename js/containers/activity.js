@@ -16,6 +16,11 @@ import {
   getActivityRubric
 } from '../core/activity-feedback-data'
 
+import {
+  isAutoScoring,
+  MANUAL_SCORE
+} from '../util/scoring-constants'
+
 import '../../css/activity.less'
 
 class Activity extends PureComponent {
@@ -56,7 +61,8 @@ class Activity extends PureComponent {
     const showText = activity.get('enableTextFeedback')
     const scoreType = activity.get('scoreType')
     const _maxScore = activity.get('maxScore')
-    const maxScore = scoreType === 'auto' ? computedMaxScore : _maxScore
+    const maxScore = scoreType === MANUAL_SCORE ? _maxScore : computedMaxScore
+    const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS())
     const showScore = (scoreType !== 'none')
     const useRubric = activity.get('useRubric')
     const showFeedback = this.showFeedback
@@ -81,8 +87,9 @@ class Activity extends PureComponent {
       </div>
 
     if (reportFor !== 'class') {
-      const autoScore = scoreType === 'auto'
-        ? autoScores.get(reportFor.get('id'))
+      const studentId = reportFor.get('id')
+      const autoScore = isAutoScoring(scoreType)
+        ? autoScores.get(`${studentId}`)
         : null
 
       feedbackButton =
@@ -108,7 +115,7 @@ class Activity extends PureComponent {
           </div>
         </Sticky>
         <SummaryIndicator
-          scores={scores}
+          scores={summaryScores}
           maxScore={maxScore}
           useRubric={useRubric}
           showScore={showScore}
@@ -126,13 +133,15 @@ class Activity extends PureComponent {
 
 function mapStateToProps (state, ownProps) {
   const actId = ownProps.activity.get('id')
+  const rubric = getActivityRubric(state, actId)
+  const scoreType = ownProps.activity.get('scoreType')
   const feedbacks = getActivityFeedbacks(state, actId)
   const questions = getQuestions(state, actId)
-  const computedMaxScore = getComputedMaxScore(questions)
-  const autoScores = calculateStudentScores(state, questions)
+  const computedMaxScore = getComputedMaxScore(questions, rubric, scoreType)
+  const autoScores = calculateStudentScores(state, questions, rubric, feedbacks, scoreType)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
   const needsReviewCount = feedbacksNeedingReview.size
-  const rubric = getActivityRubric(state, actId)
+
   const scores = feedbacks
     .flatMap(f => f.get('feedbacks')
       .filter(f => f.get('hasBeenReviewed'))

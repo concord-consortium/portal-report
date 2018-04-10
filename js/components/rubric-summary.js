@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import colorScale from '../util/colors'
 import '../../css/rubric-summary.less'
 import RubricBox from './rubric-box'
+
 export default class RubricSummary extends PureComponent {
   constructor (props) {
     super(props)
@@ -11,12 +12,10 @@ export default class RubricSummary extends PureComponent {
   }
 
   openLightBox (event) {
-    console.log('open')
     this.setState({showLightbox: true})
   }
 
   closeLightBox (event) {
-    console.log('close')
     event.stopPropagation()
     this.setState({showLightbox: false})
   }
@@ -35,7 +34,7 @@ export default class RubricSummary extends PureComponent {
       </div>
     )
   }
-  renderRubricRow (rowNumbers) {
+  renderRubricRow (rowNumbers, index) {
     const width = 32
     const total = rowNumbers.reduce((p, c) => p + c, 0)
     const colors = colorScale(rowNumbers.length)
@@ -47,8 +46,8 @@ export default class RubricSummary extends PureComponent {
       }
     }
     return (
-      <div className='rubric-row'>
-        {rowNumbers.map((value, index) => <div style={style(value, index)} />)}
+      <div key={index} className='rubric-row'>
+        {rowNumbers.map((value, index) => <div key={index} style={style(value, index)} />)}
       </div>
     )
   }
@@ -78,7 +77,7 @@ export default class RubricSummary extends PureComponent {
     const rows = this.getRowMaps()
     return (
       <div className='rubric-summary' onClick={this.openLightBox.bind(this)}>
-        { rows.map((r) => this.renderRubricRow(r)) }
+        { rows.map((r, i) => this.renderRubricRow(r, i)) }
         { showLightbox ? this.renderLightBox() : ''}
       </div>
     )

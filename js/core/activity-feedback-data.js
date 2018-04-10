@@ -1,5 +1,10 @@
-import { fromJS } from 'immutable'
-import { MAX_SCORE_DEFAULT } from '../util/scoring-constants'
+import { fromJS, Map as IMap } from 'immutable'
+import {
+  AUTOMATIC_SCORE,
+  MAX_SCORE_DEFAULT,
+  RUBRIC_SCORE
+} from '../util/scoring-constants'
+
 function keyFor (activity, student) {
   return `${activity.get('id')}-${student.get('id')}`
 }
@@ -68,9 +73,8 @@ export function getQuestions (state, activityId) {
     .map(key => report.getIn(['questions', key.toString()]))
 }
 
-export function calculateStudentScores (state, questions) {
+function calculateStudentAutoScores (state, questions) {
   const report = state.get('report')
-
   const getFeedbackScore = (feedbackId) => {
     const score = state.getIn(['feedbacks', feedbackId, 'score'])
     const reviewed = state.getIn(['feedbacks', feedbackId, 'hasBeenReviewed'])
@@ -93,11 +97,56 @@ export function calculateStudentScores (state, questions) {
   return sums
 }
 
-export function getComputedMaxScore (questions) {
+function calculateStudentRubricScores (rubric, feedbacks) {
+  let scores = IMap({})
+  feedbacks
+    .forEach(feedbackRecord => {
+      const feedback = feedbackRecord.get('feedbacks').last()
+      const key = feedbackRecord.get('studentId')
+      let score = null
+      if (feedback.get('rubricFeedback')) {
+        const rubricFeedback = feedback.get('rubricFeedback')
+        score = rubricFeedback.map((k, v) => k.get('score')).reduce((p, n) => p + n)
+        scores.set(key, score)
+      }
+      scores = scores.set(key, score)
+    })
+  return scores
+}
+
+export function calculateStudentScores (state, questions, rubric, feedbacks, scoreType) {
+  const isNumeric = obj => obj !== undefined && typeof (obj) === 'number' && !isNaN(obj)
+  switch (scoreType) {
+    case RUBRIC_SCORE:
+      return calculateStudentRubricScores(rubric, feedbacks).filter(isNumeric)
+    case AUTOMATIC_SCORE:
+    default:
+      return calculateStudentAutoScores(state, questions)
+  }
+}
+
+export function getComputedMaxScore (questions, rubric, scoreType) {
+  switch (scoreType) {
+    case AUTOMATIC_SCORE:
+      return getComputedAutoMaxScore(questions)
+    case RUBRIC_SCORE:
+      return getComputedRubicMaxScore(rubric)
+  }
+  return MAX_SCORE_DEFAULT
+}
+
+export function getComputedAutoMaxScore (questions) {
   return questions
     .filter(question => question.get('scoreEnabled'))
     .map(question => question.get('maxScore') || MAX_SCORE_DEFAULT)
     .reduce((total, score) => total + score, 0)
+}
+
+export function getComputedRubicMaxScore (rubric) {
+  const maxReducer = (prev, current) => current > prev ? current : prev
+  const numCrit = rubric.criteria.length || 0
+  const maxScore = rubric.ratings.map(r => r.score || 0).reduce(maxReducer, 0)
+  return numCrit * maxScore
 }
 
 export function getActivityFeedbacks (state, activityId) {

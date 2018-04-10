@@ -20,7 +20,7 @@ export default class SummaryIndicator extends PureComponent {
     const {scores, useRubric, showScore, rubricFeedbacks, rubric} = this.props
     const _showScore = showScore && scores && scores.length > 0
     const showRubric = useRubric && rubricFeedbacks && rubricFeedbacks.length > 0
-    const showLabel = showRubric || showScore
+    const showLabel = showRubric || _showScore
     const label = _showScore
       ? 'Avg. Score'
       : 'Rubric Summary'

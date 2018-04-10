@@ -36,7 +36,7 @@
       float: left;
       font-size: 1.15em;
       font-weight: normal;
-      height: 5em;
+      height: 3em;
       overflow: auto;
       margin: 0px;
     }
@@ -49,23 +49,9 @@
       display: flex;
       flex-direction: row;
       width: 100%;
-      min-height: 80px;
+      flex-shrink: 0;
       justify-content: space-between;
       align-items: flex-start;
-      &.tall {
-        min-height: 120px;
-      }
-    }
-
-    .feedback-options {
-      margin: 0px;
-      font-size: .8em;
-      h3 {
-        color: #3f3f3f;
-        font-size: 1em;
-        margin: 0px;
-        margin-bottom: .25em;
-      }
     }
 
     .disabled {

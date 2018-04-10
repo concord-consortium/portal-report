@@ -21,7 +21,10 @@ import '../../css/feedback-panel.less'
 import '../../css/tooltip.less'
 import {
   NO_SCORE,
-  AUTOMATIC_SCORE
+  AUTOMATIC_SCORE,
+  RUBRIC_SCORE,
+  MAX_SCORE_DEFAULT,
+  isAutoScoring
 } from '../util/scoring-constants'
 import { truncate } from '../util/misc'
 
@@ -57,7 +60,7 @@ class ActivityFeedbackPanel extends PureComponent {
     if (newV !== NO_SCORE) {
       this.setState({lastScoreType: newV})
     }
-    if (newV === AUTOMATIC_SCORE) {
+    if (isAutoScoring(newV)) {
       newFlags.maxScore = this.props.computedMaxScore
     }
     this.props.enableActivityFeedback(activityId, newFlags)
@@ -108,9 +111,16 @@ class ActivityFeedbackPanel extends PureComponent {
     const useRubric = activity.get('useRubric')
     const activityFeedbackId = activity.get('activityFeedbackId')
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks
-    const maxScore = scoreType === AUTOMATIC_SCORE
-      ? computedMaxScore
-      : activity.get('maxScore')
+    let maxScore = MAX_SCORE_DEFAULT
+    switch (scoreType) {
+      case AUTOMATIC_SCORE:
+      case RUBRIC_SCORE:
+        maxScore = computedMaxScore
+        break
+      default:
+        maxScore = activity.get('maxScore')
+    }
+
     const showGettingStarted = scoreType === NO_SCORE && !showText && !useRubric
 
     const hide = function () {
@@ -194,16 +204,18 @@ class ActivityFeedbackPanel extends PureComponent {
 }
 
 function mapStateToProps (state, ownProps) {
-  const actId = ownProps.activity.get('id')
+  const activity = ownProps.activity
+  const actId = activity.get('id')
+  const scoreType = activity.get('scoreType')
+  const rubric = getActivityRubric(state, actId)
   const feedbacks = getActivityFeedbacks(state, actId)
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
   const numFeedbacksNeedingReview = feedbacksNeedingReview.size
   const notAnswerd = getFeedbacksNotAnswered(feedbacks)
   const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - notAnswerd.size
   const questions = getQuestions(state, actId)
-  const computedMaxScore = getComputedMaxScore(questions)
-  const autoScores = calculateStudentScores(state, questions)
-  const rubric = getActivityRubric(state, actId)
+  const computedMaxScore = getComputedMaxScore(questions, rubric, scoreType)
+  const autoScores = calculateStudentScores(state, questions, rubric, feedbacks, scoreType)
   return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore, autoScores }
 }
 

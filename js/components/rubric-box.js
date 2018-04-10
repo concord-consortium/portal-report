@@ -78,12 +78,12 @@ export default class RubricBox extends PureComponent {
     if (!rubric) { return null }
     const linkLabel = 'Scoring Guide'
     const { ratings, criteria, referenceURL } = rubric
-    const referenceLink = referenceURL
     // learnerID indicates we are displaying a user (not a summary)
     const isSummaryView = !learnerId
+    const referenceLink = referenceURL
       ? <div className='reference-link'>
-        <a href={referenceURL} target='_blank'> {linkLabel}
-        </a></div>
+        <a href={referenceURL} target='_blank'> {linkLabel}</a>
+      </div>
       : null
     return (
       <div className='rubric-box'>
