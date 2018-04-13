@@ -6,6 +6,7 @@ import FeedbackFilter from '../components/feedback-filter'
 import FeedbackOverview from '../components/feedback-overview'
 import FeedbackRow from '../components/feedback-row'
 import FeedbackButton from '../components/feedback-button'
+import SummaryIndicator from '../components/summary-indicator'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { truncate } from '../util/misc'
 import { connect } from 'react-redux'
@@ -100,12 +101,17 @@ class FeedbackPanel extends PureComponent {
   render () {
     const { question, answers } = this.props
     const showing = this.state.showFeedbackPanel
-    const prompt = truncate(question.get('prompt') || '', 200)
+    const prompt = question.get('prompt')
     const number = question.get('questionNumber')
     const realAnswers = answers.filter(a => a.get('type') !== 'NoAnswer')
     const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a))
 
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers
+    const scores = this.props.feedbacks
+      .map(f => f.get('score'))
+      .filter(f => f != null)
+      .toArray()
+
     const numAnswers = realAnswers.count()
     const numNoAnswers = answers.count() - realAnswers.count()
     let numNeedsFeedback = needingFeedback.count()
@@ -114,7 +120,6 @@ class FeedbackPanel extends PureComponent {
     const scoreEnabled = question.get('scoreEnabled') || false
     const feedbackEnabled = question.get('feedbackEnabled') || false
     const maxScore = question.get('maxScore') || 0
-
     const showGettingStarted = !scoreEnabled && !feedbackEnabled
     const studentsPulldown = filteredAnswers.map((a) => {
       return {
@@ -137,6 +142,12 @@ class FeedbackPanel extends PureComponent {
             needsReviewCount={numNeedsFeedback}
             disabled={numAnswers < 1}
             showFeedback={this.showFeedback} />
+
+          <SummaryIndicator
+            scores={scores}
+            showScore={numAnswers > 0 && scoreEnabled}
+            maxScore={maxScore}
+          />
         </div>)
     }
     return (

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import RubricBox from '../components/rubric-box'
 import FeedbackPanelForStudent from '../components/feedback-panel-for-student'
-
+import SummaryIndicator from '../components/summary-indicator'
 const sampleRubric = {
   'id': 'RBK1',
   'formatVersion': '1.0.0',
@@ -48,7 +48,23 @@ const sampleRubric = {
     }
   ]
 }
+const genRFeedbacks = (rubric, numAnswers) => {
+  const ratings = rubric.ratings
+  const pickRating = (id) => {
+    return ratings[Math.floor(Math.random() * ratings.length)]
+  }
+  const answers = []
 
+  for (let i = 0; i < numAnswers; i++) {
+    const answer = {}
+    rubric.criteria.forEach(c => {
+      answer[c.id] = pickRating()
+    })
+    answers.push(answer)
+  }
+  console.dir(answers)
+  return answers
+}
 class RubricTest extends PureComponent {
   constructor (props) {
     super(props)
@@ -111,6 +127,13 @@ class RubricTest extends PureComponent {
             showScore
             useRubric
             showText
+          />
+          <SummaryIndicator
+            scores={[1, 4, 3, 4, 0, 2]}
+            maxScore={10}
+            rubricFeedbacks={genRFeedbacks(rubric, 10)}
+            rubric={rubric}
+            useRubric
           />
         </div>
       </div>
