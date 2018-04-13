@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import '../../css/rubric-box.less'
-
+import colorScale from '../util/colors'
 export default class RubricBox extends PureComponent {
   constructor (props) {
     super(props)
@@ -25,69 +25,93 @@ export default class RubricBox extends PureComponent {
     rubricChange(newFeedback)
   }
 
+  renderLearnerRating (crit, rating, learnerId, rubricFeedback) {
+    const critId = crit.id
+    const ratingId = rating.id
+    const radioButtonKey = `${critId}-${ratingId}`
+    const checked = rubricFeedback &&
+      rubricFeedback[critId] &&
+      rubricFeedback[critId].id === ratingId
+    const ratingDescription = (
+      crit.ratingDescriptions &&
+      crit.ratingDescriptions[ratingId]
+    ) || null
+    return (
+      <td key={radioButtonKey} title={ratingDescription}>
+        <div className='center'>
+          <input
+            name={`${learnerId}_${critId}`}
+            type='radio'
+            checked={checked}
+            value={ratingId}
+            onChange={(e) => this.updateSelection(e, critId, ratingId)}
+            id={radioButtonKey} />
+        </div>
+      </td>
+    )
+  }
+
+  renderSummaryRating (crit, critIndex, rating, ratingIndex, max) {
+    const colors = colorScale(max)
+    const tableStyle = { backgroundColor: colors[ratingIndex] }
+    const ratingDescription = (
+      crit.ratingDescriptions &&
+      crit.ratingDescriptions[rating.id]
+    ) || null
+    const { rowMaps } = this.props
+    const values = rowMaps[critIndex]
+    const maxV = values.reduce((p, c) => p + c, 0)
+    const value = Math.round(values[ratingIndex] / maxV * 1000) / 10
+    return (
+      <td style={tableStyle} title={ratingDescription}>
+        <div className='center'>
+          <div className='summary-cell-value'>{value}%</div>
+        </div>
+      </td>
+    )
+  }
+
   render () {
     const { rubric, rubricFeedback, learnerId } = this.props
+    if (!rubric) { return null }
     const linkLabel = 'Scoring Guide'
-    const referenceLink = rubric.referenceURL
+    const { ratings, criteria, referenceURL } = rubric
+    const referenceLink = referenceURL
       ? <div className='reference-link'>
-        <a href={rubric.referenceURL} target='_blank'> {linkLabel}
+        <a href={referenceURL} target='_blank'> {linkLabel}
         </a></div>
       : null
-    if (!rubric) { return null } else {
-      return (
-        <div className='rubric-box'>
-          {referenceLink}
-          <table>
-            <thead>
-              <tr>
-                <th key='xxx'> Aspects of Proficiency</th>
-                {
-                  rubric.ratings.map((rating) => <th key={rating.id}>{rating.label}</th>)
-                }
-              </tr>
-            </thead>
-            <tbody>
+    return (
+      <div className='rubric-box'>
+        {referenceLink}
+        <table>
+          <thead>
+            <tr>
+              <th key='Proficiency'> Aspects of Proficiency</th>
               {
-                rubric.criteria.map((crit) => {
-                  return (
-                    <tr key={crit.id}>
-                      <td>{crit.description}</td>
-                      {
-                        rubric.ratings.map((rating) => {
-                          const critId = crit.id
-                          const ratingId = rating.id
-                          const radioButtonKey = `${critId}-${ratingId}`
-                          const checked = rubricFeedback &&
-                            rubricFeedback[critId] &&
-                            rubricFeedback[critId].id === ratingId
-                          const ratingDescription = (
-                            crit.ratingDescriptions &&
-                            crit.ratingDescriptions[ratingId]
-                          ) || null
-                          return (
-                            <td key={radioButtonKey} title={ratingDescription}>
-                              <div className='center'>
-                                <input
-                                  name={`${learnerId}_${critId}`}
-                                  type='radio'
-                                  checked={checked}
-                                  value={ratingId}
-                                  onChange={(e) => this.updateSelection(e, critId, ratingId)}
-                                  id={radioButtonKey} />
-                              </div>
-                            </td>
-                          )
-                        })
-                      }
-
-                    </tr>
-                  )
-                })
+                rubric.ratings.map((rating) => <th key={rating.id}>{rating.label}</th>)
               }
-            </tbody>
-          </table>
-        </div>
-      )
-    }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              criteria.map((crit, critIndex) => {
+                return (
+                  <tr key={crit.id}>
+                    <td>{crit.description}</td>
+                    { learnerId
+                      ? ratings.map(rating => this.renderLearnerRating(crit, rating, learnerId, rubricFeedback))
+                      : ratings.map((rating, ratingIndex) => this.renderSummaryRating(crit, critIndex, rating, ratingIndex, ratings.length))
+                    }
+
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    )
+
   }
 }

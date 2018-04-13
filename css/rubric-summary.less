@@ -1,0 +1,83 @@
+
+.rubric-summary {
+  width: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background-color: black;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 1px 1px 10px hsla(50, 80%, 50%, 0.5);
+  }
+  .rubric-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; 
+    overflow: hidden;
+    padding: 1px;
+    padding-top: 0px;
+    &:first-of-type {
+      padding-top: 1px;
+    }
+    div {
+      height: 10px;
+      box-model: border-box;
+    }
+  }
+  .rubric-lightbox-wrapper {
+    position: fixed;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: hsla(0, 0%, 10%, 0.5);
+    .rubric-lightbox {
+      background-color: hsla(0, 0%, 100%, 1);
+      box-shadow: 1px 1px 10px hsla(0,0%,0%,0.3);
+      border-radius: 0.4em;
+      width: 80vw;
+      .closebox {
+        z-index: 11;
+        top: -0.5em;
+        position: relative;
+        right: -0.5em;
+        float: right;
+        border-radius: 1em;
+        text-align: center;
+        font-size: 18pt;
+        padding: 0.7em;
+        height: 1em;
+        width: 1em;
+        overflow: hidden;
+        background-color: white;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: ease-in-out 0.2s;
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        &:hover {
+          background-color: black;
+          color: white;
+        }
+      }
+      .rubic-summary{
+        // height: 50vh;
+        margin: 2em;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        font-size: 12pt;
+      }
+    }
+
+  }
+}
