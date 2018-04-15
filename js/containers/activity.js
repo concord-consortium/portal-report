@@ -71,22 +71,14 @@ class Activity extends PureComponent {
       : ''
 
     let feedbackButton =
-      <span className='feedback'>
+      <div className='feedback'>
         <FeedbackButton
           text='Provide overall feedback'
           needsReviewCount={needsReviewCount}
           feedbackEnabled={feedbackEnabled}
           showFeedback={showFeedback}
         />
-        <SummaryIndicator
-          scores={scores}
-          maxScore={maxScore}
-          useRubric={useRubric}
-          showScore={showScore}
-          rubricFeedbacks={rubricFeedbacks}
-          rubric={rubric}
-        />
-      </span>
+      </div>
 
     if (reportFor !== 'class') {
       const autoScore = scoreType === 'auto'
@@ -115,6 +107,14 @@ class Activity extends PureComponent {
             { feedbackButton }
           </div>
         </Sticky>
+        <SummaryIndicator
+          scores={scores}
+          maxScore={maxScore}
+          useRubric={useRubric}
+          showScore={showScore}
+          rubricFeedbacks={rubricFeedbacks}
+          rubric={rubric}
+        />
         <div>
           {feedbackPanel}
           {activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor} />)}
