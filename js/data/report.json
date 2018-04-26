@@ -104,7 +104,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-2",
+                            "answer_key": "Embeddable::MultipleChoice|116-13",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -127,7 +127,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-3",
+                            "answer_key": "Embeddable::MultipleChoice|116-14",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -184,7 +184,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-4",
+                            "answer_key": "Embeddable::OpenResponse|252-15",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -201,7 +201,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-5",
+                            "answer_key": "Embeddable::OpenResponse|252-13",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -218,7 +218,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-6",
+                            "answer_key": "Embeddable::OpenResponse|252-14",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -309,7 +309,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-7",
+                            "answer_key": "Embeddable::MultipleChoice|117-15",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -332,7 +332,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-8",
+                            "answer_key": "Embeddable::MultipleChoice|117-13",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -355,7 +355,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-9",
+                            "answer_key": "Embeddable::MultipleChoice|117-14",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -412,7 +412,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-10",
+                            "answer_key": "Embeddable::OpenResponse|253-15",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -429,7 +429,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-11",
+                            "answer_key": "Embeddable::OpenResponse|253-13",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -446,7 +446,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-12",
+                            "answer_key": "Embeddable::OpenResponse|253-14",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -492,7 +492,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-13",
+                            "answer_key": "Embeddable::ImageQuestion|12-15",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -512,7 +512,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-14",
+                            "answer_key": "Embeddable::ImageQuestion|12-13",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -532,7 +532,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-15",
+                            "answer_key": "Embeddable::ImageQuestion|12-14",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -552,7 +552,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-16",
+                            "answer_key": "Embeddable::ImageQuestion|12-16",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -585,7 +585,7 @@
                         "feedbacks":[
                           {
                             "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
-                            "answer_key": "FAKE_ANSWER_KEY-17-1",
+                            "answer_key": "Embeddable::Iframe|7-13",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -594,7 +594,7 @@
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::Iframe",
-                        "embeddable_key": "Embeddable::Iframe|7-1",
+                        "embeddable_key": "Embeddable::Iframe|7",
                         "student_id": 13,
                         "display_in_iframe": true,
                         "url": null,
@@ -608,7 +608,7 @@
                         "feedbacks":[
                           {
                             "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
-                            "answer_key": "FAKE_ANSWER_KEY-18-1",
+                            "answer_key": "Embeddable::Iframe|7-14",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -617,7 +617,7 @@
                         "submitted": true,
                         "question_required": false,
                         "type": "Embeddable::Iframe",
-                        "embeddable_key": "Embeddable::Iframe|7-1",
+                        "embeddable_key": "Embeddable::Iframe|7",
                         "student_id": 14,
                         "display_in_iframe": true,
                         "url": null,
@@ -663,7 +663,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-17",
+                            "answer_key": "Embeddable::Iframe|7-13",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -683,7 +683,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-18",
+                            "answer_key": "Embeddable::Iframe|7-14",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
@@ -931,7 +931,7 @@
                         "answered": true,
                         "feedbacks":[
                           {
-                            "answer_key": "FAKE_ANSWER_KEY-19",
+                            "answer_key": "Embeddable::ImageQuestion|13-16",
                             "score": null,
                             "feedback": null,
                             "has_been_reviewed": false
