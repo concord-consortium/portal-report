@@ -6,15 +6,12 @@ import FeedbackButton from '../components/feedback-button'
 import ActivityFeedbackForStudent from '../components/activity-feedback-for-student'
 import ActivityFeedbackPanel from './activity-feedback-panel'
 import SummaryIndicator from '../components/summary-indicator'
-
 import {
-  getActivityFeedbacks,
-  getQuestions,
-  getFeedbacksNeedingReview,
-  getComputedMaxScore,
-  calculateStudentScores,
-  getActivityRubric
-} from '../core/activity-feedback-data'
+  makeGetFeedbacks,
+  makeGetRubric,
+  makeGetAutoScores,
+  makeGetComputedMaxScore
+} from '../selectors/activity-feedback-selectors'
 
 import {
   isAutoScoring,
@@ -131,32 +128,33 @@ class Activity extends PureComponent {
   }
 }
 
-function mapStateToProps (state, ownProps) {
-  const actId = ownProps.activity.get('id')
-  const rubric = getActivityRubric(state, actId)
-  const scoreType = ownProps.activity.get('scoreType')
-  const feedbacks = getActivityFeedbacks(state, actId)
-  const questions = getQuestions(state, actId)
-  const computedMaxScore = getComputedMaxScore(questions, rubric, scoreType)
-  const autoScores = calculateStudentScores(state, questions, rubric, feedbacks, scoreType)
-  const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-  const needsReviewCount = feedbacksNeedingReview.size
+function makeMapStateToProps () {
+  return (state, ownProps) => {
+    const getRubric = makeGetRubric()
+    const getFeedbacks = makeGetFeedbacks()
+    const getAutoMaxScore = makeGetComputedMaxScore()
+    const getAutoScores = makeGetAutoScores()
 
-  const scores = feedbacks
-    .flatMap(f => f.get('feedbacks')
+    const rubric = getRubric(state, ownProps)
+    const computedMaxScore = getAutoMaxScore(state, ownProps)
+    const autoScores = getAutoScores(state, ownProps)
+    const { feedbacksNeedingReview, feedbacks } = getFeedbacks(state, ownProps)
+    const needsReviewCount = feedbacksNeedingReview.size
+
+    const scores = feedbacks
       .filter(f => f.get('hasBeenReviewed'))
-      .map(f2 => f2.get('score')))
-    .filter(x => x)
-    .toJS()
-  const rubricFeedbacks = feedbacks
-    .flatMap(f => f.get('feedbacks')
+      .map(f2 => f2.get('score'))
+      .filter(x => x)
+      .toJS()
+    const rubricFeedbacks = feedbacks
       .filter(f => f.get('hasBeenReviewed'))
-      .map(f2 => f2.get('rubricFeedback')))
-    .filter(x => x)
-    .toJS()
-  return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
+      .map(f2 => f2.get('rubricFeedback'))
+      .filter(x => x)
+      .toJS()
+    return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => { return {} }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Activity)
+export default connect(makeMapStateToProps, mapDispatchToProps)(Activity)
