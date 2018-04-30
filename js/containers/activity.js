@@ -72,7 +72,7 @@ class Activity extends PureComponent {
         activity={activity}
       />
       : ''
-
+    let summaryIndicator = null
     let feedbackButton =
       <div className='feedback'>
         <FeedbackButton
@@ -83,7 +83,16 @@ class Activity extends PureComponent {
         />
       </div>
 
-    if (reportFor !== 'class') {
+    if (reportFor === 'class') {
+      summaryIndicator = <SummaryIndicator
+        scores={summaryScores}
+        maxScore={maxScore}
+        useRubric={useRubric}
+        showScore={showScore}
+        rubricFeedbacks={rubricFeedbacks}
+        rubric={rubric}
+      />
+    } else {
       const studentId = reportFor.get('id')
       const autoScore = isAutoScoring(scoreType)
         ? autoScores.get(`${studentId}`)
@@ -111,14 +120,7 @@ class Activity extends PureComponent {
             { feedbackButton }
           </div>
         </Sticky>
-        <SummaryIndicator
-          scores={summaryScores}
-          maxScore={maxScore}
-          useRubric={useRubric}
-          showScore={showScore}
-          rubricFeedbacks={rubricFeedbacks}
-          rubric={rubric}
-        />
+        { summaryIndicator }
         <div>
           {feedbackPanel}
           {activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor} />)}
@@ -144,7 +146,7 @@ function makeMapStateToProps () {
       scores,
       rubricFeedbacks } = getFeedbacks(state, ownProps)
     const needsReviewCount = feedbacksNeedingReview.size
-    
+
     return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
   }
 }
