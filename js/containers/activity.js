@@ -7,7 +7,7 @@ import ActivityFeedbackForStudent from '../components/activity-feedback-for-stud
 import ActivityFeedbackPanel from './activity-feedback-panel'
 import SummaryIndicator from '../components/summary-indicator'
 import {
-  makeGetFeedbacks,
+  makeGetStudentFeedbacks,
   makeGetRubric,
   makeGetAutoScores,
   makeGetComputedMaxScore
@@ -131,26 +131,20 @@ class Activity extends PureComponent {
 function makeMapStateToProps () {
   return (state, ownProps) => {
     const getRubric = makeGetRubric()
-    const getFeedbacks = makeGetFeedbacks()
+    const getFeedbacks = makeGetStudentFeedbacks()
     const getAutoMaxScore = makeGetComputedMaxScore()
     const getAutoScores = makeGetAutoScores()
 
     const rubric = getRubric(state, ownProps)
     const computedMaxScore = getAutoMaxScore(state, ownProps)
     const autoScores = getAutoScores(state, ownProps)
-    const { feedbacksNeedingReview, feedbacks } = getFeedbacks(state, ownProps)
+    const {
+      feedbacksNeedingReview,
+      feedbacks,
+      scores,
+      rubricFeedbacks } = getFeedbacks(state, ownProps)
     const needsReviewCount = feedbacksNeedingReview.size
-
-    const scores = feedbacks
-      .filter(f => f.get('hasBeenReviewed'))
-      .map(f2 => f2.get('score'))
-      .filter(x => x)
-      .toJS()
-    const rubricFeedbacks = feedbacks
-      .filter(f => f.get('hasBeenReviewed'))
-      .map(f2 => f2.get('rubricFeedback'))
-      .filter(x => x)
-      .toJS()
+    
     return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
   }
 }

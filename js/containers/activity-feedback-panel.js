@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback } from '../actions'
 
 import {
-  makeGetFeedbacks,
+  makeGetStudentFeedbacks,
   makeGetRubric,
   makeGetAutoScores,
   makeGetComputedMaxScore
@@ -204,7 +204,7 @@ class ActivityFeedbackPanel extends PureComponent {
 
 function makeMapStateToProps () {
   return (state, ownProps) => {
-    const getFeedbacks = makeGetFeedbacks()
+    const getFeedbacks = makeGetStudentFeedbacks()
     const getRubric = makeGetRubric()
     const getMaxSCore = makeGetComputedMaxScore()
     const getAutoscores = makeGetAutoScores()
