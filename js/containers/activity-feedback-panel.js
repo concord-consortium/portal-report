@@ -3,7 +3,7 @@ import ReactDom from 'react-dom'
 import Button from '../components/button'
 import FeedbackFilter from '../components/feedback-filter'
 import FeedbackOverview from '../components/feedback-overview'
-import FeedbackOptions from '../components/feedback-options'
+import ActivityFeedbackOptions from '../components/activity-feedback-options'
 import ActivityFeedbackRow from '../components/activity-feedback-row'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
@@ -146,7 +146,7 @@ class ActivityFeedbackPanel extends PureComponent {
               numFeedbackGiven={numFeedbacksGivenReview}
               numNeedsFeedback={numFeedbacksNeedingReview}
             />
-            <FeedbackOptions
+            <ActivityFeedbackOptions
               activity={this.props.activity}
               scoreEnabled={this.state.scoreEnabled}
               toggleScoreEnabled={this.toggleScoreEnabled}
