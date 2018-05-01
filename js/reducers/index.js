@@ -2,8 +2,9 @@ import Immutable, { Map, Set} from 'immutable'
 import {
   REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
-  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK} from '../actions'
-
+  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK
+} from '../actions'
+import { MANUAL_SCORE, RUBRIC_SCORE } from '../util/scoring-constants'
 import feedbackReducer from './feedback-reducer'
 import { rubricReducer } from './rubric-reducer'
 import { activityFeedbackReducer } from './activity-feedback-reducer'
@@ -56,8 +57,18 @@ function enableFeedback (state, action) {
 }
 
 function enableActivityFeedback (state, action) {
+
   const {activityId, feedbackFlags} = action
-  const nextState = state.mergeIn(['activities', activityId.toString()], feedbackFlags)
+  const statePath = ['activities', activityId.toString()]
+  // We have to unset 'RUBRIC_SCORE' scoretypes when
+  // we are no longer using rubric...
+  if (feedbackFlags.useRubric === false) {
+    const scoreType = state.getIn(statePath).get('scoreType')
+    if (scoreType === RUBRIC_SCORE) {
+      feedbackFlags.scoreType = MANUAL_SCORE
+    }
+  }
+  const nextState = state.mergeIn(statePath, feedbackFlags)
   return nextState
 }
 

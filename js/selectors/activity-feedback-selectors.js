@@ -177,7 +177,7 @@ export const makeGetQuestionAutoScores = () => {
       const getFeedbackScore = (feedbackId) => {
         const score = questionFeedbacks.getIn([feedbackId, 'score'])
         const reviewed = questionFeedbacks.getIn([feedbackId, 'hasBeenReviewed'])
-        const computedScore = reviewed ? (score || 0) : 0
+        const computedScore = reviewed ? (score || 0) : false
         return computedScore
       }
       const scores = questions
@@ -190,6 +190,7 @@ export const makeGetQuestionAutoScores = () => {
           .filter(ans => ans.get('feedbacks'))
           .map(ans => ans.get('feedbacks').last())
           .map(feedbackId => getFeedbackScore(feedbackId))
+          .filter(a => isNumeric(a))
         )
       const sums = scores.map(s => s.reduce((sum, v) => sum + v, 0))
       return sums
@@ -255,7 +256,9 @@ const makeGetAutoMaxScore = () => {
     (questions) => {
       return questions
         .filter(question => question.get('scoreEnabled'))
-        .map(question => question.get('maxScore') || MAX_SCORE_DEFAULT)
+        .map(question => isNumeric(question.get('maxScore'))
+          ? question.get('maxScore')
+          : MAX_SCORE_DEFAULT)
         .reduce((total, score) => total + score, 0)
     }
   )
