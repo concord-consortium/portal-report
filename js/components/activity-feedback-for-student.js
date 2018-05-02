@@ -26,9 +26,7 @@ export default class ActivityFeedbackForStudent extends PureComponent {
       }
     }
     const showFeedback = (feedback && feedback.hasBeenReviewed)
-    const score = autoScore == null
-      ? feedback && feedback.score
-      : autoScore
+    const score = (autoScore != null) ? autoScore : feedback && feedback.score
     const textFeedback = feedback && feedback.feedback
     const hasBeenReviewed = feedback && feedback.hasBeenReviewed
     const rubricFeedback = feedback && feedback.rubricFeedback
@@ -45,7 +43,6 @@ export default class ActivityFeedbackForStudent extends PureComponent {
         useRubric={useRubric}
         rubric={rubric}
         rubricFeedback={rubricFeedback}
-        autoScore={autoScore}
         isOverall
       />)
   }

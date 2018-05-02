@@ -70,6 +70,7 @@
     "redux": "^3.3.1",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
+    "reselect": "^3.0.1",
     "semver": "^5.3.0"
   }
 }

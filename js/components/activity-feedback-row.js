@@ -3,7 +3,7 @@ import RubricBox from './rubric-box'
 import FeedbackBox from './feedback-box'
 import ScoreBox from './score-box'
 import StudentReportLink from './student-report-link'
-
+import { isAutoScoring } from '../util/scoring-constants'
 export default class ActivityFeedbackRow extends PureComponent {
   constructor (props) {
     super(props)
@@ -94,8 +94,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     const { useRubric, feedbackEnabled, scoreType, autoScore, rubric } = this.props
     const activityFeedbackKey = studentFeedback.get('key')
     const scoreEnabled = scoreType !== 'none'
-    const automaticScoring = scoreType === 'auto'
-
+    const automaticScoring = isAutoScoring(scoreType)
     const disableFeedback = !learnerId || complete
     const disableScore = disableFeedback || automaticScoring
     const scoreToRender = automaticScoring ? autoScore : score
@@ -108,6 +107,7 @@ export default class ActivityFeedbackRow extends PureComponent {
             useRubric
               ? <RubricBox
                 learnerId={learnerId}
+                disabled={complete}
                 rubric={rubric}
                 rubricFeedback={rubricFeedback}
                 rubricChange={(rubricFeedback) => this.rubricChange(activityFeedbackKey, rubricFeedback)} />

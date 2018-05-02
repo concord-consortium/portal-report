@@ -7,11 +7,11 @@ import FeedbackOverview from '../components/feedback-overview'
 import FeedbackRow from '../components/feedback-row'
 import FeedbackButton from '../components/feedback-button'
 import SummaryIndicator from '../components/summary-indicator'
+import FeedbackOptionsView from '../components/feedback-options-view'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import { truncate } from '../util/misc'
 import { connect } from 'react-redux'
 import { updateFeedback, enableFeedback } from '../actions'
-
+import { MANUAL_SCORE } from '../util/scoring-constants'
 import '../../css/feedback-panel.less'
 
 class FeedbackPanel extends PureComponent {
@@ -68,9 +68,11 @@ class FeedbackPanel extends PureComponent {
     this.props.enableFeedback(this.props.question.get('key'), { scoreEnabled: event.target.checked })
   }
 
-  setMaxScore (event) {
-    const value = parseInt(event.target.value, 10) || null
-    this.props.enableFeedback(this.props.question.get('key'), { maxScore: value })
+  setMaxScore (value) {
+    const {enableFeedback, question} = this.props
+    if (enableFeedback) {
+      enableFeedback(question.get('key'), { maxScore: value })
+    }
   }
 
   studentRowRef (index) {
@@ -119,7 +121,7 @@ class FeedbackPanel extends PureComponent {
 
     const scoreEnabled = question.get('scoreEnabled') || false
     const feedbackEnabled = question.get('feedbackEnabled') || false
-    const maxScore = question.get('maxScore') || 0
+    const maxScore = question.get('maxScore')
     const showGettingStarted = !scoreEnabled && !feedbackEnabled
     const studentsPulldown = filteredAnswers.map((a) => {
       return {
@@ -162,24 +164,18 @@ class FeedbackPanel extends PureComponent {
               numFeedbackGiven={numFeedbackGiven}
               numNeedsFeedback={numNeedsFeedback}
             />
-            <div className='feedback-options'>
-              <h3>Feedback Type</h3>
-              <br />
-              <input id='feedbackEnabled' type='checkbox' checked={feedbackEnabled} onChange={this.enableText} />
-              <label htmlFor='feedbackEnabled'> Give Written Feedback</label>
-              <br />
-
-              <input id='scoreEnabled' checked={scoreEnabled} type='checkbox' onChange={this.enableScore} />
-              <label htmlFor='scoreEnabled'>Give Score</label>
-              <br />
-              {scoreEnabled
-                ? <div>
-                  <label className='max-score'>Max. Score</label>
-                  <input className='max-score-input' value={maxScore} onChange={this.setMaxScore} />
-                </div>
-                : ''
-              }
-            </div>
+            <FeedbackOptionsView
+              useRubric={false}
+              rubricAvailable={false}
+              scoreEnabled={scoreEnabled}
+              scoreType={MANUAL_SCORE}
+              maxScore={maxScore}
+              enableRubric={this.enableRubric}
+              enableText={this.enableText}
+              toggleScoreEnabled={this.enableScore}
+              showText={feedbackEnabled}
+              setMaxScore={this.setMaxScore}
+            />
           </div>
 
           <div className='main-feedback'>

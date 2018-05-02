@@ -6,15 +6,17 @@ import FeedbackButton from '../components/feedback-button'
 import ActivityFeedbackForStudent from '../components/activity-feedback-for-student'
 import ActivityFeedbackPanel from './activity-feedback-panel'
 import SummaryIndicator from '../components/summary-indicator'
+import {
+  makeGetStudentFeedbacks,
+  makeGetRubric,
+  makeGetAutoScores,
+  makeGetComputedMaxScore
+} from '../selectors/activity-feedback-selectors'
 
 import {
-  getActivityFeedbacks,
-  getQuestions,
-  getFeedbacksNeedingReview,
-  getComputedMaxScore,
-  calculateStudentScores,
-  getActivityRubric
-} from '../core/activity-feedback-data'
+  isAutoScoring,
+  MANUAL_SCORE
+} from '../util/scoring-constants'
 
 import '../../css/activity.less'
 
@@ -56,7 +58,8 @@ class Activity extends PureComponent {
     const showText = activity.get('enableTextFeedback')
     const scoreType = activity.get('scoreType')
     const _maxScore = activity.get('maxScore')
-    const maxScore = scoreType === 'auto' ? computedMaxScore : _maxScore
+    const maxScore = scoreType === MANUAL_SCORE ? _maxScore : computedMaxScore
+    const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS())
     const showScore = (scoreType !== 'none')
     const useRubric = activity.get('useRubric')
     const showFeedback = this.showFeedback
@@ -81,8 +84,9 @@ class Activity extends PureComponent {
       </div>
 
     if (reportFor !== 'class') {
-      const autoScore = scoreType === 'auto'
-        ? autoScores.get(reportFor.get('id'))
+      const studentId = reportFor.get('id')
+      const autoScore = isAutoScoring(scoreType)
+        ? autoScores.get(`${studentId}`)
         : null
 
       feedbackButton =
@@ -108,7 +112,7 @@ class Activity extends PureComponent {
           </div>
         </Sticky>
         <SummaryIndicator
-          scores={scores}
+          scores={summaryScores}
           maxScore={maxScore}
           useRubric={useRubric}
           showScore={showScore}
@@ -124,30 +128,27 @@ class Activity extends PureComponent {
   }
 }
 
-function mapStateToProps (state, ownProps) {
-  const actId = ownProps.activity.get('id')
-  const feedbacks = getActivityFeedbacks(state, actId)
-  const questions = getQuestions(state, actId)
-  const computedMaxScore = getComputedMaxScore(questions)
-  const autoScores = calculateStudentScores(state, questions)
-  const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-  const needsReviewCount = feedbacksNeedingReview.size
-  const rubric = getActivityRubric(state, actId)
-  const scores = feedbacks
-    .flatMap(f => f.get('feedbacks')
-      .filter(f => f.get('hasBeenReviewed'))
-      .map(f2 => f2.get('score')))
-    .filter(x => x)
-    .toJS()
-  const rubricFeedbacks = feedbacks
-    .flatMap(f => f.get('feedbacks')
-      .filter(f => f.get('hasBeenReviewed'))
-      .map(f2 => f2.get('rubricFeedback')))
-    .filter(x => x)
-    .toJS()
-  return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
+function makeMapStateToProps () {
+  return (state, ownProps) => {
+    const getRubric = makeGetRubric()
+    const getFeedbacks = makeGetStudentFeedbacks()
+    const getAutoMaxScore = makeGetComputedMaxScore()
+    const getAutoScores = makeGetAutoScores()
+
+    const rubric = getRubric(state, ownProps)
+    const computedMaxScore = getAutoMaxScore(state, ownProps)
+    const autoScores = getAutoScores(state, ownProps)
+    const {
+      feedbacksNeedingReview,
+      feedbacks,
+      scores,
+      rubricFeedbacks } = getFeedbacks(state, ownProps)
+    const needsReviewCount = feedbacksNeedingReview.size
+    
+    return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => { return {} }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Activity)
+export default connect(makeMapStateToProps, mapDispatchToProps)(Activity)

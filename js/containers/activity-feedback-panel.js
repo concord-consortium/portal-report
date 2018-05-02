@@ -8,20 +8,22 @@ import ActivityFeedbackRow from '../components/activity-feedback-row'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback } from '../actions'
+
 import {
-  getActivityFeedbacks,
-  getFeedbacksNeedingReview,
-  getFeedbacksNotAnswered,
-  getComputedMaxScore,
-  getQuestions,
-  calculateStudentScores,
-  getActivityRubric
-} from '../core/activity-feedback-data'
+  makeGetStudentFeedbacks,
+  makeGetRubric,
+  makeGetAutoScores,
+  makeGetComputedMaxScore
+} from '../selectors/activity-feedback-selectors'
+
 import '../../css/feedback-panel.less'
 import '../../css/tooltip.less'
 import {
   NO_SCORE,
-  AUTOMATIC_SCORE
+  AUTOMATIC_SCORE,
+  RUBRIC_SCORE,
+  MAX_SCORE_DEFAULT,
+  isAutoScoring
 } from '../util/scoring-constants'
 import { truncate } from '../util/misc'
 
@@ -57,7 +59,7 @@ class ActivityFeedbackPanel extends PureComponent {
     if (newV !== NO_SCORE) {
       this.setState({lastScoreType: newV})
     }
-    if (newV === AUTOMATIC_SCORE) {
+    if (isAutoScoring(newV)) {
       newFlags.maxScore = this.props.computedMaxScore
     }
     this.props.enableActivityFeedback(activityId, newFlags)
@@ -95,12 +97,12 @@ class ActivityFeedbackPanel extends PureComponent {
       feedbacksNeedingReview,
       numFeedbacksGivenReview,
       numFeedbacksNeedingReview,
-      notAnswerd,
+      feedbacksNotAnswered,
       autoScores,
       computedMaxScore,
       rubric
     } = this.props
-    const numNotAnswered = notAnswerd.size
+    const numNotAnswered = feedbacksNotAnswered.size
     const prompt = truncate(activity.get('name') || '', 200)
     const scoreType = activity.get('scoreType') || NO_SCORE
     const activityId = activity.get('id')
@@ -108,7 +110,16 @@ class ActivityFeedbackPanel extends PureComponent {
     const useRubric = activity.get('useRubric')
     const activityFeedbackId = activity.get('activityFeedbackId')
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks
-    const maxScore = scoreType === AUTOMATIC_SCORE ? computedMaxScore : activity.get('maxScore')
+    let maxScore = MAX_SCORE_DEFAULT
+    switch (scoreType) {
+      case AUTOMATIC_SCORE:
+      case RUBRIC_SCORE:
+        maxScore = computedMaxScore
+        break
+      default:
+        maxScore = activity.get('maxScore')
+    }
+
     const showGettingStarted = scoreType === NO_SCORE && !showText && !useRubric
 
     const hide = function () {
@@ -191,18 +202,24 @@ class ActivityFeedbackPanel extends PureComponent {
   }
 }
 
-function mapStateToProps (state, ownProps) {
-  const actId = ownProps.activity.get('id')
-  const feedbacks = getActivityFeedbacks(state, actId)
-  const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-  const numFeedbacksNeedingReview = feedbacksNeedingReview.size
-  const notAnswerd = getFeedbacksNotAnswered(feedbacks)
-  const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - notAnswerd.size
-  const questions = getQuestions(state, actId)
-  const computedMaxScore = getComputedMaxScore(questions)
-  const autoScores = calculateStudentScores(state, questions)
-  const rubric = getActivityRubric(state, actId)
-  return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, notAnswerd, computedMaxScore, autoScores }
+function makeMapStateToProps () {
+  return (state, ownProps) => {
+    const getFeedbacks = makeGetStudentFeedbacks()
+    const getRubric = makeGetRubric()
+    const getMaxSCore = makeGetComputedMaxScore()
+    const getAutoscores = makeGetAutoScores()
+    const rubric = getRubric(state, ownProps)
+    const {
+      feedbacks,
+      feedbacksNeedingReview,
+      numFeedbacksNeedingReview,
+      feedbacksNotAnswered
+    } = getFeedbacks(state, ownProps)
+    const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - feedbacksNotAnswered.size
+    const computedMaxScore = getMaxSCore(state, ownProps)
+    const autoScores = getAutoscores(state, ownProps)
+    return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, feedbacksNotAnswered, computedMaxScore, autoScores }
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -213,4 +230,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ActivityFeedbackPanel)
+export default connect(makeMapStateToProps, mapDispatchToProps)(ActivityFeedbackPanel)
