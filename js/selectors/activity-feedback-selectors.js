@@ -6,18 +6,22 @@ import {
   RUBRIC_SCORE
 } from '../util/scoring-constants'
 
-/******************************************************************
- * These functions compute data for views. Some of the computations
- * are expensive, so we use reselect to memoize the results. Beacause
- * we use the selectors on multiple containers within the same
- * document we use the `makeGet<property>` factory method pattern
- * to bind each memoized function with the appropriate container.
- * When we comose selectors, we must first instantiate the parent
+/* These functions compute data for views.
+ * Some of the computations are expensive, so we use reselect to memoize
+ * the results. Because we use the selectors on multiple components and
+ * because we use the components `props` for our calculations, we use
+ * `makeGet<property>` to bind each memoized function with a single component.
+ * See: https://github.com/reduxjs/reselect#sharing-selectors-with-props-across-multiple-component-instances
+ *
+ * When we compose selectors, we must first instantiate the parent
  * selectors by something like `const getFoo = makeGetFoo()` and then
  * pass the memoized selectors as arguments to `createSelector`
  * See the reselect docs: https://github.com/reduxjs/reselect
- ******************************************************************/
+ /
 
+/*************************************************************************
+ * Simple helper functions:
+ *************************************************************************/
 const keyFor = (activity, student) => `${activity.get('id')}-${student.get('id')}`
 
 const isNumeric = obj => obj !== undefined && typeof (obj) === 'number' && !isNaN(obj)
@@ -57,6 +61,7 @@ const feedbackIsMarkedComplete = (fb) => {
 }
 
 const hasLearner = (feedback) => !!feedback.get('learnerId')
+
 const getFeedbacksNotAnswered = (fbs) => fbs.filter(f => !hasLearner(f))
 
 const getFeedbacksNeedingReview = (feedbacks) => {
@@ -69,15 +74,9 @@ const formatStudents = (students) => students
   .sortBy(s => s.get('lastName'))
   .map(s => addRealName(s))
 
-// return all the questions for an activity
-const getQuestions = (report, activity) => {
-  const sections = activity.get('children')
-  const pages = sections.flatMap(s => s.get('children'))
-  const questions = pages.flatMap(page => page.get('children'))
-  return questions.map((v, i) => report.getIn(['questions', v.get('key')]))
-}
-
-// Simple selector inputs from state:
+/*************************************************************************
+ * Simple selectors:
+ *************************************************************************/
 const getReport = (state) => state.get('report')
 const getActivity = (state, props) => props.activity
 const getActivityFeedbacks = (state) => state.get('activityFeedbacks')
@@ -85,13 +84,23 @@ const getQuestionFeedbacks = (state) => state.get('feedbacks')
 const getStudents = (state) => state.getIn(['report', 'students'])
 const getRubics = (state) => state.get('rubrics')
 
+/*************************************************************************
+ * Composite selectors (composed of other selectors).
+ * These are created via factory methods so each component has its own instance.
+ * Most of these depend (via cascaded selector input) on the activty.
+ * We partition our selectors based on the activity to limit cascading cache
+ * invadliations. Because the activityID is not part of the state tree
+ * we get the value from the component `props`.
+ *************************************************************************/
+
+// Memoization factory for thes score type
 // Updates when the activity Changes
 const makeGetScoreType = () => createSelector(
   getActivity,
   (activity) => activity.get('scoreType')
 )
 
-// Make a memoization factory for the rubric
+// Memoization factory for the rubric
 // Updates when the rubric, or activity Changes
 export const makeGetRubric = () => createSelector(
   getRubics,
@@ -103,7 +112,7 @@ export const makeGetRubric = () => createSelector(
   }
 )
 
-// Make a memoization factory for student activty feedback
+// Memoization factory for student activty feedback
 // changes to activity, students, or actFeedbacks cause update.
 export const makeGetStudentFeedbacks = () => {
   return createSelector(
@@ -143,79 +152,79 @@ export const makeGetStudentFeedbacks = () => {
   )
 }
 
-// Make a memoization factory for activity questions
-// changes to report, or activity, or feedbacks cause update.
+// Memoization factory: all Activity questions
+// changes to report, or activity cause update.
 export const makeGetQuestions = () => createSelector(
   getReport,
   getActivity,
-  (report, activity) => getQuestions(report, activity)
+  (report, activity) => {
+    const sections = activity.get('children')
+    const pages = sections.flatMap(s => s.get('children'))
+    const questions = pages.flatMap(page => page.get('children'))
+    return questions.map((v, i) => report.getIn(['questions', v.get('key')]))
+  }
 )
 
-// Calculate the activity scores from all sub question scores.
-const getQuestionAutoScores = (report, questions, questionFeedbacks) => {
-  const getFeedbackScore = (feedbackId) => {
-    const score = questionFeedbacks.getIn([feedbackId, 'score'])
-    const reviewed = questionFeedbacks.getIn([feedbackId, 'hasBeenReviewed'])
-    const computedScore = reviewed ? (score || 0) : 0
-    return computedScore
-  }
-  const scores = questions
-    .filter(question => question.get('scoreEnabled'))
-    .map(q => q.get('answers'))
-    .flatten()
-    .map(answerId => report.getIn(['answers', answerId]))
-    .groupBy(answer => answer.get('studentId'))
-    .map(studentAnswer => studentAnswer
-      .filter(ans => ans.get('feedbacks'))
-      .map(ans => ans.get('feedbacks').last())
-      .map(feedbackId => getFeedbackScore(feedbackId))
-    )
-  const sums = scores.map(s => s.reduce((sum, v) => sum + v, 0))
-  return sums
-}
-
-// Make a memoization factory for automatic scores.
-// Updated on report, question, or question feedback changs.
+// Memoization factory: Automatic scores.
+// updates when report, question, or question feedback changs.
 export const makeGetQuestionAutoScores = () => {
   const getQuestions = makeGetQuestions()
   return createSelector(
     getReport,
     getQuestions,
     getQuestionFeedbacks,
-    (report, questions, feedbacks) => getQuestionAutoScores(report, questions, feedbacks)
+    (report, questions, questionFeedbacks) => {
+      const getFeedbackScore = (feedbackId) => {
+        const score = questionFeedbacks.getIn([feedbackId, 'score'])
+        const reviewed = questionFeedbacks.getIn([feedbackId, 'hasBeenReviewed'])
+        const computedScore = reviewed ? (score || 0) : 0
+        return computedScore
+      }
+      const scores = questions
+        .filter(question => question.get('scoreEnabled'))
+        .map(q => q.get('answers'))
+        .flatten()
+        .map(answerId => report.getIn(['answers', answerId]))
+        .groupBy(answer => answer.get('studentId'))
+        .map(studentAnswer => studentAnswer
+          .filter(ans => ans.get('feedbacks'))
+          .map(ans => ans.get('feedbacks').last())
+          .map(feedbackId => getFeedbackScore(feedbackId))
+        )
+      const sums = scores.map(s => s.reduce((sum, v) => sum + v, 0))
+      return sums
+    }
   )
 }
 
-// calculate the rubric scores (normal function)
-const calculateRubricScores = (rubric, feedbacks) => {
-  let scores = IMap({})
-  feedbacks
-    .forEach(feedbackRecord => {
-      const feedback = feedbackRecord.get('feedbacks').last()
-      const key = feedbackRecord.get('studentId')
-      let score = null
-      if (feedback && feedback.get('rubricFeedback')) {
-        const rubricFeedback = feedback.get('rubricFeedback')
-        score = rubricFeedback.map((k, v) => k.get('score')).reduce((p, n) => p + n)
-        scores.set(key, score)
-      }
-      scores = scores.set(key, score)
-    })
-  return scores
-}
-
-// Make a memoization factory for rubric feedback
+// Memoization factory: rubric feedback
+// updates whenever rubric or feedbacks change
 const makeGetRubricScores = () => {
   const getFeedbacks = makeGetStudentFeedbacks()
   const getRubric = makeGetRubric()
   return createSelector(
     getRubric,
     getFeedbacks,
-    (rubric, feedbacks) => calculateRubricScores(rubric, feedbacks.feedbacks)
+    (rubric, feedbacks) => {
+      let scores = IMap({})
+      feedbacks.feedbacks
+        .forEach(feedbackRecord => {
+          const feedback = feedbackRecord.get('feedbacks').last()
+          const key = feedbackRecord.get('studentId')
+          let score = null
+          if (feedback && feedback.get('rubricFeedback')) {
+            const rubricFeedback = feedback.get('rubricFeedback')
+            score = rubricFeedback.map((k, v) => k.get('score')).reduce((p, n) => p + n)
+            scores.set(key, score)
+          }
+          scores = scores.set(key, score)
+        })
+      return scores
+    }
   )
 }
 
-// Make a memoization factory for automatic scoring (both types)
+// Memoization factory: for automatic scoring (both types)
 // updates when rubricscores or question scores changes.
 export const makeGetAutoScores = () => {
   const getRubricScores = makeGetRubricScores()
@@ -237,7 +246,7 @@ export const makeGetAutoScores = () => {
   )
 }
 
-// Make a memoization factory for the maximum auto score
+// Memoization factory for the maximum auto score
 // Updates when questions are changed.
 const makeGetAutoMaxScore = () => {
   const getQuestions = makeGetQuestions()
@@ -252,7 +261,7 @@ const makeGetAutoMaxScore = () => {
   )
 }
 
-// Make a memoization factory for the maximum rubric score
+// Memoization factory for the maximum rubric score
 // Updates when rubric changes.
 const makeGetRubricMaxScore = () => {
   const maxReducer = (prev, current) => current > prev ? current : prev
@@ -270,7 +279,7 @@ const makeGetRubricMaxScore = () => {
   )
 }
 
-// Make a memoization factory for the maximum score,
+// Memoization factory for the maximum score,
 // Updates when scoreType, autoMaxScore, or rubricMaxScore changes.
 export const makeGetComputedMaxScore = (questions, rubric, scoreType) => {
   const getScoreType = makeGetScoreType()
