@@ -75,10 +75,14 @@ export default class FeedbackRow extends PureComponent {
     return (
       <div className='feedback-interface'>
         <h4>Your Feedback</h4>
-        <div className='feedback-content'>
-          { feedbackEnabled ? this.renderFeedbackForm(answerKey, disableFeedback, feedback) : ''}
-          { scoreEnabled ? this.renderScore(answerKey, disableFeedback, score) : '' }
-          { feedbackEnabled || scoreEnabled ? this.renderComplete(answerKey, complete) : ''}
+        <div className='feedback-content grid'>
+          <div className='grid-left'>
+            { feedbackEnabled ? this.renderFeedbackForm(answerKey, disableFeedback, feedback) : ''}
+          </div>
+          <div className='grid-right'>
+            { scoreEnabled ? this.renderScore(answerKey, disableFeedback, score) : '' }
+            { feedbackEnabled || scoreEnabled ? this.renderComplete(answerKey, complete) : ''}
+          </div>
         </div>
       </div>
     )

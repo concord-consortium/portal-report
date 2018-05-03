@@ -102,32 +102,38 @@ export default class ActivityFeedbackRow extends PureComponent {
     return (
       <div className='feedback-interface'>
         <h4>Your Feedback</h4>
-        <div className='feedback-content'>
+        <div className='feedback-content grid'>
           {
             useRubric
-              ? <RubricBox
-                learnerId={learnerId}
-                disabled={complete}
-                rubric={rubric}
-                rubricFeedback={rubricFeedback}
-                rubricChange={(rubricFeedback) => this.rubricChange(activityFeedbackKey, rubricFeedback)} />
+              ? <div className='grid-wide'>
+                <RubricBox
+                  learnerId={learnerId}
+                  disabled={complete}
+                  rubric={rubric}
+                  rubricFeedback={rubricFeedback}
+                  rubricChange={(rubricFeedback) => this.rubricChange(activityFeedbackKey, rubricFeedback)} />
+              </div>
               : null
           }
-          {
-            feedbackEnabled
-              ? this.renderFeedbackForm(activityFeedbackKey, disableFeedback, feedback)
-              : ''
-          }
-          {
-            scoreEnabled
-              ? this.renderScore(activityFeedbackKey, disableScore, scoreToRender)
-              : null
-          }
-          {
-            feedbackEnabled || scoreEnabled || useRubric
-              ? this.renderComplete(activityFeedbackKey, complete)
-              : null
-          }
+          <div className='grid-left'>
+            {
+              feedbackEnabled
+                ? this.renderFeedbackForm(activityFeedbackKey, disableFeedback, feedback)
+                : ''
+            }
+          </div>
+          <div className='grid-right'>
+            {
+              scoreEnabled
+                ? this.renderScore(activityFeedbackKey, disableScore, scoreToRender)
+                : null
+            }
+            {
+              feedbackEnabled || scoreEnabled || useRubric
+                ? this.renderComplete(activityFeedbackKey, complete)
+                : null
+            }
+          </div>
         </div>
       </div>
     )
