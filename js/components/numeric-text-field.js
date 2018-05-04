@@ -35,7 +35,7 @@ class NumericTextField extends PureComponent {
   }
 
   render () {
-    const { className } = this.props
+    const { className,disabled } = this.props
     const { value } = this.state
     return (
       <input
@@ -43,6 +43,7 @@ class NumericTextField extends PureComponent {
         value={value}
         onChange={this.updateValue}
         onBlur={this.setValue}
+        disabled={disabled}
       />
     )
   }

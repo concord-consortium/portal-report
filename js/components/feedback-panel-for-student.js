@@ -74,8 +74,8 @@ export default class FeedbackPanelForStudent extends PureComponent {
     const showFeedback = (hasFeedback && hasBeenReviewed)
 
     let feedbackDiv =
-      <div className='heading'>
-        No overall feedback yet.
+      <div>
+        No feedback yet.
       </div>
 
     if (showFeedback) {

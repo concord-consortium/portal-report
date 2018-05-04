@@ -7,7 +7,7 @@ import {
   isAutoScoring
 } from '../util/scoring-constants'
 
-export default class FeedbackOptions extends PureComponent {
+export default class ActivityFeedbackOptions extends PureComponent {
   constructor (props) {
     super(props)
     this.state = { lastScoreType: null }
@@ -91,6 +91,7 @@ export default class FeedbackOptions extends PureComponent {
         showText={showText}
         changeScoreType={this.changeScoreType}
         setMaxScore={this.setMaxScore}
+        allowAutoScoring
       />
     )
   }
