@@ -10,9 +10,6 @@
 }
 .feedback-container {
   .feedback-panel {
-    div {
-      overflow: hidden;
-    }
     box-sizing: border-box;
     position: fixed;
     z-index: 5001;
@@ -36,7 +33,9 @@
       float: left;
       font-size: 1.15em;
       font-weight: normal;
-      height: 3em;
+      height: 2em;
+      min-height: 2em;
+      max-height: 3em;
       overflow: auto;
       margin: 0px;
     }
@@ -58,11 +57,9 @@
       opacity: 0.5;
     }
     .main-feedback {
+      overflow: auto;
       width: 100%;
-      flex-grow: 1;
-      flex-shrink: 1;
       align-self: flex-end;
-      position: relative;
       margin-top: 0px;
       display: flex;
       flex-direction: column;
@@ -103,10 +100,10 @@
     .feedback-row {
       background: #f6f6f6;
       font-size: .9em;
-      overflow: hidden;
       padding: 10px 15px;
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
       &:nth-child(even) {
@@ -142,19 +139,36 @@
 
 
     .student-answer {
-      width: 48%;
+      flex: 1 1 30%;
     }
 
     .feedback-interface {
-      width: 70%;
       display: flex;
+      flex: 1 1 70%;
+      min-width: 600px;
       flex-direction: column;
       justify-content: flex-end;
       align-items: flex-end;
-
+      overflow: auto;
+      .grid {
+        display: grid;
+        grid-template-columns: [left] 3fr [right] 1fr [end];
+        grid-auto-rows: auto;
+      }
+      .grid-left {
+        grid-column-start: left;
+        grid-column-end: right;
+      }
+      .grid-right {
+        grid-column-start: right;
+        grid-column-end: end;
+      }
+      .grid-wide {
+        grid-column-start: left;
+        grid-column-end: end;
+      }
       .feedback-content {
-        width: 100%;
-        font-size: 11pt;
+        font-size: 12px;
         input, textarea {
           font-family: inherit;
           font-size: inherit;
@@ -169,6 +183,7 @@
         .score {
           text-align: right;
           input { width: 3em; }
+
         }
         .feedback-complete {
           text-align: right;
@@ -178,8 +193,6 @@
     .max-score-input {
       width: 35px;
     }
-
-
 
     .footer {
       height: 40px;
@@ -213,14 +226,14 @@
       color: #3a878b;
       font-size: 1rem;
       font-weight: bold;
-      margin: 1rem 0px;
+      margin: 0.2rem 0px;
       text-transform: capitalize;
     }
 
     h4 {
       color: #777;
       font-weight: bold;
-      margin: 1rem 0px;
+      margin: 0.2rem 0px;
       padding: 0px;
     }
 
