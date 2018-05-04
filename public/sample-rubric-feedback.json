@@ -1,0 +1,14 @@
+{
+  "C1": {
+    "id": "R1",
+    "score": 1,
+    "label": "Beginning",
+    "description": "Not meeting expected goals."
+  },
+  "C2": {
+    "id": "R2",
+    "score": 2,
+    "label": "Developing",
+    "description": "Approaching proficiency."
+  }
+}
