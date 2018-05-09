@@ -7,7 +7,9 @@ node_js:
 install:
   - travis_retry gem install s3_website -v 3.4.0
   - travis_retry yarn
-before_script: webpack
+before_script:
+  - webpack
+  - WEBPACK_TARGET=lib webpack
 script:
   - "npm run test"
   - ./s3_deploy.sh

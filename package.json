@@ -1,7 +1,11 @@
 {
-  "name": "portal-report",
-  "version": "0.0.1",
+  "name": "@concord-consortium/portal-report",
+  "version": "1.7.0-pre.5",
   "description": "",
+  "main": "dist/library/portal-report.js",
+  "files": [
+    "dist/library"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/concord-consortium/portal-report.git"
@@ -18,6 +22,7 @@
   },
   "homepage": "https://github.com/concord-consortium/portal-report#readme",
   "scripts": {
+    "prepare": "WEBPACK_TARGET=lib webpack",
     "test": "mocha --compilers js:babel-core/register --require ignore-styles --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
     "test:watch": "npm run test -- --watch"
   },
