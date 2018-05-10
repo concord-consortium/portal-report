@@ -10,7 +10,7 @@ export function rubricReducer (state = INITIAL_RUBRIC_STATE, action) {
       const report = action.response.report
       const activities = report.type === 'Investigation' ? [ report.children ] : [ report ]
       const nextState = activities.reduce((_state, act) => {
-        return _state.set(act.rubric_url, Map(act.rubric))
+        return act.rubric ? _state.set(act.rubric_url, Map(act.rubric)) : _state
       }, state)
       return nextState
     case REQUEST_RUBRIC:
