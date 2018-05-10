@@ -7,11 +7,11 @@ const INITIAL_RUBRIC_STATE = Map({})
 export function rubricReducer (state = INITIAL_RUBRIC_STATE, action) {
   switch (action.type) {
     case RECEIVE_DATA:
-      const activities = action.response.report.children || []
+      const report = action.response.report
+      const activities = report.type === 'Investigation' ? [ report.children ] : [ report ]
       const nextState = activities.reduce((_state, act) => {
-        return _state.set(act.rubric_url, act.rubric)
+        return _state.set(act.rubric_url, Map(act.rubric))
       }, state)
-
       return nextState
     case REQUEST_RUBRIC:
       // NOOP for now.
