@@ -1,14 +1,25 @@
 var path = require('path');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+// WEBPACK_TARGET=lib webpack will build UMD library.
+// Library entry point is defined js/library.js
+var lib = process.env.WEBPACK_TARGET === 'lib';
+
+var appEntry = {
+  'app': ['./js/index.js'],
+  'rubric-test': ['./js/rubric-test.js']
+}
+var libEntry = {
+  'portal-report': ['./js/library.js']
+}
+
 module.exports = {
-  entry: {
-    'app': ['./js/index.js'],
-    'rubric-test': ['./js/rubric-test.js']
-  },
+  entry: lib ? libEntry : appEntry,
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].js'
+    path: path.join(__dirname, lib ? 'dist/library' : 'dist'),
+    filename: '[name].js',
+    library: lib ? 'PortalReport' : undefined,
+    libraryTarget: lib ? 'umd' : undefined
   },
   module: {
     loaders: [
@@ -46,9 +57,33 @@ module.exports = {
     ]
   },
   devtool: "source-map",
-  plugins: [
-    new CopyWebpackPlugin([
-      {from: 'public'}
-    ])
-  ]
+  plugins: []
 };
+
+if (!lib) {
+  // We don't need .html page in our library.
+  module.exports.plugins.push(new CopyWebpackPlugin([
+    {from: 'public'}
+  ]));
+}
+
+if (lib) {
+  module.exports.externals = [
+    {
+      'react': {
+        root: 'React',
+        commonjs2: 'react',
+        commonjs: 'react',
+        amd: 'react'
+      }
+    },
+    {
+      'react-dom': {
+        root: 'ReactDOM',
+        commonjs2: 'react-dom',
+        commonjs: 'react-dom',
+        amd: 'react-dom'
+      }
+    }
+  ]
+}

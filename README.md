@@ -4,9 +4,22 @@
 
 [Portal](https://github.com/concord-consortium/rigse) report for teachers.
 
-Demo: http://concord-consortium.github.io/portal-report/
+Demo: http://portal-report.concord.org/version/v1.7.0/ 
+
+Check recent git tags to open the most recent version.
 
 It expects two URL params: `reportUrl` and `token`. If they are not provided, it will be using fake data, so it's easy to work on some features without connecting to the real Portal instance.
+
+## Library 
+
+Portal Report is a standalone application, but it also provides some React components that can be used by other projects
+(https://github.com/concord-consortium/portal-pages). Check the `js/library.js` entry point to see what's available or 
+to add more components. 
+
+There are two ways to use this library:
+- NPM module: `@concord-consortium/portal-report`
+- Using script tag referencing `http://portal-report.concord.org/version/v1.7.0/library/portal-report.js` (in this case,
+  library will be available under global `PortalReport` name)
 
 ## Development
 
@@ -48,6 +61,19 @@ Travis automatically builds and deploys branches and tags. A simple `git push` i
 #### Manual S3 Deployment
 If you want to do a manual deployment, put your S3 credentials in `.env` and copy `s3_deploy.sh` to a local git-ignored script. Fill in missing ENV vars, and then run that script.
 
+
+#### Library
+
+S3 deployment will automatically take care of the library deployment to S3 bucket: `http://portal-report.concord.org/version/[some_version_tag]/library/portal-report.js`
+
+However, NPM module needs to be updated manually. First, update version number in `package.json` (follow version number of the app, so the most recent `v...` tag).
+Then run:
+
+```
+npm publish --access=public
+```
+
+NPM will automatically build the library first, as `package.json` defines `script/prepare`.
 
 ### Frameworks, conventions
 

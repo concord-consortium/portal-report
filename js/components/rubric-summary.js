@@ -83,3 +83,9 @@ export default class RubricSummary extends PureComponent {
     )
   }
 }
+
+RubricSummary.defaultProps = {
+  useRubric: true,
+  rubric: null,
+  rubricFeedbacks: []
+}
