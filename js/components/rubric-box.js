@@ -62,12 +62,14 @@ export default class RubricBox extends PureComponent {
     ) || null
     const { rowMaps } = this.props
     const values = rowMaps[critIndex]
-    const maxV = values.reduce((p, c) => p + c, 0)
-    const value = Math.round(values[ratingIndex] / maxV * 1000) / 10
+    const sum = values.reduce((p, c) => p + c, 0)
+    const value = Math.round(values[ratingIndex] / sum * 1000) / 10
+    // Render check mark when there's data for only one student (instead of 100% and 0%).
+    const valueText = sum > 1 ? `${value}%` : (value === 100 ? '✔' : '')
     return (
       <td style={tableStyle} title={ratingDescription}>
         <div className='center'>
-          <div className='summary-cell-value'>{value}%</div>
+          <div className='summary-cell-value'>{ valueText }</div>
         </div>
       </td>
     )
