@@ -127,7 +127,7 @@ export const makeGetStudentFeedbacks = () => {
       const feedbacksNotAnswered = getFeedbacksNotAnswered(feedbacks)
       const numFeedbacksNeedingReview = feedbacksNeedingReview.size
       const lastFeedbacks = activityFeedbacks
-        .map(f => f.get('feedbacks').last())
+        .map(f => f.get('feedbacks').first())
         .filter(f => f && f.get('hasBeenReviewed'))
       const scores = lastFeedbacks
         .map(f => f.get('score'))
