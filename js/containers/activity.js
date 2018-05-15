@@ -60,11 +60,11 @@ class Activity extends PureComponent {
     const _maxScore = activity.get('maxScore')
     const maxScore = scoreType === MANUAL_SCORE ? _maxScore : computedMaxScore
     const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS())
-    const showScore = (scoreType !== 'none')
+    const showScore = scoreType !== 'none'
     const useRubric = activity.get('useRubric')
     const showFeedback = this.showFeedback
     const hideFeedback = this.hideFeedback
-    const feedbackEnabled = showScore || showText
+    const feedbackEnabled = showScore || showText || useRubric
 
     const feedbackPanel = (reportFor === 'class' && this.state.showFeedbackPanel)
       ? <ActivityFeedbackPanel
