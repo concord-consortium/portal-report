@@ -1,6 +1,13 @@
 import { fromJS } from 'immutable'
 
-const noFeedback = fromJS({})
+const NO_FEEDBACK = fromJS({})
+
+// Some parts of Rubric are designed for student specifically.
+// They use common suffix appended to the properties.
+const VIEWER_SUFFIX = {
+  teacher: '',
+  student: 'ForStudent'
+}
 
 export class RubricHelper {
   constructor (rubric, feedback) {
@@ -18,17 +25,17 @@ export class RubricHelper {
 
   feedbackRatingFor (criteria) {
     const criteriaId = criteria.get('id')
-    const feedback = this.feedback.get(criteriaId) || noFeedback
+    const feedback = this.feedback.get(criteriaId) || NO_FEEDBACK
     const ratingId = feedback.get('id')
     return this.ratingForId(ratingId)
   }
 
-  feedbackDescriptionForCriteria (criteria, viewer = '') {
+  feedbackDescriptionForCriteria (criteria, viewer = 'teacher') {
     const rating = this.feedbackRatingFor(criteria)
     if (!rating) return null
     const ratingId = rating.get('id')
     const defaultKey = 'ratingDescriptions'
-    const viewerKey = `${defaultKey}_${viewer}`
+    const viewerKey = `${defaultKey}${VIEWER_SUFFIX[viewer]}`
     const viewerDescription = criteria.getIn([viewerKey, ratingId], null)
     const defaultDescription = criteria.getIn([defaultKey, ratingId], null)
     return viewerDescription || defaultDescription
@@ -38,7 +45,7 @@ export class RubricHelper {
     return this.feedbackRatingFor(criteria).get('score')
   }
 
-  allFeedback (viewer = '') {
+  allFeedback (viewer = 'teacher') {
     return this.rubric.get('criteria').map(c => {
       const record = this.feedbackRatingFor(c)
       if (!record) return null
