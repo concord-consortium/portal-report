@@ -60,11 +60,10 @@ export default class ActivityFeedbackOptions extends PureComponent {
   }
 
   render () {
-    const { activity, computedMaxScore } = this.props
+    const { activity, computedMaxScore, rubric } = this.props
     const scoreType = activity.get('scoreType') || NO_SCORE
     const showText = activity.get('enableTextFeedback')
-    const rubricUrl = activity.get('rubricUrl')
-    const rubricAvailable = rubricUrl && rubricUrl.length > 0
+    const rubricAvailable = !!rubric
     const useRubric = rubricAvailable && activity.get('useRubric')
     const scoreEnabled = scoreType !== NO_SCORE
     const maxScore = isAutoScoring(scoreType)

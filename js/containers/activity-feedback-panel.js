@@ -152,6 +152,7 @@ class ActivityFeedbackPanel extends PureComponent {
               toggleScoreEnabled={this.toggleScoreEnabled}
               enableActivityFeedback={this.props.enableActivityFeedback}
               computedMaxScore={this.props.computedMaxScore}
+              rubric={rubric}
             />
           </div>
 

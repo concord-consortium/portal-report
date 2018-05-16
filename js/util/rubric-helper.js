@@ -1,12 +1,11 @@
 import { fromJS } from 'immutable'
 
+const noFeedback = fromJS({})
+
 export class RubricHelper {
   constructor (rubric, feedback) {
     this.rubric = fromJS(rubric)
     this.feedback = fromJS(feedback)
-  }
-  noFeedback () {
-    return fromJS({})
   }
 
   criteriaForId (criteriaID) {
@@ -19,10 +18,9 @@ export class RubricHelper {
 
   feedbackRatingFor (criteria) {
     const criteriaId = criteria.get('id')
-    const feedback = this.feedback.get(criteriaId) || this.noFeedback()
+    const feedback = this.feedback.get(criteriaId) || noFeedback
     const ratingId = feedback.get('id')
-    const found = this.ratingForId(ratingId)
-    return found
+    return this.ratingForId(ratingId)
   }
 
   feedbackDescriptionForCriteria (criteria, viewer = '') {
