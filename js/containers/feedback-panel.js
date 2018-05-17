@@ -91,7 +91,7 @@ class FeedbackPanel extends PureComponent {
 
   renderGettingStarted () {
     return (
-      <div className='gettingStarted'>
+      <div className='getting-started'>
         <div className='explainer'>
           To start, choose the type of feedback you want to leave in the Feedback Type settings above.
         </div>
