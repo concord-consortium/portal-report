@@ -68,7 +68,7 @@ export class RubricHelper {
         ratingDescription: this.feedbackDescriptionForCriteria(c, viewer),
         score: record.get('score'),
         label: record.get('label'),
-        key: record.get('id')
+        key: c.get('id')
       }
     }).toJS()
   }

@@ -31,9 +31,7 @@ export default class RubricBox extends PureComponent {
     const critId = crit.id
     const ratingId = rating.id
     const radioButtonKey = `${critId}-${ratingId}`
-    const checked = rubricFeedback &&
-      rubricFeedback[critId] &&
-      rubricFeedback[critId].id === ratingId
+    const checked = !!(rubricFeedback && rubricFeedback[critId] && rubricFeedback[critId].id === ratingId)
     // Tooltips displayed to teacher should actually show student description if it's available.
     const ratingDescription =
       (crit.ratingDescriptionsForStudent && crit.ratingDescriptionsForStudent[ratingId]) ||
@@ -70,7 +68,7 @@ export default class RubricBox extends PureComponent {
     // Render check mark when there's data for only one student (instead of 100% and 0%).
     const valueText = sum > 1 ? `${value}%` : (value === 100 ? '✔' : '')
     return (
-      <td style={tableStyle} title={ratingDescription}>
+      <td key={`${crit.id}-${rating.id}`} style={tableStyle} title={ratingDescription}>
         <div className='center'>
           <div className='summary-cell-value'>{ valueText }</div>
         </div>
