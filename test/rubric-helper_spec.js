@@ -63,7 +63,7 @@ describe('the rubric helper class', () => {
       expect(record2.ratingDescription).to.eql('Student Specific: R2')
       expect(record2.score).to.eql(2)
       expect(record2.label).to.eql('Developing')
-      expect(record2.key).to.eql('R2')
+      expect(record2.key).to.eql('C2')
     })
     describe('with no actual feedback …', () => {
       it('should not return anything', () => {
