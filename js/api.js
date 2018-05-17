@@ -43,6 +43,30 @@ export function updateReportSettings (data) {
   }
 }
 
+// The api-middleware calls this function when we need to load rubric in from a rubricUrl.
+const rubricUrlCache = {}
+
+export function fetchRubric (rubricUrl) {
+  return new Promise((resolve, reject) => {
+    if (!rubricUrlCache[rubricUrl]) {
+      fetch(rubricUrl)
+        .then(checkStatus)
+        .then(response => response.json())
+        .then(newRubric => {
+          rubricUrlCache[rubricUrl] = newRubric
+          resolve({ url: rubricUrl, rubric: newRubric })
+        })
+        .catch(e => {
+          console.error(`unable to load rubric at: ${rubricUrl}`)
+          reject(e)
+        })
+    } else {
+      // Cache available, resolve promise immediately and return cached value.
+      resolve({rubricUrl, rubric: rubricUrlCache[rubricUrl]})
+    }
+  })
+}
+
 export class APIError {
   constructor (statusText, response) {
     this.message = statusText

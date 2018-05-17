@@ -5,7 +5,10 @@
     "updatedMsUTC": 1519424087822,
     "originUrl": "http://concord.org/rubrics/RBK1.json",
     "referenceURL": "https://docs.google.com/document/d/1wkrWtaT8gjDVyttf0nsa90XUhogyiXOJjC36aQGNLMA/edit?usp=sharing",
-    "showRatingDescriptions": false,
+    "showRatingDescriptions": true,
+    "criteriaLabel": "Aspects of Proficiency",
+    "criteriaLabelForStudent": "Your answer should",
+    "feedbackLabelForStudent": "Feedback",
     "criteria": [
         {
             "id": "C1",
@@ -19,10 +22,16 @@
         {
             "id": "C2",
             "description": "Provide reasoning by stating that interactions between organisms (i.e., competitive and predator-prey) are distinguished by patterns in data.",
+            "descriptionForStudent": "Student specific C2 criteria description",
             "ratingDescriptions": {
                 "R1": "Student provides reasoning that describes  predator-prey AND mutually beneficial interactions between fire ants/ladybugs and fire ants/aphids, respectively.",
                 "R2": "Student provides reasoning that describes predator-prey OR mutually beneficial interactions between fire ants/ladybugs and fire ants/aphids, respectively.",
                 "R3": "Student does not provide reasoning that describes predator-prey OR mutually beneficial  interactions between fire ants/ladybugs and fire ants/aphids, respectively."
+            },
+            "ratingDescriptionsForStudent": {
+                "R1": "Student Specific: R1",
+                "R2": "Student Specific: R2",
+                "R3": "Student Specific: R3"
             }
         }
     ],

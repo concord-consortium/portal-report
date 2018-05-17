@@ -1,11 +1,11 @@
 .activity-feedback {
   display: flex;
   justify-content: flex-end;
-  .actFeedbackPanel {
+  .act-feedback-panel {
     padding: 0.5em;
     border-radius: 0.5em;
     background-color: hsl(0,0%, 95%);
-    max-width: 500px;
+    max-width: 700px;
     width: 50vw;
     box-shadow: 1px 1px 3px hsla(0,0%, 50%, 0.5);
     font-weight: lighter;
@@ -24,9 +24,12 @@
       font-family: helvetica, arial, sans-serif;
       margin-bottom: 0.8em;
     }
+    .feedback-section {
+      margin-top: 1em;
+    }
     .score {
       text-align: right;
-      margin-bottom: 0px;
+      margin-bottom: 0;
       .scoreLabel {
         color: hsl(0,0%,50%);
         font-weight: bold;
@@ -38,7 +41,7 @@
 }
 
 .active {
-  .actFeedbackPanel {
+  .act-feedback-panel {
     display: none;
   }
 }

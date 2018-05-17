@@ -81,7 +81,7 @@ class ActivityFeedbackPanel extends PureComponent {
 
   renderGettingStarted () {
     return (
-      <div className='gettingStarted'>
+      <div className='getting-started'>
         <div className='explainer'>
           To start, choose the type of feedback you want to leave in the Feedback Type settings above.
         </div>
@@ -152,6 +152,7 @@ class ActivityFeedbackPanel extends PureComponent {
               toggleScoreEnabled={this.toggleScoreEnabled}
               enableActivityFeedback={this.props.enableActivityFeedback}
               computedMaxScore={this.props.computedMaxScore}
+              rubric={rubric}
             />
           </div>
 

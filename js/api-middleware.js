@@ -1,5 +1,4 @@
-import { fetchReportData, updateReportSettings, APIError } from './api'
-import { loadRubric } from './actions/rubric'
+import { fetchReportData, updateReportSettings, APIError, fetchRubric } from './api'
 
 // This middleware is executed only if action includes .callAPI object.
 // It calls API action defined in callAPI.type.
@@ -27,7 +26,7 @@ function callApi (type, data) {
       return fetchReportData()
     case 'updateReportSettings':
       return updateReportSettings(data)
-    case 'loadRubric':
-      return loadRubric(data)
+    case 'fetchRubric':
+      return fetchRubric(data)
   }
 }

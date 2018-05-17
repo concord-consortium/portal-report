@@ -22,7 +22,7 @@ import '../../css/activity.less'
 
 class Activity extends PureComponent {
   constructor (props) {
-    super()
+    super(props)
     this.state = {
       showFeedbackPanel: false
     }
@@ -54,76 +54,56 @@ class Activity extends PureComponent {
       rubricFeedbacks,
       scores
     } = this.props
+    const { showFeedbackPanel } = this.state
+
+    const isClassReport = reportFor === 'class'
+    const isStudentReport = !isClassReport
     const activityName = activity.get('name')
     const showText = activity.get('enableTextFeedback')
     const scoreType = activity.get('scoreType')
     const _maxScore = activity.get('maxScore')
     const maxScore = scoreType === MANUAL_SCORE ? _maxScore : computedMaxScore
     const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS())
-    const showScore = (scoreType !== 'none')
+    const showScore = scoreType !== 'none'
     const useRubric = activity.get('useRubric')
-    const showFeedback = this.showFeedback
-    const hideFeedback = this.hideFeedback
-    const feedbackEnabled = showScore || showText
+    const feedbackEnabled = showScore || showText || useRubric
+    let autoScore = null
 
-    const feedbackPanel = (reportFor === 'class' && this.state.showFeedbackPanel)
-      ? <ActivityFeedbackPanel
-        hide={hideFeedback}
-        activity={activity}
-      />
-      : ''
-    let summaryIndicator = null
-    let feedbackButton =
-      <div className='feedback'>
-        <FeedbackButton
-          text='Provide overall feedback'
-          needsReviewCount={needsReviewCount}
-          feedbackEnabled={feedbackEnabled}
-          showFeedback={showFeedback}
-        />
-      </div>
-
-    if (reportFor === 'class') {
-      summaryIndicator = <SummaryIndicator
-        scores={summaryScores}
-        maxScore={maxScore}
-        useRubric={useRubric}
-        showScore={showScore}
-        rubricFeedbacks={rubricFeedbacks}
-        rubric={rubric}
-      />
-    } else {
+    if (isStudentReport) {
       const studentId = reportFor.get('id')
-      const autoScore = isAutoScoring(scoreType)
-        ? autoScores.get(`${studentId}`)
-        : null
-
-      feedbackButton =
-        <ActivityFeedbackForStudent
-          student={reportFor}
-          feedbacks={feedbacks}
-          showScore={showScore}
-          maxScore={maxScore}
-          showText={showText}
-          useRubric={useRubric}
-          rubric={rubric}
-          autoScore={autoScore}
-          feedbackEnabled={feedbackEnabled}
-        />
+      autoScore = isAutoScoring(scoreType) ? autoScores.get(`${studentId}`) : null
     }
 
     return (
       <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
         <Sticky top={60}>
-          <div className='act-header'>
-            <h3>{activityName} </h3>
-            { feedbackButton }
-          </div>
+          <h3>{activityName} </h3>
         </Sticky>
-        { summaryIndicator }
+        {
+          isClassReport &&
+          <div className='feedback'>
+            <FeedbackButton text='Provide overall feedback' needsReviewCount={needsReviewCount}
+              feedbackEnabled={feedbackEnabled} showFeedback={this.showFeedback} />
+          </div>
+        }
+        {
+          isClassReport &&
+          <SummaryIndicator scores={summaryScores} maxScore={maxScore} useRubric={useRubric} showScore={showScore}
+            rubricFeedbacks={rubricFeedbacks} rubric={rubric} />
+        }
+        {
+          isStudentReport &&
+          <div className='student-feedback-panel'>
+            <ActivityFeedbackForStudent student={reportFor} feedbacks={feedbacks} showScore={showScore} maxScore={maxScore}
+              showText={showText} useRubric={useRubric} rubric={rubric} autoScore={autoScore} feedbackEnabled={feedbackEnabled} />
+          </div>
+        }
         <div>
-          {feedbackPanel}
-          {activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor} />)}
+          {
+            isClassReport && showFeedbackPanel &&
+            <ActivityFeedbackPanel hide={this.hideFeedback} activity={activity} />
+          }
+          { activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor} />) }
         </div>
       </div>
     )
