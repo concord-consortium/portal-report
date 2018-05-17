@@ -10,7 +10,10 @@ export default class RubricBoxForStudent extends PureComponent {
     const feedbacks = helper.allFeedback('student').filter(f => !!f).map(f =>
       <tr className='criterion' key={f.key}>
         <td className='description'>{f.description}</td>
-        <td className='rating'><span className='rating-label'>{f.label}</span> - {f.ratingDescription}</td>
+        <td className='rating'>
+          <span className='rating-label'>{f.label}</span>
+          { rubric.showRatingDescriptions && ` - ${f.ratingDescription}` }
+        </td>
       </tr>
     )
 
