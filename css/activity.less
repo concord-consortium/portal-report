@@ -2,13 +2,6 @@
   @media print {
     padding-left: 0.7em;
   }
-  .act-header {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-  }
   h3 {
     color: #86b355;
     font-size: 1em;
@@ -20,10 +13,17 @@
       font-weight: normal;
     }
   }
+
+  .student-feedback-panel {
+    display: flex;
+    justify-content: center;
+  }
+
   .feedback {
-    display: inline-block;
     margin: 0;
-    padding: 0px;
+    padding: 0;
+    text-align: right;
+
     .feedback-button.cc-button {
       display: inline-block;
       margin-left: 2em;
