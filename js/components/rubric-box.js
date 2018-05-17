@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import '../../css/rubric-box.less'
 import colorScale from '../util/colors'
+
 export default class RubricBox extends PureComponent {
   constructor (props) {
     super(props)
@@ -77,6 +78,7 @@ export default class RubricBox extends PureComponent {
 
   render () {
     const { rubric, rubricFeedback, learnerId } = this.props
+
     if (!rubric) { return null }
     const linkLabel = 'Scoring Guide'
     const { ratings, criteria, referenceURL } = rubric
@@ -93,7 +95,7 @@ export default class RubricBox extends PureComponent {
         <table>
           <thead>
             <tr>
-              <th key='Proficiency'> Aspects of Proficiency</th>
+              <th key='Proficiency'>{ rubric.criteriaLabel }</th>
               {
                 rubric.ratings.map((rating) => {
                   const label = rating.label

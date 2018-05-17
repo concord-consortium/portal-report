@@ -9,25 +9,33 @@ const VIEWER_SUFFIX = {
   student: 'ForStudent'
 }
 
+const keyForViewer = (defaultKey, viewer) => `${defaultKey}${VIEWER_SUFFIX[viewer]}`
+
 export class RubricHelper {
   constructor (rubric, feedback) {
     this.rubric = fromJS(rubric)
     this.feedback = fromJS(feedback)
   }
 
-  criteriaForId (criteriaID) {
-    this.rubric.get('criteria').find(c => c.get('id') === criteriaID)
+  criteriaLabel (viewer = 'teacher') {
+    const defaultKey = 'criteriaLabel'
+    return this.rubric.get(keyForViewer(defaultKey, viewer)) || this.rubric.get(defaultKey)
   }
 
   ratingForId (ratingID) {
     return this.rubric.get('ratings').find(r => r.get('id') === ratingID)
   }
 
-  feedbackRatingFor (criteria) {
+  feedbackRatingFor (criteria = 'teacher') {
     const criteriaId = criteria.get('id')
     const feedback = this.feedback.get(criteriaId) || NO_FEEDBACK
     const ratingId = feedback.get('id')
     return this.ratingForId(ratingId)
+  }
+
+  criteriaDescription (criteria, viewer = 'teacher') {
+    const defaultKey = 'description'
+    return criteria.get(keyForViewer(defaultKey, viewer)) || criteria.get(defaultKey)
   }
 
   feedbackDescriptionForCriteria (criteria, viewer = 'teacher') {
@@ -35,8 +43,7 @@ export class RubricHelper {
     if (!rating) return null
     const ratingId = rating.get('id')
     const defaultKey = 'ratingDescriptions'
-    const viewerKey = `${defaultKey}${VIEWER_SUFFIX[viewer]}`
-    const viewerDescription = criteria.getIn([viewerKey, ratingId], null)
+    const viewerDescription = criteria.getIn([keyForViewer(defaultKey, viewer), ratingId], null)
     const defaultDescription = criteria.getIn([defaultKey, ratingId], null)
     return viewerDescription || defaultDescription
   }
@@ -50,7 +57,7 @@ export class RubricHelper {
       const record = this.feedbackRatingFor(c)
       if (!record) return null
       return {
-        description: c.get('description'),
+        description: this.criteriaDescription(c, viewer),
         ratingDescription: this.feedbackDescriptionForCriteria(c, viewer),
         score: record.get('score'),
         label: record.get('label'),

@@ -3,33 +3,27 @@ import { RubricHelper } from '../util/rubric-helper'
 import '../../css/rubric-box-for-student.less'
 
 export default class RubricBoxForStudent extends PureComponent {
-  shouldNotRender () {
+  render () {
     const { rubric, rubricFeedback } = this.props
-    return !rubric && rubricFeedback && rubricFeedback.criteria
-  }
-
-  render (_rubricFeedback) {
-    const { rubric, rubricFeedback } = this.props
-
-    if (this.shouldNotRender()) return null
     const helper = new RubricHelper(rubric, rubricFeedback)
-    const feedbacks = helper.allFeedback('student').map(f => {
-      if (f) {
-        return (
-          <div className='criterion' key={f.key}>
-            <span className='description'>{f.description}</span>
-            <span className='rating'> – {f.label}{f.ratingDescription}</span>
-          </div>
-        )
-      }
-      return null
-    })
+
+    const feedbacks = helper.allFeedback('student').filter(f => !!f).map(f =>
+      <tr className='criterion' key={f.key}>
+        <td className='description'>{f.description}</td>
+        <td className='rating'><span className='rating-label'>{f.label}</span> - {f.ratingDescription}</td>
+      </tr>
+    )
 
     if (feedbacks.length > 0) {
       return (
-        <div className='rubricFeedback'>
-          {feedbacks}
-        </div>
+        <table className='rubric-box-for-student'>
+          <tbody>
+            <tr>
+              <th>{ helper.criteriaLabel('student') }</th><th>Feedback</th>
+            </tr>
+            { feedbacks }
+          </tbody>
+        </table>
       )
     }
     return null
