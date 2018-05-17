@@ -34,10 +34,11 @@ export default class RubricBox extends PureComponent {
     const checked = rubricFeedback &&
       rubricFeedback[critId] &&
       rubricFeedback[critId].id === ratingId
-    const ratingDescription = (
-      crit.ratingDescriptions &&
-      crit.ratingDescriptions[ratingId]
-    ) || null
+    // Tooltips displayed to teacher should actually show student description if it's available.
+    const ratingDescription =
+      (crit.ratingDescriptionsForStudent && crit.ratingDescriptionsForStudent[ratingId]) ||
+      (crit.ratingDescriptions && crit.ratingDescriptions[ratingId]) ||
+      null
     return (
       <td key={radioButtonKey} title={ratingDescription}>
         <div className='center'>
@@ -57,10 +58,11 @@ export default class RubricBox extends PureComponent {
   renderSummaryRating (crit, critIndex, rating, ratingIndex, max) {
     const colors = colorScale(max)
     const tableStyle = { backgroundColor: colors[ratingIndex] }
-    const ratingDescription = (
-      crit.ratingDescriptions &&
-      crit.ratingDescriptions[rating.id]
-    ) || null
+    // Tooltips displayed to teacher should actually show student description if it's available.
+    const ratingDescription =
+      (crit.ratingDescriptionsForStudent && crit.ratingDescriptionsForStudent[rating.id]) ||
+      (crit.ratingDescriptions && crit.ratingDescriptions[rating.id]) ||
+      null
     const { rowMaps } = this.props
     const values = rowMaps[critIndex]
     const sum = values.reduce((p, c) => p + c, 0)
