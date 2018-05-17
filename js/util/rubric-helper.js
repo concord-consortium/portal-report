@@ -22,6 +22,13 @@ export class RubricHelper {
     return this.rubric.get(keyForViewer(defaultKey, viewer)) || this.rubric.get(defaultKey)
   }
 
+  feedbackLabel (viewer = 'teacher') {
+    // Actually, there's no feedbackLabel for teachers. But let's keep this pattern in case we want to add
+    // it later and display somewhere.
+    const defaultKey = 'feedbackLabel'
+    return this.rubric.get(keyForViewer(defaultKey, viewer)) || this.rubric.get(defaultKey)
+  }
+
   ratingForId (ratingID) {
     return this.rubric.get('ratings').find(r => r.get('id') === ratingID)
   }

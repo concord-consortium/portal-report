@@ -8,6 +8,7 @@
     "showRatingDescriptions": true,
     "criteriaLabel": "Aspects of Proficiency",
     "criteriaLabelForStudent": "Your answer should",
+    "feedbackLabelForStudent": "Feedback",
     "criteria": [
         {
             "id": "C1",

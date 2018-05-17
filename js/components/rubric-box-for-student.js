@@ -22,7 +22,7 @@ export default class RubricBoxForStudent extends PureComponent {
         <table className='rubric-box-for-student'>
           <tbody>
             <tr>
-              <th>{ helper.criteriaLabel('student') }</th><th>Feedback</th>
+              <th>{ helper.criteriaLabel('student') }</th><th>{ helper.feedbackLabel('student') }</th>
             </tr>
             { feedbacks }
           </tbody>
