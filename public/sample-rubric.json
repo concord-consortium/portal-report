@@ -6,6 +6,7 @@
     "originUrl": "http://concord.org/rubrics/RBK1.json",
     "referenceURL": "https://docs.google.com/document/d/1wkrWtaT8gjDVyttf0nsa90XUhogyiXOJjC36aQGNLMA/edit?usp=sharing",
     "showRatingDescriptions": true,
+    "scoreUsingPoints": true,
     "criteriaLabel": "Aspects of Proficiency",
     "criteriaLabelForStudent": "Your answer should",
     "feedbackLabelForStudent": "Feedback",
