@@ -21,11 +21,23 @@ export default class IframeAnswer extends PureComponent {
     }
   }
 
+  getLinkURL(answer) {
+    try {
+      const json = JSON.parse(answer)
+      const interactiveState = JSON.parse(json.interactiveState)
+      return interactiveState.lara_options.reporting_url
+    }
+    catch (e) {
+      return answer
+    }
+  }
+
   renderLink () {
     const { answer } = this.props
+    const linkUrl = this.getLinkURL(answer.get('answer'));
     let decorator =
       answer.get('displayInIframe') ? '' : <span className='pr-icon-external-link' />
-    return <a href={answer.get('answer')} onClick={this.toggleIframe} target='_blank'>View Work {decorator}</a>
+    return <a href={linkUrl} onClick={this.toggleIframe} target='_blank'>View Work {decorator}</a>
   }
 
   renderIframe () {
