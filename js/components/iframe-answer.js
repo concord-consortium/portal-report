@@ -21,11 +21,35 @@ export default class IframeAnswer extends PureComponent {
     }
   }
 
+  getLinkURL(answer) {
+    /*
+    If the author initially sets the interactive to not have a report_url in LARA, then some student works on the interactive,
+    then the author sets the interactive to have a report_url in LARA, the portal will send down the full interactive state to the report.
+    Normally the portal will send down just the report URL as the learner state.
+
+    This problem goes back to LARA. When the interactive is configured as having a report_url, then LARA only sends the report_url
+    to the portal as its state. Otherwise LARA sends all of the interactive state. If the author switches the 'having a report_url'
+    configuration after some students have done work, LARA does update the saved work in the portal.
+
+    A possibly better fix is to have LARA send the updated work to the portal when this is configuration is changed.
+    But it seems wrong to have a little checkbox possibly trigger a massive amount of processing to go on in the background.
+    */
+    try {
+      const json = JSON.parse(answer)
+      const interactiveState = JSON.parse(json.interactiveState)
+      return interactiveState.lara_options.reporting_url
+    }
+    catch (e) {
+      return answer
+    }
+  }
+
   renderLink () {
     const { answer } = this.props
+    const linkUrl = this.getLinkURL(answer.get('answer'));
     let decorator =
       answer.get('displayInIframe') ? '' : <span className='pr-icon-external-link' />
-    return <a href={answer.get('answer')} onClick={this.toggleIframe} target='_blank'>View Work {decorator}</a>
+    return <a href={linkUrl} onClick={this.toggleIframe} target='_blank'>View Work {decorator}</a>
   }
 
   renderIframe () {
