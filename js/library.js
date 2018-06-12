@@ -1,4 +1,4 @@
-import RubricSummary from './components/rubric-summary'
+import RubricSummary from './components/report/rubric-summary'
 
 // This is Portal Report library entry point.
 // It exports some components that can be used by other projects.

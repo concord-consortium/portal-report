@@ -1,0 +1,38 @@
+@import "../variables";
+@import "bootstrap-components";
+
+.report-app {
+  color: @color;
+  font: @font;
+  margin: 0;
+  padding: 0;
+  @media print {
+    font-size: 10pt !important;
+  }
+
+  .loading-status {
+    margin-top: 3em;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .clear-fix {
+    clear: both;
+  }
+
+  a {
+    color: #479492;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      color: #da5936;
+    }
+  }
+}
+
+@page {
+  margin: 1cm;
+}
