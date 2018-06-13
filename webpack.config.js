@@ -26,7 +26,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel'
+        loader: 'babel-loader'
       },
       {
         test: /\.css$/,
@@ -37,12 +37,28 @@ module.exports = {
         ]
       },
       {
-        test: /\.less$/,
-        loader: 'style!css!less!'
+        test: /css\/dashboard\/.*\.less$/,
+        loaders: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              sourceMap: true,
+              importLoaders: 1,
+              localIdentName: '[name]--[local]--[hash:base64:8]'
+            }
+          },
+          'less-loader'
+        ]
+      },
+      {
+        test: /css\/(common|report)\/.*\.less$/,
+        loader: 'style-loader!css-loader!less-loader'
       },
       {
         test: /\.json$/,
-        loader: "json-loader"
+        loader: 'json-loader'
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -56,7 +72,7 @@ module.exports = {
       }
     ]
   },
-  devtool: "source-map",
+  devtool: 'source-map',
   plugins: []
 };
 
