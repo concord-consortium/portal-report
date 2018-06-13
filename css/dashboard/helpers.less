@@ -1,0 +1,23 @@
+// General table styles
+@student-name-width: 150px;
+@row-height: 40px;
+@row-padding: 3px;
+@border-width: 1px;
+@row-outer-height: @row-height + 2 * @row-padding + 2 * @border-width;
+
+@collapsed-activity-width: 250px;
+
+
+// Mixins
+.cell {
+  height: @row-height;
+  line-height: @row-height;
+  padding: @row-padding;
+  border: @border-width solid #777;
+}
+
+.nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

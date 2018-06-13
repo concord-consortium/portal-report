@@ -27,10 +27,8 @@ export const getQuestionTrees = createSelector(
   (questions, answerTrees) =>
     questions.map(question => {
       const mappedAnswers = question.get('answers').map(key => answerTrees.get(key))
-      // Sort answers by student name, so views don't have to care about it.
-      const sortedAnswers = mappedAnswers.sortBy(a => a.getIn(['student', 'name']))
       return question
-        .set('answers', sortedAnswers)
+        .set('answers', mappedAnswers)
     })
 )
 

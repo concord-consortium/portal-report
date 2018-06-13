@@ -1,0 +1,16 @@
+@import "../variables";
+
+.dashboardApp {
+  overflow: hidden;
+  color: @color;
+  font: @font;
+  margin: 0;
+  padding: 0;
+  @media print {
+    font-size: 10pt !important;
+  }
+
+  @page {
+    margin: 1cm;
+  }
+}

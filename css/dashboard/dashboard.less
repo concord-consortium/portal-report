@@ -1,0 +1,47 @@
+@import "../variables";
+@import "./helpers";
+
+.dashboard {
+  width: 100%;
+  padding: @content-padding;
+
+  .studentNames {
+    display: inline-block;
+    width: @student-name-width;
+    vertical-align: top;
+    margin-right: @border-width;
+
+    .studentName {
+      max-width: @student-name-width;
+      .cell();
+      .nowrap();
+    }
+  }
+
+  .headers {
+    height: @row-outer-height;
+    width: calc(~"100% -" @student-name-width + 2 * @content-padding);
+    margin-left: @student-name-width;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  .horizontalScrollContainer {
+    display: inline-block;
+    width: calc(~"100% -" @student-name-width);
+    margin-left: -@border-width;
+    vertical-align: top;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  .verticalScrollContainer {
+    width: calc(~"100% -" 2 * @content-padding);
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
