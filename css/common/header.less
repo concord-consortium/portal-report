@@ -1,0 +1,24 @@
+@import "../variables";
+
+.header {
+  background: #bddfdf;
+  width: 100%;
+  height: 100px;
+  @media print {
+    display: none;
+  }
+
+  .header-content {
+    padding: @content-padding;
+    min-width: @min-report-width;
+    height: 100%;
+
+    .logo {
+      height: 65%;
+    }
+    .status {
+      float: right;
+      font-size: 0.75em;
+    }
+  }
+}

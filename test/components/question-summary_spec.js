@@ -8,7 +8,7 @@ import configureStore from 'redux-mock-store'
 
 const mockStore = configureStore()
 
-import QuestionSummary from '../../js/components/question-summary'
+import QuestionSummary from '../../js/components/report/question-summary'
 
 describe('QuestionSummary', () => {
   const prompt = "Why is the sky blue?"
