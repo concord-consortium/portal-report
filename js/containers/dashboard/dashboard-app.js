@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
+import { setActivityExpanded } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import Header from '../../components/common/header'
 import DataFetchError from '../../components/report/data-fetch-error'
@@ -32,12 +33,18 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, reportTree, students, lastUpdated, activityProgress } = this.props
+    const { error, reportTree, students, lastUpdated, activityProgress, expandedActivities, setActivityExpanded } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} />
         <div>
-          {reportTree && <Dashboard report={reportTree} students={students} activityProgress={activityProgress} />}
+          {reportTree && <Dashboard
+            report={reportTree}
+            students={students}
+            activityProgress={activityProgress}
+            expandedActivities={expandedActivities}
+            setActivityExpanded={setActivityExpanded}
+          />}
           {error && <DataFetchError error={error} />}
         </div>
         {initialLoading && <LoadingIcon />}
@@ -56,14 +63,16 @@ function mapStateToProps (state) {
     error: error,
     students: dataDownloaded && sortedStudents(state),
     reportTree: dataDownloaded && getReportTree(state),
-    activityProgress: dataDownloaded && getActivityProgress(state)
+    activityProgress: dataDownloaded && getActivityProgress(state),
+    expandedActivities: state.getIn(['dashboard', 'expandedActivities'])
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
-    invalidateData: () => dispatch(invalidateData())
+    invalidateData: () => dispatch(invalidateData()),
+    setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value))
   }
 }
 

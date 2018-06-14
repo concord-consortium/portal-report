@@ -7,13 +7,18 @@
 
 @collapsed-activity-width: 250px;
 
+@collapsed-question-width: 120px;
+
+@cell-border: @border-width solid #777;
+
+@width-transition: width 1s;
 
 // Mixins
 .cell {
   height: @row-height;
   line-height: @row-height;
   padding: @row-padding;
-  border: @border-width solid #777;
+  border: @cell-border;
 }
 
 .nowrap {

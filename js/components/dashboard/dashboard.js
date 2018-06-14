@@ -60,13 +60,13 @@ export default class Dashboard extends PureComponent {
   }
 
   render () {
-    const { report, students, activityProgress } = this.props
+    const { report, students, activityProgress, expandedActivities, setActivityExpanded } = this.props
     return (
       <div className={css.dashboard}>
         <div ref={el => { this.headers = el }} className={css.headers}>
           {
             report.get('children').map(a =>
-              <ActivityHeader key={a.get('id')} activity={a} />
+              <ActivityHeader key={a.get('id')} activity={a} expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
             )
           }
         </div>
@@ -81,7 +81,7 @@ export default class Dashboard extends PureComponent {
           <div ref={el => { this.horizontalScrollingContainer = el }} className={css.horizontalScrollContainer}>
             {
               report.get('children').map(a =>
-                <ActivityColumn key={a.get('id')} activity={a} students={students} studentsProgress={activityProgress.get(a.get('id').toString())} />
+                <ActivityColumn key={a.get('id')} activity={a} expanded={expandedActivities.get(a.get('id').toString())} students={students} studentsProgress={activityProgress.get(a.get('id').toString())} />
               )
             }
           </div>

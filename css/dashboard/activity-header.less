@@ -1,8 +1,26 @@
 @import "./helpers";
 
 .activityHeader {
-  .cell();
-  .nowrap();
   display: inline-block;
+  min-width: @collapsed-activity-width;
   width: @collapsed-activity-width;
+  vertical-align: top;
+  transition: @width-transition;
+
+  .activityName {
+    .cell();
+    .nowrap();
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .questions {
+    display: flex;
+
+    .questionPrompt {
+      .cell();
+      .nowrap();
+      flex: 1;
+    }
+  }
 }

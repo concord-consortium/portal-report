@@ -1,3 +1,13 @@
+@import "./helpers";
+
 .activityColumn {
   display: inline-block;
+  width: @collapsed-activity-width;
+  min-width: @collapsed-activity-width;
+  vertical-align: top;
+  transition: @width-transition;
+
+  .questionColumns {
+    display: flex;
+  }
 }
