@@ -1,0 +1,19 @@
+@import "./helpers";
+
+.studentName {
+  display: flex;
+  cursor: pointer;
+  max-width: @student-name-width;
+  height: @row-outer-height;
+  transition: @height-transition;
+
+  &.expanded {
+    height: @expanded-student-row-height
+  }
+
+  .content {
+    flex: 1;
+    .cell();
+    .nowrap();
+  }
+}

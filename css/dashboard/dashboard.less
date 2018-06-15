@@ -10,12 +10,6 @@
     width: @student-name-width;
     vertical-align: top;
     margin-right: @border-width;
-
-    .studentName {
-      max-width: @student-name-width;
-      .cell();
-      .nowrap();
-    }
   }
 
   .headers {
@@ -24,6 +18,29 @@
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
+
+    .activityNamesRow {
+    }
+
+    .questionPromptsRow {
+      display: flex;
+      transition: @width-transition, @height-transition;
+      max-height: @row-outer-height;
+
+      &.fullPrompts {
+        max-height: @expanded-question-prompt-max-height;
+      }
+    }
+  }
+
+  .studentAnswersRow {
+    display: flex;
+    transition: @height-transition;
+    height: @row-outer-height;
+
+    &.fullAnswers {
+      height: @expanded-student-row-height;
+    }
   }
 
   .horizontalScrollContainer {

@@ -63,8 +63,13 @@ export const getActivityTrees = createSelector(
   (activities, sectionTrees) =>
     activities.map(activity => {
       const mappedChildren = activity.get('children').map(id => sectionTrees.get(id.toString()))
+      // Calculate additional properties, flattened pages and questions.
+      const pages = mappedChildren.map(section => section.get('children')).flatten(1)
+      const questions = pages.map(page => page.get('children')).flatten(1)
       return activity
         .set('children', mappedChildren)
+        .set('pages', pages)
+        .set('questions', questions)
         // Activity is visible only if at least one section is visible.
         .set('visible', mappedChildren.find(s => s.get('visible')))
     })

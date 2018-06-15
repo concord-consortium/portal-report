@@ -1,0 +1,13 @@
+@import "./helpers";
+
+.activityName {
+  transition: @width-transition;
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+
+  .content {
+    .cell();
+    .nowrap();
+  }
+}
