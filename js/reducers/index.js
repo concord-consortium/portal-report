@@ -8,6 +8,7 @@ import { MANUAL_SCORE, RUBRIC_SCORE } from '../util/scoring-constants'
 import feedbackReducer from './feedback-reducer'
 import { rubricReducer } from './rubric-reducer'
 import { activityFeedbackReducer } from './activity-feedback-reducer'
+import dashboardReducer from './dashboard-reducer'
 import transformJSONResponse from '../core/transform-json-response'
 import { noSelection } from '../calculations'
 
@@ -68,8 +69,7 @@ function enableActivityFeedback (state, action) {
       feedbackFlags.scoreType = MANUAL_SCORE
     }
   }
-  const nextState = state.mergeIn(statePath, feedbackFlags)
-  return nextState
+  return state.mergeIn(statePath, feedbackFlags)
 }
 
 const INITIAL_REPORT_STATE = Map({
@@ -138,6 +138,7 @@ export default function reducer (state = Map(), action) {
     report: report(state.get('report'), action),
     feedbacks: feedbackReducer(state.get('feedbacks'), action),
     rubrics: rubricReducer(state.get('rubrics'), action),
-    activityFeedbacks: activityFeedbackReducer(state.get('activityFeedbacks'), action)
+    activityFeedbacks: activityFeedbackReducer(state.get('activityFeedbacks'), action),
+    dashboard: dashboardReducer(state.get('dashboard'), action)
   })
 }

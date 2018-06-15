@@ -1,0 +1,27 @@
+@import "./helpers";
+
+@progress-bar-height: 25px;
+
+.progressBarCell {
+  .cell();
+  width: @collapsed-activity-width;
+
+  .progressBar {
+    width: 90%;
+    height: @progress-bar-height;
+    margin: floor(0.5 * (@row-height - @progress-bar-height)) auto 0 auto;
+    border: solid 1px #666;
+    background: white;
+    position: relative;
+  }
+
+  .bar {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    background: #ffcd99;
+    &.completed {
+      background: #ff8415;
+    }
+  }
+}
