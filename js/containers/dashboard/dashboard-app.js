@@ -74,7 +74,6 @@ function mapStateToProps (state) {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
-    invalidateData: () => dispatch(invalidateData()),
     setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
     setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value))
   }
