@@ -1,0 +1,22 @@
+@import "./helpers";
+
+.activityQuestions {
+  transition: @width-transition;
+  vertical-align: top;
+
+  .content {
+    display: flex;
+    height: 100%;
+
+    .questionPrompt {
+      .cell();
+      .nowrap();
+      flex: 1;
+
+      &.fullPrompt {
+        white-space: normal;
+        overflow-y: scroll;
+      }
+    }
+  }
+}

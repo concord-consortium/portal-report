@@ -1,10 +1,15 @@
 import React, { PureComponent } from 'react'
-import ActivityHeader from './activity-header'
-import ActivityColumn from './activity-column'
+import ActivityName from './activity-name'
+import StudentName from './student-name'
+import ActivityQuestions from './activity-questions'
+import ActivityAnswers from './activity-answers'
 
 import css from '../../../css/dashboard/dashboard.less'
 
 const BOTTOM_MARGIN = 10 // px
+const COLLAPSED_ACTIVITY_WIDTH = 250 // px
+const COLLAPSED_ANSWER_WIDTH = 120 // px
+const FULL_ANSWER_WIDTH = 350 // px
 
 export default class Dashboard extends PureComponent {
   constructor (props) {
@@ -59,29 +64,61 @@ export default class Dashboard extends PureComponent {
     element.addEventListener('scroll', temporaryHandler)
   }
 
+  getActivityColumnWidth (activity) {
+    const { expandedActivities, expandedStudents } = this.props
+    if (expandedActivities.get(activity.get('id').toString())) {
+      const showFullPrompts = expandedStudents.includes(true)
+      const questionWidth = showFullPrompts ? FULL_ANSWER_WIDTH : COLLAPSED_ANSWER_WIDTH
+      return Math.max(COLLAPSED_ACTIVITY_WIDTH, (activity.get('questions').count() * questionWidth)) + 'px'
+    }
+    return COLLAPSED_ACTIVITY_WIDTH + 'px'
+  }
+
   render () {
-    const { report, students, activityProgress } = this.props
+    const { report, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded } = this.props
+    const anyStudentExpanded = expandedStudents.includes(true)
+    const activities = report.get('children')
     return (
       <div className={css.dashboard}>
         <div ref={el => { this.headers = el }} className={css.headers}>
-          {
-            report.get('children').map(a =>
-              <ActivityHeader key={a.get('id')} activity={a} />
-            )
-          }
+          <div>
+            {
+              activities.map(a =>
+                <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
+              )
+            }
+          </div>
+          <div className={css.questionPromptsRow + ' ' + (anyStudentExpanded ? css.fullPrompts : '')}>
+            {
+              activities.map(a =>
+                <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded} />
+              )
+            }
+          </div>
         </div>
         <div ref={el => { this.verticalScrollingContainer = el }} className={css.verticalScrollContainer}>
           <div className={css.studentNames}>
             {
-              students.toArray().map(s =>
-                <div key={s.get('id')} className={css.studentName}>{ s.get('lastName') }, { s.get('firstName')}</div>
+              students.map(s =>
+                <StudentName key={s.get('id')} student={s} expanded={expandedStudents.get(s.get('id').toString())} setStudentExpanded={setStudentExpanded} />
               )
             }
           </div>
           <div ref={el => { this.horizontalScrollingContainer = el }} className={css.horizontalScrollContainer}>
             {
-              report.get('children').map(a =>
-                <ActivityColumn key={a.get('id')} activity={a} students={students} studentsProgress={activityProgress.get(a.get('id').toString())} />
+              students.map(s =>
+                <div key={s.get('id')} className={css.studentAnswersRow + ' ' + (expandedStudents.get(s.get('id').toString()) ? css.fullAnswers : '')}>
+                  {
+                    activities.map(a =>
+                      <ActivityAnswers key={a.get('id')} activity={a} student={s}
+                        width={this.getActivityColumnWidth(a)}
+                        expanded={expandedActivities.get(a.get('id').toString())}
+                        showFullAnswers={expandedStudents.get(s.get('id').toString())}
+                        progress={studentProgress.getIn([s.get('id').toString(), a.get('id').toString()])}
+                      />
+                    )
+                  }
+                </div>
               )
             }
           </div>

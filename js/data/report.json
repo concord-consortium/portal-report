@@ -493,7 +493,7 @@
                     "id": 12,
                     "name": "Embeddable::ImageQuestion element",
                     "question_number": 3,
-                    "prompt": "why does ...",
+                    "prompt": "longer prompt longer prompt longer prompt longer prompt longer prompt longer prompt ",
                     "drawing_prompt": "draw a picture of seagull",
                     "is_required": false,
                     "key": "Embeddable::ImageQuestion|12",

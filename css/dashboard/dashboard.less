@@ -10,21 +10,34 @@
     width: @student-name-width;
     vertical-align: top;
     margin-right: @border-width;
-
-    .studentName {
-      max-width: @student-name-width;
-      .cell();
-      .nowrap();
-    }
   }
 
   .headers {
-    height: @row-outer-height;
     width: calc(~"100% -" @student-name-width + 2 * @content-padding);
     margin-left: @student-name-width;
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;
+
+    .questionPromptsRow {
+      display: flex;
+      transition: @width-transition, @height-transition;
+      max-height: @row-outer-height;
+
+      &.fullPrompts {
+        max-height: @expanded-question-prompt-max-height;
+      }
+    }
+  }
+
+  .studentAnswersRow {
+    display: flex;
+    transition: @height-transition;
+    height: @row-outer-height;
+
+    &.fullAnswers {
+      height: @expanded-student-row-height;
+    }
   }
 
   .horizontalScrollContainer {

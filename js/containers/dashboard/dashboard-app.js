@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
+import { setActivityExpanded, setStudentExpanded } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import Header from '../../components/common/header'
 import DataFetchError from '../../components/report/data-fetch-error'
 import LoadingIcon from '../../components/report/loading-icon'
 import getReportTree from '../../selectors/report-tree'
-import { getActivityProgress, sortedStudents } from '../../selectors/dashboard-selectors'
+import { getStudentProgress, getSortedStudents } from '../../selectors/dashboard-selectors'
 import css from '../../../css/dashboard/dashboard-app.less'
 
 class DashboardApp extends PureComponent {
@@ -32,12 +33,20 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, reportTree, students, lastUpdated, activityProgress } = this.props
+    const { error, reportTree, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} />
         <div>
-          {reportTree && <Dashboard report={reportTree} students={students} activityProgress={activityProgress} />}
+          {reportTree && <Dashboard
+            report={reportTree}
+            students={students}
+            studentProgress={studentProgress}
+            expandedActivities={expandedActivities}
+            expandedStudents={expandedStudents}
+            setActivityExpanded={setActivityExpanded}
+            setStudentExpanded={setStudentExpanded}
+          />}
           {error && <DataFetchError error={error} />}
         </div>
         {initialLoading && <LoadingIcon />}
@@ -54,16 +63,19 @@ function mapStateToProps (state) {
     isFetching: data.get('isFetching'),
     lastUpdated: data.get('lastUpdated'),
     error: error,
-    students: dataDownloaded && sortedStudents(state),
+    students: dataDownloaded && getSortedStudents(state),
     reportTree: dataDownloaded && getReportTree(state),
-    activityProgress: dataDownloaded && getActivityProgress(state)
+    studentProgress: dataDownloaded && getStudentProgress(state),
+    expandedActivities: state.getIn(['dashboard', 'expandedActivities']),
+    expandedStudents: state.getIn(['dashboard', 'expandedStudents'])
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
-    invalidateData: () => dispatch(invalidateData())
+    setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
+    setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value))
   }
 }
 
