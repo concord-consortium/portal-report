@@ -2,12 +2,14 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import dashboardReducer from '../../js/reducers/dashboard-reducer'
 import * as types from '../../js/actions/dashboard'
+import { SORT_BY_NAME } from '../../js/actions/dashboard'
+
 
 describe('dashboard reducer', () => {
   it('should return the initial state', () => {
     expect(dashboardReducer(undefined, {}).toJS()).to.eql(
       {
-        sortBy: 'name',
+        sortBy: SORT_BY_NAME,
         expandedActivities: {},
         expandedStudents: {}
       }

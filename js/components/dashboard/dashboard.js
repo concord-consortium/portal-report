@@ -3,6 +3,7 @@ import ActivityName from './activity-name'
 import StudentName from './student-name'
 import ActivityQuestions from './activity-questions'
 import ActivityAnswers from './activity-answers'
+import Dropdown from './dropdown'
 
 import css from '../../../css/dashboard/dashboard.less'
 
@@ -75,11 +76,12 @@ export default class Dashboard extends PureComponent {
   }
 
   render () {
-    const { report, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded } = this.props
+    const { report, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
     const activities = report.get('children')
     return (
       <div className={css.dashboard}>
+        <Dropdown setStudentSort={setStudentSort} />
         <div ref={el => { this.headers = el }} className={css.headers}>
           <div>
             {
