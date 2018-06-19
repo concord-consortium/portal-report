@@ -40,7 +40,7 @@ export const getPageTrees = createSelector(
       return page
         .set('children', mappedChildren)
         // Page is visible only if at least one question is visible.
-        .set('visible', mappedChildren.find(q => q.get('visible')))
+        .set('visible', !!mappedChildren.find(q => q.get('visible')))
     })
 )
 
@@ -52,7 +52,7 @@ export const getSectionTrees = createSelector(
       return section
         .set('children', mappedChildren)
         // Section is visible only if at least one page is visible.
-        .set('visible', mappedChildren.find(p => p.get('visible')))
+        .set('visible', !!mappedChildren.find(p => p.get('visible')))
         // Hide section titles for external activities.
         .set('nameHidden', hideSectionNames)
     })
@@ -71,7 +71,7 @@ export const getActivityTrees = createSelector(
         .set('pages', pages)
         .set('questions', questions)
         // Activity is visible only if at least one section is visible.
-        .set('visible', mappedChildren.find(s => s.get('visible')))
+        .set('visible', !!mappedChildren.find(s => s.get('visible')))
     })
 )
 

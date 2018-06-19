@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
 import fs from 'fs'
-import { RubricHelper } from '../js/util/rubric-helper'
+import { RubricHelper } from '../../js/util/rubric-helper'
 const exampleRubricPath = './public/sample-rubric.json'
 const exampleFeedbackPath = './public/sample-rubric-feedback.json'
 
