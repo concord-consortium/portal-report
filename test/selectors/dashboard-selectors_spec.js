@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
-import { getSortedStudents, getStudentProgress } from '../../js/selectors/dashboard-selectors'
+import { getSortedStudents, getStudentProgress, getStudentTotalProgress } from '../../js/selectors/dashboard-selectors'
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from '../../js/actions/dashboard'
 
 describe('dashboard selectors', () => {
@@ -31,7 +31,7 @@ describe('dashboard selectors', () => {
       },
       answers: {
         A1: { studentId: 1, type: 'SomeAnswer', submitted: true },
-        A2: { studentId: 2, type: 'NoAnswer' },
+        A2: { studentId: 2, type: 'SomeAnswer', submitted: true },
         A3: { studentId: 1, type: 'SomeAnswer', submitted: false },
         A4: { studentId: 2, type: 'SomeAnswer', submitted: true },
         A5: { studentId: 1, type: 'SomeAnswer', submitted: true },
@@ -52,7 +52,7 @@ describe('dashboard selectors', () => {
             2: 0.5 // activity 2 - only one submitted answer
           },
           2: {
-            1: 0, // activity 1
+            1: 1, // activity 1
             2: 0.5 // activity 2 - one submitted answer
           },
           3: { // this student hasn't started any activity, no answer objects
@@ -64,11 +64,23 @@ describe('dashboard selectors', () => {
     })
   })
 
+  describe('getStudentTotalProgress', () => {
+    it('should return hash with student total progress', () => {
+      expect(getStudentTotalProgress(state({})).toJS()).to.eql(
+        {
+          1: 1.5,
+          2: 1.5,
+          3: 0
+        }
+      )
+    })
+  })
+
   describe('getSortedStudents', () => {
     describe('when sorting by name', () => {
       it('should return sorted list of students', () => {
         expect(getSortedStudents(state({})).toJS()).to.eql(
-          // Students sorted by name (last name first)
+          // Students sorted by name (last name first, ignoring capitalization)
           [ s3, s2, s1 ]
         )
       })
@@ -78,7 +90,7 @@ describe('dashboard selectors', () => {
       it('should return sorted list of students', () => {
         expect(getSortedStudents(state({sortBy: SORT_BY_MOST_PROGRESS})).toJS()).to.eql(
           // Students sorted by most progress (ties broken alphabetically)
-          [ s1, s2, s3 ]
+          [ s2, s1, s3 ]
         )
       })
     })

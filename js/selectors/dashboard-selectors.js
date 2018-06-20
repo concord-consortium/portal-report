@@ -45,24 +45,51 @@ export const getStudentProgress = createSelector(
   }
 )
 
-// Returns sorted students.
+// Returns a mapping from student IDs to their total progress across all activities
+export const getStudentTotalProgress = createSelector(
+  [ getStudents, getStudentProgress ],
+  (students, studentProgress) => {
+    return students.map(student => {
+      const id = student.get('id').toString()
+      return studentProgress.get(id).toList().reduce((sum, progress) => sum + progress)
+    })
+  }
+)
+
+// A comparison function to sort students by last and then first name
+const compareStudentsByName = (student1, student2) => {
+  const lastNameCompare = student1.get('lastName').toLocaleLowerCase()
+                            .localeCompare(student2.get('lastName').toLocaleLowerCase())
+  if (lastNameCompare !== 0) {
+    return lastNameCompare
+  } else {
+    return student1.get('firstName').localeCompare(student2.get('firstName'))
+  }
+}
+
+// Returns sorted students
 export const getSortedStudents = createSelector(
-  [ getStudents, getDashboardSortBy, getStudentProgress ],
+  [ getStudents, getDashboardSortBy, getStudentTotalProgress ],
   (students, sortBy, studentProgress) => {
     switch (sortBy) {
       case SORT_BY_NAME:
-        return students.toList().sortBy(student =>
-          (student.get('lastName') + student.get('firstName')).toLowerCase()
+        return students.toList().sort((student1, student2) =>
+          compareStudentsByName(student1, student2)
         )
-      case SORT_BY_MOST_PROGRESS:
       case SORT_BY_LEAST_PROGRESS:
-        const maxProgressList = students.toList().sortBy(student => {
-          const progress = studentProgress.get(student.get('id').toString())
-          return progress.toList().reduce((sum, activity) => {
-            return sum + progress.get(activity)
-          }, 0)
+      case SORT_BY_MOST_PROGRESS:
+        return students.toList().sort((student1, student2) => {
+          const student1Progress = studentProgress.get(student1.get('id').toString())
+          const student2Progress = studentProgress.get(student2.get('id').toString())
+          const progressComp = sortBy === SORT_BY_LEAST_PROGRESS
+            ? student1Progress - student2Progress
+            : student2Progress - student1Progress
+          if (progressComp !== 0) {
+            return progressComp
+          } else {
+            return compareStudentsByName(student1, student2)
+          }
         })
-        return sortBy === SORT_BY_MOST_PROGRESS ? maxProgressList : maxProgressList.reverse()
       default:
         return students.toList()
     }
