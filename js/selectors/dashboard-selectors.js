@@ -50,7 +50,7 @@ export const getSortedStudents = createSelector(
   (students, sortBy) => {
     if (sortBy === 'name') {
       return students.toList().sortBy(student =>
-        (student.get('lastName') + student.get('firstName')).toLowerCase()
+        (student.get('lastName') + ' ' + student.get('firstName')).toLowerCase()
       )
     }
   }
