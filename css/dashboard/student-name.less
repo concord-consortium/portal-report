@@ -7,6 +7,11 @@
   height: @row-outer-height;
   transition: @height-transition;
 
+  &:nth-child(even) {
+    background: @even-row;
+  }
+
+
   &.expanded {
     height: @expanded-student-row-height
   }

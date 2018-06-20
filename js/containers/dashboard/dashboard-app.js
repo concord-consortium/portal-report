@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
+import { fetchDataIfNeeded } from '../../actions/index'
 import { setActivityExpanded, setStudentExpanded, setStudentSort } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import Header from '../../components/common/header'
@@ -33,10 +33,11 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, reportTree, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
+    const { error, clazzName, reportTree, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
     return (
       <div className={css.dashboardApp}>
-        <Header lastUpdated={lastUpdated} />
+        <Header lastUpdated={lastUpdated} background='#6fc6da' />
+        <h1>Report for { clazzName }</h1>
         <div>
           {reportTree && <Dashboard
             report={reportTree}
@@ -64,6 +65,7 @@ function mapStateToProps (state) {
     isFetching: data.get('isFetching'),
     lastUpdated: data.get('lastUpdated'),
     error: error,
+    clazzName: dataDownloaded && state.getIn(['report', 'clazzName']),
     students: dataDownloaded && getSortedStudents(state),
     reportTree: dataDownloaded && getReportTree(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
