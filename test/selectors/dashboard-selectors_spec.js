@@ -4,9 +4,9 @@ import { fromJS } from 'immutable'
 import { getSortedStudents, getStudentProgress } from '../../js/selectors/dashboard-selectors'
 
 describe('dashboard selectors', () => {
-  const s1 = { id: 1, firstName: 'X', lastName: 'C' }
-  const s2 = { id: 2, firstName: 'y', lastName: 'b' }
-  const s3 = { id: 3, firstName: 'Z', lastName: 'A' }
+  const s1 = { id: 1, firstName: 'Y', lastName: 'aA' }
+  const s2 = { id: 2, firstName: 'x', lastName: 'AA' }
+  const s3 = { id: 3, firstName: 'Z', lastName: 'a' }
 
   describe('getStudentProgress', () => {
     const state = fromJS({
