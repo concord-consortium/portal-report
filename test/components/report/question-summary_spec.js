@@ -9,7 +9,7 @@ import QuestionSummary from '../../../js/components/report/question-summary'
 
 const mockStore = configureStore()
 
-describe('QuestionSummary', () => {
+describe('<QuestionSummary />', () => {
   const prompt = 'Why is the sky blue?'
   const answers = fromJS([
     {type: 'Embeddable::MultipleChoice'},
