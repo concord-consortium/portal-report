@@ -45,13 +45,13 @@ export const getStudentProgress = createSelector(
   }
 )
 
-// Returns a mapping from student IDs to their total progress across all activities
-export const getStudentTotalProgress = createSelector(
+// Returns a mapping from student IDs to their average progress across all activities
+export const getStudentAverageProgress = createSelector(
   [ getStudents, getStudentProgress ],
   (students, studentProgress) => {
     return students.map(student => {
-      const id = student.get('id').toString()
-      return studentProgress.get(id).toList().reduce((sum, progress) => sum + progress)
+      const activitiesProgress = studentProgress.get(student.get('id').toString()).toList()
+      return activitiesProgress.reduce((sum, progress) => sum + progress) / activitiesProgress.size
     })
   }
 )
@@ -69,7 +69,7 @@ const compareStudentsByName = (student1, student2) => {
 
 // Returns sorted students
 export const getSortedStudents = createSelector(
-  [ getStudents, getDashboardSortBy, getStudentTotalProgress ],
+  [ getStudents, getDashboardSortBy, getStudentAverageProgress ],
   (students, sortBy, studentProgress) => {
     switch (sortBy) {
       case SORT_BY_NAME:

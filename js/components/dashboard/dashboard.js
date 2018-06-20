@@ -3,7 +3,7 @@ import ActivityName from './activity-name'
 import StudentName from './student-name'
 import ActivityQuestions from './activity-questions'
 import ActivityAnswers from './activity-answers'
-import Dropdown from './dropdown'
+import SortByDropdown from './sort-by-dropdown'
 
 import css from '../../../css/dashboard/dashboard.less'
 
@@ -81,7 +81,7 @@ export default class Dashboard extends PureComponent {
     const activities = report.get('children')
     return (
       <div className={css.dashboard}>
-        <Dropdown setStudentSort={setStudentSort} />
+        <SortByDropdown setStudentSort={setStudentSort} />
         <div ref={el => { this.headers = el }} className={css.headers}>
           <div>
             {

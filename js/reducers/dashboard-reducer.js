@@ -14,7 +14,7 @@ export default function dashboardReducer (state = INITIAL_DASHBOARD_STATE, actio
     case SET_STUDENT_EXPANDED:
       return state.setIn(['expandedStudents', action.studentId.toString()], action.value)
     case SET_STUDENT_SORT:
-      return state.setIn(['sortBy'], action.value)
+      return state.set('sortBy', action.value)
     default:
       return state
   }

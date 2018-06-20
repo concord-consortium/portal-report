@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
-import { getSortedStudents, getStudentProgress, getStudentTotalProgress } from '../../js/selectors/dashboard-selectors'
+import { getSortedStudents, getStudentProgress, getStudentAverageProgress } from '../../js/selectors/dashboard-selectors'
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from '../../js/actions/dashboard'
 
 describe('dashboard selectors', () => {
@@ -64,12 +64,12 @@ describe('dashboard selectors', () => {
     })
   })
 
-  describe('getStudentTotalProgress', () => {
+  describe('getStudentAverageProgress', () => {
     it('should return hash with student total progress', () => {
-      expect(getStudentTotalProgress(state({})).toJS()).to.eql(
+      expect(getStudentAverageProgress(state({})).toJS()).to.eql(
         {
-          1: 1.5,
-          2: 1.5,
+          1: .75,
+          2: .75,
           3: 0
         }
       )
