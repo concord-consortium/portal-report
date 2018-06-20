@@ -10,6 +10,9 @@ import getReportTree from '../../selectors/report-tree'
 import { getStudentProgress, getSortedStudents } from '../../selectors/dashboard-selectors'
 import css from '../../../css/dashboard/dashboard-app.less'
 
+// Make icons available.
+import '../../../css/icomoon.css'
+
 class DashboardApp extends PureComponent {
   constructor (props) {
     super(props)
