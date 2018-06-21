@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { Map } from 'immutable'
 
 import css from '../../../css/dashboard/multiple-choice-answer.less'
 
@@ -108,4 +109,10 @@ export default class MultipleChoiceAnswer extends PureComponent {
       </div>
     )
   }
+}
+
+MultipleChoiceAnswer.defaultProps = {
+  answer: Map(),
+  question: Map(),
+  showFullAnswer: false
 }

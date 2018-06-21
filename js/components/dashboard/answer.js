@@ -1,10 +1,16 @@
 import React, { PureComponent } from 'react'
-import GenericAnswer from './generic-answer'
+import { Map } from 'immutable'
 import MultipleChoiceAnswer from './multiple-choice-answer'
 
 import css from '../../../css/dashboard/answer.less'
 
-const NoAnswer = () => null // nothing to render
+export const NoAnswer = () => null
+
+export const GenericAnswer = () => (
+  <div style={{textAlign: 'center'}}>
+    <i className='icomoon-radio-unchecked' />
+  </div>
+)
 
 const AnswerComponent = {
   'Embeddable::MultipleChoice': MultipleChoiceAnswer,
@@ -17,11 +23,20 @@ const AnswerComponent = {
 export default class Answer extends PureComponent {
   render () {
     const { answer, showFullAnswer, question } = this.props
-    const AComponent = (answer && answer.get('submitted')) ? AnswerComponent[answer.get('type')] : NoAnswer
+    let AComponent = NoAnswer
+    if (answer && answer.get('submitted')) {
+      AComponent = AnswerComponent[answer.get('type')] || GenericAnswer
+    }
     return (
       <div className={css.answer}>
         <AComponent answer={answer} showFullAnswer={showFullAnswer} question={question} />
       </div>
     )
   }
+}
+
+Answer.defaultProps = {
+  answer: Map(),
+  question: Map(),
+  showFullAnswer: false
 }
