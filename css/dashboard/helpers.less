@@ -7,10 +7,10 @@
 @student-name-width: 150px;
 @border-width: 1px;
 @cell-border: @border-width solid @main-dark;
-@row-height: 32px;
-@row-padding: 5px;
+@row-height: 25px;
+@row-padding: 8px;
 @row-outer-height: @row-height + 2 * @row-padding + 2 * @border-width;
-@expanded-student-row-height: 250px;
+@expanded-student-row-height: 200px;
 @expanded-question-prompt-max-height: 100px;
 
 // Transitions
@@ -24,7 +24,6 @@
   line-height: @row-height;
   padding: @row-padding;
   border: @cell-border;
-  flex-grow: 1;
 }
 
 .nowrap {

@@ -1,16 +1,10 @@
 import React, { PureComponent } from 'react'
 
-import css from '../../../css/dashboard/generic-answer.less'
-
-export default class GenericAnswerCell extends PureComponent {
+export default class GenericAnswer extends PureComponent {
   render () {
-    const { answer } = this.props
     return (
-      <div className={css.genericAnswer}>
-        {
-          answer &&
-          <i className='icomoon-radio-unchecked' />
-        }
+      <div style={{textAlign: 'center'}}>
+        <i className='icomoon-radio-unchecked' />
       </div>
     )
   }
