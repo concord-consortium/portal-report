@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
-import { setActivityExpanded, setStudentExpanded } from '../../actions/dashboard'
+import { setActivityExpanded, setStudentExpanded, setStudentSort } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import Header from '../../components/common/header'
 import DataFetchError from '../../components/report/data-fetch-error'
@@ -33,7 +33,7 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, reportTree, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded } = this.props
+    const { error, reportTree, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} />
@@ -46,6 +46,7 @@ class DashboardApp extends PureComponent {
             expandedStudents={expandedStudents}
             setActivityExpanded={setActivityExpanded}
             setStudentExpanded={setStudentExpanded}
+            setStudentSort={setStudentSort}
           />}
           {error && <DataFetchError error={error} />}
         </div>
@@ -75,7 +76,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
     setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
-    setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value))
+    setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value)),
+    setStudentSort: (value) => dispatch(setStudentSort(value))
   }
 }
 

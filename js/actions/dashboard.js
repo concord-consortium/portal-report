@@ -1,5 +1,10 @@
 export const SET_ACTIVITY_EXPANDED = 'SET_ACTIVITY_EXPANDED'
 export const SET_STUDENT_EXPANDED = 'SET_STUDENT_EXPANDED'
+export const SET_STUDENT_SORT = 'SET_STUDENT_SORT'
+
+export const SORT_BY_NAME = 'NAME'
+export const SORT_BY_MOST_PROGRESS = 'MOST_PROGRESS'
+export const SORT_BY_LEAST_PROGRESS = 'LEAST_PROGRESS'
 
 export function setActivityExpanded (activityId, value) {
   return (dispatch, getState) => {
@@ -37,5 +42,12 @@ export function setStudentExpanded (studentId, value) {
         dispatch(setActivityExpanded(firstActivity.get('id'), true))
       }
     }
+  }
+}
+
+export function setStudentSort (value) {
+  return {
+    type: SET_STUDENT_SORT,
+    value
   }
 }
