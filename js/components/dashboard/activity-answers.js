@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import ProgressBar from './progress-bar'
-import AnswerCell from './answer-cell'
+import GenericAnswer from './generic-answer'
 
 import css from '../../../css/dashboard/activity-answers.less'
 
@@ -17,7 +17,7 @@ export default class ActivityAnswers extends PureComponent {
         }
         {
           expanded && studentAnswers.map((a, idx) =>
-            <AnswerCell key={idx} answer={a} showFullAnswer={showFullAnswers} />
+            <GenericAnswer key={idx} answer={a} />
           )
         }
       </div>
