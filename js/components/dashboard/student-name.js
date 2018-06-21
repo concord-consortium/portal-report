@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { Map } from 'immutable'
 
 import css from '../../../css/dashboard/student-name.less'
 
@@ -23,4 +24,8 @@ export default class StudentName extends PureComponent {
       </div>
     )
   }
+}
+
+StudentName.defaultProps = {
+  student: Map()
 }
