@@ -6,10 +6,10 @@ import '../../../css/common/header.less'
 
 export default class Header extends PureComponent {
   render () {
-    const { isFetching, lastUpdated, onRefreshClick } = this.props
+    const { isFetching, lastUpdated, onRefreshClick, background } = this.props
 
     return (
-      <div className='header'>
+      <div className='header' style={{background: background || '#bddfdf'}}>
         <div className='header-content'>
           <img src={ccLogoSrc} className='logo' />
           <div className='status'>

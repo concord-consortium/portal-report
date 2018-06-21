@@ -35,6 +35,10 @@
     transition: @height-transition;
     height: @row-outer-height;
 
+    &:nth-child(even) > div {
+      background: @even-row;
+    }
+
     &.fullAnswers {
       height: @expanded-student-row-height;
     }

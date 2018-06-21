@@ -5,9 +5,21 @@
   display: inline-block;
   vertical-align: top;
   cursor: pointer;
+  background: @main-dark;
+  color: #fff;
+  font-weight: 500;
 
   .content {
     .cell();
-    .nowrap();
+    display: flex;
+    justify-content: space-between;
+
+    .name {
+      .nowrap();
+    }
+
+    .icon {
+      margin-left: 10px;
+    }
   }
 }
