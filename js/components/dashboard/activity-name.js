@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { Map } from 'immutable'
 
 import css from '../../../css/dashboard/activity-name.less'
 
@@ -28,4 +29,8 @@ export default class ActivityName extends PureComponent {
       </div>
     )
   }
+}
+
+ActivityName.defaultProps = {
+  activity: Map()
 }

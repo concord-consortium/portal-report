@@ -6,7 +6,7 @@ import Dashboard from '../../components/dashboard/dashboard'
 import Header from '../../components/common/header'
 import DataFetchError from '../../components/report/data-fetch-error'
 import LoadingIcon from '../../components/report/loading-icon'
-import getReportTree from '../../selectors/report-tree'
+import { getActivityTrees } from '../../selectors/report-tree'
 import { getStudentProgress, getSortedStudents } from '../../selectors/dashboard-selectors'
 import css from '../../../css/dashboard/dashboard-app.less'
 
@@ -36,14 +36,14 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, clazzName, reportTree, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
+    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} background='#6fc6da' />
         <h1>Report for { clazzName }</h1>
         <div>
-          {reportTree && <Dashboard
-            report={reportTree}
+          {activityTrees && <Dashboard
+            activities={activityTrees}
             students={students}
             studentProgress={studentProgress}
             expandedActivities={expandedActivities}
@@ -70,7 +70,7 @@ function mapStateToProps (state) {
     error: error,
     clazzName: dataDownloaded && state.getIn(['report', 'clazzName']),
     students: dataDownloaded && getSortedStudents(state),
-    reportTree: dataDownloaded && getReportTree(state),
+    activityTrees: dataDownloaded && getActivityTrees(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     expandedActivities: state.getIn(['dashboard', 'expandedActivities']),
     expandedStudents: state.getIn(['dashboard', 'expandedStudents'])
