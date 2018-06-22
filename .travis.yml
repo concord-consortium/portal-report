@@ -6,7 +6,7 @@ node_js:
   - 6
 install:
   - travis_retry gem install s3_website -v 3.4.0
-  - travis_retry yarn
+  - travis_retry npm install
 before_script:
   - webpack
   - WEBPACK_TARGET=lib webpack
