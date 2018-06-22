@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'icomoon';
     src:
-            url('../fonts/icomoon.ttf?az799c') format('truetype'),
-            url('../fonts/icomoon.woff?az799c') format('woff'),
-            url('../fonts/icomoon.svg?az799c#icomoon') format('svg');
+            url('../fonts/icomoon.ttf?m3k50c') format('truetype'),
+            url('../fonts/icomoon.woff?m3k50c') format('woff'),
+            url('../fonts/icomoon.svg?m3k50c#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -46,4 +46,7 @@
 }
 .icomoon-radio-unchecked:before {
     content: "\ea56";
+}
+.icomoon-checkmark2:before {
+    content: "\ea11";
 }

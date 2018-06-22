@@ -79,20 +79,21 @@ export default class Dashboard extends PureComponent {
   render () {
     const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
+    const activitiesList = activities.toList()
     return (
       <div className={css.dashboard}>
         <SortByDropdown setStudentSort={setStudentSort} />
         <div ref={el => { this.headers = el }} className={css.headers}>
           <div>
             {
-              activities.map(a =>
+              activitiesList.map(a =>
                 <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
               )
             }
           </div>
           <div className={css.questionPromptsRow + ' ' + (anyStudentExpanded ? css.fullPrompts : '')}>
             {
-              activities.map(a =>
+              activitiesList.map(a =>
                 <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded} />
               )
             }
@@ -111,7 +112,7 @@ export default class Dashboard extends PureComponent {
               students.map(s =>
                 <div key={s.get('id')} className={css.studentAnswersRow + ' ' + (expandedStudents.get(s.get('id').toString()) ? css.fullAnswers : '')}>
                   {
-                    activities.map(a =>
+                    activitiesList.map(a =>
                       <ActivityAnswers key={a.get('id')} activity={a} student={s}
                         width={this.getActivityColumnWidth(a)}
                         expanded={expandedActivities.get(a.get('id').toString())}

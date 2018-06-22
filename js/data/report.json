@@ -89,8 +89,9 @@
                       {
                         "answer": [
                           {
+                            "id": 423,
                             "choice": "c",
-                            "is_correct": null
+                            "is_correct": false
                           }
                         ],
                         "answered": true,
@@ -104,7 +105,7 @@
                         ],
                         "submitted": true,
                         "question_required": false,
-                        "is_correct": true,
+                        "is_correct": false,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|116",
                         "student_id": 15
@@ -112,8 +113,9 @@
                       {
                         "answer": [
                           {
-                            "choice": "a",
-                            "is_correct": null
+                            "id": 421,
+                            "choice": "very long multiple choice answer very long multiple choice answer",
+                            "is_correct": true
                           }
                         ],
                         "answered": true,
@@ -135,8 +137,9 @@
                       {
                         "answer": [
                           {
-                            "choice": "a",
-                            "is_correct": null
+                            "id": 421,
+                            "choice": "very long multiple choice answer very long multiple choice answer",
+                            "is_correct": true
                           }
                         ],
                         "answered": true,
@@ -165,7 +168,7 @@
                     "choices": [
                       {
                         "id": 421,
-                        "choice": "a",
+                        "choice": "very long multiple choice answer very long multiple choice answer",
                         "is_correct": true
                       },
                       {
@@ -317,6 +320,7 @@
                       {
                         "answer": [
                           {
+                            "id": 424,
                             "choice": "a",
                             "is_correct": null
                           }
@@ -332,7 +336,6 @@
                         ],
                         "submitted": true,
                         "question_required": false,
-                        "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|117",
                         "student_id": 15
@@ -340,6 +343,7 @@
                       {
                         "answer": [
                           {
+                            "id": 424,
                             "choice": "a",
                             "is_correct": null
                           }
@@ -355,7 +359,6 @@
                         ],
                         "submitted": true,
                         "question_required": false,
-                        "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|117",
                         "student_id": 13
@@ -363,6 +366,7 @@
                       {
                         "answer": [
                           {
+                            "id": 424,
                             "choice": "a",
                             "is_correct": null
                           }
@@ -378,7 +382,6 @@
                         ],
                         "submitted": true,
                         "question_required": false,
-                        "is_correct": true,
                         "type": "Embeddable::MultipleChoice",
                         "embeddable_key": "Embeddable::MultipleChoice|117",
                         "student_id": 14
