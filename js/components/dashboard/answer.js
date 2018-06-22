@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Map } from 'immutable'
 import MultipleChoiceAnswer from './multiple-choice-answer'
+import OpenResponseAnswer from './open-response-answer'
 
 import css from '../../../css/dashboard/answer.less'
 
@@ -14,7 +15,7 @@ export const GenericAnswer = () => (
 
 const AnswerComponent = {
   'Embeddable::MultipleChoice': MultipleChoiceAnswer,
-  'Embeddable::OpenResponse': GenericAnswer,
+  'Embeddable::OpenResponse': OpenResponseAnswer,
   'Embeddable::ImageQuestion': GenericAnswer,
   'Embeddable::Iframe': GenericAnswer,
   'NoAnswer': NoAnswer
