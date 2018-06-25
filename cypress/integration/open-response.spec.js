@@ -1,4 +1,5 @@
 import React from 'react'
+import { getByCypressTag } from '../utils'
 
 describe('Open response questions', function () {
   beforeEach(() => {
@@ -7,13 +8,13 @@ describe('Open response questions', function () {
 
   it ('Initially show a text icon', function () {
     cy.get('.icomoon-file-text').should('not.exist')
-    cy.get('[class*=activityName-]').first().click()
+    getByCypressTag('activityName').first().click()
     cy.get('.icomoon-file-text').should('exist')
   })
 
   it ('Expand to show full answer text', function () {
     cy.contains('open response answer').should('not.exist')
-    cy.get('[class*=studentName-]').first().click()
+    getByCypressTag('studentName').first().click()
     cy.contains('open response answer').should('exist')
   })
 })

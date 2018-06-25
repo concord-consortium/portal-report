@@ -1,4 +1,5 @@
 import React from 'react'
+import { getByCypressTag } from '../utils'
 
 describe('Dashboard', function () {
   beforeEach(() => {
@@ -7,7 +8,7 @@ describe('Dashboard', function () {
 
   let rowHeight = null
   it ('Has equal height rows', function () {
-    cy.get('[class*=studentName-]').should('be.visible').then((students) => {
+    getByCypressTag('studentName').should('be.visible').then((students) => {
       Array.from(students).forEach((student) => {
         if (rowHeight == null) {
           rowHeight = student.clientHeight
@@ -19,9 +20,9 @@ describe('Dashboard', function () {
 
   let expandedRowHeight = null
   it ('Has equal height rows after a student is clicked', function () {
-    cy.get('[class*=studentName-').click({ multiple: true })
+    getByCypressTag('studentName').click({ multiple: true })
     cy.wait(1000) // Wait for the animations to finish
-    cy.get('[class*=studentName-]').should('be.visible').then((students) => {
+    getByCypressTag('studentName').should('be.visible').then((students) => {
       Array.from(students).forEach((student) => {
         if (expandedRowHeight == null) {
           expandedRowHeight = student.clientHeight

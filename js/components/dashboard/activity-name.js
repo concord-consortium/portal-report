@@ -17,7 +17,7 @@ export default class ActivityName extends PureComponent {
   render () {
     const { activity, width, expanded } = this.props
     return (
-      <div className={css.activityName} onClick={this.onActivityNameClick} style={{ width: width }}>
+      <div className={css.activityName} onClick={this.onActivityNameClick} style={{ width: width }} data-cy='activityName'>
         <div className={css.content}>
           <div className={css.name}>
             { activity.get('name') }
