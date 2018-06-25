@@ -8,8 +8,10 @@ import css from '../../../css/dashboard/answer.less'
 export const NoAnswer = () => null
 
 export const GenericAnswer = () => (
-  <div style={{textAlign: 'center'}}>
-    <i className='icomoon-radio-unchecked' />
+  <div className={css.genericAnswer}>
+    {
+      '\u2b24' // large circle
+    }
   </div>
 )
 
