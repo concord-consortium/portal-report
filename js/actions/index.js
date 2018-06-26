@@ -6,8 +6,8 @@ export const RECEIVE_ERROR = 'RECEIVE_ERROR'
 export const SET_NOW_SHOWING = 'SET_NOW_SHOWING'
 export const SET_ANONYMOUS = 'SET_ANONYMOUS'
 export const SET_QUESTION_SELECTED = 'SET_QUESTION_SELECTED'
-export const SHOW_SELECTED_QUESTIONS = 'SHOW_SELECTED_QUESTIONS'
-export const SHOW_ALL_QUESTIONS = 'SHOW_ALL_QUESTIONS'
+export const HIDE_UNSELECTED_QUESTIONS = 'HIDE_UNSELECTED_QUESTIONS'
+export const SHOW_UNSELECTED_QUESTIONS = 'SHOW_UNSELECTED_QUESTIONS'
 export const SET_ANSWER_SELECTED_FOR_COMPARE = 'SET_ANSWER_SELECTED_FOR_COMPARE'
 export const SHOW_COMPARE_VIEW = 'SHOW_COMPARE_VIEW'
 export const HIDE_COMPARE_VIEW = 'HIDE_COMPARE_VIEW'
@@ -104,10 +104,10 @@ export function setQuestionSelected (key, value) {
   }
 }
 
-export function showSelectedQuestions () {
+export function hideUnselectedQuestions () {
   return (dispatch, getState) => {
     dispatch({
-      type: SHOW_SELECTED_QUESTIONS,
+      type: HIDE_UNSELECTED_QUESTIONS,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
       callAPI: {
         type: 'updateReportSettings',
@@ -121,9 +121,9 @@ export function showSelectedQuestions () {
   }
 }
 
-export function showAllQuestions () {
+export function showUnselectedQuestions () {
   return {
-    type: SHOW_ALL_QUESTIONS,
+    type: SHOW_UNSELECTED_QUESTIONS,
     // Send data to server. Don't care about success or failure. See: api-middleware.js
     callAPI: {
       type: 'updateReportSettings',

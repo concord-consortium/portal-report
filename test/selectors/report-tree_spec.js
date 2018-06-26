@@ -131,34 +131,17 @@ describe('report tree selectors', () => {
       expect(getQuestionTrees(state({})).toJS()).to.eql(expectedQuestionTrees({}))
     })
 
-    describe('when "showSelectedQuestionsOnly" filter is enabled', () => {
-      describe('and there is at least one selected question', () => {
-        it('should set visibility based on the current selection', () => {
-          const questions = fromJS({
-            1: { answers: [], selectedConfirmed: true },
-            2: { answers: [], selectedConfirmed: false }
-          })
-          const answers = fromJS({})
-          const showSelectedQuestionsOnly = true
-          const showFeaturedQuestionsOnly = false
-          const result = getQuestionTrees.resultFunc(questions, answers, showSelectedQuestionsOnly, showFeaturedQuestionsOnly).toJS()
-          expect(result[1].visible).to.eql(true)
-          expect(result[2].visible).to.eql(false)
+    describe('when there are some questions hidden by user', () => {
+      it('should set visibility based on "hiddenByUser" property', () => {
+        const questions = fromJS({
+          1: { answers: [], hiddenByUser: false },
+          2: { answers: [], hiddenByUser: true }
         })
-      })
-      describe('but there is no selected question', () => {
-        it('should ignore this filter and show all the questions', () => {
-          const questions = fromJS({
-            1: { answers: [], selectedConfirmed: false },
-            2: { answers: [], selectedConfirmed: false }
-          })
-          const answers = fromJS({})
-          const showSelectedQuestionsOnly = true
-          const showFeaturedQuestionsOnly = false
-          const result = getQuestionTrees.resultFunc(questions, answers, showSelectedQuestionsOnly, showFeaturedQuestionsOnly).toJS()
-          expect(result[1].visible).to.eql(true)
-          expect(result[2].visible).to.eql(true)
-        })
+        const answers = fromJS({})
+        const showFeaturedQuestionsOnly = false
+        const result = getQuestionTrees.resultFunc(questions, answers, showFeaturedQuestionsOnly).toJS()
+        expect(result[1].visible).to.eql(true)
+        expect(result[2].visible).to.eql(false)
       })
     })
     describe('when "showFeaturedQuestionsOnly" filter is enabled', () => {
@@ -169,9 +152,8 @@ describe('report tree selectors', () => {
             2: { answers: [], isFeatured: false }
           })
           const answers = fromJS({})
-          const showSelectedQuestionsOnly = false
           const showFeaturedQuestionsOnly = true
-          const result = getQuestionTrees.resultFunc(questions, answers, showSelectedQuestionsOnly, showFeaturedQuestionsOnly).toJS()
+          const result = getQuestionTrees.resultFunc(questions, answers, showFeaturedQuestionsOnly).toJS()
           expect(result[1].visible).to.eql(true)
           expect(result[2].visible).to.eql(false)
         })
@@ -183,9 +165,8 @@ describe('report tree selectors', () => {
             2: { answers: [], isFeatured: false }
           })
           const answers = fromJS({})
-          const showSelectedQuestionsOnly = false
           const showFeaturedQuestionsOnly = true
-          const result = getQuestionTrees.resultFunc(questions, answers, showSelectedQuestionsOnly, showFeaturedQuestionsOnly).toJS()
+          const result = getQuestionTrees.resultFunc(questions, answers, showFeaturedQuestionsOnly).toJS()
           expect(result[1].visible).to.eql(true)
           expect(result[2].visible).to.eql(true)
         })

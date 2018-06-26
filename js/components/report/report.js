@@ -68,7 +68,7 @@ export default class Report extends PureComponent {
   }
 
   renderControls () {
-    const { report, showSelectedQuestions, showAllQuestions, setAnonymous } = this.props
+    const { report, hideUnselectedQuestions, showUnselectedQuestions, setAnonymous } = this.props
     const isAnonymous = report.get('anonymous')
     const nowShowing = report.get('nowShowing')
     const buttonText = (nowShowing === 'class') ? 'Print student reports' : 'Print'
@@ -77,8 +77,8 @@ export default class Report extends PureComponent {
     if (!hideControls) {
       return (
         <div className='controls'>
-          <Button onClick={showSelectedQuestions} disabled={!anyQuestionSelected}>Show selected</Button>
-          <Button onClick={showAllQuestions}>Show all</Button>
+          <Button onClick={hideUnselectedQuestions} disabled={!anyQuestionSelected}>Show selected</Button>
+          <Button onClick={showUnselectedQuestions}>Show all</Button>
           <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
           <Button onClick={this.printStudentReports}>{buttonText}</Button>
         </div>

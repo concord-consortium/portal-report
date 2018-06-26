@@ -1,7 +1,7 @@
 import Immutable, { Map, Set} from 'immutable'
 import {
   REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
-  SET_QUESTION_SELECTED, SHOW_SELECTED_QUESTIONS, SHOW_ALL_QUESTIONS,
+  SET_QUESTION_SELECTED, HIDE_UNSELECTED_QUESTIONS, SHOW_UNSELECTED_QUESTIONS,
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK
 } from '../actions'
 import { MANUAL_SCORE, RUBRIC_SCORE } from '../util/scoring-constants'
@@ -40,12 +40,22 @@ function setAnonymous (state, anonymous) {
     .set('students', newStudents)
 }
 
-// Confirm action is explicit. Otherwise, a question will disappear immediately when teacher has selection filter
-// active and unselects given question. Instead, the question should stay visible until teacher clicks "Show selected" again.
-function confirmSelection (state) {
+// This action has to be explicit and requires additional property. Otherwise, a question will disappear immediately
+// when teacher has selection filter active and unselects given question. Instead, the question should stay visible
+// until teacher clicks "Show selected" again.
+function hideUnselectedQuestions (state) {
   return state.withMutations(state => {
     state.get('questions').forEach((value, key) => {
-      state = state.setIn(['questions', key, 'selectedConfirmed'], state.getIn(['questions', key, 'selected']))
+      state = state.setIn(['questions', key, 'hiddenByUser'], !state.getIn(['questions', key, 'selected']))
+    })
+    return state
+  })
+}
+
+function showUnselectedQuestions (state) {
+  return state.withMutations(state => {
+    state.get('questions').forEach((value, key) => {
+      state = state.setIn(['questions', key, 'hiddenByUser'], false)
     })
     return state
   })
@@ -72,11 +82,10 @@ function enableActivityFeedback (state, action) {
 
 const INITIAL_REPORT_STATE = Map({
   type: 'class',
-  // Note that visibility filters are ignored when no question is matching criteria.
-  // E.g. when there's no single featured questions, all the questions will be displayed.
+  // Note that this visibility filter is ignored when no question is matching criteria.
+  // When there's no single featured questions, all the questions will be displayed.
   // Check report-tree.js selector.
-  showFeaturedQuestionsOnly: true,
-  showSelectedQuestionsOnly: false
+  showFeaturedQuestionsOnly: true
 })
 
 function report (state = INITIAL_REPORT_STATE, action) {
@@ -97,18 +106,21 @@ function report (state = INITIAL_REPORT_STATE, action) {
         .set('nowShowing', data.type)
         .set('selectedStudentId', data.studentId)
         .set('hideControls', data.result.hideControls)
-        // Custom question filtering is currently supported only by regular, non-dashboard report.
-        .set('showSelectedQuestionsOnly', config('dashboard') ? false : data.result.visibilityFilter.active && !data.result.hideControls)
+      // Custom question filtering is currently supported only by regular, non-dashboard report.
+      // There are no checkboxes and controls in dashboard so do not restore these settings in the dashboard mode (yet).
+      if (!config('dashboard') && data.result.visibilityFilter.active && !data.result.hideControls) {
+        state = hideUnselectedQuestions(state)
+      }
       state = setAnonymous(state, data.result.anonymousReport)
       return state
     case SET_NOW_SHOWING:
       return state.set('nowShowing', action.value)
     case SET_QUESTION_SELECTED:
       return state.setIn(['questions', action.key, 'selected'], action.value)
-    case SHOW_SELECTED_QUESTIONS:
-      return confirmSelection(state).set('showSelectedQuestionsOnly', true)
-    case SHOW_ALL_QUESTIONS:
-      return state.set('showSelectedQuestionsOnly', false)
+    case HIDE_UNSELECTED_QUESTIONS:
+      return hideUnselectedQuestions(state)
+    case SHOW_UNSELECTED_QUESTIONS:
+      return showUnselectedQuestions(state)
     case SET_ANONYMOUS:
       return setAnonymous(state, action.value)
     case SET_ANSWER_SELECTED_FOR_COMPARE:

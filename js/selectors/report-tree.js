@@ -13,22 +13,17 @@ const getQuestions = state => state.get('report').get('questions')
 const getAnswers = state => state.get('report').get('answers')
 const getStudents = state => state.get('report').get('students')
 const getHideSectionNames = state => state.get('report').get('hideSectionNames')
-const getShowSelectedQuestionsOnly = state => state.get('report').get('showSelectedQuestionsOnly')
 const getShowFeaturedQuestionsOnly = state => state.get('report').get('showFeaturedQuestionsOnly')
 
 // Helpers
-const isQuestionVisible = (question, selectedOnly, featuredOnly) => {
-  if (selectedOnly && !question.get('selectedConfirmed')) {
+const isQuestionVisible = (question, featuredOnly) => {
+  if (question.get('hiddenByUser')) {
     return false
   }
   if (featuredOnly && !question.get('isFeatured')) {
     return false
   }
   return true
-}
-
-const anyQuestion = (questions, property) => {
-  return questions.filter(question => question.get(property) === true).size > 0
 }
 
 // Selectors
@@ -41,19 +36,16 @@ export const getAnswerTrees = createSelector(
 )
 
 export const getQuestionTrees = createSelector(
-  [ getQuestions, getAnswerTrees, getShowSelectedQuestionsOnly, getShowFeaturedQuestionsOnly ],
-  (questions, answerTrees, showSelectedQuestionsOnly, showFeaturedQuestionsOnly) => {
-    const anyQuestionSelected = anyQuestion(questions, 'selectedConfirmed')
-    const anyQuestionFeatured = anyQuestion(questions, 'isFeatured')
-    // Do not apply visibility filters when none of the questions is selected or featured.
-    // That's the special case when they're ignored.
-    const applySelectionFilter = anyQuestionSelected && showSelectedQuestionsOnly
-    const applyFeaturedFilter = anyQuestionFeatured && showFeaturedQuestionsOnly
+  [ getQuestions, getAnswerTrees, getShowFeaturedQuestionsOnly ],
+  (questions, answerTrees, showFeaturedQuestionsOnly) => {
+    // Do not apply visibility filter when none of the questions featured. That's a special case when author
+    // doesn't set any question to be featured. We want to show all of them in this case.
+    const applyFeaturedFilter = showFeaturedQuestionsOnly && questions.filter(q => q.get('isFeatured') === true).size > 0
     return questions.map(question => {
       const mappedAnswers = question.get('answers').map(key => answerTrees.get(key))
       return question
         .set('answers', mappedAnswers)
-        .set('visible', isQuestionVisible(question, applySelectionFilter, applyFeaturedFilter))
+        .set('visible', isQuestionVisible(question, applyFeaturedFilter))
     })
   }
 )

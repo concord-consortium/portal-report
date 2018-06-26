@@ -99,7 +99,6 @@ export default function transformJSONResponse (json) {
 function applyVisibilityFilter (questions, visibilityFilter) {
   Object.values(questions).forEach(question => {
     question.selected = false
-    question.selectedConfirmed = false
     question.visible = false
   })
   visibilityFilter.questions.forEach(key => {
@@ -108,7 +107,6 @@ function applyVisibilityFilter (questions, visibilityFilter) {
     // There may not be a question for the key. Check first.
     if (questions[key]) {
       questions[key].selected = true
-      questions[key].selectedConfirmed = true
       questions[key].visible = true
     }
   })
