@@ -9,7 +9,7 @@ export default class ActivityQuestions extends PureComponent {
       <div className={css.activityQuestions} style={{minWidth: width, width}}>
         <div className={css.content}>
           {
-            expanded && activity.get('questions').map(q =>
+            expanded && activity.get('questions').filter(q => q.get('visible')).map(q =>
               <div key={q.get('id')} className={css.questionPrompt + ' ' + (showFullPrompts ? css.fullPrompt : '')}>
                 Q{ q.get('questionNumber') }. { q.get('prompt')}
               </div>
