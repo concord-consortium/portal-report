@@ -5,8 +5,6 @@ import Button from './button'
 import '../../../css/report/report.less'
 import Sticky from 'react-stickynode'
 
-import { noSelection } from '../../calculations'
-
 export default class Report extends PureComponent {
   constructor (props) {
     super(props)
@@ -74,12 +72,12 @@ export default class Report extends PureComponent {
     const isAnonymous = report.get('anonymous')
     const nowShowing = report.get('nowShowing')
     const buttonText = (nowShowing === 'class') ? 'Print student reports' : 'Print'
-    const showSelectedDisabled = noSelection(report)
     const hideControls = report.get('hideControls')
+    const anyQuestionSelected = report.get('questions').filter(question => question.get('selected') === true).size > 0
     if (!hideControls) {
       return (
         <div className='controls'>
-          <Button onClick={showSelectedQuestions} disabled={showSelectedDisabled}>Show selected</Button>
+          <Button onClick={showSelectedQuestions} disabled={!anyQuestionSelected}>Show selected</Button>
           <Button onClick={showAllQuestions}>Show all</Button>
           <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
           <Button onClick={this.printStudentReports}>{buttonText}</Button>

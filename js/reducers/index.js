@@ -10,7 +10,7 @@ import { rubricReducer } from './rubric-reducer'
 import { activityFeedbackReducer } from './activity-feedback-reducer'
 import dashboardReducer from './dashboard-reducer'
 import transformJSONResponse from '../core/transform-json-response'
-import { noSelection } from '../calculations'
+import config from '../config'
 
 function data (state = Map(), action) {
   switch (action.type) {
@@ -40,13 +40,12 @@ function setAnonymous (state, anonymous) {
     .set('students', newStudents)
 }
 
-function setVisibilityFilterActive (state, filterActive) {
+// Confirm action is explicit. Otherwise, a question will disappear immediately when teacher has selection filter
+// active and unselects given question. Instead, the question should stay visible until teacher clicks "Show selected" again.
+function confirmSelection (state) {
   return state.withMutations(state => {
-    state.set('visibilityFilterActive', filterActive)
     state.get('questions').forEach((value, key) => {
-      const questionSelected = state.getIn(['questions', key, 'selected'])
-      // Question is visible if it's selected, visibility filter is inactive, or none are selected
-      state = state.setIn(['questions', key, 'visible'], questionSelected || !filterActive || noSelection(state))
+      state = state.setIn(['questions', key, 'selectedConfirmed'], state.getIn(['questions', key, 'selected']))
     })
     return state
   })
@@ -58,7 +57,6 @@ function enableFeedback (state, action) {
 }
 
 function enableActivityFeedback (state, action) {
-
   const {activityId, feedbackFlags} = action
   const statePath = ['activities', activityId.toString()]
   // We have to unset 'RUBRIC_SCORE' scoretypes when
@@ -73,7 +71,12 @@ function enableActivityFeedback (state, action) {
 }
 
 const INITIAL_REPORT_STATE = Map({
-  type: 'class'
+  type: 'class',
+  // Note that visibility filters are ignored when no question is matching criteria.
+  // E.g. when there's no single featured questions, all the questions will be displayed.
+  // Check report-tree.js selector.
+  showFeaturedQuestionsOnly: true,
+  showSelectedQuestionsOnly: false
 })
 
 function report (state = INITIAL_REPORT_STATE, action) {
@@ -94,17 +97,18 @@ function report (state = INITIAL_REPORT_STATE, action) {
         .set('nowShowing', data.type)
         .set('selectedStudentId', data.studentId)
         .set('hideControls', data.result.hideControls)
+        // Custom question filtering is currently supported only by regular, non-dashboard report.
+        .set('showSelectedQuestionsOnly', config('dashboard') ? false : data.result.visibilityFilter.active && !data.result.hideControls)
       state = setAnonymous(state, data.result.anonymousReport)
-      state = setVisibilityFilterActive(state, data.result.visibilityFilter.active && !data.result.hideControls)
       return state
     case SET_NOW_SHOWING:
       return state.set('nowShowing', action.value)
     case SET_QUESTION_SELECTED:
       return state.setIn(['questions', action.key, 'selected'], action.value)
     case SHOW_SELECTED_QUESTIONS:
-      return setVisibilityFilterActive(state, true)
+      return confirmSelection(state).set('showSelectedQuestionsOnly', true)
     case SHOW_ALL_QUESTIONS:
-      return setVisibilityFilterActive(state, false)
+      return state.set('showSelectedQuestionsOnly', false)
     case SET_ANONYMOUS:
       return setAnonymous(state, action.value)
     case SET_ANSWER_SELECTED_FOR_COMPARE:

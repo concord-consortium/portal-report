@@ -13,7 +13,25 @@ const getQuestions = state => state.get('report').get('questions')
 const getAnswers = state => state.get('report').get('answers')
 const getStudents = state => state.get('report').get('students')
 const getHideSectionNames = state => state.get('report').get('hideSectionNames')
+const getShowSelectedQuestionsOnly = state => state.get('report').get('showSelectedQuestionsOnly')
+const getShowFeaturedQuestionsOnly = state => state.get('report').get('showFeaturedQuestionsOnly')
 
+// Helpers
+const isQuestionVisible = (question, selectedOnly, featuredOnly) => {
+  if (selectedOnly && !question.get('selectedConfirmed')) {
+    return false
+  }
+  if (featuredOnly && !question.get('isFeatured')) {
+    return false
+  }
+  return true
+}
+
+const anyQuestion = (questions, property) => {
+  return questions.filter(question => question.get(property) === true).size > 0
+}
+
+// Selectors
 export const getAnswerTrees = createSelector(
   [ getAnswers, getStudents ],
   (answers, students) =>
@@ -23,13 +41,21 @@ export const getAnswerTrees = createSelector(
 )
 
 export const getQuestionTrees = createSelector(
-  [ getQuestions, getAnswerTrees ],
-  (questions, answerTrees) =>
-    questions.map(question => {
+  [ getQuestions, getAnswerTrees, getShowSelectedQuestionsOnly, getShowFeaturedQuestionsOnly ],
+  (questions, answerTrees, showSelectedQuestionsOnly, showFeaturedQuestionsOnly) => {
+    const anyQuestionSelected = anyQuestion(questions, 'selectedConfirmed')
+    const anyQuestionFeatured = anyQuestion(questions, 'isFeatured')
+    // Do not apply visibility filters when none of the questions is selected or featured.
+    // That's the special case when they're ignored.
+    const applySelectionFilter = anyQuestionSelected && showSelectedQuestionsOnly
+    const applyFeaturedFilter = anyQuestionFeatured && showFeaturedQuestionsOnly
+    return questions.map(question => {
       const mappedAnswers = question.get('answers').map(key => answerTrees.get(key))
       return question
         .set('answers', mappedAnswers)
+        .set('visible', isQuestionVisible(question, applySelectionFilter, applyFeaturedFilter))
     })
+  }
 )
 
 export const getPageTrees = createSelector(
