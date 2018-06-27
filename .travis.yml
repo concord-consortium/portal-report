@@ -4,17 +4,12 @@ language:
   - ruby
 node_js:
   - node
-cache:
-  directories:
-    - ~/.npm
-    - ~/.cache
 install:
   - travis_retry gem install s3_website -v 3.4.0
   - travis_retry npm ci
-before_script:
+script:
   - webpack
   - WEBPACK_TARGET=lib webpack
-script:
   - npm run test
   - npm run server &
   - wait-on http://localhost:8080
@@ -24,3 +19,5 @@ cache:
   bundler: true
   directories:
     - node_modules
+    - ~/.npm
+    - ~/.cache
