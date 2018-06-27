@@ -110,7 +110,7 @@ export default class Dashboard extends PureComponent {
           <div ref={el => { this.horizontalScrollingContainer = el }} className={css.horizontalScrollContainer}>
             {
               students.map(s =>
-                <div key={s.get('id')} className={css.studentAnswersRow + ' ' + (expandedStudents.get(s.get('id').toString()) ? css.fullAnswers : '')}>
+                <div key={s.get('id')} className={css.studentAnswersRow + ' ' + (expandedStudents.get(s.get('id').toString()) ? css.fullAnswers : '')} data-cy='studentAnswersRow'>
                   {
                     activitiesList.map(a =>
                       <ActivityAnswers key={a.get('id')} activity={a} student={s}

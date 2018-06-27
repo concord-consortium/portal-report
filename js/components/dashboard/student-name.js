@@ -17,7 +17,7 @@ export default class StudentName extends PureComponent {
   render () {
     const { student, expanded } = this.props
     return (
-      <div className={css.studentName + ' ' + (expanded ? css.expanded : '')} onClick={this.onStudentNameClick}>
+      <div className={css.studentName + ' ' + (expanded ? css.expanded : '')} onClick={this.onStudentNameClick} data-cy='studentName'>
         <div className={css.content}>
           { student.get('lastName') }, { student.get('firstName')}
         </div>
