@@ -3,7 +3,7 @@ language:
   - node_js
   - ruby
 node_js:
-  - 6
+  - node
 install:
   - travis_retry gem install s3_website -v 3.4.0
   - travis_retry npm install

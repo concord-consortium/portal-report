@@ -7,17 +7,32 @@ const warn = (message) => {
     console.warn(message)
   }
 }
-const urlParams = (() => {
-  return queryString.parse(window.location.search)
-})()
+const urlParam = (name) => {
+  return queryString.parse(window.location.search)[name]
+}
 
 // Report URL and auth tokens are provided as an URL parameters.
-const REPORT_URL = urlParams['reportUrl']
-const AUTH_HEADER = `Bearer ${urlParams['token']}`
+const getReportUrl = () => {
+  const reportUrl = urlParam('reportUrl')
+  const offeringUrl = urlParam('offering')
+  if (reportUrl) {
+    return reportUrl
+  }
+  if (offeringUrl) {
+    // When this report is used an external report, it will be launched with offering URL parameter instead of reportUrl.
+    // In this case, modify this URL to point to the correct API.
+    return offeringUrl.replace('/offerings/', '/reports/')
+  }
+  return null
+}
+
+const getAuthHeader = () => `Bearer ${urlParam('token')}`
 
 export function fetchReportData () {
-  if (REPORT_URL) {
-    return fetch(REPORT_URL, {headers: {'Authorization': AUTH_HEADER}})
+  const reportUrl = getReportUrl()
+  const authHeader = getAuthHeader()
+  if (reportUrl) {
+    return fetch(reportUrl, {headers: {'Authorization': authHeader}})
       .then(checkStatus)
       .then(response => response.json())
   } else {
@@ -27,11 +42,13 @@ export function fetchReportData () {
 }
 
 export function updateReportSettings (data) {
-  if (REPORT_URL) {
-    return fetch(REPORT_URL, {
+  const reportUrl = getReportUrl()
+  const authHeader = getAuthHeader()
+  if (reportUrl) {
+    return fetch(reportUrl, {
       method: 'put',
       headers: {
-        'Authorization': AUTH_HEADER,
+        'Authorization': authHeader,
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
