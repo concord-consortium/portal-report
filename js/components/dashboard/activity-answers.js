@@ -12,7 +12,7 @@ export default class ActivityAnswers extends PureComponent {
       answer: question.get('answers').find(answer => answer.get('studentId') === student.get('id'))
     }))
     return (
-      <div className={css.activityAnswers} style={{ minWidth: width, width: width }}>
+      <div className={css.activityAnswers} style={{ minWidth: width, width: width }} data-cy='activityAnswers'>
         {
           !expanded && <ProgressBar progress={progress} />
         }

@@ -6,6 +6,26 @@ describe('Dashboard', function () {
     cy.visit('http://localhost:8080/?dashboard=true')
   })
 
+  it ('Renders cells in a row with the same height', function () {
+    getByCypressTag('studentName').each((student, i) => {
+      getByCypressTag('studentAnswersRow').eq(i).within((studentAnswersRow) => {
+        getByCypressTag('activityAnswers').each((answerCell) => {
+          expect(answerCell.height()).to.equal(student.height())
+        })
+      })
+    })
+  })
+
+  it ('Renders cells in a column with the same width', function () {
+    getByCypressTag('activityName').each((activity, i) => {
+      getByCypressTag('studentAnswersRow').each((studentAnswersRow) => {
+        cy.wrap(studentAnswersRow).within((studentAnswersRow) => {
+          getByCypressTag('activityAnswers').eq(i).invoke('width').should('eq', activity.width())
+        })
+      })
+    })
+  })
+
   let rowHeight = null
   it ('Has equal height rows', function () {
     getByCypressTag('studentName').should('be.visible').then((students) => {
