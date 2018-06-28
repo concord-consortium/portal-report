@@ -1,7 +1,7 @@
 import React from 'react'
 import { getByCypressTag } from '../utils'
 
-describe('Expand Students button', function () {
+describe('Open Students button', function () {
   let initialHeight = 0
   beforeEach(() => {
     cy.visit('http://localhost:8080/?dashboard=true')
@@ -10,7 +10,7 @@ describe('Expand Students button', function () {
   it ('Expands students after click, and then closes them again', function () {
     getByCypressTag('studentName').first().then((row) => {
       initialHeight = row.height()
-      cy.contains('Expand Students').click()
+      cy.contains('Open Students').click()
       cy.wait(1000)
       getByCypressTag('studentName').first().invoke('height').should('be.gt', initialHeight)
       getByCypressTag('studentName').last().invoke('height').should('be.gt', initialHeight)

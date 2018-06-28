@@ -1,6 +1,23 @@
+@import "./helpers";
+
 .expandStudents {
-  width: 120px;
-  position: absolute;
-  left: 30px;
-  top: 200px;
+  width: @student-name-width;
+
+  .title {
+    .cell();
+    background: @main-dark;
+  }
+
+  .buttonCell {
+    background: @main-light;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(~"100% -" (@row-outer-height + 2 * @border-width));
+    border: @cell-border;
+
+    .button {
+      width: 120px;
+    }
+  }
 }

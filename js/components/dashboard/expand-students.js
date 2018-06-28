@@ -15,9 +15,14 @@ export default class ExpandStudents extends PureComponent {
     const { expandedStudents } = this.props
     const anyStudentsExpanded = expandedStudents.some((isExpanded) => isExpanded)
     return (
-      <Button onClick={() => this.onSetStudentsExpanded(!anyStudentsExpanded)} className={css.expandStudents}>
-        {anyStudentsExpanded ? 'Close Students' : 'Expand Students'}
-      </Button>
+      <div className={css.expandStudents}>
+        <div className={css.title} />
+        <div className={css.buttonCell} >
+          <Button onClick={() => this.onSetStudentsExpanded(!anyStudentsExpanded)} className={css.button}>
+            {anyStudentsExpanded ? 'Close Students' : 'Open Students'}
+          </Button>
+        </div>
+      </div>
     )
   }
 }

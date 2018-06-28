@@ -9,7 +9,7 @@ import ExpandStudents from '../../../js/components/dashboard/expand-students'
 describe('<ExpandStudents />', () => {
   it('should be labelled correctly on load', () => {
     const wrapper = shallow(<ExpandStudents />)
-    assert(wrapper.contains('Expand Students'))
+    assert(wrapper.contains('Open Students'))
   })
 
   it('should open students if all are closed', () => {
@@ -18,7 +18,7 @@ describe('<ExpandStudents />', () => {
     const onClick = sinon.spy()
     const wrapper = shallow(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
     
-    assert(wrapper.contains('Expand Students'))
+    assert(wrapper.contains('Open Students'))
     wrapper.simulate('click')
     assert(onClick.calledOnce)
     const args = onClick.getCall(0).args
