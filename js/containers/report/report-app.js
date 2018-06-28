@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import {
   fetchDataIfNeeded, invalidateData, hideCompareView,
-  showSelectedQuestions, showAllQuestions, setNowShowing,
+  hideUnselectedQuestions, showUnselectedQuestions, setNowShowing,
   setAnonymous } from '../../actions/index'
 import { Modal } from 'react-bootstrap'
 import Header from '../../components/common/header'
@@ -35,12 +35,12 @@ class ReportApp extends PureComponent {
   }
 
   renderReport () {
-    const { report, reportTree, showSelectedQuestions, showAllQuestions, setNowShowing, setAnonymous } = this.props
+    const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setNowShowing, setAnonymous } = this.props
     return <Report
       report={report}
       reportTree={reportTree}
-      showSelectedQuestions={showSelectedQuestions}
-      showAllQuestions={showAllQuestions}
+      hideUnselectedQuestions={hideUnselectedQuestions}
+      showUnselectedQuestions={showUnselectedQuestions}
       setNowShowing={setNowShowing} setAnonymous={setAnonymous}
     />
   }
@@ -92,8 +92,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
     invalidateData: () => dispatch(invalidateData()),
-    showSelectedQuestions: () => dispatch(showSelectedQuestions()),
-    showAllQuestions: () => dispatch(showAllQuestions()),
+    hideUnselectedQuestions: () => dispatch(hideUnselectedQuestions()),
+    showUnselectedQuestions: () => dispatch(showUnselectedQuestions()),
     setNowShowing: value => dispatch(setNowShowing(value)),
     setAnonymous: value => dispatch(setAnonymous(value)),
     hideCompareView: () => dispatch(hideCompareView())

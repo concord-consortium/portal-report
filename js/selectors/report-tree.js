@@ -13,7 +13,20 @@ const getQuestions = state => state.get('report').get('questions')
 const getAnswers = state => state.get('report').get('answers')
 const getStudents = state => state.get('report').get('students')
 const getHideSectionNames = state => state.get('report').get('hideSectionNames')
+const getShowFeaturedQuestionsOnly = state => state.get('report').get('showFeaturedQuestionsOnly')
 
+// Helpers
+const isQuestionVisible = (question, featuredOnly) => {
+  if (question.get('hiddenByUser')) {
+    return false
+  }
+  if (featuredOnly && !question.get('isFeatured')) {
+    return false
+  }
+  return true
+}
+
+// Selectors
 export const getAnswerTrees = createSelector(
   [ getAnswers, getStudents ],
   (answers, students) =>
@@ -23,13 +36,18 @@ export const getAnswerTrees = createSelector(
 )
 
 export const getQuestionTrees = createSelector(
-  [ getQuestions, getAnswerTrees ],
-  (questions, answerTrees) =>
-    questions.map(question => {
+  [ getQuestions, getAnswerTrees, getShowFeaturedQuestionsOnly ],
+  (questions, answerTrees, showFeaturedQuestionsOnly) => {
+    // Do not apply visibility filter when none of the questions featured. That's a special case when author
+    // doesn't set any question to be featured. We want to show all of them in this case.
+    const applyFeaturedFilter = showFeaturedQuestionsOnly && questions.filter(q => q.get('isFeatured') === true).size > 0
+    return questions.map(question => {
       const mappedAnswers = question.get('answers').map(key => answerTrees.get(key))
       return question
         .set('answers', mappedAnswers)
+        .set('visible', isQuestionVisible(question, applyFeaturedFilter))
     })
+  }
 )
 
 export const getPageTrees = createSelector(

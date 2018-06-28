@@ -1,11 +1,10 @@
 import React from 'react'
 import ReportApp from '../containers/report/report-app'
 import DashboardApp from '../containers/dashboard/dashboard-app'
-import queryString from 'query-string'
+import config from '../config'
 
 export default class App extends React.PureComponent {
   render () {
-    const { dashboard } = queryString.parse(window.location.search)
-    return dashboard ? <DashboardApp /> : <ReportApp />
+    return config('dashboard') ? <DashboardApp /> : <ReportApp />
   }
 }

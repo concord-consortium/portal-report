@@ -71,7 +71,7 @@ export default class Dashboard extends PureComponent {
     if (expandedActivities.get(activity.get('id').toString())) {
       const showFullPrompts = expandedStudents.includes(true)
       const questionWidth = showFullPrompts ? FULL_ANSWER_WIDTH : COLLAPSED_ANSWER_WIDTH
-      return Math.max(COLLAPSED_ACTIVITY_WIDTH, (activity.get('questions').count() * questionWidth)) + 'px'
+      return Math.max(COLLAPSED_ACTIVITY_WIDTH, (activity.get('questions').filter(q => q.get('visible')).count() * questionWidth)) + 'px'
     }
     return COLLAPSED_ACTIVITY_WIDTH + 'px'
   }
@@ -79,7 +79,7 @@ export default class Dashboard extends PureComponent {
   render () {
     const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
-    const activitiesList = activities.toList()
+    const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
       <div className={css.dashboard}>
         <SortByDropdown setStudentSort={setStudentSort} />

@@ -27,7 +27,7 @@ export const getStudentProgress = createSelector(
   (students, activities) => {
     return students.map(student =>
       activities.map(activity => {
-        const activityQuestions = activity.get('questions')
+        const activityQuestions = activity.get('questions').filter(q => q.get('visible'))
         const studentSubmittedAnswers = activityQuestions.map(question =>
           question.get('answers')
             .find(answer =>
@@ -58,8 +58,9 @@ export const getStudentAverageProgress = createSelector(
 
 // A comparison function to sort students by last and then first name
 const compareStudentsByName = (student1, student2) => {
-  const lastNameCompare = student1.get('lastName').toLocaleLowerCase()
-                            .localeCompare(student2.get('lastName').toLocaleLowerCase())
+  const lastNameCompare = student1.get('lastName').toLocaleLowerCase().localeCompare(
+    student2.get('lastName').toLocaleLowerCase()
+  )
   if (lastNameCompare !== 0) {
     return lastNameCompare
   } else {
