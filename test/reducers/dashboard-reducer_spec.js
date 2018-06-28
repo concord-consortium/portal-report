@@ -55,4 +55,24 @@ describe('dashboard reducer', () => {
       { 123: false }
     )
   })
+
+  it('should handle SET_STUDENTS_EXPANDED', () => {
+    const state1 = dashboardReducer(undefined, {
+      type: types.SET_STUDENTS_EXPANDED,
+      studentIds: [1, 2, 3],
+      value: true
+    })
+    expect(state1.get('expandedStudents').toJS()).to.eql(
+      { 1: true, 2: true, 3: true }
+    )
+
+    const state2 = dashboardReducer(state1, {
+      type: types.SET_STUDENTS_EXPANDED,
+      studentIds: [1, 2],
+      value: false
+    })
+    expect(state2.get('expandedStudents').toJS()).to.eql(
+      { 1: false, 2: false, 3: true }
+    )
+  })
 })

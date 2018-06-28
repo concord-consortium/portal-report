@@ -4,6 +4,7 @@ import StudentName from './student-name'
 import ActivityQuestions from './activity-questions'
 import ActivityAnswers from './activity-answers'
 import SortByDropdown from './sort-by-dropdown'
+import ExpandStudents from './expand-students'
 import { Map, List } from 'immutable'
 
 import css from '../../../css/dashboard/dashboard.less'
@@ -77,12 +78,13 @@ export default class Dashboard extends PureComponent {
   }
 
   render () {
-    const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
+    const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentsExpanded, setStudentSort } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
     const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
       <div className={css.dashboard}>
         <SortByDropdown setStudentSort={setStudentSort} />
+        <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />
         <div ref={el => { this.headers = el }} className={css.headers}>
           <div>
             {
