@@ -14,11 +14,14 @@ export default class SortByDropdown extends PureComponent {
 
   render () {
     return (
-      <select onChange={this.onSortSelected}>
-        <option value={SORT_BY_NAME}>Sort by Name</option>
-        <option value={SORT_BY_MOST_PROGRESS}>Sort by Most Progress</option>
-        <option value={SORT_BY_LEAST_PROGRESS}>Sort by Least Progress</option>
-      </select>
+      <div data-cy='sortDropdown'>
+        {'Sort by: '}
+        <select onChange={this.onSortSelected}>
+          <option value={SORT_BY_NAME}>Student Name</option>
+          <option value={SORT_BY_MOST_PROGRESS}>Most Progress</option>
+          <option value={SORT_BY_LEAST_PROGRESS}>Least Progress</option>
+        </select>
+      </div>
     )
   }
 }

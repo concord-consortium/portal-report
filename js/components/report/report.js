@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import Investigation from './investigation'
-import Button from './button'
+import Button from '../common/button'
 
 import '../../../css/report/report.less'
 import Sticky from 'react-stickynode'

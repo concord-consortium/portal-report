@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { fetchDataIfNeeded } from '../../actions/index'
-import { setActivityExpanded, setStudentExpanded, setStudentSort } from '../../actions/dashboard'
+import { setActivityExpanded, setStudentExpanded, setStudentsExpanded, setStudentSort } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
+import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
 import Header from '../../components/common/header'
 import DataFetchError from '../../components/report/data-fetch-error'
 import LoadingIcon from '../../components/report/loading-icon'
@@ -36,11 +37,14 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
+    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentsExpanded, setStudentSort } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} background='#6fc6da' />
-        <h1>Report for { clazzName }</h1>
+        <div className={css.title}>
+          <h1>Report for { clazzName }</h1>
+          <SortByDropdown setStudentSort={setStudentSort} />
+        </div>
         <div>
           {activityTrees && <Dashboard
             activities={activityTrees}
@@ -50,6 +54,7 @@ class DashboardApp extends PureComponent {
             expandedStudents={expandedStudents}
             setActivityExpanded={setActivityExpanded}
             setStudentExpanded={setStudentExpanded}
+            setStudentsExpanded={setStudentsExpanded}
             setStudentSort={setStudentSort}
           />}
           {error && <DataFetchError error={error} />}
@@ -82,6 +87,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
     setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
     setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value)),
+    setStudentsExpanded: (studentIds, value) => dispatch(setStudentsExpanded(studentIds, value)),
     setStudentSort: (value) => dispatch(setStudentSort(value))
   }
 }

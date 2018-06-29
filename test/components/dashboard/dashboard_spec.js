@@ -41,11 +41,6 @@ describe('<Dashboard />', () => {
     expect(wrapper2.find(ActivityAnswers)).to.have.length(2 * multipleStudents.size)
   })
 
-  it('should render sort method dropdown', () => {
-    const wrapper = shallow(<Dashboard />)
-    expect(wrapper.find(SortByDropdown)).to.have.length(1)
-  })
-
   it('synchronizes width of activity name, question prompts and activity answers', () => {
     const students = fromJS([ { id: 1 } ])
     const activities = fromJS({ 1: { id: 1, visible: true, questions: [ { id: 1, visible: true }, { id: 1, visible: true } ] }, 2: { id: 2, visible: true } })

@@ -5,6 +5,10 @@
   width: 100%;
   padding: @content-padding;
 
+  .headers {
+    display: flex;
+  }
+
   .studentNames {
     display: inline-block;
     width: @student-name-width;
@@ -12,9 +16,8 @@
     margin-right: @border-width;
   }
 
-  .headers {
+  .activityHeaders {
     width: calc(~"100% -" @student-name-width + 2 * @content-padding);
-    margin-left: @student-name-width;
     white-space: nowrap;
     overflow-x: scroll;
     overflow-y: hidden;

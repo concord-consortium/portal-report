@@ -1,5 +1,6 @@
 export const SET_ACTIVITY_EXPANDED = 'SET_ACTIVITY_EXPANDED'
 export const SET_STUDENT_EXPANDED = 'SET_STUDENT_EXPANDED'
+export const SET_STUDENTS_EXPANDED = 'SET_STUDENTS_EXPANDED'
 export const SET_STUDENT_SORT = 'SET_STUDENT_SORT'
 
 export const SORT_BY_NAME = 'NAME'
@@ -26,6 +27,14 @@ export function setActivityExpanded (activityId, value) {
   }
 }
 
+function checkActivityExpanded (dispatch, getState) {
+  const expandedActivities = getState().getIn(['dashboard', 'expandedActivities'])
+  if (!expandedActivities.includes(true)) {
+    const firstActivity = getState().getIn(['report', 'activities']).first()
+    dispatch(setActivityExpanded(firstActivity.get('id'), true))
+  }
+}
+
 export function setStudentExpanded (studentId, value) {
   return (dispatch, getState) => {
     dispatch({
@@ -36,11 +45,20 @@ export function setStudentExpanded (studentId, value) {
     if (value) {
       // When user expands student row, check if there's at least one expanded activity.
       // If not, expand the fist one.
-      const expandedActivities = getState().getIn(['dashboard', 'expandedActivities'])
-      if (!expandedActivities.includes(true)) {
-        const firstActivity = getState().getIn(['report', 'activities']).first()
-        dispatch(setActivityExpanded(firstActivity.get('id'), true))
-      }
+      checkActivityExpanded(dispatch, getState)
+    }
+  }
+}
+
+export function setStudentsExpanded (studentIds, value) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SET_STUDENTS_EXPANDED,
+      studentIds,
+      value
+    })
+    if (value) {
+      checkActivityExpanded(dispatch, getState)
     }
   }
 }

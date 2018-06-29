@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import Button from '../report/button'
+import Button from '../common/button'
 
 import ccLogoSrc from '../../../img/cc-logo.png'
 import '../../../css/common/header.less'

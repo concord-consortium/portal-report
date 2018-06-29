@@ -7,9 +7,15 @@
   margin: 0;
   padding: 0;
 
+  .title {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: @content-padding @content-padding 0 @content-padding;
+  }
+
   h1 {
     font: 700 24px museo, verdana, helvetica, arial, sans-serif;
-    padding: @content-padding @content-padding 0 @content-padding;
   }
 
   @media print {

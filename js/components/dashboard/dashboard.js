@@ -3,7 +3,7 @@ import ActivityName from './activity-name'
 import StudentName from './student-name'
 import ActivityQuestions from './activity-questions'
 import ActivityAnswers from './activity-answers'
-import SortByDropdown from './sort-by-dropdown'
+import ExpandStudents from './expand-students'
 import { Map, List } from 'immutable'
 
 import css from '../../../css/dashboard/dashboard.less'
@@ -26,14 +26,14 @@ export default class Dashboard extends PureComponent {
     window.addEventListener('resize', this.onResize)
     // Synchronize scrolling of headers and horizontalScrollContainer.
     this.horizontalScrollingContainer.addEventListener('scroll', this.onHorizontalContainerScroll)
-    this.headers.addEventListener('scroll', this.onHeadersScroll)
+    this.activityHeaders.addEventListener('scroll', this.onHeadersScroll)
     this.onResize()
   }
 
   componentWillUnmount () {
     window.removeEventListener('resize', this.onResize)
     this.horizontalScrollingContainer.removeEventListener('scroll', this.onHorizontalContainerScroll)
-    this.headers.removeEventListener('scroll', this.onHeadersScroll)
+    this.activityHeaders.removeEventListener('scroll', this.onHeadersScroll)
   }
 
   onResize () {
@@ -45,15 +45,15 @@ export default class Dashboard extends PureComponent {
   onHorizontalContainerScroll () {
     // Synchronize scrolling of headers and horizontalScrollContainer.
     // Make sure there's no loop of scroll events. It causes weird effects and containers end up out of sync.
-    this.ignoreNextScrollEvent(this.headers, this.onHeadersScroll)
-    this.headers.scrollLeft = this.horizontalScrollingContainer.scrollLeft
+    this.ignoreNextScrollEvent(this.activityHeaders, this.onHeadersScroll)
+    this.activityHeaders.scrollLeft = this.horizontalScrollingContainer.scrollLeft
   }
 
   onHeadersScroll () {
     // Synchronize scrolling of headers and horizontalScrollContainer.
     // Make sure there's no loop of scroll events. It causes weird effects and containers end up out of sync.
     this.ignoreNextScrollEvent(this.horizontalScrollingContainer, this.onHorizontalContainerScroll)
-    this.horizontalScrollingContainer.scrollLeft = this.headers.scrollLeft
+    this.horizontalScrollingContainer.scrollLeft = this.activityHeaders.scrollLeft
   }
 
   ignoreNextScrollEvent (element, originalHandler) {
@@ -77,26 +77,28 @@ export default class Dashboard extends PureComponent {
   }
 
   render () {
-    const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentSort } = this.props
+    const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentsExpanded } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
     const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
       <div className={css.dashboard}>
-        <SortByDropdown setStudentSort={setStudentSort} />
-        <div ref={el => { this.headers = el }} className={css.headers}>
-          <div>
-            {
-              activitiesList.map(a =>
-                <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
-              )
-            }
-          </div>
-          <div className={css.questionPromptsRow + ' ' + (anyStudentExpanded ? css.fullPrompts : '')}>
-            {
-              activitiesList.map(a =>
-                <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded} />
-              )
-            }
+        <div className={css.headers}>
+          <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />
+          <div ref={el => { this.activityHeaders = el }} className={css.activityHeaders}>
+            <div>
+              {
+                activitiesList.map(a =>
+                  <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
+                )
+              }
+            </div>
+            <div className={css.questionPromptsRow + ' ' + (anyStudentExpanded ? css.fullPrompts : '')}>
+              {
+                activitiesList.map(a =>
+                  <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded} />
+                )
+              }
+            </div>
           </div>
         </div>
         <div ref={el => { this.verticalScrollingContainer = el }} className={css.verticalScrollContainer}>
