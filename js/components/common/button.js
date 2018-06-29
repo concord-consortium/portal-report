@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 
-import '../../../css/report/button.less'
+import '../../../css/common/button.less'
 
 export default class Button extends PureComponent {
   constructor (props) {

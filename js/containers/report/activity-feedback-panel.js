@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react' // eslint-disable-line
 import ReactDom from 'react-dom'
-import Button from '../../components/report/button'
+import Button from '../../components/common/button'
 import FeedbackFilter from '../../components/report/feedback-filter'
 import FeedbackOverview from '../../components/report/feedback-overview'
 import ActivityFeedbackOptions from '../../components/report/activity-feedback-options'

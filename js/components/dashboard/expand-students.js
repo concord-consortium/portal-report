@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Map, List } from 'immutable'
 import { SET_STUDENTS_EXPANDED } from '../../actions/dashboard'
-import Button from '../report/button'
+import Button from '../common/button'
 
 import css from '../../../css/dashboard/expand-students.less'
 

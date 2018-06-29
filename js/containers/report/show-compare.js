@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { showCompareView } from '../../actions/index'
-import Button from '../../components/report/button'
+import Button from '../../components/common/button'
 
 export class ShowCompareButton extends PureComponent {
   render () {
