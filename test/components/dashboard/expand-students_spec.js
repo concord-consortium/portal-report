@@ -1,25 +1,25 @@
 import React from 'react'
 import { assert, expect } from 'chai'
 import { describe, it } from 'mocha'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import sinon from 'sinon'
 import { fromJS } from 'immutable'
 import ExpandStudents from '../../../js/components/dashboard/expand-students'
 
 describe('<ExpandStudents />', () => {
   it('should be labelled correctly on load', () => {
-    const wrapper = shallow(<ExpandStudents />)
-    assert(wrapper.find('Button').contains('Open Students'))
+    const wrapper = mount(<ExpandStudents />)
+    expect(wrapper.text()).to.equal('Open Students')
   })
 
   it('should open students if all are closed', () => {
     const students = fromJS([{id: 42}])
     const expandedStudents = fromJS({42: false})
     const onClick = sinon.spy()
-    const wrapper = shallow(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
-    
+    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
+
+    expect(wrapper.text()).to.equal('Open Students')
     const button = wrapper.find('Button')
-    assert(button.contains('Open Students'))
     button.simulate('click')
     assert(onClick.calledOnce)
     const args = onClick.getCall(0).args
@@ -31,10 +31,10 @@ describe('<ExpandStudents />', () => {
     const students = fromJS([{id: 42}, {id: 43}])
     const expandedStudents = fromJS({42: true, 43: false})
     const onClick = sinon.spy()
-    const wrapper = shallow(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
+    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
     
+    expect(wrapper.text()).to.equal('Close Students')
     const button = wrapper.find('Button')
-    assert(button.contains('Close Students'))
     button.simulate('click')
     assert(onClick.calledOnce)
     const args = onClick.getCall(0).args

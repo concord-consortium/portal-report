@@ -5,22 +5,34 @@ import Button from '../report/button'
 
 import css from '../../../css/dashboard/expand-students.less'
 
-export default class ExpandStudents extends PureComponent {
-  onSetStudentsExpanded (value) {
-    const { setStudentsExpanded, students } = this.props
-    setStudentsExpanded(students.map(student => student.get('id')), value)
+class ExpandStudentsButton extends PureComponent {
+  handleClick = () => {
+    const { onSetStudentsExpanded, students, anyStudentsExpanded } = this.props
+    onSetStudentsExpanded(students.map(student => student.get('id')), !anyStudentsExpanded)
   }
 
   render () {
-    const { expandedStudents } = this.props
+    const { anyStudentsExpanded } = this.props
+    return (
+      <Button onClick={this.handleClick} className={css.button}>
+        {anyStudentsExpanded ? 'Close Students' : 'Open Students'}
+      </Button>
+    )
+  }
+}
+
+export default class ExpandStudents extends PureComponent {
+  render () {
+    const { expandedStudents, students, setStudentsExpanded } = this.props
     const anyStudentsExpanded = expandedStudents.some((isExpanded) => isExpanded)
     return (
       <div className={css.expandStudents}>
         <div className={css.title} />
-        <div className={css.buttonCell} >
-          <Button onClick={() => this.onSetStudentsExpanded(!anyStudentsExpanded)} className={css.button}>
-            {anyStudentsExpanded ? 'Close Students' : 'Open Students'}
-          </Button>
+        <div className={css.buttonCell}>
+          <ExpandStudentsButton 
+            students={students}
+            onSetStudentsExpanded={setStudentsExpanded} 
+            anyStudentsExpanded={anyStudentsExpanded} />
         </div>
       </div>
     )
