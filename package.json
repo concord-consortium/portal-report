@@ -27,6 +27,7 @@
     "cypress:test": "cypress run --config video=false,trashAssetsBeforeRuns=false",
     "cypress:open": "cypress open",
     "test": "mocha --compilers js:babel-core/register --require ignore-styles --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
+    "test:debug": "mocha --debug-brk --inspect --compilers js:babel-core/register --require ignore-styles --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
     "test:watch": "npm run cypress:open & npm run test -- --watch",
     "test:full": "npm run test && npm run cypress:test"
   },

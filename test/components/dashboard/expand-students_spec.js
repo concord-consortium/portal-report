@@ -9,7 +9,7 @@ import ExpandStudents from '../../../js/components/dashboard/expand-students'
 describe('<ExpandStudents />', () => {
   it('should be labelled correctly on load', () => {
     const wrapper = shallow(<ExpandStudents />)
-    assert(wrapper.contains('Open Students'))
+    assert(wrapper.find('Button').contains('Open Students'))
   })
 
   it('should open students if all are closed', () => {
@@ -18,8 +18,9 @@ describe('<ExpandStudents />', () => {
     const onClick = sinon.spy()
     const wrapper = shallow(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
     
-    assert(wrapper.contains('Open Students'))
-    wrapper.simulate('click')
+    const button = wrapper.find('Button')
+    assert(button.contains('Open Students'))
+    button.simulate('click')
     assert(onClick.calledOnce)
     const args = onClick.getCall(0).args
     expect(args[0].toJS()).to.deep.equal([42])
@@ -32,8 +33,9 @@ describe('<ExpandStudents />', () => {
     const onClick = sinon.spy()
     const wrapper = shallow(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
     
-    assert(wrapper.contains('Close Students'))
-    wrapper.simulate('click')
+    const button = wrapper.find('Button')
+    assert(button.contains('Close Students'))
+    button.simulate('click')
     assert(onClick.calledOnce)
     const args = onClick.getCall(0).args
     expect(args[0].toJS()).to.deep.equal([42, 43])

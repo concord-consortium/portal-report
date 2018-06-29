@@ -14,7 +14,7 @@ export default class SortByDropdown extends PureComponent {
 
   render () {
     return (
-      <div>
+      <div data-cy='sortDropdown'>
         {'Sort by: '}
         <select onChange={this.onSortSelected}>
           <option value={SORT_BY_NAME}>Student Name</option>
