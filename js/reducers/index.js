@@ -12,6 +12,25 @@ import dashboardReducer from './dashboard-reducer'
 import transformJSONResponse from '../core/transform-json-response'
 import config from '../config'
 
+export const FULL_REPORT = 'fullReport'
+export const DASHBOARD = 'dashboard'
+
+const INITIAL_VIEW = Map({
+  type: config('dashboard') ? DASHBOARD : FULL_REPORT
+})
+
+// Defines which view / app is going to be used. A full report or a compact dashboard.
+function view (state = INITIAL_VIEW, action) {
+  switch (action.type) {
+    // Nothing to do here now. In the future, we might let users toggle between full report and dashboard.
+    // Implementation can look like:
+    // case SWITCH_REPORT_VIEW:
+    //   return state.set('type', action.viewType)
+    default:
+      return state
+  }
+}
+
 function data (state = Map(), action) {
   switch (action.type) {
     case INVALIDATE_DATA:
@@ -81,10 +100,10 @@ function enableActivityFeedback (state, action) {
 }
 
 const INITIAL_REPORT_STATE = Map({
+  // Type: 'class' or 'student'. Used by regular report only. 'class' displays all the answers,
+  // while 'student' focuses on one student only.
   type: 'class',
-  // Note that this visibility filter is ignored when no question is matching criteria.
-  // When there's no single featured questions, all the questions will be displayed.
-  // Check report-tree.js selector.
+  // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: true
 })
 
@@ -106,9 +125,7 @@ function report (state = INITIAL_REPORT_STATE, action) {
         .set('nowShowing', data.type)
         .set('selectedStudentId', data.studentId)
         .set('hideControls', data.result.hideControls)
-      // Custom question filtering is currently supported only by regular, non-dashboard report.
-      // There are no checkboxes and controls in dashboard so do not restore these settings in the dashboard mode (yet).
-      if (!config('dashboard') && data.result.visibilityFilter.active && !data.result.hideControls) {
+      if (data.result.visibilityFilter.active && !data.result.hideControls) {
         state = hideUnselectedQuestions(state)
       }
       state = setAnonymous(state, data.result.anonymousReport)
@@ -150,6 +167,7 @@ function report (state = INITIAL_REPORT_STATE, action) {
 
 export default function reducer (state = Map(), action) {
   return Map({
+    view: view(state.get('view'), action),
     data: data(state.get('data'), action),
     report: report(state.get('report'), action),
     feedbacks: feedbackReducer(state.get('feedbacks'), action),

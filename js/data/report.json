@@ -80,7 +80,7 @@
                     "rationale_prompt": "Explain your choice. Give specific examples.",
                     "allow_multiple_selection": null,
                     "is_required": false,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "feedback_enabled": true,
                     "score_enabled": true,
                     "max_score": 10,
@@ -195,7 +195,7 @@
                     "columns": 32,
                     "font_size": 12,
                     "is_required": false,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "key": "Embeddable::OpenResponse|252",
                     "type": "Embeddable::OpenResponse",
                     "answers": [
@@ -316,7 +316,7 @@
                     "rationale_prompt": "Explain your choice. Give specific examples.",
                     "allow_multiple_selection": null,
                     "is_required": false,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "key": "Embeddable::MultipleChoice|117",
                     "type": "Embeddable::MultipleChoice",
                     "answers": [
@@ -425,7 +425,7 @@
                     "columns": 32,
                     "font_size": 12,
                     "is_required": false,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "key": "Embeddable::OpenResponse|253",
                     "type": "Embeddable::OpenResponse",
                     "answers": [
@@ -503,7 +503,7 @@
                     "prompt": "longer prompt longer prompt longer prompt longer prompt longer prompt longer prompt ",
                     "drawing_prompt": "draw a picture of seagull",
                     "is_required": false,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "key": "Embeddable::ImageQuestion|12",
                     "type": "Embeddable::ImageQuestion",
                     "answers": [
@@ -597,7 +597,7 @@
                     "width": 600,
                     "height": 500,
                     "url": null,
-                    "is_featured": false,
+                    "show_in_featured_question_report": false,
                     "display_in_iframe": true,
                     "key": "Embeddable::Iframe|7-1",
                     "type": "Embeddable::Iframe",
@@ -679,7 +679,7 @@
                     "height": 500,
                     "url": null,
                     "display_in_iframe": true,
-                    "is_featured": false,
+                    "show_in_featured_question_report": false,
                     "key": "Embeddable::Iframe|7",
                     "type": "Embeddable::Iframe",
                     "answers": [
@@ -748,7 +748,7 @@
                     "key": "Embeddable::Iframe|1245",
                     "type": "Embeddable::Iframe",
                     "question_number": 6,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "answers": [
                       {
                         "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
@@ -832,7 +832,7 @@
                     "key": "Embeddable::Iframe|1022",
                     "type": "Embeddable::Iframe",
                     "question_number": 7,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "answers": [
                       {
                         "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Trial\\\",\\\"readOnly\\\":true,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Description\\\",\\\"readOnly\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature A (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature B (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"something\\\",\\\"3\\\",\\\"2\\\"],[\\\"b\\\",\\\"else\\\",\\\"1.5\\\",\\\"3\\\"],[\\\"c\\\",\\\"more\\\",\\\"0.5\\\",\\\"1\\\"]]}\"}",
@@ -947,7 +947,7 @@
                     "prompt": "why does ...",
                     "drawing_prompt": "",
                     "is_required": false,
-                    "is_featured": true,
+                    "show_in_featured_question_report": true,
                     "key": "Embeddable::ImageQuestion|13",
                     "type": "Embeddable::ImageQuestion",
                     "answers": [
