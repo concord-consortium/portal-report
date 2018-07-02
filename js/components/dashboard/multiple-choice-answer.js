@@ -17,7 +17,6 @@ export class Choice extends PureComponent {
     } else if (correctAnswerDefined && selected && !isCorrect) {
       return INCORRECT_ICON
     } else if (selected) {
-      // Undefined as there's no correct or incorrect choice defined.
       return SELECTED_ICON
     }
     return NOT_SELECTED_ICON
@@ -70,7 +69,7 @@ export default class MultipleChoiceAnswer extends PureComponent {
   get correctAnswerDefined () {
     const { question } = this.props
     const choices = question.get('choices')
-    return !!choices.find(c => c.get('isCorrect'))
+    return choices.some(c => c.get('isCorrect'))
   }
 
   renderIcon () {
@@ -98,7 +97,7 @@ export default class MultipleChoiceAnswer extends PureComponent {
         {
           choices.map(choice =>
             <Choice key={choice.get('id')} choice={choice} correctAnswerDefined={this.correctAnswerDefined}
-              selected={!!studentChoices.find(studentChoice => studentChoice.get('id') === choice.get('id'))}
+              selected={studentChoices.some(studentChoice => studentChoice.get('id') === choice.get('id'))}
             />
           )
         }
