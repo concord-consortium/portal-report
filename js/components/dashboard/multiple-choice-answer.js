@@ -10,25 +10,24 @@ const NOT_SELECTED_ICON = 'icomoon-radio-unchecked'
 
 export class Choice extends PureComponent {
   get icon () {
-    const { choice, selected } = this.props
+    const { choice, selected, correctAnswerDefined } = this.props
     const isCorrect = choice.get('isCorrect')
-    if (selected && isCorrect === true) {
+    if (correctAnswerDefined && selected && isCorrect) {
       return CORRECT_ICON
-    } else if (selected && isCorrect === false) {
+    } else if (correctAnswerDefined && selected && !isCorrect) {
       return INCORRECT_ICON
     } else if (selected) {
-      // Undefined as there's no correct or incorrect choice defined.
       return SELECTED_ICON
     }
     return NOT_SELECTED_ICON
   }
 
   get contentStyling () {
-    const { choice, selected } = this.props
+    const { choice, selected, correctAnswerDefined } = this.props
     const isCorrect = choice.get('isCorrect')
-    if (isCorrect === true) {
+    if (correctAnswerDefined && isCorrect) {
       return css.correct
-    } else if (selected && isCorrect === false) {
+    } else if (correctAnswerDefined && selected && !isCorrect) {
       return css.incorrect
     } else if (selected) {
       return css.selected
@@ -67,17 +66,20 @@ export class Choice extends PureComponent {
 }
 
 export default class MultipleChoiceAnswer extends PureComponent {
+  get correctAnswerDefined () {
+    const { question } = this.props
+    const choices = question.get('choices')
+    return choices.some(c => c.get('isCorrect'))
+  }
+
   renderIcon () {
     const { answer } = this.props
-    const isCorrect = answer.get('isCorrect')
     let icon
-    if (isCorrect === true) {
-      icon = CORRECT_ICON
-    } else if (isCorrect === false) {
-      icon = INCORRECT_ICON
-    } else if (isCorrect === undefined || isCorrect === null) {
+    if (!this.correctAnswerDefined) {
       // Undefined as there's no correct or incorrect choice defined.
       icon = SELECTED_ICON
+    } else {
+      icon = answer.get('isCorrect') ? CORRECT_ICON : INCORRECT_ICON
     }
     return (
       <div className={css.icon}>
@@ -94,7 +96,9 @@ export default class MultipleChoiceAnswer extends PureComponent {
       <div>
         {
           choices.map(choice =>
-            <Choice key={choice.get('id')} choice={choice} selected={!!studentChoices.find(studentChoice => studentChoice.get('id') === choice.get('id'))} />
+            <Choice key={choice.get('id')} choice={choice} correctAnswerDefined={this.correctAnswerDefined}
+              selected={studentChoices.some(studentChoice => studentChoice.get('id') === choice.get('id'))}
+            />
           )
         }
       </div>
