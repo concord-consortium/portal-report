@@ -63,6 +63,12 @@ function setAnonymous (state, anonymous) {
 // when teacher has selection filter active and unselects given question. Instead, the question should stay visible
 // until teacher clicks "Show selected" again.
 function hideUnselectedQuestions (state) {
+  if (!state.get('questions').some(question => question.get('selected'))) {
+    // Make sure that at least one question is selected. Never let user hide all the questions.
+    // This is necessary due to compatibility with Portal API and old report. Portal API by default states
+    // that the visibility filter is active, but no questions are selected. Without this check, nothing would be visible.
+    return
+  }
   return state.withMutations(state => {
     state.get('questions').forEach((value, key) => {
       state = state.setIn(['questions', key, 'hiddenByUser'], !state.getIn(['questions', key, 'selected']))
