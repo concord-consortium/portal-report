@@ -2,13 +2,16 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
 import getInvestigationTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from '../../js/selectors/report-tree'
+import { FULL_REPORT, DASHBOARD } from '../../js/reducers'
 
 describe('report tree selectors', () => {
   const state = ({ questionVisible = true, hideSectionNames = true }) => fromJS({
     // Note that `questionVisible` parameter uses just one of the many ways to make question visible or not.
     // `getQuestionTrees` specs below test all these ways. This is used for tests that deal with the whole state.
+    view: {
+      type: 'fullReport'
+    },
     report: {
-      showFeaturedQuestionsOnly: !questionVisible,
       students: {
         1: { id: 1, firstName: 'John', lastName: 'Doe' }
       },
@@ -16,8 +19,8 @@ describe('report tree selectors', () => {
         A1: { key: 'A1', studentId: 1, someAnswerProp: 'x' }
       },
       questions: {
-        Q1: { key: 'Q1', answers: [ 'A1' ], isFeatured: false, someQuestionProp: 'x' },
-        Q2: { key: 'Q2', answers: [ ], isFeatured: true, someQuestionProp: 'y' }
+        Q1: { key: 'Q1', answers: [ 'A1' ], hiddenByUser: !questionVisible, someQuestionProp: 'x' },
+        Q2: { key: 'Q2', answers: [ ], hiddenByUser: false, someQuestionProp: 'y' }
       },
       pages: {
         1: { id: 1, children: [ 'Q1' ], somePageProp: 'x' },
@@ -51,14 +54,14 @@ describe('report tree selectors', () => {
     Q1: {
       key: 'Q1',
       visible: questionVisible,
-      isFeatured: false,
+      hiddenByUser: !questionVisible,
       someQuestionProp: 'x',
       answers: [ expectedAnswerTrees.A1 ]
     },
     Q2: {
       key: 'Q2',
       visible: true,
-      isFeatured: true,
+      hiddenByUser: false,
       someQuestionProp: 'y',
       answers: [ ]
     }
@@ -132,43 +135,60 @@ describe('report tree selectors', () => {
     })
 
     describe('when there are some questions hidden by user', () => {
-      it('should set visibility based on "hiddenByUser" property', () => {
-        const questions = fromJS({
-          1: { answers: [], hiddenByUser: false },
-          2: { answers: [], hiddenByUser: true }
-        })
-        const answers = fromJS({})
-        const showFeaturedQuestionsOnly = false
-        const result = getQuestionTrees.resultFunc(questions, answers, showFeaturedQuestionsOnly).toJS()
-        expect(result[1].visible).to.eql(true)
-        expect(result[2].visible).to.eql(false)
-      })
-    })
-    describe('when "showFeaturedQuestionsOnly" filter is enabled', () => {
-      describe('and there is at least one featured question', () => {
-        it('should set visibility based on the current selection', () => {
+      describe('and full report view is used', () => {
+        it('should set visibility based on "hiddenByUser" property', () => {
           const questions = fromJS({
-            1: { answers: [], isFeatured: true },
-            2: { answers: [], isFeatured: false }
+            1: { answers: [], hiddenByUser: false },
+            2: { answers: [], hiddenByUser: true }
           })
           const answers = fromJS({})
-          const showFeaturedQuestionsOnly = true
-          const result = getQuestionTrees.resultFunc(questions, answers, showFeaturedQuestionsOnly).toJS()
+          const showFeaturedQuestionsOnly = false
+          const result = getQuestionTrees.resultFunc(questions, answers, FULL_REPORT, showFeaturedQuestionsOnly).toJS()
           expect(result[1].visible).to.eql(true)
           expect(result[2].visible).to.eql(false)
         })
       })
-      describe('but there is no featured question', () => {
-        it('should ignore this filter and show all the questions', () => {
+      describe('and dashboard view is used', () => {
+        it('should ignore "hiddenByUser" property', () => {
           const questions = fromJS({
-            1: { answers: [], isFeatured: false },
-            2: { answers: [], isFeatured: false }
+            1: { answers: [], hiddenByUser: false },
+            2: { answers: [], hiddenByUser: true }
+          })
+          const answers = fromJS({})
+          const showFeaturedQuestionsOnly = false
+          const result = getQuestionTrees.resultFunc(questions, answers, DASHBOARD, showFeaturedQuestionsOnly).toJS()
+          expect(result[1].visible).to.eql(true)
+          expect(result[2].visible).to.eql(true)
+        })
+      })
+    })
+
+    describe('when "showFeaturedQuestionsOnly" filter is enabled', () => {
+      describe('and the full report is used', () => {
+        it('should ignore "showInFeaturedQuestionReport" property', () => {
+          const questions = fromJS({
+            1: { answers: [], showInFeaturedQuestionReport: true },
+            2: { answers: [], showInFeaturedQuestionReport: false }
           })
           const answers = fromJS({})
           const showFeaturedQuestionsOnly = true
-          const result = getQuestionTrees.resultFunc(questions, answers, showFeaturedQuestionsOnly).toJS()
+          const result = getQuestionTrees.resultFunc(questions, answers, FULL_REPORT, showFeaturedQuestionsOnly).toJS()
           expect(result[1].visible).to.eql(true)
           expect(result[2].visible).to.eql(true)
+        })
+      })
+
+      describe('and dashboard view is used', () => {
+        it('should set visibility based on "showInFeaturedQuestionReport" property', () => {
+          const questions = fromJS({
+            1: { answers: [], showInFeaturedQuestionReport: true },
+            2: { answers: [], showInFeaturedQuestionReport: false }
+          })
+          const answers = fromJS({})
+          const showFeaturedQuestionsOnly = true
+          const result = getQuestionTrees.resultFunc(questions, answers, DASHBOARD, showFeaturedQuestionsOnly).toJS()
+          expect(result[1].visible).to.eql(true)
+          expect(result[2].visible).to.eql(false)
         })
       })
     })

@@ -1,26 +1,41 @@
 import { createSelector } from 'reselect'
+import { FULL_REPORT, DASHBOARD } from '../reducers'
 
 // `getInvestigationTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // Redux state has flat structure. This selector maps all the IDs and keys and creates a tree-like hierarchy.
 // It includes all the properties provided by API + calculates a few additional ones.
 
 // Inputs
-const getInvestigations = state => state.get('report').get('investigations')
-const getActivities = state => state.get('report').get('activities')
-const getPages = state => state.get('report').get('pages')
-const getSections = state => state.get('report').get('sections')
-const getQuestions = state => state.get('report').get('questions')
-const getAnswers = state => state.get('report').get('answers')
-const getStudents = state => state.get('report').get('students')
-const getHideSectionNames = state => state.get('report').get('hideSectionNames')
-const getShowFeaturedQuestionsOnly = state => state.get('report').get('showFeaturedQuestionsOnly')
+const getInvestigations = state => state.getIn(['report', 'investigations'])
+const getActivities = state => state.getIn(['report', 'activities'])
+const getPages = state => state.getIn(['report', 'pages'])
+const getSections = state => state.getIn(['report', 'sections'])
+const getQuestions = state => state.getIn(['report', 'questions'])
+const getAnswers = state => state.getIn(['report', 'answers'])
+const getStudents = state => state.getIn(['report', 'students'])
+const getHideSectionNames = state => state.getIn(['report', 'hideSectionNames'])
+const getShowFeaturedQuestionsOnly = state => state.getIn(['report', 'showFeaturedQuestionsOnly'])
+const getViewType = state => state.getIn(['view', 'type'])
 
 // Helpers
-const isQuestionVisible = (question, featuredOnly) => {
-  if (question.get('hiddenByUser')) {
+
+// Why isn't this helper used by React components directly? So we don't have to care about view type here?
+// The problem is that if all the questions on given page are not visible, page should not be visible too.
+// If all the pages are not visible, then section is not visible too. And the same thing applies to activities.
+// It's convenient to calculate all that here while building a report tree.
+const isQuestionVisible = (question, viewType, featuredOnly) => {
+  // Custom question filtering is currently supported only by regular, non-dashboard report.
+  // There are no checkboxes and controls in dashboard.
+  if (viewType === FULL_REPORT && question.get('hiddenByUser')) {
     return false
   }
-  if (featuredOnly && !question.get('isFeatured')) {
+  // Only dashboard is considered to be featured question report". In the future, when there's a toggle
+  // letting user switch `showFeaturedQuestionsOnly` on and off, this might not be the case anymore.
+  // Note that === false check is explicit and it's like that by design. If API does not provide this property
+  // (so the value is undefined or null), assume that the question is visible in the featured question report.
+  // It's necessary so this report works before Portal (API) is updated to provide this flag. Later, it will be
+  // less important.
+  if (viewType === DASHBOARD && featuredOnly && question.get('showInFeaturedQuestionReport') === false) {
     return false
   }
   return true
@@ -36,16 +51,13 @@ export const getAnswerTrees = createSelector(
 )
 
 export const getQuestionTrees = createSelector(
-  [ getQuestions, getAnswerTrees, getShowFeaturedQuestionsOnly ],
-  (questions, answerTrees, showFeaturedQuestionsOnly) => {
-    // Do not apply visibility filter when none of the questions featured. That's a special case when author
-    // doesn't set any question to be featured. We want to show all of them in this case.
-    const applyFeaturedFilter = showFeaturedQuestionsOnly && questions.filter(q => q.get('isFeatured') === true).size > 0
+  [ getQuestions, getAnswerTrees, getViewType, getShowFeaturedQuestionsOnly ],
+  (questions, answerTrees, viewType, showFeaturedQuestionsOnly) => {
     return questions.map(question => {
       const mappedAnswers = question.get('answers').map(key => answerTrees.get(key))
       return question
         .set('answers', mappedAnswers)
-        .set('visible', isQuestionVisible(question, applyFeaturedFilter))
+        .set('visible', isQuestionVisible(question, viewType, showFeaturedQuestionsOnly))
     })
   }
 )
