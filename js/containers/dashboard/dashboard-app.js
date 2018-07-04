@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { fetchDataIfNeeded } from '../../actions/index'
+import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
 import { setActivityExpanded, setStudentExpanded, setStudentsExpanded, setStudentSort } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
@@ -14,17 +14,26 @@ import css from '../../../css/dashboard/dashboard-app.less'
 // Make icons available.
 import '../../../css/icomoon.css'
 
+const AUTO_REFRESH_INTERVAL = 10000 // ms
+
 class DashboardApp extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
       initialLoading: true
     }
+    this.autoRefreshHandler = this.autoRefreshHandler.bind(this)
   }
 
   componentDidMount () {
     const { fetchDataIfNeeded } = this.props
     fetchDataIfNeeded()
+
+    this.autoRefreshId = setInterval(this.autoRefreshHandler, AUTO_REFRESH_INTERVAL)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.autoRefreshId)
   }
 
   componentDidUpdate (prevProps) {
@@ -33,6 +42,12 @@ class DashboardApp extends PureComponent {
     if (initialLoading && !isFetching && prevProps.isFetching) {
       this.setState({ initialLoading: false })
     }
+  }
+
+  autoRefreshHandler () {
+    const { invalidateData, fetchDataIfNeeded } = this.props
+    invalidateData()
+    fetchDataIfNeeded()
   }
 
   render () {
@@ -85,6 +100,7 @@ function mapStateToProps (state) {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
+    invalidateData: () => dispatch(invalidateData()),
     setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
     setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value)),
     setStudentsExpanded: (studentIds, value) => dispatch(setStudentsExpanded(studentIds, value)),
