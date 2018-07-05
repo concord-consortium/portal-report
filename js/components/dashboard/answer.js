@@ -31,9 +31,7 @@ export default class Answer extends PureComponent {
       AComponent = AnswerComponent[answer.get('type')] || GenericAnswer
     }
     return (
-      <div className={css.answer}>
-        <AComponent answer={answer} showFullAnswer={showFullAnswer} question={question} />
-      </div>
+      <AComponent answer={answer} showFullAnswer={showFullAnswer} question={question} />
     )
   }
 }

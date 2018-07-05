@@ -66,12 +66,23 @@ export default class Dashboard extends PureComponent {
     element.addEventListener('scroll', temporaryHandler)
   }
 
+  shouldShowMultChoiceSummary (activity) {
+    return activity.get('questions') && activity.get('questions').some(q =>
+      q.get('visible') && q.get('type') === 'Embeddable::MultipleChoice' && q.get('scored')
+    )
+  }
+
+  getNumberOfActivityColumns (activity) {
+    return activity.get('questions').filter(q => q.get('visible')).count() +
+      (this.shouldShowMultChoiceSummary(activity) ? 1 : 0)
+  }
+
   getActivityColumnWidth (activity) {
     const { expandedActivities, expandedStudents } = this.props
     if (expandedActivities.get(activity.get('id').toString())) {
       const showFullPrompts = expandedStudents.includes(true)
       const questionWidth = showFullPrompts ? FULL_ANSWER_WIDTH : COLLAPSED_ANSWER_WIDTH
-      return Math.max(COLLAPSED_ACTIVITY_WIDTH, (activity.get('questions').filter(q => q.get('visible')).count() * questionWidth)) + 'px'
+      return Math.max(COLLAPSED_ACTIVITY_WIDTH, (this.getNumberOfActivityColumns(activity) * questionWidth)) + 'px'
     }
     return COLLAPSED_ACTIVITY_WIDTH + 'px'
   }
@@ -88,14 +99,17 @@ export default class Dashboard extends PureComponent {
             <div>
               {
                 activitiesList.map(a =>
-                  <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
+                  <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)}
+                    expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
                 )
               }
             </div>
             <div className={css.questionPromptsRow + ' ' + (anyStudentExpanded ? css.fullPrompts : '')}>
               {
                 activitiesList.map(a =>
-                  <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)} expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded} />
+                  <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)}
+                    expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded}
+                    multChoiceSummary={this.shouldShowMultChoiceSummary(a)} />
                 )
               }
             </div>
@@ -120,6 +134,7 @@ export default class Dashboard extends PureComponent {
                         expanded={expandedActivities.get(a.get('id').toString())}
                         showFullAnswers={expandedStudents.get(s.get('id').toString())}
                         progress={studentProgress.getIn([s.get('id').toString(), a.get('id').toString()])}
+                        multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
                       />
                     )
                   }

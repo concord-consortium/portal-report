@@ -134,6 +134,19 @@ describe('report tree selectors', () => {
       expect(getQuestionTrees(state({})).toJS()).to.eql(expectedQuestionTrees({}))
     })
 
+    describe('when it is a Embeddable::MultipleChoice question', () => {
+      it('should compute `scored` property', () => {
+        const questions = fromJS({
+          1: { answers: [], type: 'Embeddable::MultipleChoice', choices: [ { isCorrect: true }, { isCorrect: false } ] },
+          2: { answers: [], type: 'Embeddable::MultipleChoice', choices: [ { isCorrect: false }, { isCorrect: false } ] }
+        })
+        const answers = fromJS({})
+        const result = getQuestionTrees.resultFunc(questions, answers).toJS()
+        expect(result[1].scored).to.eql(true)
+        expect(result[2].scored).to.eql(false)
+      })
+    })
+
     describe('when there are some questions hidden by user', () => {
       describe('and full report view is used', () => {
         it('should set visibility based on "hiddenByUser" property', () => {

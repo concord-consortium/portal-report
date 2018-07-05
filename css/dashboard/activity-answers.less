@@ -4,4 +4,16 @@
   display: flex;
   vertical-align: top;
   transition: @width-transition;
+
+  .answer {
+    .cell();
+    flex: 1;
+    white-space: normal;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .multChoiceSummary {
+    text-align: center;
+  }
 }
