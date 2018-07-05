@@ -5,8 +5,19 @@ import Answer from './answer'
 import css from '../../../css/dashboard/activity-answers.less'
 
 export default class ActivityAnswers extends PureComponent {
+  renderMultChoiceSummary () {
+    const { student, activity } = this.props
+    const scoredQuestions = activity.get('questions').filter(q =>
+      q.get('visible') && q.get('type') === 'Embeddable::MultipleChoice' && q.get('scored')
+    )
+    const correctAnswers = scoredQuestions.filter(question =>
+      question.get('answers').find(answer => answer.get('studentId') === student.get('id') && answer.get('isCorrect'))
+    )
+    return `${correctAnswers.count()} / ${scoredQuestions.count()}`
+  }
+
   render () {
-    const { student, activity, progress, expanded, showFullAnswers, width } = this.props
+    const { student, activity, progress, expanded, showFullAnswers, width, multChoiceSummary } = this.props
     const studentAnswers = activity.get('questions').filter(q => q.get('visible')).map(question => ({
       question,
       answer: question.get('answers').find(answer => answer.get('studentId') === student.get('id'))
@@ -18,8 +29,16 @@ export default class ActivityAnswers extends PureComponent {
         }
         {
           expanded && studentAnswers.map((data, idx) =>
-            <Answer key={idx} answer={data.answer} showFullAnswer={showFullAnswers} question={data.question} />
+            <div key={idx} className={css.answer}>
+              <Answer answer={data.answer} showFullAnswer={showFullAnswers} question={data.question} />
+            </div>
           )
+        }
+        {
+          expanded && multChoiceSummary &&
+          <div className={css.answer + ' ' + css.multChoiceSummary}>
+            { this.renderMultChoiceSummary() }
+          </div>
         }
       </div>
     )

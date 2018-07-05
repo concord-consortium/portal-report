@@ -55,6 +55,10 @@ export const getQuestionTrees = createSelector(
   (questions, answerTrees, viewType, showFeaturedQuestionsOnly) => {
     return questions.map(question => {
       const mappedAnswers = question.get('answers').map(key => answerTrees.get(key))
+      if (question.get('type') === 'Embeddable::MultipleChoice') {
+        // Multiple choice question is scored if at least one choice is marked as correct.
+        question = question.set('scored', question.get('choices').some(c => c.get('isCorrect')))
+      }
       return question
         .set('answers', mappedAnswers)
         .set('visible', isQuestionVisible(question, viewType, showFeaturedQuestionsOnly))

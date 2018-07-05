@@ -9,7 +9,7 @@ describe('<MultipleChoiceAnswer />', () => {
   describe('when showFullAnswer prop is false and selected answer is correct', () => {
     it('should render checkmark icon only', () => {
       const answer = fromJS({ answer: [ { id: 1, choice: 'choice_1' } ], isCorrect: true })
-      const question = fromJS({ choices: [ { id: 1, choice: 'choice_1', isCorrect: true }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
+      const question = fromJS({ scored: true, choices: [ { id: 1, choice: 'choice_1', isCorrect: true }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
       const wrapper = shallow(<MultipleChoiceAnswer showFullAnswer={false} question={question} answer={answer} />)
       expect(wrapper.find(Choice)).to.have.length(0)
       expect(wrapper.find('.icomoon-checkmark')).to.have.length(1)
@@ -19,7 +19,7 @@ describe('<MultipleChoiceAnswer />', () => {
   describe('when showFullAnswer prop is false and selected answer is incorrect', () => {
     it('should render cross icon only', () => {
       const answer = fromJS({ answer: [ { id: 2, choice: 'choice_2' } ], isCorrect: false })
-      const question = fromJS({ choices: [ { id: 1, choice: 'choice_1', isCorrect: true }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
+      const question = fromJS({ scored: true, choices: [ { id: 1, choice: 'choice_1', isCorrect: true }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
       const wrapper = shallow(<MultipleChoiceAnswer showFullAnswer={false} question={question} answer={answer} />)
       expect(wrapper.find(Choice)).to.have.length(0)
       expect(wrapper.find('.icomoon-cross')).to.have.length(1)
@@ -63,7 +63,7 @@ describe('<MultipleChoiceAnswer />', () => {
   describe('when there is no choice with isCorrect property equal to `true`', () => {
     it('should pass `correctAnswerDefined=false` prop to choices', () => {
       const answer = fromJS({ answer: [ { id: 1, choice: 'choice_1' } ] })
-      const question = fromJS({ choices: [ { id: 1, choice: 'choice_1', isCorrect: false }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
+      const question = fromJS({ scored: false, choices: [ { id: 1, choice: 'choice_1', isCorrect: false }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
       const wrapper = shallow(<MultipleChoiceAnswer showFullAnswer question={question} answer={answer} />)
       expect(wrapper.find(Choice)).to.have.length(2)
       expect(wrapper.find(Choice).at(0).prop('correctAnswerDefined')).to.equal(false)
@@ -74,7 +74,7 @@ describe('<MultipleChoiceAnswer />', () => {
   describe('when there is at least one choice with isCorrect property equal to `true`', () => {
     it('should pass `correctAnswerDefined=true` prop to choices', () => {
       const answer = fromJS({ answer: [ { id: 1, choice: 'choice_1' } ] })
-      const question = fromJS({ choices: [ { id: 1, choice: 'choice_1', isCorrect: true }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
+      const question = fromJS({ scored: true, choices: [ { id: 1, choice: 'choice_1', isCorrect: true }, { id: 2, choice: 'choice_2', isCorrect: false } ] })
       const wrapper = shallow(<MultipleChoiceAnswer showFullAnswer question={question} answer={answer} />)
       expect(wrapper.find(Choice)).to.have.length(2)
       expect(wrapper.find(Choice).at(0).prop('correctAnswerDefined')).to.equal(true)
