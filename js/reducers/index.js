@@ -67,7 +67,7 @@ function hideUnselectedQuestions (state) {
     // Make sure that at least one question is selected. Never let user hide all the questions.
     // This is necessary due to compatibility with Portal API and old report. Portal API by default states
     // that the visibility filter is active, but no questions are selected. Without this check, nothing would be visible.
-    return
+    return state
   }
   return state.withMutations(state => {
     state.get('questions').forEach((value, key) => {

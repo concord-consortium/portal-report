@@ -1,6 +1,6 @@
 {
   "name": "@concord-consortium/portal-report",
-  "version": "1.7.0-pre.10",
+  "version": "1.7.0-pre.12",
   "description": "",
   "main": "dist/library/portal-report.js",
   "files": [
