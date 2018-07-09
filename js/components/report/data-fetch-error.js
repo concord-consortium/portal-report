@@ -24,6 +24,8 @@ export default class DataFetchError extends PureComponent {
     switch (error.status) {
       case 401:
         return this.renderUnauthorized()
+      case 403:
+        return this.renderUnauthorized()
       default:
         return this.renderGenericInfo(error)
     }

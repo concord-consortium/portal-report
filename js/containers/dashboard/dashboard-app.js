@@ -33,14 +33,20 @@ class DashboardApp extends PureComponent {
   }
 
   componentWillUnmount () {
-    clearInterval(this.autoRefreshId)
+    this.stopAutoRefresh()
   }
 
   componentDidUpdate (prevProps) {
     const { initialLoading } = this.state
-    const { isFetching } = this.props
+    const { isFetching, error } = this.props
     if (initialLoading && !isFetching && prevProps.isFetching) {
       this.setState({ initialLoading: false })
+    }
+    if (error) {
+      // Stop polling in case of error. The most likely reason for error to happen is that auth token has expired.
+      // In this case, user needs to go back to Portal and run Portal again. In case of other errors, it doesn't seem
+      // useful to keep polling Portal either.
+      this.stopAutoRefresh()
     }
   }
 
@@ -50,30 +56,36 @@ class DashboardApp extends PureComponent {
     fetchDataIfNeeded()
   }
 
+  stopAutoRefresh () {
+    clearInterval(this.autoRefreshId)
+  }
+
   render () {
     const { initialLoading } = this.state
     const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentsExpanded, setStudentSort } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} background='#6fc6da' />
-        <div className={css.title}>
-          <h1>Report for { clazzName }</h1>
-          <SortByDropdown setStudentSort={setStudentSort} />
-        </div>
-        <div>
-          {activityTrees && <Dashboard
-            activities={activityTrees}
-            students={students}
-            studentProgress={studentProgress}
-            expandedActivities={expandedActivities}
-            expandedStudents={expandedStudents}
-            setActivityExpanded={setActivityExpanded}
-            setStudentExpanded={setStudentExpanded}
-            setStudentsExpanded={setStudentsExpanded}
-            setStudentSort={setStudentSort}
-          />}
-          {error && <DataFetchError error={error} />}
-        </div>
+        {activityTrees &&
+          <div>
+            <div className={css.title}>
+              <h1>Report for { clazzName }</h1>
+              <SortByDropdown setStudentSort={setStudentSort} />
+            </div>
+            <Dashboard
+              activities={activityTrees}
+              students={students}
+              studentProgress={studentProgress}
+              expandedActivities={expandedActivities}
+              expandedStudents={expandedStudents}
+              setActivityExpanded={setActivityExpanded}
+              setStudentExpanded={setStudentExpanded}
+              setStudentsExpanded={setStudentsExpanded}
+              setStudentSort={setStudentSort}
+            />
+          </div>
+        }
+        {error && <DataFetchError error={error} />}
         {initialLoading && <LoadingIcon />}
       </div>
     )
