@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import striptags from 'striptags'
 
 import css from '../../../css/dashboard/activity-questions.less'
 
@@ -12,7 +13,7 @@ export default class ActivityQuestions extends PureComponent {
           {
             expanded && activity.get('questions').filter(q => q.get('visible')).map(q =>
               <div key={q.get('id')} className={headerClassName}>
-                Q{ q.get('questionNumber') }. { q.get('prompt')}
+                Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
               </div>
             )
           }
