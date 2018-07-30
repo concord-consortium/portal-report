@@ -18,9 +18,9 @@ export default class ActivityAnswers extends PureComponent {
 
   render () {
     const { student, activity, progress, expanded, showFullAnswers, width, multChoiceSummary } = this.props
-    const studentAnswers = activity.get('questions').filter(q => q.get('visible')).map(question => ({
+    const studentAnswers = activity.get('questions', []).filter(q => q.get('visible')).map(question => ({
       question,
-      answer: question.get('answers').find(answer => answer.get('studentId') === student.get('id'))
+      answer: question.get('answers', []).find(answer => answer.get('studentId') === student.get('id'))
     }))
     return (
       <div className={css.activityAnswers} style={{ minWidth: width, width: width }} data-cy='activityAnswers'>
