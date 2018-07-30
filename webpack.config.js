@@ -1,9 +1,9 @@
-var path = require('path');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+var path = require('path')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 // WEBPACK_TARGET=lib webpack will build UMD library.
 // Library entry point is defined js/library.js
-var lib = process.env.WEBPACK_TARGET === 'lib';
+var lib = process.env.WEBPACK_TARGET === 'lib'
 
 var appEntry = {
   'app': ['./js/index.js'],
@@ -74,13 +74,13 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: []
-};
+}
 
 if (!lib) {
   // We don't need .html page in our library.
   module.exports.plugins.push(new CopyWebpackPlugin([
     {from: 'public'}
-  ]));
+  ]))
 }
 
 if (lib) {
