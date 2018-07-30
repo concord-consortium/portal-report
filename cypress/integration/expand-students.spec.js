@@ -1,3 +1,5 @@
+/* global describe, it, beforeEach, cy */
+/* eslint-disable-next-line */
 import React from 'react'
 import { getByCypressTag } from '../utils'
 
@@ -7,7 +9,7 @@ describe('Open Students button', function () {
     cy.visit('http://localhost:8080/?dashboard=true')
   })
 
-  it ('Expands students after click, and then closes them again', function () {
+  it('Expands students after click, and then closes them again', function () {
     getByCypressTag('studentName').first().then((row) => {
       initialHeight = row.height()
       cy.contains('Open Students').click()
