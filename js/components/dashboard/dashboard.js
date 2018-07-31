@@ -88,7 +88,11 @@ export default class Dashboard extends PureComponent {
   }
 
   render () {
-    const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentsExpanded } = this.props
+    const {
+      activities, students, studentProgress, expandedStudents,
+      expandedActivities, setActivityExpanded, setStudentExpanded,
+      setStudentsExpanded, setQuestionExpanded, expandedQuestions
+    } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
     const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
@@ -107,9 +111,16 @@ export default class Dashboard extends PureComponent {
             <div className={css.questionPromptsRow + ' ' + (anyStudentExpanded ? css.fullPrompts : '')}>
               {
                 activitiesList.map(a =>
-                  <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)}
-                    expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded}
-                    multChoiceSummary={this.shouldShowMultChoiceSummary(a)} />
+                  <ActivityQuestions
+                    key={a.get('id')}
+                    activity={a}
+                    width={this.getActivityColumnWidth(a)}
+                    expanded={expandedActivities.get(a.get('id').toString())}
+                    showFullPrompts={anyStudentExpanded}
+                    multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
+                    setQuestionExpanded={setQuestionExpanded}
+                    expandedQuestions={expandedQuestions}
+                  />
                 )
               }
             </div>
