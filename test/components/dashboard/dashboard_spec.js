@@ -1,42 +1,41 @@
 import React from 'react'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import { fromJS } from 'immutable'
 import Dashboard from '../../../js/components/dashboard/dashboard'
 import StudentName from '../../../js/components/dashboard/student-name'
 import ActivityName from '../../../js/components/dashboard/activity-name'
-import SortByDropdown from '../../../js/components/dashboard/sort-by-dropdown'
 import ActivityQuestions from '../../../js/components/dashboard/activity-questions'
 import ActivityAnswers from '../../../js/components/dashboard/activity-answers'
 
 describe('<Dashboard />', () => {
   it('should render student names', () => {
     const students = fromJS([ { id: 1 }, { id: 2 }, { id: 3 } ])
-    const wrapper = shallow(<Dashboard students={students} />)
+    const wrapper = mount(<Dashboard students={students} />)
     expect(wrapper.find(StudentName)).to.have.length(3)
   })
 
   it('should render visible activity names', () => {
     const activities = fromJS({ 1: { id: 1, visible: true }, 2: { id: 2, visible: true }, 3: { id: 3, visible: false } })
-    const wrapper = shallow(<Dashboard activities={activities} />)
+    const wrapper = mount(<Dashboard activities={activities} />)
     expect(wrapper.find(ActivityName)).to.have.length(2)
   })
 
   it('should render visible activity questions', () => {
     const activities = fromJS({ 1: { id: 1, visible: true }, 2: { id: 2, visible: true }, 3: { id: 3, visible: false } })
-    const wrapper = shallow(<Dashboard activities={activities} />)
+    const wrapper = mount(<Dashboard activities={activities} />)
     expect(wrapper.find(ActivityQuestions)).to.have.length(2)
   })
 
   it('should render visible activity answers', () => {
     const activities = fromJS({ 1: { id: 1, visible: true }, 2: { id: 2, visible: true }, 3: { id: 3, visible: false } })
     const students = fromJS([ { id: 1 } ])
-    const wrapper1 = shallow(<Dashboard students={students} activities={activities} />)
+    const wrapper1 = mount(<Dashboard students={students} activities={activities} />)
     expect(wrapper1.find(ActivityAnswers)).to.have.length(2)
 
     const multipleStudents = fromJS([ { id: 1 }, { id: 2 } ])
-    const wrapper2 = shallow(<Dashboard students={multipleStudents} activities={activities} />)
+    const wrapper2 = mount(<Dashboard students={multipleStudents} activities={activities} />)
     // ActivityAnswer components are displayed in a table, so their number is activities_count * students_count.
     expect(wrapper2.find(ActivityAnswers)).to.have.length(2 * multipleStudents.size)
   })
@@ -45,7 +44,7 @@ describe('<Dashboard />', () => {
     const students = fromJS([ { id: 1 } ])
     const activities = fromJS({ 1: { id: 1, visible: true, questions: [ { id: 1, visible: true }, { id: 1, visible: true } ] }, 2: { id: 2, visible: true } })
     const expandedActivities = fromJS({ 1: true }) // expand the first activity
-    const wrapper = shallow(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />)
+    const wrapper = mount(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />)
 
     const activityWidth = wrapper.find(ActivityName).first().prop('width')
     const questionPromptsWidth = wrapper.find(ActivityQuestions).first().prop('width')
@@ -66,7 +65,7 @@ describe('<Dashboard />', () => {
       2: { id: 2, visible: true, questions: [ { id: 1, visible: true }, { id: 1, visible: true }, { id: 1, visible: false } ] }
     })
     const expandedActivities = fromJS({ 1: true, 2: true })
-    const wrapper = shallow(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />)
+    const wrapper = mount(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />)
 
     const firstActivityWidth = wrapper.find(ActivityName).at(0).prop('width')
     const secondActivityWidth = wrapper.find(ActivityName).at(1).prop('width')

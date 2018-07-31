@@ -1,3 +1,5 @@
+/* global describe, it, beforeEach, cy, expect */
+/* eslint-disable-next-line */
 import React from 'react'
 import { getByCypressTag } from '../utils'
 
@@ -6,7 +8,7 @@ describe('Dashboard', function () {
     cy.visit('http://localhost:8080/?dashboard=true')
   })
 
-  it ('Renders cells in a row with the same height', function () {
+  it('Renders cells in a row with the same height', function () {
     getByCypressTag('studentName').each((student, i) => {
       getByCypressTag('studentAnswersRow').eq(i).within((studentAnswersRow) => {
         getByCypressTag('activityAnswers').each((answerCell) => {
@@ -16,7 +18,7 @@ describe('Dashboard', function () {
     })
   })
 
-  it ('Renders cells in a column with the same width', function () {
+  it('Renders cells in a column with the same width', function () {
     getByCypressTag('activityName').each((activity, i) => {
       getByCypressTag('studentAnswersRow').each((studentAnswersRow) => {
         cy.wrap(studentAnswersRow).within((studentAnswersRow) => {
@@ -27,7 +29,7 @@ describe('Dashboard', function () {
   })
 
   let rowHeight = null
-  it ('Has equal height rows', function () {
+  it('Has equal height rows', function () {
     getByCypressTag('studentName').should('be.visible').then((students) => {
       Array.from(students).forEach((student) => {
         if (rowHeight == null) {
@@ -39,7 +41,7 @@ describe('Dashboard', function () {
   })
 
   let expandedRowHeight = null
-  it ('Has equal height rows after a student is clicked', function () {
+  it('Has equal height rows after a student is clicked', function () {
     getByCypressTag('studentName').click({ multiple: true })
     cy.wait(1000) // Wait for the animations to finish
     getByCypressTag('studentName').should('be.visible').then((students) => {
