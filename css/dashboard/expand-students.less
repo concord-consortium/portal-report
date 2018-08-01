@@ -13,9 +13,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(~"100% -" (@row-outer-height + 2 * @border-width));
+    height: calc(~"100% -" (@row-outer-height));
     border: @cell-border;
-
+    width: @student-name-width;
+    box-sizing: border-box;
     .button {
       width: 120px;
     }
