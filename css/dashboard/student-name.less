@@ -2,11 +2,11 @@
 
 .studentName {
   display: flex;
-  cursor: pointer;
   max-width: @student-name-width;
   height: @row-outer-height;
   transition: @height-transition;
-
+  .clickable();
+  
   &:nth-child(even) {
     background: @even-row;
   }

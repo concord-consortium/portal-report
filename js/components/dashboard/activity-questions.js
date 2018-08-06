@@ -11,7 +11,7 @@ export default class ActivityQuestions extends PureComponent {
       expandedQuestions
     } = this.props
 
-    const headerSummaryClassName = css.questionPrompt + ' ' + (showFullPrompts ? css.fullPrompt : '')
+    const headerSummaryClassName = css.questionPrompt + ' ' + css.mcSummary + ' ' + (showFullPrompts ? css.fullPrompt : '')
     return (
       <div className={css.activityQuestions} style={{minWidth: width, width}}>
         <div className={css.content}>
@@ -19,26 +19,40 @@ export default class ActivityQuestions extends PureComponent {
             expanded && activity.get('questions').filter(q => q.get('visible')).map(q => {
               const questionIsExpaned = expandedQuestions.get(q.get('id').toString())
               const expanded = showFullPrompts || questionIsExpaned
-              const headerClassName = css.questionPrompt + ' ' + (expanded ? css.fullPrompt : '')
-              return (
-                <div
-                  key={q.get('id')}
-                  className={headerClassName}
-                  onClick={() => {
-                    setQuestionExpanded(q.get('id'), true)
-                  }}>
-                  Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
-                </div>
-              )
+              if (expanded) {
+                const headerClassName = `${css.questionPrompt} ${css.fullPrompt}`
+                return (
+                  <div
+                    key={q.get('id')}
+                    className={headerClassName}
+                    onClick={() => {
+                      setQuestionExpanded(q.get('id'), true)
+                    }}>
+                    Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
+                  </div>
+                )
+              } else {
+                const headerClassName = css.questionPrompt
+                return (
+                  <div
+                    key={q.get('id')}
+                    className={headerClassName}
+                    onClick={() => {
+                      setQuestionExpanded(q.get('id'), true)
+                    }}>
+                    Q{ q.get('questionNumber') }.
+                  </div>
+                )
+              }
             })
           }
           {
             expanded && multChoiceSummary &&
-            <div className={headerSummaryClassName}>Multiple Choice Correct</div>
+            <div className={headerSummaryClassName}>Correct</div>
           }
           {
             // Fake question prompt, just to add cell with the border.
-            !expanded && <div className={css.questionPrompt} />
+            !expanded && <div className={`${css.questionPrompt} ${css.blankCell}`} />
           }
         </div>
       </div>

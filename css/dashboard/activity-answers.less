@@ -7,13 +7,19 @@
 
   .answer {
     .cell();
-    flex: 1;
+    transition: @width-transition;
     white-space: normal;
     overflow-y: auto;
     overflow-x: hidden;
+    width: @closed-question-width;
+    &.fullAnswer {
+      width: @expanded-question-width;
+    }
   }
 
   .multChoiceSummary {
     text-align: center;
+    flex-basis: 120px;
+    flex-grow: 1;
   }
 }
