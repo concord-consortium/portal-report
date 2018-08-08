@@ -133,8 +133,11 @@ export default class Dashboard extends PureComponent {
           <div ref={el => { this.activityHeaders = el }} className={css.activityHeaders}>
             <div>
               {
-                activitiesList.map(a =>
-                  <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)}
+                activitiesList.map((a, number) =>
+                  <ActivityName key={a.get('id')}
+                    activity={a}
+                    width={this.getActivityColumnWidth(a)}
+                    number={number + 1}
                     expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
                 )
               }
