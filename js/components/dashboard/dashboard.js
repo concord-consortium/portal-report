@@ -214,5 +214,6 @@ Dashboard.defaultProps = {
   students: List(),
   expandedStudents: Map(),
   expandedActivities: Map(),
+  expandedQuestions: Map(),
   studentProgress: Map()
 }
