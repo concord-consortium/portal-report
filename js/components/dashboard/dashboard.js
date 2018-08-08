@@ -160,13 +160,14 @@ export default class Dashboard extends PureComponent {
           <div className={css.studentNames}>
             {
               students.map(s => {
-                const expandedStudent = expandedStudents.get(s.get('id').toString())
+                const studentExpanded = expandedStudents.get(s.get('id').toString())
                 const anyQuestionExpanded = expandedQuestions.find(v => v)
-                const expanded = anyQuestionExpanded || expandedStudent
+                const expanded = anyQuestionExpanded || studentExpanded
                 return (
                   <StudentName
                     key={s.get('id')}
                     student={s}
+                    studentExpanded={studentExpanded}
                     expanded={expanded}
                     setStudentExpanded={setStudentExpanded} />
                 )

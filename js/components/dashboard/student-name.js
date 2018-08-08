@@ -10,8 +10,8 @@ export default class StudentName extends PureComponent {
   }
 
   onStudentNameClick () {
-    const { student, expanded, setStudentExpanded } = this.props
-    setStudentExpanded(student.get('id'), !expanded)
+    const { student, studentExpanded, setStudentExpanded } = this.props
+    setStudentExpanded(student.get('id'), !studentExpanded)
   }
 
   render () {
