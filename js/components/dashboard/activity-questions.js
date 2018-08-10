@@ -11,6 +11,8 @@ export default class ActivityQuestions extends PureComponent {
       expandedQuestions
     } = this.props
 
+    const selectQuestion = this.props.selectQuestion
+
     const headerSummaryClassName = css.questionPrompt + ' ' + css.multChoiceSummary + ' ' + (showFullPrompts ? css.fullPrompt : '')
     return (
       <div className={css.activityQuestions} style={{minWidth: width, width}}>
@@ -19,6 +21,10 @@ export default class ActivityQuestions extends PureComponent {
             expanded && activity.get('questions').filter(q => q.get('visible')).map(q => {
               const questionIsExpaned = expandedQuestions.get(q.get('id').toString())
               const expanded = showFullPrompts || questionIsExpaned
+              const openQuestionDetails = (e) => {
+                e.stopPropagation()
+                selectQuestion(q)
+              }
               if (expanded) {
                 const headerClassName = `${css.questionPrompt} ${css.fullPrompt}`
                 return (
@@ -28,6 +34,7 @@ export default class ActivityQuestions extends PureComponent {
                     onClick={() => {
                       setQuestionExpanded(q.get('id'), false)
                     }}>
+                    <span onClick={openQuestionDetails} className={css['icomoon-expander']} />
                     Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
                   </div>
                 )

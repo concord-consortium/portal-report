@@ -6,7 +6,8 @@ import {
   setStudentExpanded,
   setStudentsExpanded,
   setQuestionExpanded,
-  setStudentSort
+  setStudentSort,
+  selectQuestion
 } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
@@ -68,7 +69,7 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort } = this.props
+    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} background='#6fc6da' />
@@ -90,6 +91,8 @@ class DashboardApp extends PureComponent {
               setStudentsExpanded={setStudentsExpanded}
               setQuestionExpanded={setQuestionExpanded}
               setStudentSort={setStudentSort}
+              selectedQuestion={selectedQuestion}
+              selectQuestion={selectQuestion}
             />
           </div>
         }
@@ -114,7 +117,8 @@ function mapStateToProps (state) {
     studentProgress: dataDownloaded && getStudentProgress(state),
     expandedActivities: state.getIn(['dashboard', 'expandedActivities']),
     expandedStudents: state.getIn(['dashboard', 'expandedStudents']),
-    expandedQuestions: state.getIn(['dashboard', 'expandedQuestions'])
+    expandedQuestions: state.getIn(['dashboard', 'expandedQuestions']),
+    selectedQuestion: state.getIn(['dashboard', 'selectedQuestion'])
   }
 }
 
@@ -126,7 +130,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value)),
     setStudentsExpanded: (studentIds, value) => dispatch(setStudentsExpanded(studentIds, value)),
     setQuestionExpanded: (studentId, value) => dispatch(setQuestionExpanded(studentId, value)),
-    setStudentSort: (value) => dispatch(setStudentSort(value))
+    setStudentSort: (value) => dispatch(setStudentSort(value)),
+    selectQuestion: (value) => dispatch(selectQuestion(value))
   }
 }
 

@@ -4,6 +4,7 @@ import StudentName from './student-name'
 import ActivityQuestions from './activity-questions'
 import ActivityAnswers from './activity-answers'
 import ExpandStudents from './expand-students'
+import QuestionDetails from './question-details'
 import { Map, List } from 'immutable'
 
 import css from '../../../css/dashboard/dashboard.less'
@@ -120,7 +121,8 @@ export default class Dashboard extends PureComponent {
     const {
       activities, students, studentProgress, expandedStudents,
       expandedActivities, setActivityExpanded, setStudentExpanded,
-      setStudentsExpanded, setQuestionExpanded, expandedQuestions
+      setStudentsExpanded, setQuestionExpanded, expandedQuestions,
+      selectedQuestion, selectQuestion
     } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
     const anyQuestionExpanded = expandedQuestions.includes(true)
@@ -128,6 +130,10 @@ export default class Dashboard extends PureComponent {
     const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
       <div className={css.dashboard}>
+        <QuestionDetails
+          selectedQuestion={selectedQuestion}
+          onClose={(e) => selectQuestion(Map())}
+        />
         <div className={css.headers}>
           <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />
           <div ref={el => { this.activityHeaders = el }} className={css.activityHeaders}>
@@ -154,6 +160,7 @@ export default class Dashboard extends PureComponent {
                     multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
                     setQuestionExpanded={setQuestionExpanded}
                     expandedQuestions={expandedQuestions}
+                    selectQuestion={selectQuestion}
                   />
                 )
               }
@@ -220,5 +227,7 @@ Dashboard.defaultProps = {
   expandedStudents: Map(),
   expandedActivities: Map(),
   expandedQuestions: Map(),
-  studentProgress: Map()
+  studentProgress: Map(),
+  selectedQuestion: Map(),
+  selectQuestion: (e) => console.log('selectQuestion prop undefined')
 }
