@@ -11,7 +11,8 @@ describe('dashboard reducer', () => {
         sortBy: SORT_BY_NAME,
         expandedActivities: {},
         expandedQuestions: {},
-        expandedStudents: {}
+        expandedStudents: {},
+        selectedQuestion: {}
       }
     )
   })
