@@ -2,14 +2,16 @@ import { Map } from 'immutable'
 import {
   SET_ACTIVITY_EXPANDED, SET_STUDENT_EXPANDED,
   SET_STUDENTS_EXPANDED, SET_STUDENT_SORT,
-  SORT_BY_NAME, SET_QUESTION_EXPANDED
+  SORT_BY_NAME, SET_QUESTION_EXPANDED,
+  SELECT_QUESTION
 } from '../actions/dashboard'
 
 const INITIAL_DASHBOARD_STATE = Map({
   sortBy: SORT_BY_NAME,
   expandedActivities: Map(),
   expandedStudents: Map(),
-  expandedQuestions: Map()
+  expandedQuestions: Map(),
+  selectedQuestion: Map()
 })
 
 export default function dashboardReducer (state = INITIAL_DASHBOARD_STATE, action) {
@@ -27,6 +29,8 @@ export default function dashboardReducer (state = INITIAL_DASHBOARD_STATE, actio
       return state
     case SET_STUDENT_SORT:
       return state.set('sortBy', action.value)
+    case SELECT_QUESTION:
+      return state.set('selectedQuestion', action.value)
     default:
       return state
   }
