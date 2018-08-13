@@ -26,7 +26,7 @@ export default class ActivityQuestions extends PureComponent {
                     key={q.get('id')}
                     className={headerClassName}
                     onClick={() => {
-                      setQuestionExpanded(q.get('id'), true)
+                      setQuestionExpanded(q.get('id'), false)
                     }}>
                     Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
                   </div>

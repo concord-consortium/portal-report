@@ -30,13 +30,10 @@ export function setActivityExpanded (activityId, value) {
 }
 
 export function setQuestionExpanded (questionId, value) {
-  return (dispatch, getState) => {
-    const expanded = getState().getIn(['dashboard', 'expandedQuestions', questionId.toString()])
-    dispatch({
-      type: SET_QUESTION_EXPANDED,
-      questionId,
-      value: !expanded
-    })
+  return {
+    type: SET_QUESTION_EXPANDED,
+    questionId,
+    value: value
   }
 }
 
