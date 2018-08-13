@@ -13,8 +13,7 @@ import {
   COLLAPSED_ACTIVITY_WIDTH,
   COLLAPSED_ANSWER_WIDTH,
   FULL_ANSWER_WIDTH,
-  FULL_MC_SUMMARY_WIDTH,
-  COLLAPSED_MC_SUMMARY_WIDTH
+  MC_SUMMARY_APPROX_WIDTH
 } from './const-metrics'
 
 export default class Dashboard extends PureComponent {
@@ -99,7 +98,7 @@ export default class Dashboard extends PureComponent {
         q.get('scored')
       )
     ) {
-      return collapsed ? FULL_MC_SUMMARY_WIDTH : COLLAPSED_MC_SUMMARY_WIDTH
+      return MC_SUMMARY_APPROX_WIDTH
     }
     return 0
   }
@@ -109,7 +108,9 @@ export default class Dashboard extends PureComponent {
     if (expandedActivities.get(activity.get('id').toString())) {
       const numberOfExpandedQuestions = this.getNumberOfExpandedQuestions(activity)
       const numberOfClosedQuestions = this.getNumberOfActivityColumns(activity) - numberOfExpandedQuestions
-      const width = numberOfClosedQuestions * COLLAPSED_ANSWER_WIDTH + numberOfExpandedQuestions * FULL_ANSWER_WIDTH
+      const width = numberOfClosedQuestions * COLLAPSED_ANSWER_WIDTH +
+        numberOfExpandedQuestions * FULL_ANSWER_WIDTH +
+        this.getMultChoiceSummaryWidth(activity)
       return Math.max(COLLAPSED_ACTIVITY_WIDTH, width) + 'px'
     }
     return COLLAPSED_ACTIVITY_WIDTH + 'px'

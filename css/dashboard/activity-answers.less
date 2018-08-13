@@ -11,15 +11,14 @@
     white-space: normal;
     overflow-y: auto;
     overflow-x: hidden;
-    width: @closed-question-width;
+    flex: 1;
+    min-width: 50px;
     &.fullAnswer {
-      width: @expanded-question-width;
+      flex: 100;
     }
   }
 
   .multChoiceSummary {
-    text-align: center;
-    flex-basis: 120px;
-    flex-grow: 1;
+    .multChoiceSummary();
   }
 }

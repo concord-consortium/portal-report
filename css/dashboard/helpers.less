@@ -12,8 +12,6 @@
 @row-outer-height: @row-height + 2 * @row-padding + 2 * @border-width;
 @expanded-student-row-height: 200px;
 @expanded-question-prompt-max-height: 100px;
-@expanded-question-width: 350px;
-@closed-question-width: 50px;
 
 
 // Transitions
@@ -27,6 +25,13 @@
   padding: @row-padding;
   border: @cell-border;
   box-sizing: border-box;
+}
+
+.multChoiceSummary {
+  text-align: center;
+  font-weight: 100;
+  flex: 1;
+  min-width: 100px;
 }
 
 .nowrap {

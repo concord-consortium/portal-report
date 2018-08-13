@@ -11,7 +11,7 @@ export default class ActivityQuestions extends PureComponent {
       expandedQuestions
     } = this.props
 
-    const headerSummaryClassName = css.questionPrompt + ' ' + css.mcSummary + ' ' + (showFullPrompts ? css.fullPrompt : '')
+    const headerSummaryClassName = css.questionPrompt + ' ' + css.multChoiceSummary + ' ' + (showFullPrompts ? css.fullPrompt : '')
     return (
       <div className={css.activityQuestions} style={{minWidth: width, width}}>
         <div className={css.content}>

@@ -14,18 +14,17 @@
       .nowrap();
       background: @main-light;
       color: #fff;
-      width: @closed-question-width;
+      flex: 1;
+      min-width: 50px;
       .clickable();
       &.fullPrompt {
         white-space: normal;
         overflow-y: auto;
-        width: @expanded-question-width;
+        flex: 100;
       }
-      &.mcSummary {
+      &.multChoiceSummary {
         background: @main-light;
-        flex-grow: 1;
-        flex-basis: 120px;
-        font-weight: 100;
+        .multChoiceSummary();
         cursor: default;
       }
       &.blankCell {
