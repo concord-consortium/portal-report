@@ -7,13 +7,13 @@
 
   .answer {
     .cell();
-    transition: @width-transition;
     white-space: normal;
     overflow-y: auto;
     overflow-x: hidden;
+    transition: @flex-transition;
     flex: 1;
-    min-width: 50px;
     &.fullAnswer {
+      transition: @flex-transition;
       flex: 100;
     }
   }

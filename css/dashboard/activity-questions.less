@@ -9,14 +9,13 @@
     height: 100%;
 
     .questionPrompt {
-      transition: @width-transition;
       .cell();
       .nowrap();
+      .clickable();
       background: @main-light;
       color: #fff;
       flex: 1;
-      min-width: 50px;
-      .clickable();
+      transition: @flex-transition;
       &.fullPrompt {
         white-space: normal;
         overflow-y: auto;
