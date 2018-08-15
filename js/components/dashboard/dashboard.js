@@ -8,10 +8,13 @@ import { Map, List } from 'immutable'
 
 import css from '../../../css/dashboard/dashboard.less'
 
-const BOTTOM_MARGIN = 10 // px
-const COLLAPSED_ACTIVITY_WIDTH = 250 // px
-const COLLAPSED_ANSWER_WIDTH = 120 // px
-const FULL_ANSWER_WIDTH = 350 // px
+import {
+  BOTTOM_MARGIN,
+  COLLAPSED_ACTIVITY_WIDTH,
+  COLLAPSED_ANSWER_WIDTH,
+  FULL_ANSWER_WIDTH,
+  MC_SUMMARY_APPROX_WIDTH
+} from './const-metrics'
 
 export default class Dashboard extends PureComponent {
   constructor (props) {
@@ -77,19 +80,51 @@ export default class Dashboard extends PureComponent {
       (this.shouldShowMultChoiceSummary(activity) ? 1 : 0)
   }
 
+  getNumberOfExpandedQuestions (activity) {
+    const { expandedQuestions, expandedStudents } = this.props
+    const numberOfQuestions = this.getNumberOfActivityColumns(activity)
+    if (expandedStudents.includes(true)) {
+      return numberOfQuestions
+    }
+    return activity.get('questions').filter(q => expandedQuestions.get(q.get('id').toString())).count()
+  }
+
+  getMultChoiceSummaryWidth (activity, collapsed) {
+    if (
+      activity.get('questions') &&
+      activity.get('questions').some(q =>
+        q.get('visible') &&
+        q.get('type') === 'Embeddable::MultipleChoice' &&
+        q.get('scored')
+      )
+    ) {
+      return MC_SUMMARY_APPROX_WIDTH
+    }
+    return 0
+  }
+
   getActivityColumnWidth (activity) {
-    const { expandedActivities, expandedStudents } = this.props
+    const { expandedActivities } = this.props
     if (expandedActivities.get(activity.get('id').toString())) {
-      const showFullPrompts = expandedStudents.includes(true)
-      const questionWidth = showFullPrompts ? FULL_ANSWER_WIDTH : COLLAPSED_ANSWER_WIDTH
-      return Math.max(COLLAPSED_ACTIVITY_WIDTH, (this.getNumberOfActivityColumns(activity) * questionWidth)) + 'px'
+      const numberOfExpandedQuestions = this.getNumberOfExpandedQuestions(activity)
+      const numberOfClosedQuestions = this.getNumberOfActivityColumns(activity) - numberOfExpandedQuestions
+      const width = numberOfClosedQuestions * COLLAPSED_ANSWER_WIDTH +
+        numberOfExpandedQuestions * FULL_ANSWER_WIDTH +
+        this.getMultChoiceSummaryWidth(activity)
+      return Math.max(COLLAPSED_ACTIVITY_WIDTH, width) + 'px'
     }
     return COLLAPSED_ACTIVITY_WIDTH + 'px'
   }
 
   render () {
-    const { activities, students, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentsExpanded } = this.props
+    const {
+      activities, students, studentProgress, expandedStudents,
+      expandedActivities, setActivityExpanded, setStudentExpanded,
+      setStudentsExpanded, setQuestionExpanded, expandedQuestions
+    } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
+    const anyQuestionExpanded = expandedQuestions.includes(true)
+    const showTallQuestionHeader = anyStudentExpanded || anyQuestionExpanded
     const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
       <div className={css.dashboard}>
@@ -104,12 +139,19 @@ export default class Dashboard extends PureComponent {
                 )
               }
             </div>
-            <div className={css.questionPromptsRow + ' ' + (anyStudentExpanded ? css.fullPrompts : '')}>
+            <div className={css.questionPromptsRow + ' ' + (showTallQuestionHeader ? css.fullPrompts : '')}>
               {
                 activitiesList.map(a =>
-                  <ActivityQuestions key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)}
-                    expanded={expandedActivities.get(a.get('id').toString())} showFullPrompts={anyStudentExpanded}
-                    multChoiceSummary={this.shouldShowMultChoiceSummary(a)} />
+                  <ActivityQuestions
+                    key={a.get('id')}
+                    activity={a}
+                    width={this.getActivityColumnWidth(a)}
+                    expanded={expandedActivities.get(a.get('id').toString())}
+                    showFullPrompts={anyStudentExpanded}
+                    multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
+                    setQuestionExpanded={setQuestionExpanded}
+                    expandedQuestions={expandedQuestions}
+                  />
                 )
               }
             </div>
@@ -118,28 +160,49 @@ export default class Dashboard extends PureComponent {
         <div ref={el => { this.verticalScrollingContainer = el }} className={css.verticalScrollContainer}>
           <div className={css.studentNames}>
             {
-              students.map(s =>
-                <StudentName key={s.get('id')} student={s} expanded={expandedStudents.get(s.get('id').toString())} setStudentExpanded={setStudentExpanded} />
-              )
+              students.map(s => {
+                const studentExpanded = expandedStudents.get(s.get('id').toString())
+                const anyQuestionExpanded = expandedQuestions.find(v => v)
+                const expanded = anyQuestionExpanded || studentExpanded
+                return (
+                  <StudentName
+                    key={s.get('id')}
+                    student={s}
+                    studentExpanded={studentExpanded}
+                    expanded={expanded}
+                    setStudentExpanded={setStudentExpanded} />
+                )
+              })
             }
           </div>
           <div ref={el => { this.horizontalScrollingContainer = el }} className={css.horizontalScrollContainer}>
             {
-              students.map(s =>
-                <div key={s.get('id')} className={css.studentAnswersRow + ' ' + (expandedStudents.get(s.get('id').toString()) ? css.fullAnswers : '')} data-cy='studentAnswersRow'>
-                  {
-                    activitiesList.map(a =>
-                      <ActivityAnswers key={a.get('id')} activity={a} student={s}
-                        width={this.getActivityColumnWidth(a)}
-                        expanded={expandedActivities.get(a.get('id').toString())}
-                        showFullAnswers={expandedStudents.get(s.get('id').toString())}
-                        progress={studentProgress.getIn([s.get('id').toString(), a.get('id').toString()])}
-                        multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
-                      />
-                    )
-                  }
-                </div>
-              )
+              students.map(s => {
+                const expandedStudent = expandedStudents.get(s.get('id').toString())
+                const anyQuestionExpanded = expandedQuestions.find(v => v)
+                const expanded = anyQuestionExpanded || expandedStudent
+
+                return (
+                  <div
+                    key={s.get('id')}
+                    className={css.studentAnswersRow + ' ' + (expanded ? css.fullAnswers : '')} data-cy='studentAnswersRow'>
+                    {
+                      activitiesList.map(a =>
+                        <ActivityAnswers key={a.get('id')} activity={a} student={s}
+                          width={this.getActivityColumnWidth(a)}
+                          anyStudentExpanded={anyStudentExpanded}
+                          expanded={expandedActivities.get(a.get('id').toString())}
+                          showFullAnswers={expandedStudents.get(s.get('id').toString())}
+                          progress={studentProgress.getIn([s.get('id').toString(), a.get('id').toString()])}
+                          multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
+                          setQuestionExpanded={setQuestionExpanded}
+                          expandedQuestions={expandedQuestions}
+                        />
+                      )
+                    }
+                  </div>
+                )
+              })
             }
           </div>
         </div>
@@ -153,5 +216,6 @@ Dashboard.defaultProps = {
   students: List(),
   expandedStudents: Map(),
   expandedActivities: Map(),
+  expandedQuestions: Map(),
   studentProgress: Map()
 }

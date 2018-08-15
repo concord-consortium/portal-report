@@ -7,13 +7,18 @@
 
   .answer {
     .cell();
-    flex: 1;
     white-space: normal;
     overflow-y: auto;
     overflow-x: hidden;
+    transition: @flex-transition;
+    flex: 1;
+    &.fullAnswer {
+      transition: @flex-transition;
+      flex: 100;
+    }
   }
 
   .multChoiceSummary {
-    text-align: center;
+    .multChoiceSummary();
   }
 }

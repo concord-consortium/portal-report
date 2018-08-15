@@ -11,13 +11,23 @@
     .questionPrompt {
       .cell();
       .nowrap();
-      flex: 1;
+      .clickable();
       background: @main-light;
       color: #fff;
-
+      flex: 1;
+      transition: @flex-transition;
       &.fullPrompt {
         white-space: normal;
         overflow-y: auto;
+        flex: 100;
+      }
+      &.multChoiceSummary {
+        background: @main-light;
+        .multChoiceSummary();
+        cursor: default;
+      }
+      &.blankCell {
+        flex-grow: 1;
       }
     }
   }

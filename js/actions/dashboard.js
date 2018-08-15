@@ -7,6 +7,8 @@ export const SORT_BY_NAME = 'NAME'
 export const SORT_BY_MOST_PROGRESS = 'MOST_PROGRESS'
 export const SORT_BY_LEAST_PROGRESS = 'LEAST_PROGRESS'
 
+export const SET_QUESTION_EXPANDED = 'SET_QUESTION_EXPANDED'
+
 export function setActivityExpanded (activityId, value) {
   return (dispatch, getState) => {
     dispatch({
@@ -24,6 +26,14 @@ export function setActivityExpanded (activityId, value) {
         )
       }
     }
+  }
+}
+
+export function setQuestionExpanded (questionId, value) {
+  return {
+    type: SET_QUESTION_EXPANDED,
+    questionId,
+    value: value
   }
 }
 

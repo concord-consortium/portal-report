@@ -1,7 +1,13 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
-import { setActivityExpanded, setStudentExpanded, setStudentsExpanded, setStudentSort } from '../../actions/dashboard'
+import {
+  setActivityExpanded,
+  setStudentExpanded,
+  setStudentsExpanded,
+  setQuestionExpanded,
+  setStudentSort
+} from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
 import Header from '../../components/common/header'
@@ -62,7 +68,7 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, setActivityExpanded, setStudentExpanded, setStudentsExpanded, setStudentSort } = this.props
+    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} background='#6fc6da' />
@@ -78,9 +84,11 @@ class DashboardApp extends PureComponent {
               studentProgress={studentProgress}
               expandedActivities={expandedActivities}
               expandedStudents={expandedStudents}
+              expandedQuestions={expandedQuestions}
               setActivityExpanded={setActivityExpanded}
               setStudentExpanded={setStudentExpanded}
               setStudentsExpanded={setStudentsExpanded}
+              setQuestionExpanded={setQuestionExpanded}
               setStudentSort={setStudentSort}
             />
           </div>
@@ -105,7 +113,8 @@ function mapStateToProps (state) {
     activityTrees: dataDownloaded && getActivityTrees(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     expandedActivities: state.getIn(['dashboard', 'expandedActivities']),
-    expandedStudents: state.getIn(['dashboard', 'expandedStudents'])
+    expandedStudents: state.getIn(['dashboard', 'expandedStudents']),
+    expandedQuestions: state.getIn(['dashboard', 'expandedQuestions'])
   }
 }
 
@@ -116,6 +125,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
     setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value)),
     setStudentsExpanded: (studentIds, value) => dispatch(setStudentsExpanded(studentIds, value)),
+    setQuestionExpanded: (studentId, value) => dispatch(setQuestionExpanded(studentId, value)),
     setStudentSort: (value) => dispatch(setStudentSort(value))
   }
 }

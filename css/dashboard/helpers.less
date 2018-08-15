@@ -6,28 +6,44 @@
 // General table styles
 @student-name-width: 150px;
 @border-width: 1px;
+@min-cell-width: 60px;
 @cell-border: @border-width solid @main-dark;
-@row-height: 25px;
+@row-height: 40px;
 @row-padding: 8px;
 @row-outer-height: @row-height + 2 * @row-padding + 2 * @border-width;
 @expanded-student-row-height: 200px;
 @expanded-question-prompt-max-height: 100px;
 
+
 // Transitions
-@transition-time: 1s;
+@transition-time: 500ms;
 @width-transition: min-width @transition-time, width @transition-time;
-@height-transition: height @transition-time, max-height @transition-time;
+@height-transition: height @transition-time @transition-time, max-height @transition-time @transition-time;
+@flex-transition: flex @transition-time;
 
 // Mixins
 .cell {
   min-height: @row-height;
-  line-height: @row-height;
+  min-width: @min-cell-width;
   padding: @row-padding;
   border: @cell-border;
+  box-sizing: border-box;
+}
+
+.multChoiceSummary {
+  text-align: center;
+  font-weight: 100;
+  flex: 1;
+  min-width: 100px;
 }
 
 .nowrap {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.clickable {
+  cursor: pointer;
+  font-weight: 500;
 }

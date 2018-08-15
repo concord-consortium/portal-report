@@ -25,8 +25,7 @@
     .questionPromptsRow {
       display: flex;
       transition: @width-transition, @height-transition;
-      max-height: @row-outer-height;
-
+      max-height: @row-height;
       &.fullPrompts {
         max-height: @expanded-question-prompt-max-height;
       }
@@ -58,7 +57,7 @@
   }
 
   .verticalScrollContainer {
-    width: calc(~"100% -" 2 * @content-padding);
+    width: 100%;
     display: inline-block;
     vertical-align: top;
     overflow-y: auto;
