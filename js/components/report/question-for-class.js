@@ -1,17 +1,11 @@
 import React, { PureComponent } from 'react'
-import MultipleChoiceDetails from './multiple-choice-details'
-import ImageQuestionDetails from './image-question-details'
 import QuestionSummary from './question-summary'
 import QuestionHeader from './question-header'
 import AnswersTable from '../../containers/report/answers-table'
 import SelectionCheckbox from '../../containers/report/selection-checkbox'
+import QuestionDetails from './question-details'
 
 import '../../../css/report/question.less'
-
-const QuestionComponent = {
-  'Embeddable::MultipleChoice': MultipleChoiceDetails,
-  'Embeddable::ImageQuestion': ImageQuestionDetails
-}
 
 export default class QuestionForClass extends PureComponent {
   constructor (props) {
@@ -50,12 +44,4 @@ export default class QuestionForClass extends PureComponent {
       </div>
     )
   }
-}
-
-const QuestionDetails = ({question}) => {
-  const QComponent = QuestionComponent[question.get('type')]
-  if (!QComponent) {
-    return <span />
-  }
-  return <QComponent question={question} />
 }

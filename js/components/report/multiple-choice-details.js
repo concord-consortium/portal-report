@@ -57,7 +57,7 @@ export default class MultipleChoiceDetails extends PureComponent {
 
 const ChoiceRow = ({idx, choice, isCorrect, percent, count}) => (
   <tr className={isCorrect ? 'correct' : ''}>
-    <td>{idx}. {choice}</td>
+    <td className='td-prompt'>{idx}. {choice}</td>
     <td className='bar-container'><div className='bar' style={{width: percent + '%'}} /></td>
     <td className='number'>{percent}%</td>
     <td className='number'>{count}</td>

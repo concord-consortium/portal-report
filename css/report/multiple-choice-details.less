@@ -9,6 +9,7 @@ table.multiple-choice-details {
 
   tr {
     background: #f3f3f3;
+
   }
 
   td {
@@ -17,15 +18,18 @@ table.multiple-choice-details {
     @media print {
       padding: 0.2em;
     }
+    &.td-prompt {
+      width: 40%;
+    }
+    &.number {
+      width: 3em;
+    }
+    &.bar-container {
+      width: 40%;
+    }
   }
 
-  td.number {
-    width: 3em;
-  }
 
-  .bar-container {
-    width: 65%;
-  }
 
   .bar {
     height: 1.3em;

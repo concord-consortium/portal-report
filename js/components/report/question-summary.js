@@ -18,7 +18,7 @@ export default class QuestionSummary extends PureComponent {
   }
 
   render () {
-    const { question } = this.props
+    const { question, showFeedback } = this.props
     const notAnsweredDiv = (<div><strong>Not answered:</strong> {this.notAnswered}</div>)
 
     // These aren't stats have been removed, but its possibly they will go back in.
@@ -30,11 +30,17 @@ export default class QuestionSummary extends PureComponent {
         <div className='stats'>
 
           {this.notAnswered > 0 ? notAnsweredDiv : ''}
-
-          <FeedbackPanel question={this.props.question} answers={this.props.answers} />
+          { showFeedback
+            ? <FeedbackPanel question={this.props.question} answers={this.props.answers} />
+            : ''
+          }
         </div>
         <div className='clear-fix' />
       </div>
     )
   }
+}
+
+QuestionSummary.defaultProps = {
+  showFeedback: true
 }
