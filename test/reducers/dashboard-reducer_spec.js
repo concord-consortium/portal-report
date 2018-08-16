@@ -2,13 +2,12 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import dashboardReducer from '../../js/reducers/dashboard-reducer'
 import * as types from '../../js/actions/dashboard'
-import { SORT_BY_NAME } from '../../js/actions/dashboard'
 
 describe('dashboard reducer', () => {
   it('should return the initial state', () => {
     expect(dashboardReducer(undefined, {}).toJS()).to.eql(
       {
-        sortBy: SORT_BY_NAME,
+        sortBy: types.SORT_BY_NAME,
         expandedActivities: {},
         expandedQuestions: {},
         expandedStudents: {},
@@ -75,5 +74,20 @@ describe('dashboard reducer', () => {
     expect(state2.get('expandedStudents').toJS()).to.eql(
       { 1: false, 2: false, 3: true }
     )
+  })
+
+  it('should handle SELECT_QUESTION', () => {
+    const someQuestion = {id: 1, prompt: 'this is the prompt', answers: []}
+    const state1 = dashboardReducer(undefined, {
+      type: types.SELECT_QUESTION,
+      value: someQuestion
+    })
+    expect(state1.get('selectedQuestion')).to.eql(someQuestion)
+
+    const state2 = dashboardReducer(state1, {
+      type: types.SELECT_QUESTION,
+      value: null
+    })
+    expect(state2.get('selectedQuestion')).to.eql(null)
   })
 })

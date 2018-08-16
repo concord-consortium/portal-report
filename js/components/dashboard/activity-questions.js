@@ -34,7 +34,10 @@ export default class ActivityQuestions extends PureComponent {
                     onClick={() => {
                       setQuestionExpanded(q.get('id'), false)
                     }}>
-                    <span onClick={openQuestionDetails} className={css['icomoon-expander']} />
+                    <span
+                      onClick={openQuestionDetails}
+                      className={css['icomoon-expander']}
+                      data-cy='expand-question-details' />
                     Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
                   </div>
                 )

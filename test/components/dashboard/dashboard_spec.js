@@ -8,6 +8,7 @@ import StudentName from '../../../js/components/dashboard/student-name'
 import ActivityName from '../../../js/components/dashboard/activity-name'
 import ActivityQuestions from '../../../js/components/dashboard/activity-questions'
 import ActivityAnswers from '../../../js/components/dashboard/activity-answers'
+import { Modal } from 'react-bootstrap'
 
 describe('<Dashboard />', () => {
   it('should render student names', () => {
@@ -73,5 +74,45 @@ describe('<Dashboard />', () => {
     expect(firstActivityWidth).to.be.a('string')
     expect(parseInt(firstActivityWidth)).to.be.above(0) // parseInt will ignore 'px' suffix
     expect(firstActivityWidth).to.equal(secondActivityWidth)
+  })
+
+  describe('the question details modal box', () => {
+    const students = fromJS([ { id: 1 } ])
+    const activities = fromJS({
+      1: { id: 1, visible: true, questions: [ { id: 1, visible: true }, { id: 2, visible: true } ] }
+    })
+    const expandedActivities = fromJS({ 1: true })
+
+    describe('when no question is selected', () => {
+      it('the question modal is not visible', () => {
+        const selectedQuestion = fromJS({})
+        const wrapper = mount(
+          <Dashboard
+            students={students}
+            activities={activities}
+            selectedQuestion={selectedQuestion}
+            expandedActivities={expandedActivities} />
+        )
+        expect(wrapper.find(Modal).props().show).to.equal(false)
+      })
+    })
+
+    describe('when a question is selected', () => {
+      it('the question modal is visible', () => {
+        const selectedQuestion = fromJS({
+          id: 1,
+          prompt: 'why is the sky blue',
+          answers: []
+        })
+        const wrapper = mount(
+          <Dashboard
+            students={students}
+            activities={activities}
+            selectedQuestion={selectedQuestion}
+            expandedActivities={expandedActivities} />
+        )
+        expect(wrapper.find(Modal).props().show).to.equal(true)
+      })
+    })
   })
 })

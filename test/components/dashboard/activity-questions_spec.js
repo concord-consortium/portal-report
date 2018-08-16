@@ -1,7 +1,7 @@
 import React from 'react'
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { fromJS } from 'immutable'
 import ActivityQuestions from '../../../js/components/dashboard/activity-questions'
 
@@ -36,9 +36,25 @@ describe('<ActivityQuestions />', () => {
             activity={activity}
             expandedQuestions={expandedQuestions}
           />)
-        expect(wrapper.html()).to.contain('Q1.')
-        expect(wrapper.contains('Q2.')).to.equal(false)
-        expect(wrapper.contains(prompt1)).to.equal(true)
+        expect(wrapper.text()).to.contain('Q1.')
+        expect(wrapper.text()).to.contain(prompt1)
+      })
+
+      it('should render a clickable expansion box', () => {
+        const expandedQuestions = fromJS({1: true})
+        let clickCount = 0
+        const onClick = () => clickCount++
+        const wrapper = mount(
+          <ActivityQuestions
+            expanded
+            activity={activity}
+            expandedQuestions={expandedQuestions}
+            selectQuestion={onClick}
+          />)
+        const opener = wrapper.find('[data-cy="expand-question-details"]')
+        expect(clickCount).to.eql(0)
+        opener.simulate('click')
+        expect(clickCount).to.eql(1)
       })
     })
   })
