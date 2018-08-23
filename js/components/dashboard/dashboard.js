@@ -23,6 +23,7 @@ export default class Dashboard extends PureComponent {
     this.onResize = this.onResize.bind(this)
     this.onHorizontalContainerScroll = this.onHorizontalContainerScroll.bind(this)
     this.onHeadersScroll = this.onHeadersScroll.bind(this)
+    this.selectNoQuestions = this.selectNoQuestions.bind(this)
   }
 
   componentDidMount () {
@@ -38,6 +39,11 @@ export default class Dashboard extends PureComponent {
     window.removeEventListener('resize', this.onResize)
     this.horizontalScrollingContainer.removeEventListener('scroll', this.onHorizontalContainerScroll)
     this.activityHeaders.removeEventListener('scroll', this.onHeadersScroll)
+  }
+
+  selectNoQuestions () {
+    const { selectQuestion } = this.props
+    selectQuestion(Map())
   }
 
   onResize () {
@@ -132,7 +138,7 @@ export default class Dashboard extends PureComponent {
       <div className={css.dashboard}>
         <QuestionDetails
           selectedQuestion={selectedQuestion}
-          onClose={(e) => selectQuestion(Map())}
+          onClose={this.selectNoQuestions}
         />
         <div className={css.headers}>
           <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />

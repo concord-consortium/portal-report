@@ -29,7 +29,6 @@ export default class QuestionDetails extends PureComponent {
       <Modal
         show={selectedQuestion.size > 0}
         onHide={onClose}
-        contentLabel='Example Modal'
       >
         <Modal.Body>
           <div

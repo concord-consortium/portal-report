@@ -22,6 +22,8 @@ export default class ActivityQuestions extends PureComponent {
               const questionIsExpaned = expandedQuestions.get(q.get('id').toString())
               const expanded = showFullPrompts || questionIsExpaned
               const openQuestionDetails = (e) => {
+                // stop the click event from being handled by parent click handler
+                // which would cause the question collumn to collapse.
                 e.stopPropagation()
                 selectQuestion(q)
               }
