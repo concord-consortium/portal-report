@@ -4,6 +4,7 @@ import StudentName from './student-name'
 import ActivityQuestions from './activity-questions'
 import ActivityAnswers from './activity-answers'
 import ExpandStudents from './expand-students'
+import QuestionDetails from './question-details'
 import { Map, List } from 'immutable'
 
 import css from '../../../css/dashboard/dashboard.less'
@@ -22,6 +23,7 @@ export default class Dashboard extends PureComponent {
     this.onResize = this.onResize.bind(this)
     this.onHorizontalContainerScroll = this.onHorizontalContainerScroll.bind(this)
     this.onHeadersScroll = this.onHeadersScroll.bind(this)
+    this.selectNoQuestions = this.selectNoQuestions.bind(this)
   }
 
   componentDidMount () {
@@ -37,6 +39,11 @@ export default class Dashboard extends PureComponent {
     window.removeEventListener('resize', this.onResize)
     this.horizontalScrollingContainer.removeEventListener('scroll', this.onHorizontalContainerScroll)
     this.activityHeaders.removeEventListener('scroll', this.onHeadersScroll)
+  }
+
+  selectNoQuestions () {
+    const { selectQuestion } = this.props
+    selectQuestion(null)
   }
 
   onResize () {
@@ -120,7 +127,8 @@ export default class Dashboard extends PureComponent {
     const {
       activities, students, studentProgress, expandedStudents,
       expandedActivities, setActivityExpanded, setStudentExpanded,
-      setStudentsExpanded, setQuestionExpanded, expandedQuestions
+      setStudentsExpanded, setQuestionExpanded, expandedQuestions,
+      selectedQuestion, selectQuestion
     } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
     const anyQuestionExpanded = expandedQuestions.includes(true)
@@ -128,13 +136,20 @@ export default class Dashboard extends PureComponent {
     const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
       <div className={css.dashboard}>
+        <QuestionDetails
+          selectedQuestion={selectedQuestion}
+          onClose={this.selectNoQuestions}
+        />
         <div className={css.headers}>
           <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />
           <div ref={el => { this.activityHeaders = el }} className={css.activityHeaders}>
             <div>
               {
-                activitiesList.map(a =>
-                  <ActivityName key={a.get('id')} activity={a} width={this.getActivityColumnWidth(a)}
+                activitiesList.map((a, number) =>
+                  <ActivityName key={a.get('id')}
+                    activity={a}
+                    width={this.getActivityColumnWidth(a)}
+                    number={number + 1}
                     expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
                 )
               }
@@ -151,6 +166,7 @@ export default class Dashboard extends PureComponent {
                     multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
                     setQuestionExpanded={setQuestionExpanded}
                     expandedQuestions={expandedQuestions}
+                    selectQuestion={selectQuestion}
                   />
                 )
               }
@@ -217,5 +233,7 @@ Dashboard.defaultProps = {
   expandedStudents: Map(),
   expandedActivities: Map(),
   expandedQuestions: Map(),
-  studentProgress: Map()
+  studentProgress: Map(),
+  selectedQuestion: Map(),
+  selectQuestion: (e) => console.log('selectQuestion prop undefined')
 }

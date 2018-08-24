@@ -13,14 +13,14 @@ class AnswersTable extends PureComponent {
   }
 
   render () {
-    const {question, answers, hidden} = this.props
+    const {question, answers, hidden, showCompare} = this.props
     const getLatestFeedback = this.getLatestFeedback.bind(this)
     const anonymous = this.props.anonymous
     const scoreEnabled = (!anonymous) && question.get('scoreEnabled')
     const feedbackEnabled = (!anonymous) && question.get('feedbackEnabled')
-
     const feedbackTH = feedbackEnabled ? <th>Feedback</th> : null
     const scoreTH = scoreEnabled ? <th>Score</th> : null
+    const selectTH = showCompare ? <th className='select-header'>Select</th> : null
     return (
       <table className={`answers-table ${hidden ? 'hidden' : ''}`}>
         <tbody>
@@ -29,7 +29,8 @@ class AnswersTable extends PureComponent {
             <th>Response</th>
             {feedbackTH}
             {scoreTH}
-            <th className='select-header'>Select</th>
+            {selectTH}
+
           </tr>
           {answers.map(function (answer) {
             const feedback = getLatestFeedback(answer)
@@ -39,6 +40,7 @@ class AnswersTable extends PureComponent {
               feedback={feedback}
               showFeedback={feedbackEnabled}
               showScore={scoreEnabled}
+              showCompare={showCompare}
             />)
           }
           )}
@@ -48,13 +50,13 @@ class AnswersTable extends PureComponent {
   }
 }
 
-function AnswerRow ({answer, feedback, showScore, showFeedback}) {
+function AnswerRow ({answer, feedback, showScore, showFeedback, showCompare}) {
   const hasAnswer = answer.get('type') !== 'NoAnswer'
   const score = feedback && feedback.get('score')
   const textFeedback = feedback && feedback.get('feedback')
   const scoreTD = showScore ? <td className='score'>{score}</td> : null
   const feedbackTD = showFeedback ? <td className='feedback'>{textFeedback}</td> : null
-  const compareDIV = hasAnswer
+  const compareDIV = hasAnswer && showCompare
     ? <div>
       <CompareAnswerCheckboxContainer answer={answer} />
       <ShowCompareContainer answer={answer} />
@@ -86,3 +88,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnswersTable)
+
+AnswersTable.defaultProps = {
+  showCompare: true
+}

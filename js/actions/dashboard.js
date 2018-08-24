@@ -8,6 +8,7 @@ export const SORT_BY_MOST_PROGRESS = 'MOST_PROGRESS'
 export const SORT_BY_LEAST_PROGRESS = 'LEAST_PROGRESS'
 
 export const SET_QUESTION_EXPANDED = 'SET_QUESTION_EXPANDED'
+export const SELECT_QUESTION = 'SELECT_QUESTION'
 
 export function setActivityExpanded (activityId, value) {
   return (dispatch, getState) => {
@@ -76,6 +77,13 @@ export function setStudentsExpanded (studentIds, value) {
 export function setStudentSort (value) {
   return {
     type: SET_STUDENT_SORT,
+    value
+  }
+}
+
+export function selectQuestion (value) {
+  return {
+    type: SELECT_QUESTION,
     value
   }
 }
