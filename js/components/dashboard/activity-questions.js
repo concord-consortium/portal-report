@@ -25,7 +25,7 @@ export default class ActivityQuestions extends PureComponent {
                 // stop the click event from being handled by parent click handler
                 // which would cause the question collumn to collapse.
                 e.stopPropagation()
-                selectQuestion(q)
+                selectQuestion(q.get('key'))
               }
               if (expanded) {
                 const headerClassName = `${css.questionPrompt} ${css.fullPrompt}`

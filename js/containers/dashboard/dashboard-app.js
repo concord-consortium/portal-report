@@ -15,7 +15,7 @@ import Header from '../../components/common/header'
 import DataFetchError from '../../components/report/data-fetch-error'
 import LoadingIcon from '../../components/report/loading-icon'
 import { getActivityTrees } from '../../selectors/report-tree'
-import { getStudentProgress, getSortedStudents } from '../../selectors/dashboard-selectors'
+import { getStudentProgress, getSortedStudents, getSelectedQuestion } from '../../selectors/dashboard-selectors'
 import css from '../../../css/dashboard/dashboard-app.less'
 
 // Make icons available.
@@ -118,7 +118,7 @@ function mapStateToProps (state) {
     expandedActivities: state.getIn(['dashboard', 'expandedActivities']),
     expandedStudents: state.getIn(['dashboard', 'expandedStudents']),
     expandedQuestions: state.getIn(['dashboard', 'expandedQuestions']),
-    selectedQuestion: state.getIn(['dashboard', 'selectedQuestion'])
+    selectedQuestion: dataDownloaded && getSelectedQuestion(state)
   }
 }
 

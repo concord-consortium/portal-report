@@ -11,7 +11,7 @@ const INITIAL_DASHBOARD_STATE = Map({
   expandedActivities: Map(),
   expandedStudents: Map(),
   expandedQuestions: Map(),
-  selectedQuestion: Map()
+  selectedQuestion: null
 })
 
 export default function dashboardReducer (state = INITIAL_DASHBOARD_STATE, action) {

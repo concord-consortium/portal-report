@@ -1,7 +1,13 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
-import { getSortedStudents, getStudentProgress, getStudentAverageProgress } from '../../js/selectors/dashboard-selectors'
+import {
+  getSortedStudents,
+  getStudentProgress,
+  getStudentAverageProgress,
+  getSelectedQuestion
+} from '../../js/selectors/dashboard-selectors'
+
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from '../../js/actions/dashboard'
 
 describe('dashboard selectors', () => {
@@ -68,8 +74,8 @@ describe('dashboard selectors', () => {
     it('should return hash with student total progress', () => {
       expect(getStudentAverageProgress(state({})).toJS()).to.eql(
         {
-          1: .75,
-          2: .75,
+          1: 0.75,
+          2: 0.75,
           3: 0
         }
       )
@@ -101,6 +107,51 @@ describe('dashboard selectors', () => {
           // Students sorted by least progress (ties broken alphabetically)
           [ s3, s2, s1 ]
         )
+      })
+    })
+
+    describe('getSelectedQuestion', () => {
+      const state = ({ selectedQuestion = null }) => fromJS({
+        report: {
+          questions: {
+            Q1: { prompt: 'prompt1', answers: [ 'A1', 'A2' ] },
+            Q2: { prompt: 'prompt2', answers: [ 'A3', 'A4' ] }
+          },
+          answers: {
+            A1: { studentId: 1, answer: 'answer one', correct: false },
+            A2: { studentId: 1, answer: 'answer two', correct: true },
+            A3: { studentId: 1, answer: 'answer three', correct: false },
+            A4: { studentId: 1, answer: 'answer four', correct: false }
+          },
+          students: {
+            1: { id: 1, firstName: 'Y', lastName: 'aA' }
+          }
+        },
+        dashboard: {
+          selectedQuestion: selectedQuestion
+        }
+      })
+
+      describe('When no question is selected', () => {
+        it('should return an empty map', () => {
+          expect(getSelectedQuestion(state({selectedQuestion: null})).toJS()).to.eql({})
+        })
+      })
+
+      describe('When Q1 is selected', () => {
+        it('Should return the prompt for the first question ...', () => {
+          const s = state({selectedQuestion: 'Q1'})
+          const question = getSelectedQuestion(s).toJS()
+          expect(question.prompt).to.eql('prompt1')
+        })
+      })
+      
+      describe('When Q2 is selected', () => {
+        it('Should return the prompt for the second question ...', () => {
+          const s = state({selectedQuestion: 'Q2'})
+          const question = getSelectedQuestion(s).toJS()
+          expect(question.prompt).to.eql('prompt2')
+        })
       })
     })
   })

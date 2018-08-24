@@ -1,10 +1,25 @@
 import { createSelector } from 'reselect'
-import { getActivityTrees } from './report-tree'
+import { getActivityTrees, getQuestionTrees } from './report-tree'
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from '../actions/dashboard'
+import { fromJS } from 'immutable'
 
 // Inputs
 const getStudents = state => state.getIn(['report', 'students'])
 const getDashboardSortBy = state => state.getIn(['dashboard', 'sortBy'])
+const getSeletedQuestionId = state => state.getIn(['dashboard', 'selectedQuestion'])
+
+// When a user selects a to display question details by
+// Clicking on the question column expand icon.
+export const getSelectedQuestion = createSelector(
+  [getQuestionTrees, getSeletedQuestionId],
+  (questions, id) => {
+    if (questions && id) {
+      return questions
+        .get(id.toString(), fromJS({}))
+    }
+    return fromJS({})
+  }
+)
 
 // Selectors
 

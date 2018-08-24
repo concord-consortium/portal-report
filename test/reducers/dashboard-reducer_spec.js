@@ -11,7 +11,7 @@ describe('dashboard reducer', () => {
         expandedActivities: {},
         expandedQuestions: {},
         expandedStudents: {},
-        selectedQuestion: {}
+        selectedQuestion: null
       }
     )
   })
