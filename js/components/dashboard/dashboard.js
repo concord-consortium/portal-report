@@ -43,7 +43,7 @@ export default class Dashboard extends PureComponent {
 
   selectNoQuestions () {
     const { selectQuestion } = this.props
-    selectQuestion(Map())
+    selectQuestion(null)
   }
 
   onResize () {

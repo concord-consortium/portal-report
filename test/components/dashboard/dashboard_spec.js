@@ -85,7 +85,7 @@ describe('<Dashboard />', () => {
 
     describe('when no question is selected', () => {
       it('the question modal is not visible', () => {
-        const selectedQuestion = fromJS({})
+        const selectedQuestion = null
         const wrapper = mount(
           <Dashboard
             students={students}

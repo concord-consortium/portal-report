@@ -134,7 +134,7 @@ describe('dashboard selectors', () => {
 
       describe('When no question is selected', () => {
         it('should return an empty map', () => {
-          expect(getSelectedQuestion(state({selectedQuestion: null})).toJS()).to.eql({})
+          expect(getSelectedQuestion(state({selectedQuestion: null}))).to.eql(null)
         })
       })
 

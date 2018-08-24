@@ -17,7 +17,7 @@ export const getSelectedQuestion = createSelector(
       return questions
         .get(id.toString(), fromJS({}))
     }
-    return fromJS({})
+    return null
   }
 )
 

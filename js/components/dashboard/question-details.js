@@ -27,14 +27,14 @@ export default class QuestionDetails extends PureComponent {
     const prompt = selectedQuestion && selectedQuestion.get('prompt')
     return (
       <Modal
-        show={selectedQuestion.size > 0}
+        show={selectedQuestion !== null}
         onHide={onClose}
       >
         <Modal.Body>
           <div
             className={css.question} >
             <div dangerouslySetInnerHTML={{ __html: prompt }} />
-            <ReportQuestionDetails question={selectedQuestion} />
+            { selectedQuestion !== null ? <ReportQuestionDetails question={selectedQuestion} /> : null }
             <Button onClick={this.toggleAnswersVisibility}>
               {answersVisible ? 'Hide responses' : 'Show responses'}
             </Button>
