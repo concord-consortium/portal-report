@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/concord-consortium/portal-report#readme",
   "scripts": {
-    "server": "webpack-dev-server",
+    "start": "webpack-dev-server",
     "prepare": "WEBPACK_TARGET=lib webpack",
     "cypress:test": "cypress run --config video=false,trashAssetsBeforeRuns=false",
     "cypress:open": "cypress open",
@@ -42,7 +42,7 @@
     "chai-immutable": "^1.5.3",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
-    "cypress": "^3.0.2",
+    "cypress": "^3.1.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-15": "^1.0.6",
     "file-loader": "^1.1.11",
