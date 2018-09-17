@@ -53,7 +53,7 @@ export default class Report extends PureComponent {
     let selectStudents = s => true
     const startedOffering = s => s.get('startedOffering')
     if (selectedStudentId) {
-      const id = parseInt(selectedStudentId)
+      const id = parseInt(selectedStudentId, 10)
       selectStudents = (student) => id === student.get('id')
     }
     return [...report.get('students').values()]

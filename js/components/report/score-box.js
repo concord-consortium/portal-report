@@ -7,7 +7,7 @@ export default class ScoreBox extends PureComponent {
   }
 
   validateValue (v) {
-    return parseInt(v) || 0
+    return parseInt(v, 10) || 0
   }
 
   updateText (e) {
