@@ -273,7 +273,7 @@ export const getRubricScores = (rubric, feedbacks) => {
   let scores = IMap({})
   feedbacks.feedbacks
     .forEach(feedbackRecord => {
-      const feedback = feedbackRecord.get('feedbacks').last()
+      const feedback = feedbackRecord.get('feedbacks').first()
       const key = feedbackRecord.get('studentId')
       let score = null
       if (feedback && feedback.get('rubricFeedback')) {
