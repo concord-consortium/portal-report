@@ -71,7 +71,7 @@ class Activity extends PureComponent {
 
     if (isStudentReport) {
       const studentId = reportFor.get('id')
-      autoScore = isAutoScoring(scoreType) ? autoScores.get(`${studentId}`) : null
+      autoScore = isAutoScoring(scoreType) ? autoScores.get(studentId) : null
     }
 
     return (
@@ -94,8 +94,17 @@ class Activity extends PureComponent {
         {
           isStudentReport &&
           <div className='student-feedback-panel'>
-            <ActivityFeedbackForStudent student={reportFor} feedbacks={feedbacks} showScore={showScore} maxScore={maxScore}
-              showText={showText} useRubric={useRubric} rubric={rubric} autoScore={autoScore} feedbackEnabled={feedbackEnabled} />
+            <ActivityFeedbackForStudent
+              student={reportFor}
+              feedbacks={feedbacks}
+              showScore={showScore}
+              maxScore={maxScore}
+              showText={showText}
+              useRubric={useRubric}
+              rubric={rubric}
+              autoScore={autoScore}
+              feedbackEnabled={feedbackEnabled}
+            />
           </div>
         }
         <div>
