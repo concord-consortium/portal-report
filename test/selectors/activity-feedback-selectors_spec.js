@@ -4,7 +4,8 @@ import { expect } from 'chai'
 import { fromJS } from 'immutable'
 import {
   getStudentFeedbacks,
-  getAutoscores
+  getAutoscores,
+  getRubricScores
 } from '../../js/selectors/activity-feedback-selectors'
 
 describe('activity-feedback-selectors', () => {
@@ -162,6 +163,113 @@ describe('activity-feedback-selectors', () => {
       it('should return the autoScores', () => {
         expect(autoScores).to.eql(questionAutoScores)
       })
+    })
+  })
+
+  describe('getRubricScores', () => {
+    // The rubric we are using to score with …
+    let rubricDef = {
+      'id': 'RBK1',
+      'formatVersion': '1.0.0',
+      'version': '12',
+      'updatedMsUTC': 1519424087822,
+      'originUrl': 'http://concord.org/rubrics/RBK1.json',
+      'scoreUsingPoints': false,
+      'showRatingDescriptions': false,
+      'criteria': [
+        {
+          'id': 'C1',
+          'description': 'description',
+          'ratingDescriptions': {
+            'R1': 'Not meeting expected goals.',
+            'R2': 'Approaching proficiency.',
+            'R3': 'Exhibiting proficiency.'
+          }
+        },
+        {
+          'id': 'C2',
+          'description': 'description',
+          'ratingDescriptions': {
+            'R1': 'Not meeting expected goals.',
+            'R2': 'Approaching proficiency.',
+            'R3': 'Exhibiting proficiency.'
+          }
+        }
+      ],
+      'ratings': [
+        {
+          'id': 'R1',
+          'label': 'Beginning',
+          'score': 1
+        },
+        {
+          'id': 'R2',
+          'label': 'Developing',
+          'score': 2
+        },
+        {
+          'id': 'R3',
+          'label': 'Proficient',
+          'score': 3
+        }
+      ]
+    }
+
+    let feedbacks = {feedbacks: fromJS({
+      '1-1': {
+        key: '1-1',
+        studentId: 1,
+        learnerId: 201,
+        // Most recent items are delivered first from the portal.
+        feedbacks: [
+          {
+            feedback: 'second answer',
+            hasBeenReviewed: true,
+            rubricFeedback: {
+              C1: {
+                description: 'Not meeting expected goals.',
+                id: 'R1',
+                label: 'Beginning',
+                score: 1
+              },
+              C2: {
+                description: 'Not meeting expected goals.',
+                id: 'R1',
+                label: 'Beginning',
+                score: 1
+              }
+            }
+          }, {
+            feedback: 'first answer',
+            hasBeenReviewed: true,
+            rubricFeedback: {
+              C1: {
+                description: 'Not meeting expected goals.',
+                id: 'R2',
+                label: 'Beginning',
+                score: 3
+              },
+              C2: {
+                description: 'Not meeting expected goals.',
+                id: 'R2',
+                label: 'Beginning',
+                score: 3
+              }
+            },
+            score: 1
+          }
+        ]
+      }
+    })}
+    // the collection of feedbacks …
+    let scores = null
+
+    beforeEach(() => {
+      scores = getRubricScores(rubricDef, feedbacks)
+    })
+
+    it('Should return the score from the most recent rubric feedback', () => {
+      expect(scores.get(1)).to.eql(2)
     })
   })
 })
