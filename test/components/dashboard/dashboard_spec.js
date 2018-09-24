@@ -52,7 +52,7 @@ describe('<Dashboard />', () => {
     const activityAnswersWidth = wrapper.find(ActivityAnswers).first().prop('width')
 
     expect(activityWidth).to.be.a('string')
-    expect(parseInt(activityWidth)).to.be.above(0) // parseInt will ignore 'px' suffix
+    expect(parseInt(activityWidth, 10)).to.be.above(0) // parseInt will ignore 'px' suffix
     expect(activityWidth).to.equal(questionPromptsWidth)
     expect(questionPromptsWidth).to.equal(activityAnswersWidth)
   })
@@ -72,7 +72,7 @@ describe('<Dashboard />', () => {
     const secondActivityWidth = wrapper.find(ActivityName).at(1).prop('width')
 
     expect(firstActivityWidth).to.be.a('string')
-    expect(parseInt(firstActivityWidth)).to.be.above(0) // parseInt will ignore 'px' suffix
+    expect(parseInt(firstActivityWidth, 10)).to.be.above(0) // parseInt will ignore 'px' suffix
     expect(firstActivityWidth).to.equal(secondActivityWidth)
   })
 

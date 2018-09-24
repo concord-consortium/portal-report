@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react' // eslint-disable-line
 
-const DEFAULT_VALUE = 0
+// Numeric text fields DEFAULT value is not
+// the same thing as MAX_SCORE_DEFAULT.
+const DEFAULT_NUMERIC_INPUT_VALUE = 0
 
 class NumericTextField extends PureComponent {
   constructor (props) {
@@ -24,7 +26,7 @@ class NumericTextField extends PureComponent {
   }
 
   setValue (event) {
-    const defaultValue = this.props.default || DEFAULT_VALUE
+    const defaultValue = this.props.default || DEFAULT_NUMERIC_INPUT_VALUE
     const newValue = parseInt(this.state.value, 10) || defaultValue
     const onChange = this.props.onChange
     const lastValue = this.props.value

@@ -8,7 +8,7 @@ function updateActivityFeedback (state, action) {
   // eslint-disable-next-line
   const [activityId, studentId] = activityFeedbackKey.split('-')
   const record = state.get(activityFeedbackKey) || fromJS({
-    studentId: parseInt(studentId),
+    studentId: parseInt(studentId, 10),
     key: activityFeedbackKey,
     feedbacks: [{
       feedback: '',

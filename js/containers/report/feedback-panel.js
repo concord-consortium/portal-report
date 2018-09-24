@@ -11,7 +11,7 @@ import FeedbackOptionsView from '../../components/report/feedback-options-view'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
 import { updateFeedback, enableFeedback } from '../../actions/index'
-import { MANUAL_SCORE } from '../../util/scoring-constants'
+import { MANUAL_SCORE, MAX_SCORE_DEFAULT } from '../../util/scoring-constants'
 import '../../../css/report/feedback-panel.less'
 
 class FeedbackPanel extends PureComponent {
@@ -121,7 +121,7 @@ class FeedbackPanel extends PureComponent {
 
     const scoreEnabled = question.get('scoreEnabled') || false
     const feedbackEnabled = question.get('feedbackEnabled') || false
-    const maxScore = question.get('maxScore')
+    const maxScore = question.get('maxScore') || MAX_SCORE_DEFAULT
     const showGettingStarted = !scoreEnabled && !feedbackEnabled
     const studentsPulldown = filteredAnswers.map((a) => {
       return {

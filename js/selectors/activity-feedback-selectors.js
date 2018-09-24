@@ -112,6 +112,96 @@ export const makeGetRubric = () => createSelector(
   }
 )
 
+/*******************************************************************************
+IActivity {
+  id: int,
+  type: 'Activity',
+  maxScore: int
+  name: string,
+  scoreType: string 'manual|atuo|rubric|none'
+  activityFeedback: string[] // feedback id's
+  activityFeedbackId: int // ID for feedback ?? Can we get rid of this?
+  enableTextFeedback: boolean
+  children: Map[] // a nested tree of sections → pages → questions → answers …
+  questions: nested tree of questions …
+  pages: nested tree of pages …
+}
+
+IStudent{
+  firstName: string,
+  id: integer,
+  lastName: string,
+  name: string,
+  realName: string,  // duplicate of 'name'
+  startedOffering: boolean
+}
+
+IAFeedback {
+  feedback: string,
+  hasBeenReviewed: boolean,
+  rubricFeedback: {IRubricFeedback},
+  score
+}
+
+IActivityFeedbacks {
+  key: string,
+  learnerID: integer,
+  studentID: integer,
+  feedbacks: [IAFeedback]
+}
+ ******************************************************************************/
+
+/*******************************************************************************
+ * @function getStudentFeedbacks : get most recent feedback & summary data
+ * @argument activity : IActivity
+ * @argument students : Map <IStudent> - description
+ * @argument activityFeedbacks : Map <activityID: <IActivityFeedback>
+ * @returns {
+    feedbacks:
+    activityFeedbacks:
+    feedbacksNeedingReview:
+    feedbacksNotAnswered:
+    numFeedbacksNeedingReview:
+    scores:
+    rubricFeedbacks:
+  }
+ ******************************************************************************/
+export const getStudentFeedbacks = (activity, _students, _activityFeedbacks) => {
+  const students = formatStudents(_students)
+  const feedbacks = students.map(s => activityFeedbackFor(activity, s, _activityFeedbacks)).toList()
+  const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
+  const activityFeedbacks = _activityFeedbacks
+  const feedbacksNotAnswered = getFeedbacksNotAnswered(feedbacks)
+  const numFeedbacksNeedingReview = feedbacksNeedingReview.size
+
+  const lastFeedbacks = activityFeedbacks
+    .map(f => f.get('feedbacks').first())
+    .filter(f => f && f.get('hasBeenReviewed'))
+
+  const scores = lastFeedbacks
+    .map(f => f.get('score'))
+    .filter(x => x)
+    .toList()
+    .toJS()
+
+  const rubricFeedbacks = lastFeedbacks
+    .map(f => f.get('rubricFeedback'))
+    .filter(x => x)
+    .toList()
+    .toJS()
+
+  const returnValue = {
+    feedbacks,
+    activityFeedbacks,
+    feedbacksNeedingReview,
+    feedbacksNotAnswered,
+    numFeedbacksNeedingReview,
+    scores,
+    rubricFeedbacks
+  }
+  return returnValue
+}
+
 // Memoization factory for student activty feedback
 // changes to activity, students, or actFeedbacks cause update.
 export const makeGetStudentFeedbacks = () => {
@@ -119,36 +209,7 @@ export const makeGetStudentFeedbacks = () => {
     getActivity,
     getStudents,
     getActivityFeedbacks,
-    (activity, _students, _activityFeedbacks) => {
-      const students = formatStudents(_students)
-      const feedbacks = students.map(s => activityFeedbackFor(activity, s, _activityFeedbacks)).toList()
-      const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
-      const activityFeedbacks = _activityFeedbacks
-      const feedbacksNotAnswered = getFeedbacksNotAnswered(feedbacks)
-      const numFeedbacksNeedingReview = feedbacksNeedingReview.size
-      const lastFeedbacks = activityFeedbacks
-        .map(f => f.get('feedbacks').first())
-        .filter(f => f && f.get('hasBeenReviewed'))
-      const scores = lastFeedbacks
-        .map(f => f.get('score'))
-        .filter(x => x)
-        .toList()
-        .toJS()
-      const rubricFeedbacks = lastFeedbacks
-        .map(f => f.get('rubricFeedback'))
-        .filter(x => x)
-        .toList()
-        .toJS()
-      return {
-        feedbacks,
-        activityFeedbacks,
-        feedbacksNeedingReview,
-        feedbacksNotAnswered,
-        numFeedbacksNeedingReview,
-        scores,
-        rubricFeedbacks
-      }
-    }
+    (activity, _students, _activityFeedbacks) => getStudentFeedbacks(activity, _students, _activityFeedbacks)
   )
 }
 
@@ -198,6 +259,32 @@ export const makeGetQuestionAutoScores = () => {
   )
 }
 
+/*******************************************************************************
+ * @function getRubricScores : return scores from most recent rubric feedback
+ * TODO: We `export` this function so we can test it.
+ * TODO: We should consider cleaning up the function arguments so they are more
+ * consistent. e.g. make them all Immutable ... also: `feedbacks.feedbacks`?
+ * @argument rubric : Plain JSObj (not immutable?!) type IRubricDef
+ * @argument feedbacks : Plain JSObj containing {feedbacks: <Immutable Map> }
+ * @returns scores : IMap  ( {'<student-id>': score} )
+ ******************************************************************************/
+export const getRubricScores = (rubric, feedbacks) => {
+  let scores = IMap({})
+  feedbacks.feedbacks
+    .forEach(feedbackRecord => {
+      const feedback = feedbackRecord.get('feedbacks').first()
+      const key = feedbackRecord.get('studentId')
+      let score = null
+      if (feedback && feedback.get('rubricFeedback')) {
+        const rubricFeedback = feedback.get('rubricFeedback')
+        score = rubricFeedback.map((v, k) => v.get('score')).reduce((p, n) => p + n)
+        scores.set(key, score)
+      }
+      scores = scores.set(key, score)
+    })
+  return scores
+}
+
 // Memoization factory: rubric feedback
 // updates whenever rubric or feedbacks change
 const makeGetRubricScores = () => {
@@ -206,44 +293,31 @@ const makeGetRubricScores = () => {
   return createSelector(
     getRubric,
     getFeedbacks,
-    (rubric, feedbacks) => {
-      let scores = IMap({})
-      feedbacks.feedbacks
-        .forEach(feedbackRecord => {
-          const feedback = feedbackRecord.get('feedbacks').last()
-          const key = feedbackRecord.get('studentId')
-          let score = null
-          if (feedback && feedback.get('rubricFeedback')) {
-            const rubricFeedback = feedback.get('rubricFeedback')
-            score = rubricFeedback.map((k, v) => k.get('score')).reduce((p, n) => p + n)
-            scores.set(key, score)
-          }
-          scores = scores.set(key, score)
-        })
-      return scores
-    }
+    getRubricScores
   )
+}
+
+export const getAutoscores = (scoreType, rubricScores, questionAutoScores) => {
+  switch (scoreType) {
+    case RUBRIC_SCORE:
+      return rubricScores.filter(isNumeric)
+    case AUTOMATIC_SCORE:
+    default:
+      return questionAutoScores
+  }
 }
 
 // Memoization factory: for automatic scoring (both types)
 // updates when rubricscores or question scores changes.
 export const makeGetAutoScores = () => {
+  const getScoreType = makeGetScoreType()
   const getRubricScores = makeGetRubricScores()
   const getQuestionAutoScores = makeGetQuestionAutoScores()
-  const getScoreType = makeGetScoreType()
   return createSelector(
     getScoreType,
     getRubricScores,
     getQuestionAutoScores,
-    (scoreType, rubricScores, questionAutoScores) => {
-      switch (scoreType) {
-        case RUBRIC_SCORE:
-          return rubricScores.filter(isNumeric)
-        case AUTOMATIC_SCORE:
-        default:
-          return questionAutoScores
-      }
-    }
+    getAutoscores
   )
 }
 

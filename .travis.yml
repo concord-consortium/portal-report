@@ -11,7 +11,7 @@ script:
   - webpack
   - WEBPACK_TARGET=lib webpack
   - npm run test
-  - npm run server &
+  - npm run start &
   - wait-on http://localhost:8080
   - $(npm bin)/cypress run --config video=false
   - ./s3_deploy.sh
