@@ -152,7 +152,7 @@ IActivityFeedbacks {
  ******************************************************************************/
 
 /*******************************************************************************
- * @function getStudentFeedbacks : blah
+ * @function getStudentFeedbacks : get most recent feedback & summary data
  * @argument activity : IActivity
  * @argument students : Map <IStudent> - description
  * @argument activityFeedbacks : Map <activityID: <IActivityFeedback>
@@ -167,7 +167,6 @@ IActivityFeedbacks {
   }
  ******************************************************************************/
 export const getStudentFeedbacks = (activity, _students, _activityFeedbacks) => {
-
   const students = formatStudents(_students)
   const feedbacks = students.map(s => activityFeedbackFor(activity, s, _activityFeedbacks)).toList()
   const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks)
@@ -197,7 +196,7 @@ export const getStudentFeedbacks = (activity, _students, _activityFeedbacks) => 
     feedbacksNeedingReview,
     feedbacksNotAnswered,
     numFeedbacksNeedingReview,
-    scores, // This value is an array with length 1 …
+    scores,
     rubricFeedbacks
   }
   return returnValue

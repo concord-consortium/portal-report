@@ -197,21 +197,9 @@ describe('activity-feedback-selectors', () => {
         }
       ],
       'ratings': [
-        {
-          'id': 'R1',
-          'label': 'Beginning',
-          'score': 1
-        },
-        {
-          'id': 'R2',
-          'label': 'Developing',
-          'score': 2
-        },
-        {
-          'id': 'R3',
-          'label': 'Proficient',
-          'score': 3
-        }
+        { 'id': 'R1', 'label': 'Beginning', 'score': 1 },
+        { 'id': 'R2', 'label': 'Developing', 'score': 2 },
+        { 'id': 'R3', 'label': 'Proficient', 'score': 3 }
       ]
     }
 
