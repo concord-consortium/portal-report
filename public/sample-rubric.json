@@ -45,7 +45,8 @@
         {
             "id": "R2",
             "label": "Developing",
-            "score": 2
+            "score": 2,
+            "notApplicable": true
         },
         {
             "id": "R3",
