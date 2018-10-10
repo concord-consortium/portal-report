@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import Markdown from 'markdown-to-jsx'
 import colorScale from '../../util/colors'
 
 import '../../../css/report/rubric-box.less'
@@ -111,7 +112,7 @@ export default class RubricBox extends PureComponent {
               criteria.map((crit, critIndex) => {
                 return (
                   <tr key={crit.id}>
-                    <td>{crit.description}</td>
+                    <td><Markdown>{crit.description}</Markdown></td>
                     { isSummaryView
                       ? ratings.map((rating, ratingIndex) => this.renderSummaryRating(crit, critIndex, rating, ratingIndex, ratings.length))
                       : ratings.map(rating => this.renderLearnerRating(crit, rating, learnerId, rubricFeedback))

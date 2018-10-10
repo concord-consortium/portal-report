@@ -29,7 +29,7 @@ describe('the rubric helper class', () => {
     describe('when there is no student description', () => {
       it('should always return the default description', () => {
         const criteria = fromJS(rubric.criteria[0])
-        const expected = 'Student makes a claim supported by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.'
+        const expected = 'Student makes a claim _supported_ by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.'
 
         const defaultDesc = helper.feedbackDescriptionForCriteria(criteria)
         expect(defaultDesc).to.equal(expected)

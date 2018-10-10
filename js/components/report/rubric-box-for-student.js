@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import Markdown from 'markdown-to-jsx'
 import { RubricHelper } from '../../util/rubric-helper'
 import '../../../css/report/rubric-box-for-student.less'
 
@@ -9,10 +10,12 @@ export default class RubricBoxForStudent extends PureComponent {
 
     const feedbacks = helper.allFeedback('student').filter(f => !!f).map(f =>
       <tr className='criterion' key={f.key}>
-        <td className='description'>{f.description}</td>
+        <td className='description'><Markdown>{f.description}</Markdown></td>
         <td className='rating'>
           <span className='rating-label'>{f.label}</span>
-          { rubric.showRatingDescriptions && ` - ${f.ratingDescription}` }
+          <Markdown>
+            { rubric.showRatingDescriptions && ` - ${f.ratingDescription}` }
+          </Markdown>
         </td>
       </tr>
     )
