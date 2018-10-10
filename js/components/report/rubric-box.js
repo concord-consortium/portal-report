@@ -38,8 +38,8 @@ export default class RubricBox extends PureComponent {
       (crit.ratingDescriptionsForStudent && crit.ratingDescriptionsForStudent[ratingId]) ||
       (crit.ratingDescriptions && crit.ratingDescriptions[ratingId]) ||
       null
-    const isApplicableRating = rating.notApplicable === undefined ||
-                               rating.notApplicable !== true
+    const isApplicableRating = crit.nonApplicableRatings === undefined ||
+                               crit.nonApplicableRatings.indexOf(ratingId) < 0
     return (
       <td key={radioButtonKey} title={ratingDescription}>
         <div className='center'>
@@ -101,9 +101,7 @@ export default class RubricBox extends PureComponent {
               <th key='Proficiency'>{ rubric.criteriaLabel }</th>
               {
                 rubric.ratings.map((rating) => {
-                  const isApplicableRating = rating.notApplicable === undefined ||
-                                             rating.notApplicable !== true
-                  const label = rating.label + (isApplicableRating ? "" : "(NA)")
+                  const label = rating.label
                   const score = rubric.scoreUsingPoints && rating.score ? `(${rating.score})` : ''
                   return <th key={rating.id}>{label} {score}</th>
                 })
