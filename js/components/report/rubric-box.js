@@ -27,6 +27,26 @@ export default class RubricBox extends PureComponent {
     rubricChange(newFeedback)
   }
 
+  renderInput(learnerId, critId, checked, ratingId, radioButtonKey) {
+    return (
+      <input
+        name={`${learnerId}_${critId}`}
+        type='radio'
+        checked={checked}
+        value={ratingId}
+        onChange={(e) => this.updateSelection(e, critId, ratingId)}
+        id={radioButtonKey} />
+    );
+  }
+
+  renderCell(learnerId, critId, checked, ratingId, disabled, radioButtonKey) {
+    return (
+      <div className='center'>
+        {disabled ? 'N/A' : this.renderInput(learnerId, critId, checked, ratingId, radioButtonKey)}
+      </div>
+    );
+  }
+
   renderLearnerRating (crit, rating, learnerId, rubricFeedback) {
     const {disabled} = this.props
     const critId = crit.id
@@ -41,17 +61,8 @@ export default class RubricBox extends PureComponent {
     const isApplicableRating = crit.nonApplicableRatings === undefined ||
                                crit.nonApplicableRatings.indexOf(ratingId) < 0
     return (
-      <td key={radioButtonKey} title={ratingDescription}>
-        <div className='center'>
-          <input
-            name={`${learnerId}_${critId}`}
-            type='radio'
-            checked={checked}
-            value={ratingId}
-            onChange={(e) => this.updateSelection(e, critId, ratingId)}
-            disabled={disabled || !isApplicableRating}
-            id={radioButtonKey} />
-        </div>
+      <td key={radioButtonKey} title={(disabled || isApplicableRating) ? ratingDescription : "Not Applicable"}>
+        {this.renderCell(learnerId, critId, checked, ratingId, disabled || !isApplicableRating, radioButtonKey)}
       </td>
     )
   }
@@ -118,8 +129,7 @@ export default class RubricBox extends PureComponent {
                       ? ratings.map((rating, ratingIndex) => this.renderSummaryRating(crit, critIndex, rating, ratingIndex, ratings.length))
                       : ratings.map(rating => this.renderLearnerRating(crit, rating, learnerId, rubricFeedback))
                     }
-                    
-                    </tr>
+                  </tr>
                 )
               })
             }
