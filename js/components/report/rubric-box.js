@@ -113,8 +113,8 @@ export default class RubricBox extends PureComponent {
             {
               criteria.map((crit, critIndex) => {
                 return (
-                  <tr key={crit.id}>
-                    <td><Markdown>{crit.description}</Markdown></td>
+                  <tr key={crit.id} id={crit.id}>
+                    <td className='description'><Markdown>{crit.description}</Markdown></td>
                     { isSummaryView
                       ? ratings.map((rating, ratingIndex) => this.renderSummaryRating(crit, critIndex, rating, ratingIndex, ratings.length))
                       : ratings.map(rating => this.renderLearnerRating(crit, rating, learnerId, rubricFeedback))
