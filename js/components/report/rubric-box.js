@@ -38,6 +38,8 @@ export default class RubricBox extends PureComponent {
       (crit.ratingDescriptionsForStudent && crit.ratingDescriptionsForStudent[ratingId]) ||
       (crit.ratingDescriptions && crit.ratingDescriptions[ratingId]) ||
       null
+    const isApplicableRating = crit.nonApplicableRatings === undefined ||
+                               crit.nonApplicableRatings.indexOf(ratingId) < 0
     return (
       <td key={radioButtonKey} title={ratingDescription}>
         <div className='center'>
@@ -47,7 +49,7 @@ export default class RubricBox extends PureComponent {
             checked={checked}
             value={ratingId}
             onChange={(e) => this.updateSelection(e, critId, ratingId)}
-            disabled={disabled}
+            disabled={disabled || !isApplicableRating}
             id={radioButtonKey} />
         </div>
       </td>
@@ -116,8 +118,8 @@ export default class RubricBox extends PureComponent {
                       ? ratings.map((rating, ratingIndex) => this.renderSummaryRating(crit, critIndex, rating, ratingIndex, ratings.length))
                       : ratings.map(rating => this.renderLearnerRating(crit, rating, learnerId, rubricFeedback))
                     }
-
-                  </tr>
+                    
+                    </tr>
                 )
               })
             }

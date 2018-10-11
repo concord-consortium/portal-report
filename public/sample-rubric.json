@@ -13,6 +13,7 @@
     "criteria": [
         {
             "id": "C1",
+            "nonApplicableRatings" : [ "R2" ],
             "description": "Make a claim supported by evidence that indicates that when the population of one organism changes, the pattern of impact on other organisms is based on the types of interactions between the organisms.",
             "ratingDescriptions": {
                 "R1": "Student makes a claim supported by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.",
