@@ -12,18 +12,18 @@
     "feedbackLabelForStudent": "Feedback",
     "criteria": [
         {
-            "id": "C1",
-            "nonApplicableRatings" : [ "R2" ],
-            "description": "Make a claim supported by evidence that indicates that when the population of one organism changes, the pattern of impact on other organisms is based on the types of interactions between the organisms.",
+            "id": "C1",  
+            "description": "Make a claim, _**supported by evidence**_ that indicates that when the population of one organism changes, the pattern of impact on other organisms is based on the types of interactions between the organisms.",
+            "nonApplicableRatings" : [ "R2" ],           
             "ratingDescriptions": {
-                "R1": "Student makes a claim supported by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.",
-                "R2": "Student makes a claim supported by evidence that indicates the pattern of impact on either ladybugs or aphids when the population of fire ants changes.",
-                "R3": "Student makes a claim not supported by evidence or does not make a claim that indicates the pattern of  impact on EITHER ladybugs or aphids when the population of fire ants changes."
+                "R1": "Student makes a claim _supported_ by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.",
+                "R2": "Student makes a claim **supported** by evidence that indicates the pattern of impact on either ladybugs or aphids when the population of fire ants changes.",
+                "R3": "Student makes a claim _**not supported**_ by evidence or does not make a claim that indicates the pattern of  impact on EITHER ladybugs or aphids when the population of fire ants changes."
             }
         },
         {
             "id": "C2",
-            "description": "Provide reasoning by stating that interactions between organisms (i.e., competitive and predator-prey) are distinguished by patterns in data.",
+            "description": "Provide reasoning:\n\n* by stating that interactions between organisms (i.e., competitive and predator-prey)\n\n* and how they are distinguished by patterns in data.",
             "descriptionForStudent": "Student specific C2 criteria description",
             "ratingDescriptions": {
                 "R1": "Student provides reasoning that describes  predator-prey AND mutually beneficial interactions between fire ants/ladybugs and fire ants/aphids, respectively.",
