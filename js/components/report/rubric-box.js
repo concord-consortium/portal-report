@@ -42,7 +42,7 @@ export default class RubricBox extends PureComponent {
   renderCell(learnerId, critId, checked, ratingId, disabled, radioButtonKey) {
     return (
       <div className='center'>
-        {disabled ? 'N/A' : this.renderInput(learnerId, critId, checked, ratingId, radioButtonKey)}
+        {disabled ? <span id={radioButtonKey}>N/A</span> : this.renderInput(learnerId, critId, checked, ratingId, radioButtonKey)}
       </div>
     );
   }
