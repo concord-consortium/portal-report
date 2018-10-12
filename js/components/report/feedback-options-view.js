@@ -24,6 +24,7 @@ export default class FeedbackOptionsView extends PureComponent {
           <NumericTextField
             className='max-score-input'
             value={maxScore}
+            min={1}
             default={MAX_SCORE_DEFAULT}
             onChange={setMaxScore}
             disabled={!scoreEnabled}
