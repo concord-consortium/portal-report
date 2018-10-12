@@ -47,4 +47,10 @@ describe('<NumericTextField /> minValue prop', () => {
     wrapper.find('input').simulate('blur', {})
     expect(wrapper.state('value')).to.equal(-3)
   })
+  it('wont allow zero value when minimum is 1; with default 10', () => {
+    const wrapper = shallow(<NumericTextField default={10} min={1} />)
+    wrapper.find('input').simulate('change', { target: { value: '0' } })
+    wrapper.find('input').simulate('blur', {})
+    expect(wrapper.state('value')).to.equal(10)
+  })
 })
