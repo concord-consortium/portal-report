@@ -25,4 +25,27 @@ describe('<RubricBox /> disabling non-applicable ratings', () => {
     expect(rubricBox.find("#C1-R2")[0].attribs.disabled).equals('')
     expect(rubricBox.find("#C1-R3")[0].attribs.disabled).undefined
   })
-}) 
+})
+
+describe('<RubricBox /> converting markdown in description fields', () => {
+  it('should convert to HTML', () => {
+    const rubric = sampleRubric
+    const rubricFeedback = {}
+    const updateFeedback = () => null
+    const learnerId = 'id3'
+    const rubricBox = render(<RubricBox
+      rubric={rubric}
+      rubricFeedback={rubricFeedback}
+      rubricChange={updateFeedback}
+      learnerId={learnerId}
+    />)
+
+    // Verify the input rubric includes expected markdown:
+    expect(rubric.criteria[0].description)
+      .to.include('_**supported by evidence**_')
+
+    // Verify the Markdown in our description gets converted to HTML tags:
+    expect(rubricBox.find('tr#C1 td.description').html())
+      .to.include('<em><strong>supported by evidence</strong></em>')
+  })
+})
