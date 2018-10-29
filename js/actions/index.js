@@ -2,7 +2,7 @@ import { requestRubric } from './rubric'
 export const INVALIDATE_DATA = 'INVALIDATE_DATA'
 export const REQUEST_DATA = 'REQUEST_DATA'
 export const RECEIVE_DATA = 'RECEIVE_DATA'
-export const RECEIVE_ERROR = 'RECEIVE_ERROR'
+export const FETCH_ERROR = 'FETCH_ERROR'
 export const SET_NOW_SHOWING = 'SET_NOW_SHOWING'
 export const SET_ANONYMOUS = 'SET_ANONYMOUS'
 export const SET_QUESTION_SELECTED = 'SET_QUESTION_SELECTED'
@@ -27,7 +27,7 @@ function requestData () {
       callAPI: {
         type: 'fetchReportData',
         successAction: receiveData,
-        errorAction: receiveError
+        errorAction: fetchError
       }
     })
   }
@@ -44,9 +44,9 @@ function receiveData (response) {
   }
 }
 
-function receiveError (response) {
+function fetchError (response) {
   return {
-    type: RECEIVE_ERROR,
+    type: FETCH_ERROR,
     response: response,
     receivedAt: Date.now()
   }
@@ -182,6 +182,7 @@ export function updateFeedback (answerKey, feedback) {
     feedback,
     callAPI: {
       type: 'updateReportSettings',
+      errorAction: fetchError,
       data: {
         feedback: feedbackData
       }
@@ -206,6 +207,7 @@ export function enableFeedback (embeddableKey, feedbackFlags) {
     feedbackFlags,
     callAPI: {
       type: 'updateReportSettings',
+      errorAction: fetchError,
       data: {
         feedback_opts: feedbackSettings
       }
@@ -228,6 +230,7 @@ export function updateActivityFeedback (activityFeedbackKey, feedback) {
     feedback,
     callAPI: {
       type: 'updateReportSettings',
+      errorAction: fetchError,
       data: {
         activity_feedback: feedbackData
       }
@@ -251,6 +254,7 @@ export function enableActivityFeedback (activityId, feedbackFlags, invalidatePre
     feedbackFlags,
     callAPI: {
       type: 'updateReportSettings',
+      errorAction: fetchError,
       data: {
         actvity_feedback_opts: feedbackSettings
       }

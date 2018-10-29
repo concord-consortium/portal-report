@@ -10,6 +10,14 @@ export default class DataFetchError extends PureComponent {
     </div>
   }
 
+  renderNetworkError (error) {
+    return <div>
+      <div>A network error occurred. Please go back to Portal and launch report again.</div>
+      <h3>Details</h3>
+      <div>{error.statusText}</div>
+    </div>
+  }
+
   renderGenericInfo (error) {
     return (
       <div>
@@ -26,6 +34,8 @@ export default class DataFetchError extends PureComponent {
         return this.renderUnauthorized()
       case 403:
         return this.renderUnauthorized()
+      case 599:
+        return this.renderNetworkError(error)
       default:
         return this.renderGenericInfo(error)
     }
@@ -35,7 +45,7 @@ export default class DataFetchError extends PureComponent {
     const { error } = this.props
     return (
       <div className='data-fetch-error'>
-        <h2>Report data download failed</h2>
+        <h2>Connection to server failed</h2>
         {this.renderError(error)}
       </div>
     )
