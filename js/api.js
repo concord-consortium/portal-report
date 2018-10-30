@@ -53,7 +53,7 @@ export function updateReportSettings (data) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
-    })
+    }).then(checkStatus)
   } else {
     warn('No REPORT_URL. Faking put method.')
     return new Promise(resolve => {})
