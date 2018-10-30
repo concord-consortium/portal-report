@@ -1,6 +1,6 @@
 import Immutable, { Map, Set} from 'immutable'
 import {
-  REQUEST_DATA, RECEIVE_DATA, RECEIVE_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
+  REQUEST_DATA, RECEIVE_DATA, FETCH_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, HIDE_UNSELECTED_QUESTIONS, SHOW_UNSELECTED_QUESTIONS,
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK
 } from '../actions'
@@ -42,7 +42,7 @@ function data (state = Map(), action) {
         .set('didInvalidate', false)
         .set('error', null)
         .set('lastUpdated', action.receivedAt)
-    case RECEIVE_ERROR:
+    case FETCH_ERROR:
       return state.set('isFetching', false)
         .set('didInvalidate', false)
         .set('error', action.response)
