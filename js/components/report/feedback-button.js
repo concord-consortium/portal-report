@@ -15,7 +15,7 @@ export default class FeedbackButton extends PureComponent {
     countClassName = feedbackEnabled && (!disabled) ? countClassName : 'notification-circle hidden'
 
     return (
-      <div className={buttonClass} onClick={clickAction}>
+      <div className={buttonClass} onClick={clickAction} data-cy='feedbackButton'>
         <div className={countClassName}>
           {counterDiv}
         </div>
