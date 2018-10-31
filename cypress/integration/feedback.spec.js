@@ -7,7 +7,7 @@ import sampleRubric from '../../public/sample-rubric'
 describe('Provide Feedback', function () {
   beforeEach(() => {
     // cypress currently doesn't handle window.fetch so:
-    // disable browser's fetch this way the fetch polyfill is used which uses XHR
+    // diable browser's fetch this way the fetch polyfill is used which uses XHR
     cy.on('window:before:load', win => {
       win.fetch = null
     })
@@ -36,7 +36,7 @@ describe('Provide Feedback', function () {
     }).as('putReportSettings')
 
     let fakeServer = 'http://portal.test'
-    cy.visit(`http://localhost:8080/?reportUrl=${encodeURIComponent(fakeServer)}`)
+    cy.visit(`/?reportUrl=${encodeURIComponent(fakeServer)}`)
   })
 
   it('Is visible', function () {
@@ -52,7 +52,7 @@ describe('Provide Feedback', function () {
     // This is the first put that happens when the UI is initialized
     cy.wait('@putReportSettings')
     cy.get('.question [data-cy=feedbackButton]').first().click()
-    cy.get('[data-cy=feedbackBox]').first().type('Your answer was great!')
+    cy.get('[data-cy=feedbackBox]').first().type('Your answer was great!').blur()
     // This is the second put that happens when the user finishes typing
     cy.wait('@putReportSettings')
     cy.get('@putReportSettings').should((xhr) => {
@@ -74,7 +74,7 @@ describe('Provide Feedback', function () {
     })
 
     cy.get('.question [data-cy=feedbackButton]').first().click()
-    cy.get('[data-cy=feedbackBox]').first().type('Your answer was great!')
+    cy.get('[data-cy=feedbackBox]').first().type('Your answer was great!').blur()
     cy.contains('Connection to server failed')
   })
 })

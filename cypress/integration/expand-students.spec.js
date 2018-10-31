@@ -6,7 +6,7 @@ import { getByCypressTag } from '../utils'
 describe('Open Students button', function () {
   let initialHeight = 0
   beforeEach(() => {
-    cy.visit('http://localhost:8080/?dashboard=true')
+    cy.visit('/?dashboard=true')
   })
 
   it('Expands students after click, and then closes them again', function () {

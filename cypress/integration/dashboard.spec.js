@@ -5,7 +5,7 @@ import { getByCypressTag } from '../utils'
 
 describe('Dashboard', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:8080/?dashboard=true')
+    cy.visit('/?dashboard=true')
   })
 
   it('Renders cells in a row with the same height', function () {

@@ -5,7 +5,7 @@ import { getByCypressTag } from '../utils'
 
 describe('Open response questions', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:8080/?dashboard=true')
+    cy.visit('/?dashboard=true')
   })
 
   it('Initially show a text icon', function () {
