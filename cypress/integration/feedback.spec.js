@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach, cy */
+/* global describe, it, beforeEach, cy, expect */
 /* eslint-disable-next-line */
 import React from 'react'
 import fakeData from '../../js/data/report.json'
@@ -33,7 +33,7 @@ describe('Provide Feedback', function () {
       method: 'PUT',
       url: '/',
       response: {}
-    })
+    }).as('putReportSettings')
 
     let fakeServer = 'http://portal.test'
     cy.visit(`http://localhost:8080/?reportUrl=${encodeURIComponent(fakeServer)}`)
@@ -45,7 +45,36 @@ describe('Provide Feedback', function () {
 
   it('Shows dialog when clicked', function () {
     cy.get('.question [data-cy=feedbackButton]').first().click()
-    // do I need to wait here?
-    cy.get('[data-cy=feedbackBox]').should('be.visible')
+    cy.get('.feedback-panel').should('be.visible')
+  })
+
+  it('Sends feedback to the server', function () {
+    // This is the first put that happens when the UI is initialized
+    cy.wait('@putReportSettings')
+    cy.get('.question [data-cy=feedbackButton]').first().click()
+    cy.get('[data-cy=feedbackBox]').first().type('Your answer was great!')
+    // This is the second put that happens when the user finishes typing
+    cy.wait('@putReportSettings')
+    cy.get('@putReportSettings').should((xhr) => {
+      // Newer versions of Chai have a 'nested' chained method that would simplify this
+      expect(xhr.requestBody).to.have.property('feedback')
+      expect(xhr.requestBody.feedback).to.have.property('feedback', 'Your answer was great!')
+    })
+  })
+
+  it('Shows error if feedback fails to send', function () {
+    // This is the first put that happens when the UI is initialized
+    cy.wait('@putReportSettings')
+
+    cy.route({
+      method: 'PUT',
+      url: '/',
+      status: 403,
+      response: {}
+    })
+
+    cy.get('.question [data-cy=feedbackButton]').first().click()
+    cy.get('[data-cy=feedbackBox]').first().type('Your answer was great!')
+    cy.contains('Connection to server failed')
   })
 })
