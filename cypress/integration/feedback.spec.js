@@ -7,7 +7,7 @@ import sampleRubric from '../../public/sample-rubric'
 describe('Provide Feedback', function () {
   beforeEach(() => {
     // cypress currently doesn't handle window.fetch so:
-    // diable browser's fetch this way the fetch polyfill is used which uses XHR
+    // disable browser's fetch this way the fetch polyfill is used which uses XHR
     cy.on('window:before:load', win => {
       win.fetch = null
     })
