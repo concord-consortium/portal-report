@@ -27,6 +27,7 @@ export default class FeedbackBox extends PureComponent {
   render () {
     return (
       <textarea
+        data-cy='feedbackBox'
         rows='10'
         cols='20'
         value={this.state.value}
