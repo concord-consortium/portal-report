@@ -4,6 +4,8 @@
 .dashboard {
   width: 100%;
   padding: @content-padding;
+  box-sizing: border-box;
+  overflow: auto;
 
   .headers {
     display: flex;
@@ -20,7 +22,7 @@
     width: calc(~"100% -" @student-name-width + 2 * @content-padding);
     white-space: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
 
     .questionPromptsRow {
       display: flex;
@@ -53,7 +55,7 @@
     vertical-align: top;
     white-space: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
   }
 
   .verticalScrollContainer {
@@ -61,6 +63,7 @@
     display: inline-block;
     vertical-align: top;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
+    margin-bottom: 10px;
   }
 }

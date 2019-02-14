@@ -17,6 +17,8 @@ import {
   MC_SUMMARY_APPROX_WIDTH
 } from './const-metrics'
 
+let _timeout = null;
+
 export default class Dashboard extends PureComponent {
   constructor (props) {
     super(props)
@@ -34,6 +36,11 @@ export default class Dashboard extends PureComponent {
     this.activityHeaders.addEventListener('scroll', this.onHeadersScroll)
     this.onResize()
   }
+  componentDidUpdate(prevProps) {
+    if (!_timeout && prevProps.expandedStudents !== this.props.expandedStudents) {
+      _timeout = window.setTimeout(this.onResize, 2000);
+    }
+  }
 
   componentWillUnmount () {
     window.removeEventListener('resize', this.onResize)
@@ -48,6 +55,8 @@ export default class Dashboard extends PureComponent {
 
   onResize () {
     // Make sure that the verticalScrollContainer fits the window height.
+    console.log("resize");
+    _timeout = null;
     const bb = this.verticalScrollingContainer.getBoundingClientRect()
     this.verticalScrollingContainer.style.height = (window.innerHeight - bb.y - BOTTOM_MARGIN) + 'px'
   }
