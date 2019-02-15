@@ -38,6 +38,7 @@ export default class Dashboard extends PureComponent {
   }
   componentDidUpdate(prevProps) {
     if (!_timeout && prevProps.expandedStudents !== this.props.expandedStudents) {
+      // timer used for fixing vertical container resizing after expanded data is displayed
       _timeout = window.setTimeout(this.onResize, 2000);
     }
   }
@@ -55,10 +56,10 @@ export default class Dashboard extends PureComponent {
 
   onResize () {
     // Make sure that the verticalScrollContainer fits the window height.
-    console.log("resize");
-    _timeout = null;
     const bb = this.verticalScrollingContainer.getBoundingClientRect()
     this.verticalScrollingContainer.style.height = (window.innerHeight - bb.y - BOTTOM_MARGIN) + 'px'
+    // clear timer
+    _timeout = null;
   }
 
   onHorizontalContainerScroll () {
