@@ -48,8 +48,8 @@ export default class Dashboard extends PureComponent {
 
   onResize () {
     // Make sure that the verticalScrollContainer fits the window height.
-    const bb = this.verticalScrollingContainer.getBoundingClientRect()
-    this.verticalScrollingContainer.style.height = (window.innerHeight - bb.y - BOTTOM_MARGIN) + 'px'
+    const bb = this.mainContainer.getBoundingClientRect()
+    this.mainContainer.style.height = (window.innerHeight - bb.y - BOTTOM_MARGIN) + 'px'
   }
 
   onHorizontalContainerScroll () {
@@ -135,91 +135,93 @@ export default class Dashboard extends PureComponent {
     const showTallQuestionHeader = anyStudentExpanded || anyQuestionExpanded
     const activitiesList = activities.toList().filter(activity => activity.get('visible'))
     return (
-      <div className={css.dashboard}>
-        <QuestionDetails
-          selectedQuestion={selectedQuestion}
-          onClose={this.selectNoQuestions}
-        />
-        <div className={css.headers}>
-          <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />
-          <div ref={el => { this.activityHeaders = el }} className={css.activityHeaders}>
-            <div>
-              {
-                activitiesList.map((a, number) =>
-                  <ActivityName key={a.get('id')}
-                    activity={a}
-                    width={this.getActivityColumnWidth(a)}
-                    number={number + 1}
-                    expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
-                )
-              }
-            </div>
-            <div className={css.questionPromptsRow + ' ' + (showTallQuestionHeader ? css.fullPrompts : '')}>
-              {
-                activitiesList.map(a =>
-                  <ActivityQuestions
-                    key={a.get('id')}
-                    activity={a}
-                    width={this.getActivityColumnWidth(a)}
-                    expanded={expandedActivities.get(a.get('id').toString())}
-                    showFullPrompts={anyStudentExpanded}
-                    multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
-                    setQuestionExpanded={setQuestionExpanded}
-                    expandedQuestions={expandedQuestions}
-                    selectQuestion={selectQuestion}
-                  />
-                )
-              }
+      <div ref={el => { this.mainContainer = el }} className={css.dashboard}>
+        <div className={css.innerContainer}>
+          <QuestionDetails
+            selectedQuestion={selectedQuestion}
+            onClose={this.selectNoQuestions}
+          />
+          <div className={css.headers}>
+            <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />
+            <div ref={el => { this.activityHeaders = el }} className={css.activityHeaders}>
+              <div>
+                {
+                  activitiesList.map((a, number) =>
+                    <ActivityName key={a.get('id')}
+                      activity={a}
+                      width={this.getActivityColumnWidth(a)}
+                      number={number + 1}
+                      expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
+                  )
+                }
+              </div>
+              <div className={css.questionPromptsRow + ' ' + (showTallQuestionHeader ? css.fullPrompts : '')}>
+                {
+                  activitiesList.map(a =>
+                    <ActivityQuestions
+                      key={a.get('id')}
+                      activity={a}
+                      width={this.getActivityColumnWidth(a)}
+                      expanded={expandedActivities.get(a.get('id').toString())}
+                      showFullPrompts={anyStudentExpanded}
+                      multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
+                      setQuestionExpanded={setQuestionExpanded}
+                      expandedQuestions={expandedQuestions}
+                      selectQuestion={selectQuestion}
+                    />
+                  )
+                }
+              </div>
             </div>
           </div>
-        </div>
-        <div ref={el => { this.verticalScrollingContainer = el }} className={css.verticalScrollContainer}>
-          <div className={css.studentNames}>
-            {
-              students.map(s => {
-                const studentExpanded = expandedStudents.get(s.get('id').toString())
-                const anyQuestionExpanded = expandedQuestions.find(v => v)
-                const expanded = anyQuestionExpanded || studentExpanded
-                return (
-                  <StudentName
-                    key={s.get('id')}
-                    student={s}
-                    studentExpanded={studentExpanded}
-                    expanded={expanded}
-                    setStudentExpanded={setStudentExpanded} />
-                )
-              })
-            }
-          </div>
-          <div ref={el => { this.horizontalScrollingContainer = el }} className={css.horizontalScrollContainer}>
-            {
-              students.map(s => {
-                const expandedStudent = expandedStudents.get(s.get('id').toString())
-                const anyQuestionExpanded = expandedQuestions.find(v => v)
-                const expanded = anyQuestionExpanded || expandedStudent
+          <div ref={el => { this.verticalScrollingContainer = el }} className={css.verticalScrollContainer}>
+            <div className={css.studentNames}>
+              {
+                students.map(s => {
+                  const studentExpanded = expandedStudents.get(s.get('id').toString())
+                  const anyQuestionExpanded = expandedQuestions.find(v => v)
+                  const expanded = anyQuestionExpanded || studentExpanded
+                  return (
+                    <StudentName
+                      key={s.get('id')}
+                      student={s}
+                      studentExpanded={studentExpanded}
+                      expanded={expanded}
+                      setStudentExpanded={setStudentExpanded} />
+                  )
+                })
+              }
+            </div>
+            <div ref={el => { this.horizontalScrollingContainer = el }} className={css.horizontalScrollContainer}>
+              {
+                students.map(s => {
+                  const expandedStudent = expandedStudents.get(s.get('id').toString())
+                  const anyQuestionExpanded = expandedQuestions.find(v => v)
+                  const expanded = anyQuestionExpanded || expandedStudent
 
-                return (
-                  <div
-                    key={s.get('id')}
-                    className={css.studentAnswersRow + ' ' + (expanded ? css.fullAnswers : '')} data-cy='studentAnswersRow'>
-                    {
-                      activitiesList.map(a =>
-                        <ActivityAnswers key={a.get('id')} activity={a} student={s}
-                          width={this.getActivityColumnWidth(a)}
-                          anyStudentExpanded={anyStudentExpanded}
-                          expanded={expandedActivities.get(a.get('id').toString())}
-                          showFullAnswers={expandedStudents.get(s.get('id').toString())}
-                          progress={studentProgress.getIn([s.get('id').toString(), a.get('id').toString()])}
-                          multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
-                          setQuestionExpanded={setQuestionExpanded}
-                          expandedQuestions={expandedQuestions}
-                        />
-                      )
-                    }
-                  </div>
-                )
-              })
-            }
+                  return (
+                    <div
+                      key={s.get('id')}
+                      className={css.studentAnswersRow + ' ' + (expanded ? css.fullAnswers : '')} data-cy='studentAnswersRow'>
+                      {
+                        activitiesList.map(a =>
+                          <ActivityAnswers key={a.get('id')} activity={a} student={s}
+                            width={this.getActivityColumnWidth(a)}
+                            anyStudentExpanded={anyStudentExpanded}
+                            expanded={expandedActivities.get(a.get('id').toString())}
+                            showFullAnswers={expandedStudents.get(s.get('id').toString())}
+                            progress={studentProgress.getIn([s.get('id').toString(), a.get('id').toString()])}
+                            multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
+                            setQuestionExpanded={setQuestionExpanded}
+                            expandedQuestions={expandedQuestions}
+                          />
+                        )
+                      }
+                    </div>
+                  )
+                })
+              }
+            </div>
           </div>
         </div>
       </div>
