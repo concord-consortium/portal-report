@@ -3,7 +3,13 @@
 
 .dashboard {
   width: 100%;
-  padding: @content-padding;
+  padding: 0;
+  margin: 0;
+
+  .innerContainer {
+    height: 100%;
+    margin: @content-padding;
+  }
 
   .headers {
     display: flex;
@@ -14,13 +20,17 @@
     width: @student-name-width;
     vertical-align: top;
     margin-right: @border-width;
+    flex-basis: content;
   }
 
   .activityHeaders {
-    width: calc(~"100% -" @student-name-width + 2 * @content-padding);
+    max-width: calc(~"100% -" @student-name-width + 2 * @content-padding);
     white-space: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
+    // why scroll? If the scrollbars are visible, and the verticalScrollContainer has a scrollbar, this will ensure
+    // that both headers and verticalScrollContainer have the same width. If scrollbars are hidden (e.g. OS X),
+    // this won't be visible anyway.
+    overflow-y: scroll;
 
     .questionPromptsRow {
       display: flex;
@@ -53,14 +63,15 @@
     vertical-align: top;
     white-space: nowrap;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: auto;
   }
 
   .verticalScrollContainer {
-    width: 100%;
+    max-width: 100%;
+    height: calc(100% - @expanded-question-prompt-max-height - @row-height);
     display: inline-block;
     vertical-align: top;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
   }
 }
