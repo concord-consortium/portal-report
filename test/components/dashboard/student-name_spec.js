@@ -18,7 +18,8 @@ describe('<StudentName />', () => {
 
   it('should call setStudentExpanded when user clicks on it', () => {
     const onClick = sinon.spy()
-    const wrapper = shallow(<StudentName expanded={false} setStudentExpanded={onClick} />)
+    const trackEvent = sinon.spy()
+    const wrapper = shallow(<StudentName expanded={false} setStudentExpanded={onClick} trackEvent={trackEvent} />)
     wrapper.simulate('click')
     expect(onClick.calledOnce).to.equal(true)
   })

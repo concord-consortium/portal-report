@@ -16,7 +16,8 @@ describe('<ExpandStudents />', () => {
     const students = fromJS([{id: 42}])
     const expandedStudents = fromJS({42: false})
     const onClick = sinon.spy()
-    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
+    const trackEvent = sinon.spy()
+    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />)
 
     expect(wrapper.text()).to.equal('Open Students')
     const button = wrapper.find('Button')
@@ -31,8 +32,9 @@ describe('<ExpandStudents />', () => {
     const students = fromJS([{id: 42}, {id: 43}])
     const expandedStudents = fromJS({42: true, 43: false})
     const onClick = sinon.spy()
-    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
-    
+    const trackEvent = sinon.spy()
+    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />)
+
     expect(wrapper.text()).to.equal('Close Students')
     const button = wrapper.find('Button')
     button.simulate('click')
