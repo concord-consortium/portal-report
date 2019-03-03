@@ -8,8 +8,9 @@ export default class SortByDropdown extends PureComponent {
   }
 
   onSortSelected (e) {
-    const { setStudentSort } = this.props
+    const { setStudentSort, trackEvent} = this.props
     setStudentSort(e.target.value)
+    trackEvent('Dashboard', 'Sorted', e.target.value)
   }
 
   render () {

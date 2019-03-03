@@ -10,8 +10,9 @@ export default class ActivityName extends PureComponent {
   }
 
   onActivityNameClick () {
-    const { activity, expanded, setActivityExpanded } = this.props
+    const { activity, expanded, setActivityExpanded, trackEvent } = this.props
     setActivityExpanded(activity.get('id'), !expanded)
+    trackEvent('Dashboard', 'Activity Column Click', activity.get('name'))
   }
 
   render () {

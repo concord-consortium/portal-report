@@ -6,8 +6,10 @@ import css from '../../../css/dashboard/expand-students.less'
 
 class ExpandStudentsButton extends PureComponent {
   handleClick = () => {
-    const { onSetStudentsExpanded, students, anyStudentsExpanded } = this.props
+    const { onSetStudentsExpanded, students, anyStudentsExpanded, trackEvent } = this.props
     onSetStudentsExpanded(students.map(student => student.get('id')), !anyStudentsExpanded)
+    let trackAction = anyStudentsExpanded ? 'Collapsed Students' : 'Expanded Students'
+    trackEvent('Dashboard', trackAction, '')
   }
 
   render () {
@@ -22,16 +24,17 @@ class ExpandStudentsButton extends PureComponent {
 
 export default class ExpandStudents extends PureComponent {
   render () {
-    const { expandedStudents, students, setStudentsExpanded } = this.props
+    const { expandedStudents, students, setStudentsExpanded, trackEvent } = this.props
     const anyStudentsExpanded = expandedStudents.some((isExpanded) => isExpanded)
     return (
       <div className={css.expandStudents}>
         <div className={css.title} />
         <div className={css.buttonCell}>
-          <ExpandStudentsButton 
+          <ExpandStudentsButton
             students={students}
-            onSetStudentsExpanded={setStudentsExpanded} 
-            anyStudentsExpanded={anyStudentsExpanded} />
+            onSetStudentsExpanded={setStudentsExpanded}
+            anyStudentsExpanded={anyStudentsExpanded}
+            trackEvent={trackEvent} />
         </div>
       </div>
     )

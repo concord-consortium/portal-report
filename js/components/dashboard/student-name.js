@@ -10,8 +10,9 @@ export default class StudentName extends PureComponent {
   }
 
   onStudentNameClick () {
-    const { student, studentExpanded, setStudentExpanded } = this.props
+    const { student, studentExpanded, setStudentExpanded, trackEvent } = this.props
     setStudentExpanded(student.get('id'), !studentExpanded)
+    trackEvent('Dashboard', 'Clicked Student Row', '')
   }
 
   render () {
