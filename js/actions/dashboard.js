@@ -10,6 +10,8 @@ export const SORT_BY_LEAST_PROGRESS = 'LEAST_PROGRESS'
 export const SET_QUESTION_EXPANDED = 'SET_QUESTION_EXPANDED'
 export const SELECT_QUESTION = 'SELECT_QUESTION'
 
+export const TRACK_EVENT = 'TRACK_EVENT'
+
 export function setActivityExpanded (activityId, value) {
   return (dispatch, getState) => {
     dispatch({
@@ -85,5 +87,20 @@ export function selectQuestion (value) {
   return {
     type: SELECT_QUESTION,
     value
+  }
+}
+
+export function trackEvent(category, action, label) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: TRACK_EVENT,
+      category,
+      action,
+      label
+    })
+    const clazzName = getState().getIn(['report', 'clazzName'])
+    let labelText = clazzName + ' - ' + label
+    labelText = labelText.replace(/ - $/, '')
+    gtag('event', action, {'event_category': category, 'event_label': labelText})
   }
 }
