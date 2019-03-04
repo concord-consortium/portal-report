@@ -50,11 +50,12 @@ describe('<ActivityQuestions />', () => {
             activity={activity}
             expandedQuestions={expandedQuestions}
             selectQuestion={onClick}
+            trackEvent={onClick}
           />)
         const opener = wrapper.find('[data-cy="expand-question-details"]')
         expect(clickCount).to.eql(0)
         opener.simulate('click')
-        expect(clickCount).to.eql(1)
+        expect(clickCount).to.eql(2)
       })
     })
   })

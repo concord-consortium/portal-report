@@ -42,7 +42,10 @@ export default class ActivityQuestions extends PureComponent {
                       trackEvent('Dashboard', trackAction, trackLabel)
                     }}>
                     <span
-                      onClick={openQuestionDetails}
+                      onClick={(e) => {
+                        openQuestionDetails(e)
+                        trackEvent('Dashboard', 'Opened Question Details', trackLabel)
+                      }}
                       className={css['icomoon-expander']}
                       data-cy='expand-question-details' />
                     Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
