@@ -28,7 +28,7 @@ export default class ActivityQuestions extends PureComponent {
                 e.stopPropagation()
                 selectQuestion(q.get('key'))
               }
-              let trackAction = expanded ? 'Closed Question Column - ' : 'Opened Question Column - '
+              let trackAction = expanded ? 'Collapsed Question - ' : 'Expanded Question - '
               trackAction = trackAction + q.get('type').replace('Embeddable::', '')
               let trackLabel = activity.get('name') + ' - ' + q.get('questionNumber') + '. ' + striptags(q.get('prompt'))
               if (expanded) {
