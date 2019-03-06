@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {
   fetchDataIfNeeded, invalidateData, hideCompareView,
   hideUnselectedQuestions, showUnselectedQuestions, setNowShowing,
-  setAnonymous } from '../../actions/index'
+  setAnonymous, trackEvent } from '../../actions/index'
 import { Modal } from 'react-bootstrap'
 import Header from '../../components/common/header'
 import CompareView from '../../components/report/compare-view'
@@ -35,13 +35,15 @@ class ReportApp extends PureComponent {
   }
 
   renderReport () {
-    const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setNowShowing, setAnonymous } = this.props
+    const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setNowShowing, setAnonymous, trackEvent } = this.props
     return <Report
       report={report}
       reportTree={reportTree}
       hideUnselectedQuestions={hideUnselectedQuestions}
       showUnselectedQuestions={showUnselectedQuestions}
-      setNowShowing={setNowShowing} setAnonymous={setAnonymous}
+      setNowShowing={setNowShowing}
+      setAnonymous={setAnonymous}
+      trackEvent={trackEvent}
     />
   }
 
@@ -96,7 +98,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     showUnselectedQuestions: () => dispatch(showUnselectedQuestions()),
     setNowShowing: value => dispatch(setNowShowing(value)),
     setAnonymous: value => dispatch(setAnonymous(value)),
-    hideCompareView: () => dispatch(hideCompareView())
+    hideCompareView: () => dispatch(hideCompareView()),
+    trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label))
   }
 }
 
