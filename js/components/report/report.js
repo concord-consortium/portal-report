@@ -67,8 +67,27 @@ export default class Report extends PureComponent {
       )
   }
 
+  onShowSelectedClick = () => {
+    const { reportTree, hideUnselectedQuestions, trackEvent } = this.props
+    hideUnselectedQuestions()
+    trackEvent('Report', 'Show Selected Question(s)', reportTree.get('name'))
+  }
+
+  onShowUnselectedClick = () => {
+    const { reportTree, showUnselectedQuestions, trackEvent } = this.props
+    showUnselectedQuestions()
+    trackEvent('Report', 'Show All Questions', reportTree.get('name'))
+  }
+
+  onShowHideNamesClick = (isAnonymous) => {
+    const { reportTree, setAnonymous, trackEvent } = this.props
+    const actionLabel = isAnonymous ? 'Show Student Names' : 'Hide Student Names'
+    trackEvent('Report', actionLabel, '')
+    return setAnonymous(!isAnonymous)
+  }
+
   renderControls () {
-    const { report, hideUnselectedQuestions, showUnselectedQuestions, setAnonymous } = this.props
+    const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setAnonymous, trackEvent } = this.props
     const isAnonymous = report.get('anonymous')
     const nowShowing = report.get('nowShowing')
     const buttonText = (nowShowing === 'class') ? 'Print student reports' : 'Print'
@@ -77,9 +96,9 @@ export default class Report extends PureComponent {
     if (!hideControls) {
       return (
         <div className='controls'>
-          <Button onClick={hideUnselectedQuestions} disabled={!anyQuestionSelected}>Show selected</Button>
-          <Button onClick={showUnselectedQuestions}>Show all</Button>
-          <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
+          <Button onClick={this.onShowSelectedClick} disabled={!anyQuestionSelected}>Show selected</Button>
+          <Button onClick={this.onShowUnselectedClick}>Show all</Button>
+          <Button onClick={() => this.onShowHideNamesClick(isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
           <Button onClick={this.printStudentReports}>{buttonText}</Button>
         </div>
       )
@@ -90,11 +109,12 @@ export default class Report extends PureComponent {
 
   printStudentReports () {
     // Change report style to "per student" style.
-    const { setNowShowing } = this.props
+    const { reportTree, setNowShowing, trackEvent } = this.props
     setNowShowing('student')
     // setTimeout is necessary, as and re-render is async. Not the nicest way, but it's simple and self-contained.
     setTimeout(() => window.print(), 1)
     this.setupAfterPrintListener()
+    trackEvent('Report', 'Print Student Reports', reportTree.get('name'))
   }
 
   afterPrint () {
