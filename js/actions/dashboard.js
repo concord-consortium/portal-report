@@ -89,18 +89,3 @@ export function selectQuestion (value) {
     value
   }
 }
-
-export function trackEvent(category, action, label) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: TRACK_EVENT,
-      category,
-      action,
-      label
-    })
-    const clazzName = getState().getIn(['report', 'clazzName'])
-    let labelText = clazzName + ' - ' + label
-    labelText = labelText.replace(/ - $/, '')
-    gtag('event', action, {'event_category': category, 'event_label': labelText})
-  }
-}

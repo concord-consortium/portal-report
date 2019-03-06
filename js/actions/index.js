@@ -16,6 +16,7 @@ export const UPDATE_FEEDBACK = 'UPDATE_FEEDBACK'
 export const ENABLE_FEEDBACK = 'ENABLE_FEEDBACK'
 export const UPDATE_ACTIVITY_FEEDBACK = 'UPDATE_ACTIVITY_FEEDBACK'
 export const ENABLE_ACTIVITY_FEEDBACK = 'ENABLE_ACTIVITY_FEEDBACK'
+export const TRACK_EVENT = 'TRACK_EVENT'
 
 // When fetch succeeds, receiveData action will be called with the response object (json in this case).
 // REQUEST_DATA action will be processed by the reducer immediately.
@@ -259,5 +260,20 @@ export function enableActivityFeedback (activityId, feedbackFlags, invalidatePre
         actvity_feedback_opts: feedbackSettings
       }
     }
+  }
+}
+
+export function trackEvent(category, action, label) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: TRACK_EVENT,
+      category,
+      action,
+      label
+    })
+    const clazzName = getState().getIn(['report', 'clazzName'])
+    let labelText = clazzName + ' - ' + label
+    labelText = labelText.replace(/ - $/, '')
+    gtag('event', action, {'event_category': category, 'event_label': labelText})
   }
 }

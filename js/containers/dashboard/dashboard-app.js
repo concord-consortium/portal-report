@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
+import { fetchDataIfNeeded, invalidateData, trackEvent } from '../../actions/index'
 import {
   setActivityExpanded,
   setStudentExpanded,
   setStudentsExpanded,
   setQuestionExpanded,
   setStudentSort,
-  selectQuestion,
-  trackEvent
+  selectQuestion
 } from '../../actions/dashboard'
 import Dashboard from '../../components/dashboard/dashboard'
 import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
