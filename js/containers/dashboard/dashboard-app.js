@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
+import { Modal } from 'react-bootstrap'
 import {
   setActivityExpanded,
   setStudentExpanded,
@@ -12,6 +13,7 @@ import {
 import Dashboard from '../../components/dashboard/dashboard'
 import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
 import Header from '../../components/common/header'
+import Button from '../../components/common/button'
 import DataFetchError from '../../components/report/data-fetch-error'
 import LoadingIcon from '../../components/report/loading-icon'
 import { getActivityTrees } from '../../selectors/report-tree'
@@ -27,9 +29,11 @@ class DashboardApp extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
-      initialLoading: true
+      initialLoading: true,
+      helpViewVisible: false
     }
     this.autoRefreshHandler = this.autoRefreshHandler.bind(this)
+    this.toggleHelpModal = this.toggleHelpModal.bind(this)
   }
 
   componentDidMount () {
@@ -67,12 +71,29 @@ class DashboardApp extends PureComponent {
     clearInterval(this.autoRefreshId)
   }
 
+  toggleHelpModal () {
+    this.setState({ helpViewVisible: !this.state.helpViewVisible });
+  }
+
+  renderHelpView () {
+    const { toggleHelpModal } = this.props
+    const helpViewVisible = this.state.helpViewVisible
+    return (
+      <Modal show={helpViewVisible} onHide={toggleHelpModal}>
+        <Modal.Body>
+          <h2>Help</h2>
+          <Button onClick={this.toggleHelpModal}>Close</Button>
+        </Modal.Body>
+      </Modal>
+    )
+  }
+
   render () {
     const { initialLoading } = this.state
     const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion } = this.props
     return (
       <div className={css.dashboardApp}>
-        <Header lastUpdated={lastUpdated} background='#6fc6da' />
+        <Header lastUpdated={lastUpdated} onHelpButtonClick={this.toggleHelpModal} background='#6fc6da' />
         {activityTrees &&
           <div>
             <div className={css.title}>
@@ -96,6 +117,7 @@ class DashboardApp extends PureComponent {
             />
           </div>
         }
+        {this.renderHelpView()}
         {error && <DataFetchError error={error} />}
         {initialLoading && <LoadingIcon />}
       </div>
