@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
-import { Modal } from 'react-bootstrap'
 import {
   setActivityExpanded,
   setStudentExpanded,
@@ -13,7 +12,7 @@ import {
 import Dashboard from '../../components/dashboard/dashboard'
 import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
 import Header from '../../components/common/header'
-import Button from '../../components/common/button'
+import HelpModal from '../../components/dashboard/help-modal'
 import DataFetchError from '../../components/report/data-fetch-error'
 import LoadingIcon from '../../components/report/loading-icon'
 import { getActivityTrees } from '../../selectors/report-tree'
@@ -75,19 +74,6 @@ class DashboardApp extends PureComponent {
     this.setState({ helpViewVisible: !this.state.helpViewVisible });
   }
 
-  renderHelpView () {
-    const { toggleHelpModal } = this.props
-    const helpViewVisible = this.state.helpViewVisible
-    return (
-      <Modal show={helpViewVisible} onHide={toggleHelpModal}>
-        <Modal.Body>
-          <h2>Help</h2>
-          <Button onClick={this.toggleHelpModal}>Close</Button>
-        </Modal.Body>
-      </Modal>
-    )
-  }
-
   render () {
     const { initialLoading } = this.state
     const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion } = this.props
@@ -117,7 +103,7 @@ class DashboardApp extends PureComponent {
             />
           </div>
         }
-        {this.renderHelpView()}
+        <HelpModal toggleHelpModal={this.toggleHelpModal} helpViewVisible={this.state.helpViewVisible}  />
         {error && <DataFetchError error={error} />}
         {initialLoading && <LoadingIcon />}
       </div>
