@@ -28,24 +28,25 @@ export default class RubricBox extends PureComponent {
     rubricChange(newFeedback)
   }
 
-  renderInput(learnerId, critId, checked, ratingId, radioButtonKey) {
+  renderButton (learnerId, critId, checked, ratingId, disabled, radioButtonKey) {
+    const onChange = disabled
+      ? () => {}
+      : (e) => this.updateSelection(e, critId, ratingId)
+
     return (
       <input
         name={`${learnerId}_${critId}`}
         type='radio'
         checked={checked}
         value={ratingId}
-        onChange={(e) => this.updateSelection(e, critId, ratingId)}
+        onChange={onChange}
+        disabled={ disabled && !checked }
         id={radioButtonKey} />
-    );
+    )
   }
 
-  renderCell(learnerId, critId, checked, ratingId, disabled, radioButtonKey) {
-    return (
-      <div className='center'>
-        {disabled ? <span id={radioButtonKey}>N/A</span> : this.renderInput(learnerId, critId, checked, ratingId, radioButtonKey)}
-      </div>
-    );
+  renderNotApplicable (radioButtonKey) {
+    return <span id={radioButtonKey}>N/A</span>
   }
 
   renderLearnerRating (crit, rating, learnerId, rubricFeedback) {
@@ -61,9 +62,15 @@ export default class RubricBox extends PureComponent {
       null
     const isApplicableRating = crit.nonApplicableRatings === undefined ||
                                crit.nonApplicableRatings.indexOf(ratingId) < 0
+    const isNotApplicable = !isApplicableRating
     return (
       <td key={radioButtonKey} title={(disabled || isApplicableRating) ? ratingDescription : "Not Applicable"}>
-        {this.renderCell(learnerId, critId, checked, ratingId, disabled || !isApplicableRating, radioButtonKey)}
+        <div className='center'>
+          { isNotApplicable
+            ? this.renderNotApplicable(radioButtonKey)
+            : this.renderButton(learnerId, critId, checked, ratingId, disabled, radioButtonKey)
+          }
+        </div>
       </td>
     )
   }
