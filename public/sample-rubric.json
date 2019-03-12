@@ -13,10 +13,10 @@
     "criteria": [
         {
             "id": "C1",
-            "description": "Make a claim, _**supported by evidence**_ that indicates that when the population of one organism changes, the pattern of impact on other organisms is based on the types of interactions between the organisms.",
+            "description": "Make a claim, _**supported by evidence**_ that indicates:\n\n\n\n\n\n\n\nlinebreaks now work\n\npopulation of one organism changes, the pattern\n\n1. one\n\n1. two\n\n1. three\n\nof impact on other organisms is based on the types of interactions between the organisms.\n\nLet's try the other kind of bullets:\n\n* One size\n\n* prolly doesn't fit all let's make this very big and long 2nd bullet\n\n* Let's close it all down, shall we?",
             "nonApplicableRatings" : [ "R2" ],
             "ratingDescriptions": {
-                "R1": "Student makes a claim _supported_ by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.",
+                "R1": "Student makes a claim _supported_ by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes. Note that the feedback here is already formated outside the text and that using stuff like line breaks or bullets will conflict with the enclosing styles.",
                 "R2": "Student makes a claim **supported** by evidence that indicates the pattern of impact on either ladybugs or aphids when the population of fire ants changes.",
                 "R3": "Student makes a claim _**not supported**_ by evidence or does not make a claim that indicates the pattern of  impact on EITHER ladybugs or aphids when the population of fire ants changes."
             }
