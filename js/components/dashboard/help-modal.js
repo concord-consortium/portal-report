@@ -12,18 +12,24 @@ export default class HelpModal extends PureComponent {
       <Modal show={helpViewVisible} onHide={toggleHelpModal}>
         <Modal.Body>
           <div className={css.helpContent}>
-          <h2>Help</h2>
-          <ul>
-          <li className="icon"><i className="icomoon-checkmark correct" style={{color: '#2da343'}}></i> Correct Answer</li>
-          <li className="icon"><i className="icomoon-checkmark incorrect" style={{color: '#ea6d2f'}}></i> Incorrect Answer</li>
-          <li className="icon"><i className="icomoon-checkmark2"></i> Answer</li>
-          <li className="icon"><i className="icomoon-file-text"></i> Open Response Answer</li>
-          <li className="genericAnswer"><span style={{color: '#999'}}>⬤</span> Image Answer</li>
-          <li className="questionPrompt"><span className="icomoon-expander"></span> Expand to view question and answer details</li>
-          </ul>
-          <p>The open/close students...</p>
-          <p>Scrolling (two fingers on trackpad tip should be included)...</p>
-
+            <h2>Help</h2>
+            <h3>Navigating the Dashboard</h3>
+            <img className={css.helpNav} src="/img/help/nav.png" alt="Navigating the Dashboard - Use the 'Sort by' menu to sort. Click 'Open Students' to expand the table. Click a column header to expand a column." />
+            <p><strong>NOTE:</strong> Use your mouse or two fingers on your trackpad to scroll.</p>
+            <hr />
+            <h3>Questions &amp; Answers</h3>
+            <div className={css.symbolKey}>
+              <ul className={css.symbolKeyList}>
+                <li className="icon"><i className={[css.helpIcon, css.correct, 'icomoon-checkmark'].join(' ')}></i> Multiple Choice Correct Response</li>
+                <li className="icon"><i className={[css.helpIcon, css.incorrect, 'icomoon-checkmark'].join(' ')}></i> Multiple Choice Incorrect Response</li>
+                <li className="icon"><i className={[css.helpIcon, 'icomoon-checkmark2'].join(' ')}></i> Non-Scored Multiple Choice Response</li>
+              </ul>
+              <ul className={css.symbolKeyList}>
+                <li className="icon"><i className={[css.helpIcon, css.helpExpander, 'icomoon-expander'].join(' ')}></i> Expand Question and Response Details</li>
+                <li className="icon"><i className={[css.helpIcon, 'icomoon-file-text'].join(' ')}></i> Written Response</li>
+                <li className="genericAnswer"><span className={css.snapshot}>⬤</span> Snapshot (expand question to see images)</li>
+              </ul>
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
