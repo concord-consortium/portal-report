@@ -26,6 +26,9 @@ describe('<ExpandStudents />', () => {
     const args = onClick.getCall(0).args
     expect(args[0].toJS()).to.deep.equal([42])
     expect(args[1]).to.equal(true)
+    const trackEventArgs = trackEvent.getCall(0).args
+    expect(trackEventArgs[0]).to.equal('Dashboard')
+    expect(trackEventArgs[1]).to.equal('Opened All Students')
   })
 
   it('should close students if any are open', () => {
@@ -42,5 +45,9 @@ describe('<ExpandStudents />', () => {
     const args = onClick.getCall(0).args
     expect(args[0].toJS()).to.deep.equal([42, 43])
     expect(args[1]).to.equal(false)
+    assert(trackEvent.calledOnce)
+    const trackEventArgs = trackEvent.getCall(0).args
+    expect(trackEventArgs[0]).to.equal('Dashboard')
+    expect(trackEventArgs[1]).to.equal('Closed All Students')
   })
 })

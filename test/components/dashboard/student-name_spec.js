@@ -22,5 +22,6 @@ describe('<StudentName />', () => {
     const wrapper = shallow(<StudentName expanded={false} setStudentExpanded={onClick} trackEvent={trackEvent} />)
     wrapper.simulate('click')
     expect(onClick.calledOnce).to.equal(true)
+    expect(trackEvent.calledOnce).to.equal(true)
   })
 })
