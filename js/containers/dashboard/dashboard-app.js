@@ -83,7 +83,7 @@ class DashboardApp extends PureComponent {
         {activityTrees &&
           <div>
             <div className={css.title}>
-              <h1>Report for { clazzName }</h1>
+              <h1>Dashboard for { clazzName }</h1>
               <SortByDropdown setStudentSort={setStudentSort} />
             </div>
             <Dashboard
