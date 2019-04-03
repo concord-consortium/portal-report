@@ -69,7 +69,7 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props
+    const { error, clazzName, clazzId, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} background='#6fc6da' />

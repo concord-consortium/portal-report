@@ -1000,6 +1000,7 @@
     ]
   },
   "class": {
+    "id": 3,
     "name": "Test Class",
     "students": [
       {

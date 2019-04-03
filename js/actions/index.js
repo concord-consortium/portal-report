@@ -271,8 +271,8 @@ export function trackEvent(category, action, label) {
       action,
       label
     })
-    const clazzName = getState().getIn(['report', 'clazzName'])
-    let labelText = clazzName + ' - ' + label
+    const clazzId = getState().getIn(['report', 'clazzId'])
+    let labelText = 'Class ID: ' + clazzId + ' - ' + label
     labelText = labelText.replace(/ - $/, '')
     gtag('event', action, {'event_category': category, 'event_label': labelText})
   }

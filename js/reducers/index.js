@@ -126,6 +126,7 @@ function report (state = INITIAL_REPORT_STATE, action) {
         .set('questions', Immutable.fromJS(data.entities.questions))
         .set('answers', Immutable.fromJS(data.entities.answers))
         .set('clazzName', data.result.class.name)
+        .set('clazzId', data.result.class.id)
         .set('hideSectionNames', data.result.isOfferingExternal)
         .set('type', data.type)
         .set('nowShowing', data.type)
