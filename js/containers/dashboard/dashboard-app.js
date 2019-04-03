@@ -12,6 +12,7 @@ import {
 import Dashboard from '../../components/dashboard/dashboard'
 import SortByDropdown from '../../components/dashboard/sort-by-dropdown'
 import Header from '../../components/common/header'
+import HelpModal from '../../components/dashboard/help-modal'
 import DataFetchError from '../../components/report/data-fetch-error'
 import LoadingIcon from '../../components/report/loading-icon'
 import { getActivityTrees } from '../../selectors/report-tree'
@@ -27,9 +28,11 @@ class DashboardApp extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
-      initialLoading: true
+      initialLoading: true,
+      helpViewVisible: false
     }
     this.autoRefreshHandler = this.autoRefreshHandler.bind(this)
+    this.toggleHelpModal = this.toggleHelpModal.bind(this)
   }
 
   componentDidMount () {
@@ -67,17 +70,21 @@ class DashboardApp extends PureComponent {
     clearInterval(this.autoRefreshId)
   }
 
+  toggleHelpModal () {
+    this.setState({ helpViewVisible: !this.state.helpViewVisible });
+  }
+
   render () {
     const { initialLoading } = this.state
     const { error, clazzName, clazzId, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props
     return (
       <div className={css.dashboardApp}>
-        <Header lastUpdated={lastUpdated} background='#6fc6da' />
+        <Header lastUpdated={lastUpdated} onHelpButtonClick={this.toggleHelpModal} background='#6fc6da' />
         {activityTrees &&
           <div>
             <div className={css.title}>
-              <h1>Report for { clazzName }</h1>
-              <SortByDropdown setStudentSort={setStudentSort} trackEvent={trackEvent} />
+              <h1>Dashboard for { clazzName }</h1>
+              <SortByDropdown setStudentSort={setStudentSort} />
             </div>
             <Dashboard
               activities={activityTrees}
@@ -97,6 +104,7 @@ class DashboardApp extends PureComponent {
             />
           </div>
         }
+        <HelpModal toggleHelpModal={this.toggleHelpModal} helpViewVisible={this.state.helpViewVisible}  />
         {error && <DataFetchError error={error} />}
         {initialLoading && <LoadingIcon />}
       </div>

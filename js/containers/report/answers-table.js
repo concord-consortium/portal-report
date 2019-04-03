@@ -13,11 +13,10 @@ class AnswersTable extends PureComponent {
   }
 
   render () {
-    const {question, answers, hidden, showCompare} = this.props
+    const {question, answers, hidden, showCompare, anonymous} = this.props
     const getLatestFeedback = this.getLatestFeedback.bind(this)
-    const anonymous = this.props.anonymous
-    const scoreEnabled = (!anonymous) && question.get('scoreEnabled')
-    const feedbackEnabled = (!anonymous) && question.get('feedbackEnabled')
+    const scoreEnabled = (!anonymous) && question && question.get('scoreEnabled')
+    const feedbackEnabled = (!anonymous) && question && question.get('feedbackEnabled')
     const feedbackTH = feedbackEnabled ? <th>Feedback</th> : null
     const scoreTH = scoreEnabled ? <th>Score</th> : null
     const selectTH = showCompare ? <th className='select-header'>Select</th> : null

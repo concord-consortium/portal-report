@@ -12,9 +12,11 @@ export default class RubricBoxForStudent extends PureComponent {
       <tr className='criterion' key={f.key}>
         <td className='description'><Markdown>{f.description}</Markdown></td>
         <td className='rating'>
-          <span className='rating-label'>{f.label}</span>
           <Markdown>
-            { rubric.showRatingDescriptions && ` - ${f.ratingDescription}` }
+            { rubric.showRatingDescriptions
+              ? `${f.label.toUpperCase()} – ${f.ratingDescription}`
+              : f.label.toUpperCase()
+            }
           </Markdown>
         </td>
       </tr>
