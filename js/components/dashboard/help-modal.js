@@ -14,7 +14,7 @@ export default class HelpModal extends PureComponent {
           <div className={css.helpContent}>
             <h2>Help</h2>
             <h3>Navigating the Dashboard</h3>
-            <img className={css.helpNav} src="/img/help/nav.png" alt="Navigating the Dashboard - Use the 'Sort by' menu to sort. Click 'Open Students' to expand the table. Click a column header to expand a column." />
+            <img className={css.helpNav} src="../../../img/help/nav.png" alt="Navigating the Dashboard - Use the 'Sort by' menu to sort. Click 'Open Students' to expand the table. Click a column header to expand a column." />
             <p><strong>NOTE:</strong> Use your mouse or two fingers on your trackpad to scroll.</p>
             <hr />
             <h3>Questions &amp; Answers</h3>
