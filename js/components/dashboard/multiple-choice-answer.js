@@ -76,7 +76,7 @@ export default class MultipleChoiceAnswer extends PureComponent {
       icon = answer.get("correct") ? CORRECT_ICON : INCORRECT_ICON;
     }
     return (
-      <div className={css.icon}>
+      <div className={css.icon} data-cy='multipleChoiceIcon'>
         <i className={icon} />
       </div>
     );
@@ -87,7 +87,7 @@ export default class MultipleChoiceAnswer extends PureComponent {
     const choices = question.get("choices");
     const studentChoices = answer.get("selectedChoices");
     return (
-      <div>
+      <div data-cy='multipleChoiceAnswers'>
         {
           choices.map(choice =>
             <Choice key={choice.get("id")} choice={choice} correctAnswerDefined={question.get("scored")}
