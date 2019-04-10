@@ -16,6 +16,18 @@ class Dashboard {
     getExpandQuestionDetails () {
         return getByCypressTag('expand-question-details')
     }
+    getMultipleChoiceAnswerDetails() {
+        return getByCypressTag('multiple-choice-details')
+    }
+    getMultipleChoiceAnswerTable() {
+        return getByCypressTag('multiple-choice-answers-table')
+    }
+    getActivityQuestions() {
+        return getByCypressTag('activityQuestions')
+    }
+    getShowHideResponse() {
+        return cy.get('.modal-body').find('.cc-button')
+    }
     //Every Student Row
     getStudentAnswersRow () {
         return getByCypressTag('studentAnswersRow')
@@ -63,6 +75,12 @@ class Dashboard {
 
     getOpenCloseStudents () {
         return getByCypressTag('openCloseStudents').find('a')
+    }
+    getCloseExpandedQuestion() {
+        return cy.get('.modal-footer > .cc-button')
+    }
+    getExpandedQuestionPanel() {
+        return cy.get('div.modal-content')
     }
 }
 

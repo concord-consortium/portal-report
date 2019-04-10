@@ -21,7 +21,7 @@ class AnswersTable extends PureComponent {
     const scoreTH = scoreEnabled ? <th>Score</th> : null
     const selectTH = showCompare ? <th className='select-header'>Select</th> : null
     return (
-      <table className={`answers-table ${hidden ? 'hidden' : ''}`}>
+      <table className={`answers-table ${hidden ? 'hidden' : ''}`} data-cy="multiple-choice-answers-table">
         <tbody>
           <tr>
             <th className='student-header'>Student</th>

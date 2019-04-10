@@ -35,7 +35,8 @@ export default class ActivityQuestions extends PureComponent {
                     className={headerClassName}
                     onClick={() => {
                       setQuestionExpanded(q.get('id'), false)
-                    }}>
+                    }}
+                    data-cy="activityQuestions">
                     <span
                       onClick={openQuestionDetails}
                       className={css['icomoon-expander']}

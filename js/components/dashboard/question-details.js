@@ -33,7 +33,7 @@ export default class QuestionDetails extends PureComponent {
         <Modal.Body>
           <div
             className={css.question} >
-            <div dangerouslySetInnerHTML={{ __html: prompt }} />
+            <div dangerouslySetInnerHTML={{ __html: prompt }} data-cy='show-hide-responses' />
             { selectedQuestion !== null ? <ReportQuestionDetails question={selectedQuestion} /> : null }
             <Button onClick={this.toggleAnswersVisibility}>
               {answersVisible ? 'Hide responses' : 'Show responses'}

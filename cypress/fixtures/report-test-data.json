@@ -3,10 +3,16 @@
     "name": "Test Class",
     "activity": {
       "activityName":"Test Activity 1: Constructing an argument: climate as imported with long title",
+      "questionTotal": 2,
       "questions": [
         {
-          "Q1": "In this activity, you will use a computer model to explore what happens to the Sun’s energy when it strikes Earth. What happens when sunlight strikes Earth? Sunlight is constantly falling on Earth. At the same time, Earth is losing energy to the cold emptiness of outer space.",
-          "Q2": "why does ..."
+          "Q1": "What happens when sunlight strikes Earth?",
+          "correctTotal": "2",
+          "studentScore": "10"
+        },
+        {
+          "Q2": "why does ...",
+          "correctTotal": "0"
         }
       ]
     },
