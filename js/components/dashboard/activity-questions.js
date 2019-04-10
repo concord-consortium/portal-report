@@ -38,9 +38,10 @@ export default class ActivityQuestions extends PureComponent {
                     key={q.get("id")}
                     className={headerClassName}
                     onClick={() => {
-                      setQuestionExpanded(q.get("id"), false);
+                      setQuestionExpanded(q.get('id'), false);
                       trackEvent("Dashboard", trackAction, trackLabel);
-                    }}>
+                    }}
+                    data-cy="activityQuestions">
                     <span
                       onClick={(e) => {
                         openQuestionDetails(e);

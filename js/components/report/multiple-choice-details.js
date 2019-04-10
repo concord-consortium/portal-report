@@ -35,7 +35,7 @@ export default class MultipleChoiceDetails extends PureComponent {
   render() {
     const stats = getChoicesStats(this.choices, this.props.answers.toJS(), this.props.students.toJS());
     return (
-      <table className="multiple-choice-details">
+      <table className='multiple-choice-details' data-cy="multiple-choice-details">
         <tbody>
           {this.choices.map((choiceDesc, idx) => {
             const { id, content, correct } = choiceDesc;
