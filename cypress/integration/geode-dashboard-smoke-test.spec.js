@@ -99,36 +99,24 @@ context('Geode Dashboard Smoke Test', () => {
                 const a1q1Text = activity.questions[0].Q1
                 const a1q2Text = activity.questions[1].Q2
                 const a1QuestionTotal = activity.questionTotal
-                const correctTotal = activity.questionTotal
-                const studentScore = activity.questions[0].studentScore
                 dashboard.getExpandQuestionDetails()
                     .should('exist')
                     .and('be.visible')
                     .and('have.length', a1QuestionTotal)
-                dashboard.getActivityQuestions()
+                dashboard.getActivityQuestionsText()
                     .should('contain', a1q1Text)
-                dashboard.getActivityQuestions()
+                dashboard.getActivityQuestionsText()
                     .should('contain', a1q2Text)
-                dashboard.getMultipleChoiceAnswerDetails()
+                dashboard.getExpandedMCAnswerDetails()
                     .should('not.be.visible')
                     .and('not.exist')
                 dashboard.getExpandQuestionDetails().eq(0)
                     .click({ force: true })
-                dashboard.getMultipleChoiceAnswerDetails()
+                dashboard.getExpandedQuestionPanel()
+                    .should('be.visible')
+                dashboard.getExpandedMCAnswerDetails()
                     .should('be.visible')
                     .and('exist')
-                    .and('contain', correctTotal)
-                dashboard.getMultipleChoiceAnswerTable()
-                    .should('not.exist')
-                    .and('not.be.visible')
-                dashboard.getShowHideResponse()
-                    .should('exist')
-                    .click({ force: true })
-                    .then(() => {
-                        dashboard.getMultipleChoiceAnswerTable()
-                            .should('exist')
-                            .and('contain', studentScore)
-                    })
                 dashboard.getCloseExpandedQuestion()
                     .should('exist')
                     .click({ force: true })
@@ -142,7 +130,7 @@ context('Geode Dashboard Smoke Test', () => {
                 .click({force:true})
             dashboard.getActivityName().last()
                 .scrollIntoView({ duration: 2000 })
-                
+
         })
         it('can contract activity questions', () => {
             dashboard.getProgressBar()
@@ -160,19 +148,84 @@ context('Geode Dashboard Smoke Test', () => {
 
         })
         it('can expand question', () => {
-
+            dashboard.getActivityName().eq(0)
+                .click({force:true})
+            cy.get('@classData').then((classData) => {
+                const activityNumCount = classData.class.activity.questionTotal
+                dashboard.getActivityQuestions()
+                .should('exist')
+                .and('have.length', activityNumCount)
+            })
+            dashboard.getActivityQuestionsText()
+                .should('not.be.visible')
+            dashboard.getActivityQuestions().eq(0)
+                .click({force:true})
+            dashboard.getActivityQuestionsText()
+                .should('be.visible')
+            dashboard.getActivityQuestionsText().eq(0)
+                .click({force:true})
+            dashboard.getActivityQuestionsText()
+                .should('not.be.visible')
         })
     })
 
     describe('Expanded Question dialog', () => {
         it('show responses', () => {
-
+            dashboard.getOpenCloseStudents()
+                .click({force:true})
+            dashboard.getExpandQuestionDetails().eq(0)
+                .click({force:true})
+            cy.get('@classData').then((classData) => {
+                const activity = classData.class.activity
+                const correctTotal = activity.questionTotal
+                const studentScore = activity.questions[0].studentScore
+                dashboard.getExpandedMCAnswerDetails()
+                    .should('be.visible')
+                    .and('exist')
+                    .and('contain', correctTotal)
+                dashboard.getExpandedMCAnswerTable()
+                    .should('not.exist')
+                    .and('not.be.visible')
+                dashboard.getShowHideResponse()
+                    .should('exist')
+                    .click({ force: true })
+                    .then(() => {
+                        dashboard.getExpandedMCAnswerTable()
+                            .should('exist')
+                            .and('contain', studentScore)
+                    })
+                })
+                dashboard.getCloseExpandedQuestion()
+                    .should('exist')
+                    .click({ force: true })
+                dashboard.getExpandedQuestionPanel()
+                    .should('not.be.visible')
         })
         it('hide responses', () => {
-
-        })
-        it('close dialog', () => {
-
+            dashboard.getOpenCloseStudents()
+                .click({force:true})
+            dashboard.getExpandedMCAnswerTable()
+                .should('not.be.visible')
+                .and('not.exist')
+            dashboard.getExpandQuestionDetails().eq(0)
+                .click({force:true})
+            cy.get('@classData').then((classData) => {
+                const activity = classData.class.activity
+                const studentScore = activity.questions[0].studentScore
+                dashboard.getShowHideResponse()
+                    .should('exist')
+                    .click({ force: true })
+                    .then(() => {
+                        dashboard.getExpandedMCAnswerTable()
+                            .should('exist')
+                            .and('contain', studentScore)
+                    })
+                })
+                dashboard.getShowHideResponse()
+                    .should('exist')
+                    .click({ force: true })
+                dashboard.getExpandedMCAnswerTable()
+                    .should('not.exist')
         })
     })
 })

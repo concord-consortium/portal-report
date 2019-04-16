@@ -42,7 +42,7 @@ export default class QuestionDetails extends PureComponent {
           </div>
         </Modal.Body>
         <Modal.Footer style={{display: 'flex', justifyContent: 'center'}}>
-          <Button onClick={onClose}>
+          <Button onClick={onClose} data-cy="close-panel">
             Close
           </Button>
         </Modal.Footer>
