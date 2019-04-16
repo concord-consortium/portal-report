@@ -4,84 +4,77 @@ class Dashboard {
 
     answersOpen = 'dashboard--fullAnswers--1-gA5Yaq'
 
-    //Every answer
-    getActivityAnswers () {
-        return getByCypressTag('activityAnswers')
-    }
-    //Every activity title
-    getActivityName () {
-        return getByCypressTag('activityName')
-    }
-    //Every expand icon for student answers
-    getExpandQuestionDetails () {
-        return getByCypressTag('expand-question-details')
-    }
-    getMultipleChoiceAnswerDetails() {
-        return getByCypressTag('multiple-choice-details')
-    }
-    getMultipleChoiceAnswerTable() {
-        return getByCypressTag('multiple-choice-answers-table')
-    }
-    getActivityQuestions() {
-        return getByCypressTag('activityQuestions')
-    }
-    getShowHideResponse() {
-        return cy.get('.modal-body').find('.cc-button')
-    }
-    //Every Student Row
-    getStudentAnswersRow () {
-        return getByCypressTag('studentAnswersRow')
-    }
-    //Sort dropdown button/menu
+    //Sort, Help, and Open/Close Students
     getSortDropdown () {
         return getByCypressTag('sortDropdown')
     }
-    //Every student name
+    getHelpPanel () {
+        return getByCypressTag('helpPanel')
+    }
+    getOpenCloseStudents () {
+        return getByCypressTag('openCloseStudents').find('a')
+    }
+
+    //Students
     getStudentNames () {
         return getByCypressTag('studentName')
     }
-
-    getFeedbackBox () {
-        return getByCypressTag('feedbackBox')
+    getStudentAnswersRow () {
+        return getByCypressTag('studentAnswersRow')
     }
-
-    getFeedbackButton () {
-        return getByCypressTag('feedbackButton')
-    }
-
     getProgressBar () {
         return getByCypressTag('progressBar')
     }
-
-    getOpenResponseIcon () {
-        return getByCypressTag('openResponseIcon')
-    }
-
     getOpenResponseText () {
         return getByCypressTag('openResponseText')
-    }
-
-    getMultipleChoiceIcon () {
-        return getByCypressTag('multipleChoiceIcon')
     }
 
     getMultipleChoiceAnswers () {
         return getByCypressTag('multipleChoiceAnswers')
     }
 
-    getHelpPanel () {
-        return getByCypressTag('helpPanel')
+    //Icons
+    getOpenResponseIcon () {
+        return getByCypressTag('openResponseIcon')
     }
-
-    getOpenCloseStudents () {
-        return getByCypressTag('openCloseStudents').find('a')
+    getMultipleChoiceIcon () {
+        return getByCypressTag('multipleChoiceIcon')
+    }
+    
+    //Expand Question
+    getExpandedQuestionPanel() {
+        return cy.get('div.modal-content')
+    }
+    getExpandQuestionDetails () {
+        return getByCypressTag('expand-question-details')
+    }
+    getExpandedMCAnswerDetails() {
+        return getByCypressTag('multiple-choice-details')
+    }
+    getExpandedMCAnswerTable() {
+        return getByCypressTag('multiple-choice-answers-table')
+    }
+    getShowHideResponse() {
+        return cy.get('.modal-body').find('.cc-button')
     }
     getCloseExpandedQuestion() {
         return cy.get('.modal-footer > .cc-button')
     }
-    getExpandedQuestionPanel() {
-        return cy.get('div.modal-content')
+
+    //Activity Info
+    getActivityQuestions() {
+        return getByCypressTag('activity-question-toggle')
     }
+    getActivityQuestionsText() {
+        return getByCypressTag('activityQuestionsText')
+    }
+    getActivityAnswers () {
+        return getByCypressTag('activityAnswers')
+    }
+    getActivityName () {
+        return getByCypressTag('activityName')
+    }
+    
 }
 
 export default Dashboard;
