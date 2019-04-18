@@ -128,7 +128,7 @@ export default class Dashboard extends PureComponent {
       activities, students, studentProgress, expandedStudents,
       expandedActivities, setActivityExpanded, setStudentExpanded,
       setStudentsExpanded, setQuestionExpanded, expandedQuestions,
-      selectedQuestion, selectQuestion
+      selectedQuestion, selectQuestion, trackEvent
     } = this.props
     const anyStudentExpanded = expandedStudents.includes(true)
     const anyQuestionExpanded = expandedQuestions.includes(true)
@@ -142,7 +142,7 @@ export default class Dashboard extends PureComponent {
             onClose={this.selectNoQuestions}
           />
           <div className={css.headers}>
-            <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} />
+            <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />
             <div ref={el => { this.activityHeaders = el }} className={css.activityHeaders}>
               <div>
                 {
@@ -151,7 +151,7 @@ export default class Dashboard extends PureComponent {
                       activity={a}
                       width={this.getActivityColumnWidth(a)}
                       number={number + 1}
-                      expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} />
+                      expanded={expandedActivities.get(a.get('id').toString())} setActivityExpanded={setActivityExpanded} trackEvent={trackEvent} />
                   )
                 }
               </div>
@@ -168,6 +168,7 @@ export default class Dashboard extends PureComponent {
                       setQuestionExpanded={setQuestionExpanded}
                       expandedQuestions={expandedQuestions}
                       selectQuestion={selectQuestion}
+                      trackEvent={trackEvent}
                     />
                   )
                 }
@@ -187,7 +188,8 @@ export default class Dashboard extends PureComponent {
                       student={s}
                       studentExpanded={studentExpanded}
                       expanded={expanded}
-                      setStudentExpanded={setStudentExpanded} />
+                      setStudentExpanded={setStudentExpanded}
+                      trackEvent={trackEvent} />
                   )
                 })
               }

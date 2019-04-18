@@ -17,7 +17,7 @@ describe('<ActivityName />', () => {
   })
   it('should call setActivityExpanded when user clicks on it', () => {
     const onClick = sinon.spy()
-    const wrapper = shallow(<ActivityName setActivityExpanded={onClick} />)
+    const wrapper = shallow(<ActivityName setActivityExpanded={onClick} trackEvent={onClick} />)
     wrapper.simulate('click')
     expect(onClick.firstCall.calledWith()).to.equal(true)
   })

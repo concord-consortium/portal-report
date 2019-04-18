@@ -16,7 +16,8 @@ describe('<ExpandStudents />', () => {
     const students = fromJS([{id: 42}])
     const expandedStudents = fromJS({42: false})
     const onClick = sinon.spy()
-    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
+    const trackEvent = sinon.spy()
+    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />)
 
     expect(wrapper.text()).to.equal('Open Students')
     const button = wrapper.find('Button')
@@ -25,14 +26,18 @@ describe('<ExpandStudents />', () => {
     const args = onClick.getCall(0).args
     expect(args[0].toJS()).to.deep.equal([42])
     expect(args[1]).to.equal(true)
+    const trackEventArgs = trackEvent.getCall(0).args
+    expect(trackEventArgs[0]).to.equal('Dashboard')
+    expect(trackEventArgs[1]).to.equal('Opened All Students')
   })
 
   it('should close students if any are open', () => {
     const students = fromJS([{id: 42}, {id: 43}])
     const expandedStudents = fromJS({42: true, 43: false})
     const onClick = sinon.spy()
-    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} />)
-    
+    const trackEvent = sinon.spy()
+    const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />)
+
     expect(wrapper.text()).to.equal('Close Students')
     const button = wrapper.find('Button')
     button.simulate('click')
@@ -40,5 +45,9 @@ describe('<ExpandStudents />', () => {
     const args = onClick.getCall(0).args
     expect(args[0].toJS()).to.deep.equal([42, 43])
     expect(args[1]).to.equal(false)
+    assert(trackEvent.calledOnce)
+    const trackEventArgs = trackEvent.getCall(0).args
+    expect(trackEventArgs[0]).to.equal('Dashboard')
+    expect(trackEventArgs[1]).to.equal('Closed All Students')
   })
 })

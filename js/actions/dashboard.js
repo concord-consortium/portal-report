@@ -10,6 +10,8 @@ export const SORT_BY_LEAST_PROGRESS = 'LEAST_PROGRESS'
 export const SET_QUESTION_EXPANDED = 'SET_QUESTION_EXPANDED'
 export const SELECT_QUESTION = 'SELECT_QUESTION'
 
+export const TRACK_EVENT = 'TRACK_EVENT'
+
 export function setActivityExpanded (activityId, value) {
   return (dispatch, getState) => {
     dispatch({

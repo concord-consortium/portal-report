@@ -43,7 +43,7 @@ describe('<Dashboard />', () => {
 
   it('synchronizes width of activity name, question prompts and activity answers', () => {
     const students = fromJS([ { id: 1 } ])
-    const activities = fromJS({ 1: { id: 1, visible: true, questions: [ { id: 1, visible: true }, { id: 1, visible: true } ] }, 2: { id: 2, visible: true } })
+    const activities = fromJS({ 1: { id: 1, visible: true, questions: [ { id: 1, visible: true, type: 'Embeddable:MultipleChoice' }, { id: 1, visible: true, type: 'Embeddable:MultipleChoice' } ] }, 2: { id: 2, visible: true, type: 'Embeddable:MultipleChoice' } })
     const expandedActivities = fromJS({ 1: true }) // expand the first activity
     const wrapper = mount(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />)
 
@@ -62,8 +62,8 @@ describe('<Dashboard />', () => {
     // This setup includes two expanded activities. One has more questions, but they both have the same number of
     // visible questions, so widths should be equal.
     const activities = fromJS({
-      1: { id: 1, visible: true, questions: [ { id: 1, visible: true }, { id: 1, visible: true } ] },
-      2: { id: 2, visible: true, questions: [ { id: 1, visible: true }, { id: 1, visible: true }, { id: 1, visible: false } ] }
+      1: { id: 1, visible: true, questions: [ { id: 1, visible: true, type: 'Embeddable:MultipleChoice' }, { id: 1, visible: true, type: 'Embeddable:MultipleChoice' } ] },
+      2: { id: 2, visible: true, questions: [ { id: 1, visible: true, type: 'Embeddable:MultipleChoice' }, { id: 1, visible: true, type: 'Embeddable:MultipleChoice' }, { id: 1, visible: false, type: 'Embeddable:MultipleChoice' } ] }
     })
     const expandedActivities = fromJS({ 1: true, 2: true })
     const wrapper = mount(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />)
@@ -79,7 +79,7 @@ describe('<Dashboard />', () => {
   describe('the question details modal box', () => {
     const students = fromJS([ { id: 1 } ])
     const activities = fromJS({
-      1: { id: 1, visible: true, questions: [ { id: 1, visible: true }, { id: 2, visible: true } ] }
+      1: { id: 1, visible: true, questions: [ { id: 1, visible: true, type: 'Embeddable:MultipleChoice' }, { id: 2, visible: true, type: 'Embeddable:MultipleChoice' } ] }
     })
     const expandedActivities = fromJS({ 1: true })
 

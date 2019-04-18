@@ -9,8 +9,8 @@ describe('<ActivityQuestions />', () => {
   const prompt1 = '1st question prompt'
   const prompt2 = '2nd question prompt (not visible)'
   const activity = fromJS({ questions: [
-    { id: 1, visible: true, prompt: prompt1, questionNumber: '1' },
-    { id: 2, visible: false, prompt: prompt2, questionNumber: '2' }
+    { id: 1, visible: true, prompt: prompt1, questionNumber: '1', type: 'Embeddable::MultipleChoice' },
+    { id: 2, visible: false, prompt: prompt2, questionNumber: '2', type: 'Embeddable::MultipleChoice' }
   ]})
   const expandedQuestions = fromJS({})
   describe('when activity is expanded', () => {
@@ -50,11 +50,12 @@ describe('<ActivityQuestions />', () => {
             activity={activity}
             expandedQuestions={expandedQuestions}
             selectQuestion={onClick}
+            trackEvent={onClick}
           />)
         const opener = wrapper.find('[data-cy="expand-question-details"]')
         expect(clickCount).to.eql(0)
         opener.simulate('click')
-        expect(clickCount).to.eql(1)
+        expect(clickCount).to.eql(2)
       })
     })
   })

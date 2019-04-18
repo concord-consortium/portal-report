@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { fetchDataIfNeeded, invalidateData } from '../../actions/index'
+import { fetchDataIfNeeded, invalidateData, trackEvent } from '../../actions/index'
 import {
   setActivityExpanded,
   setStudentExpanded,
@@ -76,7 +76,7 @@ class DashboardApp extends PureComponent {
 
   render () {
     const { initialLoading } = this.state
-    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion } = this.props
+    const { error, clazzName, clazzId, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} onHelpButtonClick={this.toggleHelpModal} background='#6fc6da' />
@@ -100,6 +100,7 @@ class DashboardApp extends PureComponent {
               setStudentSort={setStudentSort}
               selectedQuestion={selectedQuestion}
               selectQuestion={selectQuestion}
+              trackEvent={trackEvent}
             />
           </div>
         }
@@ -139,7 +140,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setStudentsExpanded: (studentIds, value) => dispatch(setStudentsExpanded(studentIds, value)),
     setQuestionExpanded: (studentId, value) => dispatch(setQuestionExpanded(studentId, value)),
     setStudentSort: (value) => dispatch(setStudentSort(value)),
-    selectQuestion: (value) => dispatch(selectQuestion(value))
+    selectQuestion: (value) => dispatch(selectQuestion(value)),
+    trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label))
   }
 }
 

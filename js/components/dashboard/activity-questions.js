@@ -8,12 +8,13 @@ export default class ActivityQuestions extends PureComponent {
     const {
       activity, expanded, showFullPrompts,
       width, multChoiceSummary, setQuestionExpanded,
-      expandedQuestions
+      expandedQuestions, trackEvent
     } = this.props
 
     const selectQuestion = this.props.selectQuestion
 
     const headerSummaryClassName = css.questionPrompt + ' ' + css.multChoiceSummary + ' ' + (showFullPrompts ? css.fullPrompt : '')
+
     return (
       <div className={css.activityQuestions} style={{minWidth: width, width}}>
         <div className={css.content}>
@@ -27,6 +28,9 @@ export default class ActivityQuestions extends PureComponent {
                 e.stopPropagation()
                 selectQuestion(q.get('key'))
               }
+              let trackAction = expanded ? 'Collapsed Question - ' : 'Expanded Question - '
+              trackAction = trackAction + q.get('type').replace('Embeddable::', '')
+              let trackLabel = activity.get('name') + ' - ' + q.get('questionNumber') + '. ' + striptags(q.get('prompt'))
               if (expanded) {
                 const headerClassName = `${css.questionPrompt} ${css.fullPrompt}`
                 return (
@@ -35,9 +39,13 @@ export default class ActivityQuestions extends PureComponent {
                     className={headerClassName}
                     onClick={() => {
                       setQuestionExpanded(q.get('id'), false)
+                      trackEvent('Dashboard', trackAction, trackLabel)
                     }}>
                     <span
-                      onClick={openQuestionDetails}
+                      onClick={(e) => {
+                        openQuestionDetails(e)
+                        trackEvent('Dashboard', 'Opened Question Details', trackLabel)
+                      }}
                       className={css['icomoon-expander']}
                       data-cy='expand-question-details' />
                     Q{ q.get('questionNumber') }. { striptags(q.get('prompt')) }
@@ -51,6 +59,7 @@ export default class ActivityQuestions extends PureComponent {
                     className={headerClassName}
                     onClick={() => {
                       setQuestionExpanded(q.get('id'), true)
+                      trackEvent('Dashboard', trackAction, trackLabel)
                     }}>
                     Q{ q.get('questionNumber') }.
                   </div>
