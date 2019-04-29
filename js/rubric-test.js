@@ -1,7 +1,7 @@
 import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom'
-import RubricTest from './containers/report/rubric-test'
+import RubricTest from './containers/authoring/rubric-test'
 
 render(
   <RubricTest />,
