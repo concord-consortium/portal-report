@@ -1,4 +1,8 @@
 sudo: false
+addons:
+  apt:
+    packages:
+    - libgconf-2-4
 language:
   - node_js
   - ruby

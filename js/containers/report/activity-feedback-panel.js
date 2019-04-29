@@ -5,7 +5,9 @@ import FeedbackFilter from '../../components/report/feedback-filter'
 import FeedbackOverview from '../../components/report/feedback-overview'
 import ActivityFeedbackOptions from '../../components/report/activity-feedback-options'
 import ActivityFeedbackRow from '../../components/report/activity-feedback-row'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
+// TODO: Figure out how to use new TransitionGroups …
+// TODO: See  https://reactcommunity.org/react-transition-group/transition-group
 import { connect } from 'react-redux'
 import { updateActivityFeedback, enableActivityFeedback } from '../../actions/index'
 
@@ -169,27 +171,35 @@ class ActivityFeedbackPanel extends PureComponent {
             <div className='feedback-rows-wrapper'>
               { showGettingStarted ? this.renderGettingStarted() : ''}
               <div className='feedback-for-students'>
-                <ReactCSSTransitionGroup transitionName='answer' transitionEnterTimeout={400} transitionLeaveTimeout={300}>
+                <TransitionGroup classNames='answer'>
                   { filteredFeedbacks.map((studentActivityFeedback, i) => {
                     const studentId = studentActivityFeedback.get('studentId')
-                    return <ActivityFeedbackRow
-                      studentActivityFeedback={studentActivityFeedback}
-                      activityFeedbackId={activityFeedbackId}
-                      key={`${activityFeedbackId}-${studentId}`}
-                      ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row }}
-                      scoreType={scoreType}
-                      autoScore={autoScores.get(studentId)}
-                      feedbackEnabled={showText}
-                      useRubric={useRubric}
-                      activityId={activityId}
-                      rubric={rubric}
-                      maxScore={maxScore}
-                      updateFeedback={this.props.updateActivityFeedback}
-                      showOnlyNeedReview={this.state.showOnlyNeedReview}
-                    />
+                    return (
+                      <CSSTransition
+                        key={i}
+                        timeout={500}
+                        classNames='answer'
+                      >
+                        <ActivityFeedbackRow
+                          studentActivityFeedback={studentActivityFeedback}
+                          activityFeedbackId={activityFeedbackId}
+                          key={`${activityFeedbackId}-${studentId}`}
+                          ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row }}
+                          scoreType={scoreType}
+                          autoScore={autoScores.get(studentId)}
+                          feedbackEnabled={showText}
+                          useRubric={useRubric}
+                          activityId={activityId}
+                          rubric={rubric}
+                          maxScore={maxScore}
+                          updateFeedback={this.props.updateActivityFeedback}
+                          showOnlyNeedReview={this.state.showOnlyNeedReview}
+                        />
+                      </CSSTransition>
+                    )
                   }
                   )}
-                </ReactCSSTransitionGroup>
+                </TransitionGroup>
               </div>
             </div>
           </div>

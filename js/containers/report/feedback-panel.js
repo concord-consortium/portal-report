@@ -8,7 +8,9 @@ import FeedbackRow from '../../components/report/feedback-row'
 import FeedbackButton from '../../components/report/feedback-button'
 import SummaryIndicator from '../../components/report/summary-indicator'
 import FeedbackOptionsView from '../../components/report/feedback-options-view'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
+// TODO: Figure out how to use new TransitionGroups …
+// TODO: See  https://reactcommunity.org/react-transition-group/transition-group
 import { connect } from 'react-redux'
 import { updateFeedback, enableFeedback } from '../../actions/index'
 import { MANUAL_SCORE, MAX_SCORE_DEFAULT } from '../../util/scoring-constants'
@@ -191,21 +193,23 @@ class FeedbackPanel extends PureComponent {
             <div className='feedback-rows-wrapper'>
               {showGettingStarted ? this.renderGettingStarted() : ''}
               <div className='feedback-for-students'>
-                <ReactCSSTransitionGroup transitionName='answer' transitionEnterTimeout={400} transitionLeaveTimeout={300}>
+                <TransitionGroup className='answer'>
                   {filteredAnswers.map((answer, i) =>
-                    <FeedbackRow
-                      answer={answer}
-                      ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row }}
-                      key={answer.get('key')}
-                      scoreEnabled={scoreEnabled}
-                      feedbackEnabled={feedbackEnabled}
-                      maxScore={maxScore}
-                      feedbacks={this.props.feedbacks}
-                      updateFeedback={this.props.updateFeedback}
-                      showOnlyNeedsRiew={this.state.showOnlyNeedReview}
-                    />
+                    <CSSTransition key={i} timeout={500} classNames='answer' >
+                      <FeedbackRow
+                        answer={answer}
+                        ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row }}
+                        key={answer.get('key')}
+                        scoreEnabled={scoreEnabled}
+                        feedbackEnabled={feedbackEnabled}
+                        maxScore={maxScore}
+                        feedbacks={this.props.feedbacks}
+                        updateFeedback={this.props.updateFeedback}
+                        showOnlyNeedsRiew={this.state.showOnlyNeedReview}
+                      />
+                    </CSSTransition>
                   )}
-                </ReactCSSTransitionGroup>
+                </TransitionGroup>
               </div>
             </div>
           </div>
