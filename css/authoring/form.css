@@ -1,0 +1,117 @@
+
+.json-editor {
+  width: 100%;
+  height:  80vh;
+}
+
+.markdown-field {
+  border: 1px solid gray;
+  margin-bottom: 1em;
+  margin-right: 1em;
+  padding: 0.5em;
+}
+
+/* Hide preview tabs in MD Editor because they don't reall work.*/
+.mde-tabs * {
+  display:  none;
+}
+
+input {
+  margin-left: 1em;
+}
+
+button.remove {
+  color: white;
+  background-color: hsl(0,50%,40%);
+  display: inline-block;
+  border: none;
+  font-size: 12pt;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 0px;
+  font-weight: bold;
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  border-radius: 0.5em;
+  padding: 0.2em;
+}
+
+button.remove-wide {
+  width: auto;
+  display: block;
+  color: white;
+  background-color: hsl(0,50%,40%);
+}
+
+
+button.add-wide {
+  color: white;
+  background-color: hsl(150,50%,40%);
+  width: auto;
+  display: block;
+}
+
+button.big {
+  font-size: 14pt;
+  color: white;
+  background-color: hsl(150,50%,40%);
+  border-radius: 0.2em;
+}
+
+button.add {
+  color: white;
+  background-color: hsl(150,50%,40%);
+  display: inline-block;
+  border: none;
+  font-size: 12pt;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 0px;
+  font-weight: bold;
+  margin-right: 0.5em;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  border-radius: 0.5em;
+  padding: 0.2em;
+}
+
+.criteria {
+  display: flex;
+  background-color: hsl(0,0%,97%);
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border-radius: 0.2em;
+}
+
+.criteria input {
+  margin-left: 1em;
+}
+
+.criterion-description {
+  flex-basis: 500px;
+}
+
+.ratings-list {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 400px;
+  flex-direction: row;
+}
+
+.ratings {
+  padding: 1em;
+  background-color: hsl(0,0%,93%);
+}
+
+.rating-header {
+  font-weight: bold;
+  font-size: 10pt;
+  color: hsl(0,0%, 30%);
+}
+
+.criteria-header {
+  font-weight: bold;
+  font-size: 12pt;
+  color: hsl(0,0%, 30%);
+}
