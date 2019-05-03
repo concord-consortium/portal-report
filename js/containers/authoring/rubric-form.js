@@ -45,18 +45,55 @@ const MarkdownField = ({value, setValue}) => {
   )
 }
 
+
+const NonApplicableRatings = ({name, values, setFieldValue}) => {
+  const ratings = values.ratings
+  const nonApplicableRatings = getIn(values, `${name}.nonApplicableRatings`, [])
+
+  const nonApplicableRatingSelection = ratings.map((rating, index) => {
+    const checked = nonApplicableRatings.indexOf(rating.id) > -1
+    const valuePath = `${name}.nonApplicableRatings.${index}`
+    const setValue = e => {
+      const newValue = e.target.checked ? rating.id : ''
+      setFieldValue(valuePath, newValue)
+    }
+    return (
+      <span className='inline-checkbox'>
+        {rating.id}: &nbsp;
+        <input
+          type='checkbox'
+          checked={checked}
+          onChange={setValue}
+        />
+      </span>
+    )
+  })
+  return (
+    <div>
+      <h4>non-applicable rating ids: </h4>
+      <div className='ratings-list'>
+        {nonApplicableRatingSelection}
+      </div>
+    </div>
+  )
+}
+
 const RatingDescriptions = ({name, values, setFieldValue}) => {
   const ratings = values.ratings
+  const nonApplicableRatings = getIn(values, `${name}.nonApplicableRatings`, [])
   const ratingDescriptions = ratings.map((rating, index) => {
     const descriptionName = `${name}.ratingDescriptions.${rating.id}`
     const descriptionValue = getIn(values, descriptionName, 'description')
     const setValue = v => setFieldValue(descriptionName, v)
-    return (
-      <div key={index}>
-        <span className='rating-header'>Description for {rating.id}:{rating.label}</span>
-        <MarkdownField value={descriptionValue} setValue={setValue} />
-      </div>
-    )
+    if (nonApplicableRatings.indexOf(rating.id) === -1) {
+      return (
+        <div key={index}>
+          <span className='rating-header'>Description for {rating.id}:{rating.label}</span>
+          <MarkdownField value={descriptionValue} setValue={setValue} />
+        </div>
+      )
+    }
+    return ''
   })
   return (
     <div>
@@ -71,6 +108,7 @@ const RatingDescriptions = ({name, values, setFieldValue}) => {
 const RatingDescriptionsForStudent = ({name, values, setFieldValue}) => {
   const ratings = values.ratings
   const key = `${name}.ratingDescriptionsForStudent`
+  const nonApplicableRatings = getIn(values, `${name}.nonApplicableRatings`, [])
   let hasForStudent = getIn(values, key)
   // hasForStudent = hasForStudent && Object.keys(hasForStudent).length > 0
   if (hasForStudent) {
@@ -78,12 +116,16 @@ const RatingDescriptionsForStudent = ({name, values, setFieldValue}) => {
       const descriptionName = `${key}.${rating.id}`
       const descriptionValue = getIn(values, descriptionName, 'description')
       const setValue = v => setFieldValue(descriptionName, v)
-      return (
-        <div key={index}>
-          <span className='rating-header'>STUDENT description for {rating.id}:{rating.label}</span>
-          <MarkdownField value={descriptionValue} setValue={setValue} />
-        </div>
-      )
+      if (nonApplicableRatings.indexOf(rating.id) === -1) {
+        return (
+          <div key={index}>
+            <span className='rating-header'>STUDENT description for {rating.id}:{rating.label}</span>
+            <MarkdownField value={descriptionValue} setValue={setValue} />
+          </div>
+        )
+      } else {
+        return ''
+      }
     })
 
     return (
@@ -151,6 +193,11 @@ const Criteria = ({name, remove, values, setFieldValue}) => {
           </div>
         </div>
         <div className='ratings'>
+          <NonApplicableRatings
+            name={name}
+            values={values}
+            setFieldValue={setFieldValue} />
+          <hr />
           <RatingDescriptions
             name={name}
             values={values}
@@ -208,7 +255,7 @@ class RubricForm extends PureComponent {
                   name='showRatingDescriptions'
                   component='input'
                   type='checkbox' checked={values.showRatingDescriptions} />
-  
+
                 <label> Score using points: </label>
                 <Field
                   name='scoreUsingPoints'
@@ -250,9 +297,19 @@ class RubricForm extends PureComponent {
 
               <h2> Criteria </h2>
               <FieldArray
-                name='ratings'
+                name='criteria'
                 render={arrayHelpers => (
                   <div>
+                    <button
+                      className='add'
+                      onClick={e => arrayHelpers.push({
+                        id: 'C-next',
+                        description: 'new criteon',
+                        ratingDescriptions: {},
+                        nonApplicableRatings: []
+                      })}>
+                    +
+                    </button>
                     { values.criteria.map((criteria, index) => (
                       <Criteria
                         name={`criteria.${index}`}
