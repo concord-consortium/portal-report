@@ -59,19 +59,19 @@ class RubricTest extends PureComponent {
     this.setState(
       {
         rubric: newValues,
-        hasBug: false,
-        rubricText: JSON.stringify(newValues, null, '  ')
+        hasBug: false
       }
     )
   }
 
   render () {
-    const { learnerId, rubric, rubricFeedback, rubricText } = this.state
+    const { learnerId, rubric, rubricFeedback } = this.state
     const updateFeedback = (rf) => {
       this.setState({rubricFeedback: rf})
     }
+    const rubricText = JSON.stringify(rubric, null, '  ')
     return (
-      <Tabs className="full-width">
+      <Tabs className='full-width'>
         <TabList>
           <Tab> Editor </Tab>
           <Tab> JSON </Tab>
@@ -85,7 +85,7 @@ class RubricTest extends PureComponent {
           JSON:
           <textarea
             className='json-editor'
-            onChange={this.updateRubric}
+            onChange={this.updateRubricFromJsonText}
             value={rubricText}
           />
         </TabPanel>

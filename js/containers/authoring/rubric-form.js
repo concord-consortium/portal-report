@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { Formik, Form, Field, FieldArray, getIn } from 'formik'
 import ReactMde from 'react-mde'
 import Markdown from 'markdown-to-jsx'
@@ -47,25 +47,25 @@ const MarkdownField = ({value, setValue}) => {
 
 const RatingDescriptions = ({name, values, setFieldValue}) => {
   const ratings = values.ratings
-  return ratings.map((rating, index) => {
+  const ratingDescriptions = ratings.map((rating, index) => {
     const descriptionName = `${name}.ratingDescriptions.${rating.id}`
     const descriptionValue = getIn(values, descriptionName, 'description')
     const setValue = v => setFieldValue(descriptionName, v)
-    const ratingDescriptions = (
-      <div key={rating.id}>
+    return (
+      <div key={index}>
         <span className='rating-header'>Description for {rating.id}:{rating.label}</span>
         <MarkdownField value={descriptionValue} setValue={setValue} />
       </div>
     )
-    return (
-      <div>
-        <h4>Rating descriptions: </h4>
-        <div className='ratings-list'>
-          {ratingDescriptions}
-        </div>
-      </div>
-    )
   })
+  return (
+    <div>
+      <h4>Rating descriptions: </h4>
+      <div className='ratings-list'>
+        {ratingDescriptions}
+      </div>
+    </div>
+  )
 }
 
 const RatingDescriptionsForStudent = ({name, values, setFieldValue}) => {
@@ -79,12 +79,13 @@ const RatingDescriptionsForStudent = ({name, values, setFieldValue}) => {
       const descriptionValue = getIn(values, descriptionName, 'description')
       const setValue = v => setFieldValue(descriptionName, v)
       return (
-        <div key={rating.id}>
+        <div key={index}>
           <span className='rating-header'>STUDENT description for {rating.id}:{rating.label}</span>
           <MarkdownField value={descriptionValue} setValue={setValue} />
         </div>
       )
     })
+
     return (
       <div>
         <h4>Rating descriptions for students: </h4>
@@ -117,8 +118,17 @@ const RatingDescriptionsForStudent = ({name, values, setFieldValue}) => {
 
 const Criteria = ({name, remove, values, setFieldValue}) => {
   const descriptionName = `${name}.description`
+  const studentDescriptionName = `${name}.descriptionForStudent`
   const setDescription = v => setFieldValue(descriptionName, v)
+  const setStudentDescription = v => {
+    // if (v && v.length > 0) {
+    setFieldValue(studentDescriptionName, v)
+    // } else {
+    // setFieldValue(studentDescriptionName, null)
+    // }
+  }
   const descriptionValue = getIn(values, descriptionName, 'description')
+  const studentDescriptionValue = getIn(values, studentDescriptionName, '')
   const criteriaName = getIn(values, `${name}.id`)
   return (
     <div>
@@ -134,9 +144,17 @@ const Criteria = ({name, remove, values, setFieldValue}) => {
             <label>Description for criterion {criteriaName} </label>
             <MarkdownField value={descriptionValue} setValue={setDescription} />
           </div>
+          <div>
+            <label>Student Description for criterion {criteriaName} </label>
+            <br />( blank will use above description )
+            <MarkdownField value={studentDescriptionValue} setValue={setStudentDescription} />
+          </div>
         </div>
         <div className='ratings'>
-          <RatingDescriptions name={name} values={values} setFieldValue={setFieldValue} />
+          <RatingDescriptions
+            name={name}
+            values={values}
+            setFieldValue={setFieldValue} />
           <hr />
           <RatingDescriptionsForStudent
             name={name}
@@ -148,89 +166,111 @@ const Criteria = ({name, remove, values, setFieldValue}) => {
   )
 }
 
-const RubricForm = (props) => {
-  const { rubric, updateRubric } = props
-  return (
-    <div>
-      <Formik
-        initialValues={rubric}
-        onSubmit={updateRubric}
-        render={({ values, setFieldValue }) => (
-          <Form>
-            <button class='big' type='submit'>Update</button>
-            <h3> General options </h3>
+class RubricForm extends PureComponent {
 
-            <label>
-              Show rating descriptions:
-              <Field
-                name='showRatingDescriptions'
-                component='input'
-                type='checkbox' checked={values.showRatingDescriptions} />
-            </label><br />
+  render () {
+    return this.renderRubricForm()
+  }
 
-            <label>
-              Score using points:
-              <Field
-                name='scoreUsingPoints'
-                component='input'
-                type='checkbox' checked={values.scoreUsingPoints} />
-            </label><br />
+  // We try and automatically submit our form if we are unloading.
+  // (Incase the author forgets to click the 'update' button)
+  componentWillUnmount () {
+    this.triggerSave()
+  }
 
-            <label>
-              Criteria label:
-              <Field name='criteriaLabel' />
-            </label><br />
+  triggerSave () {
+    if (this.form) {
+      this.form.executeSubmit()
+    }
+  }
+  
+  renderRubricForm () {
+    const { rubric, updateRubric } = this.props
+    return (
+      <div>
+        <Formik
+          initialValues={rubric}
+          onSubmit={updateRubric}
+          ref={node => (this.form = node)}
+          render={({ values, setFieldValue }) => (
+            <Form>
+              <div className='general-options'>
+                <span />
+                <h3> General options </h3>
+                <label> ID: </label>
+                <Field name='id' />
+  
+                <label> Reference URL: </label>
+                <Field name='referenceURL' />
+  
+                <label> Show rating descriptions: </label>
+                <Field
+                  name='showRatingDescriptions'
+                  component='input'
+                  type='checkbox' checked={values.showRatingDescriptions} />
+  
+                <label> Score using points: </label>
+                <Field
+                  name='scoreUsingPoints'
+                  component='input'
+                  type='checkbox' checked={values.scoreUsingPoints} />
+  
+                <label> Criteria label:</label>
+                <Field name='criteriaLabel' />
+  
+                <label> Criteria Label for student: </label>
+                <Field name='criteriaLabelForStudent' />
+  
+                <label> Fiedback label for students: </label>
+                <Field name='feedbackLabelForStudent' />
+  
+              </div>
 
-            <label>
-              Criteria Label for student:
-              <Field name='criteriaLabelForStudent' />
-            </label><br />
+              <div className='rating-section'>
+                <h3> Ratings </h3>
+                <FieldArray
+                  name='ratings'
+                  render={arrayHelpers => (
+                    <div>
+                      <button
+                        className='add'
+                        onClick={e => arrayHelpers.push({id: 'R-next', label: 'label', score: 0})}>
+                      +
+                      </button>
+                      { values.ratings.map((rating, index) => (
+                        <Rating
+                          name={`ratings.${index}`}
+                          key={index}
+                          remove={() => arrayHelpers.remove(index)} />
+                      ))}
+                    </div>
+                  )}
+                />
+              </div>
 
-            <label>
-              Fiedback label for students:
-              <Field name='feedbackLabelForStudent' />
-            </label><br />
-
-            <h3> Ratings </h3>
-            <FieldArray
-              name='ratings'
-              render={arrayHelpers => (
-                <div>
-                  <button
-                    className='add'
-                    onClick={e => arrayHelpers.push({id: 'R-next', label: 'label', score: 0})}>
-                  +
-                  </button>
-                  { values.ratings.map((rating, index) => (
-                    <Rating
-                      name={`ratings.${index}`}
-                      key={index}
-                      remove={() => arrayHelpers.remove(index)} />
-                  ))}
-                </div>
-              )}
-            />
-            <h2> Criteria </h2>
-            <FieldArray
-              name='ratings'
-              render={arrayHelpers => (
-                <div>
-                  { values.criteria.map((criteria, index) => (
-                    <Criteria
-                      name={`criteria.${index}`}
-                      key={index}
-                      values={values}
-                      setFieldValue={setFieldValue}
-                      remove={() => arrayHelpers.remove(index)} />
-                  ))}
-                </div>
-              )}
-            />
-          </Form>
-        )}
-      />
-    </div>
-  )
+              <h2> Criteria </h2>
+              <FieldArray
+                name='ratings'
+                render={arrayHelpers => (
+                  <div>
+                    { values.criteria.map((criteria, index) => (
+                      <Criteria
+                        name={`criteria.${index}`}
+                        key={index}
+                        values={values}
+                        setFieldValue={setFieldValue}
+                        remove={() => arrayHelpers.remove(index)} />
+                    ))}
+                  </div>
+                )}
+              />
+              <button className='big' type='submit'>Update</button>
+            </Form>
+          )}
+        />
+      </div>
+    )
+  }
 }
 
 export default RubricForm
