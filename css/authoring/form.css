@@ -152,3 +152,10 @@ label {
   font-size: 12pt;
   color: hsl(0,0%, 30%);
 }
+
+.inline-checkbox {
+  margin-right: 2em;
+}
+.inline-checkbox input[type='checkbox'] {
+  margin-left: 1px;
+}
