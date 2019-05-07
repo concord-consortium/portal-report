@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderIntoDocument, findRenderedDOMComponentWithClass } from 'react-addons-test-utils'
+import { renderIntoDocument, findRenderedDOMComponentWithClass } from 'react-dom/test-utils'
 import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import { List, Map, fromJS } from 'immutable'

@@ -2,7 +2,7 @@ import jsdom from 'jsdom'
 import chai from 'chai'
 import chaiImmutable from 'chai-immutable'
 import { shallow, configure } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-15'
+import Adapter from 'enzyme-adapter-react-16'
 
 // see http://airbnb.io/enzyme/docs/installation/index.html
 configure({ adapter: new Adapter() })

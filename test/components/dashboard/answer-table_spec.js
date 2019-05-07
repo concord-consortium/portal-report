@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
 import { Provider } from 'react-redux'
-import { renderIntoDocument, findRenderedDOMComponentWithClass } from 'react-addons-test-utils'
+import { renderIntoDocument, findRenderedDOMComponentWithClass } from 'react-dom/test-utils'
 import AnswersTable from '../../../js/containers/report/answers-table'
 
 describe('<AnswersTable />', () => {
