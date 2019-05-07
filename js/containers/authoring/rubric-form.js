@@ -58,7 +58,10 @@ const NonApplicableRatings = ({name, values, setFieldValue}) => {
       setFieldValue(valuePath, newValue)
     }
     return (
-      <span className='inline-checkbox'>
+      <span
+        className='inline-checkbox'
+        key={index}
+      >
         {rating.id}: &nbsp;
         <input
           type='checkbox'

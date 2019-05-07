@@ -1,3 +1,14 @@
 .full-width {
   width: 95vw;
 }
+.preview {
+  display: grid;
+  /* max-width: 600px; */
+  background-color: hsl(180, 10%, 95%);
+  padding: 1em;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+}
+.preview > div {
+  margin-right: 1em;
+}

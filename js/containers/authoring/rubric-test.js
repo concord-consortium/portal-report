@@ -75,8 +75,7 @@ class RubricTest extends PureComponent {
         <TabList>
           <Tab> Editor </Tab>
           <Tab> JSON </Tab>
-          <Tab> Teacher </Tab>
-          <Tab> Student </Tab>
+          <Tab> Preview </Tab>
         </TabList>
         <TabPanel>
           <RubricForm rubric={rubric} updateRubric={this.updateRubric} />
@@ -90,31 +89,33 @@ class RubricTest extends PureComponent {
           />
         </TabPanel>
         <TabPanel>
-          <RubricBox
-            rubric={rubric}
-            rubricFeedback={rubricFeedback}
-            rubricChange={updateFeedback}
-            learnerId={learnerId} />
-        </TabPanel>
-        <TabPanel>
-          <FeedbackPanelForStudent
-            textFeedback='Great work!'
-            score={10}
-            maxScore={10}
-            rubricFeedback={rubricFeedback}
-            rubric={rubric}
-            hasBeenReviewed
-            showScore
-            useRubric
-            showText
-          />
-          <SummaryIndicator
-            scores={[1, 4, 3, 4, 0, 2]}
-            maxScore={10}
-            rubricFeedbacks={genRFeedbacks(rubric, 10)}
-            rubric={rubric}
-            useRubric
-          />
+          <div className='preview'>
+            <RubricBox
+              rubric={rubric}
+              rubricFeedback={rubricFeedback}
+              rubricChange={updateFeedback}
+              learnerId={learnerId} />
+            <div>
+              <FeedbackPanelForStudent
+                textFeedback='Great work!'
+                score={10}
+                maxScore={10}
+                rubricFeedback={rubricFeedback}
+                rubric={rubric}
+                hasBeenReviewed
+                showScore
+                useRubric
+                showText
+              />
+              <SummaryIndicator
+                scores={[1, 4, 3, 4, 0, 2]}
+                maxScore={10}
+                rubricFeedbacks={genRFeedbacks(rubric, 10)}
+                rubric={rubric}
+                useRubric
+              />
+            </div>
+          </div>
         </TabPanel>
       </Tabs>
     )
