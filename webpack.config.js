@@ -53,7 +53,7 @@ module.exports = {
         ]
       },
       {
-        test: /css\/(common|report)\/.*\.less$/,
+        test: /css\/(common|report|authoring)\/.*\.less$/,
         loader: 'style-loader!css-loader!less-loader'
       },
       {

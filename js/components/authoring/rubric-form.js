@@ -233,12 +233,13 @@ class RubricForm extends PureComponent {
       this.form.executeSubmit()
     }
   }
-  
+
   renderRubricForm () {
     const { rubric, updateRubric } = this.props
     return (
       <div>
         <Formik
+          enableReinitialize // so update of initialValues reinitializes the form
           initialValues={rubric}
           onSubmit={updateRubric}
           ref={node => (this.form = node)}
@@ -249,10 +250,10 @@ class RubricForm extends PureComponent {
                 <h3> General options </h3>
                 <label> ID: </label>
                 <Field name='id' />
-  
+
                 <label> Reference URL: </label>
                 <Field name='referenceURL' />
-  
+
                 <label> Show rating descriptions: </label>
                 <Field
                   name='showRatingDescriptions'
@@ -264,16 +265,16 @@ class RubricForm extends PureComponent {
                   name='scoreUsingPoints'
                   component='input'
                   type='checkbox' checked={values.scoreUsingPoints} />
-  
+
                 <label> Criteria label:</label>
                 <Field name='criteriaLabel' />
-  
+
                 <label> Criteria Label for student: </label>
                 <Field name='criteriaLabelForStudent' />
-  
+
                 <label> Fiedback label for students: </label>
                 <Field name='feedbackLabelForStudent' />
-  
+
               </div>
 
               <div className='rating-section'>
@@ -324,7 +325,6 @@ class RubricForm extends PureComponent {
                   </div>
                 )}
               />
-              <button className='big' type='submit'>Update</button>
             </Form>
           )}
         />

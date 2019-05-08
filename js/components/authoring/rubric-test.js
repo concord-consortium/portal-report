@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react'
-import RubricBox from '../../components/report/rubric-box'
-import FeedbackPanelForStudent from '../../components/report/feedback-panel-for-student'
-import SummaryIndicator from '../../components/report/summary-indicator'
+import RubricBox from '../report/rubric-box'
+import FeedbackPanelForStudent from '../report/feedback-panel-for-student'
+import SummaryIndicator from '../report/summary-indicator'
 import sampleRubric from '../../../public/sample-rubric'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import RubricForm from './rubric-form'
+import S3Upload from './s3-upload'
 
 import 'react-tabs/style/react-tabs.css'
 import '../../../css/authoring/tabs.css'
@@ -39,10 +40,11 @@ class RubricTest extends PureComponent {
     }
     this.updateRubric = this.updateRubric.bind(this)
     this.updateRubricFromJsonText = this.updateRubricFromJsonText.bind(this)
+    this.handleJsonEditorChange = this.handleJsonEditorChange.bind(this)
+    this.handleTabsChange = this.handleTabsChange.bind(this)
   }
 
-  updateRubricFromJsonText (e) {
-    const value = e.target.value
+  updateRubricFromJsonText (value) {
     this.setState({rubricText: value})
     try {
       const newRubric = JSON.parse(value)
@@ -52,6 +54,18 @@ class RubricTest extends PureComponent {
     } catch (e) {
       console.error(e)
       this.setState({hasBug: true})
+    }
+  }
+
+  handleJsonEditorChange (e) {
+    const value = e.target.value
+    this.updateRubricFromJsonText(value)
+  }
+
+  handleTabsChange (firstTab, lastTab) {
+    if (lastTab === 0 && this.rubricFormRef) {
+      // RubricForm tab has been just unselected -> trigger save.
+      this.rubricFormRef.triggerSave()
     }
   }
 
@@ -71,20 +85,24 @@ class RubricTest extends PureComponent {
     }
     const rubricText = JSON.stringify(rubric, null, '  ')
     return (
-      <Tabs className='full-width'>
+      // Why forceRenderTabPanel?
+      // Without it, every tab panel will be mounted when it's open and unmounted when it's closed.
+      // It prevents tab content from having its own state.
+      <Tabs className='full-width' forceRenderTabPanel onSelect={this.handleTabsChange}>
         <TabList>
           <Tab> Editor </Tab>
           <Tab> JSON </Tab>
           <Tab> Preview </Tab>
+          <Tab> S3 Upload </Tab>
         </TabList>
         <TabPanel>
-          <RubricForm rubric={rubric} updateRubric={this.updateRubric} />
+          <RubricForm ref={rf => { this.rubricFormRef = rf }} rubric={rubric} updateRubric={this.updateRubric} />
         </TabPanel>
         <TabPanel>
           JSON:
           <textarea
             className='json-editor'
-            onChange={this.updateRubricFromJsonText}
+            onChange={this.handleJsonEditorChange}
             value={rubricText}
           />
         </TabPanel>
@@ -116,6 +134,9 @@ class RubricTest extends PureComponent {
               />
             </div>
           </div>
+        </TabPanel>
+        <TabPanel>
+          <S3Upload onLoad={this.updateRubricFromJsonText} resourceJSON={rubricText} />
         </TabPanel>
       </Tabs>
     )
