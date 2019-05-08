@@ -45,16 +45,23 @@ const MarkdownField = ({value, setValue}) => {
   )
 }
 
-
 const NonApplicableRatings = ({name, values, setFieldValue}) => {
   const ratings = values.ratings
-  const nonApplicableRatings = getIn(values, `${name}.nonApplicableRatings`, [])
+  const fieldPath = `${name}.nonApplicableRatings`
+  const nonApplicableRatings = getIn(values, fieldPath)
+  const fieldValues = ratings.map(r => {
+    const id = r.id
+    if (nonApplicableRatings.indexOf(id) < 0) {
+      return ''
+    }
+    return id
+  })
 
   const nonApplicableRatingSelection = ratings.map((rating, index) => {
-    const checked = nonApplicableRatings.indexOf(rating.id) > -1
-    const valuePath = `${name}.nonApplicableRatings.${index}`
+    const checked = fieldValues.indexOf(rating.id) > -1
+    const valuePath = `${fieldPath}.${index}`
     const setValue = e => {
-      const newValue = e.target.checked ? rating.id : ''
+      const newValue = checked ? '' : rating.id
       setFieldValue(valuePath, newValue)
     }
     return (
@@ -166,11 +173,7 @@ const Criteria = ({name, remove, values, setFieldValue}) => {
   const studentDescriptionName = `${name}.descriptionForStudent`
   const setDescription = v => setFieldValue(descriptionName, v)
   const setStudentDescription = v => {
-    // if (v && v.length > 0) {
     setFieldValue(studentDescriptionName, v)
-    // } else {
-    // setFieldValue(studentDescriptionName, null)
-    // }
   }
   const descriptionValue = getIn(values, descriptionName, 'description')
   const studentDescriptionValue = getIn(values, studentDescriptionName, '')
