@@ -1,13 +1,7 @@
 sudo: false
-addons:
-  apt:
-    packages:
-    - libgconf-2-4
-language:
-  - node_js
-  - ruby
-node_js:
-  - node
+dist: trusty
+language: node_js
+node_js: lts/*
 install:
   - travis_retry gem install s3_website -v 3.4.0
   - travis_retry npm ci
@@ -21,7 +15,6 @@ script:
   - ./s3_deploy.sh
 cache:
   bundler: true
+  npm: true
   directories:
-    - node_modules
-    - ~/.npm
     - ~/.cache
