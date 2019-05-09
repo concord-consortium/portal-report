@@ -6,6 +6,7 @@ import sampleRubric from '../../../public/sample-rubric'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import RubricForm from './rubric-form'
 import S3Upload from './s3-upload'
+import migrate from '../../core/rubric-migrations'
 
 import 'react-tabs/style/react-tabs.css'
 import '../../../css/authoring/tabs.css'
@@ -31,9 +32,10 @@ const genRFeedbacks = (rubric, numAnswers) => {
 class RubricTest extends PureComponent {
   constructor (props) {
     super(props)
+    const rubric = migrate(sampleRubric)
     this.state = {
-      rubric: sampleRubric,
-      rubricText: JSON.stringify(sampleRubric, null, '  '),
+      rubric: rubric,
+      rubricText: JSON.stringify(rubric, null, '  '),
       learnerId: 'noah123',
       rubricFeedback: {},
       hasBug: false
@@ -49,7 +51,7 @@ class RubricTest extends PureComponent {
     try {
       const newRubric = JSON.parse(value)
       if (newRubric) {
-        this.setState({rubric: newRubric, hasBug: false})
+        this.setState({rubric: migrate(newRubric), hasBug: false})
       }
     } catch (e) {
       console.error(e)
