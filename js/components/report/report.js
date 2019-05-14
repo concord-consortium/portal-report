@@ -80,14 +80,14 @@ export default class Report extends PureComponent {
   }
 
   onShowHideNamesClick = (isAnonymous) => {
-    const { reportTree, setAnonymous, trackEvent } = this.props
+    const { setAnonymous, trackEvent } = this.props
     const trackAction = isAnonymous ? 'Show Student Names' : 'Hide Student Names'
     trackEvent('Report', trackAction, '')
     return setAnonymous(!isAnonymous)
   }
 
   renderControls () {
-    const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setAnonymous, trackEvent } = this.props
+    const { report, lastUpdated, isFetching, onRefreshClick } = this.props
     const isAnonymous = report.get('anonymous')
     const nowShowing = report.get('nowShowing')
     const buttonText = (nowShowing === 'class') ? 'Print student reports' : 'Print'
@@ -100,6 +100,8 @@ export default class Report extends PureComponent {
           <Button onClick={this.onShowUnselectedClick}>Show all</Button>
           <Button onClick={() => this.onShowHideNamesClick(isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
           <Button onClick={this.printStudentReports}>{buttonText}</Button>
+          {onRefreshClick && <Button onClick={onRefreshClick} disabled={isFetching}>Refresh</Button>}
+          {lastUpdated && <div className='last-updated'>Last updated at {new Date(lastUpdated).toLocaleTimeString()} </div>}
         </div>
       )
     } else {
