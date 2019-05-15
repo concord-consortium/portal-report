@@ -23,6 +23,7 @@
   "homepage": "https://github.com/concord-consortium/portal-report#readme",
   "scripts": {
     "start": "webpack-dev-server",
+    "build": "webpack",
     "prepare": "WEBPACK_TARGET=lib webpack",
     "cypress:test": "cypress run --config video=false,trashAssetsBeforeRuns=false",
     "cypress:open": "cypress open",
@@ -60,6 +61,10 @@
     "sinon": "^6.3.5",
     "standard": "^11.0.0",
     "style-loader": "^0.21.0",
+    "ts-loader": "^6.0.0",
+    "tslint": "^5.16.0",
+    "tslint-loader": "^3.5.4",
+    "typescript": "^3.4.5",
     "url-loader": "^1.1.2",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.5"

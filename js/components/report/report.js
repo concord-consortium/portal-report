@@ -56,7 +56,7 @@ export default class Report extends PureComponent {
       const id = parseInt(selectedStudentId, 10)
       selectStudents = (student) => id === student.get('id')
     }
-    return [...report.get('students').values()]
+    return Array.from(report.get('students').values())
       .filter(startedOffering)
       .filter(selectStudents)
       .map(s =>

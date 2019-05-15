@@ -24,9 +24,21 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
+        test: /\.tsx?$/,
+        enforce: 'pre',
+        use: [
+          {
+            loader: 'tslint-loader',
+            options: {}
+          }
+        ]
+      },
+      {
+        test: /\.[tj]sx?$/,
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
+        }
       },
       {
         test: /\.css$/,
