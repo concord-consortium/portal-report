@@ -1,8 +1,6 @@
 import { s3Upload, s3Url, CLOUDFRONT_URL, S3_BUCKET, S3_DIR_PREFIX } from '../../js/util/s3-helpers'
 import * as AWS from 'aws-sdk'
-import { expect } from 'chai'
 import sinon from 'sinon'
-import { describe, it, beforeEach } from 'mocha'
 
 describe('S3 helpers', () => {
   describe('s3Upload', () => {
@@ -35,14 +33,14 @@ describe('S3 helpers', () => {
         ACL: 'public-read',
         ContentType: params.contentType,
         CacheControl: params.cacheControl
-      })).to.equal(true)
-      expect(url).to.equal(`${CLOUDFRONT_URL}/${expectedKey}`)
+      })).toBe(true)
+      expect(url).toBe(`${CLOUDFRONT_URL}/${expectedKey}`)
     })
   })
 
   describe('s3Url', () => {
     describe('it should return Cloudfront URL for a given file and directory', () => {
-      expect(s3Url({filename: 'test.abc', dir: 'dir'})).to.equal(`${CLOUDFRONT_URL}/${S3_DIR_PREFIX}/dir/test.abc`)
+      expect(s3Url({filename: 'test.abc', dir: 'dir'})).toBe(`${CLOUDFRONT_URL}/${S3_DIR_PREFIX}/dir/test.abc`)
     })
   })
 })

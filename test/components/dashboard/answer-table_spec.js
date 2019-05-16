@@ -1,6 +1,4 @@
 import React from 'react'
-import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
 import { Provider } from 'react-redux'
 import { renderIntoDocument, findRenderedDOMComponentWithClass } from 'react-dom/test-utils'
@@ -16,7 +14,7 @@ describe('<AnswersTable />', () => {
   const anonymous = false
   const answers = fromJS([])
   const state = {}
-  const store = { getState: () => fromJS(state), subscribe: () => {} }
+  const store = { getState: () => fromJS(state), subscribe: () => {}, dispatch: () => {} }
   const params = { hidden, showCompare, anonymous, question, answers }
 
   describe('with a question', () => {
@@ -27,10 +25,10 @@ describe('<AnswersTable />', () => {
         </Provider>
       )
       const found = findRenderedDOMComponentWithClass(component, 'answers-table')
-      expect(found.textContent).to.match(/Student/)
-      expect(found.textContent).to.match(/Response/)
-      expect(found.textContent).to.match(/Score/)
-      expect(found.textContent).to.match(/Feedback/)
+      expect(found.textContent).toMatch(/Student/)
+      expect(found.textContent).toMatch(/Response/)
+      expect(found.textContent).toMatch(/Score/)
+      expect(found.textContent).toMatch(/Feedback/)
     })
   })
 
@@ -45,10 +43,10 @@ describe('<AnswersTable />', () => {
         </Provider>
       )
       const found = findRenderedDOMComponentWithClass(component, 'answers-table')
-      expect(found.textContent).to.match(/Student/)
-      expect(found.textContent).to.match(/Response/)
-      expect(found.textContent).not.to.match(/Score/)
-      expect(found.textContent).not.to.match(/Feedback/)
+      expect(found.textContent).toMatch(/Student/)
+      expect(found.textContent).toMatch(/Response/)
+      expect(found.textContent).not.toMatch(/Score/)
+      expect(found.textContent).not.toMatch(/Feedback/)
     })
   })
 })

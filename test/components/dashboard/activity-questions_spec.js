@@ -1,6 +1,4 @@
 import React from 'react'
-import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { shallow, mount } from 'enzyme'
 import { fromJS } from 'immutable'
 import ActivityQuestions from '../../../js/components/dashboard/activity-questions'
@@ -22,9 +20,9 @@ describe('<ActivityQuestions />', () => {
             activity={activity}
             expandedQuestions={expandedQuestions}
           />)
-        expect(wrapper.html()).to.contain('Q1.')
-        expect(wrapper.contains('Q2.')).to.equal(false)
-        expect(wrapper.contains(prompt1)).to.equal(false)
+        expect(wrapper.html()).toEqual(expect.stringContaining('Q1.'))
+        expect(wrapper.contains('Q2.')).toBe(false)
+        expect(wrapper.contains(prompt1)).toBe(false)
       })
     })
     describe('when first question is expanded', () => {
@@ -36,8 +34,8 @@ describe('<ActivityQuestions />', () => {
             activity={activity}
             expandedQuestions={expandedQuestions}
           />)
-        expect(wrapper.text()).to.contain('Q1.')
-        expect(wrapper.text()).to.contain(prompt1)
+        expect(wrapper.text()).toEqual(expect.stringContaining('Q1.'))
+        expect(wrapper.text()).toEqual(expect.stringContaining(prompt1))
       })
 
       it('should render a clickable expansion box', () => {
@@ -53,9 +51,9 @@ describe('<ActivityQuestions />', () => {
             trackEvent={onClick}
           />)
         const opener = wrapper.find('[data-cy="expand-question-details"]')
-        expect(clickCount).to.eql(0)
+        expect(clickCount).toBe(0)
         opener.simulate('click')
-        expect(clickCount).to.eql(2)
+        expect(clickCount).toBe(2)
       })
     })
   })

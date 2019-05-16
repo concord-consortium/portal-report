@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
 import {
   getSortedStudents,
@@ -51,62 +49,52 @@ describe('dashboard selectors', () => {
 
   describe('getStudentProgress', () => {
     it('should return hash with student progress', () => {
-      expect(getStudentProgress(state({})).toJS()).to.eql(
-        {
-          1: {
-            1: 1, // activity 1
-            2: 0.5 // activity 2 - only one submitted answer
-          },
-          2: {
-            1: 1, // activity 1
-            2: 0.5 // activity 2 - one submitted answer
-          },
-          3: { // this student hasn't started any activity, no answer objects
-            1: 0,
-            2: 0
-          }
+      expect(getStudentProgress(state({})).toJS()).toEqual({
+        1: {
+          1: 1, // activity 1
+          2: 0.5 // activity 2 - only one submitted answer
+        },
+        2: {
+          1: 1, // activity 1
+          2: 0.5 // activity 2 - one submitted answer
+        },
+        3: { // this student hasn't started any activity, no answer objects
+          1: 0,
+          2: 0
         }
-      )
+      })
     })
   })
 
   describe('getStudentAverageProgress', () => {
     it('should return hash with student total progress', () => {
-      expect(getStudentAverageProgress(state({})).toJS()).to.eql(
-        {
-          1: 0.75,
-          2: 0.75,
-          3: 0
-        }
-      )
+      expect(getStudentAverageProgress(state({})).toJS()).toEqual({
+        1: 0.75,
+        2: 0.75,
+        3: 0
+      })
     })
   })
 
   describe('getSortedStudents', () => {
     describe('when sorting by name', () => {
       it('should return sorted list of students', () => {
-        expect(getSortedStudents(state({})).toJS()).to.eql(
-          // Students sorted by name (last name first, ignoring capitalization)
-          [ s3, s2, s1 ]
-        )
+        expect(getSortedStudents(state({})).toJS()).toEqual(// Students sorted by name (last name first, ignoring capitalization)
+        [ s3, s2, s1 ])
       })
     })
 
     describe('when sorting by most progress', () => {
       it('should return sorted list of students', () => {
-        expect(getSortedStudents(state({sortBy: SORT_BY_MOST_PROGRESS})).toJS()).to.eql(
-          // Students sorted by most progress (ties broken alphabetically)
-          [ s2, s1, s3 ]
-        )
+        expect(getSortedStudents(state({sortBy: SORT_BY_MOST_PROGRESS})).toJS()).toEqual(// Students sorted by most progress (ties broken alphabetically)
+        [ s2, s1, s3 ])
       })
     })
 
     describe('when sorting by least progress', () => {
       it('should return sorted list of students', () => {
-        expect(getSortedStudents(state({sortBy: SORT_BY_LEAST_PROGRESS})).toJS()).to.eql(
-          // Students sorted by least progress (ties broken alphabetically)
-          [ s3, s2, s1 ]
-        )
+        expect(getSortedStudents(state({sortBy: SORT_BY_LEAST_PROGRESS})).toJS()).toEqual(// Students sorted by least progress (ties broken alphabetically)
+        [ s3, s2, s1 ])
       })
     })
 
@@ -134,7 +122,7 @@ describe('dashboard selectors', () => {
 
       describe('When no question is selected', () => {
         it('should return an empty map', () => {
-          expect(getSelectedQuestion(state({selectedQuestion: null}))).to.eql(null)
+          expect(getSelectedQuestion(state({selectedQuestion: null}))).toBe(null)
         })
       })
 
@@ -142,15 +130,15 @@ describe('dashboard selectors', () => {
         it('Should return the prompt for the first question ...', () => {
           const s = state({selectedQuestion: 'Q1'})
           const question = getSelectedQuestion(s).toJS()
-          expect(question.prompt).to.eql('prompt1')
+          expect(question.prompt).toBe('prompt1')
         })
       })
-      
+
       describe('When Q2 is selected', () => {
         it('Should return the prompt for the second question ...', () => {
           const s = state({selectedQuestion: 'Q2'})
           const question = getSelectedQuestion(s).toJS()
-          expect(question.prompt).to.eql('prompt2')
+          expect(question.prompt).toBe('prompt2')
         })
       })
     })

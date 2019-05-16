@@ -1,6 +1,3 @@
-
-import { describe, it, beforeEach } from 'mocha'
-import { expect } from 'chai'
 import { fromJS } from 'immutable'
 import {
   getStudentFeedbacks,
@@ -96,7 +93,7 @@ describe('activity-feedback-selectors', () => {
 
   describe('getStudentFeedbacks', () => {
     it('should be a function', () => {
-      expect(getStudentFeedbacks).to.be.a('function')
+      expect(typeof getStudentFeedbacks).toBe('function')
     })
 
     describe('with two complete answers', () => {
@@ -109,10 +106,7 @@ describe('activity-feedback-selectors', () => {
         )
       })
       it('should have two scores', () => {
-        expect(studentFeedbacks.scores)
-          .to
-          .have
-          .members([1, 2])
+        expect(studentFeedbacks.scores).toEqual(expect.arrayContaining([1, 2]))
       })
       describe('with one answer not reviewed', () => {
         beforeEach(() => {
@@ -123,10 +117,7 @@ describe('activity-feedback-selectors', () => {
           )
         })
         it('should have one score', () => {
-          expect(studentFeedbacks.scores)
-            .to
-            .have
-            .members([1])
+          expect(studentFeedbacks.scores).toEqual(expect.arrayContaining([1]))
         })
       })
     })
@@ -143,7 +134,7 @@ describe('activity-feedback-selectors', () => {
       })
       it('should return the questionAutoScores', () => {
         scoreType = 'auto'
-        expect(autoScores).to.eql(questionAutoScores)
+        expect(autoScores).toEqual(questionAutoScores)
       })
     })
     describe('with rubric scoreType', () => {
@@ -152,7 +143,7 @@ describe('activity-feedback-selectors', () => {
         autoScores = getAutoscores(scoreType, rubricScores, questionAutoScores)
       })
       it('should return the questionAutoScores', () => {
-        expect(autoScores).to.eql(rubricScores)
+        expect(autoScores).toEqual(rubricScores)
       })
     })
     describe('with manual scoreType', () => {
@@ -161,7 +152,7 @@ describe('activity-feedback-selectors', () => {
         autoScores = getAutoscores(scoreType, rubricScores, questionAutoScores)
       })
       it('should return the autoScores', () => {
-        expect(autoScores).to.eql(questionAutoScores)
+        expect(autoScores).toEqual(questionAutoScores)
       })
     })
   })
@@ -257,7 +248,7 @@ describe('activity-feedback-selectors', () => {
     })
 
     it('Should return the score from the most recent rubric feedback', () => {
-      expect(scores.get(1)).to.eql(2)
+      expect(scores.get(1)).toBe(2)
     })
   })
 })

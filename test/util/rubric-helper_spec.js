@@ -1,27 +1,22 @@
-import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
-import fs from 'fs'
 import { RubricHelper } from '../../js/util/rubric-helper'
-const exampleRubricPath = './public/sample-rubric.json'
-const exampleFeedbackPath = './public/sample-rubric-feedback.json'
+import rubric from '../../public/sample-rubric'
+import feedback from '../../public/sample-rubric-feedback'
 
 describe('the rubric helper class', () => {
-  const rubric = JSON.parse(fs.readFileSync(exampleRubricPath))
-  const feedback = JSON.parse(fs.readFileSync(exampleFeedbackPath))
   const helper = new RubricHelper(rubric, feedback)
 
   it('Should read the example rubric', () => {
-    expect(rubric).to.have.property('criteria')
+    expect(rubric).toHaveProperty('criteria')
   })
   it('Should read the example feedback', () => {
-    expect(feedback).to.have.property('C1')
+    expect(feedback).toHaveProperty('C1')
   })
 
   describe('scoreFor', () => {
     it('should  return the correct scores', () => {
       const criteria = fromJS(rubric.criteria[0])
-      expect(helper.feedbackScoreForCriteria(criteria)).to.eql(3)
+      expect(helper.feedbackScoreForCriteria(criteria)).toBe(3)
     })
   })
 
@@ -32,10 +27,10 @@ describe('the rubric helper class', () => {
         const expected = 'Student makes a claim _supported_ by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.'
 
         const defaultDesc = helper.feedbackDescriptionForCriteria(criteria)
-        expect(defaultDesc).to.equal(expected)
+        expect(defaultDesc).toBe(expected)
 
         const studentDesc = helper.feedbackDescriptionForCriteria(criteria, 'student')
-        expect(studentDesc).to.equal(expected)
+        expect(studentDesc).toBe(expected)
       })
     })
 
@@ -48,10 +43,10 @@ describe('the rubric helper class', () => {
         const studentText = 'Student Specific: R2'
 
         const defaultDesc = helper.feedbackDescriptionForCriteria(criteria)
-        expect(defaultDesc).to.equal(defaultText)
+        expect(defaultDesc).toBe(defaultText)
 
         const studentDesc = helper.feedbackDescriptionForCriteria(criteria, 'student')
-        expect(studentDesc).to.equal(studentText)
+        expect(studentDesc).toBe(studentText)
       })
     })
   })
@@ -60,17 +55,17 @@ describe('the rubric helper class', () => {
     it('returns an object with all feedback values', () => {
       const data = helper.allFeedback('student')
       const record2 = data[1]
-      expect(record2.ratingDescription).to.eql('Student Specific: R2')
-      expect(record2.score).to.eql(2)
-      expect(record2.label).to.eql('Developing')
-      expect(record2.key).to.eql('C2')
+      expect(record2.ratingDescription).toBe('Student Specific: R2')
+      expect(record2.score).toBe(2)
+      expect(record2.label).toBe('Developing')
+      expect(record2.key).toBe('C2')
     })
     describe('with no actual feedback …', () => {
       it('should not return anything', () => {
         const badHelper = new RubricHelper(rubric, {})
         const data = badHelper.allFeedback('student')
         const record2 = data[1]
-        expect(record2).to.be.null
+        expect(record2).toBeNull()
       })
     })
   })

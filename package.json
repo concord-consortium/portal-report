@@ -27,27 +27,43 @@
     "prepare": "WEBPACK_TARGET=lib webpack",
     "cypress:test": "cypress run --config video=false,trashAssetsBeforeRuns=false",
     "cypress:open": "cypress open",
-    "test": "mocha --compilers js:babel-core/register --require ignore-styles --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
-    "test:debug": "mocha --debug-brk --inspect --compilers js:babel-core/register --require ignore-styles --require ./test/test_helper.js 'test/**/*.@(js|jsx)'",
-    "test:watch": "npm run test -R spec -- --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "test:full": "npm run test && npm run cypress:test"
   },
+  "jest": {
+    "roots": [
+      "<rootDir>"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTest.js"
+    ],
+    "preset": "ts-jest/presets/js-with-ts",
+    "testURL": "https://portal-report.unexisting.url.com",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/cypress/"
+    ],
+    "testRegex": "(_spec)\\.[tj]sx?$",
+    "moduleNameMapper": {
+      "\\.(css|scss|less)$": "identity-obj-proxy"
+    }
+  },
   "devDependencies": {
+    "@types/jest": "^24.0.13",
     "autoprefixer": "^9.5.1",
-    "chai": "^4.2.0",
-    "chai-immutable": "^1.5.3",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^1.0.1",
     "cypress": "^3.2.0",
     "enzyme": "*",
     "enzyme-adapter-react-16": "*",
     "file-loader": "^1.1.11",
+    "identity-obj-proxy": "^3.0.0",
     "ignore-styles": "^5.0.1",
-    "jsdom": "^11.12.0",
+    "jest": "^24.8.0",
     "json-loader": "^0.5.4",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
-    "mocha": "^5.2.0",
     "nock": "^9.6.1",
     "postcss-loader": "^2.1.6",
     "react-dom": "^16.8.6",
@@ -56,6 +72,7 @@
     "sinon": "^6.3.5",
     "standard": "^11.0.0",
     "style-loader": "^0.21.0",
+    "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.0",
     "tslint": "^5.16.0",
     "tslint-loader": "^3.5.4",

@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { fromJS } from 'immutable'
 import getInvestigationTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from '../../js/selectors/report-tree'
 import { FULL_REPORT, DASHBOARD } from '../../js/reducers'
@@ -125,13 +123,13 @@ describe('report tree selectors', () => {
 
   describe('getAnswerTrees', () => {
     it('should return answers with students ids mapped to students', () => {
-      expect(getAnswerTrees(state({})).toJS()).to.eql(expectedAnswerTrees)
+      expect(getAnswerTrees(state({})).toJS()).toEqual(expectedAnswerTrees)
     })
   })
 
   describe('getQuestionTrees', () => {
     it('should return questions with answers keys mapped to answers', () => {
-      expect(getQuestionTrees(state({})).toJS()).to.eql(expectedQuestionTrees({}))
+      expect(getQuestionTrees(state({})).toJS()).toEqual(expectedQuestionTrees({}))
     })
 
     describe('when it is a Embeddable::MultipleChoice question', () => {
@@ -142,8 +140,8 @@ describe('report tree selectors', () => {
         })
         const answers = fromJS({})
         const result = getQuestionTrees.resultFunc(questions, answers).toJS()
-        expect(result[1].scored).to.eql(true)
-        expect(result[2].scored).to.eql(false)
+        expect(result[1].scored).toBe(true)
+        expect(result[2].scored).toBe(false)
       })
     })
 
@@ -157,8 +155,8 @@ describe('report tree selectors', () => {
           const answers = fromJS({})
           const showFeaturedQuestionsOnly = false
           const result = getQuestionTrees.resultFunc(questions, answers, FULL_REPORT, showFeaturedQuestionsOnly).toJS()
-          expect(result[1].visible).to.eql(true)
-          expect(result[2].visible).to.eql(false)
+          expect(result[1].visible).toBe(true)
+          expect(result[2].visible).toBe(false)
         })
       })
       describe('and dashboard view is used', () => {
@@ -170,8 +168,8 @@ describe('report tree selectors', () => {
           const answers = fromJS({})
           const showFeaturedQuestionsOnly = false
           const result = getQuestionTrees.resultFunc(questions, answers, DASHBOARD, showFeaturedQuestionsOnly).toJS()
-          expect(result[1].visible).to.eql(true)
-          expect(result[2].visible).to.eql(true)
+          expect(result[1].visible).toBe(true)
+          expect(result[2].visible).toBe(true)
         })
       })
     })
@@ -186,8 +184,8 @@ describe('report tree selectors', () => {
           const answers = fromJS({})
           const showFeaturedQuestionsOnly = true
           const result = getQuestionTrees.resultFunc(questions, answers, FULL_REPORT, showFeaturedQuestionsOnly).toJS()
-          expect(result[1].visible).to.eql(true)
-          expect(result[2].visible).to.eql(true)
+          expect(result[1].visible).toBe(true)
+          expect(result[2].visible).toBe(true)
         })
       })
 
@@ -200,8 +198,8 @@ describe('report tree selectors', () => {
           const answers = fromJS({})
           const showFeaturedQuestionsOnly = true
           const result = getQuestionTrees.resultFunc(questions, answers, DASHBOARD, showFeaturedQuestionsOnly).toJS()
-          expect(result[1].visible).to.eql(true)
-          expect(result[2].visible).to.eql(false)
+          expect(result[1].visible).toBe(true)
+          expect(result[2].visible).toBe(false)
         })
       })
     })
@@ -209,37 +207,37 @@ describe('report tree selectors', () => {
 
   describe('getPageTrees', () => {
     it('should return pages with question keys mapped to questions', () => {
-      expect(getPageTrees(state({})).toJS()).to.eql(expectedPageTrees({}))
+      expect(getPageTrees(state({})).toJS()).toEqual(expectedPageTrees({}))
     })
     it('should set visible property based on the children visibility', () => {
-      expect(getPageTrees(state({ questionVisible: false })).toJS()).to.eql(expectedPageTrees({ questionVisible: false }))
+      expect(getPageTrees(state({ questionVisible: false })).toJS()).toEqual(expectedPageTrees({ questionVisible: false }))
     })
   })
 
   describe('getSectionTrees', () => {
     it('should return sections with page ids mapped to pages', () => {
-      expect(getSectionTrees(state({})).toJS()).to.eql(expectedSectionTrees({}))
+      expect(getSectionTrees(state({})).toJS()).toEqual(expectedSectionTrees({}))
     })
     it('should set visible property based on the children visibility', () => {
-      expect(getSectionTrees(state({ questionVisible: false })).toJS()).to.eql(expectedSectionTrees({ questionVisible: false }))
+      expect(getSectionTrees(state({ questionVisible: false })).toJS()).toEqual(expectedSectionTrees({ questionVisible: false }))
     })
     it('should set nameHidden property based on the hideSectionNames prop', () => {
-      expect(getSectionTrees(state({ hideSectionNames: false })).toJS()).to.eql(expectedSectionTrees({ nameHidden: false }))
+      expect(getSectionTrees(state({ hideSectionNames: false })).toJS()).toEqual(expectedSectionTrees({ nameHidden: false }))
     })
   })
 
   describe('getActivityTrees', () => {
     it('should return activities with section ids mapped to sections', () => {
-      expect(getActivityTrees(state({})).toJS()).to.eql(expectedActivityTrees({}))
+      expect(getActivityTrees(state({})).toJS()).toEqual(expectedActivityTrees({}))
     })
     it('should set visible property based on the children visibility', () => {
-      expect(getActivityTrees(state({ questionVisible: false })).toJS()).to.eql(expectedActivityTrees({ questionVisible: false }))
+      expect(getActivityTrees(state({ questionVisible: false })).toJS()).toEqual(expectedActivityTrees({ questionVisible: false }))
     })
   })
 
   describe('getInvestigationTrees', () => {
     it('should return investigation (only one!) with activity ids mapped to activities', () => {
-      expect(getInvestigationTree(state({})).toJS()).to.eql(expectedInvestigationTree({}))
+      expect(getInvestigationTree(state({})).toJS()).toEqual(expectedInvestigationTree({}))
     })
   })
 })

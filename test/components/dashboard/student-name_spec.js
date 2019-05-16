@@ -1,6 +1,4 @@
 import React from 'react'
-import { expect } from 'chai'
-import { describe, it } from 'mocha'
 import { shallow } from 'enzyme'
 import sinon from 'sinon'
 import { fromJS } from 'immutable'
@@ -12,8 +10,8 @@ describe('<StudentName />', () => {
     const firstName = 'John'
     const student = fromJS({ lastName, firstName })
     const wrapper = shallow(<StudentName student={student} />)
-    expect(wrapper.contains(lastName)).to.equal(true)
-    expect(wrapper.contains(firstName)).to.equal(true)
+    expect(wrapper.contains(lastName)).toBe(true)
+    expect(wrapper.contains(firstName)).toBe(true)
   })
 
   it('should call setStudentExpanded when user clicks on it', () => {
@@ -21,7 +19,7 @@ describe('<StudentName />', () => {
     const trackEvent = sinon.spy()
     const wrapper = shallow(<StudentName expanded={false} setStudentExpanded={onClick} trackEvent={trackEvent} />)
     wrapper.simulate('click')
-    expect(onClick.calledOnce).to.equal(true)
-    expect(trackEvent.calledOnce).to.equal(true)
+    expect(onClick.calledOnce).toBe(true)
+    expect(trackEvent.calledOnce).toBe(true)
   })
 })
