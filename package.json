@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "@types/query-string": "^6.3.0",
     "autoprefixer": "^9.5.1",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^1.0.1",

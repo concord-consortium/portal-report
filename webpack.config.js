@@ -21,6 +21,9 @@ module.exports = {
     library: lib ? 'PortalReport' : undefined,
     libraryTarget: lib ? 'umd' : undefined
   },
+  resolve: {
+    extensions: ['.ts', '.js', '.json']
+  },
   module: {
     loaders: [
       {
