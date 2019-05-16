@@ -1,38 +1,38 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from "react";
 
-const UPDATE_INTERVAL = 1000
+const UPDATE_INTERVAL = 1000;
 
 export default class FeedbackBox extends PureComponent {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      value: props.initialFeedback || ''
-    }
-    this.updateText = this.updateText.bind(this)
+      value: props.initialFeedback || "",
+    };
+    this.updateText = this.updateText.bind(this);
   }
 
-  clearUpdateTimer () {
+  clearUpdateTimer() {
     if (this.updateTimer) {
-      clearTimeout(this.updateTimer)
+      clearTimeout(this.updateTimer);
     }
   }
 
-  updateText (e) {
-    const value = e.target.value
-    this.clearUpdateTimer()
-    this.setState({value: value})
-    this.updateTimer = setTimeout(() => this.props.onChange(this.state.value), this.props.updateInterval || UPDATE_INTERVAL)
+  updateText(e) {
+    const value = e.target.value;
+    this.clearUpdateTimer();
+    this.setState({value: value});
+    this.updateTimer = setTimeout(() => this.props.onChange(this.state.value), this.props.updateInterval || UPDATE_INTERVAL);
   }
 
-  render () {
+  render() {
     return (
       <textarea
-        data-cy='feedbackBox'
-        rows='10'
-        cols='20'
+        data-cy="feedbackBox"
+        rows="10"
+        cols="20"
         value={this.state.value}
         disabled={this.props.disabled}
         onChange={this.updateText} />
-    )
+    );
   }
 }

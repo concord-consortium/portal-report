@@ -1,21 +1,21 @@
-import { createSelector } from 'reselect'
-import { FULL_REPORT, DASHBOARD } from '../reducers'
+import { createSelector } from "reselect";
+import { FULL_REPORT, DASHBOARD } from "../reducers";
 
 // `getInvestigationTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // Redux state has flat structure. This selector maps all the IDs and keys and creates a tree-like hierarchy.
 // It includes all the properties provided by API + calculates a few additional ones.
 
 // Inputs
-const getInvestigations = state => state.getIn(['report', 'investigations'])
-const getActivities = state => state.getIn(['report', 'activities'])
-const getPages = state => state.getIn(['report', 'pages'])
-const getSections = state => state.getIn(['report', 'sections'])
-const getQuestions = state => state.getIn(['report', 'questions'])
-const getAnswers = state => state.getIn(['report', 'answers'])
-const getStudents = state => state.getIn(['report', 'students'])
-const getHideSectionNames = state => state.getIn(['report', 'hideSectionNames'])
-const getShowFeaturedQuestionsOnly = state => state.getIn(['report', 'showFeaturedQuestionsOnly'])
-const getViewType = state => state.getIn(['view', 'type'])
+const getInvestigations = state => state.getIn(["report", "investigations"]);
+const getActivities = state => state.getIn(["report", "activities"]);
+const getPages = state => state.getIn(["report", "pages"]);
+const getSections = state => state.getIn(["report", "sections"]);
+const getQuestions = state => state.getIn(["report", "questions"]);
+const getAnswers = state => state.getIn(["report", "answers"]);
+const getStudents = state => state.getIn(["report", "students"]);
+const getHideSectionNames = state => state.getIn(["report", "hideSectionNames"]);
+const getShowFeaturedQuestionsOnly = state => state.getIn(["report", "showFeaturedQuestionsOnly"]);
+const getViewType = state => state.getIn(["view", "type"]);
 
 // Helpers
 
@@ -26,8 +26,8 @@ const getViewType = state => state.getIn(['view', 'type'])
 const isQuestionVisible = (question, viewType, featuredOnly) => {
   // Custom question filtering is currently supported only by regular, non-dashboard report.
   // There are no checkboxes and controls in dashboard.
-  if (viewType === FULL_REPORT && question.get('hiddenByUser')) {
-    return false
+  if (viewType === FULL_REPORT && question.get("hiddenByUser")) {
+    return false;
   }
   // Only dashboard is considered to be featured question report". In the future, when there's a toggle
   // letting user switch `showFeaturedQuestionsOnly` on and off, this might not be the case anymore.
@@ -35,89 +35,89 @@ const isQuestionVisible = (question, viewType, featuredOnly) => {
   // (so the value is undefined or null), assume that the question is visible in the featured question report.
   // It's necessary so this report works before Portal (API) is updated to provide this flag. Later, it will be
   // less important.
-  if (viewType === DASHBOARD && featuredOnly && question.get('showInFeaturedQuestionReport') === false) {
-    return false
+  if (viewType === DASHBOARD && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
+    return false;
   }
-  return true
-}
+  return true;
+};
 
 // Selectors
 export const getAnswerTrees = createSelector(
   [ getAnswers, getStudents ],
   (answers, students) =>
     answers.map(answer =>
-      answer.set('student', students.get(answer.get('studentId').toString()))
-    )
-)
+      answer.set("student", students.get(answer.get("studentId").toString())),
+    ),
+);
 
 export const getQuestionTrees = createSelector(
   [ getQuestions, getAnswerTrees, getViewType, getShowFeaturedQuestionsOnly ],
   (questions, answerTrees, viewType, showFeaturedQuestionsOnly) => {
     return questions.map(question => {
-      const mappedAnswers = question.get('answers').map(key => answerTrees.get(key))
-      if (question.get('type') === 'Embeddable::MultipleChoice') {
+      const mappedAnswers = question.get("answers").map(key => answerTrees.get(key));
+      if (question.get("type") === "Embeddable::MultipleChoice") {
         // Multiple choice question is scored if at least one choice is marked as correct.
-        question = question.set('scored', question.get('choices').some(c => c.get('isCorrect')))
+        question = question.set("scored", question.get("choices").some(c => c.get("isCorrect")));
       }
       return question
-        .set('answers', mappedAnswers)
-        .set('visible', isQuestionVisible(question, viewType, showFeaturedQuestionsOnly))
-    })
-  }
-)
+        .set("answers", mappedAnswers)
+        .set("visible", isQuestionVisible(question, viewType, showFeaturedQuestionsOnly));
+    });
+  },
+);
 
 export const getPageTrees = createSelector(
   [ getPages, getQuestionTrees ],
   (pages, questionTrees) =>
     pages.map(page => {
-      const mappedChildren = page.get('children').map(key => questionTrees.get(key))
+      const mappedChildren = page.get("children").map(key => questionTrees.get(key));
       return page
-        .set('children', mappedChildren)
+        .set("children", mappedChildren)
         // Page is visible only if at least one question is visible.
-        .set('visible', !!mappedChildren.find(q => q.get('visible')))
-    })
-)
+        .set("visible", !!mappedChildren.find(q => q.get("visible")));
+    }),
+);
 
 export const getSectionTrees = createSelector(
   [ getSections, getPageTrees, getHideSectionNames ],
   (sections, pageTrees, hideSectionNames) =>
     sections.map(section => {
-      const mappedChildren = section.get('children').map(id => pageTrees.get(id.toString()))
+      const mappedChildren = section.get("children").map(id => pageTrees.get(id.toString()));
       return section
-        .set('children', mappedChildren)
+        .set("children", mappedChildren)
         // Section is visible only if at least one page is visible.
-        .set('visible', !!mappedChildren.find(p => p.get('visible')))
+        .set("visible", !!mappedChildren.find(p => p.get("visible")))
         // Hide section titles for external activities.
-        .set('nameHidden', hideSectionNames)
-    })
-)
+        .set("nameHidden", hideSectionNames);
+    }),
+);
 
 export const getActivityTrees = createSelector(
   [ getActivities, getSectionTrees ],
   (activities, sectionTrees) =>
     activities.map(activity => {
-      const mappedChildren = activity.get('children').map(id => sectionTrees.get(id.toString()))
+      const mappedChildren = activity.get("children").map(id => sectionTrees.get(id.toString()));
       // Calculate additional properties, flattened pages and questions.
-      const pages = mappedChildren.map(section => section.get('children')).flatten(1)
-      const questions = pages.map(page => page.get('children')).flatten(1)
+      const pages = mappedChildren.map(section => section.get("children")).flatten(1);
+      const questions = pages.map(page => page.get("children")).flatten(1);
       return activity
-        .set('children', mappedChildren)
-        .set('pages', pages)
-        .set('questions', questions)
+        .set("children", mappedChildren)
+        .set("pages", pages)
+        .set("questions", questions)
         // Activity is visible only if at least one section is visible.
-        .set('visible', !!mappedChildren.find(s => s.get('visible')))
-    })
-)
+        .set("visible", !!mappedChildren.find(s => s.get("visible")));
+    }),
+);
 
 export const getInvestigationTree = createSelector(
   [ getInvestigations, getActivityTrees ],
   (investigations, activityTrees) => {
     // There is always only one investigation.
-    const investigation = investigations.values().next().value
-    const mappedChildren = investigation.get('children').map(id => activityTrees.get(id.toString()))
+    const investigation = investigations.values().next().value;
+    const mappedChildren = investigation.get("children").map(id => activityTrees.get(id.toString()));
     return investigation
-      .set('children', mappedChildren)
-  }
-)
+      .set("children", mappedChildren);
+  },
+);
 
-export default getInvestigationTree
+export default getInvestigationTree;

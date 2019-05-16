@@ -1,12 +1,12 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from "react";
 
 export default class OpenResponseAnswer extends PureComponent {
-  render () {
-    const { answer } = this.props
+  render() {
+    const { answer } = this.props;
     return (
       <div>
-        {answer.get('answer')}
+        {answer.get("answer")}
       </div>
-    )
+    );
   }
 }

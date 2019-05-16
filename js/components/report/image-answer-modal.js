@@ -1,37 +1,37 @@
-import React, { PureComponent } from 'react'
-import { Modal } from 'react-bootstrap'
+import React, { PureComponent } from "react";
+import { Modal } from "react-bootstrap";
 
 export default class ImageAnswerModal extends PureComponent {
-  componentDidMount () {
-    window.addEventListener('click', this.windowClicked.bind(this), true)
+  componentDidMount() {
+    window.addEventListener("click", this.windowClicked.bind(this), true);
   }
 
-  componentWillUnmount () {
-    window.removeEventListener('click', this.windowClicked.bind(this))
+  componentWillUnmount() {
+    window.removeEventListener("click", this.windowClicked.bind(this));
   }
 
-  windowClicked () {
-    const { show, onHide } = this.props
+  windowClicked() {
+    const { show, onHide } = this.props;
     if (show) {
       // hide the modal with any click in the window and not just the modal background
-      onHide()
+      onHide();
     }
   }
 
-  render () {
-    const { answer, show, onHide } = this.props
-    if (!answer) return null
+  render() {
+    const { answer, show, onHide } = this.props;
+    if (!answer) { return null; }
     return (
       <Modal show={show} onHide={onHide}>
         <Modal.Header closeButton />
         <Modal.Body>
-          <img src={answer.getIn(['answer', 'imageUrl'])} style={{display: 'block', margin: '0 auto'}} />
+          <img src={answer.getIn(["answer", "imageUrl"])} style={{display: "block", margin: "0 auto"}} />
         </Modal.Body>
         <Modal.Footer>
-          <div style={{fontWeight: 'bold'}}>{answer.getIn(['student', 'name'])}</div>
-          <div>{answer.getIn(['answer', 'note'])}</div>
+          <div style={{fontWeight: "bold"}}>{answer.getIn(["student", "name"])}</div>
+          <div>{answer.getIn(["answer", "note"])}</div>
         </Modal.Footer>
       </Modal>
-    )
+    );
   }
 }

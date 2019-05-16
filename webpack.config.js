@@ -24,7 +24,8 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.tsx?$/,
+        test: /\.[tj]sx?$/,
+        exclude: path.join(__dirname, 'node_modules'),
         enforce: 'pre',
         use: [
           {
@@ -35,6 +36,7 @@ module.exports = {
       },
       {
         test: /\.[tj]sx?$/,
+        exclude: path.join(__dirname, 'node_modules'),
         loader: 'ts-loader',
         options: {
           transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation

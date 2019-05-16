@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from "react";
 
 export default class NoAnswer extends PureComponent {
-  render () {
+  render() {
     return (
       <div>
         No response
       </div>
-    )
+    );
   }
 }

@@ -1,23 +1,23 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from "react";
 
 export default class ScoreBox extends PureComponent {
-  constructor (props) {
-    super(props)
-    this.updateText = this.updateText.bind(this)
+  constructor(props) {
+    super(props);
+    this.updateText = this.updateText.bind(this);
   }
 
-  validateValue (v) {
-    return parseInt(v, 10) || 0
+  validateValue(v) {
+    return parseInt(v, 10) || 0;
   }
 
-  updateText (e) {
-    const value = e.target.value
-    this.props.onChange(this.validateValue(value))
+  updateText(e) {
+    const value = e.target.value;
+    this.props.onChange(this.validateValue(value));
   }
 
-  render () {
+  render() {
     return (
-      <div className='score'>
+      <div className="score">
         Score
         <input
           disabled={this.props.disabled}
@@ -25,6 +25,6 @@ export default class ScoreBox extends PureComponent {
           value={this.props.score}
         />
       </div>
-    )
+    );
   }
 }

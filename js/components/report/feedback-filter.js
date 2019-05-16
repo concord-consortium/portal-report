@@ -1,32 +1,32 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from "react";
 
-import '../../../css/report/feedback-filters.less'
+import "../../../css/report/feedback-filters.less";
 
 export default class FeedbackFilter extends PureComponent {
-  render () {
-    const makeOnlyNeedReview = this.props.makeOnlyNeedReview
-    const makeShowAll = this.props.makeShowAll
-    const onlyNeedReview = this.props.showOnlyNeedReview
+  render() {
+    const makeOnlyNeedReview = this.props.makeOnlyNeedReview;
+    const makeShowAll = this.props.makeShowAll;
+    const onlyNeedReview = this.props.showOnlyNeedReview;
 
-    const showAll = !onlyNeedReview
-    const disable = this.props.disable
+    const showAll = !onlyNeedReview;
+    const disable = this.props.disable;
     const pullDownOptions = this.props.students.unshift(
       {
-        realName: 'Select a student …',
+        realName: "Select a student …",
         id: -1,
-        answer: null
-      })
+        answer: null,
+      });
 
     return (
-      <div className='feedback-filters'>
-        <div className='filters'>
+      <div className="feedback-filters">
+        <div className="filters">
           <div>
             Show:
-            <input id='needsReview' type='radio' name='groupType' value='needs review' checked={onlyNeedReview} onChange={makeOnlyNeedReview} />
-            <label htmlFor='needsReview'> Students that need review</label>
+            <input id="needsReview" type="radio" name="groupType" value="needs review" checked={onlyNeedReview} onChange={makeOnlyNeedReview} />
+            <label htmlFor="needsReview"> Students that need review</label>
 
-            <input id='all' type='radio' name='groupType' value='all' checked={showAll} onChange={makeShowAll} />
-            <label htmlFor='all'> All students </label>
+            <input id="all" type="radio" name="groupType" value="all" checked={showAll} onChange={makeShowAll} />
+            <label htmlFor="all"> All students </label>
           </div>
           <div>
             Jump to
@@ -35,8 +35,8 @@ export default class FeedbackFilter extends PureComponent {
             </select>
           </div>
         </div>
-        { disable ? <div className='disabled' /> : null}
+        { disable ? <div className="disabled" /> : null}
       </div>
-    )
+    );
   }
 }
