@@ -8,6 +8,7 @@ install:
 script:
   - webpack
   - WEBPACK_TARGET=lib webpack
+  - npm run lint
   - npm run test
   - npm run start &
   - wait-on http://localhost:8080
