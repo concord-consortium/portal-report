@@ -35,7 +35,8 @@ class ReportApp extends PureComponent {
   }
 
   renderReport() {
-    const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setNowShowing, setAnonymous, trackEvent } = this.props;
+    const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setNowShowing, setAnonymous,
+      trackEvent, lastUpdated, isFetching } = this.props;
     return <Report
       report={report}
       reportTree={reportTree}
@@ -44,6 +45,9 @@ class ReportApp extends PureComponent {
       setNowShowing={setNowShowing}
       setAnonymous={setAnonymous}
       trackEvent={trackEvent}
+      lastUpdated={lastUpdated}
+      isFetching={isFetching}
+      onRefreshClick={this.handleRefreshClick}
     />;
   }
 
@@ -59,10 +63,10 @@ class ReportApp extends PureComponent {
   }
 
   render() {
-    const { report, error, isFetching, lastUpdated } = this.props;
+    const { report, error, isFetching } = this.props;
     return (
       <div className="report-app">
-        <Header lastUpdated={lastUpdated} isFetching={isFetching} onRefreshClick={this.handleRefreshClick} />
+        <Header />
         <div className="report" style={{ opacity: isFetching ? 0.3 : 1 }}>
           {report && this.renderReport()}
           {error && <DataFetchError error={error} />}
