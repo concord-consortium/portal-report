@@ -1,0 +1,240 @@
+{
+  "source_type": "LARA",
+  "type": "Sequence",
+  "id": 230,
+  "name": "Report Test Sequence",
+  "description": "",
+  "abstract": "",
+  "url": "http://authoring.staging.concord.org/sequences/230",
+  "create_url": "http://authoring.staging.concord.org/sequences/230",
+  "author_url": "http://authoring.staging.concord.org/sequences/230/edit",
+  "print_url": "http://authoring.staging.concord.org/sequences/230/print_blank",
+  "external_report_url": "",
+  "thumbnail_url": "",
+  "author_email": "janikpiotrek@gmail.com",
+  "children": [
+    {
+      "source_type": "LARA",
+      "type": "Activity",
+      "id": 20138,
+      "name": "Report Test Activity 1",
+      "description": "",
+      "url": "http://authoring.staging.concord.org/activities/20138",
+      "create_url": "http://authoring.staging.concord.org/activities/20138",
+      "author_url": "http://authoring.staging.concord.org/activities/20138/edit",
+      "print_url": "http://authoring.staging.concord.org/activities/20138/print_blank",
+      "external_report_url": null,
+      "student_report_enabled": true,
+      "thumbnail_url": "",
+      "author_email": "janikpiotrek@gmail.com",
+      "is_locked": false,
+      "children": [
+        {
+          "name": "Report Test Activity 1 Section",
+          "type": "Section",
+          "id": 123,
+          "children": [
+            {
+              "name": "Basic question types",
+              "url": "http://authoring.staging.concord.org/pages/305387",
+              "type": "Page",
+              "id": 305387,
+              "children": [
+                {
+                  "type": "open_response",
+                  "id": 444601,
+                  "prompt": "\u003Cp\u003EOpen response question prompt\u003C/p\u003E",
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                },
+                {
+                  "type": "multiple_choice",
+                  "id": 11982,
+                  "prompt": "\u003Cp\u003EMultiple choice question prompt\u003C/p\u003E",
+                  "choices": [
+                    {
+                      "id": 46039,
+                      "content": "a",
+                      "correct": false
+                    },
+                    {
+                      "id": 46040,
+                      "content": "b",
+                      "correct": false
+                    },
+                    {
+                      "id": 46041,
+                      "content": "c",
+                      "correct": false
+                    }
+                  ],
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                },
+                {
+                  "type": "iframe_interactive",
+                  "id": "Embeddable::Labbook_209903",
+                  "name": "Labbook album",
+                  "show_in_featured_question_report": true,
+                  "display_in_iframe": true,
+                  "native_width": 600,
+                  "native_height": 500
+                },
+                {
+                  "type": "image_question",
+                  "id": 211468,
+                  "prompt": "\u003Cp\u003Ewhy does ...\u003C/p\u003E",
+                  "drawing_prompt": "",
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                }
+              ]
+            },
+            {
+              "name": "Interactives saving state",
+              "url": "http://authoring.staging.concord.org/pages/305388",
+              "type": "Page",
+              "id": 305388,
+              "children": [
+                {
+                  "name": "",
+                  "url": "https://document-store.concord.org/v2/documents/105461/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Flatest%2F\u0026scaling",
+                  "native_width": 576,
+                  "native_height": 435,
+                  "enable_learner_state": true,
+                  "show_delete_data_button": true,
+                  "has_report_url": true,
+                  "click_to_play": false,
+                  "click_to_play_prompt": null,
+                  "full_window": false,
+                  "image_url": "",
+                  "is_hidden": false,
+                  "is_full_width": true,
+                  "show_in_featured_question_report": true,
+                  "model_library_url": null,
+                  "authored_state": null,
+                  "aspect_ratio_method": "DEFAULT",
+                  "type": "iframe_interactive",
+                  "id": 209008,
+                  "display_in_iframe": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_type": "LARA",
+      "type": "Activity",
+      "id": 20139,
+      "name": "Report Test Activity 2",
+      "description": "",
+      "url": "http://authoring.staging.concord.org/activities/20139",
+      "create_url": "http://authoring.staging.concord.org/activities/20139",
+      "author_url": "http://authoring.staging.concord.org/activities/20139/edit",
+      "print_url": "http://authoring.staging.concord.org/activities/20139/print_blank",
+      "external_report_url": null,
+      "student_report_enabled": true,
+      "thumbnail_url": "",
+      "author_email": "janikpiotrek@gmail.com",
+      "is_locked": false,
+      "children": [
+        {
+          "name": "Report Test Activity 2 Section",
+          "type": "Section",
+          "id": 124,
+          "children": [
+            {
+              "name": "Arg block",
+              "type": "Page",
+              "id": 35389,
+              "url": "http://authoring.staging.concord.org/pages/305389",
+              "children": [
+                {
+                  "type": "open_response",
+                  "id": 444602,
+                  "prompt": "why does ...",
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                },
+                {
+                  "type": "multiple_choice",
+                  "id": 11983,
+                  "prompt": "why does ...",
+                  "choices": [
+                    {
+                      "id": 46042,
+                      "content": "a",
+                      "correct": null
+                    },
+                    {
+                      "id": 46043,
+                      "content": "b",
+                      "correct": null
+                    },
+                    {
+                      "id": 46044,
+                      "content": "c",
+                      "correct": null
+                    }
+                  ],
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                },
+                {
+                  "type": "open_response",
+                  "id": 444603,
+                  "prompt": "Explain your answer.",
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                },
+                {
+                  "type": "multiple_choice",
+                  "id": 11984,
+                  "prompt": "How certain are you about your claim based on your explanation?",
+                  "choices": [
+                    {
+                      "id": 46045,
+                      "content": "(1) Not at all certain",
+                      "correct": null
+                    },
+                    {
+                      "id": 46046,
+                      "content": "(2)",
+                      "correct": null
+                    },
+                    {
+                      "id": 46047,
+                      "content": "(3)",
+                      "correct": null
+                    },
+                    {
+                      "id": 46048,
+                      "content": "(4)",
+                      "correct": null
+                    },
+                    {
+                      "id": 46049,
+                      "content": "(5) Very certain",
+                      "correct": null
+                    }
+                  ],
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                },
+                {
+                  "type": "open_response",
+                  "id": 444604,
+                  "prompt": "Explain what influenced your certainty rating.",
+                  "is_required": false,
+                  "show_in_featured_question_report": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
