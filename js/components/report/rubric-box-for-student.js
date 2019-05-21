@@ -1,17 +1,17 @@
-import React, { PureComponent } from 'react'
-import Markdown from 'markdown-to-jsx'
-import { RubricHelper } from '../../util/rubric-helper'
-import '../../../css/report/rubric-box-for-student.less'
+import React, { PureComponent } from "react";
+import Markdown from "markdown-to-jsx";
+import { RubricHelper } from "../../util/rubric-helper";
+import "../../../css/report/rubric-box-for-student.less";
 
 export default class RubricBoxForStudent extends PureComponent {
-  render () {
-    const { rubric, rubricFeedback } = this.props
-    const helper = new RubricHelper(rubric, rubricFeedback)
+  render() {
+    const { rubric, rubricFeedback } = this.props;
+    const helper = new RubricHelper(rubric, rubricFeedback);
 
-    const feedbacks = helper.allFeedback('student').filter(f => !!f).map(f =>
-      <tr className='criterion' key={f.key}>
-        <td className='description'><Markdown>{f.description}</Markdown></td>
-        <td className='rating'>
+    const feedbacks = helper.allFeedback("student").filter(f => !!f).map(f =>
+      <tr className="criterion" key={f.key}>
+        <td className="description"><Markdown>{f.description}</Markdown></td>
+        <td className="rating">
           <Markdown>
             { rubric.showRatingDescriptions
               ? `${f.label.toUpperCase()} – ${f.ratingDescription}`
@@ -19,21 +19,21 @@ export default class RubricBoxForStudent extends PureComponent {
             }
           </Markdown>
         </td>
-      </tr>
-    )
+      </tr>,
+    );
 
     if (feedbacks.length > 0) {
       return (
-        <table className='rubric-box-for-student'>
+        <table className="rubric-box-for-student">
           <tbody>
             <tr>
-              <th>{ helper.criteriaLabel('student') }</th><th>{ helper.feedbackLabel('student') }</th>
+              <th>{ helper.criteriaLabel("student") }</th><th>{ helper.feedbackLabel("student") }</th>
             </tr>
             { feedbacks }
           </tbody>
         </table>
-      )
+      );
     }
-    return null
+    return null;
   }
 }

@@ -3,6 +3,7 @@ dist
 _site
 .env
 .idea
+.DS_Store
 
 /cypress/screenshots
 /cypress/fixtures/example.json

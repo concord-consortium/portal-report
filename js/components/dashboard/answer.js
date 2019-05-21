@@ -1,43 +1,43 @@
-import React, { PureComponent } from 'react'
-import { Map } from 'immutable'
-import MultipleChoiceAnswer from './multiple-choice-answer'
-import OpenResponseAnswer from './open-response-answer'
+import React, { PureComponent } from "react";
+import { Map } from "immutable";
+import MultipleChoiceAnswer from "./multiple-choice-answer";
+import OpenResponseAnswer from "./open-response-answer";
 
-import css from '../../../css/dashboard/answer.less'
+import css from "../../../css/dashboard/answer.less";
 
-export const NoAnswer = () => null
+export const NoAnswer = () => null;
 
 export const GenericAnswer = () => (
   <div className={css.genericAnswer}>
     {
-      '\u2b24' // large circle
+      "\u2b24" // large circle
     }
   </div>
-)
+);
 
 const AnswerComponent = {
-  'Embeddable::MultipleChoice': MultipleChoiceAnswer,
-  'Embeddable::OpenResponse': OpenResponseAnswer,
-  'Embeddable::ImageQuestion': GenericAnswer,
-  'Embeddable::Iframe': GenericAnswer,
-  'NoAnswer': NoAnswer
-}
+  "Embeddable::MultipleChoice": MultipleChoiceAnswer,
+  "Embeddable::OpenResponse": OpenResponseAnswer,
+  "Embeddable::ImageQuestion": GenericAnswer,
+  "Embeddable::Iframe": GenericAnswer,
+  "NoAnswer": NoAnswer,
+};
 
 export default class Answer extends PureComponent {
-  render () {
-    const { answer, showFullAnswer, question } = this.props
-    let AComponent = NoAnswer
-    if (answer && answer.get('submitted')) {
-      AComponent = AnswerComponent[answer.get('type')] || GenericAnswer
+  render() {
+    const { answer, showFullAnswer, question } = this.props;
+    let AComponent = NoAnswer;
+    if (answer && answer.get("submitted")) {
+      AComponent = AnswerComponent[answer.get("type")] || GenericAnswer;
     }
     return (
       <AComponent answer={answer} showFullAnswer={showFullAnswer} question={question} />
-    )
+    );
   }
 }
 
 Answer.defaultProps = {
   answer: Map(),
   question: Map(),
-  showFullAnswer: false
-}
+  showFullAnswer: false,
+};

@@ -1,14 +1,14 @@
-import React, { PureComponent } from 'react'
-import { Modal } from 'react-bootstrap'
-import Button from '../../components/common/button'
+import React, { PureComponent } from "react";
+import { Modal } from "react-bootstrap";
+import Button from "../../components/common/button";
 
-import helpNavImg from '../../../img/help/nav.png'
-import css from '../../../css/dashboard/help-modal.less'
+import helpNavImg from "../../../img/help/nav.png";
+import css from "../../../css/dashboard/help-modal.less";
 
 export default class HelpModal extends PureComponent {
 
-  render () {
-    const { toggleHelpModal, helpViewVisible } = this.props
+  render() {
+    const { toggleHelpModal, helpViewVisible } = this.props;
     return (
       <Modal show={helpViewVisible} onHide={toggleHelpModal}>
         <Modal.Body>
@@ -21,13 +21,13 @@ export default class HelpModal extends PureComponent {
             <h3>Questions &amp; Answers</h3>
             <div className={css.symbolKey}>
               <ul className={css.symbolKeyList}>
-                <li className="icon"><i className={[css.helpIcon, css.correct, 'icomoon-checkmark'].join(' ')}></i> Multiple Choice Correct Response</li>
-                <li className="icon"><i className={[css.helpIcon, css.incorrect, 'icomoon-checkmark'].join(' ')}></i> Multiple Choice Incorrect Response</li>
-                <li className="icon"><i className={[css.helpIcon, 'icomoon-checkmark2'].join(' ')}></i> Non-Scored Multiple Choice Response</li>
+                <li className="icon"><i className={[css.helpIcon, css.correct, "icomoon-checkmark"].join(" ")}></i> Multiple Choice Correct Response</li>
+                <li className="icon"><i className={[css.helpIcon, css.incorrect, "icomoon-checkmark"].join(" ")}></i> Multiple Choice Incorrect Response</li>
+                <li className="icon"><i className={[css.helpIcon, "icomoon-checkmark2"].join(" ")}></i> Non-Scored Multiple Choice Response</li>
               </ul>
               <ul className={css.symbolKeyList}>
-                <li className="icon"><i className={[css.helpIcon, css.helpExpander, 'icomoon-expander'].join(' ')}></i> Expand Question and Response Details</li>
-                <li className="icon"><i className={[css.helpIcon, 'icomoon-file-text'].join(' ')}></i> Written Response</li>
+                <li className="icon"><i className={[css.helpIcon, css.helpExpander, "icomoon-expander"].join(" ")}></i> Expand Question and Response Details</li>
+                <li className="icon"><i className={[css.helpIcon, "icomoon-file-text"].join(" ")}></i> Written Response</li>
                 <li className="genericAnswer"><span className={css.snapshot}>⬤</span> Snapshot (expand question to see images)</li>
               </ul>
             </div>
@@ -37,6 +37,6 @@ export default class HelpModal extends PureComponent {
           <div className={css.closeButton}><Button onClick={toggleHelpModal}>close</Button></div>
         </Modal.Footer>
       </Modal>
-    )
+    );
   }
 }

@@ -1,48 +1,48 @@
-import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
-import Sticky from 'react-stickynode'
-import Section from '../../components/report/section'
-import FeedbackButton from '../../components/report/feedback-button'
-import ActivityFeedbackForStudent from '../../components/report/activity-feedback-for-student'
-import ActivityFeedbackPanel from './activity-feedback-panel'
-import SummaryIndicator from '../../components/report/summary-indicator'
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+import Sticky from "react-stickynode";
+import Section from "../../components/report/section";
+import FeedbackButton from "../../components/report/feedback-button";
+import ActivityFeedbackForStudent from "../../components/report/activity-feedback-for-student";
+import ActivityFeedbackPanel from "./activity-feedback-panel";
+import SummaryIndicator from "../../components/report/summary-indicator";
 import {
   makeGetStudentFeedbacks,
   makeGetRubric,
   makeGetAutoScores,
-  makeGetComputedMaxScore
-} from '../../selectors/activity-feedback-selectors'
+  makeGetComputedMaxScore,
+} from "../../selectors/activity-feedback-selectors";
 
 import {
   isAutoScoring,
-  MANUAL_SCORE
-} from '../../util/scoring-constants'
+  MANUAL_SCORE,
+} from "../../util/scoring-constants";
 
-import '../../../css/report/activity.less'
+import "../../../css/report/activity.less";
 
 class Activity extends PureComponent {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      showFeedbackPanel: false
-    }
-    this.showFeedback = this.showFeedback.bind(this)
-    this.hideFeedback = this.hideFeedback.bind(this)
+      showFeedbackPanel: false,
+    };
+    this.showFeedback = this.showFeedback.bind(this);
+    this.hideFeedback = this.hideFeedback.bind(this);
   }
 
-  showFeedback () {
+  showFeedback() {
     this.setState({
-      showFeedbackPanel: true
-    })
+      showFeedbackPanel: true,
+    });
   }
 
-  hideFeedback () {
+  hideFeedback() {
     this.setState({
-      showFeedbackPanel: false
-    })
+      showFeedbackPanel: false,
+    });
   }
 
-  render () {
+  render() {
     const {
       activity,
       reportFor,
@@ -52,37 +52,36 @@ class Activity extends PureComponent {
       autoScores,
       rubric,
       rubricFeedbacks,
-      scores
-    } = this.props
-    const { showFeedbackPanel } = this.state
+      scores,
+    } = this.props;
+    const { showFeedbackPanel } = this.state;
 
-    const isClassReport = reportFor === 'class'
-    const isStudentReport = !isClassReport
-    const activityName = activity.get('name')
-    const showText = activity.get('enableTextFeedback')
-    const scoreType = activity.get('scoreType')
-    const _maxScore = activity.get('maxScore')
-    const maxScore = scoreType === MANUAL_SCORE ? _maxScore : computedMaxScore
-    const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS())
-    const showScore = scoreType !== 'none'
-    const useRubric = activity.get('useRubric')
-    const feedbackEnabled = showScore || showText || useRubric
-    let autoScore = null
+    const isClassReport = reportFor === "class";
+    const isStudentReport = !isClassReport;
+    const activityName = activity.get("name");
+    const showText = activity.get("enableTextFeedback");
+    const scoreType = activity.get("scoreType");
+    const maxScore = scoreType === MANUAL_SCORE ? activity.get("maxScore") : computedMaxScore;
+    const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS());
+    const showScore = scoreType !== "none";
+    const useRubric = activity.get("useRubric");
+    const feedbackEnabled = showScore || showText || useRubric;
+    let autoScore = null;
 
     if (isStudentReport) {
-      const studentId = reportFor.get('id')
-      autoScore = isAutoScoring(scoreType) ? autoScores.get(studentId) : null
+      const studentId = reportFor.get("id");
+      autoScore = isAutoScoring(scoreType) ? autoScores.get(studentId) : null;
     }
 
     return (
-      <div className={`activity ${activity.get('visible') ? '' : 'hidden'}`}>
+      <div className={`activity ${activity.get("visible") ? "" : "hidden"}`}>
         <Sticky top={60}>
           <h3>{activityName} </h3>
         </Sticky>
         {
           isClassReport &&
-          <div className='feedback'>
-            <FeedbackButton text='Provide overall feedback' needsReviewCount={needsReviewCount}
+          <div className="feedback">
+            <FeedbackButton text="Provide overall feedback" needsReviewCount={needsReviewCount}
               feedbackEnabled={feedbackEnabled} showFeedback={this.showFeedback} />
           </div>
         }
@@ -93,7 +92,7 @@ class Activity extends PureComponent {
         }
         {
           isStudentReport &&
-          <div className='student-feedback-panel'>
+          <div className="student-feedback-panel">
             <ActivityFeedbackForStudent
               student={reportFor}
               feedbacks={feedbacks}
@@ -112,34 +111,34 @@ class Activity extends PureComponent {
             isClassReport && showFeedbackPanel &&
             <ActivityFeedbackPanel hide={this.hideFeedback} activity={activity} />
           }
-          { activity.get('children').map(s => <Section key={s.get('id')} section={s} reportFor={reportFor} />) }
+          { activity.get("children").map(s => <Section key={s.get("id")} section={s} reportFor={reportFor} />) }
         </div>
       </div>
-    )
+    );
   }
 }
 
-function makeMapStateToProps () {
+function makeMapStateToProps() {
   return (state, ownProps) => {
-    const getRubric = makeGetRubric()
-    const getFeedbacks = makeGetStudentFeedbacks()
-    const getAutoMaxScore = makeGetComputedMaxScore()
-    const getAutoScores = makeGetAutoScores()
+    const getRubric = makeGetRubric();
+    const getFeedbacks = makeGetStudentFeedbacks();
+    const getAutoMaxScore = makeGetComputedMaxScore();
+    const getAutoScores = makeGetAutoScores();
 
-    const rubric = getRubric(state, ownProps)
-    const computedMaxScore = getAutoMaxScore(state, ownProps)
-    const autoScores = getAutoScores(state, ownProps)
+    const rubric = getRubric(state, ownProps);
+    const computedMaxScore = getAutoMaxScore(state, ownProps);
+    const autoScores = getAutoScores(state, ownProps);
     const {
       feedbacksNeedingReview,
       feedbacks,
       scores,
-      rubricFeedbacks } = getFeedbacks(state, ownProps)
-    const needsReviewCount = feedbacksNeedingReview.size
+      rubricFeedbacks } = getFeedbacks(state, ownProps);
+    const needsReviewCount = feedbacksNeedingReview.size;
 
-    return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore }
-  }
+    return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore };
+  };
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => { return {} }
+const mapDispatchToProps = (dispatch, ownProps) => { return {}; };
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(Activity)
+export default connect(makeMapStateToProps, mapDispatchToProps)(Activity);

@@ -1,53 +1,53 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent } from "react";
 
-import '../../../css/report/data-fetch-error.less'
+import "../../../css/report/data-fetch-error.less";
 
 export default class DataFetchError extends PureComponent {
-  renderUnauthorized () {
+  renderUnauthorized() {
     return <div>
       You are not authorized to access report data. Your access token might have expired.
       Please go back to Portal and launch report again.
-    </div>
+    </div>;
   }
 
-  renderNetworkError (error) {
+  renderNetworkError(error) {
     return <div>
       <div>A network error occurred. Please go back to Portal and launch report again.</div>
       <h3>Details</h3>
       <div>{error.statusText}</div>
-    </div>
+    </div>;
   }
 
-  renderGenericInfo (error) {
+  renderGenericInfo(error) {
     return (
       <div>
         <div>URL: {error.url}</div>
         <div>Status: {error.status}</div>
         <div>Status text: {error.statusText}</div>
       </div>
-    )
+    );
   }
 
-  renderError (error) {
+  renderError(error) {
     switch (error.status) {
       case 401:
-        return this.renderUnauthorized()
+        return this.renderUnauthorized();
       case 403:
-        return this.renderUnauthorized()
+        return this.renderUnauthorized();
       case 599:
-        return this.renderNetworkError(error)
+        return this.renderNetworkError(error);
       default:
-        return this.renderGenericInfo(error)
+        return this.renderGenericInfo(error);
     }
   }
 
-  render () {
-    const { error } = this.props
+  render() {
+    const { error } = this.props;
     return (
-      <div className='data-fetch-error'>
+      <div className="data-fetch-error">
         <h2>Connection to server failed</h2>
         {this.renderError(error)}
       </div>
-    )
+    );
   }
 }

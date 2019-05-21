@@ -1,12 +1,12 @@
-import { createSelector } from 'reselect'
-import { getActivityTrees, getQuestionTrees } from './report-tree'
-import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from '../actions/dashboard'
-import { fromJS } from 'immutable'
+import { createSelector } from "reselect";
+import { getActivityTrees, getQuestionTrees } from "./report-tree";
+import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../actions/dashboard";
+import { fromJS } from "immutable";
 
 // Inputs
-const getStudents = state => state.getIn(['report', 'students'])
-const getDashboardSortBy = state => state.getIn(['dashboard', 'sortBy'])
-const getSeletedQuestionId = state => state.getIn(['dashboard', 'selectedQuestion'])
+const getStudents = state => state.getIn(["report", "students"]);
+const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
+const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
 
 // When a user selects a to display question details by
 // Clicking on the question column expand icon.
@@ -15,11 +15,11 @@ export const getSelectedQuestion = createSelector(
   (questions, id) => {
     if (questions && id) {
       return questions
-        .get(id.toString(), fromJS({}))
+        .get(id.toString(), fromJS({}));
     }
-    return null
-  }
-)
+    return null;
+  },
+);
 
 // Selectors
 
@@ -42,46 +42,46 @@ export const getStudentProgress = createSelector(
   (students, activities) => {
     return students.map(student =>
       activities.map(activity => {
-        const activityQuestions = activity.get('questions').filter(q => q.get('visible'))
+        const activityQuestions = activity.get("questions").filter(q => q.get("visible"));
         const studentSubmittedAnswers = activityQuestions.map(question =>
-          question.get('answers')
+          question.get("answers")
             .find(answer =>
-              answer.get('studentId') === student.get('id') &&
-              answer.get('type') !== 'NoAnswer' &&
+              answer.get("studentId") === student.get("id") &&
+              answer.get("type") !== "NoAnswer" &&
               // Question is completed by student only if it's there's some answer and it's submitted.
               // Note that non-required answers are "submitted" by default.
-              answer.get('submitted') === true
-            )
+              answer.get("submitted") === true,
+            ),
         // Filter out undefined / falsy values, which mean that answer has not been found.
-        ).filter(answer => !!answer)
-        return studentSubmittedAnswers.size / activityQuestions.size
-      })
-    )
-  }
-)
+        ).filter(answer => !!answer);
+        return studentSubmittedAnswers.size / activityQuestions.size;
+      }),
+    );
+  },
+);
 
 // Returns a mapping from student IDs to their average progress across all activities
 export const getStudentAverageProgress = createSelector(
   [ getStudents, getStudentProgress ],
   (students, studentProgress) => {
     return students.map(student => {
-      const activitiesProgress = studentProgress.get(student.get('id').toString()).toList()
-      return activitiesProgress.reduce((sum, progress) => sum + progress) / activitiesProgress.size
-    })
-  }
-)
+      const activitiesProgress = studentProgress.get(student.get("id").toString()).toList();
+      return activitiesProgress.reduce((sum, progress) => sum + progress) / activitiesProgress.size;
+    });
+  },
+);
 
 // A comparison function to sort students by last and then first name
 const compareStudentsByName = (student1, student2) => {
-  const lastNameCompare = student1.get('lastName').toLocaleLowerCase().localeCompare(
-    student2.get('lastName').toLocaleLowerCase()
-  )
+  const lastNameCompare = student1.get("lastName").toLocaleLowerCase().localeCompare(
+    student2.get("lastName").toLocaleLowerCase(),
+  );
   if (lastNameCompare !== 0) {
-    return lastNameCompare
+    return lastNameCompare;
   } else {
-    return student1.get('firstName').localeCompare(student2.get('firstName'))
+    return student1.get("firstName").localeCompare(student2.get("firstName"));
   }
-}
+};
 
 // Returns sorted students
 export const getSortedStudents = createSelector(
@@ -90,24 +90,24 @@ export const getSortedStudents = createSelector(
     switch (sortBy) {
       case SORT_BY_NAME:
         return students.toList().sort((student1, student2) =>
-          compareStudentsByName(student1, student2)
-        )
+          compareStudentsByName(student1, student2),
+        );
       case SORT_BY_LEAST_PROGRESS:
       case SORT_BY_MOST_PROGRESS:
         return students.toList().sort((student1, student2) => {
-          const student1Progress = studentProgress.get(student1.get('id').toString())
-          const student2Progress = studentProgress.get(student2.get('id').toString())
+          const student1Progress = studentProgress.get(student1.get("id").toString());
+          const student2Progress = studentProgress.get(student2.get("id").toString());
           const progressComp = sortBy === SORT_BY_LEAST_PROGRESS
             ? student1Progress - student2Progress
-            : student2Progress - student1Progress
+            : student2Progress - student1Progress;
           if (progressComp !== 0) {
-            return progressComp
+            return progressComp;
           } else {
-            return compareStudentsByName(student1, student2)
+            return compareStudentsByName(student1, student2);
           }
-        })
+        });
       default:
-        return students.toList()
+        return students.toList();
     }
-  }
-)
+  },
+);

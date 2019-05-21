@@ -1,30 +1,30 @@
-import React, { PureComponent } from 'react'
-import { Modal } from 'react-bootstrap'
-import Button from '../common/button'
-import ReportQuestionDetails from '../report/question-details'
-import AnswersTable from '../../containers/report/answers-table'
-import css from '../../../css/dashboard/question-details.less'
+import React, { PureComponent } from "react";
+import { Modal } from "react-bootstrap";
+import Button from "../common/button";
+import ReportQuestionDetails from "../report/question-details";
+import AnswersTable from "../../containers/report/answers-table";
+import css from "../../../css/dashboard/question-details.less";
 
 export default class QuestionDetails extends PureComponent {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      answersVisible: false
-    }
-    this.toggleAnswersVisibility = this.toggleAnswersVisibility.bind(this)
+      answersVisible: false,
+    };
+    this.toggleAnswersVisibility = this.toggleAnswersVisibility.bind(this);
   }
 
-  toggleAnswersVisibility () {
-    this.setState({answersVisible: !this.state.answersVisible})
+  toggleAnswersVisibility() {
+    this.setState({answersVisible: !this.state.answersVisible});
   }
-  render () {
-    const { selectedQuestion, onClose } = this.props
-    const { answersVisible } = this.state
-    const answers = selectedQuestion && selectedQuestion.get('answers')
-      ? selectedQuestion.get('answers').sortBy(a =>
-        (a.getIn(['student', 'lastName']) + a.getIn(['student', 'firstName'])).toLowerCase())
-      : []
-    const prompt = selectedQuestion && selectedQuestion.get('prompt')
+  render() {
+    const { selectedQuestion, onClose } = this.props;
+    const { answersVisible } = this.state;
+    const answers = selectedQuestion && selectedQuestion.get("answers")
+      ? selectedQuestion.get("answers").sortBy(a =>
+        (a.getIn(["student", "lastName"]) + a.getIn(["student", "firstName"])).toLowerCase())
+      : [];
+    const prompt = selectedQuestion && selectedQuestion.get("prompt");
     return (
       <Modal
         show={selectedQuestion !== null}
@@ -36,17 +36,17 @@ export default class QuestionDetails extends PureComponent {
             <div dangerouslySetInnerHTML={{ __html: prompt }} />
             { selectedQuestion !== null ? <ReportQuestionDetails question={selectedQuestion} /> : null }
             <Button onClick={this.toggleAnswersVisibility}>
-              {answersVisible ? 'Hide responses' : 'Show responses'}
+              {answersVisible ? "Hide responses" : "Show responses"}
             </Button>
-            {answersVisible ? <AnswersTable question={selectedQuestion} answers={answers} showCompare={false} /> : ''}
+            {answersVisible ? <AnswersTable question={selectedQuestion} answers={answers} showCompare={false} /> : ""}
           </div>
         </Modal.Body>
-        <Modal.Footer style={{display: 'flex', justifyContent: 'center'}}>
+        <Modal.Footer style={{display: "flex", justifyContent: "center"}}>
           <Button onClick={onClose}>
             Close
           </Button>
         </Modal.Footer>
       </Modal>
-    )
+    );
   }
 }

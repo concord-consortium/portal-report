@@ -1,65 +1,63 @@
-import semver from 'semver'
+import semver from "semver";
 
-function notify (message) {
-  console && console.log(message)
+function setVersionNumber(rubric, versionString) {
+  rubric.version = versionString;
 }
 
-function setVersionNumber (rubric, versionString) {
-  rubric.version = versionString
-}
-
-function expandNonApplicableRatings (rubric) {
-  const {ratings, criteria} = rubric
+function expandNonApplicableRatings(rubric) {
+  const {ratings, criteria} = rubric;
   criteria.forEach(c => {
     c.nonApplicableRatings = c.nonApplicableRatings
       ? c.nonApplicableRatings
-      : []
-    const oldNonApplicable = c.nonApplicableRatings.slice()
+      : [];
+    const oldNonApplicable = c.nonApplicableRatings.slice();
     c.nonApplicableRatings = ratings.map(r => {
       if (oldNonApplicable.indexOf(r.id) > -1) {
-        return r.id
+        return r.id;
       }
-      return ''
-    })
-  })
+      return "";
+    });
+  });
 }
 
 const migrations = [
-  { version: '1.0.0',
-    migrations: []
+  { version: "1.0.0",
+    migrations: [],
   },
   {
-    version: '1.1.0',
+    version: "1.1.0",
     migrations: [
-      expandNonApplicableRatings
-    ]
-  }
-]
+      expandNonApplicableRatings,
+    ],
+  },
+];
 
-function runMigration (rubric, migration) {
-  notify(`migrating rubric to ${migration.version}`)
-  setVersionNumber(rubric, migration.version)
+function runMigration(rubric, migration) {
+  // tslint:disable-next-line:no-console
+  console.log(`migrating rubric to ${migration.version}`);
+  setVersionNumber(rubric, migration.version);
   for (migration of migration.migrations) {
-    migration(rubric)
+    migration(rubric);
   }
-  return rubric
+  return rubric;
 }
 
-function skipMigration (migration) {
-  notify(`skipping migration: ${migration.version}`)
+function skipMigration(migration) {
+  // tslint:disable-next-line:no-console
+  console.log(`skipping migration: ${migration.version}`);
 }
 
-export const LastVersion = migrations[migrations.length - 1].version
+export const LastVersion = migrations[migrations.length - 1].version;
 
-export default function migrate (rubric) {
-  rubric.reportVersion = rubric.reportVersion ? rubric.reportVersion : '0.0.0'
+export default function migrate(rubric) {
+  rubric.reportVersion = rubric.reportVersion ? rubric.reportVersion : "0.0.0";
 
   for (var m of migrations) {
     if (semver.gte(rubric.reportVersion, m.version)) {
-      skipMigration(m)
+      skipMigration(m);
     } else {
-      runMigration(rubric, m)
+      runMigration(rubric, m);
     }
   }
-  return rubric
+  return rubric;
 }
