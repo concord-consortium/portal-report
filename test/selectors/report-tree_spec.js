@@ -1,5 +1,5 @@
 import { fromJS } from "immutable";
-import getInvestigationTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from "../../js/selectors/report-tree";
+import getSequenceTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from "../../js/selectors/report-tree";
 import { FULL_REPORT, DASHBOARD } from "../../js/reducers";
 
 describe("report tree selectors", () => {
@@ -17,12 +17,12 @@ describe("report tree selectors", () => {
         A1: { key: "A1", studentId: 1, someAnswerProp: "x" }
       },
       questions: {
-        Q1: { key: "Q1", answers: [ "A1" ], hiddenByUser: !questionVisible, someQuestionProp: "x" },
-        Q2: { key: "Q2", answers: [ ], hiddenByUser: false, someQuestionProp: "y" }
+        "open_response-1": { key: "open_response-1", hiddenByUser: !questionVisible, someQuestionProp: "x" },
+        "image_question-2": { key: "image_question-2", hiddenByUser: false, someQuestionProp: "y" }
       },
       pages: {
-        1: { id: 1, children: [ "Q1" ], somePageProp: "x" },
-        2: { id: 2, children: [ "Q2" ], somePageProp: "y" }
+        1: { id: 1, children: [  "open_response-1" ], somePageProp: "x" },
+        2: { id: 2, children: [ "image_question-2" ], somePageProp: "y" }
       },
       sections: {
         1: { id: 1, children: [ 1 ], someSectionProp: "x" },
@@ -32,8 +32,8 @@ describe("report tree selectors", () => {
         1: { id: 1, children: [ 1 ], someActivityProp: "x" },
         2: { id: 2, children: [ 2 ], someActivityProp: "y" }
       },
-      investigations: {
-        1: { id: 1, children: [ 1, 2 ], someInvestigationProp: "x" }
+      sequences: {
+        1: { id: 1, children: [ 1, 2 ], someSequenceProp: "x" }
       },
       // additional props that get merged into tree:
       hideSectionNames: hideSectionNames
@@ -49,15 +49,15 @@ describe("report tree selectors", () => {
     }
   };
   const expectedQuestionTrees = ({ questionVisible = true }) => ({
-    Q1: {
-      key: "Q1",
+    "open_response-1": {
+      key: "open_response-1",
       visible: questionVisible,
       hiddenByUser: !questionVisible,
       someQuestionProp: "x",
-      answers: [ expectedAnswerTrees.A1 ]
+      answers: [ ]
     },
-    Q2: {
-      key: "Q2",
+    "image_question-2": {
+      key: "image_question-2",
       visible: true,
       hiddenByUser: false,
       someQuestionProp: "y",
@@ -69,13 +69,13 @@ describe("report tree selectors", () => {
       id: 1,
       somePageProp: "x",
       visible: questionVisible,
-      children: [ expectedQuestionTrees({ questionVisible }).Q1 ]
+      children: [ expectedQuestionTrees({ questionVisible })["open_response-1"] ]
     },
     2: {
       id: 2,
       somePageProp: "y",
       visible: true,
-      children: [ expectedQuestionTrees({}).Q2 ]
+      children: [ expectedQuestionTrees({})["image_question-2"] ]
     }
   });
   const expectedSectionTrees = ({ questionVisible = true, nameHidden = true }) => ({
@@ -101,7 +101,7 @@ describe("report tree selectors", () => {
       visible: questionVisible,
       children: [ expectedSectionTrees({ questionVisible })[1] ],
       pages: [ expectedPageTrees({ questionVisible })[1] ],
-      questions: [ expectedQuestionTrees({ questionVisible }).Q1 ]
+      questions: [ expectedQuestionTrees({ questionVisible })["open_response-1"] ]
     },
     2: {
       id: 2,
@@ -109,12 +109,12 @@ describe("report tree selectors", () => {
       visible: true,
       children: [ expectedSectionTrees({})[2] ],
       pages: [ expectedPageTrees({})[2] ],
-      questions: [ expectedQuestionTrees({}).Q2 ]
+      questions: [ expectedQuestionTrees({})["image_question-2"] ]
     }
   });
-  const expectedInvestigationTree = ({ questionVisible = true }) => ({
+  const expectedSequenceTree = ({ questionVisible = true }) => ({
     id: 1,
-    someInvestigationProp: "x",
+    someSequenceProp: "x",
     children: [
       expectedActivityTrees({ questionVisible })[1],
       expectedActivityTrees({})[2]
@@ -132,29 +132,18 @@ describe("report tree selectors", () => {
       expect(getQuestionTrees(state({})).toJS()).toEqual(expectedQuestionTrees({}));
     });
 
-    describe("when it is a Embeddable::MultipleChoice question", () => {
-      it("should compute `scored` property", () => {
-        const questions = fromJS({
-          1: { answers: [], type: "Embeddable::MultipleChoice", choices: [ { isCorrect: true }, { isCorrect: false } ] },
-          2: { answers: [], type: "Embeddable::MultipleChoice", choices: [ { isCorrect: false }, { isCorrect: false } ] }
-        });
-        const answers = fromJS({});
-        const result = getQuestionTrees.resultFunc(questions, answers).toJS();
-        expect(result[1].scored).toBe(true);
-        expect(result[2].scored).toBe(false);
-      });
-    });
-
     describe("when there are some questions hidden by user", () => {
       describe("and full report view is used", () => {
         it('should set visibility based on "hiddenByUser" property', () => {
           const questions = fromJS({
-            1: { answers: [], hiddenByUser: false },
-            2: { answers: [], hiddenByUser: true }
+            1: { hiddenByUser: false },
+            2: { hiddenByUser: true }
           });
-          const answers = fromJS({});
+          const activities = fromJS({});
+          const sections = fromJS({});
+          const pages = fromJS({});
           const showFeaturedQuestionsOnly = false;
-          const result = getQuestionTrees.resultFunc(questions, answers, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(false);
         });
@@ -162,12 +151,14 @@ describe("report tree selectors", () => {
       describe("and dashboard view is used", () => {
         it('should ignore "hiddenByUser" property', () => {
           const questions = fromJS({
-            1: { answers: [], hiddenByUser: false },
-            2: { answers: [], hiddenByUser: true }
+            1: { hiddenByUser: false },
+            2: { hiddenByUser: true }
           });
-          const answers = fromJS({});
+          const activities = fromJS({});
+          const sections = fromJS({});
+          const pages = fromJS({});
           const showFeaturedQuestionsOnly = false;
-          const result = getQuestionTrees.resultFunc(questions, answers, DASHBOARD, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, DASHBOARD, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(true);
         });
@@ -178,12 +169,14 @@ describe("report tree selectors", () => {
       describe("and the full report is used", () => {
         it('should ignore "showInFeaturedQuestionReport" property', () => {
           const questions = fromJS({
-            1: { answers: [], showInFeaturedQuestionReport: true },
-            2: { answers: [], showInFeaturedQuestionReport: false }
+            1: { showInFeaturedQuestionReport: true },
+            2: { showInFeaturedQuestionReport: false }
           });
-          const answers = fromJS({});
+          const activities = fromJS({});
+          const sections = fromJS({});
+          const pages = fromJS({});
           const showFeaturedQuestionsOnly = true;
-          const result = getQuestionTrees.resultFunc(questions, answers, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(true);
         });
@@ -192,12 +185,14 @@ describe("report tree selectors", () => {
       describe("and dashboard view is used", () => {
         it('should set visibility based on "showInFeaturedQuestionReport" property', () => {
           const questions = fromJS({
-            1: { answers: [], showInFeaturedQuestionReport: true },
-            2: { answers: [], showInFeaturedQuestionReport: false }
+            1: { showInFeaturedQuestionReport: true },
+            2: { showInFeaturedQuestionReport: false }
           });
-          const answers = fromJS({});
+          const activities = fromJS({});
+          const sections = fromJS({});
+          const pages = fromJS({});
           const showFeaturedQuestionsOnly = true;
-          const result = getQuestionTrees.resultFunc(questions, answers, DASHBOARD, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, DASHBOARD, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(false);
         });
@@ -235,9 +230,9 @@ describe("report tree selectors", () => {
     });
   });
 
-  describe("getInvestigationTrees", () => {
-    it("should return investigation (only one!) with activity ids mapped to activities", () => {
-      expect(getInvestigationTree(state({})).toJS()).toEqual(expectedInvestigationTree({}));
+  describe("getSequenceTrees", () => {
+    it("should return sequence (only one!) with activity ids mapped to activities", () => {
+      expect(getSequenceTree(state({})).toJS()).toEqual(expectedSequenceTree({}));
     });
   });
 });

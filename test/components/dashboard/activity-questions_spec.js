@@ -7,8 +7,8 @@ describe("<ActivityQuestions />", () => {
   const prompt1 = "1st question prompt";
   const prompt2 = "2nd question prompt (not visible)";
   const activity = fromJS({ questions: [
-    { id: 1, visible: true, prompt: prompt1, questionNumber: "1", type: "Embeddable::MultipleChoice" },
-    { id: 2, visible: false, prompt: prompt2, questionNumber: "2", type: "Embeddable::MultipleChoice" }
+    { id: 1, visible: true, prompt: prompt1, questionNumber: "1", type: "multiple_choice" },
+    { id: 2, visible: false, prompt: prompt2, questionNumber: "2", type: "multiple_choice" }
   ]});
   const expandedQuestions = fromJS({});
   describe("when activity is expanded", () => {

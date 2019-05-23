@@ -10,9 +10,9 @@ const mockStore = configureStore();
 describe("<QuestionSummary />", () => {
   const prompt = "Why is the sky blue?";
   const answers = fromJS([
-    {type: "Embeddable::MultipleChoice"},
+    {type: "multiple_choice"},
     {type: "NoAnswer"},
-    {type: "Embeddable::OpenResponse"}
+    {type: "open_response"}
   ]);
   const question = Map({
     prompt: prompt,
