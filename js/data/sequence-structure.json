@@ -1,6 +1,6 @@
 {
   "source_type": "LARA",
-  "type": "Sequence",
+  "type": "sequence",
   "id": 230,
   "name": "Report Test Sequence",
   "description": "",
@@ -15,7 +15,7 @@
   "children": [
     {
       "source_type": "LARA",
-      "type": "Activity",
+      "type": "activity",
       "id": 20138,
       "name": "Report Test Activity 1",
       "description": "",
@@ -31,13 +31,13 @@
       "children": [
         {
           "name": "Report Test Activity 1 Section",
-          "type": "Section",
+          "type": "section",
           "id": 123,
           "children": [
             {
               "name": "Basic question types",
               "url": "http://authoring.staging.concord.org/pages/305387",
-              "type": "Page",
+              "type": "page",
               "id": 305387,
               "children": [
                 {
@@ -93,7 +93,7 @@
             {
               "name": "Interactives saving state",
               "url": "http://authoring.staging.concord.org/pages/305388",
-              "type": "Page",
+              "type": "page",
               "id": 305388,
               "children": [
                 {
@@ -126,7 +126,7 @@
     },
     {
       "source_type": "LARA",
-      "type": "Activity",
+      "type": "activity",
       "id": 20139,
       "name": "Report Test Activity 2",
       "description": "",
@@ -142,12 +142,12 @@
       "children": [
         {
           "name": "Report Test Activity 2 Section",
-          "type": "Section",
+          "type": "section",
           "id": 124,
           "children": [
             {
               "name": "Arg block",
-              "type": "Page",
+              "type": "page",
               "id": 35389,
               "url": "http://authoring.staging.concord.org/pages/305389",
               "children": [

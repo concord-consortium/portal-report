@@ -3,16 +3,16 @@ import { preprocessResourceJson } from "../../js/core/transform-json-response";
 describe("preprocessResourceJson helper", () => {
   const activityJSON = {
     id: 1,
-    type: "Activity",
+    type: "activity",
     name: "Test activity",
     children: [
       {
         id: 1,
-        type: "Section",
+        type: "section",
         children: [
           {
             id: 1,
-            type: "Page",
+            type: "page",
             children: [
               {
                 id: 1,
@@ -40,8 +40,8 @@ describe("preprocessResourceJson helper", () => {
   describe("adds top-level sequence object if it's missing", () => {
     it("should compute `scored` property", () => {
       const resource = preprocessResourceJson(activityJSON);
-      expect(resource.type).toBe("Sequence");
-      expect(resource.children[0].type).toBe("Activity");
+      expect(resource.type).toBe("sequence");
+      expect(resource.children[0].type).toBe("activity");
     });
   });
 

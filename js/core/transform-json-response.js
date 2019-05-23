@@ -38,11 +38,11 @@ export default function normalizeResourceJSON(json) {
 
 export function preprocessResourceJson(resourceJson) {
   // Provide fake sequence if it's not present to simplify app logic.
-  if (resourceJson.type === "Activity") {
+  if (resourceJson.type === "activity") {
     resourceJson = {
       id: 1,
       name: "",
-      type: "Sequence",
+      type: "sequence",
       children: [ resourceJson ],
     };
   }
