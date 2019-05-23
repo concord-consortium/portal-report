@@ -40,7 +40,6 @@ describe("preprocessResourceJson helper", () => {
   describe("adds top-level sequence object if it's missing", () => {
     it("should compute `scored` property", () => {
       const resource = preprocessResourceJson(activityJSON);
-      console.log(resource);
       expect(resource.type).toBe("Sequence");
       expect(resource.children[0].type).toBe("Activity");
     });
