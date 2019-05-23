@@ -1,12 +1,13 @@
 import { createSelector } from "reselect";
+import Immutable from "immutable";
 import { FULL_REPORT, DASHBOARD } from "../reducers";
 
-// `getInvestigationTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
+// `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // Redux state has flat structure. This selector maps all the IDs and keys and creates a tree-like hierarchy.
 // It includes all the properties provided by API + calculates a few additional ones.
 
 // Inputs
-const getInvestigations = state => state.getIn(["report", "investigations"]);
+const getSequences = state => state.getIn(["report", "sequences"]);
 const getActivities = state => state.getIn(["report", "activities"]);
 const getPages = state => state.getIn(["report", "pages"]);
 const getSections = state => state.getIn(["report", "sections"]);
@@ -51,18 +52,15 @@ export const getAnswerTrees = createSelector(
 );
 
 export const getQuestionTrees = createSelector(
-  [ getQuestions, getAnswerTrees, getViewType, getShowFeaturedQuestionsOnly ],
-  (questions, answerTrees, viewType, showFeaturedQuestionsOnly) => {
-    return questions.map(question => {
-      const mappedAnswers = question.get("answers").map(key => answerTrees.get(key));
-      if (question.get("type") === "Embeddable::MultipleChoice") {
-        // Multiple choice question is scored if at least one choice is marked as correct.
-        question = question.set("scored", question.get("choices").some(c => c.get("isCorrect")));
-      }
-      return question
-        .set("answers", mappedAnswers)
-        .set("visible", isQuestionVisible(question, viewType, showFeaturedQuestionsOnly));
-    });
+  [ getActivities, getSections, getPages, getQuestions, getViewType, getShowFeaturedQuestionsOnly ],
+  ( activities, sections, pages, questions, viewType, showFeaturedQuestionsOnly) => {
+    return questions.map(question =>
+      question
+        // This is only a temporal solution. Answers should no longer be added to a report tree.
+        // Components that need answer content should become containers and request answers from redux state.
+        .set("answers", Immutable.fromJS([]))
+        .set("visible", isQuestionVisible(question, viewType, showFeaturedQuestionsOnly))
+    );
   },
 );
 
@@ -109,15 +107,15 @@ export const getActivityTrees = createSelector(
     }),
 );
 
-export const getInvestigationTree = createSelector(
-  [ getInvestigations, getActivityTrees ],
-  (investigations, activityTrees) => {
-    // There is always only one investigation.
-    const investigation = investigations.values().next().value;
-    const mappedChildren = investigation.get("children").map(id => activityTrees.get(id.toString()));
-    return investigation
+export const getSequenceTree = createSelector(
+  [ getSequences, getActivityTrees ],
+  (sequences, activityTrees) => {
+    // There is always only one sequence.
+    const sequence = sequences.values().next().value;
+    const mappedChildren = sequence.get("children").map(id => activityTrees.get(id.toString()));
+    return sequence
       .set("children", mappedChildren);
   },
 );
 
-export default getInvestigationTree;
+export default getSequenceTree;

@@ -16,10 +16,10 @@ export const GenericAnswer = () => (
 );
 
 const AnswerComponent = {
-  "Embeddable::MultipleChoice": MultipleChoiceAnswer,
-  "Embeddable::OpenResponse": OpenResponseAnswer,
-  "Embeddable::ImageQuestion": GenericAnswer,
-  "Embeddable::Iframe": GenericAnswer,
+  "multiple_choice": MultipleChoiceAnswer,
+  "open_response": OpenResponseAnswer,
+  "image_question": GenericAnswer,
+  "iframe_interactive": GenericAnswer,
   "NoAnswer": NoAnswer,
 };
 

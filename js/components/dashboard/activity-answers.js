@@ -8,7 +8,7 @@ export default class ActivityAnswers extends PureComponent {
   renderMultChoiceSummary() {
     const { student, activity } = this.props;
     const scoredQuestions = activity.get("questions").filter(q =>
-      q.get("visible") && q.get("type") === "Embeddable::MultipleChoice" && q.get("scored"),
+      q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
     );
     const correctAnswers = scoredQuestions.filter(question =>
       question.get("answers").find(answer => answer.get("studentId") === student.get("id") && answer.get("isCorrect")),

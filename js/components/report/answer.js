@@ -6,10 +6,10 @@ import IframeAnswer from "./iframe-answer";
 import NoAnswer from "./no-answer";
 
 const AnswerComponent = {
-  "Embeddable::OpenResponse": OpenResponseAnswer,
-  "Embeddable::MultipleChoice": MultipleChoiceAnswer,
-  "Embeddable::ImageQuestion": ImageAnswer,
-  "Embeddable::Iframe": IframeAnswer,
+  "open_response": OpenResponseAnswer,
+  "multiple_choice": MultipleChoiceAnswer,
+  "image_question": ImageAnswer,
+  "iframe_interactive": IframeAnswer,
   "NoAnswer": NoAnswer,
 };
 

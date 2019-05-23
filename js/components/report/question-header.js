@@ -5,7 +5,7 @@ export default class QuestionHeader extends PureComponent {
   get questionName() {
     // Provide question name only for the iframe question type.
     const { question } = this.props;
-    if (question.get("type") === "Embeddable::Iframe") {
+    if (question.get("type") === "iframe_interactive") {
       return `: ${question.get("name")}`;
     }
     return "";

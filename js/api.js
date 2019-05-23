@@ -1,5 +1,5 @@
 import fetch from "isomorphic-fetch";
-import fakeData from "./data/report.json";
+import fakeData from "./data/sequence-structure.json";
 import queryString from "query-string";
 
 const warn = (message) => {
@@ -30,7 +30,7 @@ const getReportUrl = () => {
 
 const getAuthHeader = () => `Bearer ${urlParam("token")}`;
 
-export function fetchReportData() {
+export function fetchResourceStructure() {
   const reportUrl = getReportUrl();
   const authHeader = getAuthHeader();
   if (reportUrl) {

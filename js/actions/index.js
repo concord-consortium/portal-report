@@ -1,7 +1,7 @@
 import { requestRubric } from "./rubric";
 export const INVALIDATE_DATA = "INVALIDATE_DATA";
-export const REQUEST_DATA = "REQUEST_DATA";
-export const RECEIVE_DATA = "RECEIVE_DATA";
+export const REQUEST_RESOURCE_STRUCTURE = "REQUEST_RESOURCE_STRUCTURE";
+export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -18,26 +18,26 @@ export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 
-// When fetch succeeds, receiveData action will be called with the response object (json in this case).
-// REQUEST_DATA action will be processed by the reducer immediately.
+// When fetch succeeds, receiveResourceStructure action will be called with the response object (json in this case).
+// REQUEST_RESOURCE_STRUCTURE action will be processed by the reducer immediately.
 // See: api-middleware.js
 function requestData() {
   return (dispatch, getState) => {
     dispatch({
-      type: REQUEST_DATA,
+      type: REQUEST_RESOURCE_STRUCTURE,
       callAPI: {
-        type: "fetchReportData",
-        successAction: receiveData,
+        type: "fetchResourceStructure",
+        successAction: receiveResourceStructure,
         errorAction: fetchError,
       },
     });
   };
 }
 
-function receiveData(response) {
+function receiveResourceStructure(response) {
   return (dispatch, getState) => {
     dispatch({
-      type: RECEIVE_DATA,
+      type: RECEIVE_RESOURCE_STRUCTURE,
       response: response,
       receivedAt: Date.now(),
     });
@@ -90,8 +90,9 @@ export function setQuestionSelected(key, value) {
     const questionsMap = getState().getIn(["report", "questions"]);
     // the questionsMap represents the previous state of the checkboxes
     // so the filter needs to special case the current key
-    const selectedQuestionKeys =
-      [...questionsMap.values()].filter(q => q.get("key") === key ? value : q.get("selected")).map(q => q.get("key"));
+    const selectedQuestionKeys = Array.from(questionsMap.values())
+      .filter(q => q.get("key") === key ? value : q.get("selected"))
+      .map(q => q.get("key"));
     dispatch({
       type: SET_QUESTION_SELECTED,
       key,

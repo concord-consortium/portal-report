@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import Investigation from "./investigation";
+import Sequence from "./sequence";
 import Button from "../common/button";
 
 import "../../../css/report/report.less";
@@ -15,7 +15,7 @@ export default class Report extends PureComponent {
   componentDidMount() {
     const { report, reportTree } = this.props;
     const nowShowing = report.get("nowShowing");
-    const student = report.get("students").first().get("name");
+    const student = report.get("students").length > 0 ? report.get("students").first().get("name") : "";
     const title = nowShowing === "class" ? `Report for ${report.get("clazzName")}` : `Report for ${student}`;
     document.title = `${reportTree.get("name")} ${title}`;
   }
@@ -40,7 +40,7 @@ export default class Report extends PureComponent {
     return (
       <div className={className}>
         {this.renderReportHeader(report.get("clazzName"))}
-        <Investigation investigation={reportTree} reportFor={"class"} />
+        <Sequence sequence={reportTree} reportFor={"class"} />
       </div>
     );
   }
@@ -62,7 +62,7 @@ export default class Report extends PureComponent {
       .map(s =>
         <div key={s.get("id")} className={className}>
           {this.renderReportHeader(s.get("name"))}
-          <Investigation investigation={reportTree} reportFor={s} />
+          <Sequence sequence={reportTree} reportFor={s} />
         </div>,
       );
   }

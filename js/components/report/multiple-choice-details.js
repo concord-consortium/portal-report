@@ -7,7 +7,7 @@ function noAnswer(answer) {
 }
 
 function answerIncludeChoice(answer, choice) {
-  return !noAnswer(answer) && answer.answer.find(a => a.choice === choice.choice);
+  return !noAnswer(answer) && answer.answer.find(a => a.choice === choice.content);
 }
 
 function getChoicesStats(choices, answers) {
@@ -19,7 +19,7 @@ function getChoicesStats(choices, answers) {
     const count = answers.filter(filterFunc).length;
     // avoid division by zero:
     const percent = totalAnswers === 0 ? 0 : count / totalAnswers * 100;
-    stats[choice.choice] = {
+    stats[choice.id] = {
       count,
       percent: (percent).toFixed(1),
     };
@@ -31,7 +31,7 @@ export default class MultipleChoiceDetails extends PureComponent {
   get choices() {
     const choices = this.props.question.get("choices").toJS();
     // Add fake, no-answer choice.
-    choices.push({choice: "No response", noAnswer: true});
+    choices.push({id: -1, content: "No response", noAnswer: true});
     return choices;
   }
 
@@ -45,9 +45,9 @@ export default class MultipleChoiceDetails extends PureComponent {
       <table className="multiple-choice-details">
         <tbody>
           {this.choices.map((choiceDesc, idx) => {
-            const { choice, isCorrect } = choiceDesc;
-            return <ChoiceRow key={idx} idx={idx} choice={choice} isCorrect={isCorrect}
-              percent={stats[choice].percent} count={stats[choice].count} />;
+            const { id, content, correct } = choiceDesc;
+            return <ChoiceRow key={id} idx={idx} content={content} correct={correct}
+              percent={stats[id].percent} count={stats[id].count} />;
           })}
         </tbody>
       </table>
@@ -55,9 +55,9 @@ export default class MultipleChoiceDetails extends PureComponent {
   }
 }
 
-const ChoiceRow = ({idx, choice, isCorrect, percent, count}) => (
-  <tr className={isCorrect ? "correct" : ""}>
-    <td className="td-prompt">{idx}. {choice}</td>
+const ChoiceRow = ({idx, content, correct, percent, count}) => (
+  <tr className={correct ? "correct" : ""}>
+    <td className="td-prompt">{idx}. {content}</td>
     <td className="bar-container"><div className="bar" style={{width: percent + "%"}} /></td>
     <td className="number">{percent}%</td>
     <td className="number">{count}</td>

@@ -1,6 +1,6 @@
 import Immutable, { Map, Set} from "immutable";
 import {
-  REQUEST_DATA, RECEIVE_DATA, FETCH_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
+  REQUEST_RESOURCE_STRUCTURE, RECEIVE_RESOURCE_STRUCTURE, FETCH_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
   SET_QUESTION_SELECTED, HIDE_UNSELECTED_QUESTIONS, SHOW_UNSELECTED_QUESTIONS,
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK,
 } from "../actions";
@@ -9,7 +9,7 @@ import feedbackReducer from "./feedback-reducer";
 import { rubricReducer } from "./rubric-reducer";
 import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
-import transformJSONResponse from "../core/transform-json-response";
+import normalizeResourceJSON from "../core/transform-json-response";
 import config from "../config";
 
 export const FULL_REPORT = "fullReport";
@@ -35,9 +35,9 @@ function data(state = Map(), action) {
   switch (action.type) {
     case INVALIDATE_DATA:
       return state.set("didInvalidate", true);
-    case REQUEST_DATA:
+    case REQUEST_RESOURCE_STRUCTURE:
       return state.set("isFetching", true);
-    case RECEIVE_DATA:
+    case RECEIVE_RESOURCE_STRUCTURE:
       return state.set("isFetching", false)
         .set("didInvalidate", false)
         .set("error", null)
@@ -106,36 +106,31 @@ function enableActivityFeedback(state, action) {
 }
 
 const INITIAL_REPORT_STATE = Map({
+  answers: Immutable.fromJS([]),
+  students: Immutable.fromJS([]),
+  clazzName: "",
+  clazzId: "",
+  selectedStudentId: null,
+  hideControls: false,
   // Type: 'class' or 'student'. Used by regular report only. 'class' displays all the answers,
   // while 'student' focuses on one student only.
   type: "class",
+  nowShowing: "class",
+  hideSectionNames: false,
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: true,
 });
 
 function report(state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
-    case RECEIVE_DATA:
-      const data = transformJSONResponse(action.response);
+    case RECEIVE_RESOURCE_STRUCTURE:
+      const data = normalizeResourceJSON(action.response);
       state = state
-        .set("students", Immutable.fromJS(data.entities.students))
-        .set("investigations", Immutable.fromJS(data.entities.investigations))
+        .set("sequences", Immutable.fromJS(data.entities.sequences))
         .set("activities", Immutable.fromJS(data.entities.activities))
         .set("sections", Immutable.fromJS(data.entities.sections))
         .set("pages", Immutable.fromJS(data.entities.pages))
-        .set("questions", Immutable.fromJS(data.entities.questions))
-        .set("answers", Immutable.fromJS(data.entities.answers))
-        .set("clazzName", data.result.class.name)
-        .set("clazzId", data.result.class.id)
-        .set("hideSectionNames", data.result.isOfferingExternal)
-        .set("type", data.type)
-        .set("nowShowing", data.type)
-        .set("selectedStudentId", data.studentId)
-        .set("hideControls", data.result.hideControls);
-      if (data.result.visibilityFilter.active && !data.result.hideControls) {
-        state = hideUnselectedQuestions(state);
-      }
-      state = setAnonymous(state, data.result.anonymousReport);
+        .set("questions", Immutable.fromJS(data.entities.questions));
       return state;
     case SET_NOW_SHOWING:
       return state.set("nowShowing", action.value);
