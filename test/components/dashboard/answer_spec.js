@@ -23,8 +23,8 @@ describe("<Answer />", () => {
     expect(wrapper.find(NoAnswer)).toHaveLength(1);
   });
 
-  it('should render <MultipleChoiceAnswer> when answer type is "Embeddable::MultipleChoice"', () => {
-    const answer = fromJS({ submitted: true, type: "Embeddable::MultipleChoice" });
+  it('should render <MultipleChoiceAnswer> when answer type is "multiple_choice"', () => {
+    const answer = fromJS({ submitted: true, type: "multiple_choice" });
     const wrapper = shallow(<Answer answer={answer} />);
     expect(wrapper.find(MultipleChoiceAnswer)).toHaveLength(1);
   });

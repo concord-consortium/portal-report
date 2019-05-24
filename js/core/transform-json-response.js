@@ -1,58 +1,31 @@
 import { normalize, schema } from "normalizr";
 import humps from "humps";
-import migrate from "./migrations";
 import queryString from "query-string";
 
-const DEFAULT_REPORT_FOR = "class";
-// Transforms deeply nested structure of report:
-// {
-//  "report": {
-//  "id": 18,
-//  "type": "Investigation",
-//  "name": "Test Sequence",
-//  "children": [
-//  {
-//      "id": 29,
-//      "type" "Activity",
-//      "children": [
-//      {
-//        "id": 101,
-//        "type": "Section"
-//        (...)
+// Transforms deeply nested structure of activity or sequence
 // into normalized form where objects are grouped by ID.
 // See: https://github.com/gaearon/normalizr
-export default function transformJSONResponse(json) {
-  const camelizedJson = humps.camelizeKeys(json,
+export default function normalizeResourceJSON(json) {
+  // preprocessResourceJson transforms response a bit, e.g. provides additional properties that can be calculated
+  // at this point or ensures that we always deal with a sequence.
+  const camelizedJson = preprocessResourceJson(humps.camelizeKeys(json, (key, convert) =>
     // don't convert keys that are only upercase letters and numbers.
     // This is useful for rubric keys for example "C2" and "R1"
-    (key, convert) => /^[A-Z0-9_]+$/.test(key) ? key : convert(key));
+    /^[A-Z0-9_]+$/.test(key) ? key : convert(key)
+  ));
 
-  const student = new schema.Entity("students");
-  const investigation = new schema.Entity("investigations");
-  const activity = new schema.Entity("activities");
+  const sequence = new schema.Entity("sequences", {});
+  const activity = new schema.Entity("activities", {});
   const section = new schema.Entity("sections");
-  const page = new schema.Entity("pages");
+  const page = new schema.Entity("pages", {});
   const question = new schema.Entity("questions", {}, {
-    idAttribute: (q) => q.key,
+    idAttribute: value => value.key
   });
-  // Answers don't have unique ID so generate it. Embeddable key + student ID works.
-  const answer = new schema.Entity("answers", {}, {
-    idAttribute: (a) => `${a.embeddableKey}-${a.studentId}`,
-  });
-  const feedback = new schema.Entity("feedbacks", {}, {
-    idAttribute: (a) => a.answerKey,
-  });
-
-  const activityFeedback = new schema.Entity("activityFeedbacks", {}, {
-    idAttribute: (value, parent) => `${parent.id}-${value.studentId}`,
-  });
-
-  investigation.define({
+  sequence.define({
     children: [ activity ],
   });
   activity.define({
     children: [ section ],
-    activityFeedback: [ activityFeedback ],
   });
   section.define({
     children: [ page ],
@@ -60,40 +33,35 @@ export default function transformJSONResponse(json) {
   page.define({
     children: [ question ],
   });
-  question.define({
-    answers: [ answer ],
-  });
-  answer.define({
-    feedbacks: [ feedback ],
-  });
+  return normalize(camelizedJson, sequence);
+}
 
-  const reportType = camelizedJson.report.type;
-  const response = normalize(migrate(camelizedJson), {
-    report: reportType === "Investigation" ? investigation : activity,
-    "class": {
-      students: [ student ],
-    },
-  });
-  // Post-process response:
-  // Provide fake investigation if it's not present to simplify app logic.
-  if (reportType === "Activity") {
-    response.entities.investigations = {
-      1: {
-        id: 1,
-        name: "",
-        type: "Investigation",
-        children: [response.result.report],
-      },
+export function preprocessResourceJson(resourceJson) {
+  // Provide fake sequence if it's not present to simplify app logic.
+  if (resourceJson.type === "activity") {
+    resourceJson = {
+      id: 1,
+      name: "",
+      type: "sequence",
+      children: [ resourceJson ],
     };
   }
-  response.type = camelizedJson.reportFor || DEFAULT_REPORT_FOR;
-  response.hideControls = camelizedJson.hideControls || false;
-  applyVisibilityFilter(response.entities.questions, response.result.visibilityFilter);
-  copyAnswerKeysToObjects(response.entities.answers || []);
-  copyAnswerKeysToObjects(response.entities.activityFeedbacks || []);
-  saveStudentsRealNames(response.entities.students);
-  urlParamOverrides(response);
-  return response;
+  // Add some question properties, e.g. question numbers, selection, visibility.
+  resourceJson.children.forEach(activity => {
+    activity.children.forEach(section => {
+      section.children.forEach(page => {
+        page.children.forEach(question => {
+          // Nothing is selected by default.
+          question.selected = false;
+          if (question.type === "multiple_choice") {
+            // Multiple choice question is scored if at least one choice is marked as correct.
+            question.scored = question.choices.some(c => c.correct);
+          }
+        });
+      });
+    });
+  });
+  return resourceJson;
 }
 
 function applyVisibilityFilter(questions, visibilityFilter) {

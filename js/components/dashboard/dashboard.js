@@ -78,7 +78,7 @@ export default class Dashboard extends PureComponent {
 
   shouldShowMultChoiceSummary(activity) {
     return activity.get("questions") && activity.get("questions").some(q =>
-      q.get("visible") && q.get("type") === "Embeddable::MultipleChoice" && q.get("scored"),
+      q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
     );
   }
 
@@ -101,7 +101,7 @@ export default class Dashboard extends PureComponent {
       activity.get("questions") &&
       activity.get("questions").some(q =>
         q.get("visible") &&
-        q.get("type") === "Embeddable::MultipleChoice" &&
+        q.get("type") === "multiple_choice" &&
         q.get("scored"),
       )
     ) {

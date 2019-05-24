@@ -1,5 +1,5 @@
 import nock from "nock";
-import { fetchReportData } from "../js/api";
+import { fetchResourceStructure } from "../js/api";
 
 describe("api helper", () => {
   afterEach(() => {
@@ -7,7 +7,7 @@ describe("api helper", () => {
     nock.cleanAll();
   });
 
-  describe("fetchReportData", () => {
+  describe("fetchResourceStructure", () => {
     const okResponse = { message: "OK" };
 
     beforeEach(() => {
@@ -21,7 +21,7 @@ describe("api helper", () => {
         window.history.replaceState({}, "Test", "/?reportUrl=https://portal.com/reports/123&offering=https://portal.com/offerings/123");
       });
       it("should use it to download report data", async () => {
-        const resp = await fetchReportData();
+        const resp = await fetchResourceStructure();
         expect(resp).toEqual(okResponse);
       });
     });
@@ -31,7 +31,7 @@ describe("api helper", () => {
         window.history.replaceState({}, "Test", "/?offering=https://portal.com/offerings/123");
       });
       it("should use offering URL to generate report API URL and use it to download report data", async () => {
-        const resp = await fetchReportData();
+        const resp = await fetchResourceStructure();
         expect(resp).toEqual(okResponse);
       });
     });

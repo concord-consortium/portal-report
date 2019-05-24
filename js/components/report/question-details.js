@@ -3,8 +3,8 @@ import MultipleChoiceDetails from "./multiple-choice-details";
 import ImageQuestionDetails from "./image-question-details";
 
 const QuestionComponent = {
-  "Embeddable::MultipleChoice": MultipleChoiceDetails,
-  "Embeddable::ImageQuestion": ImageQuestionDetails,
+  "multiple_choice": MultipleChoiceDetails,
+  "image_question": ImageQuestionDetails,
 };
 
 export default ({question}) => {

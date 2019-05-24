@@ -11,7 +11,7 @@ const NOT_SELECTED_ICON = "icomoon-radio-unchecked";
 export class Choice extends PureComponent {
   get icon() {
     const { choice, selected, correctAnswerDefined } = this.props;
-    const isCorrect = choice.get("isCorrect");
+    const isCorrect = choice.get("correct");
     if (correctAnswerDefined && selected && isCorrect) {
       return CORRECT_ICON;
     } else if (correctAnswerDefined && selected && !isCorrect) {
@@ -24,7 +24,7 @@ export class Choice extends PureComponent {
 
   get contentStyling() {
     const { choice, selected, correctAnswerDefined } = this.props;
-    const isCorrect = choice.get("isCorrect");
+    const isCorrect = choice.get("correct");
     if (correctAnswerDefined && isCorrect) {
       return css.correct;
     } else if (correctAnswerDefined && selected && !isCorrect) {
@@ -38,7 +38,7 @@ export class Choice extends PureComponent {
 
   get label() {
     const { choice, selected } = this.props;
-    const isCorrect = choice.get("isCorrect");
+    const isCorrect = choice.get("correct");
     if (selected === true) {
       return "student's response";
     } else if (!selected && isCorrect === true) {
@@ -54,7 +54,7 @@ export class Choice extends PureComponent {
         <i className={this.icon} />
         <div className={css.choiceContent + " " + this.contentStyling}>
           <div className={css.choiceText}>
-            { choice.get("choice") }
+            { choice.get("content") }
           </div>
           <div className={css.label}>
             { this.label }

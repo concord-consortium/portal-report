@@ -29,7 +29,7 @@ export default class ActivityQuestions extends PureComponent {
                 selectQuestion(q.get("key"));
               };
               let trackAction = promptExpanded ? "Collapsed Question - " : "Expanded Question - ";
-              trackAction = trackAction + q.get("type").replace("Embeddable::", "");
+              trackAction = trackAction + q.get("type");
               let trackLabel = activity.get("name") + " - " + q.get("questionNumber") + ". " + striptags(q.get("prompt"));
               if (promptExpanded) {
                 const headerClassName = `${css.questionPrompt} ${css.fullPrompt}`;

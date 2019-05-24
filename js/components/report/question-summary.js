@@ -13,26 +13,20 @@ export default class QuestionSummary extends PureComponent {
     return this.props.answers.toJS().filter(a => a.type === "NoAnswer").length;
   }
 
-  get total() {
-    return this.props.answers.size;
-  }
-
   render() {
     const { question, showFeedback } = this.props;
-    const notAnsweredDiv = (<div><strong>Not answered:</strong> {this.notAnswered}</div>);
-
-    // These aren't stats have been removed, but its possibly they will go back in.
-    // const answeredDiv = (<div><strong>Answered:</strong> {this.answered}</div>)
-    // const totalDiv = (<div><strong>Total:</strong> {this.total}</div>)
+    const notAnswered = this.notAnswered;
     return (
       <div className="question-summary">
         <Prompt question={question} />
         <div className="stats">
-
-          {this.notAnswered > 0 ? notAnsweredDiv : ""}
-          { showFeedback
-            ? <FeedbackPanel question={this.props.question} answers={this.props.answers} />
-            : ""
+          {
+            notAnswered > 0 &&
+            <div><strong>Not answered:</strong> { notAnswered }</div>
+          }
+          {
+            showFeedback &&
+            <FeedbackPanel question={this.props.question} answers={this.props.answers} />
           }
         </div>
         <div className="clear-fix" />

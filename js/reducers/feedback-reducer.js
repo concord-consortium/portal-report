@@ -1,6 +1,6 @@
 import Immutable, { Map } from "immutable";
-import { RECEIVE_DATA, UPDATE_FEEDBACK } from "../actions";
-import transformJSONResponse from "../core/transform-json-response";
+import { RECEIVE_RESOURCE_STRUCTURE, UPDATE_FEEDBACK } from "../actions";
+import normalizeResourceJSON from "../core/transform-json-response";
 
 const INITIAL_FEEDBACK_STATE = Map({});
 
@@ -11,8 +11,8 @@ export default function feedbackReducer(state = INITIAL_FEEDBACK_STATE, action) 
   }
 
   switch (action.type) {
-    case RECEIVE_DATA:
-      const data = transformJSONResponse(action.response);
+    case RECEIVE_RESOURCE_STRUCTURE:
+      const data = normalizeResourceJSON(action.response);
       return Immutable.fromJS(data.entities.feedbacks || {});
     case UPDATE_FEEDBACK:
       return updateFeedback(state, action);
