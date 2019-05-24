@@ -1,100 +1,90 @@
 {
-  "source_type": "LARA",
+  "id": "sequence-1",
   "type": "sequence",
-  "id": 230,
   "name": "Report Test Sequence",
-  "description": "",
-  "abstract": "",
-  "url": "http://authoring.staging.concord.org/sequences/230",
-  "create_url": "http://authoring.staging.concord.org/sequences/230",
-  "author_url": "http://authoring.staging.concord.org/sequences/230/edit",
-  "print_url": "http://authoring.staging.concord.org/sequences/230/print_blank",
-  "external_report_url": "",
-  "thumbnail_url": "",
-  "author_email": "janikpiotrek@gmail.com",
+  "url": "http://app.lara.docker/sequences/1",
   "children": [
     {
-      "source_type": "LARA",
+      "id": 9,
       "type": "activity",
-      "id": 20138,
       "name": "Report Test Activity 1",
-      "description": "",
-      "url": "http://authoring.staging.concord.org/activities/20138",
-      "create_url": "http://authoring.staging.concord.org/activities/20138",
-      "author_url": "http://authoring.staging.concord.org/activities/20138/edit",
-      "print_url": "http://authoring.staging.concord.org/activities/20138/print_blank",
-      "external_report_url": null,
-      "student_report_enabled": true,
-      "thumbnail_url": "",
-      "author_email": "janikpiotrek@gmail.com",
-      "is_locked": false,
+      "url": "http://app.lara.docker/activities/9",
       "children": [
         {
-          "name": "Report Test Activity 1 Section",
+          "id": 9,
           "type": "section",
-          "id": 123,
+          "name": "Report Test Activity 1 Section",
+          "url": "http://app.lara.docker/activities/9",
           "children": [
             {
-              "name": "Basic question types",
-              "url": "http://authoring.staging.concord.org/pages/305387",
+              "id": 25,
               "type": "page",
-              "id": 305387,
+              "name": "Basic question types",
+              "url": "http://app.lara.docker/pages/25",
               "children": [
                 {
                   "type": "open_response",
-                  "id": 444601,
+                  "id": 60,
                   "prompt": "\u003Cp\u003EOpen response question prompt\u003C/p\u003E",
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "open_response-60",
+                  "question_number": 1
                 },
                 {
                   "type": "multiple_choice",
-                  "id": 11982,
+                  "id": 19,
                   "prompt": "\u003Cp\u003EMultiple choice question prompt\u003C/p\u003E",
                   "choices": [
                     {
-                      "id": 46039,
+                      "id": 57,
                       "content": "a",
                       "correct": false
                     },
                     {
-                      "id": 46040,
+                      "id": 58,
                       "content": "b",
                       "correct": false
                     },
                     {
-                      "id": 46041,
+                      "id": 59,
                       "content": "c",
                       "correct": false
                     }
                   ],
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "multiple_choice-19",
+                  "question_number": 2
                 },
                 {
                   "type": "iframe_interactive",
-                  "id": "Embeddable::Labbook_209903",
+                  "id": "Embeddable::Labbook_1",
                   "name": "Labbook album",
                   "show_in_featured_question_report": true,
                   "display_in_iframe": true,
                   "native_width": 600,
-                  "native_height": 500
+                  "native_height": 500,
+                  "key": "iframe_interactive-Embeddable::Labbook_1",
+                  "question_number": 3
                 },
                 {
                   "type": "image_question",
-                  "id": 211468,
+                  "id": 2,
                   "prompt": "\u003Cp\u003Ewhy does ...\u003C/p\u003E",
                   "drawing_prompt": "",
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "image_question-2",
+                  "question_number": 4
                 }
               ]
             },
             {
-              "name": "Interactives saving state",
-              "url": "http://authoring.staging.concord.org/pages/305388",
+              "id": 26,
               "type": "page",
-              "id": 305388,
+              "name": "Interactives saving state",
+              "url": "http://app.lara.docker/pages/26",
               "children": [
                 {
                   "name": "",
@@ -115,8 +105,10 @@
                   "authored_state": null,
                   "aspect_ratio_method": "DEFAULT",
                   "type": "iframe_interactive",
-                  "id": 209008,
-                  "display_in_iframe": false
+                  "id": 18,
+                  "display_in_iframe": false,
+                  "key": "iframe_interactive-18",
+                  "question_number": 5
                 }
               ]
             }
@@ -125,110 +117,111 @@
       ]
     },
     {
-      "source_type": "LARA",
+      "id": 10,
       "type": "activity",
-      "id": 20139,
       "name": "Report Test Activity 2",
-      "description": "",
-      "url": "http://authoring.staging.concord.org/activities/20139",
-      "create_url": "http://authoring.staging.concord.org/activities/20139",
-      "author_url": "http://authoring.staging.concord.org/activities/20139/edit",
-      "print_url": "http://authoring.staging.concord.org/activities/20139/print_blank",
-      "external_report_url": null,
-      "student_report_enabled": true,
-      "thumbnail_url": "",
-      "author_email": "janikpiotrek@gmail.com",
-      "is_locked": false,
+      "url": "http://app.lara.docker/activities/10",
       "children": [
         {
-          "name": "Report Test Activity 2 Section",
+          "id": 10,
           "type": "section",
-          "id": 124,
+          "name": "Report Test Activity 2 Section",
+          "url": "http://app.lara.docker/activities/10",
           "children": [
             {
-              "name": "Arg block",
+              "id": 27,
               "type": "page",
-              "id": 35389,
-              "url": "http://authoring.staging.concord.org/pages/305389",
+              "name": "Arg block",
+              "url": "http://app.lara.docker/pages/27",
               "children": [
                 {
                   "type": "open_response",
-                  "id": 444602,
+                  "id": 61,
                   "prompt": "why does ...",
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "open_response-61",
+                  "question_number": 1
                 },
                 {
                   "type": "multiple_choice",
-                  "id": 11983,
+                  "id": 20,
                   "prompt": "why does ...",
                   "choices": [
                     {
-                      "id": 46042,
+                      "id": 60,
                       "content": "a",
                       "correct": null
                     },
                     {
-                      "id": 46043,
+                      "id": 61,
                       "content": "b",
                       "correct": null
                     },
                     {
-                      "id": 46044,
+                      "id": 62,
                       "content": "c",
                       "correct": null
                     }
                   ],
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "multiple_choice-20",
+                  "question_number": 2
                 },
                 {
                   "type": "open_response",
-                  "id": 444603,
+                  "id": 62,
                   "prompt": "Explain your answer.",
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "open_response-62",
+                  "question_number": 3
                 },
                 {
                   "type": "multiple_choice",
-                  "id": 11984,
+                  "id": 21,
                   "prompt": "How certain are you about your claim based on your explanation?",
                   "choices": [
                     {
-                      "id": 46045,
+                      "id": 63,
                       "content": "(1) Not at all certain",
                       "correct": null
                     },
                     {
-                      "id": 46046,
+                      "id": 64,
                       "content": "(2)",
                       "correct": null
                     },
                     {
-                      "id": 46047,
+                      "id": 65,
                       "content": "(3)",
                       "correct": null
                     },
                     {
-                      "id": 46048,
+                      "id": 66,
                       "content": "(4)",
                       "correct": null
                     },
                     {
-                      "id": 46049,
+                      "id": 67,
                       "content": "(5) Very certain",
                       "correct": null
                     }
                   ],
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "multiple_choice-21",
+                  "question_number": 4
                 },
                 {
                   "type": "open_response",
-                  "id": 444604,
+                  "id": 63,
                   "prompt": "Explain what influenced your certainty rating.",
                   "is_required": false,
-                  "show_in_featured_question_report": true
+                  "show_in_featured_question_report": true,
+                  "key": "open_response-63",
+                  "question_number": 5
                 }
               ]
             }
@@ -236,5 +229,8 @@
         }
       ]
     }
-  ]
+  ],
+  "created": "2019-05-24 16:11:49 UTC",
+  "version": "1",
+  "source_key": "app_lara_docker"
 }

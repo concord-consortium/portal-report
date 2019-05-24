@@ -49,13 +49,8 @@ export function preprocessResourceJson(resourceJson) {
   // Add some question properties, e.g. question numbers, selection, visibility.
   resourceJson.children.forEach(activity => {
     activity.children.forEach(section => {
-      // Questions are numbered within the whole activity.
-      let currentQuestionNumber = 1;
       section.children.forEach(page => {
         page.children.forEach(question => {
-          question.questionNumber = currentQuestionNumber++;
-          // Id is not enough, as questions of different type can have the same id.
-          question.key = `${question.type}-${question.id}`;
           // Nothing is selected by default.
           question.selected = false;
           if (question.type === "multiple_choice") {
