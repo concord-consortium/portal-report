@@ -1,5 +1,5 @@
 import nock from "nock";
-import { fetchResourceStructure } from "../js/api";
+import { fetchOfferingData } from "../js/api";
 
 describe("api helper", () => {
   afterEach(() => {
@@ -7,31 +7,20 @@ describe("api helper", () => {
     nock.cleanAll();
   });
 
-  describe("fetchResourceStructure", () => {
+  describe("fetchOfferingData", () => {
     const okResponse = { message: "OK" };
 
     beforeEach(() => {
       nock("https://portal.com/")
-        .get("/offerings/123").reply(200, { weDontWantToReceiveThisOne: 123 })
-        .get("/reports/123").reply(200, okResponse);
+        .get("/offerings/123").reply(200, okResponse);
     });
 
-    describe("when reportUrl URL param is present", () => {
-      beforeEach(() => {
-        window.history.replaceState({}, "Test", "/?reportUrl=https://portal.com/reports/123&offering=https://portal.com/offerings/123");
-      });
-      it("should use it to download report data", async () => {
-        const resp = await fetchResourceStructure();
-        expect(resp).toEqual(okResponse);
-      });
-    });
-
-    describe("when reportUrl URL param is not available, but there is offering URL", () => {
+    describe("when offering URL param is present", () => {
       beforeEach(() => {
         window.history.replaceState({}, "Test", "/?offering=https://portal.com/offerings/123");
       });
-      it("should use offering URL to generate report API URL and use it to download report data", async () => {
-        const resp = await fetchResourceStructure();
+      it("should use it to download report data", async () => {
+        const resp = await fetchOfferingData();
         expect(resp).toEqual(okResponse);
       });
     });

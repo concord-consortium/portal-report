@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { fetchDataIfNeeded, invalidateData, trackEvent } from "../../actions/index";
+import { fetchAndObserveData, invalidateData, trackEvent } from "../../actions/index";
 import {
   setActivityExpanded,
   setStudentExpanded,
@@ -22,8 +22,6 @@ import css from "../../../css/dashboard/dashboard-app.less";
 // Make icons available.
 import "../../../css/icomoon.css";
 
-const AUTO_REFRESH_INTERVAL = 10000; // ms
-
 class DashboardApp extends PureComponent {
   constructor(props) {
     super(props);
@@ -36,38 +34,16 @@ class DashboardApp extends PureComponent {
   }
 
   componentDidMount() {
-    const { fetchDataIfNeeded } = this.props;
-    fetchDataIfNeeded();
-
-    this.autoRefreshId = setInterval(this.autoRefreshHandler, AUTO_REFRESH_INTERVAL);
-  }
-
-  componentWillUnmount() {
-    this.stopAutoRefresh();
+    const { fetchAndObserveData } = this.props;
+    fetchAndObserveData();
   }
 
   componentDidUpdate(prevProps) {
     const { initialLoading } = this.state;
-    const { isFetching, error } = this.props;
+    const { isFetching } = this.props;
     if (initialLoading && !isFetching && prevProps.isFetching) {
       this.setState({ initialLoading: false });
     }
-    if (error) {
-      // Stop polling in case of error. The most likely reason for error to happen is that auth token has expired.
-      // In this case, user needs to go back to Portal and run Portal again. In case of other errors, it doesn't seem
-      // useful to keep polling Portal either.
-      this.stopAutoRefresh();
-    }
-  }
-
-  autoRefreshHandler() {
-    const { invalidateData, fetchDataIfNeeded } = this.props;
-    invalidateData();
-    fetchDataIfNeeded();
-  }
-
-  stopAutoRefresh() {
-    clearInterval(this.autoRefreshId);
   }
 
   toggleHelpModal() {
@@ -76,7 +52,7 @@ class DashboardApp extends PureComponent {
 
   render() {
     const { initialLoading } = this.state;
-    const { error, clazzName, clazzId, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props;
+    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props;
     return (
       <div className={css.dashboardApp}>
         <Header lastUpdated={lastUpdated} onHelpButtonClick={this.toggleHelpModal} background="#6fc6da" />
@@ -133,7 +109,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
+    fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     invalidateData: () => dispatch(invalidateData()),
     setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
     setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value)),
