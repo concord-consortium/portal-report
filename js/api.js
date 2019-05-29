@@ -1,65 +1,28 @@
 import fetch from "isomorphic-fetch";
-import fakeData from "./data/sequence-structure.json";
+import fakeOfferingData from "./data/offering-data.json";
 import queryString from "query-string";
 
-const warn = (message) => {
-  // tslint:disable-next-line:no-console
-  if (console && typeof console.warn === "function") {
-    // tslint:disable-next-line:no-console
-    console.warn(message);
-  }
-};
 const urlParam = (name) => {
   return queryString.parse(window.location.search)[name];
 };
 
-// Report URL and auth tokens are provided as an URL parameters.
-const getReportUrl = () => {
-  const reportUrl = urlParam("reportUrl");
-  const offeringUrl = urlParam("offering");
-  if (reportUrl) {
-    return reportUrl;
-  }
-  if (offeringUrl) {
-    // When this report is used an external report, it will be launched with offering URL parameter
-    // instead of reportUrl. In this case, modify this URL to point to the correct API.
-    return offeringUrl.replace("/offerings/", "/reports/");
-  }
-  return null;
-};
-
 const getAuthHeader = () => `Bearer ${urlParam("token")}`;
 
-export function fetchResourceStructure() {
-  const reportUrl = getReportUrl();
+export function fetchOfferingData() {
+  const offeringUrl = urlParam("offering");
   const authHeader = getAuthHeader();
-  if (reportUrl) {
-    return fetch(reportUrl, {headers: {"Authorization": authHeader}})
+  if (offeringUrl) {
+    return fetch(offeringUrl, {headers: {"Authorization": authHeader}})
       .then(checkStatus)
       .then(response => response.json());
   } else {
     // Use fake data if REPORT_URL is not available.
-    return new Promise(resolve => setTimeout(() => resolve(fakeData), 500));
+    return new Promise(resolve => setTimeout(() => resolve(fakeOfferingData), 500));
   }
 }
 
 export function updateReportSettings(data) {
-  const reportUrl = getReportUrl();
-  const authHeader = getAuthHeader();
-  if (reportUrl) {
-    return fetch(reportUrl, {
-      method: "put",
-      headers: {
-        "Authorization": authHeader,
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }).then(checkStatus);
-  } else {
-    warn("No REPORT_URL. Faking put method.");
-    return new Promise(resolve => {});
-  }
+  // TODO using Firebase
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.

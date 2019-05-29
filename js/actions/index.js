@@ -1,6 +1,9 @@
-import { requestRubric } from "./rubric";
+import db from "../db";
+import { getHostname } from "../util/misc";
+import fakeSequenceStructure from "../data/sequence-structure.json";
+
 export const INVALIDATE_DATA = "INVALIDATE_DATA";
-export const REQUEST_RESOURCE_STRUCTURE = "REQUEST_RESOURCE_STRUCTURE";
+export const REQUEST_OFFERING_DATA = "REQUEST_OFFERING_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
@@ -18,30 +21,46 @@ export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 
-// When fetch succeeds, receiveResourceStructure action will be called with the response object (json in this case).
-// REQUEST_RESOURCE_STRUCTURE action will be processed by the reducer immediately.
+// When fetch succeeds, receiveOfferingData action will be called with the response object (json in this case).
+// REQUEST_OFFERING_DATA action will be processed by the reducer immediately.
 // See: api-middleware.js
-function requestData() {
-  return (dispatch, getState) => {
-    dispatch({
-      type: REQUEST_RESOURCE_STRUCTURE,
-      callAPI: {
-        type: "fetchResourceStructure",
-        successAction: receiveResourceStructure,
-        errorAction: fetchError,
-      },
-    });
+export function fetchAndObserveData() {
+  return {
+    type: REQUEST_OFFERING_DATA,
+    // Start with fetching offering data. It will cause other actions to be chained later.
+    callAPI: {
+      type: "fetchOfferingData",
+      successAction: receiveOfferingData,
+      errorAction: fetchError,
+    },
   };
 }
 
-function receiveResourceStructure(response) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: RECEIVE_RESOURCE_STRUCTURE,
-      response: response,
-      receivedAt: Date.now(),
-    });
-    dispatch(requestRubric());
+function receiveOfferingData(response) {
+  return (dispatch) => {
+    const url = response.activity_url;
+    const source = getHostname(url).replace(/\./g, "_");
+    if (source === "fake_authoring_system") { // defined in data/offering-data.json
+      // Use fake data.
+      dispatch({
+        type: RECEIVE_RESOURCE_STRUCTURE,
+        response: fakeSequenceStructure,
+        receivedAt: Date.now(),
+      });
+    } else {
+      // Setup Firebase observer. It will fire each time the resource structure is updated.
+      db.collection(`sources/${source}/resources`)
+        .where("url", "==", url)
+        .onSnapshot(doc => {
+          if (!doc.empty) {
+            dispatch({
+              type: RECEIVE_RESOURCE_STRUCTURE,
+              response: doc.docs[0].data(),
+              receivedAt: Date.now(),
+            });
+          }
+        });
+    }
   };
 }
 
@@ -50,22 +69,6 @@ function fetchError(response) {
     type: FETCH_ERROR,
     response: response,
     receivedAt: Date.now(),
-  };
-}
-
-function shouldFetchData(state) {
-  const data = state.get("data");
-  if (data.get("isFetching")) {
-    return false;
-  }
-  return data.get("didInvalidate") || !data.get("lastUpdated");
-}
-
-export function fetchDataIfNeeded() {
-  return (dispatch, getState) => {
-    if (shouldFetchData(getState())) {
-      return dispatch(requestData());
-    }
   };
 }
 

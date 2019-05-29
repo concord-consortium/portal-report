@@ -1,4 +1,4 @@
-import { fetchResourceStructure, updateReportSettings, APIError, fetchRubric } from "./api";
+import { fetchOfferingData, updateReportSettings, APIError, fetchRubric } from "./api";
 
 // This middleware is executed only if action includes .callAPI object.
 // It calls API action defined in callAPI.type.
@@ -32,8 +32,8 @@ export default store => next => action => {
 
 function callApi(type, data) {
   switch (type) {
-    case "fetchResourceStructure":
-      return fetchResourceStructure();
+    case "fetchOfferingData":
+      return fetchOfferingData();
     case "updateReportSettings":
       return updateReportSettings(data);
     case "fetchRubric":

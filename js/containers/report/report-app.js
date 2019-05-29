@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import {
-  fetchDataIfNeeded, invalidateData, hideCompareView,
+  fetchAndObserveData, invalidateData, hideCompareView,
   hideUnselectedQuestions, showUnselectedQuestions, setNowShowing,
   setAnonymous, trackEvent } from "../../actions/index";
 import { Modal } from "react-bootstrap";
@@ -22,16 +22,16 @@ class ReportApp extends PureComponent {
   }
 
   componentDidMount() {
-    const { fetchDataIfNeeded } = this.props;
-    fetchDataIfNeeded();
+    const { fetchAndObserveData } = this.props;
+    fetchAndObserveData();
   }
 
   handleRefreshClick(e) {
     e.preventDefault();
 
-    const { invalidateData, fetchDataIfNeeded } = this.props;
+    const { invalidateData, fetchAndObserveData } = this.props;
     invalidateData();
-    fetchDataIfNeeded();
+    fetchAndObserveData();
   }
 
   renderReport() {
@@ -96,7 +96,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchDataIfNeeded: () => dispatch(fetchDataIfNeeded()),
+    fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     invalidateData: () => dispatch(invalidateData()),
     hideUnselectedQuestions: () => dispatch(hideUnselectedQuestions()),
     showUnselectedQuestions: () => dispatch(showUnselectedQuestions()),
