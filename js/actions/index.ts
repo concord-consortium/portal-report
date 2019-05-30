@@ -1,10 +1,13 @@
 import db from "../db";
-import { getHostname } from "../util/misc";
+import { parseUrl } from "../util/misc";
 import fakeSequenceStructure from "../data/sequence-structure.json";
+import {Dispatch} from "redux";
+import { Map } from "immutable";
+import { IPortalRawData, IResponse } from "../api";
 
-export const INVALIDATE_DATA = "INVALIDATE_DATA";
-export const REQUEST_OFFERING_DATA = "REQUEST_OFFERING_DATA";
+export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
+export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -21,31 +24,36 @@ export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 
-// When fetch succeeds, receiveOfferingData action will be called with the response object (json in this case).
-// REQUEST_OFFERING_DATA action will be processed by the reducer immediately.
+type StateMap = Map<string, any>;
+
+// When fetch succeeds, receivePortalData action will be called with the response object (json in this case).
+// REQUEST_PORTAL_DATA action will be processed by the reducer immediately.
 // See: api-middleware.js
 export function fetchAndObserveData() {
   return {
-    type: REQUEST_OFFERING_DATA,
-    // Start with fetching offering data. It will cause other actions to be chained later.
+    type: REQUEST_PORTAL_DATA,
+    // Start with fetching portal data. It will cause other actions to be chained later.
     callAPI: {
-      type: "fetchOfferingData",
-      successAction: receiveOfferingData,
+      type: "fetchPortalDataAndAuthFirestore",
+      successAction: receivePortalData,
       errorAction: fetchError,
     },
   };
 }
 
-function receiveOfferingData(response) {
-  return (dispatch) => {
-    const url = response.activity_url;
-    const source = getHostname(url).replace(/\./g, "_");
+function receivePortalData(rawPortalData: IPortalRawData) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: RECEIVE_PORTAL_DATA,
+      response: rawPortalData
+    });
+    const url = rawPortalData.offering.activity_url;
+    const source = parseUrl(url).hostname.replace(/\./g, "_");
     if (source === "fake_authoring_system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
         type: RECEIVE_RESOURCE_STRUCTURE,
         response: fakeSequenceStructure,
-        receivedAt: Date.now(),
       });
     } else {
       // Setup Firebase observer. It will fire each time the resource structure is updated.
@@ -56,26 +64,31 @@ function receiveOfferingData(response) {
             dispatch({
               type: RECEIVE_RESOURCE_STRUCTURE,
               response: doc.docs[0].data(),
-              receivedAt: Date.now(),
             });
           }
+        }, (err: Error) => {
+          // tslint:disable-next-line no-console
+          console.error("Firestore error", err);
+          dispatch(fetchError({
+            status: 500,
+            statusText: `Firestore fetch error: ${err.message}`
+          }));
         });
     }
   };
 }
 
-function fetchError(response) {
+function fetchError(response: IResponse) {
   return {
     type: FETCH_ERROR,
-    response: response,
-    receivedAt: Date.now(),
+    response,
   };
 }
 
-function mappedCopy(src, fieldMappings) {
-  const dst = {};
+function mappedCopy(src: any, fieldMappings: any) {
+  const dst: any = {};
   let dstKey;
-  for (let key in src) {
+  for (const key in src) {
     if (src.hasOwnProperty(key)) {
       dstKey = fieldMappings[key] || key;
       dst[dstKey] = src[key];
@@ -84,18 +97,14 @@ function mappedCopy(src, fieldMappings) {
   return dst;
 }
 
-export function invalidateData() {
-  return {type: INVALIDATE_DATA};
-}
-
-export function setQuestionSelected(key, value) {
-  return (dispatch, getState) => {
+export function setQuestionSelected(key: string, value: boolean) {
+  return (dispatch: Dispatch, getState: () => StateMap) => {
     const questionsMap = getState().getIn(["report", "questions"]);
     // the questionsMap represents the previous state of the checkboxes
     // so the filter needs to special case the current key
     const selectedQuestionKeys = Array.from(questionsMap.values())
-      .filter(q => q.get("key") === key ? value : q.get("selected"))
-      .map(q => q.get("key"));
+      .filter((q: StateMap) => q.get("key") === key ? value : q.get("selected"))
+      .map((q: StateMap) => q.get("key"));
     dispatch({
       type: SET_QUESTION_SELECTED,
       key,
@@ -114,7 +123,7 @@ export function setQuestionSelected(key, value) {
 }
 
 export function hideUnselectedQuestions() {
-  return (dispatch, getState) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: HIDE_UNSELECTED_QUESTIONS,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
@@ -145,14 +154,14 @@ export function showUnselectedQuestions() {
   };
 }
 
-export function setNowShowing(value) {
+export function setNowShowing(value: boolean) {
   return {
     type: SET_NOW_SHOWING,
     value,
   };
 }
 
-export function setAnonymous(value) {
+export function setAnonymous(value: boolean) {
   return {
     type: SET_ANONYMOUS,
     value,
@@ -166,11 +175,11 @@ export function setAnonymous(value) {
   };
 }
 
-export function setAnswerSelectedForCompare(key, value) {
+export function setAnswerSelectedForCompare(key: string, value: boolean) {
   return {type: SET_ANSWER_SELECTED_FOR_COMPARE, key, value};
 }
 
-export function showCompareView(embeddableKey) {
+export function showCompareView(embeddableKey: string) {
   return {type: SHOW_COMPARE_VIEW, embeddableKey};
 }
 
@@ -178,11 +187,11 @@ export function hideCompareView() {
   return {type: HIDE_COMPARE_VIEW};
 }
 
-export function showFeedbackView(embeddableKey) {
+export function showFeedbackView(embeddableKey: string) {
   return {type: SHOW_FEEDBACK, embeddableKey};
 }
 
-export function updateFeedback(answerKey, feedback) {
+export function updateFeedback(answerKey: string, feedback: any) {
   const feedbackData = mappedCopy(feedback, {hasBeenReviewed: "has_been_reviewed"});
   feedbackData.answer_key = answerKey;
   return {
@@ -200,14 +209,14 @@ export function updateFeedback(answerKey, feedback) {
   };
 }
 
-export function enableFeedback(embeddableKey, feedbackFlags) {
+export function enableFeedback(embeddableKey: string, feedbackFlags: any) {
   const mappings = {
     feedbackEnabled: "enable_text_feedback",
     rubricEnabled: "rubric_enabled",
     scoreEnabled: "enable_score",
     maxScore: "max_score",
   };
-  const feedbackSettings = mappedCopy(feedbackFlags, mappings);
+  const feedbackSettings: any = mappedCopy(feedbackFlags, mappings);
   feedbackSettings.embeddable_key = embeddableKey;
 
   return {
@@ -224,7 +233,7 @@ export function enableFeedback(embeddableKey, feedbackFlags) {
   };
 }
 
-export function updateActivityFeedback(activityFeedbackKey, feedback) {
+export function updateActivityFeedback(activityFeedbackKey: string, feedback: any) {
   const feedbackData = mappedCopy(feedback, {
     hasBeenReviewed: "has_been_reviewed",
     activityFeedbackId: "activity_feedback_id",
@@ -247,7 +256,7 @@ export function updateActivityFeedback(activityFeedbackKey, feedback) {
   };
 }
 
-export function enableActivityFeedback(activityId, feedbackFlags, invalidatePreviousFeedback = true) {
+export function enableActivityFeedback(activityId: string, feedbackFlags: any, invalidatePreviousFeedback = true) {
   const mappings = {
     enableTextFeedback: "enable_text_feedback",
     scoreType: "score_type",
@@ -271,8 +280,8 @@ export function enableActivityFeedback(activityId, feedbackFlags, invalidatePrev
   };
 }
 
-export function trackEvent(category, action, label) {
-  return (dispatch, getState) => {
+export function trackEvent(category: string, action: string, label: string) {
+  return (dispatch: Dispatch, getState: () => StateMap) => {
     dispatch({
       type: TRACK_EVENT,
       category,
@@ -282,6 +291,6 @@ export function trackEvent(category, action, label) {
     const clazzId = getState().getIn(["report", "clazzId"]);
     let labelText = "Class ID: " + clazzId + " - " + label;
     labelText = labelText.replace(/ - $/, "");
-    gtag("event", action, {"event_category": category, "event_label": labelText});
+    (window as any).gtag("event", action, {event_category: category, event_label: labelText});
   };
 }

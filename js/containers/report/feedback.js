@@ -18,6 +18,9 @@ class Feedback extends PureComponent {
   }
 
   getLatestFeedback() {
+    if (!this.props.answer) {
+      return null;
+    }
     const feedbackKey = this.props.answer.get("feedbacks") && this.props.answer.get("feedbacks").last();
     return this.props.feedbacks.get(feedbackKey);
   }
@@ -62,6 +65,9 @@ class Feedback extends PureComponent {
     const feedbackEnabled = showText || showScore;
     const maxScore = this.props.question.get("maxScore");
     const feedback = this.getLatestFeedback();
+    if (!feedback) {
+      return null;
+    }
     const score = feedback && feedback.get("score");
     const textFeedback = feedback && feedback.get("feedback");
     const hasBeenReviewed = feedback && feedback.get("hasBeenReviewed");

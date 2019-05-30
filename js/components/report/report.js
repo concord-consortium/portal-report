@@ -51,13 +51,11 @@ export default class Report extends PureComponent {
     const selectedStudentId = report.get("selectedStudentId");
     const className = nowShowing ? "report-content" : "report-content hidden";
     let selectStudents = s => true;
-    const startedOffering = s => s.get("startedOffering");
     if (selectedStudentId) {
       const id = parseInt(selectedStudentId, 10);
       selectStudents = (student) => id === student.get("id");
     }
     return Array.from(report.get("students").values())
-      .filter(startedOffering)
       .filter(selectStudents)
       .map(s =>
         <div key={s.get("id")} className={className}>
@@ -87,7 +85,7 @@ export default class Report extends PureComponent {
   }
 
   renderControls() {
-    const { report, lastUpdated, isFetching, onRefreshClick } = this.props;
+    const { report } = this.props;
     const isAnonymous = report.get("anonymous");
     const nowShowing = report.get("nowShowing");
     const buttonText = (nowShowing === "class") ? "Print student reports" : "Print";
@@ -100,8 +98,6 @@ export default class Report extends PureComponent {
           <Button onClick={this.onShowUnselectedClick}>Show all</Button>
           <Button onClick={() => this.onShowHideNamesClick(isAnonymous)}>{isAnonymous ? "Show names" : "Hide names"}</Button>
           <Button onClick={this.printStudentReports}>{buttonText}</Button>
-          {onRefreshClick && <Button onClick={onRefreshClick} disabled={isFetching}>Refresh</Button>}
-          {lastUpdated && <div className="last-updated">Last updated at {new Date(lastUpdated).toLocaleTimeString()} </div>}
         </div>
       );
     } else {

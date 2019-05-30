@@ -1,7 +1,7 @@
 import Immutable, { Map, Set} from "immutable";
 import {
-  REQUEST_OFFERING_DATA, RECEIVE_RESOURCE_STRUCTURE, FETCH_ERROR, INVALIDATE_DATA, SET_NOW_SHOWING, SET_ANONYMOUS,
-  SET_QUESTION_SELECTED, HIDE_UNSELECTED_QUESTIONS, SHOW_UNSELECTED_QUESTIONS,
+  REQUEST_PORTAL_DATA, RECEIVE_RESOURCE_STRUCTURE, FETCH_ERROR, SET_NOW_SHOWING, SET_ANONYMOUS,
+  SET_QUESTION_SELECTED, HIDE_UNSELECTED_QUESTIONS, SHOW_UNSELECTED_QUESTIONS, RECEIVE_PORTAL_DATA,
   SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK,
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
@@ -9,8 +9,8 @@ import feedbackReducer from "./feedback-reducer";
 import { rubricReducer } from "./rubric-reducer";
 import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
-import normalizeResourceJSON from "../core/transform-json-response";
 import config from "../config";
+import { normalizeResourceJSON, preprocessPortalDataJSON } from "../core/transform-json-response";
 
 export const FULL_REPORT = "fullReport";
 export const DASHBOARD = "dashboard";
@@ -31,22 +31,19 @@ function view(state = INITIAL_VIEW, action) {
   }
 }
 
-function data(state = Map(), action) {
+const INITIAL_DATA = Map({
+  isFetching: true
+});
+function data(state = INITIAL_DATA, action) {
   switch (action.type) {
-    case INVALIDATE_DATA:
-      return state.set("didInvalidate", true);
-    case REQUEST_OFFERING_DATA:
+    case REQUEST_PORTAL_DATA:
       return state.set("isFetching", true);
     case RECEIVE_RESOURCE_STRUCTURE:
       return state.set("isFetching", false)
-        .set("didInvalidate", false)
-        .set("error", null)
-        .set("lastUpdated", action.receivedAt);
+        .set("error", null);
     case FETCH_ERROR:
       return state.set("isFetching", false)
-        .set("didInvalidate", false)
-        .set("error", action.response)
-        .set("lastUpdated", action.receivedAt);
+        .set("error", action.response);
     default:
       return state;
   }
@@ -106,25 +103,38 @@ function enableActivityFeedback(state, action) {
 }
 
 const INITIAL_REPORT_STATE = Map({
-  answers: Immutable.fromJS([]),
-  students: Immutable.fromJS([]),
-  clazzName: "",
-  clazzId: "",
-  selectedStudentId: null,
-  hideControls: false,
   // Type: 'class' or 'student'. Used by regular report only. 'class' displays all the answers,
   // while 'student' focuses on one student only.
   type: "class",
   nowShowing: "class",
+  clazzName: "",
+  clazzId: "",
+  students: Immutable.fromJS([]),
+  answers: Immutable.fromJS([]),
+  selectedStudentId: null,
+  hideControls: false,
   hideSectionNames: false,
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: true,
 });
 
 function report(state = INITIAL_REPORT_STATE, action) {
+  let data;
   switch (action.type) {
+    case RECEIVE_PORTAL_DATA:
+      data = preprocessPortalDataJSON(action.response);
+      // Report type depends on what kind of user is launching the report. Teachers will see class report,
+      // while students will see their answers (student report).
+      const type = data.userType === "teacher" ? "class" : "student";
+      state = state
+        .set("type", type)
+        .set("nowShowing", type)
+        .set("clazzName", data.classInfo.name)
+        .set("clazzId", data.classInfo.id)
+        .set("students", Map(data.classInfo.students.map(student => [student.id.toString(), Map(student)])));
+      return state;
     case RECEIVE_RESOURCE_STRUCTURE:
-      const data = normalizeResourceJSON(action.response);
+      data = normalizeResourceJSON(action.response);
       state = state
         .set("sequences", Immutable.fromJS(data.entities.sequences))
         .set("activities", Immutable.fromJS(data.entities.activities))

@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import {
-  fetchAndObserveData, invalidateData, hideCompareView,
+  fetchAndObserveData, hideCompareView,
   hideUnselectedQuestions, showUnselectedQuestions, setNowShowing,
   setAnonymous, trackEvent } from "../../actions/index";
 import { Modal } from "react-bootstrap";
@@ -18,7 +18,6 @@ import "../../../css/report/report-app.less";
 class ReportApp extends PureComponent {
   constructor(props) {
     super(props);
-    this.handleRefreshClick = this.handleRefreshClick.bind(this);
   }
 
   componentDidMount() {
@@ -26,17 +25,9 @@ class ReportApp extends PureComponent {
     fetchAndObserveData();
   }
 
-  handleRefreshClick(e) {
-    e.preventDefault();
-
-    const { invalidateData, fetchAndObserveData } = this.props;
-    invalidateData();
-    fetchAndObserveData();
-  }
-
   renderReport() {
     const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setNowShowing, setAnonymous,
-      trackEvent, lastUpdated, isFetching } = this.props;
+      trackEvent, isFetching } = this.props;
     return <Report
       report={report}
       reportTree={reportTree}
@@ -45,9 +36,7 @@ class ReportApp extends PureComponent {
       setNowShowing={setNowShowing}
       setAnonymous={setAnonymous}
       trackEvent={trackEvent}
-      lastUpdated={lastUpdated}
       isFetching={isFetching}
-      onRefreshClick={this.handleRefreshClick}
     />;
   }
 
@@ -83,13 +72,12 @@ function mapStateToProps(state) {
   const error = data.get("error");
   const reportState = state.get("report");
   const compareViewAnswers = reportState && reportState.get("compareViewAnswers");
-  const dataDownloaded = !error && !!data.get("lastUpdated");
+  const dataDownloaded = !error && !data.get("isFetching");
   return {
     report: dataDownloaded && reportState,
     reportTree: dataDownloaded && getReportTree(state),
     compareViewAnswers: compareViewAnswers && getCompareViewData(state),
     isFetching: data.get("isFetching"),
-    lastUpdated: data.get("lastUpdated"),
     error: error,
   };
 }
@@ -97,7 +85,6 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
-    invalidateData: () => dispatch(invalidateData()),
     hideUnselectedQuestions: () => dispatch(hideUnselectedQuestions()),
     showUnselectedQuestions: () => dispatch(showUnselectedQuestions()),
     setNowShowing: value => dispatch(setNowShowing(value)),
