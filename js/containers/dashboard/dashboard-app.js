@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { fetchAndObserveData, invalidateData, trackEvent } from "../../actions/index";
+import { fetchAndObserveData, trackEvent } from "../../actions/index";
 import {
   setActivityExpanded,
   setStudentExpanded,
@@ -29,7 +29,6 @@ class DashboardApp extends PureComponent {
       initialLoading: true,
       helpViewVisible: false,
     };
-    this.autoRefreshHandler = this.autoRefreshHandler.bind(this);
     this.toggleHelpModal = this.toggleHelpModal.bind(this);
   }
 
@@ -52,10 +51,10 @@ class DashboardApp extends PureComponent {
 
   render() {
     const { initialLoading } = this.state;
-    const { error, clazzName, activityTrees, students, lastUpdated, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props;
+    const { error, clazzName, activityTrees, students, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props;
     return (
       <div className={css.dashboardApp}>
-        <Header lastUpdated={lastUpdated} onHelpButtonClick={this.toggleHelpModal} background="#6fc6da" />
+        <Header onHelpButtonClick={this.toggleHelpModal} background="#6fc6da" />
         {activityTrees &&
           <div>
             <div className={css.title}>
@@ -91,10 +90,9 @@ class DashboardApp extends PureComponent {
 function mapStateToProps(state) {
   const data = state.get("data");
   const error = data.get("error");
-  const dataDownloaded = !error && !!data.get("lastUpdated");
+  const dataDownloaded = !error && !data.get("isFetching");
   return {
     isFetching: data.get("isFetching"),
-    lastUpdated: data.get("lastUpdated"),
     error: error,
     clazzName: dataDownloaded && state.getIn(["report", "clazzName"]),
     students: dataDownloaded && getSortedStudents(state),
@@ -110,7 +108,6 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
-    invalidateData: () => dispatch(invalidateData()),
     setActivityExpanded: (activityId, value) => dispatch(setActivityExpanded(activityId, value)),
     setStudentExpanded: (studentId, value) => dispatch(setStudentExpanded(studentId, value)),
     setStudentsExpanded: (studentIds, value) => dispatch(setStudentsExpanded(studentIds, value)),

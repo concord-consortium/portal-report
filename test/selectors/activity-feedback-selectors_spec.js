@@ -12,15 +12,13 @@ describe("activity-feedback-selectors", () => {
         lastName: "Paessel",
         firstName: "Noah",
         id: 1,
-        realName: "Noah Paessel",
-        startedOffering: true
+        realName: "Noah Paessel"
       },
       {
         lastName: "Ada",
         firstName: "Noah",
         id: 2,
-        realName: "Ada Paessel",
-        startedOffering: true
+        realName: "Ada Paessel"
       }
     ]
   );

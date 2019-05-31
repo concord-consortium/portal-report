@@ -133,7 +133,6 @@ IStudent{
   lastName: string,
   name: string,
   realName: string,  // duplicate of 'name'
-  startedOffering: boolean
 }
 
 IAFeedback {

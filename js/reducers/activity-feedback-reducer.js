@@ -1,6 +1,5 @@
 import Immutable, { Map, fromJS} from "immutable";
 import { RECEIVE_RESOURCE_STRUCTURE, UPDATE_ACTIVITY_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK } from "../actions";
-import normalizeResourceJSON from "../core/transform-json-response";
 const INITIAL_ACTIVITY_FEEDBACK_STATE = Map({});
 
 function updateActivityFeedback(state, action) {
@@ -27,9 +26,9 @@ function markAnswersNeedReview(state, action) {
 export function activityFeedbackReducer(state = INITIAL_ACTIVITY_FEEDBACK_STATE, action) {
   switch (action.type) {
     case RECEIVE_RESOURCE_STRUCTURE:
-      const data = normalizeResourceJSON(action.response);
-      const feedbacks = Immutable.fromJS(data.entities.activityFeedbacks || {});
-      return feedbacks;
+      // const data = normalizeResourceJSON(action.response);
+      // return Immutable.fromJS(data.entities.activityFeedbacks || {});
+      return Immutable.fromJS({});
     case UPDATE_ACTIVITY_FEEDBACK:
       return updateActivityFeedback(state, action);
     case ENABLE_ACTIVITY_FEEDBACK:

@@ -30,7 +30,7 @@ export class ShowCompareButton extends PureComponent {
 function mapStateToProps(state) {
   const data = state.get("data");
   const error = data.get("error");
-  const dataDownloaded = !error && !!data.get("lastUpdated");
+  const dataDownloaded = !error && !data.get("isFetching");
   return {
     reportTree: dataDownloaded && getReportTree(state),
   };

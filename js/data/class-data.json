@@ -1,0 +1,32 @@
+{
+  "class_hash": "123",
+  "id": 3,
+  "name": "Test Class",
+  "students": [
+    {
+      "id": 13,
+      "first_name": "John",
+      "last_name": "Jenkins"
+    },
+    {
+      "id": 14,
+      "first_name": "Jenna",
+      "last_name": "Armstrong"
+    },
+    {
+      "id": 15,
+      "first_name": "Amy",
+      "last_name": "Galloway"
+    },
+    {
+      "id": 16,
+      "first_name": "John",
+      "last_name": "Ross"
+    },
+    {
+      "id": 18,
+      "first_name": "Kate",
+      "last_name": "Crosby"
+    }
+  ]
+}

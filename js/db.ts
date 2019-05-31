@@ -12,4 +12,17 @@ firebase.initializeApp({
   appId: "1:402218300971:web:32b7266ef5226ff7"
 });
 
+// Useful only for manual testing Firebase rules.
+const SKIP_SIGN_IN = false;
+
+export const signInWithToken = (rawFirestoreJWT: string) => {
+  // It's actually useful to sign out first, as firebase seems to stay signed in between page reloads otherwise.
+  const signOutPromise = firebase.auth().signOut();
+  if (!SKIP_SIGN_IN) {
+    return signOutPromise.then(() => firebase.auth().signInWithCustomToken(rawFirestoreJWT));
+  } else {
+    return signOutPromise;
+  }
+};
+
 export default firebase.firestore();
