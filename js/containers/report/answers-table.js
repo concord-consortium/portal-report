@@ -3,18 +3,31 @@ import Answer from "../../components/report/answer";
 import { CompareAnswerCheckboxContainer } from "./compare-answer";
 import ShowCompareContainer from "./show-compare";
 import { connect } from "react-redux";
+import { fromJS } from "immutable";
 
 import "../../../css/report/answers-table.less";
 
 class AnswersTable extends PureComponent {
   getLatestFeedback(answer) {
     const feedbackKey = answer.get("feedbacks") && answer.get("feedbacks").last();
-    return this.props.feedbacks.get(feedbackKey);
+    return this.props.feedbacks && this.props.feedbacks.get(feedbackKey);
+  }
+
+  getAnswerForStudent(student) {
+    const { answers } = this.props;
+    // userId is actually an email.
+    const result = answers.filter(answer => answer.get("userId") === student.get("email"));
+    if (result.size === 0) {
+      return fromJS({
+        type: "NoAnswer"
+      });
+    } else {
+      return result.get(0);
+    }
   }
 
   render() {
-    const {question, answers, hidden, showCompare, anonymous} = this.props;
-    const getLatestFeedback = this.getLatestFeedback.bind(this);
+    const {question, students, hidden, showCompare, anonymous} = this.props;
     const scoreEnabled = (!anonymous) && question && question.get("scoreEnabled");
     const feedbackEnabled = (!anonymous) && question && question.get("feedbackEnabled");
     const feedbackTH = feedbackEnabled ? <th>Feedback</th> : null;
@@ -31,25 +44,28 @@ class AnswersTable extends PureComponent {
             {selectTH}
 
           </tr>
-          {answers.map(function(answer) {
-            const feedback = getLatestFeedback(answer);
-            return (<AnswerRow
-              key={answer.get("studentId")}
-              answer={answer}
-              feedback={feedback}
-              showFeedback={feedbackEnabled}
-              showScore={scoreEnabled}
-              showCompare={showCompare}
-            />);
-          },
-          )}
+          {
+            students.map(student => {
+              const answer = this.getAnswerForStudent(student);
+              const feedback = this.getLatestFeedback(answer);
+              return (<AnswerRow
+                key={student.get("id")}
+                student={student}
+                answer={answer}
+                feedback={feedback}
+                showFeedback={feedbackEnabled}
+                showScore={scoreEnabled}
+                showCompare={showCompare}
+              />);
+            })
+          }
         </tbody>
       </table>
     );
   }
 }
 
-function AnswerRow({answer, feedback, showScore, showFeedback, showCompare}) {
+function AnswerRow({student, answer, feedback, showScore, showFeedback, showCompare}) {
   const hasAnswer = answer.get("type") !== "NoAnswer";
   const score = feedback && feedback.get("score");
   const textFeedback = feedback && feedback.get("feedback");
@@ -64,7 +80,7 @@ function AnswerRow({answer, feedback, showScore, showFeedback, showCompare}) {
 
   return (
     <tr>
-      <td>{answer.getIn(["student", "name"])}</td>
+      <td>{student.get("name")}</td>
       <td> <Answer answer={answer} /> </td>
       {feedbackTD}
       {scoreTD}
@@ -75,8 +91,13 @@ function AnswerRow({answer, feedback, showScore, showFeedback, showCompare}) {
   );
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  const answers = state.getIn(["report", "answers"])
+    .toList()
+    .filter(answer => answer.get("questionKey") === ownProps.question.get("key"));
   return {
+    students: state.getIn(["report", "students"]).toList(),
+    answers,
     feedbacks: state.get("feedbacks"),
     anonymous: state.getIn(["report", "anonymous"]),
   };

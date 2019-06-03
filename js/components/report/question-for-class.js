@@ -23,10 +23,6 @@ export default class QuestionForClass extends PureComponent {
   render() {
     const { question, url } = this.props;
     const { answersVisible } = this.state;
-    const answers = question.get("answers").sortBy(a =>
-      (a.getIn(["student", "lastName"]) + a.getIn(["student", "firstName"])).toLowerCase(),
-    );
-
     return (
       <div>
         <div className={`question ${question.get("visible") ? "" : "hidden"}`}>
@@ -37,9 +33,9 @@ export default class QuestionForClass extends PureComponent {
               {answersVisible ? "Hide responses" : "Show responses"}
             </a>
           </div>
-          <QuestionSummary question={question} answers={answers} />
+          <QuestionSummary question={question} />
           <QuestionDetails question={question} />
-          {answersVisible ? <AnswersTable question={question} answers={answers} /> : ""}
+          {answersVisible ? <AnswersTable question={question} /> : ""}
         </div>
       </div>
     );

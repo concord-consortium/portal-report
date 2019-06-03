@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import Prompt from "./prompt";
 import FeedbackPanel from "../../containers/report/feedback-panel";
+import { fromJS } from "immutable";
 
 import "../../../css/report/question-summary.less";
 
@@ -37,4 +38,5 @@ export default class QuestionSummary extends PureComponent {
 
 QuestionSummary.defaultProps = {
   showFeedback: true,
+  answers: fromJS([])
 };
