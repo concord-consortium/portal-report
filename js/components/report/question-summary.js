@@ -6,12 +6,8 @@ import { fromJS } from "immutable";
 import "../../../css/report/question-summary.less";
 
 export default class QuestionSummary extends PureComponent {
-  get answered() {
-    return this.props.answers.toJS().filter(a => a.type !== "NoAnswer").length;
-  }
-
   get notAnswered() {
-    return this.props.answers.toJS().filter(a => a.type === "NoAnswer").length;
+    return this.props.students.size -  this.props.answers.size;
   }
 
   render() {

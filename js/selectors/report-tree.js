@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import Immutable from "immutable";
+import Immutable, { Map } from "immutable";
 import { FULL_REPORT, DASHBOARD } from "../reducers";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
@@ -44,11 +44,24 @@ const isQuestionVisible = (question, viewType, featuredOnly) => {
 
 // Selectors
 export const getAnswerTrees = createSelector(
-  [ getAnswers, getStudents ],
-  (answers, students) =>
-    answers.map(answer =>
-      answer.set("student", students.get(answer.get("studentId").toString())),
-    ),
+  [ getAnswers, getStudents, getQuestions ],
+  (answers, students, questions) =>
+    answers
+      // Filter out answers that are not matching any students in the class. Class could have been updated.
+      .filter(answer => students.has(answer.get("userEmail")))
+      .map(answer => {
+        if (answer.get("type") === "multiple_choice_answer") {
+          const question = questions.get(answer.get("questionId"));
+          const choices = Map(question.get("choices").map(c => [c.get("id"), c]));
+          const selectedChoices = answer.getIn(["answer", "choiceIds"]).map(id => choices.get(id));
+          const selectedCorrectChoices = selectedChoices.filter(c => c.get("correct"));
+          answer = answer
+            .set("scored", question.get("scored"))
+            .set("selectedChoices", selectedChoices)
+            .set("correct", selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size);
+        }
+        return answer.set("student", students.get(answer.get("userEmail")));
+      })
 );
 
 export const getQuestionTrees = createSelector(
@@ -73,7 +86,7 @@ export const getPageTrees = createSelector(
         .set("children", mappedChildren)
         // Page is visible only if at least one question is visible.
         .set("visible", !!mappedChildren.find(q => q.get("visible")));
-    }),
+    })
 );
 
 export const getSectionTrees = createSelector(

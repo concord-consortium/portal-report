@@ -61,17 +61,17 @@ class FeedbackPanel extends PureComponent {
   }
 
   enableText(event) {
-    this.props.enableFeedback(this.props.question.get("key"), { feedbackEnabled: event.target.checked });
+    this.props.enableFeedback(this.props.question.get("id"), { feedbackEnabled: event.target.checked });
   }
 
   enableScore(event) {
-    this.props.enableFeedback(this.props.question.get("key"), { scoreEnabled: event.target.checked });
+    this.props.enableFeedback(this.props.question.get("id"), { scoreEnabled: event.target.checked });
   }
 
   setMaxScore(value) {
     const {enableFeedback, question} = this.props;
     if (enableFeedback) {
-      enableFeedback(question.get("key"), { maxScore: value });
+      enableFeedback(question.get("id"), { maxScore: value });
     }
   }
 
@@ -197,7 +197,7 @@ class FeedbackPanel extends PureComponent {
                       <FeedbackRow
                         answer={answer}
                         ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
-                        key={answer.get("key")}
+                        key={answer.get("id")}
                         scoreEnabled={scoreEnabled}
                         feedbackEnabled={feedbackEnabled}
                         maxScore={maxScore}

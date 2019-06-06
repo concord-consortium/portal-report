@@ -1,8 +1,20 @@
 import Immutable, { Map, Set} from "immutable";
 import {
-  REQUEST_PORTAL_DATA, RECEIVE_RESOURCE_STRUCTURE, FETCH_ERROR, SET_NOW_SHOWING, SET_ANONYMOUS,
-  SET_QUESTION_SELECTED, HIDE_UNSELECTED_QUESTIONS, SHOW_UNSELECTED_QUESTIONS, RECEIVE_PORTAL_DATA,
-  SET_ANSWER_SELECTED_FOR_COMPARE, SHOW_COMPARE_VIEW, HIDE_COMPARE_VIEW, ENABLE_FEEDBACK, ENABLE_ACTIVITY_FEEDBACK,
+  REQUEST_PORTAL_DATA,
+  RECEIVE_RESOURCE_STRUCTURE,
+  FETCH_ERROR,
+  SET_NOW_SHOWING,
+  SET_ANONYMOUS,
+  SET_QUESTION_SELECTED,
+  HIDE_UNSELECTED_QUESTIONS,
+  SHOW_UNSELECTED_QUESTIONS,
+  RECEIVE_PORTAL_DATA,
+  SET_ANSWER_SELECTED_FOR_COMPARE,
+  SHOW_COMPARE_VIEW,
+  HIDE_COMPARE_VIEW,
+  ENABLE_FEEDBACK,
+  ENABLE_ACTIVITY_FEEDBACK,
+  RECEIVE_ANSWERS,
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
 import feedbackReducer from "./feedback-reducer";
@@ -10,7 +22,7 @@ import { rubricReducer } from "./rubric-reducer";
 import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
 import config from "../config";
-import { normalizeResourceJSON, preprocessPortalDataJSON } from "../core/transform-json-response";
+import { normalizeResourceJSON, preprocessPortalDataJSON, preprocessAnswersJSON } from "../core/transform-json-response";
 
 export const FULL_REPORT = "fullReport";
 export const DASHBOARD = "dashboard";
@@ -39,11 +51,10 @@ function data(state = INITIAL_DATA, action) {
     case REQUEST_PORTAL_DATA:
       return state.set("isFetching", true);
     case RECEIVE_RESOURCE_STRUCTURE:
-      return state.set("isFetching", false)
-        .set("error", null);
+      return state.set("isFetching", false);
     case FETCH_ERROR:
       return state.set("isFetching", false)
-        .set("error", action.response);
+                  .set("error", action.response);
     default:
       return state;
   }
@@ -131,7 +142,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("nowShowing", type)
         .set("clazzName", data.classInfo.name)
         .set("clazzId", data.classInfo.id)
-        .set("students", Map(data.classInfo.students.map(student => [student.id.toString(), Map(student)])));
+        .set("students", Map(data.classInfo.students.map(student => [student.email, Map(student)])));
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);
@@ -142,6 +153,8 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("pages", Immutable.fromJS(data.entities.pages))
         .set("questions", Immutable.fromJS(data.entities.questions));
       return state;
+    case RECEIVE_ANSWERS:
+      return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
     case SET_NOW_SHOWING:
       return state.set("nowShowing", action.value);
     case SET_QUESTION_SELECTED:
@@ -163,7 +176,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
     case SHOW_COMPARE_VIEW:
       const selectedAnswerKeys = state.get("answers")
         .filter(a => a.get("selectedForCompare") && a.get("embeddableKey") === action.embeddableKey)
-        .map(a => a.get("key"))
+        .map(a => a.get("id"))
         .values();
       return state.set("compareViewAnswers", Set(selectedAnswerKeys));
     case HIDE_COMPARE_VIEW:

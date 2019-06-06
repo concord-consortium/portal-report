@@ -7,7 +7,7 @@ function noAnswer(answer) {
 }
 
 function answerIncludeChoice(answer, choice) {
-  return !noAnswer(answer) && answer.answer.find(a => a.choice === choice.content);
+  return !noAnswer(answer) && answer.selectedChoices.find(a => a.id === choice.id);
 }
 
 function getChoicesStats(choices, answers) {
@@ -35,12 +35,8 @@ export default class MultipleChoiceDetails extends PureComponent {
     return choices;
   }
 
-  get answers() {
-    return this.props.question.get("answers").toJS();
-  }
-
   render() {
-    const stats = getChoicesStats(this.choices, this.answers);
+    const stats = getChoicesStats(this.choices, this.props.answers.toJS());
     return (
       <table className="multiple-choice-details">
         <tbody>

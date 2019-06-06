@@ -220,7 +220,7 @@ export const makeGetQuestions = () => createSelector(
     const sections = activity.get("children");
     const pages = sections.flatMap(s => s.get("children"));
     const questions = pages.flatMap(page => page.get("children"));
-    return questions.map((v, i) => report.getIn(["questions", v.get("key")]));
+    return questions.map((v, i) => report.getIn(["questions", v.get("id")]));
   },
 );
 

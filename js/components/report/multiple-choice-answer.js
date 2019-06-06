@@ -5,7 +5,7 @@ export default class MultipleChoiceAnswer extends PureComponent {
     const { answer } = this.props;
     return (
       <div>
-        {answer.get("answer").map(a => a.get("choice")).join(", ")}
+        {answer.get("selectedChoices").map(c => c.get("content")).join(", ")}
       </div>
     );
   }
