@@ -107,4 +107,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(AnswersTable);
 
 AnswersTable.defaultProps = {
   showCompare: true,
+  answers: fromJS([])
 };

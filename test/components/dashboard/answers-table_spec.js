@@ -11,6 +11,7 @@ describe("<AnswersTable />", () => {
   });
   const hidden = false;
   const showCompare = false;
+  const answers = fromJS([]);
   const state = fromJS({
     report: {
       anonymous: false,
@@ -18,12 +19,11 @@ describe("<AnswersTable />", () => {
         1: { id: 1, name: "John Doe" },
         2: { id: 2, name: "Test Student" }
       },
-      feedbacks: {},
-      answers: {},
+      feedbacks: {}
     }
   });
   const store = { getState: () => state, subscribe: () => {}, dispatch: () => {} };
-  const params = { hidden, showCompare, question };
+  const params = { hidden, showCompare, question, answers };
 
   it("should render student names", () => {
     const wrapper = mount(

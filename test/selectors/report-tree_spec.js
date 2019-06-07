@@ -11,14 +11,14 @@ describe("report tree selectors", () => {
     },
     report: {
       students: {
-        1: { id: 1, firstName: "John", lastName: "Doe" }
+        "john@doe.com": { id: 1, firstName: "John", lastName: "Doe", email: "john@doe.com" }
       },
       answers: {
-        A1: { key: "A1", studentId: 1, someAnswerProp: "x" }
+        A1: { id: "A1", studentId: 1, someAnswerProp: "x", userEmail: "john@doe.com" }
       },
       questions: {
-        "open_response-1": { key: "open_response-1", hiddenByUser: !questionVisible, someQuestionProp: "x" },
-        "image_question-2": { key: "image_question-2", hiddenByUser: false, someQuestionProp: "y" }
+        "open_response-1": { id: "open_response-1", hiddenByUser: !questionVisible, someQuestionProp: "x" },
+        "image_question-2": { id: "image_question-2", hiddenByUser: false, someQuestionProp: "y" }
       },
       pages: {
         1: { id: 1, children: [  "open_response-1" ], somePageProp: "x" },
@@ -42,22 +42,23 @@ describe("report tree selectors", () => {
 
   const expectedAnswerTrees = {
     A1: {
-      key: "A1",
+      id: "A1",
       someAnswerProp: "x",
       studentId: 1,
-      student: { id: 1, firstName: "John", lastName: "Doe" },
+      student: { id: 1, firstName: "John", lastName: "Doe", email: "john@doe.com" },
+      userEmail: "john@doe.com"
     }
   };
   const expectedQuestionTrees = ({ questionVisible = true }) => ({
     "open_response-1": {
-      key: "open_response-1",
+      id: "open_response-1",
       visible: questionVisible,
       hiddenByUser: !questionVisible,
       someQuestionProp: "x",
       answers: [ ]
     },
     "image_question-2": {
-      key: "image_question-2",
+      id: "image_question-2",
       visible: true,
       hiddenByUser: false,
       someQuestionProp: "y",

@@ -11,9 +11,13 @@ describe("<QuestionSummary />", () => {
   const prompt = "Why is the sky blue?";
   const answers = fromJS([
     {type: "multiple_choice"},
-    {type: "NoAnswer"},
     {type: "open_response"}
   ]);
+  const students = fromJS({
+    "test1@student": {},
+    "test2@student": {},
+    "test3@student": {}
+  });
   const question = Map({
     prompt: prompt,
     answers: answers
@@ -22,7 +26,7 @@ describe("<QuestionSummary />", () => {
   it("should have the specified prompt", () => {
     const component = renderIntoDocument(
       <Provider store={mockStore(fromJS({feedbacks: {}}))}>
-        <QuestionSummary question={question} answers={List()} />
+        <QuestionSummary question={question} answers={List()} students={students} />
       </Provider>
     );
     const promptComp = findRenderedDOMComponentWithClass(component, "prompt");
@@ -32,7 +36,7 @@ describe("<QuestionSummary />", () => {
   it("should have a summary of answered questions", () => {
     const component = renderIntoDocument(
       <Provider store={mockStore(fromJS({feedbacks: {}}))}>
-        <QuestionSummary question={question} answers={question.get("answers")} />
+        <QuestionSummary question={question} answers={question.get("answers")} students={students} />
       </Provider>
     );
     const statsComp = findRenderedDOMComponentWithClass(component, "stats");
