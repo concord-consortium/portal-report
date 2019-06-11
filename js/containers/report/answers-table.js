@@ -66,7 +66,7 @@ class AnswersTable extends PureComponent {
 }
 
 function AnswerRow({student, answer, question, feedback, showScore, showFeedback, showCompare}) {
-  const hasAnswer = answer.get("type") !== "NoAnswer";
+  const hasAnswer = answer.get("questionType") !== "NoAnswer";
   const score = feedback && feedback.get("score");
   const textFeedback = feedback && feedback.get("feedback");
   const scoreTD = showScore ? <td className="score">{score}</td> : null;

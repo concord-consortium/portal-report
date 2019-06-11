@@ -170,15 +170,15 @@ function report(state = INITIAL_REPORT_STATE, action) {
       if (compareViewAns) {
         // If compare view is open and user unselect given answer, remove it from the compare set too.
         // It's possible, as there is "Remove" link in the compare view.
-        state = state.set("compareViewAnswers", compareViewAns.delete(action.key));
+        state = state.set("compareViewAnswers", compareViewAns.delete(action.id));
       }
-      return state.setIn(["answers", action.key, "selectedForCompare"], action.value);
+      return state.setIn(["answers", action.id, "selectedForCompare"], action.value);
     case SHOW_COMPARE_VIEW:
-      const selectedAnswerKeys = state.get("answers")
-        .filter(a => a.get("selectedForCompare") && a.get("embeddableKey") === action.embeddableKey)
+      const selectedAnswerIds = state.get("answers")
+        .filter(a => a.get("selectedForCompare") && a.get("questionId") === action.questionId)
         .map(a => a.get("id"))
         .values();
-      return state.set("compareViewAnswers", Set(selectedAnswerKeys));
+      return state.set("compareViewAnswers", Set(selectedAnswerIds));
     case HIDE_COMPARE_VIEW:
       return state.set("compareViewAnswers", null);
     case ENABLE_FEEDBACK:

@@ -1,12 +1,8 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { showCompareView, trackEvent } from "../../actions/index";
-import CompareView from "../../components/report/compare-view";
 import Report from "../../components/report/report";
-import DataFetchError from "../../components/report/data-fetch-error";
-import LoadingIcon from "../../components/report/loading-icon";
 import getReportTree from "../../selectors/report-tree";
-import getCompareViewData from "../../selectors/compare-view-data";
 import Button from "../../components/common/button";
 
 export class ShowCompareButton extends PureComponent {
@@ -14,11 +10,11 @@ export class ShowCompareButton extends PureComponent {
   onCompareButtonClick = () => {
     const { reportTree, answer, onClick, trackEvent } = this.props;
     trackEvent("Report", "Compare/Project", reportTree.get("name"));
-    return onClick(answer.get("embeddableKey"));
+    return onClick(answer.get("questionId"));
   }
 
   render() {
-    const { reportTree, answer, onClick, trackEvent } = this.props;
+    const { answer } = this.props;
     return (
       <Button className="select-answer" onClick={this.onCompareButtonClick} disabled={!answer.get("selectedForCompare")}>
         Compare/project
@@ -36,9 +32,9 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onClick: (embeddableKey) => dispatch(showCompareView(embeddableKey)),
+    onClick: questionId => dispatch(showCompareView(questionId)),
     trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label)),
   };
 };

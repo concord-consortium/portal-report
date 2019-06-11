@@ -23,13 +23,13 @@ export default class ImageAnswerModal extends PureComponent {
     if (!answer) { return null; }
     return (
       <Modal show={show} onHide={onHide}>
-        <Modal.Header closeButton />
+        <Modal.Header closeButton closeLabel="" />
         <Modal.Body>
           <img src={answer.getIn(["answer", "imageUrl"])} style={{display: "block", margin: "0 auto"}} />
         </Modal.Body>
         <Modal.Footer>
           <div style={{fontWeight: "bold"}}>{answer.getIn(["student", "name"])}</div>
-          <div>{answer.getIn(["answer", "note"])}</div>
+          <div>{answer.getIn(["answer", "text"])}</div>
         </Modal.Footer>
       </Modal>
     );

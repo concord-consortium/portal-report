@@ -41,11 +41,18 @@ class ReportApp extends PureComponent {
   }
 
   renderCompareView() {
-    const { compareViewAnswers, hideCompareView } = this.props;
+    const { compareViewAnswers, hideCompareView, report } = this.props;
+    const showCompare = compareViewAnswers && compareViewAnswers.size > 0;
+    let question = null;
+    if (showCompare) {
+      // All the answers belong to the same question, so we can pick any answer to find the question.
+      const questionId = compareViewAnswers.first().get("questionId");
+      question = report.getIn(["questions", questionId]);
+    }
     return (
-      <Modal show={compareViewAnswers && compareViewAnswers.size > 0} bsStyle="compare-view" onHide={hideCompareView}>
+      <Modal show={showCompare} bsStyle="compare-view" onHide={hideCompareView}>
         <Modal.Body>
-          {compareViewAnswers && <CompareView answers={compareViewAnswers} />}
+          {compareViewAnswers && <CompareView answers={compareViewAnswers} question={question} />}
         </Modal.Body>
       </Modal>
     );

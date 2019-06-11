@@ -201,12 +201,12 @@ export function setAnonymous(value: boolean) {
   };
 }
 
-export function setAnswerSelectedForCompare(key: string, value: boolean) {
-  return {type: SET_ANSWER_SELECTED_FOR_COMPARE, key, value};
+export function setAnswerSelectedForCompare(id: string, value: boolean) {
+  return {type: SET_ANSWER_SELECTED_FOR_COMPARE, id, value};
 }
 
-export function showCompareView(embeddableKey: string) {
-  return {type: SHOW_COMPARE_VIEW, embeddableKey};
+export function showCompareView(questionId: string) {
+  return {type: SHOW_COMPARE_VIEW, questionId};
 }
 
 export function hideCompareView() {

@@ -16,16 +16,16 @@ export class CompareAnswerRmLink extends PureComponent {
   render() {
     const { answer, onChange, children } = this.props;
     return (
-      <a onClick={(e) => onChange(answer.get("id"), false)}>{children}</a>
+      <a onClick={() => onChange(answer.get("id"), false)}>{children}</a>
     );
   }
 }
 
 // AddLink would be simple too, but there is no use case for it yet.
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onChange: (key, value) => dispatch(setAnswerSelectedForCompare(key, value)),
+    onChange: (id, value) => dispatch(setAnswerSelectedForCompare(id, value)),
   };
 };
 
