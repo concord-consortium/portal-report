@@ -81,10 +81,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
           }));
         });
       // Setup another Firebase observer, this time for answers.
-      // Temporarily use "anonymous-run" as that's what's stored in Firebase at the moment. When LARA export is fixed,
-      // this line should be changed to:
-      // const classHash = rawPortalData.classInfo.class_hash;
-      const classHash = "anonymous-run";
+      const classHash = rawPortalData.classInfo.class_hash;
       db.collection(`sources/${source}/answers`)
         .where("resource_url", "==", resourceUrl)
         .where("class_hash", "==", classHash)
