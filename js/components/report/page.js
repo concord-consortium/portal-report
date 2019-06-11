@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import Question from "./question";
+import Question from "../../containers/report/question";
 import MaybeLink from "./maybe-link";
 import Sticky from "react-stickynode";
 import "../../../css/report/page.less";
@@ -21,7 +21,7 @@ export default class Page extends PureComponent {
         </Sticky>
         <div>
           {page.get("children").map((question) => {
-            return <Question key={question.get("key")} question={question} reportFor={reportFor} url={url} />;
+            return <Question key={question.get("id")} question={question} reportFor={reportFor} url={url} />;
           })}
         </div>
       </div>

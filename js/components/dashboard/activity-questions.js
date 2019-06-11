@@ -26,7 +26,7 @@ export default class ActivityQuestions extends PureComponent {
                 // stop the click event from being handled by parent click handler
                 // which would cause the question collumn to collapse.
                 e.stopPropagation();
-                selectQuestion(q.get("key"));
+                selectQuestion(q.get("id"));
               };
               let trackAction = promptExpanded ? "Collapsed Question - " : "Expanded Question - ";
               trackAction = trackAction + q.get("type");

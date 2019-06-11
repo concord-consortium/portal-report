@@ -15,11 +15,10 @@ class AnswersTable extends PureComponent {
 
   getAnswerForStudent(student) {
     const { answers } = this.props;
-    // userId is actually an email.
-    const result = answers.filter(answer => answer.get("userId") === student.get("email"));
+    const result = answers.filter(answer => answer.get("userEmail") === student.get("email"));
     if (result.size === 0) {
       return fromJS({
-        type: "NoAnswer"
+        questionType: "NoAnswer"
       });
     } else {
       return result.get(0);
@@ -52,6 +51,7 @@ class AnswersTable extends PureComponent {
                 key={student.get("id")}
                 student={student}
                 answer={answer}
+                question={question}
                 feedback={feedback}
                 showFeedback={feedbackEnabled}
                 showScore={scoreEnabled}
@@ -65,7 +65,7 @@ class AnswersTable extends PureComponent {
   }
 }
 
-function AnswerRow({student, answer, feedback, showScore, showFeedback, showCompare}) {
+function AnswerRow({student, answer, question, feedback, showScore, showFeedback, showCompare}) {
   const hasAnswer = answer.get("type") !== "NoAnswer";
   const score = feedback && feedback.get("score");
   const textFeedback = feedback && feedback.get("feedback");
@@ -74,14 +74,14 @@ function AnswerRow({student, answer, feedback, showScore, showFeedback, showComp
   const compareDIV = hasAnswer && showCompare
     ? <div>
       <CompareAnswerCheckboxContainer answer={answer} />
-      <ShowCompareContainer answer={answer} />
+      <ShowCompareContainer answer={answer}  />
     </div>
     : "";
 
   return (
     <tr>
       <td>{student.get("name")}</td>
-      <td> <Answer answer={answer} /> </td>
+      <td> <Answer answer={answer} question={question} /> </td>
       {feedbackTD}
       {scoreTD}
       <td className="select-answer-column">
@@ -92,12 +92,8 @@ function AnswerRow({student, answer, feedback, showScore, showFeedback, showComp
 }
 
 function mapStateToProps(state, ownProps) {
-  const answers = state.getIn(["report", "answers"])
-    .toList()
-    .filter(answer => answer.get("questionKey") === ownProps.question.get("key"));
   return {
     students: state.getIn(["report", "students"]).toList(),
-    answers,
     feedbacks: state.get("feedbacks"),
     anonymous: state.getIn(["report", "anonymous"]),
   };
@@ -111,4 +107,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(AnswersTable);
 
 AnswersTable.defaultProps = {
   showCompare: true,
+  answers: fromJS([])
 };

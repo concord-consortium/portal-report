@@ -15,7 +15,7 @@ export default class QuestionForStudent extends PureComponent {
     return (
       <div className={`question for-student ${question.get("visible") ? "" : "hidden"}`}>
         <div className="question-header">
-          <SelectionCheckbox selected={question.get("selected")} questionKey={question.get("key")} />
+          <SelectionCheckbox selected={question.get("selected")} questionKey={question.get("id")} />
           <QuestionHeader question={question} url={url} />
         </div>
         <Prompt question={question} />

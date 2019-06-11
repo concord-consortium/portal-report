@@ -44,6 +44,18 @@ export interface IStudentData {
   id: string;
 }
 
+export interface IAnswerData {
+  id: string;
+  type: string;
+  questionKey: string;
+  userEmail: string;
+  answerIds?: number[];
+}
+
+export interface IAnswerDataHash {
+  [key: string]: IAnswerData;
+}
+
 function camelizeKeys(json: any) {
   return humps.camelizeKeys(json, (key, convert) =>
     // Don't convert keys that are only uppercase letters and numbers.
@@ -60,13 +72,11 @@ export function normalizeResourceJSON(json: any) {
   // at this point or ensures that we always deal with a sequence.
   const camelizedJson = preprocessResourceJSON(camelizeKeys(json) as IResource);
 
-  const sequence = new schema.Entity("sequences", {});
-  const activity = new schema.Entity("activities", {});
+  const sequence = new schema.Entity("sequences");
+  const activity = new schema.Entity("activities");
   const section = new schema.Entity("sections");
-  const page = new schema.Entity("pages", {});
-  const question = new schema.Entity("questions", {}, {
-    idAttribute: value => value.key
-  });
+  const page = new schema.Entity("pages");
+  const question = new schema.Entity("questions");
   sequence.define({
     children: [ activity ],
   });
@@ -108,6 +118,20 @@ export function preprocessResourceJSON(resourceJson: IResource) {
     });
   });
   return resourceJson;
+}
+
+export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
+  const camelizedJSON = camelizeKeys(answersJSON) as IAnswerData[];
+  const result: IAnswerDataHash = {};
+  camelizedJSON.forEach(answer => {
+    if (answer.type === "multiple_choice" && answer.answerIds) {
+      // Ensure that answerIds (in fact choice IDs) are numbers. LARA sends them as numbers in the activity structure
+      // but later, it sends them as strings in the answer object. Fix this inconsistency here.
+      answer.answerIds = answer.answerIds.map(id => Number(id));
+    }
+    result[answer.id] = answer;
+  });
+  return result;
 }
 
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {

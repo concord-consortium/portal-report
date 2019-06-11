@@ -47,8 +47,8 @@ export default class ImageQuestionDetails extends PureComponent {
   }
 
   get images() {
-    const { question } = this.props;
-    return question.get("answers").filter(a => a.get("answer") !== null);
+    const { answers } = this.props;
+    return answers.filter(a => a.getIn(["answer", "imageUrl"]) !== null);
   }
 
   get selectedAnswerProps() {
@@ -57,7 +57,7 @@ export default class ImageQuestionDetails extends PureComponent {
 
   renderImages() {
     return this.images.map(a => {
-      return renderImage(a.getIn(["answer", "imageUrl"]), a.getIn(["student", "name"]), a.getIn(["student", "id"]), a.getIn(["answer", "note"]));
+      return renderImage(a.getIn(["answer", "imageUrl"]), a.getIn(["student", "name"]), a.getIn(["student", "id"]), a.getIn(["answer", "text"]));
     }).toJS();
   }
 

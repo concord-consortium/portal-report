@@ -15,13 +15,13 @@ export default class CompareView extends PureComponent {
 
   answerClassName(answer) {
     const { highlighted } = this.state;
-    const key = answer.get("key");
+    const key = answer.get("id");
     return `answer-wrapper ${highlighted.has(key) ? "highlighted" : ""}`;
   }
 
   toggleHighlight(answer) {
     const { highlighted } = this.state;
-    const key = answer.get("key");
+    const key = answer.get("id");
     const isHighlighted = highlighted.has(key);
     const newHighlightedSet = isHighlighted ? highlighted.delete(key) : highlighted.add(key);
     this.setState({highlighted: newHighlightedSet});
@@ -33,7 +33,7 @@ export default class CompareView extends PureComponent {
       <div className="compare-view">
         <div className="answers-container">
           {answers.map(a =>
-            <div className={this.answerClassName(a)} key={a.get("key")}>
+            <div className={this.answerClassName(a)} key={a.get("id")}>
               <div>
                 <strong>{a.getIn(["student", "name"])}</strong>
                 <div className="controls">

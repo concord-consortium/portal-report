@@ -92,7 +92,7 @@ export default class ActivityFeedbackRow extends PureComponent {
   renderFeedbackSection(studentFeedback) {
     const { feedback, score, complete, learnerId, rubricFeedback } = this.fieldValues();
     const { useRubric, feedbackEnabled, scoreType, autoScore, rubric } = this.props;
-    const activityFeedbackKey = studentFeedback.get("key");
+    const activityFeedbackKey = studentFeedback.get("id");
     const scoreEnabled = scoreType !== "none";
     const automaticScoring = isAutoScoring(scoreType);
     const disableFeedback = !learnerId || complete;

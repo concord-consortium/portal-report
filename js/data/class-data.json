@@ -6,27 +6,32 @@
     {
       "id": 13,
       "first_name": "John",
-      "last_name": "Jenkins"
+      "last_name": "Jenkins",
+      "email": "jonhjenkins@test.concord.org"
     },
     {
       "id": 14,
       "first_name": "Jenna",
-      "last_name": "Armstrong"
+      "last_name": "Armstrong",
+      "email": "jennaarmstrong@test.concord.org"
     },
     {
       "id": 15,
       "first_name": "Amy",
-      "last_name": "Galloway"
+      "last_name": "Galloway",
+      "email": "amygalloway@test.concord.org"
     },
     {
       "id": 16,
       "first_name": "John",
-      "last_name": "Ross"
+      "last_name": "Ross",
+      "email": "johnross@test.concord.org"
     },
     {
       "id": 18,
       "first_name": "Kate",
-      "last_name": "Crosby"
+      "last_name": "Crosby",
+      "email": "katecrosby@test.concord.org"
     }
   ]
 }

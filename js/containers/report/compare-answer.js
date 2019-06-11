@@ -7,7 +7,7 @@ export class CompareAnswerCheckbox extends PureComponent {
     const { answer, onChange } = this.props;
     return (
       <input type="checkbox" checked={answer.get("selectedForCompare")}
-        onChange={(e) => onChange(answer.get("key"), e.target.checked)} />
+        onChange={(e) => onChange(answer.get("id"), e.target.checked)} />
     );
   }
 }
@@ -16,7 +16,7 @@ export class CompareAnswerRmLink extends PureComponent {
   render() {
     const { answer, onChange, children } = this.props;
     return (
-      <a onClick={(e) => onChange(answer.get("key"), false)}>{children}</a>
+      <a onClick={(e) => onChange(answer.get("id"), false)}>{children}</a>
     );
   }
 }

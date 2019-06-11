@@ -1,12 +1,14 @@
 import db from "../db";
 import { parseUrl } from "../util/misc";
 import fakeSequenceStructure from "../data/sequence-structure.json";
+import fakeAnswers from "../data/answers.json";
 import {Dispatch} from "redux";
 import { Map } from "immutable";
 import { IPortalRawData, IResponse } from "../api";
 
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
+export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
@@ -47,31 +49,58 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       type: RECEIVE_PORTAL_DATA,
       response: rawPortalData
     });
-    const url = rawPortalData.offering.activity_url;
-    const source = parseUrl(url).hostname.replace(/\./g, "_");
+    const resourceUrl = rawPortalData.offering.activity_url;
+    const source = parseUrl(resourceUrl).hostname.replace(/\./g, "_");
     if (source === "fake_authoring_system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
         type: RECEIVE_RESOURCE_STRUCTURE,
         response: fakeSequenceStructure,
       });
+      dispatch({
+        type: RECEIVE_ANSWERS,
+        response: fakeAnswers,
+      });
     } else {
       // Setup Firebase observer. It will fire each time the resource structure is updated.
       db.collection(`sources/${source}/resources`)
-        .where("url", "==", url)
-        .onSnapshot(doc => {
-          if (!doc.empty) {
+        .where("url", "==", resourceUrl)
+        .onSnapshot(snapshot => {
+          if (!snapshot.empty) {
             dispatch({
               type: RECEIVE_RESOURCE_STRUCTURE,
-              response: doc.docs[0].data(),
+              response: snapshot.docs[0].data(),
             });
           }
         }, (err: Error) => {
           // tslint:disable-next-line no-console
-          console.error("Firestore error", err);
+          console.error("Firestore resource fetch error", err);
           dispatch(fetchError({
             status: 500,
-            statusText: `Firestore fetch error: ${err.message}`
+            statusText: `Firestore resource fetch error: ${err.message}`
+          }));
+        });
+      // Setup another Firebase observer, this time for answers.
+      // Temporarily use "anonymous-run" as that's what's stored in Firebase at the moment. When LARA export is fixed,
+      // this line should be changed to:
+      // const classHash = rawPortalData.classInfo.class_hash;
+      const classHash = "anonymous-run";
+      db.collection(`sources/${source}/answers`)
+        .where("resource_url", "==", resourceUrl)
+        .where("class_hash", "==", classHash)
+        .onSnapshot(snapshot => {
+          if (!snapshot.empty) {
+            dispatch({
+              type: RECEIVE_ANSWERS,
+              response: snapshot.docs.map(doc => doc.data())
+            });
+          }
+        }, (err: Error) => {
+          // tslint:disable-next-line no-console
+          console.error("Firestore answers fetch error", err);
+          dispatch(fetchError({
+            status: 500,
+            statusText: `Firestore answers fetch error: ${err.message}`
           }));
         });
     }
@@ -103,8 +132,8 @@ export function setQuestionSelected(key: string, value: boolean) {
     // the questionsMap represents the previous state of the checkboxes
     // so the filter needs to special case the current key
     const selectedQuestionKeys = Array.from(questionsMap.values())
-      .filter((q: StateMap) => q.get("key") === key ? value : q.get("selected"))
-      .map((q: StateMap) => q.get("key"));
+      .filter((q: StateMap) => q.get("id") === key ? value : q.get("selected"))
+      .map((q: StateMap) => q.get("id"));
     dispatch({
       type: SET_QUESTION_SELECTED,
       key,
