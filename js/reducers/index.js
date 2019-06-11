@@ -142,7 +142,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("nowShowing", type)
         .set("clazzName", data.classInfo.name)
         .set("clazzId", data.classInfo.id)
-        .set("students", Map(data.classInfo.students.map(student => [student.email, Map(student)])));
+        .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])));
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);

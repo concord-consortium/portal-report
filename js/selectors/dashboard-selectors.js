@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { getActivityTrees, getQuestionTrees } from "./report-tree";
+import { getActivityTrees, getQuestionTrees, getAnswerTrees } from "./report-tree";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../actions/dashboard";
 import { fromJS } from "immutable";
 
@@ -38,20 +38,20 @@ export const getSelectedQuestion = createSelector(
 //   (...)
 // }
 export const getStudentProgress = createSelector(
-  [ getStudents, getActivityTrees ],
-  (students, activities) => {
+  [ getStudents, getActivityTrees, getAnswerTrees ],
+  (students, activities, answers) => {
+    const answersList = answers.toList();
     return students.map(student =>
       activities.map(activity => {
         const activityQuestions = activity.get("questions").filter(q => q.get("visible"));
         const studentSubmittedAnswers = activityQuestions.map(question =>
-          question.get("answers")
+          answersList
             .find(answer =>
-              answer.get("studentId") === student.get("id") &&
-              answer.get("type") !== "NoAnswer" &&
-              // Question is completed by student only if it's there's some answer and it's submitted.
-              // Note that non-required answers are "submitted" by default.
-              answer.get("submitted") === true,
-            ),
+              answer.get("questionId") === question.get("id") &&
+              answer.get("userEmail") === student.get("id") &&
+              // If question is required, its answer must be submitted.
+              (!question.get("required") || answer.get("submitted") === true)
+            )
         // Filter out undefined / falsy values, which mean that answer has not been found.
         ).filter(answer => !!answer);
         return studentSubmittedAnswers.size / activityQuestions.size;
@@ -65,7 +65,7 @@ export const getStudentAverageProgress = createSelector(
   [ getStudents, getStudentProgress ],
   (students, studentProgress) => {
     return students.map(student => {
-      const activitiesProgress = studentProgress.get(student.get("id").toString()).toList();
+      const activitiesProgress = studentProgress.get(student.get("id")).toList();
       return activitiesProgress.reduce((sum, progress) => sum + progress) / activitiesProgress.size;
     });
   },
@@ -95,8 +95,8 @@ export const getSortedStudents = createSelector(
       case SORT_BY_LEAST_PROGRESS:
       case SORT_BY_MOST_PROGRESS:
         return students.toList().sort((student1, student2) => {
-          const student1Progress = studentProgress.get(student1.get("id").toString());
-          const student2Progress = studentProgress.get(student2.get("id").toString());
+          const student1Progress = studentProgress.get(student1.get("id"));
+          const student2Progress = studentProgress.get(student2.get("id"));
           const progressComp = sortBy === SORT_BY_LEAST_PROGRESS
             ? student1Progress - student2Progress
             : student2Progress - student1Progress;

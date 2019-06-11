@@ -132,6 +132,7 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {
   const camelizedJson = camelizeKeys(portalData) as IPortalData;
   camelizedJson.classInfo.students.forEach(student => {
+    student.id = student.email;
     student.name = `${student.firstName} ${student.lastName}`;
     // Provide additional property in student hash, it's useful for anonymization.
     student.realName = student.name;

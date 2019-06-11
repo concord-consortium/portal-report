@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import { fromJS } from "immutable";
-import Answer, { NoAnswer, GenericAnswer } from "../../../js/components/dashboard/answer";
+import Answer, { NoAnswer, GenericAnswer } from "../../../js/containers/dashboard/answer";
 import MultipleChoiceAnswer from "../../../js/components/dashboard/multiple-choice-answer";
 
 describe("<Answer />", () => {
