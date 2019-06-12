@@ -40,7 +40,6 @@ export class Answer extends PureComponent {
 
 Answer.defaultProps = {
   answer: null,
-  student: Map(),
   question: Map(),
   showFullAnswer: false,
 };

@@ -4,7 +4,7 @@ import StudentName from "./student-name";
 import ActivityQuestions from "./activity-questions";
 import ActivityAnswers from "./activity-answers";
 import ExpandStudents from "./expand-students";
-import QuestionDetails from "./question-details";
+import QuestionDetails from "../../containers/dashboard/question-details";
 import { Map, List } from "immutable";
 
 import css from "../../../css/dashboard/dashboard.less";

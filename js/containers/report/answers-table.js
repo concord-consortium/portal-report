@@ -4,6 +4,7 @@ import { CompareAnswerCheckboxContainer } from "./compare-answer";
 import ShowCompareContainer from "./show-compare";
 import { connect } from "react-redux";
 import { fromJS } from "immutable";
+import { getAnswerTrees } from "../../selectors/report-tree";
 
 import "../../../css/report/answers-table.less";
 
