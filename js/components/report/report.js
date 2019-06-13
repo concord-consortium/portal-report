@@ -52,7 +52,12 @@ export default class Report extends PureComponent {
     const selectedStudentId = report.get("selectedStudentId");
     let studentsToRender;
     if (selectedStudentId) {
-      studentsToRender = [ report.get("students").get(selectedStudentId) ];
+      const selectedStudent = report.get("students").get(selectedStudentId);
+      if (selectedStudent) {
+        studentsToRender = [ selectedStudent ];
+      } else {
+        return <div>Selected student doesn't exist</div>;
+      }
     } else {
       studentsToRender = report.get("students").toList();
     }

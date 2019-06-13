@@ -137,21 +137,26 @@ function report(state = INITIAL_REPORT_STATE, action) {
       data = preprocessPortalDataJSON(action.response);
       // Report type depends on what kind of user is launching the report. Teachers will see class report,
       // while students will see their answers (student report).
-      let type = null;
+
       // For now, studentId is being passed in the URL parameter. In the future, we might use data coming from Portal
       // to get it (e.g. user ID parsed from Firebase JWT).
       const { studentId } = queryString.parse(window.location.search);
+      let type;
+      let hideControls;
       if (studentId) {
         type = "student";
+        hideControls = true;
       } else if (data.userType === "teacher") {
         // Ensure that Portal data also indicates that the user is a teacher. Otherwise, student could just
         // remove "studentId" URL parameter to see the full class report.
         type = "class";
+        hideControls = false;
       }
       state = state
         .set("type", type)
         .set("nowShowing", type)
         .set("selectedStudentId", studentId)
+        .set("hideControls", hideControls)
         .set("clazzName", data.classInfo.name)
         .set("clazzId", data.classInfo.id)
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])));
