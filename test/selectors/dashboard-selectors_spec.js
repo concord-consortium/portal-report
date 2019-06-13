@@ -83,7 +83,6 @@ describe("dashboard selectors", () => {
       });
     });
 
-    // TODO fix these tests when we start supporting answers using new data format
     describe("when sorting by most progress", () => {
       it("should return sorted list of students", () => {
         expect(getSortedStudents(state({sortBy: SORT_BY_MOST_PROGRESS})).toJS()).toEqual(// Students sorted by most progress (ties broken alphabetically)
@@ -91,7 +90,6 @@ describe("dashboard selectors", () => {
       });
     });
 
-    // TODO fix these tests when we start supporting answers using new data format
     describe("when sorting by least progress", () => {
       it("should return sorted list of students", () => {
         expect(getSortedStudents(state({sortBy: SORT_BY_LEAST_PROGRESS})).toJS()).toEqual(// Students sorted by least progress (ties broken alphabetically)

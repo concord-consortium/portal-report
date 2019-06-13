@@ -5,9 +5,6 @@ import Answer from "../../containers/dashboard/answer";
 import css from "../../../css/dashboard/activity-answers.less";
 
 export default class ActivityAnswers extends PureComponent {
-
-  studentAnswer;
-
   renderMultChoiceSummary() {
     const { student, activity } = this.props;
     const scoredQuestions = activity.get("questions").filter(q =>
