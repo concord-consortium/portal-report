@@ -9,9 +9,9 @@ import Prompt from "./prompt";
 
 export default class QuestionForStudent extends PureComponent {
   render() {
-    const { question, url, student } = this.props;
+    const { question, url, student, answers } = this.props;
     const studentId = student.get("id");
-    const answer = question.get("answers").filter(a => a.get("studentId") === studentId).first();
+    const answer = answers.find(a => a.get("userEmail") === studentId);
     return (
       <div className={`question for-student ${question.get("visible") ? "" : "hidden"}`}>
         <div className="question-header">
@@ -19,7 +19,7 @@ export default class QuestionForStudent extends PureComponent {
           <QuestionHeader question={question} url={url} />
         </div>
         <Prompt question={question} />
-        <Answer answer={answer} />
+        <Answer answer={answer} question={question} />
         <Feedback answer={answer} student={student} question={question} htmlFor="student" />
       </div>
     );
