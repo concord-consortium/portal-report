@@ -7,34 +7,43 @@ import ActivityName from "../../../js/components/dashboard/activity-name";
 import ActivityQuestions from "../../../js/components/dashboard/activity-questions";
 import ActivityAnswers from "../../../js/components/dashboard/activity-answers";
 import { Modal } from "react-bootstrap";
+import { mountWithStore } from "../../setupTest";
+
+const state = fromJS({
+  report: {
+    answers: {},
+    students: {},
+    questions: {}
+  }
+});
 
 describe("<Dashboard />", () => {
   it("should render student names", () => {
     const students = fromJS([ { id: 1 }, { id: 2 }, { id: 3 } ]);
-    const wrapper = mount(<Dashboard students={students} />);
+    const wrapper = mountWithStore(<Dashboard students={students} />, state);
     expect(wrapper.find(StudentName)).toHaveLength(3);
   });
 
   it("should render visible activity names", () => {
     const activities = fromJS({ 1: { id: 1, visible: true }, 2: { id: 2, visible: true }, 3: { id: 3, visible: false } });
-    const wrapper = mount(<Dashboard activities={activities} />);
+    const wrapper = mountWithStore(<Dashboard activities={activities} />, state);
     expect(wrapper.find(ActivityName)).toHaveLength(2);
   });
 
   it("should render visible activity questions", () => {
     const activities = fromJS({ 1: { id: 1, visible: true }, 2: { id: 2, visible: true }, 3: { id: 3, visible: false } });
-    const wrapper = mount(<Dashboard activities={activities} />);
+    const wrapper = mountWithStore(<Dashboard activities={activities} />, state);
     expect(wrapper.find(ActivityQuestions)).toHaveLength(2);
   });
 
   it("should render visible activity answers", () => {
     const activities = fromJS({ 1: { id: 1, visible: true }, 2: { id: 2, visible: true }, 3: { id: 3, visible: false } });
     const students = fromJS([ { id: 1 } ]);
-    const wrapper1 = mount(<Dashboard students={students} activities={activities} />);
+    const wrapper1 = mountWithStore(<Dashboard students={students} activities={activities} />, state);
     expect(wrapper1.find(ActivityAnswers)).toHaveLength(2);
 
     const multipleStudents = fromJS([ { id: 1 }, { id: 2 } ]);
-    const wrapper2 = mount(<Dashboard students={multipleStudents} activities={activities} />);
+    const wrapper2 = mountWithStore(<Dashboard students={multipleStudents} activities={activities} />, state);
     // ActivityAnswer components are displayed in a table, so their number is activities_count * students_count.
     expect(wrapper2.find(ActivityAnswers)).toHaveLength(2 * multipleStudents.size);
   });
@@ -43,7 +52,7 @@ describe("<Dashboard />", () => {
     const students = fromJS([ { id: 1 } ]);
     const activities = fromJS({ 1: { id: 1, visible: true, questions: [ { id: 1, visible: true, type: "Embeddable:MultipleChoice" }, { id: 2, visible: true, type: "Embeddable:MultipleChoice" } ] }, 2: { id: 3, visible: true, type: "Embeddable:MultipleChoice" } });
     const expandedActivities = fromJS({ 1: true }); // expand the first activity
-    const wrapper = mount(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />);
+    const wrapper = mountWithStore(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />, state);
 
     const activityWidth = wrapper.find(ActivityName).first().prop("width");
     const questionPromptsWidth = wrapper.find(ActivityQuestions).first().prop("width");
@@ -64,7 +73,7 @@ describe("<Dashboard />", () => {
       2: { id: 2, visible: true, questions: [ { id: 1, visible: true, type: "Embeddable:MultipleChoice" }, { id: 2, visible: true, type: "Embeddable:MultipleChoice" }, { id: 3, visible: false, type: "Embeddable:MultipleChoice" } ] }
     });
     const expandedActivities = fromJS({ 1: true, 2: true });
-    const wrapper = mount(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />);
+    const wrapper = mountWithStore(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />, state);
 
     const firstActivityWidth = wrapper.find(ActivityName).at(0).prop("width");
     const secondActivityWidth = wrapper.find(ActivityName).at(1).prop("width");
@@ -84,12 +93,13 @@ describe("<Dashboard />", () => {
     describe("when no question is selected", () => {
       it("the question modal is not visible", () => {
         const selectedQuestion = null;
-        const wrapper = mount(
+        const wrapper = mountWithStore(
           <Dashboard
             students={students}
             activities={activities}
             selectedQuestion={selectedQuestion}
-            expandedActivities={expandedActivities} />
+            expandedActivities={expandedActivities} />,
+          state
         );
         expect(wrapper.find(Modal).props().show).toBe(false);
       });
@@ -102,12 +112,13 @@ describe("<Dashboard />", () => {
           prompt: "why is the sky blue",
           answers: []
         });
-        const wrapper = mount(
+        const wrapper = mountWithStore(
           <Dashboard
             students={students}
             activities={activities}
             selectedQuestion={selectedQuestion}
-            expandedActivities={expandedActivities} />
+            expandedActivities={expandedActivities} />,
+          state
         );
         expect(wrapper.find(Modal).props().show).toBe(true);
       });

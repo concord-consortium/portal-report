@@ -47,9 +47,8 @@ export interface IStudentData {
 export interface IAnswerData {
   id: string;
   type: string;
-  questionKey: string;
   userEmail: string;
-  answerIds?: number[];
+  selectedForCompare: boolean;
 }
 
 export interface IAnswerDataHash {
@@ -124,11 +123,7 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
   const camelizedJSON = camelizeKeys(answersJSON) as IAnswerData[];
   const result: IAnswerDataHash = {};
   camelizedJSON.forEach(answer => {
-    if (answer.type === "multiple_choice" && answer.answerIds) {
-      // Ensure that answerIds (in fact choice IDs) are numbers. LARA sends them as numbers in the activity structure
-      // but later, it sends them as strings in the answer object. Fix this inconsistency here.
-      answer.answerIds = answer.answerIds.map(id => Number(id));
-    }
+    answer.selectedForCompare = false;
     result[answer.id] = answer;
   });
   return result;
@@ -137,6 +132,7 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {
   const camelizedJson = camelizeKeys(portalData) as IPortalData;
   camelizedJson.classInfo.students.forEach(student => {
+    student.id = student.email;
     student.name = `${student.firstName} ${student.lastName}`;
     // Provide additional property in student hash, it's useful for anonymization.
     student.realName = student.name;

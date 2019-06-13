@@ -4,7 +4,7 @@ import StudentName from "./student-name";
 import ActivityQuestions from "./activity-questions";
 import ActivityAnswers from "./activity-answers";
 import ExpandStudents from "./expand-students";
-import QuestionDetails from "./question-details";
+import QuestionDetails from "../../containers/dashboard/question-details";
 import { Map, List } from "immutable";
 
 import css from "../../../css/dashboard/dashboard.less";
@@ -93,7 +93,7 @@ export default class Dashboard extends PureComponent {
     if (expandedStudents.includes(true)) {
       return numberOfQuestions;
     }
-    return activity.get("questions").filter(q => expandedQuestions.get(q.get("id").toString())).count();
+    return activity.get("questions").filter(q => expandedQuestions.get(q.get("id"))).count();
   }
 
   getMultChoiceSummaryWidth(activity, collapsed) {
@@ -112,7 +112,7 @@ export default class Dashboard extends PureComponent {
 
   getActivityColumnWidth(activity) {
     const { expandedActivities } = this.props;
-    if (expandedActivities.get(activity.get("id").toString())) {
+    if (expandedActivities.get(activity.get("id"))) {
       const numberOfExpandedQuestions = this.getNumberOfExpandedQuestions(activity);
       const numberOfClosedQuestions = this.getNumberOfActivityColumns(activity) - numberOfExpandedQuestions;
       const width = numberOfClosedQuestions * COLLAPSED_ANSWER_WIDTH +
@@ -151,7 +151,7 @@ export default class Dashboard extends PureComponent {
                       activity={a}
                       width={this.getActivityColumnWidth(a)}
                       number={num + 1}
-                      expanded={expandedActivities.get(a.get("id").toString())} setActivityExpanded={setActivityExpanded} trackEvent={trackEvent} />,
+                      expanded={expandedActivities.get(a.get("id"))} setActivityExpanded={setActivityExpanded} trackEvent={trackEvent} />,
                   )
                 }
               </div>
@@ -162,7 +162,7 @@ export default class Dashboard extends PureComponent {
                       key={a.get("id")}
                       activity={a}
                       width={this.getActivityColumnWidth(a)}
-                      expanded={expandedActivities.get(a.get("id").toString())}
+                      expanded={expandedActivities.get(a.get("id"))}
                       showFullPrompts={anyStudentExpanded}
                       multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
                       setQuestionExpanded={setQuestionExpanded}
@@ -175,11 +175,11 @@ export default class Dashboard extends PureComponent {
               </div>
             </div>
           </div>
-          <div ref={el => { this.verticalScrollingContainer = el; }} className={css.verticalScrollContainer}>
+          <div className={css.verticalScrollContainer}>
             <div className={css.studentNames}>
               {
                 students.map(s => {
-                  const studentExpanded = expandedStudents.get(s.get("id").toString());
+                  const studentExpanded = expandedStudents.get(s.get("id"));
                   const expanded = anyQuestionExpanded || studentExpanded;
                   return (
                     <StudentName
@@ -196,7 +196,7 @@ export default class Dashboard extends PureComponent {
             <div ref={el => { this.horizontalScrollingContainer = el; }} className={css.horizontalScrollContainer}>
               {
                 students.map(s => {
-                  const expandedStudent = expandedStudents.get(s.get("id").toString());
+                  const expandedStudent = expandedStudents.get(s.get("id"));
                   const expanded = anyQuestionExpanded || expandedStudent;
 
                   return (
@@ -208,9 +208,9 @@ export default class Dashboard extends PureComponent {
                           <ActivityAnswers key={a.get("id")} activity={a} student={s}
                             width={this.getActivityColumnWidth(a)}
                             anyStudentExpanded={anyStudentExpanded}
-                            expanded={expandedActivities.get(a.get("id").toString())}
-                            showFullAnswers={expandedStudents.get(s.get("id").toString())}
-                            progress={studentProgress.getIn([s.get("id").toString(), a.get("id").toString()])}
+                            expanded={expandedActivities.get(a.get("id"))}
+                            showFullAnswers={expandedStudents.get(s.get("id"))}
+                            progress={studentProgress.getIn([s.get("id"), a.get("id")])}
                             multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
                             setQuestionExpanded={setQuestionExpanded}
                             expandedQuestions={expandedQuestions}

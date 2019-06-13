@@ -4,6 +4,7 @@ import { CompareAnswerCheckboxContainer } from "./compare-answer";
 import ShowCompareContainer from "./show-compare";
 import { connect } from "react-redux";
 import { fromJS } from "immutable";
+import { getAnswerTrees } from "../../selectors/report-tree";
 
 import "../../../css/report/answers-table.less";
 
@@ -15,7 +16,7 @@ class AnswersTable extends PureComponent {
 
   getAnswerForStudent(student) {
     const { answers } = this.props;
-    const result = answers.filter(answer => answer.get("userEmail") === student.get("email"));
+    const result = answers.filter(answer => answer.get("userEmail") === student.get("id"));
     if (result.size === 0) {
       return fromJS({
         questionType: "NoAnswer"
@@ -66,7 +67,7 @@ class AnswersTable extends PureComponent {
 }
 
 function AnswerRow({student, answer, question, feedback, showScore, showFeedback, showCompare}) {
-  const hasAnswer = answer.get("type") !== "NoAnswer";
+  const hasAnswer = answer.get("questionType") !== "NoAnswer";
   const score = feedback && feedback.get("score");
   const textFeedback = feedback && feedback.get("feedback");
   const scoreTD = showScore ? <td className="score">{score}</td> : null;

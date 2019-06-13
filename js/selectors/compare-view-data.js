@@ -9,7 +9,7 @@ const getCompareViewData = createSelector(
   [ getCompareViewAnswers, getAnswerTrees ],
   (compareViewAnswers, answerTrees) =>
     compareViewAnswers
-      .map(key => answerTrees.get(key))
+      .map(id => answerTrees.get(id))
       .sortBy(answer => answer.getIn(["student", "name"])),
 );
 

@@ -9,37 +9,36 @@ import {
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../js/actions/dashboard";
 
 describe("dashboard selectors", () => {
-  const s1 = { id: 1, firstName: "Y", lastName: "aA" };
-  const s2 = { id: 2, firstName: "x", lastName: "AA" };
-  const s3 = { id: 3, firstName: "Z", lastName: "a" };
+  const s1 = { id: "1@email.com", firstName: "Y", lastName: "aA" };
+  const s2 = { id: "2@email.com", firstName: "x", lastName: "AA" };
+  const s3 = { id: "3@email.com", firstName: "Z", lastName: "a" };
 
   const state = ({ sortBy = SORT_BY_NAME }) => fromJS({
     report: {
-      students: { 1: s1, 2: s2, 3: s3 },
+      students: { "1@email.com": s1, "2@email.com": s2, "3@email.com": s3 },
       activities: {
-        1: { children: [ 1 ] },
-        2: { children: [ 2 ] }
+        a1: { children: [ "s1" ] },
+        a2: { children: [ "s2" ] }
       },
       sections: {
-        1: { children: [ 1 ] },
-        2: { children: [ 2 ] }
+        s1: { children: [ "p1" ] },
+        s2: { children: [ "p2" ] }
       },
       pages: {
-        1: { children: [ "open_response-1" ] },
-        2: { children: [ "open_response-2", "image_question-1" ] }
+        p1: { children: [ "open_response-1" ] },
+        p2: { children: [ "open_response-2", "image_question-1" ] }
       },
       questions: {
-        "open_response-1": { id: 1, type: "open_response"  }, // activity 1
-        "open_response-2": { id: 2, type: "open_response" }, // activity 2
-        "image_question-1": { id: 1, type: "image_question" } // activity 2
+        "open_response-1": { id: "open_response-1", type: "open_response", required: true  }, // activity 1
+        "open_response-2": { id: "open_response-2", type: "open_response", required: true }, // activity 2
+        "image_question-1": { id: "image_question-1", type: "image_question" } // activity 2
       },
       answers: {
-        A1: { studentId: 1, type: "SomeAnswer", submitted: true },
-        A2: { studentId: 2, type: "SomeAnswer", submitted: true },
-        A3: { studentId: 1, type: "SomeAnswer", submitted: false },
-        A4: { studentId: 2, type: "SomeAnswer", submitted: true },
-        A5: { studentId: 1, type: "SomeAnswer", submitted: true },
-        A6: { studentId: 2, type: "NoAnswer" }
+        ans1: { id: "ans1", questionId: "open_response-1",  userEmail: "1@email.com", type: "SomeAnswer", submitted: true },
+        ans2: { id: "ans2", questionId: "open_response-1", userEmail: "2@email.com", type: "SomeAnswer", submitted: true },
+        ans3: { id: "ans3", questionId: "open_response-2", userEmail: "1@email.com", type: "SomeAnswer", submitted: false },
+        ans4: { id: "ans4", questionId: "open_response-2", userEmail: "2@email.com", type: "SomeAnswer", submitted: true },
+        ans5: { id: "ans5", questionId: "image_question-1", userEmail: "1@email.com", type: "SomeAnswer" }
       }
     },
     dashboard: {
@@ -47,33 +46,31 @@ describe("dashboard selectors", () => {
     }
   });
 
-  // TODO fix these tests when we start supporting answers using new data format
-  xdescribe("getStudentProgress", () => {
+  describe("getStudentProgress", () => {
     it("should return hash with student progress", () => {
       expect(getStudentProgress(state({})).toJS()).toEqual({
-        1: {
-          1: 1, // activity 1
-          2: 0.5 // activity 2 - only one submitted answer
+        "1@email.com": {
+          a1: 1, // activity 1
+          a2: 0.5 // activity 2 - only one submitted answer
         },
-        2: {
-          1: 1, // activity 1
-          2: 0.5 // activity 2 - one submitted answer
+        "2@email.com": {
+          a1: 1, // activity 1
+          a2: 0.5 // activity 2 - one submitted answer
         },
-        3: { // this student hasn't started any activity, no answer objects
-          1: 0,
-          2: 0
+        "3@email.com": { // this student hasn't started any activity, no answer objects
+          a1: 0,
+          a2: 0
         }
       });
     });
   });
 
-  // TODO fix these tests when we start supporting answers using new data format
-  xdescribe("getStudentAverageProgress", () => {
+  describe("getStudentAverageProgress", () => {
     it("should return hash with student total progress", () => {
       expect(getStudentAverageProgress(state({})).toJS()).toEqual({
-        1: 0.75,
-        2: 0.75,
-        3: 0
+        "1@email.com": 0.75,
+        "2@email.com": 0.75,
+        "3@email.com": 0
       });
     });
   });
@@ -86,16 +83,14 @@ describe("dashboard selectors", () => {
       });
     });
 
-    // TODO fix these tests when we start supporting answers using new data format
-    xdescribe("when sorting by most progress", () => {
+    describe("when sorting by most progress", () => {
       it("should return sorted list of students", () => {
         expect(getSortedStudents(state({sortBy: SORT_BY_MOST_PROGRESS})).toJS()).toEqual(// Students sorted by most progress (ties broken alphabetically)
         [ s2, s1, s3 ]);
       });
     });
 
-    // TODO fix these tests when we start supporting answers using new data format
-    xdescribe("when sorting by least progress", () => {
+    describe("when sorting by least progress", () => {
       it("should return sorted list of students", () => {
         expect(getSortedStudents(state({sortBy: SORT_BY_LEAST_PROGRESS})).toJS()).toEqual(// Students sorted by least progress (ties broken alphabetically)
         [ s3, s2, s1 ]);
