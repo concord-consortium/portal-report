@@ -49,7 +49,13 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       type: RECEIVE_PORTAL_DATA,
       response: rawPortalData
     });
-    const resourceUrl = rawPortalData.offering.activity_url;
+    let resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
+    if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
+      // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
+      // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
+      // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
+      resourceUrl = resourceUrl.replace("http", "https");
+    }
     const source = parseUrl(resourceUrl).hostname.replace(/\./g, "_");
     if (source === "fake_authoring_system") { // defined in data/offering-data.json
       // Use fake data.
