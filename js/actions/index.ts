@@ -57,7 +57,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       resourceUrl = resourceUrl.replace("http", "https");
     }
     const source = parseUrl(resourceUrl).hostname;
-    if (source === "fake_authoring_system") { // defined in data/offering-data.json
+    if (source === "fake.authoring.system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
         type: RECEIVE_RESOURCE_STRUCTURE,
