@@ -16,7 +16,7 @@ class AnswersTable extends PureComponent {
 
   getAnswerForStudent(student) {
     const { answers } = this.props;
-    const result = answers.filter(answer => answer.get("userEmail") === student.get("id"));
+    const result = answers.filter(answer => answer.get("platformUserId") === student.get("id"));
     if (result.size === 0) {
       return fromJS({
         questionType: "NoAnswer"

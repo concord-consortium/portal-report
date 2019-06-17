@@ -48,7 +48,7 @@ export const getStudentProgress = createSelector(
           answersList
             .find(answer =>
               answer.get("questionId") === question.get("id") &&
-              answer.get("userEmail") === student.get("id") &&
+              answer.get("platformUserId") === student.get("id") &&
               // If question is required, its answer must be submitted.
               (!question.get("required") || answer.get("submitted") === true)
             )

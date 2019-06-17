@@ -11,7 +11,7 @@ export default class QuestionForStudent extends PureComponent {
   render() {
     const { question, url, student, answers } = this.props;
     const studentId = student.get("id");
-    const answer = answers.find(a => a.get("userEmail") === studentId);
+    const answer = answers.find(a => a.get("platformUserId") === studentId);
     return (
       <div className={`question for-student ${question.get("visible") ? "" : "hidden"}`}>
         <div className="question-header">

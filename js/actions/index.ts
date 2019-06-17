@@ -56,7 +56,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
       resourceUrl = resourceUrl.replace("http", "https");
     }
-    const source = parseUrl(resourceUrl).hostname.replace(/\./g, "_");
+    const source = parseUrl(resourceUrl).hostname;
     if (source === "fake_authoring_system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
@@ -87,25 +87,30 @@ function receivePortalData(rawPortalData: IPortalRawData) {
           }));
         });
       // Setup another Firebase observer, this time for answers.
-      const classHash = rawPortalData.classInfo.class_hash;
-      db.collection(`sources/${source}/answers`)
-        .where("resource_url", "==", resourceUrl)
-        .where("class_hash", "==", classHash)
-        .onSnapshot(snapshot => {
-          if (!snapshot.empty) {
-            dispatch({
-              type: RECEIVE_ANSWERS,
-              response: snapshot.docs.map(doc => doc.data())
-            });
-          }
-        }, (err: Error) => {
-          // tslint:disable-next-line no-console
-          console.error("Firestore answers fetch error", err);
-          dispatch(fetchError({
-            status: 500,
-            statusText: `Firestore answers fetch error: ${err.message}`
-          }));
-        });
+      let answersQuery = db.collection(`sources/${source}/answers`)
+        // This first where clause seems redundant, but it's necessary for Firestore auth rules to work fine
+        // (they are based on context_id value).
+        .where("context_id", "==", rawPortalData.contextId)
+        .where("platform_id", "==", rawPortalData.platformId)
+        .where("resource_link_id", "==", rawPortalData.offering.id.toString());
+      if (rawPortalData.userType === "learner") {
+        answersQuery = answersQuery.where("platform_user_id", "==", rawPortalData.platformUserId.toString());
+      }
+      answersQuery.onSnapshot(snapshot => {
+        if (!snapshot.empty) {
+          dispatch({
+            type: RECEIVE_ANSWERS,
+            response: snapshot.docs.map(doc => doc.data())
+          });
+        }
+      }, (err: Error) => {
+        // tslint:disable-next-line no-console
+        console.error("Firestore answers fetch error", err);
+        dispatch(fetchError({
+          status: 500,
+          statusText: `Firestore answers fetch error: ${err.message}`
+        }));
+      });
     }
   };
 }
