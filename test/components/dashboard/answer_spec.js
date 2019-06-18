@@ -9,7 +9,7 @@ import { shallow } from "enzyme";
 describe("<AnswerContainer />", () => {
   it("should fetch correct Answer from store", () => {
     const question = fromJS({ id: "q1" });
-    const student = fromJS({ id: "s1@email.com" });
+    const student = fromJS({ id: "s1" });
     const state = fromJS({
       report: {
         answers: {
@@ -17,20 +17,20 @@ describe("<AnswerContainer />", () => {
             questionId: "q1",
             questionType: "open_response",
             answer: "correct answer",
-            userEmail: "s1@email.com"
+            platformUserId: "s1"
           },
           a2: {
             questionId: "q1",
             questionType: "open_response",
             answer: "incorrect answer",
-            userEmail: "s2@email.com"
+            platformUserId: "s2"
           }
         },
         questions: {
           q1: question
         },
         students: {
-          "s1@email.com": student
+          "s1": student
         }
       }
     });

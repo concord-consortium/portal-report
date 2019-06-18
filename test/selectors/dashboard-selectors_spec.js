@@ -9,13 +9,13 @@ import {
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../js/actions/dashboard";
 
 describe("dashboard selectors", () => {
-  const s1 = { id: "1@email.com", firstName: "Y", lastName: "aA" };
-  const s2 = { id: "2@email.com", firstName: "x", lastName: "AA" };
-  const s3 = { id: "3@email.com", firstName: "Z", lastName: "a" };
+  const s1 = { id: "1", firstName: "Y", lastName: "aA" };
+  const s2 = { id: "2", firstName: "x", lastName: "AA" };
+  const s3 = { id: "3", firstName: "Z", lastName: "a" };
 
   const state = ({ sortBy = SORT_BY_NAME }) => fromJS({
     report: {
-      students: { "1@email.com": s1, "2@email.com": s2, "3@email.com": s3 },
+      students: { "1": s1, "2": s2, "3": s3 },
       activities: {
         a1: { children: [ "s1" ] },
         a2: { children: [ "s2" ] }
@@ -34,11 +34,11 @@ describe("dashboard selectors", () => {
         "image_question-1": { id: "image_question-1", type: "image_question" } // activity 2
       },
       answers: {
-        ans1: { id: "ans1", questionId: "open_response-1",  userEmail: "1@email.com", type: "SomeAnswer", submitted: true },
-        ans2: { id: "ans2", questionId: "open_response-1", userEmail: "2@email.com", type: "SomeAnswer", submitted: true },
-        ans3: { id: "ans3", questionId: "open_response-2", userEmail: "1@email.com", type: "SomeAnswer", submitted: false },
-        ans4: { id: "ans4", questionId: "open_response-2", userEmail: "2@email.com", type: "SomeAnswer", submitted: true },
-        ans5: { id: "ans5", questionId: "image_question-1", userEmail: "1@email.com", type: "SomeAnswer" }
+        ans1: { id: "ans1", questionId: "open_response-1",  platformUserId: "1", type: "SomeAnswer", submitted: true },
+        ans2: { id: "ans2", questionId: "open_response-1", platformUserId: "2", type: "SomeAnswer", submitted: true },
+        ans3: { id: "ans3", questionId: "open_response-2", platformUserId: "1", type: "SomeAnswer", submitted: false },
+        ans4: { id: "ans4", questionId: "open_response-2", platformUserId: "2", type: "SomeAnswer", submitted: true },
+        ans5: { id: "ans5", questionId: "image_question-1", platformUserId: "1", type: "SomeAnswer" }
       }
     },
     dashboard: {
@@ -49,15 +49,15 @@ describe("dashboard selectors", () => {
   describe("getStudentProgress", () => {
     it("should return hash with student progress", () => {
       expect(getStudentProgress(state({})).toJS()).toEqual({
-        "1@email.com": {
+        "1": {
           a1: 1, // activity 1
           a2: 0.5 // activity 2 - only one submitted answer
         },
-        "2@email.com": {
+        "2": {
           a1: 1, // activity 1
           a2: 0.5 // activity 2 - one submitted answer
         },
-        "3@email.com": { // this student hasn't started any activity, no answer objects
+        "3": { // this student hasn't started any activity, no answer objects
           a1: 0,
           a2: 0
         }
@@ -68,9 +68,9 @@ describe("dashboard selectors", () => {
   describe("getStudentAverageProgress", () => {
     it("should return hash with student total progress", () => {
       expect(getStudentAverageProgress(state({})).toJS()).toEqual({
-        "1@email.com": 0.75,
-        "2@email.com": 0.75,
-        "3@email.com": 0
+        "1": 0.75,
+        "2": 0.75,
+        "3": 0
       });
     });
   });
