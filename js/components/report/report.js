@@ -46,7 +46,7 @@ export default class Report extends PureComponent {
   }
 
   renderStudentReports() {
-    const { report, reportTree } = this.props;
+    const { report, reportTree, sortedStudents } = this.props;
     const nowShowing = report.get("nowShowing") === "student";
     const className = nowShowing ? "report-content" : "report-content hidden";
     const selectedStudentId = report.get("selectedStudentId");
@@ -59,7 +59,7 @@ export default class Report extends PureComponent {
         return <div>Selected student doesn't exist</div>;
       }
     } else {
-      studentsToRender = report.get("students").toList();
+      studentsToRender = sortedStudents;
     }
     return studentsToRender.map(s =>
         <div key={s.get("id")} className={className}>

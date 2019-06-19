@@ -14,6 +14,7 @@ import getReportTree from "../../selectors/report-tree";
 import getCompareViewData from "../../selectors/compare-view-data";
 
 import "../../../css/report/report-app.less";
+import { getSortedStudents } from "../../selectors/report";
 
 class ReportApp extends PureComponent {
   constructor(props) {
@@ -27,10 +28,11 @@ class ReportApp extends PureComponent {
 
   renderReport() {
     const { report, reportTree, hideUnselectedQuestions, showUnselectedQuestions, setNowShowing, setAnonymous,
-      trackEvent, isFetching } = this.props;
+      trackEvent, isFetching, sortedStudents } = this.props;
     return <Report
       report={report}
       reportTree={reportTree}
+      sortedStudents={sortedStudents}
       hideUnselectedQuestions={hideUnselectedQuestions}
       showUnselectedQuestions={showUnselectedQuestions}
       setNowShowing={setNowShowing}
@@ -83,6 +85,7 @@ function mapStateToProps(state) {
   return {
     report: dataDownloaded && reportState,
     reportTree: dataDownloaded && getReportTree(state),
+    sortedStudents: dataDownloaded && getSortedStudents(state),
     compareViewAnswers: compareViewAnswers && getCompareViewData(state),
     isFetching: data.get("isFetching"),
     error: error,
