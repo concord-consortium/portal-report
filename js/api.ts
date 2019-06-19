@@ -164,6 +164,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
 
 export function updateReportSettings(data: any) {
   // TODO using Firebase
+  return new Promise(resolve => resolve());
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.
