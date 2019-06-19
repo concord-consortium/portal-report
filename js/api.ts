@@ -11,22 +11,24 @@ const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
 export interface IPortalRawData {
   offering: {
+    id: number,
     activity_url: string;
   };
   classInfo: {
     id: number;
     name: string;
-    class_hash: string;
     students: IStudentRawData[];
   };
   userType: "teacher" | "learner";
+  platformId: string;
+  platformUserId: string;
+  contextId: string; // class hash
 }
 
 export interface IStudentRawData {
-  email: string;
   first_name: string;
   last_name: string;
-  id: string;
+  user_id: string;
 }
 
 export interface IResponse {
@@ -38,6 +40,8 @@ export interface IResponse {
 export interface IFirebaseJWT {
   claims: {
     user_type: "teacher" | "learner";
+    platform_id: string;
+    platform_user_id: number;
   };
 }
 
@@ -121,6 +125,8 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   return classPromise.then(classInfo => {
     const firestoreJWTPromise = fetchFirestoreJWT(classInfo.class_hash);
     return Promise.all([offeringPromise, classPromise, firestoreJWTPromise]).then(result => {
+      const offeringData = result[0];
+      const classData = result[1];
       const rawFirestoreJWT = result[2].token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {
         // We're not using fake data.
@@ -133,17 +139,23 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
         }
         const verifiedFirebaseJWT = decodedFirebaseJWT as IFirebaseJWT;
         return authFirestore(rawFirestoreJWT).then(() => ({
-            offering: result[0],
-            classInfo: result[1],
-            userType: verifiedFirebaseJWT.claims.user_type
+            offering: offeringData,
+            classInfo: classData,
+            userType: verifiedFirebaseJWT.claims.user_type,
+            platformId: verifiedFirebaseJWT.claims.platform_id.replace(/\/$/, ""), // remove trailing slash if present
+            platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
+            contextId: classInfo.class_hash
           })
         );
       } else {
         // We're using fake data, including fake JWT.
         return {
-          offering: result[0],
-          classInfo: result[1],
-          userType: "teacher"
+          offering: offeringData,
+          classInfo: classData,
+          userType: "teacher",
+          platformId: "https://fake.portal",
+          platformUserId: "1",
+          contextId: "class123"
         };
       }
     });

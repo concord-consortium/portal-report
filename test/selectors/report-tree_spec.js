@@ -11,10 +11,10 @@ describe("report tree selectors", () => {
     },
     report: {
       students: {
-        "john@doe.com": { id: 1, firstName: "John", lastName: "Doe", email: "john@doe.com" }
+        "1": { id: "1", firstName: "John", lastName: "Doe" }
       },
       answers: {
-        A1: { id: "A1", studentId: 1, someAnswerProp: "x", userEmail: "john@doe.com" }
+        A1: { id: "A1", someAnswerProp: "x", platformUserId: "1" }
       },
       questions: {
         "open_response-1": { id: "open_response-1", hiddenByUser: !questionVisible, someQuestionProp: "x" },
@@ -44,9 +44,8 @@ describe("report tree selectors", () => {
     A1: {
       id: "A1",
       someAnswerProp: "x",
-      studentId: 1,
-      student: { id: 1, firstName: "John", lastName: "Doe", email: "john@doe.com" },
-      userEmail: "john@doe.com"
+      student: { id: "1", firstName: "John", lastName: "Doe" },
+      platformUserId: "1"
     }
   };
   const expectedQuestionTrees = ({ questionVisible = true }) => ({

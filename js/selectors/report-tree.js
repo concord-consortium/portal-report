@@ -48,7 +48,7 @@ export const getAnswerTrees = createSelector(
   (answers, students, questions) =>
     answers
       // Filter out answers that are not matching any students in the class. Class could have been updated.
-      .filter(answer => students.has(answer.get("userEmail")))
+      .filter(answer => students.has(answer.get("platformUserId")))
       .map(answer => {
         if (answer.get("type") === "multiple_choice_answer") {
           const question = questions.get(answer.get("questionId"));
@@ -60,7 +60,7 @@ export const getAnswerTrees = createSelector(
             .set("selectedChoices", selectedChoices)
             .set("correct", selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size);
         }
-        return answer.set("student", students.get(answer.get("userEmail")));
+        return answer.set("student", students.get(answer.get("platformUserId")));
       })
 );
 

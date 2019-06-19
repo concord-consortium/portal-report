@@ -36,12 +36,12 @@ export interface IPortalData {
 }
 
 export interface IStudentData {
-  email: string;
   name: string;
   realName: string;
   firstName: string;
   lastName: string;
   id: string;
+  userId: number;
 }
 
 export interface IAnswerData {
@@ -132,7 +132,7 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {
   const camelizedJson = camelizeKeys(portalData) as IPortalData;
   camelizedJson.classInfo.students.forEach(student => {
-    student.id = student.email;
+    student.id = student.userId.toString();
     student.name = `${student.firstName} ${student.lastName}`;
     // Provide additional property in student hash, it's useful for anonymization.
     student.realName = student.name;

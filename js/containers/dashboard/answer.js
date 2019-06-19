@@ -48,7 +48,7 @@ function mapStateToProps(state, ownProps) {
   return {
     answer: getAnswerTrees(state).toList().find(answer =>
       answer.get("questionId") === ownProps.question.get("id") &&
-      answer.get("userEmail") === ownProps.student.get("id")
+      answer.get("platformUserId") === ownProps.student.get("id")
     )
   };
 }
