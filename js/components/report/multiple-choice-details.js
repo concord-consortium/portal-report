@@ -2,22 +2,19 @@ import React, { PureComponent } from "react";
 
 import "../../../css/report/multiple-choice-details.less";
 
-function noAnswer(answer) {
-  return answer.answer === null;
-}
-
-function answerIncludeChoice(answer, choice) {
-  return !noAnswer(answer) && answer.selectedChoices.find(a => a.id === choice.id);
-}
-
-function getChoicesStats(choices, answers) {
+function getChoicesStats(choices, answers, students) {
   let stats = {};
-  const answersFlat = answers.reduce((res, answer) => res.concat(answer.answer), []);
-  const totalAnswers = answersFlat.length;
+  const noResponseCount = students.length - answers.length;
+  const allSelectedChoicesFlat = answers.reduce((res, answer) => res.concat(answer.selectedChoices), []);
+  const totalAnswers = allSelectedChoicesFlat.length + noResponseCount;
   choices.forEach((choice) => {
-    const filterFunc = choice.noAnswer ? noAnswer : ans => answerIncludeChoice(ans, choice);
-    const count = answers.filter(filterFunc).length;
-    // avoid division by zero:
+    let count;
+    if (choice.noResponseChoice) {
+      count = noResponseCount;
+    } else {
+      count = allSelectedChoicesFlat.filter(selectedChoice => selectedChoice.id === choice.id).length;
+    }
+    // Avoid division by zero:
     const percent = totalAnswers === 0 ? 0 : count / totalAnswers * 100;
     stats[choice.id] = {
       count,
@@ -31,12 +28,12 @@ export default class MultipleChoiceDetails extends PureComponent {
   get choices() {
     const choices = this.props.question.get("choices").toJS();
     // Add fake, no-answer choice.
-    choices.push({id: -1, content: "No response", noAnswer: true});
+    choices.push({id: -1, content: "No response", noResponseChoice: true});
     return choices;
   }
 
   render() {
-    const stats = getChoicesStats(this.choices, this.props.answers.toJS());
+    const stats = getChoicesStats(this.choices, this.props.answers.toJS(), this.props.students.toJS());
     return (
       <table className="multiple-choice-details">
         <tbody>

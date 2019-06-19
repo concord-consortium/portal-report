@@ -34,7 +34,7 @@ export default class QuestionForClass extends PureComponent {
             </a>
           </div>
           <QuestionSummary question={question} answers={answers} students={students} />
-          <QuestionDetails question={question} answers={answers} />
+          <QuestionDetails question={question} answers={answers} students={students} />
           { answersVisible && <AnswersTable question={question} answers={answers} students={students} /> }
         </div>
       </div>
