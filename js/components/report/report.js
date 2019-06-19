@@ -141,7 +141,12 @@ export default class Report extends PureComponent {
 
   printMediaQueryListener(mql) {
     if (!mql.matches) {
-      this.afterPrint();
+      // setTimeout fixes a React problem. Without it, React complains about:
+      // "Uncaught Invariant Violation: Maximum update depth exceeded. This can happen when a component
+      // repeatedly calls setState inside componentWillUpdate or componentDidUpdate."
+      // My blind guess might be that print dialog stops execution of the main JS thread and another state update
+      // happens too early.
+      setTimeout(() => { this.afterPrint(); }, 1);
     }
   }
 
