@@ -30,7 +30,7 @@ export default class CompareView extends PureComponent {
   render () {
     const { answers } = this.props
     return (
-      <div className='compare-view'>
+      <div className='compare-view' data-test="compare-view">
         <div className='answers-container'>
           {answers.map(a =>
             <div className={this.answerClassName(a)} key={a.get('key')}>

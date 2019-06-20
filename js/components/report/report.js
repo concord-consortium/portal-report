@@ -77,10 +77,10 @@ export default class Report extends PureComponent {
     if (!hideControls) {
       return (
         <div className='controls'>
-          <Button onClick={hideUnselectedQuestions} disabled={!anyQuestionSelected}>Show selected</Button>
-          <Button onClick={showUnselectedQuestions}>Show all</Button>
-          <Button onClick={() => setAnonymous(!isAnonymous)}>{isAnonymous ? 'Show names' : 'Hide names'}</Button>
-          <Button onClick={this.printStudentReports}>{buttonText}</Button>
+          <Button onClick={hideUnselectedQuestions} disabled={!anyQuestionSelected} data-cy="show-selected">Show selected</Button>
+          <Button onClick={showUnselectedQuestions} data-cy="show-all">Show all</Button>
+          <Button onClick={() => setAnonymous(!isAnonymous)} data-cy="hide-show-names" >{isAnonymous ? 'Show names' : 'Hide names'}</Button>
+          <Button onClick={this.printStudentReports} data-cy="print-reports">{buttonText}</Button>
         </div>
       )
     } else {
@@ -125,7 +125,7 @@ export default class Report extends PureComponent {
 
   render () {
     return (
-      <div>
+      <div data-cy="report">
         {this.renderClassReport()}
         {this.renderStudentReports()}
       </div>

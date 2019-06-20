@@ -12,10 +12,10 @@ export default class Header extends PureComponent {
       <div className='header' style={{background: background || '#bddfdf'}}>
         <div className='header-content'>
           <img src={ccLogoSrc} className='logo' />
-          <div className='status'>
+          <div className='status' data-cy="time">
             {lastUpdated && <span>Last updated at {new Date(lastUpdated).toLocaleTimeString()} </span>}
-            {onRefreshClick && <Button onClick={onRefreshClick} disabled={isFetching}>Refresh</Button>}
-            {onHelpButtonClick && <Button className="help" onClick={onHelpButtonClick}>Help</Button>}
+            {onRefreshClick && <Button onClick={onRefreshClick} disabled={isFetching} data-cy="refresh-button">Refresh</Button>}
+            {onHelpButtonClick && <Button className="help" onClick={onHelpButtonClick} data-cy="help">Help</Button>}
           </div>
         </div>
       </div>

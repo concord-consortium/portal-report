@@ -1,4 +1,4 @@
-import { getByCypressTag } from '../../utils'
+import { getByCypressTag } from '../../../utils'
 
 class Dashboard {
 
@@ -25,13 +25,7 @@ class Dashboard {
     getProgressBar () {
         return getByCypressTag('progressBar')
     }
-    getOpenResponseText () {
-        return getByCypressTag('openResponseText')
-    }
-
-    getMultipleChoiceAnswers () {
-        return getByCypressTag('multipleChoiceAnswers')
-    }
+    
 
     //Icons
     getOpenResponseIcon () {
@@ -51,9 +45,10 @@ class Dashboard {
     getExpandedMCAnswerDetails() {
         return getByCypressTag('multiple-choice-details')
     }
-    getExpandedMCAnswerTable() {
+    getExpandedMCAnswers() {
         return getByCypressTag('multiple-choice-answers-table')
     }
+
     getShowHideResponse() {
         return cy.get('.modal-body').find('.cc-button')
     }
@@ -71,8 +66,15 @@ class Dashboard {
     getActivityAnswers () {
         return getByCypressTag('activityAnswers')
     }
-    getActivityName () {
+    getActivityNames () {
         return getByCypressTag('activityName')
+    }
+    //Portal Report 
+    getFeedbackBox () {
+        return getByCypressTag('feedbackBox')
+    }
+    getFeedbackButton () {
+        return getByCypressTag('feedbackButton')
     }
     
 }

@@ -87,7 +87,7 @@ export default class MultipleChoiceAnswer extends PureComponent {
     const choices = question.get('choices')
     const studentChoices = answer.get('answer')
     return (
-      <div data-cy='multipleChoiceAnswers'>
+      <div data-cy='multiple-choice-answers'>
         {
           choices.map(choice =>
             <Choice key={choice.get('id')} choice={choice} correctAnswerDefined={question.get('scored')}

@@ -39,7 +39,7 @@ export default class FeedbackPanelForStudent extends PureComponent {
     const showFeedback = (hasFeedback && hasBeenReviewed)
 
     let feedbackDiv =
-      <div>
+      <div data-cy="no-feedback">
         No feedback yet.
       </div>
 
@@ -60,7 +60,7 @@ export default class FeedbackPanelForStudent extends PureComponent {
     }
 
     return (
-      <div className='activity-feedback'>
+      <div className='activity-feedback' data-test="activity-feedback">
         { feedbackDiv }
       </div>
     )
