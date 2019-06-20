@@ -86,7 +86,7 @@ export default class IframeAnswer extends PureComponent {
 
   render() {
     return (
-      <div className="iframe-answer">
+      <div className='iframe-answer' data-cy="iframe-answer">
         {this.shouldRenderIframe() ? this.renderIframe() : this.renderLink()}
       </div>
     );
