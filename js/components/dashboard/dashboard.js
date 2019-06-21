@@ -139,6 +139,7 @@ export default class Dashboard extends PureComponent {
         <div className={css.innerContainer}>
           <QuestionDetails
             selectedQuestion={selectedQuestion}
+            students={students}
             onClose={this.selectNoQuestions}
           />
           <div className={css.headers}>

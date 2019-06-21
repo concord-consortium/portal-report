@@ -48,7 +48,9 @@ export const getAnswerTrees = createSelector(
   (answers, students, questions) =>
     answers
       // Filter out answers that are not matching any students in the class. Class could have been updated.
-      .filter(answer => students.has(answer.get("platformUserId")))
+      // Also, filter out answers that are not matching any question. It might happen if the activity gets updated and
+      // some questions are deleted.
+      .filter(answer => students.has(answer.get("platformUserId")) && questions.has(answer.get("questionId")))
       .map(answer => {
         if (answer.get("type") === "multiple_choice_answer") {
           const question = questions.get(answer.get("questionId"));

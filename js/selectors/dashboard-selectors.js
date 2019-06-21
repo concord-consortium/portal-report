@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import { getActivityTrees, getQuestionTrees, getAnswerTrees } from "./report-tree";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../actions/dashboard";
+import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
 
 // Inputs
@@ -70,18 +71,6 @@ export const getStudentAverageProgress = createSelector(
     });
   },
 );
-
-// A comparison function to sort students by last and then first name
-const compareStudentsByName = (student1, student2) => {
-  const lastNameCompare = student1.get("lastName").toLocaleLowerCase().localeCompare(
-    student2.get("lastName").toLocaleLowerCase(),
-  );
-  if (lastNameCompare !== 0) {
-    return lastNameCompare;
-  } else {
-    return student1.get("firstName").localeCompare(student2.get("firstName"));
-  }
-};
 
 // Returns sorted students
 export const getSortedStudents = createSelector(

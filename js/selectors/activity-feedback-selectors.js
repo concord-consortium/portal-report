@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { fromJS, Map as IMap } from "immutable";
+import { compareStudentsByName } from "../util/misc";
 import {
   AUTOMATIC_SCORE,
   MAX_SCORE_DEFAULT,
@@ -71,7 +72,7 @@ const getFeedbacksNeedingReview = (feedbacks) => {
 };
 
 const formatStudents = (students) => students
-  .sortBy(s => s.get("lastName"))
+  .sort((student1, student2) => compareStudentsByName(student1, student2))
   .map(s => addRealName(s));
 
 /*************************************************************************

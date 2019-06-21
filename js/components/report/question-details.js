@@ -7,10 +7,10 @@ const QuestionComponent = {
   "image_question": ImageQuestionDetails,
 };
 
-export default ({question, answers}) => {
+export default ({question, answers, students}) => {
   const QComponent = QuestionComponent[question.get("type")];
   if (!QComponent) {
     return <span />;
   }
-  return <QComponent question={question} answers={answers} />;
+  return <QComponent question={question} answers={answers} students={students} />;
 };

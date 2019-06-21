@@ -4,7 +4,6 @@ import { CompareAnswerCheckboxContainer } from "./compare-answer";
 import ShowCompareContainer from "./show-compare";
 import { connect } from "react-redux";
 import { fromJS } from "immutable";
-import { getAnswerTrees } from "../../selectors/report-tree";
 
 import "../../../css/report/answers-table.less";
 
@@ -94,7 +93,6 @@ function AnswerRow({student, answer, question, feedback, showScore, showFeedback
 
 function mapStateToProps(state, ownProps) {
   return {
-    students: state.getIn(["report", "students"]).toList(),
     feedbacks: state.get("feedbacks"),
     anonymous: state.getIn(["report", "anonymous"]),
   };

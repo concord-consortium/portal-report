@@ -21,7 +21,7 @@ export default class QuestionDetails extends PureComponent {
   }
 
   render() {
-    const { selectedQuestion, answers, onClose } = this.props;
+    const { selectedQuestion, answers, students, onClose } = this.props;
     const { answersVisible } = this.state;
     const prompt = selectedQuestion && selectedQuestion.get("prompt");
     return (
@@ -35,11 +35,11 @@ export default class QuestionDetails extends PureComponent {
             <div
               className={css.question} >
               <div dangerouslySetInnerHTML={{ __html: prompt }} />
-              <ReportQuestionDetails question={selectedQuestion} answers={answers} />
+              <ReportQuestionDetails question={selectedQuestion} answers={answers} students={students} />
               <Button onClick={this.toggleAnswersVisibility}>
                 {answersVisible ? "Hide responses" : "Show responses"}
               </Button>
-              {answersVisible ? <AnswersTable question={selectedQuestion} answers={answers} showCompare={false} /> : ""}
+              {answersVisible ? <AnswersTable question={selectedQuestion} answers={answers} students={students} showCompare={false} /> : ""}
             </div>
           }
         </Modal.Body>

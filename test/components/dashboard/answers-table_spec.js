@@ -10,18 +10,18 @@ describe("<AnswersTable />", () => {
   });
   const hidden = false;
   const showCompare = false;
+  const students = fromJS([
+    { id: 1, name: "John Doe" },
+    { id: 2, name: "Test Student" }
+  ]);
+  const answers = fromJS({});
   const state = fromJS({
     report: {
       anonymous: false,
-      students: {
-        1: { id: 1, name: "John Doe" },
-        2: { id: 2, name: "Test Student" }
-      },
-      answers: {},
       feedbacks: {}
     }
   });
-  const params = { hidden, showCompare, question };
+  const params = { answers, hidden, showCompare, question, students };
 
   it("should render student names", () => {
     const wrapper = mountWithStore(<AnswersTable {...params} />, state);
@@ -41,7 +41,7 @@ describe("<AnswersTable />", () => {
 
   describe("With out a question", () => {
     const question = null;
-    const params = { hidden, showCompare, question };
+    const params = { answers, hidden, showCompare, question, students };
 
     it("should render <AnswersTable> without Score or Feedback text", () => {
       const wrapper = mountWithStore(<AnswersTable {...params} />, state);

@@ -14,7 +14,11 @@ describe("report tree selectors", () => {
         "1": { id: "1", firstName: "John", lastName: "Doe" }
       },
       answers: {
-        A1: { id: "A1", someAnswerProp: "x", platformUserId: "1" }
+        A1: { id: "A1", someAnswerProp: "x", platformUserId: "1", questionId: "open_response-1" },
+        // user not matching, should be filtered out:
+        A2: { id: "A2", someAnswerProp: "x", platformUserId: "123", questionId: "open_response-1" },
+        // question not matching, should be filtered out:
+        A3: { id: "A3", someAnswerProp: "x", platformUserId: "1", questionId: "open_response-123" },
       },
       questions: {
         "open_response-1": { id: "open_response-1", hiddenByUser: !questionVisible, someQuestionProp: "x" },
@@ -44,6 +48,7 @@ describe("report tree selectors", () => {
     A1: {
       id: "A1",
       someAnswerProp: "x",
+      questionId: "open_response-1",
       student: { id: "1", firstName: "John", lastName: "Doe" },
       platformUserId: "1"
     }

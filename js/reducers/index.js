@@ -135,11 +135,11 @@ function report(state = INITIAL_REPORT_STATE, action) {
   switch (action.type) {
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
-      // Report type depends on what kind of user is launching the report. Teachers will see class report,
-      // while students will see their answers (student report).
-
-      // For now, studentId is being passed in the URL parameter. In the future, we might use data coming from Portal
-      // to get it (e.g. user ID parsed from Firebase JWT).
+      // Report type depends on what kind of user is launching the report and whether `studentId` URL param is provided.
+      // Students can only see their own report. Teachers can see either class report or individual student report.
+      // Theoretically student can easily modify URL parameter to open report of the other student. But this report
+      // will be always empty, as student-oriented report queries only student own answers (student user id is coming
+      // from JWT info) and Firestore security rules also ensure that.
       const { studentId } = queryString.parse(window.location.search);
       let type;
       let hideControls;

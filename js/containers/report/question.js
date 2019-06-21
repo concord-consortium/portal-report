@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import QuestionForClass from "../../components/report/question-for-class";
 import QuestionForStudent from "../../components/report/question-for-student";
 import { getAnswerTrees } from "../../selectors/report-tree";
+import { getSortedStudents } from "../../selectors/report";
 import { connect } from "react-redux";
 
 export default class Question extends PureComponent {
@@ -18,7 +19,7 @@ export default class Question extends PureComponent {
 function mapStateToProps(state, ownProps) {
   return {
     answers: getAnswerTrees(state).toList().filter(answer => answer.get("questionId") === ownProps.question.get("id")),
-    students: state.getIn(["report", "students"]).toList()
+    students: getSortedStudents(state)
   };
 }
 
