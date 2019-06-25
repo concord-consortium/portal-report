@@ -10,7 +10,6 @@
 .modal-content {
   color: @color;
   font: @font;
-
   a {
     color: #479492;
     text-decoration: none;
@@ -48,5 +47,9 @@
 .modal {
   &.fade {
     opacity: 1;
+    .modal-dialog {
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
+    }
   }
 }
