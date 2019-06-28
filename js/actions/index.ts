@@ -4,12 +4,13 @@ import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
 import {Dispatch} from "redux";
 import { Map } from "immutable";
-import { IPortalRawData, IResponse } from "../api";
+import { IPortalRawData, IResponse, reportSettingsFireStorePath } from "../api";
 
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
+export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -112,6 +113,20 @@ function receivePortalData(rawPortalData: IPortalRawData) {
         }));
       });
     }
+    // Create Firestore document oberserver for settings:
+    db.doc(reportSettingsFireStorePath(rawPortalData))
+      .onSnapshot(
+        (snapshot)   => {
+          dispatch({
+            type: RECEIVE_USER_SETTINGS,
+            response: snapshot.data()
+          });
+        },
+        (err: Error) => {
+          // tslint:disable-next-line no-console
+          console.error(err);
+        }
+      );
   };
 }
 

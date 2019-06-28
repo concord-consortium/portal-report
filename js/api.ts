@@ -1,3 +1,4 @@
+import * as firebase from "firebase";
 import fetch from "isomorphic-fetch";
 import * as jwt from "jsonwebtoken";
 import fakeOfferingData from "./data/offering-data.json";
@@ -9,7 +10,13 @@ import * as db from "./db";
 const FIREBASE_APP = "report-service-dev";
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
-export interface IPortalRawData {
+export interface ILTIPartial {
+  platformId: string;
+  platformUserId: string;
+  contextId: string; // class hash
+}
+
+export interface IPortalRawData extends ILTIPartial{
   offering: {
     id: number,
     activity_url: string;
@@ -20,9 +27,6 @@ export interface IPortalRawData {
     students: IStudentRawData[];
   };
   userType: "teacher" | "learner";
-  platformId: string;
-  platformUserId: string;
-  contextId: string; // class hash
 }
 
 export interface IStudentRawData {
@@ -162,9 +166,24 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   });
 }
 
-export function updateReportSettings(data: any) {
-  // TODO using Firebase
-  return new Promise(resolve => resolve());
+export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
+  const {platformId, platformUserId, contextId} = LTIData;
+  const sourceId = platformId.replace(/https?:\/\//, "");
+  // NP: 2019-06-28 In the case of fake portal data we will return
+  // `/sources/fake.portal/user_settings/1/offering/class123` which has
+  // special FireStore Rules to allow universal read and write to that document.
+  // Allows us to test limited report settings with fake portal data, sans JWT.
+  return `/sources/${sourceId}/user_settings/${platformUserId}/offering/${contextId}`;
+}
+
+export function updateReportSettings(update: any, state: ILTIPartial) {
+  const path = reportSettingsFireStorePath(state);
+  return new Promise( (resolve, reject) => {
+    firebase.firestore()
+      .doc(path)
+      .set(update, {merge: true});
+    resolve();
+  });
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.

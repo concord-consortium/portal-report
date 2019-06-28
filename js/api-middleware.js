@@ -1,4 +1,9 @@
-import { fetchPortalDataAndAuthFirestore, updateReportSettings, APIError, fetchRubric } from "./api";
+import {
+  fetchPortalDataAndAuthFirestore,
+  updateReportSettings,
+  APIError,
+  fetchRubric
+} from "./api";
 
 // This middleware is executed only if action includes .callAPI object.
 // It calls API action defined in callAPI.type.
@@ -6,8 +11,9 @@ import { fetchPortalDataAndAuthFirestore, updateReportSettings, APIError, fetchR
 // If action fails and callAPI.errorAction is defined, it will be called with the error response object.
 export default store => next => action => {
   if (action.callAPI) {
-    const { type, data, successAction, errorAction } = action.callAPI;
-    callApi(type, data)
+    const state = store.getState();
+    const { type, data, successAction, errorAction} = action.callAPI;
+    callApi(type, data, state)
       .then(response => successAction && next(successAction(response)))
       .catch(error => {
         if (error instanceof APIError && errorAction) {
@@ -30,12 +36,12 @@ export default store => next => action => {
   return next(action);
 };
 
-function callApi(type, data) {
+function callApi(type, data, state) {
   switch (type) {
     case "fetchPortalDataAndAuthFirestore":
       return fetchPortalDataAndAuthFirestore();
     case "updateReportSettings":
-      return updateReportSettings(data);
+      return updateReportSettings(data, state.get("report").toJS());
     case "fetchRubric":
       return fetchRubric(data);
   }
