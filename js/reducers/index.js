@@ -79,13 +79,37 @@ function setUserSettings(state, response) {
     state.get("questions").forEach((value, key) => {
       const selected = selectedQuestions.indexOf(key) > -1;
       state = state.setIn(["questions", key, "selected"], selected);
-      if (someSelected && filterActive) {
+    });
+    state = setAnonymous(state, anonymous_report);
+    return state;
+  });
+  return state;
+}
+
+// This action has to be explicit, otherwise, a question will disappear
+// immediately when teacher has selection filter active and unselects given
+// question. Instead, the question should stay visible until teacher clicks
+// "Show selected" again.
+function hideUnselectedQuestions(state) {
+  return state.withMutations(state => {
+    const someSelected = state.get("questions").size > 0;
+    state.get("questions").forEach((value, key) => {
+      const selected = state.getIn(["questions", key, "selected"]);
+      if (someSelected) {
         state = state.setIn(["questions", key, "hiddenByUser"], !selected);
       } else {
         state = state.setIn(["questions", key, "hiddenByUser"], false);
       }
     });
-    state = setAnonymous(state, anonymous_report);
+    return state;
+  });
+}
+
+function showUnselectedQuestions(state) {
+  return state.withMutations(state => {
+    state.get("questions").forEach((value, key) => {
+      state = state.setIn(["questions", key, "hiddenByUser"], false);
+    });
     return state;
   });
 }
@@ -157,6 +181,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
         .set("platformUserId", data.platformUserId)
         .set("contextId", data.contextId)
+        .set("resourceLinkId", data.offering.id)
         .set("platformId", data.platformId);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
@@ -175,15 +200,19 @@ function report(state = INITIAL_REPORT_STATE, action) {
 
     // The following actions only trigger API middleware hooks that call out
     // to firebase. The results of the calls are handled by RECEIVE_USER_SETTINGS
-    case SET_ANONYMOUS:
+    // case SET_ANONYMOUS: No direct reducer action, only API middleware.
+    // case SET_QUESTION_SELECTED: No direct reducer action, only API middleware.
     case HIDE_UNSELECTED_QUESTIONS:
+      return hideUnselectedQuestions(state);
     case SHOW_UNSELECTED_QUESTIONS:
-    case SET_QUESTION_SELECTED:
-      return state; // These ⬆ API-calling actions just return the current state.
+      return showUnselectedQuestions(state);
 
     // The middleware triggered API from above will result in invokation of:
     case RECEIVE_USER_SETTINGS:
-      return setUserSettings(state, action.response);
+      if (action.response) {
+        return setUserSettings(state, action.response);
+      }
+      return state;
 
     case SET_ANSWER_SELECTED_FOR_COMPARE:
       const compareViewAns = state.get("compareViewAnswers");

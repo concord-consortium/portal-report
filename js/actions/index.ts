@@ -51,6 +51,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       response: rawPortalData
     });
     let resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
+    const resourceLinkId = rawPortalData.offering.id.toString();
     if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
       // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
       // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
@@ -114,7 +115,14 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       });
     }
     // Create Firestore document oberserver for settings:
-    db.doc(reportSettingsFireStorePath(rawPortalData))
+    const fireStorePath = reportSettingsFireStorePath(
+      { resourceLinkId,
+        contextId: rawPortalData.contextId,
+        platformId: rawPortalData.platformId,
+        platformUserId: rawPortalData.platformUserId
+      }
+    );
+    db.doc(fireStorePath)
       .onSnapshot(
         (snapshot)   => {
           dispatch({

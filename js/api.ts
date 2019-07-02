@@ -11,9 +11,10 @@ const FIREBASE_APP = "report-service-dev";
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
 export interface ILTIPartial {
-  platformId: string;
+  platformId: string;      // portal
   platformUserId: string;
-  contextId: string; // class hash
+  contextId: string;       // class hash
+  resourceLinkId?: string;  // offering ID
 }
 
 export interface IPortalRawData extends ILTIPartial{
@@ -167,23 +168,20 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
 }
 
 export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
-  const {platformId, platformUserId, contextId} = LTIData;
+  const {platformId, platformUserId, resourceLinkId} = LTIData;
   const sourceId = platformId.replace(/https?:\/\//, "");
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.portal/user_settings/1/offering/class123` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, sans JWT.
-  return `/sources/${sourceId}/user_settings/${platformUserId}/offering/${contextId}`;
+  return `/sources/${sourceId}/user_settings/${platformUserId}/resource_link/${resourceLinkId}`;
 }
 
 export function updateReportSettings(update: any, state: ILTIPartial) {
   const path = reportSettingsFireStorePath(state);
-  return new Promise( (resolve, reject) => {
-    firebase.firestore()
+  return firebase.firestore()
       .doc(path)
       .set(update, {merge: true});
-    resolve();
-  });
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.
