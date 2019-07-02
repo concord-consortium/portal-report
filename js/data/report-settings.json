@@ -1,0 +1,10 @@
+{
+  "anonymous_report": true,
+  "visibility_filter": {
+    "active": true,
+    "questions": [
+      "open_response_60",
+      "multiple_choice_19"
+    ]
+  }
+}
