@@ -91,7 +91,7 @@ export function setQuestionSelected(key, value) {
     // the questionsMap represents the previous state of the checkboxes
     // so the filter needs to special case the current key
     const selectedQuestionKeys =
-      [...questionsMap.values()].filter(q => q.get("key") === key ? value : q.get("selected")).map(q => q.get("key"));
+      Array.from(questionsMap.values()).filter(q => q.get("key") === key ? value : q.get("selected")).map(q => q.get("key"));
     dispatch({
       type: SET_QUESTION_SELECTED,
       key,
