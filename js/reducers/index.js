@@ -198,10 +198,14 @@ function report(state = INITIAL_REPORT_STATE, action) {
     case SET_NOW_SHOWING:
       return state.set("nowShowing", action.value);
 
-    // The following actions only trigger API middleware hooks that call out
-    // to firebase. The results of the calls are handled by RECEIVE_USER_SETTINGS
-    // case SET_ANONYMOUS: No direct reducer action, only API middleware.
-    // case SET_QUESTION_SELECTED: No direct reducer action, only API middleware.
+    // The following actions trigger API middleware that invokes the FireStore API.
+    // The results of middleware invocation are handled by the `RECEIVE_USER_SETTINGS` action.
+    // These FireStore API calls return immediately.
+    // See: https://firebase.google.com/docs/firestore/query-data/listen
+
+    // Two NO-OP Named actions only call the FireStore middleware:
+    // case SET_ANONYMOUS: ; // No direct reducer action, only API middleware.
+    // case SET_QUESTION_SELECTED: ; // No direct reducer action, only API middleware.
     case HIDE_UNSELECTED_QUESTIONS:
       return hideUnselectedQuestions(state);
     case SHOW_UNSELECTED_QUESTIONS:

@@ -177,6 +177,10 @@ export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
   return `/sources/${sourceId}/user_settings/${platformUserId}/resource_link/${resourceLinkId}`;
 }
 
+// The updateReportSettings API middleware calls out to the FireStore API.
+// `firestore().path().set()` returns a Promise that will resolve immediately.
+// This due to a feature in the FireStore API called "latency compensation."
+// See: https://firebase.google.com/docs/firestore/query-data/listen
 export function updateReportSettings(update: any, state: ILTIPartial) {
   const path = reportSettingsFireStorePath(state);
   return firebase.firestore()
