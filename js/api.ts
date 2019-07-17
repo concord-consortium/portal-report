@@ -1,3 +1,4 @@
+import * as firebase from "firebase";
 import fetch from "isomorphic-fetch";
 import * as jwt from "jsonwebtoken";
 import fakeOfferingData from "./data/offering-data.json";
@@ -9,7 +10,14 @@ import * as db from "./db";
 const FIREBASE_APP = "report-service-dev";
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
-export interface IPortalRawData {
+export interface ILTIPartial {
+  platformId: string;      // portal
+  platformUserId: string;
+  contextId: string;       // class hash
+  resourceLinkId?: string;  // offering ID
+}
+
+export interface IPortalRawData extends ILTIPartial{
   offering: {
     id: number,
     activity_url: string;
@@ -20,9 +28,6 @@ export interface IPortalRawData {
     students: IStudentRawData[];
   };
   userType: "teacher" | "learner";
-  platformId: string;
-  platformUserId: string;
-  contextId: string; // class hash
 }
 
 export interface IStudentRawData {
@@ -162,9 +167,25 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   });
 }
 
-export function updateReportSettings(data: any) {
-  // TODO using Firebase
-  return new Promise(resolve => resolve());
+export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
+  const {platformId, platformUserId, resourceLinkId} = LTIData;
+  const sourceId = platformId.replace(/https?:\/\//, "");
+  // NP: 2019-06-28 In the case of fake portal data we will return
+  // `/sources/fake.portal/user_settings/1/offering/class123` which has
+  // special FireStore Rules to allow universal read and write to that document.
+  // Allows us to test limited report settings with fake portal data, sans JWT.
+  return `/sources/${sourceId}/user_settings/${platformUserId}/resource_link/${resourceLinkId}`;
+}
+
+// The updateReportSettings API middleware calls out to the FireStore API.
+// `firestore().path().set()` returns a Promise that will resolve immediately.
+// This due to a feature in the FireStore API called "latency compensation."
+// See: https://firebase.google.com/docs/firestore/query-data/listen
+export function updateReportSettings(update: any, state: ILTIPartial) {
+  const path = reportSettingsFireStorePath(state);
+  return firebase.firestore()
+      .doc(path)
+      .set(update, {merge: true});
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.

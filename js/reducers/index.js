@@ -1,7 +1,9 @@
 import Immutable, { Map, Set} from "immutable";
+import {updateReportSettings} from "../api";
 import {
   REQUEST_PORTAL_DATA,
   RECEIVE_RESOURCE_STRUCTURE,
+  RECEIVE_USER_SETTINGS,
   FETCH_ERROR,
   SET_NOW_SHOWING,
   SET_ANONYMOUS,
@@ -63,24 +65,41 @@ function data(state = INITIAL_DATA, action) {
 
 function setAnonymous(state, anonymous) {
   let idx = 1;
-  const newStudents = state.get("students").map(s => s.set("name", anonymous ? `Student ${idx++}` : s.get("realName")));
-  return state.set("anonymous", anonymous)
-    .set("students", newStudents);
+  const newStudents = state.get("students")
+    .map(s => s.set("name", anonymous ? `Student ${idx++}` : s.get("realName")));
+  return state.set("anonymous", anonymous).set("students", newStudents);
 }
 
-// This action has to be explicit and requires additional property. Otherwise, a question will disappear immediately
-// when teacher has selection filter active and unselects given question. Instead, the question should stay visible
-// until teacher clicks "Show selected" again.
-function hideUnselectedQuestions(state) {
-  if (!state.get("questions").some(question => question.get("selected"))) {
-    // Make sure that at least one question is selected. Never let user hide all the questions.
-    // This is necessary due to compatibility with Portal API and old report. Portal API by default states
-    // that the visibility filter is active, but no questions are selected. Without this check, nothing would be visible.
-    return state;
-  }
+function setUserSettings(state, response) {
+  const {visibility_filter, anonymous_report} = response;
+  const selectedQuestions = visibility_filter.questions || [];
+  const filterActive = visibility_filter.active || false;
+  const someSelected = selectedQuestions.length > 0;
   return state.withMutations(state => {
     state.get("questions").forEach((value, key) => {
-      state = state.setIn(["questions", key, "hiddenByUser"], !state.getIn(["questions", key, "selected"]));
+      const selected = selectedQuestions.indexOf(key) > -1;
+      state = state.setIn(["questions", key, "selected"], selected);
+    });
+    state = setAnonymous(state, anonymous_report);
+    return state;
+  });
+  return state;
+}
+
+// This action has to be explicit, otherwise, a question will disappear
+// immediately when teacher has selection filter active and unselects given
+// question. Instead, the question should stay visible until teacher clicks
+// "Show selected" again.
+function hideUnselectedQuestions(state) {
+  return state.withMutations(state => {
+    const someSelected = state.get("questions").size > 0;
+    state.get("questions").forEach((value, key) => {
+      const selected = state.getIn(["questions", key, "selected"]);
+      if (someSelected) {
+        state = state.setIn(["questions", key, "hiddenByUser"], !selected);
+      } else {
+        state = state.setIn(["questions", key, "hiddenByUser"], false);
+      }
     });
     return state;
   });
@@ -159,7 +178,11 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("hideControls", hideControls)
         .set("clazzName", data.classInfo.name)
         .set("clazzId", data.classInfo.id)
-        .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])));
+        .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
+        .set("platformUserId", data.platformUserId)
+        .set("contextId", data.contextId)
+        .set("resourceLinkId", data.offering.id)
+        .set("platformId", data.platformId);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);
@@ -174,14 +197,27 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
     case SET_NOW_SHOWING:
       return state.set("nowShowing", action.value);
-    case SET_QUESTION_SELECTED:
-      return state.setIn(["questions", action.key, "selected"], action.value);
+
+    // The following actions trigger API middleware that invokes the FireStore API.
+    // The results of middleware invocation are handled by the `RECEIVE_USER_SETTINGS` action.
+    // These FireStore API calls return immediately.
+    // See: https://firebase.google.com/docs/firestore/query-data/listen
+
+    // Two NO-OP Named actions only call the FireStore middleware:
+    // case SET_ANONYMOUS: ; // No direct reducer action, only API middleware.
+    // case SET_QUESTION_SELECTED: ; // No direct reducer action, only API middleware.
     case HIDE_UNSELECTED_QUESTIONS:
       return hideUnselectedQuestions(state);
     case SHOW_UNSELECTED_QUESTIONS:
       return showUnselectedQuestions(state);
-    case SET_ANONYMOUS:
-      return setAnonymous(state, action.value);
+
+    // The middleware triggered API from above will result in invokation of:
+    case RECEIVE_USER_SETTINGS:
+      if (action.response) {
+        return setUserSettings(state, action.response);
+      }
+      return state;
+
     case SET_ANSWER_SELECTED_FOR_COMPARE:
       const compareViewAns = state.get("compareViewAnswers");
       if (compareViewAns) {
