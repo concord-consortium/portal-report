@@ -147,7 +147,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
             offering: offeringData,
             classInfo: classData,
             userType: verifiedFirebaseJWT.claims.user_type,
-            platformId: verifiedFirebaseJWT.claims.platform_id.replace(/\/$/, ""), // remove trailing slash if present
+            platformId: verifiedFirebaseJWT.claims.platform_id,
             platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
             contextId: classInfo.class_hash
           })
