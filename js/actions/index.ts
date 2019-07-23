@@ -5,6 +5,11 @@ import fakeAnswers from "../data/answers.json";
 import {Dispatch} from "redux";
 import { Map } from "immutable";
 import { IPortalRawData, IResponse, reportSettingsFireStorePath } from "../api";
+import {
+  API_UPDATE_REPORT_FEEDBACK,
+  API_UPDATE_REPORT_SETTINGS,
+  API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE
+} from "../api-middleware";
 
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
@@ -37,7 +42,7 @@ export function fetchAndObserveData() {
     type: REQUEST_PORTAL_DATA,
     // Start with fetching portal data. It will cause other actions to be chained later.
     callAPI: {
-      type: "fetchPortalDataAndAuthFirestore",
+      type: API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE,
       successAction: receivePortalData,
       errorAction: fetchError,
     },
@@ -171,7 +176,7 @@ export function setQuestionSelected(key: string, value: boolean) {
       value,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
       callAPI: {
-        type: "updateReportSettings",
+        type: API_UPDATE_REPORT_SETTINGS,
         data: {
           visibility_filter: {
             questions: selectedQuestionKeys,
@@ -188,7 +193,7 @@ export function hideUnselectedQuestions() {
       type: HIDE_UNSELECTED_QUESTIONS,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
       callAPI: {
-        type: "updateReportSettings",
+        type: API_UPDATE_REPORT_SETTINGS,
         data: {
           visibility_filter: {
             active: true,
@@ -204,7 +209,7 @@ export function showUnselectedQuestions() {
     type: SHOW_UNSELECTED_QUESTIONS,
     // Send data to server. Don't care about success or failure. See: api-middleware.js
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       data: {
         visibility_filter: {
           active: false,
@@ -227,7 +232,7 @@ export function setAnonymous(value: boolean) {
     value,
     // Send data to server. Don't care about success or failure. See: api-middleware.js
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       data: {
         anonymous_report: value,
       },
@@ -259,10 +264,11 @@ export function updateFeedback(answerKey: string, feedback: any) {
     answerKey,
     feedback,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_FEEDBACK,
       errorAction: fetchError,
       data: {
         feedback: feedbackData,
+        answerKey
       },
     },
 
@@ -284,7 +290,7 @@ export function enableFeedback(embeddableKey: string, feedbackFlags: any) {
     embeddableKey,
     feedbackFlags,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       errorAction: fetchError,
       data: {
         feedback_opts: feedbackSettings,
@@ -307,7 +313,7 @@ export function updateActivityFeedback(activityFeedbackKey: string, feedback: an
     activityFeedbackKey,
     feedback,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       errorAction: fetchError,
       data: {
         activity_feedback: feedbackData,
@@ -331,7 +337,7 @@ export function enableActivityFeedback(activityId: string, feedbackFlags: any, i
     invalidatePreviousFeedback,
     feedbackFlags,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       errorAction: fetchError,
       data: {
         actvity_feedback_opts: feedbackSettings,
