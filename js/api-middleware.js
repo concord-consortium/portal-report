@@ -1,6 +1,7 @@
 import {
   fetchPortalDataAndAuthFirestore,
   updateReportSettings,
+  updateFeedbacks,
   APIError,
   fetchRubric
 } from "./api";

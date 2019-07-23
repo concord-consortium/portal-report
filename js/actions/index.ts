@@ -16,6 +16,7 @@ export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
+export const RECEIVE_FEEDBACKS = "RECEIVE_FEEDBACKS";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -140,6 +141,31 @@ function receivePortalData(rawPortalData: IPortalRawData) {
           console.error(err);
         }
       );
+    // TODO: Fix hardcoding of souurce and Setup another Firebase observer, this time for feedbacks.
+    let feedbacksQuery = db.collection(`sources/${source}/feedbacks_resource_links/${resourceLinkId}`)
+      // This first where clause seems redundant, but it's necessary for Firestore auth rules to work fine
+      // (they are based on context_id value).
+      .where("context_id", "==", rawPortalData.contextId)
+      .where("platform_id", "==", rawPortalData.platformId)
+      .where("resource_link_id", "==", rawPortalData.offering.id.toString());
+    if (rawPortalData.userType === "learner") {
+      feedbacksQuery = feedbacksQuery.where("platform_user_id", "==", rawPortalData.platformUserId.toString());
+    }
+    feedbacksQuery.onSnapshot(snapshot => {
+      if (!snapshot.empty) {
+        dispatch({
+          type: RECEIVE_FEEDBACKS,
+          response: snapshot.docs.map(doc => doc.data())
+        });
+      }
+    }, (err: Error) => {
+      // tslint:disable-next-line no-console
+      console.error("Firestore answers fetch error", err);
+      dispatch(fetchError({
+        status: 500,
+        statusText: `Firestore answers fetch error: ${err.message}`
+      }));
+    });
   };
 }
 
