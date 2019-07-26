@@ -16,6 +16,13 @@ export interface ILTIPartial {
   contextId: string;       // class hash
   resourceLinkId?: string;  // offering ID
 }
+export interface IStateAnswer {
+  questionId: string;
+  id: string;
+}
+export interface IStateReportPartial extends ILTIPartial {
+  answers: IStateAnswer[];
+}
 
 export interface IPortalRawData extends ILTIPartial{
   offering: {
@@ -188,28 +195,39 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
       .set(update, {merge: true});
 }
 
-export function reportFeedbacksFireStorePath(LTIData: ILTIPartial, answerKey: string) {
+export function reportFeedbacksFireStorePath(LTIData: ILTIPartial, answerKey?: string) {
   const {platformId, platformUserId, resourceLinkId} = LTIData;
   const sourceId = platformId.replace(/https?:\/\//, "");
   // NP: 2019-06-28 In the case of fake portal data we will return
-  // `/sources/fake.portal/feedbacks_resource_links/1/` which has
+  // `/sources/fake.portal/resource_links/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
-  // Allows us to test limited report settings with fake portal data, sans JWT.
-  return `/sources/${sourceId}/feedbacks_resource_links/${resourceLinkId}/${answerKey}`;
+  // Allows us to test limited report settings with fake portal data, without a JWT.
+  if (answerKey) {
+    return `/sources/${sourceId}/resource_links/${resourceLinkId}/feedbacks/${answerKey}`;
+  }
+  return `/sources/${sourceId}/resource_links/${resourceLinkId}/feedbacks`;
+}
+
+function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial) {
+  const {platformUserId, resourceLinkId, answers } = reportState;
+  const questionId = answers[feedback.answerKey].questionId;
+  feedback.resourceLinkId = resourceLinkId;
+  feedback.questionId = questionId;
+  feedback.platformUserId = platformUserId;
+  return feedback;
 }
 
 // The updateReportSettings API middleware calls out to the FireStore API.
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateFeedbacks(data: any, state: ILTIPartial) {
-  const { answerKey } = data;
+export function updateFeedbacks(data: any, state: IStateReportPartial) {
+  const { answerKey, feedback } = data;
   const path = reportFeedbacksFireStorePath(state, answerKey);
   return firebase.firestore()
       .doc(path)
-      .set(data, {merge: true});
+      .set(addFeedbackMetaData(feedback, state), {merge: true});
 }
-
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.
 const rubricUrlCache: any = {};

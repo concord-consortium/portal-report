@@ -69,7 +69,7 @@ export default class ActivityFeedbackRow extends PureComponent {
 
   fieldValues() {
     const { studentActivityFeedback } = this.props;
-    const feedbackRecord = studentActivityFeedback.get("feedbacks").first();
+    const feedbackRecord = studentActivityFeedback.get("feedback");
     const recordJS = feedbackRecord
       ? feedbackRecord.toJS()
       : {};

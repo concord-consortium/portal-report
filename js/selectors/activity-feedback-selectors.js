@@ -243,15 +243,16 @@ export const makeGetQuestionAutoScores = () => {
       const scores = questions
         .filter(question => question.get("scoreEnabled"))
         .map(q => q.get("answers"))
-        .flatten()
-        .map(answerId => report.getIn(["answers", answerId]))
-        .groupBy(answer => answer.get("studentId"))
-        .map(studentAnswer => studentAnswer
-          .filter(ans => ans.get("feedbacks"))
-          .map(ans => ans.get("feedbacks").last())
-          .map(feedbackId => getFeedbackScore(feedbackId))
-          .filter(a => isNumeric(a)),
-        );
+        .flatten();
+        // .map(answerId => report.getIn(["answers", answerId]))
+        // .groupBy(answer => answer.get("studentId"))
+        // .map(studentAnswer => studentAnswer
+        //   .filter(ans => ans.get("feedbacks"))
+        //   .map(ans => ans.get("feedbacks").last())
+        //   .map(feedbackId => getFeedbackScore(feedbackId))
+        //   .filter(a => isNumeric(a)),
+        // );
+        // TODO ⬆
       const sums = scores.map(s => s.reduce((sum, v) => sum + v, 0));
       return sums;
     },

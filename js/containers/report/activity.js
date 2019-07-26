@@ -6,6 +6,7 @@ import FeedbackButton from "../../components/report/feedback-button";
 import ActivityFeedbackForStudent from "../../components/report/activity-feedback-for-student";
 import ActivityFeedbackPanel from "./activity-feedback-panel";
 import SummaryIndicator from "../../components/report/summary-indicator";
+import { fromJS } from "immutable";
 import {
   makeGetStudentFeedbacks,
   makeGetRubric,
@@ -56,7 +57,9 @@ class Activity extends PureComponent {
     } = this.props;
     const { showFeedbackPanel } = this.state;
 
-    const isClassReport = reportFor === "class";
+    // const isClassReport = reportFor === "class";
+    // @important TODO ⬆ Why don't it work?
+    const isClassReport = true;
     const isStudentReport = !isClassReport;
     const activityName = activity.get("name");
     const showText = activity.get("enableTextFeedback");
@@ -123,11 +126,12 @@ function makeMapStateToProps() {
     const getRubric = makeGetRubric();
     const getFeedbacks = makeGetStudentFeedbacks();
     const getAutoMaxScore = makeGetComputedMaxScore();
-    const getAutoScores = makeGetAutoScores();
+    // const getAutoScores = makeGetAutoScores();
 
     const rubric = getRubric(state, ownProps);
     const computedMaxScore = getAutoMaxScore(state, ownProps);
-    const autoScores = getAutoScores(state, ownProps);
+    // const autoScores = getAutoScores(state, ownProps);
+    const autoScores = fromJS([]);
     const {
       feedbacksNeedingReview,
       feedbacks,

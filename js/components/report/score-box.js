@@ -1,28 +1,22 @@
 import React, { PureComponent } from "react";
-
+import NumericTextField from "./numeric-text-field";
 export default class ScoreBox extends PureComponent {
   constructor(props) {
     super(props);
-    this.updateText = this.updateText.bind(this);
-  }
-
-  validateValue(v) {
-    return parseInt(v, 10) || 0;
-  }
-
-  updateText(e) {
-    const value = e.target.value;
-    this.props.onChange(this.validateValue(value));
   }
 
   render() {
+    const {score} = this.props;
     return (
       <div className="score">
-        Score
-        <input
+        Score:
+        <NumericTextField
+          className="score-input"
+          value={score}
+          min={0}
+          default={0}
+          onChange={this.props.onChange}
           disabled={this.props.disabled}
-          onChange={this.updateText}
-          value={this.props.score}
         />
       </div>
     );

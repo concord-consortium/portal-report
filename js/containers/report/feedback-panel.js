@@ -55,8 +55,7 @@ class FeedbackPanel extends PureComponent {
   }
 
   answerIsMarkedComplete(answer) {
-    const feedbackId = answer.get("feedbacks") && answer.get("feedbacks").last();
-    const feedback = this.props.feedbacks.get(feedbackId);
+    const feedback = answer.get("feedback");
     return feedback && feedback.get("hasBeenReviewed");
   }
 
@@ -109,7 +108,7 @@ class FeedbackPanel extends PureComponent {
     const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a));
 
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers;
-    const scores = this.props.feedbacks
+    const scores = answers.map( (a) => a.get("feedback"))
       .map(f => f.get("score"))
       .filter(f => f != null)
       .toArray();
@@ -201,7 +200,7 @@ class FeedbackPanel extends PureComponent {
                         scoreEnabled={scoreEnabled}
                         feedbackEnabled={feedbackEnabled}
                         maxScore={maxScore}
-                        feedbacks={this.props.feedbacks}
+                        feedback={answer.get("feedback")}
                         updateFeedback={this.props.updateFeedback}
                         showOnlyNeedsRiew={this.state.showOnlyNeedReview}
                       />
@@ -222,7 +221,8 @@ class FeedbackPanel extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  return { feedbacks: state.get("feedbacks") };
+  // return { feedbacks: state.get("feedbacks") };
+  return {};
 }
 
 const mapDispatchToProps = (dispatch) => {

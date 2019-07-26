@@ -16,8 +16,7 @@ import {
   HIDE_COMPARE_VIEW,
   ENABLE_FEEDBACK,
   ENABLE_ACTIVITY_FEEDBACK,
-  RECEIVE_ANSWERS,
-  RECEIVE_FEEDBACKS
+  RECEIVE_ANSWERS
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
 import feedbackReducer from "./feedback-reducer";
@@ -28,8 +27,7 @@ import config from "../config";
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
-  preprocessAnswersJSON,
-  preprocessFeedbacks
+  preprocessAnswersJSON
 } from "../core/transform-json-response";
 
 import queryString from "query-string";
@@ -202,10 +200,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state;
     case RECEIVE_ANSWERS:
       return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
-      case RECEIVE_FEEDBACKS:
-        const feedbacks = preprocessFeedbacks(action.response)
-        console.log(feedbacks)
-        return state.set("feedbacks", Immutable.fromJS(feedbacks));
+
     case SET_NOW_SHOWING:
       return state.set("nowShowing", action.value);
 

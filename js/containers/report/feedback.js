@@ -21,8 +21,9 @@ class Feedback extends PureComponent {
     if (!this.props.answer) {
       return null;
     }
-    const feedbackKey = this.props.answer.get("feedbacks") && this.props.answer.get("feedbacks").last();
-    return this.props.feedbacks.get(feedbackKey);
+    return this.props.answer.get("feedback");
+    // const feedbackKey = this.props.answer.get("feedbacks") && this.props.answer.get("feedbacks").last();
+    // return this.props.feedbacks.get(feedbackKey);
   }
 
   renderScore(feedback) {

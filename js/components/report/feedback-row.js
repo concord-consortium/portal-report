@@ -43,7 +43,8 @@ export default class FeedbackRow extends PureComponent {
       <ScoreBox
         disabled={disableScore}
         onChange={(value) => this.changeFeedback(answerKey, {score: value})}
-        score={score} />
+        score={score}
+      />
     );
   }
 
@@ -60,16 +61,15 @@ export default class FeedbackRow extends PureComponent {
   }
 
   renderFeedbackSection(answer) {
-    const allFeedbacks = this.props.feedbacks;
-    const feedbackRecords = answer.get("feedbacks").map(feedbackKey => allFeedbacks.get(feedbackKey));
-    const feedbackRecord = feedbackRecords.last();
-    const answerKey = feedbackRecord ? feedbackRecord.get("answerKey") : null;
-    const feedback = feedbackRecord ? feedbackRecord.get("feedback") : "";
-    const score = parseInt(feedbackRecord.get("score"), 10) || 0;
+    const feedbackRecord = this.props.feedback;
+    const answerKey = feedbackRecord.get("answerKey");
+    const feedback = feedbackRecord.get("feedback");
+    const scoreString = feedbackRecord.get("score");
+    const complete = feedbackRecord.get("hasBeenReviewed");
+    const score = parseInt(scoreString, 10);
 
     const scoreEnabled = this.props.scoreEnabled;
     const feedbackEnabled = this.props.feedbackEnabled;
-    const complete = feedbackRecord ? feedbackRecord.get("hasBeenReviewed") : false;
     const disableFeedback = (!feedbackRecord) || complete;
 
     return (
@@ -90,7 +90,7 @@ export default class FeedbackRow extends PureComponent {
 
   render() {
     const answer = this.props.answer;
-    const answered = answer.get("answered") || false;
+    const answered = answer.get("answer");
     const name = answer.get("student").get("realName");
 
     return (

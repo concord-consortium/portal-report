@@ -169,7 +169,7 @@ class ActivityFeedbackPanel extends PureComponent {
             <div className="feedback-rows-wrapper">
               { showGettingStarted ? this.renderGettingStarted() : ""}
               <div className="feedback-for-students">
-                <TransitionGroup classNames="answer">
+                <TransitionGroup>
                   { filteredFeedbacks.map((studentActivityFeedback, i) => {
                     const studentId = studentActivityFeedback.get("studentId");
                     return (
@@ -216,7 +216,7 @@ function makeMapStateToProps() {
     const getFeedbacks = makeGetStudentFeedbacks();
     const getRubric = makeGetRubric();
     const getMaxSCore = makeGetComputedMaxScore();
-    const getAutoscores = makeGetAutoScores();
+    // const getAutoscores = makeGetAutoScores();
     const rubric = getRubric(state, ownProps);
     const {
       feedbacks,
@@ -226,7 +226,8 @@ function makeMapStateToProps() {
     } = getFeedbacks(state, ownProps);
     const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - feedbacksNotAnswered.size;
     const computedMaxScore = getMaxSCore(state, ownProps);
-    const autoScores = getAutoscores(state, ownProps);
+    // const autoScores = getAutoscores(state, ownProps);
+    const autoScores = [];
     return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, feedbacksNotAnswered, computedMaxScore, autoScores };
   };
 }

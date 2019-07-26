@@ -4,7 +4,12 @@ import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
 import {Dispatch} from "redux";
 import { Map } from "immutable";
-import { IPortalRawData, IResponse, reportSettingsFireStorePath } from "../api";
+import {
+  IPortalRawData,
+  IResponse,
+  reportSettingsFireStorePath,
+  reportFeedbacksFireStorePath
+} from "../api";
 import {
   API_UPDATE_REPORT_FEEDBACK,
   API_UPDATE_REPORT_SETTINGS,
@@ -57,6 +62,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       response: rawPortalData
     });
     let resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
+    const platformId = rawPortalData.platformId.toLowerCase();
     const resourceLinkId = rawPortalData.offering.id.toString();
     if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
       // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
@@ -111,62 +117,75 @@ function receivePortalData(rawPortalData: IPortalRawData) {
             response: snapshot.docs.map(doc => doc.data())
           });
         }
-      }, (err: Error) => {
-        // tslint:disable-next-line no-console
-        console.error("Firestore answers fetch error", err);
-        dispatch(fetchError({
-          status: 500,
-          statusText: `Firestore answers fetch error: ${err.message}`
-        }));
-      });
+      }, fireStoreError(RECEIVE_ANSWERS, dispatch));
     }
-    // Create Firestore document oberserver for settings:
-    const fireStorePath = reportSettingsFireStorePath(
-      { resourceLinkId,
-        contextId: rawPortalData.contextId,
-        platformId: rawPortalData.platformId,
-        platformUserId: rawPortalData.platformUserId
-      }
-    );
-    db.doc(fireStorePath)
-      .onSnapshot(
-        (snapshot)   => {
-          dispatch({
-            type: RECEIVE_USER_SETTINGS,
-            response: snapshot.data()
-          });
-        },
-        (err: Error) => {
-          // tslint:disable-next-line no-console
-          console.error(err);
-        }
-      );
-    // TODO: Fix hardcoding of souurce and Setup another Firebase observer, this time for feedbacks.
-    let feedbacksQuery = db.collection(`sources/${source}/feedbacks_resource_links/${resourceLinkId}`)
-      // This first where clause seems redundant, but it's necessary for Firestore auth rules to work fine
-      // (they are based on context_id value).
-      .where("context_id", "==", rawPortalData.contextId)
-      .where("platform_id", "==", rawPortalData.platformId)
-      .where("resource_link_id", "==", rawPortalData.offering.id.toString());
-    if (rawPortalData.userType === "learner") {
-      feedbacksQuery = feedbacksQuery.where("platform_user_id", "==", rawPortalData.platformUserId.toString());
-    }
-    feedbacksQuery.onSnapshot(snapshot => {
-      if (!snapshot.empty) {
-        dispatch({
-          type: RECEIVE_FEEDBACKS,
-          response: snapshot.docs.map(doc => doc.data())
-        });
-      }
-    }, (err: Error) => {
-      // tslint:disable-next-line no-console
-      console.error("Firestore answers fetch error", err);
-      dispatch(fetchError({
-        status: 500,
-        statusText: `Firestore answers fetch error: ${err.message}`
-      }));
-    });
+
+    // Always watch for settings and feedback updates:
+    watchFireStoreReportSettings(rawPortalData, dispatch);
+    watchFireStoreFeedback(rawPortalData, dispatch);
   };
+}
+function getResourceLink(rawPortalData: IPortalRawData) {
+  return rawPortalData.offering.id.toString();
+}
+
+function fireStoreError(dispatchType: string, dispatch: Dispatch) {
+  return (err: Error) => {
+    // tslint:disable-next-line no-console
+    console.error(err);
+    dispatch(fetchError({
+      status: 500,
+      statusText: `Firestore ${dispatchType} fetch error: ${err.message}`
+    }));
+  };
+}
+
+function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
+   // Create Firestore document oberserver for settings:
+   const resourceLinkId = getResourceLink(rawPortalData);
+   const settingsFileStorePath = reportSettingsFireStorePath(
+    { resourceLinkId,
+      contextId: rawPortalData.contextId,
+      platformId: rawPortalData.platformId,
+      platformUserId: rawPortalData.platformUserId
+    }
+  );
+   db.doc(settingsFileStorePath)
+     .onSnapshot(
+      (snapshot: any) => {
+        dispatch({
+          type: RECEIVE_USER_SETTINGS,
+          response: snapshot.data()
+        });
+      },
+      fireStoreError(RECEIVE_USER_SETTINGS, dispatch)
+     );
+}
+
+function watchFireStoreFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  const resourceLinkId = getResourceLink(rawPortalData);
+  const feedbackFireStorePath = reportFeedbacksFireStorePath(
+    { resourceLinkId,
+      contextId: rawPortalData.contextId,
+      platformId: rawPortalData.platformId,
+      platformUserId: rawPortalData.platformUserId
+    });
+
+  let feedbacksQuery;
+  if (rawPortalData.userType === "learner") {
+    feedbacksQuery = db.collection(feedbackFireStorePath).where("platformLearnerId", "==", rawPortalData.platformUserId.toString());
+  } else {
+    feedbacksQuery = db.collection(feedbackFireStorePath);
+  }
+  feedbacksQuery.onSnapshot(snapshot => {
+    if (!snapshot.empty) {
+      dispatch({
+        type: RECEIVE_FEEDBACKS,
+        response: snapshot.docs.map(doc => doc.data())
+      });
+    }},
+    fireStoreError(RECEIVE_FEEDBACKS, dispatch)
+  );
 }
 
 function fetchError(response: IResponse) {
@@ -182,7 +201,10 @@ function mappedCopy(src: any, fieldMappings: any) {
   for (const key in src) {
     if (src.hasOwnProperty(key)) {
       dstKey = fieldMappings[key] || key;
-      dst[dstKey] = src[key];
+      // remove undefined values;
+      if (src[key] !== undefined) {
+        dst[dstKey] = src[key];
+      }
     }
   }
   return dst;
@@ -283,12 +305,12 @@ export function showFeedbackView(embeddableKey: string) {
 }
 
 export function updateFeedback(answerKey: string, feedback: any) {
-  const feedbackData = mappedCopy(feedback, {hasBeenReviewed: "has_been_reviewed"});
-  feedbackData.answer_key = answerKey;
+  const feedbackData = mappedCopy(feedback, {});
+  feedbackData.answerKey = answerKey;
   return {
     type: UPDATE_FEEDBACK,
     answerKey,
-    feedback,
+    feedbackData,
     callAPI: {
       type: API_UPDATE_REPORT_FEEDBACK,
       errorAction: fetchError,
