@@ -13,7 +13,6 @@ const getPages = state => state.getIn(["report", "pages"]);
 const getSections = state => state.getIn(["report", "sections"]);
 const getQuestions = state => state.getIn(["report", "questions"]);
 const getAnswers = state => state.getIn(["report", "answers"]);
-const getFeedbacks = state => state.get("feedbacks");
 const getStudents = state => state.getIn(["report", "students"]);
 const getHideSectionNames = state => state.getIn(["report", "hideSectionNames"]);
 const getShowFeaturedQuestionsOnly = state => state.getIn(["report", "showFeaturedQuestionsOnly"]);
@@ -43,21 +42,10 @@ const isQuestionVisible = (question, viewType, featuredOnly) => {
   return true;
 };
 
-const generateFeedback = ({answer}) => {
-  return fromJS({
-    answerKey: answer.get("id"),
-    feedback: "✖ No Feedback Yet",
-    score: "0",
-    hasBeenReviewed: false,
-    classHash: answer.get("classHash"),
-    platformUserId: answer.get("platformUserId")
-  });
-};
-
 // Selectors
 export const getAnswerTrees = createSelector(
-  [ getAnswers, getStudents, getQuestions, getFeedbacks ],
-  (answers, students, questions, feedbacks) => {
+  [ getAnswers, getStudents, getQuestions],
+  (answers, students, questions) => {
 
   return answers
       // Filter out answers that are not matching any students in the class. Class could have been updated.
@@ -75,10 +63,7 @@ export const getAnswerTrees = createSelector(
             .set("selectedChoices", selectedChoices)
             .set("correct", selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size);
         }
-        const feedback = feedbacks.get(answer.get("id")) || generateFeedback({answer});
-
         return answer
-          .set("feedback", feedback)
           .set("student", students.get(answer.get("platformUserId")));
       });
     }

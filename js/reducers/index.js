@@ -88,7 +88,6 @@ function setUserSettings(state, response) {
     state = setAnonymous(state, anonymous_report);
     return state;
   });
-  return state;
 }
 
 // This action has to be explicit, otherwise, a question will disappear

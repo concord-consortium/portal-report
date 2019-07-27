@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react"; // eslint-disable-line
 import ReactDom from "react-dom";
-
+import { fromJS } from "immutable";
 import Button from "../../components/common/button";
 import FeedbackFilter from "../../components/report/feedback-filter";
 import FeedbackOverview from "../../components/report/feedback-overview";
@@ -55,7 +55,7 @@ class FeedbackPanel extends PureComponent {
   }
 
   answerIsMarkedComplete(answer) {
-    const feedback = answer.get("feedback");
+    const feedback = this.getFeedback(answer);
     return feedback && feedback.get("hasBeenReviewed");
   }
 
@@ -108,7 +108,7 @@ class FeedbackPanel extends PureComponent {
     const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a));
 
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers;
-    const scores = answers.map( (a) => a.get("feedback"))
+    const scores = answers.map( (a) => this.getFeedback(a))
       .map(f => f.get("score"))
       .filter(f => f != null)
       .toArray();
@@ -200,7 +200,7 @@ class FeedbackPanel extends PureComponent {
                         scoreEnabled={scoreEnabled}
                         feedbackEnabled={feedbackEnabled}
                         maxScore={maxScore}
-                        feedback={answer.get("feedback")}
+                        feedback={this.getFeedback(answer)}
                         updateFeedback={this.props.updateFeedback}
                         showOnlyNeedsRiew={this.state.showOnlyNeedReview}
                       />
@@ -218,11 +218,22 @@ class FeedbackPanel extends PureComponent {
 
     );
   }
+
+  getFeedback(answer) {
+    const newFeedback = fromJS({
+      answerKey: answer.get("id"),
+      feedback: "✖ No Feedback Yet",
+      score: "0",
+      hasBeenReviewed: false,
+      classHash: answer.get("classHash"),
+      platformUserId: answer.get("platformUserId")
+    });
+    return this.props.feedbacks.get(answer.get("id")) || newFeedback;
+  }
 }
 
 function mapStateToProps(state) {
-  // return { feedbacks: state.get("feedbacks") };
-  return {};
+  return { feedbacks: state.get("feedbacks") };
 }
 
 const mapDispatchToProps = (dispatch) => {

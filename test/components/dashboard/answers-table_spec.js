@@ -18,8 +18,8 @@ describe("<AnswersTable />", () => {
   const state = fromJS({
     report: {
       anonymous: false,
-      feedbacks: {}
-    }
+    },
+    feedbacks: fromJS({})
   });
   const params = { answers, hidden, showCompare, question, students };
 
