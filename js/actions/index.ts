@@ -8,7 +8,7 @@ import {
   IPortalRawData,
   IResponse,
   reportSettingsFireStorePath,
-  reportFeedbacksFireStorePath
+  reportQuestionFeedbacksFireStorePath
 } from "../api";
 import {
   API_UPDATE_REPORT_FEEDBACK,
@@ -62,8 +62,6 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       response: rawPortalData
     });
     let resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
-    const platformId = rawPortalData.platformId.toLowerCase();
-    const resourceLinkId = rawPortalData.offering.id.toString();
     if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
       // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
       // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
@@ -122,7 +120,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
 
     // Always watch for settings and feedback updates:
     watchFireStoreReportSettings(rawPortalData, dispatch);
-    watchFireStoreFeedback(rawPortalData, dispatch);
+    watchFirestoreQuestionFeedback(rawPortalData, dispatch);
   };
 }
 function getResourceLink(rawPortalData: IPortalRawData) {
@@ -162,18 +160,18 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
      );
 }
 
-function watchFireStoreFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
+function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
   const resourceLinkId = getResourceLink(rawPortalData);
-  const feedbackFireStorePath = reportFeedbacksFireStorePath(
-    { resourceLinkId,
-      contextId: rawPortalData.contextId,
-      platformId: rawPortalData.platformId,
-      platformUserId: rawPortalData.platformUserId
-    });
+  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath({
+    resourceLinkId,
+    contextId: rawPortalData.contextId,
+    platformId: rawPortalData.platformId,
+    platformUserId: rawPortalData.platformUserId
+  });
 
   let feedbacksQuery;
   if (rawPortalData.userType === "learner") {
-    feedbacksQuery = db.collection(feedbackFireStorePath).where("platformLearnerId", "==", rawPortalData.platformUserId.toString());
+    feedbacksQuery = db.collection(feedbackFireStorePath).where("platform_learner_id", "==", rawPortalData.platformUserId.toString());
   } else {
     feedbacksQuery = db.collection(feedbackFireStorePath);
   }

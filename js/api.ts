@@ -195,25 +195,26 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
       .set(update, {merge: true});
 }
 
-export function reportFeedbacksFireStorePath(LTIData: ILTIPartial, answerKey?: string) {
-  const {platformId, platformUserId, resourceLinkId} = LTIData;
+export function reportQuestionFeedbacksFireStorePath(LTIData: ILTIPartial, answerKey?: string) {
+  const { platformId, contextId, resourceLinkId } = LTIData;
   const sourceId = platformId.replace(/https?:\/\//, "");
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.portal/resource_links/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
   if (answerKey) {
-    return `/sources/${sourceId}/resource_links/${resourceLinkId}/feedbacks/${answerKey}`;
+    return `/sources/${sourceId}/context_id/${contextId}/resource_links/${resourceLinkId}/question_feedbacks/${answerKey}`;
   }
-  return `/sources/${sourceId}/resource_links/${resourceLinkId}/feedbacks`;
+  return `/sources/${sourceId}/context_id/${contextId}/resource_links/${resourceLinkId}/question_feedbacks`;
 }
 
 function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial) {
-  const {platformUserId, resourceLinkId, answers } = reportState;
+  const {platformUserId, resourceLinkId, contextId, answers } = reportState;
   const questionId = answers[feedback.answerKey].questionId;
-  feedback.resourceLinkId = resourceLinkId;
-  feedback.questionId = questionId;
-  feedback.platformUserId = platformUserId;
+  feedback.resource_link_id = resourceLinkId;
+  feedback.context_id = contextId;
+  feedback.question_id = questionId;
+  feedback.platform_user_id = platformUserId;
   return feedback;
 }
 
@@ -223,7 +224,7 @@ function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial) {
 // See: https://firebase.google.com/docs/firestore/query-data/listen
 export function updateFeedbacks(data: any, state: IStateReportPartial) {
   const { answerKey, feedback } = data;
-  const path = reportFeedbacksFireStorePath(state, answerKey);
+  const path = reportQuestionFeedbacksFireStorePath(state, answerKey);
   return firebase.firestore()
       .doc(path)
       .set(addFeedbackMetaData(feedback, state), {merge: true});

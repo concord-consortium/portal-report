@@ -130,7 +130,7 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
 }
 
 export function preprocessFeedbacks(feedbacksJSON: any) {
-  return feedbacksJSON;
+  return camelizeKeys(feedbacksJSON);
 }
 
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {

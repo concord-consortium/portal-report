@@ -185,7 +185,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
         .set("platformUserId", data.platformUserId)
         .set("contextId", data.contextId)
-        .set("resourceLinkId", data.offering.id)
+        .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
