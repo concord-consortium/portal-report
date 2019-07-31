@@ -55,7 +55,7 @@ export interface IAnswerDataHash {
   [key: string]: IAnswerData;
 }
 
-function camelizeKeys(json: any) {
+export function camelizeKeys(json: any) {
   return humps.camelizeKeys(json, (key, convert) =>
     // Don't convert keys that are only uppercase letters and numbers.
     // This is useful for rubric keys for example "C2" and "R1".
@@ -127,10 +127,6 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
     result[answer.id] = answer;
   });
   return result;
-}
-
-export function preprocessFeedbacks(feedbacksJSON: any) {
-  return camelizeKeys(feedbacksJSON);
 }
 
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {

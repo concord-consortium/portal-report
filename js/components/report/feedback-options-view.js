@@ -156,7 +156,7 @@ export default class FeedbackOptionsView extends PureComponent {
           <input
             id="feedbackEnabled"
             type="checkbox"
-            checked={showText}
+            checked={showText || false}
             onChange={enableText}
           />
           <label htmlFor="feedbackEnabled">{writtenFeedbackLabel}</label>
@@ -165,7 +165,7 @@ export default class FeedbackOptionsView extends PureComponent {
             id="giveScore"
             name="giveScore"
             type="checkbox"
-            checked={scoreEnabled}
+            checked={scoreEnabled || false}
             onChange={toggleScoreEnabled}
           />
           <label htmlFor="giveScore">{giveScoreLabel}</label>

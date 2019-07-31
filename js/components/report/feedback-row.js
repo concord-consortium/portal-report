@@ -53,8 +53,8 @@ export default class FeedbackRow extends PureComponent {
       <div className="feedback-complete">
         <span> Feedback Complete </span>
         <input
-          checked={complete}
           type="checkbox"
+          checked={complete}
           onChange={(e) => this.completeChange(e, answerId)} />
       </div>
     );
@@ -65,7 +65,7 @@ export default class FeedbackRow extends PureComponent {
     const answerId = feedbackRecord.get("answerId");
     const feedback = feedbackRecord.get("feedback");
     const scoreString = feedbackRecord.get("score");
-    const complete = feedbackRecord.get("hasBeenReviewed");
+    const complete = feedbackRecord.get("hasBeenReviewed") || false;
     const score = parseInt(scoreString, 10);
 
     const scoreEnabled = this.props.scoreEnabled;

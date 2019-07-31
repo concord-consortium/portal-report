@@ -16,7 +16,7 @@ import {
   RECEIVE_ANSWERS
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
-import questionFeedbackReducer from "./question-feedback-reducer";
+import feedbackReducer from "./feedback-reducer";
 import { rubricReducer } from "./rubric-reducer";
 import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
@@ -113,7 +113,7 @@ function showUnselectedQuestions(state) {
   });
 }
 
-function enableFeedback(state, action) {
+function updateQuestionFeedbackSettings(state, action) {
   const {embeddableKey, feedbackFlags} = action;
   return state.mergeIn(["questions", embeddableKey], feedbackFlags);
 }
@@ -236,7 +236,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
     case HIDE_COMPARE_VIEW:
       return state.set("compareViewAnswers", null);
     case ENABLE_FEEDBACK:
-      return enableFeedback(state, action);
+      return updateQuestionFeedbackSettings(state, action);
     case ENABLE_ACTIVITY_FEEDBACK:
       return enableActivityFeedback(state, action);
     default:
@@ -249,7 +249,7 @@ export default function reducer(state = Map(), action) {
     view: view(state.get("view"), action),
     data: data(state.get("data"), action),
     report: report(state.get("report"), action),
-    questionFeedbacks: questionFeedbackReducer(state.get("questionFeedbacks"), action),
+    feedback: feedbackReducer(state.get("feedback"), action),
     activityFeedbacks: activityFeedbackReducer(state.get("activityFeedbacks"), action),
     rubrics: rubricReducer(state.get("rubrics"), action),
     dashboard: dashboardReducer(state.get("dashboard"), action),

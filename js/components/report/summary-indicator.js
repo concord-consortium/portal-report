@@ -9,7 +9,7 @@ export default class SummaryIndicator extends PureComponent {
 
   renderAvgScore(label) {
     const {scores, maxScore} = this.props;
-    const avgScore = scores.reduce((p, c) => p + c, 0) / scores.length;
+    const avgScore = scores.reduce((p, c) => p + Number(c), 0) / scores.length;
     const roundedAvg = Math.round(avgScore * 10) / 10;
     return avgScore
       ? <span className="value"> {roundedAvg} / {maxScore}</span>

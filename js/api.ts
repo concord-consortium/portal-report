@@ -15,7 +15,7 @@ export interface ILTIPartial {
   platformId: string;      // portal
   platformUserId: string;
   contextId: string;       // class hash
-  resourceLinkId?: string;  // offering ID
+  resourceLinkId: string;  // offering ID
 }
 
 export interface IStateAnswer {
@@ -91,6 +91,21 @@ const getPortalFirebaseJWTUrl = (classHash: string) => {
 };
 
 const getAuthHeader = () => `Bearer ${urlParam("token")}`;
+
+// Returns path that only includes allowed Firestore characters.
+// Firestore docs say:
+// Must be valid UTF-8 characters
+// Must be no longer than 1,500 bytes
+// Cannot contain a forward slash (/)
+// Cannot solely consist of a single period (.) or double periods (..)
+// Cannot match the regular expression __.*__
+const validFsId = (anyPath: string) => {
+  const safeCharacter = "%";
+  return anyPath
+    .replace(/\//g, safeCharacter)
+    .replace(/\.\./g, safeCharacter)
+    .replace(/__/g, safeCharacter);
+};
 
 export function fetchOfferingData() {
   const offeringUrl = urlParam("offering");
@@ -189,7 +204,7 @@ export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
   // `/sources/fake.portal/user_settings/1/offering/class123` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, sans JWT.
-  return `/sources/${sourceId}/user_settings/${platformUserId}/resource_link/${resourceLinkId}`;
+  return `/sources/${sourceId}/user_settings/${validFsId(platformUserId)}/resource_link/${validFsId(resourceLinkId)}`;
 }
 
 // The updateReportSettings API middleware calls out to the FireStore API.
@@ -201,6 +216,37 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
   return firebase.firestore()
       .doc(path)
       .set(update, {merge: true});
+}
+
+export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?: { platformId?: string, resourceLinkId?: string }) {
+  const path = `/sources/${sourceId}/feedback_settings`;
+  if (instanceParams) {
+    return path + `/${validFsId(instanceParams.platformId + "-" + instanceParams.resourceLinkId)}`;
+  }
+  return path;
+}
+
+// The updateQuestionFeedbackSettings API middleware calls out to the FireStore API.
+// `firestore().path().set()` returns a Promise that will resolve immediately.
+// This due to a feature in the FireStore API called "latency compensation."
+// See: https://firebase.google.com/docs/firestore/query-data/listen
+export function updateFeedbackSettings(data: {questionId?: string, activityId?: string, settings: any}, state: IStateReportPartial) {
+  const { questionId, activityId, settings } = data;
+  let finalData: any;
+  // Depending what's provided as an argument, we'll either update question settings or activity setting.
+  if (questionId !== undefined) {
+    finalData = { questionSettings: { [questionId]: settings } };
+  } else if (activityId) {
+    finalData = { activitySettings: { [activityId]: settings } };
+  }
+  finalData.platformId = state.platformId;
+  finalData.resourceLinkId = state.resourceLinkId;
+  // contextId is used by security rules.
+  finalData.contextId = state.contextId;
+  const path = feedbackSettingsFirestorePath(state.sourceId, {platformId: state.platformId, resourceLinkId: state.resourceLinkId});
+  return firebase.firestore()
+    .doc(path)
+    .set(finalData, {merge: true});
 }
 
 export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?: string) {
@@ -215,26 +261,24 @@ export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?
   return path;
 }
 
-function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial, answerId: string) {
-  const {platformUserId, resourceLinkId, contextId, answers } = reportState;
-  feedback.resourceLinkId = resourceLinkId;
-  feedback.contextId = contextId;
-  feedback.platformUserId = platformUserId;
-  feedback.questionId = answers[answerId].questionId;
-  feedback.answerId = answerId;
-  return feedback;
-}
-
 // The updateReportSettings API middleware calls out to the FireStore API.
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateQuestionFeedbacks(data: any, state: IStateReportPartial) {
+export function updateQuestionFeedbacks(data: any, reportState: IStateReportPartial) {
   const { answerId, feedback } = data;
-  const path = reportQuestionFeedbacksFireStorePath(state.sourceId, answerId);
+  const { platformId, platformUserId, resourceLinkId, contextId, answers } = reportState;
+  feedback.platformId = platformId;
+  feedback.platformUserId = platformUserId;
+  feedback.resourceLinkId = resourceLinkId;
+  feedback.questionId = answers[answerId].questionId;
+  feedback.answerId = answerId;
+  // contextId is used by security rules.
+  feedback.contextId = contextId;
+  const path = reportQuestionFeedbacksFireStorePath(reportState.sourceId, answerId);
   return firebase.firestore()
       .doc(path)
-      .set(humps.decamelizeKeys(addFeedbackMetaData(feedback, state, answerId)), {merge: true});
+      .set(feedback, {merge: true});
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.

@@ -58,7 +58,7 @@ class Feedback extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  return { questionFeedbacks: state.get("questionFeedbacks") };
+  return { questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]) };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
