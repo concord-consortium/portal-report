@@ -169,7 +169,7 @@ function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch:
   } else {
     feedbacksQuery = db.collection(feedbackFireStorePath)
       // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
-      // but that lets use use context_id value in the Firestore security rules.
+      // but that lets us use context_id value in the Firestore security rules.
       .where("context_id", "==", rawPortalData.contextId)
       .where("resource_link_id", "==", rawPortalData.resourceLinkId);
   }
