@@ -20,16 +20,16 @@ export default store => next => action => {
         if (error instanceof APIError && errorAction) {
           return next(errorAction(error.response));
         }
-        // if (error instanceof TypeError && errorAction) {
-        //   // This happens when there is a network error while fetching
-        //   // Use a fake error code 599 so the errorAction code can render something informative
-        //   const response = {
-        //     url: type,
-        //     status: 599,
-        //     statusText: error.message,
-        //   };
-        //   return next(errorAction(response));
-        // }
+        if (error instanceof TypeError && errorAction) {
+          // This happens when there is a network error while fetching
+          // Use a fake error code 599 so the errorAction code can render something informative
+          const response = {
+            url: type,
+            status: 599,
+            statusText: error.message,
+          };
+          return next(errorAction(response));
+        }
         // Remember to throw original error, as otherwise we would swallow every kind of error.
         throw error;
       });

@@ -1,6 +1,5 @@
 import Immutable, { Map } from "immutable";
 import {
-  UPDATE_QUESTION_FEEDBACK,
   RECEIVE_QUESTION_FEEDBACKS
 } from "../actions";
 import { preprocessFeedbacks } from "../core/transform-json-response";
@@ -15,9 +14,6 @@ export default function questionFeedbackReducer(state = INITIAL_FEEDBACK_STATE, 
         return map;
       }, {});
       return Immutable.fromJS(feedbacks);
-    case UPDATE_QUESTION_FEEDBACK:
-      // Just trigger the API middleware side-effect.
-      return state;
     default:
       return state;
   }

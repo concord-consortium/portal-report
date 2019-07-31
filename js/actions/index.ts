@@ -32,11 +32,11 @@ export const SET_ANSWER_SELECTED_FOR_COMPARE = "SET_ANSWER_SELECTED_FOR_COMPARE"
 export const SHOW_COMPARE_VIEW = "SHOW_COMPARE_VIEW";
 export const HIDE_COMPARE_VIEW = "HIDE_COMPARE_VIEW";
 export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
-export const UPDATE_QUESTION_FEEDBACK = "UPDATE_QUESTION_FEEDBACK";
 export const ENABLE_FEEDBACK = "ENABLE_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
+export const API_CALL = "API_CALL";
 
 type StateMap = Map<string, any>;
 
@@ -68,7 +68,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
       resourceUrl = resourceUrl.replace("http", "https");
     }
-    const source = parseUrl(resourceUrl).hostname;
+    const source = rawPortalData.sourceId;
     if (source === "fake.authoring.system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
@@ -161,19 +161,17 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
 }
 
 function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const resourceLinkId = getResourceLink(rawPortalData);
-  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath({
-    resourceLinkId,
-    contextId: rawPortalData.contextId,
-    platformId: rawPortalData.platformId,
-    platformUserId: rawPortalData.platformUserId
-  });
-
+  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceId);
   let feedbacksQuery;
   if (rawPortalData.userType === "learner") {
-    feedbacksQuery = db.collection(feedbackFireStorePath).where("platform_learner_id", "==", rawPortalData.platformUserId.toString());
+    feedbacksQuery = db.collection(feedbackFireStorePath)
+      .where("platform_learner_id", "==", rawPortalData.platformUserId.toString());
   } else {
-    feedbacksQuery = db.collection(feedbackFireStorePath);
+    feedbacksQuery = db.collection(feedbackFireStorePath)
+      // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
+      // but that lets use use context_id value in the Firestore security rules.
+      .where("context_id", "==", rawPortalData.contextId)
+      .where("resource_link_id", "==", rawPortalData.resourceLinkId);
   }
   feedbacksQuery.onSnapshot(snapshot => {
     if (!snapshot.empty) {
@@ -305,9 +303,7 @@ export function showFeedbackView(embeddableKey: string) {
 export function updateQuestionFeedback(answerKey: string, feedback: any) {
   const feedbackData = mappedCopy(feedback, {});
   return {
-    type: UPDATE_QUESTION_FEEDBACK,
-    answerKey,
-    feedbackData,
+    type: API_CALL,
     callAPI: {
       type: API_UPDATE_QUESTION_FEEDBACK,
       errorAction: fetchError,
@@ -315,8 +311,7 @@ export function updateQuestionFeedback(answerKey: string, feedback: any) {
         feedback: feedbackData,
         answerKey
       },
-    },
-
+    }
   };
 }
 

@@ -75,8 +75,6 @@ function setAnonymous(state, anonymous) {
 function setUserSettings(state, response) {
   const {visibility_filter, anonymous_report} = response;
   const selectedQuestions = visibility_filter.questions || [];
-  const filterActive = visibility_filter.active || false;
-  const someSelected = selectedQuestions.length > 0;
   return state.withMutations(state => {
     state.get("questions").forEach((value, key) => {
       const selected = selectedQuestions.indexOf(key) > -1;
@@ -183,7 +181,8 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("platformUserId", data.platformUserId)
         .set("contextId", data.contextId)
         .set("resourceLinkId", data.offering.id.toString())
-        .set("platformId", data.platformId);
+        .set("platformId", data.platformId)
+        .set("sourceId", data.sourceId);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);
