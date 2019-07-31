@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react"; // eslint-disable-line
 import ReactDom from "react-dom";
-import { fromJS } from "immutable";
+import { fromJS, Map } from "immutable";
 import Button from "../../components/common/button";
 import FeedbackFilter from "../../components/report/feedback-filter";
 import FeedbackOverview from "../../components/report/feedback-overview";
@@ -119,9 +119,9 @@ class QuestionFeedbackPanel extends PureComponent {
     let numFeedbackGiven = numAnswers - numNeedsFeedback;
 
     const questionSettings = this.getFeedbackSettings(question);
-    const scoreEnabled = questionSettings.get("scoreEnabled");
-    const feedbackEnabled = questionSettings.get("feedbackEnabled");
-    const maxScore = questionSettings.get("maxScore");
+    const scoreEnabled = questionSettings.get("scoreEnabled") || false;
+    const feedbackEnabled = questionSettings.get("feedbackEnabled") || false;
+    const maxScore = questionSettings.get("maxScore") || MAX_SCORE_DEFAULT;
 
     const showGettingStarted = !scoreEnabled && !feedbackEnabled;
     const studentsPulldown = filteredAnswers.map((a) => {
@@ -222,12 +222,7 @@ class QuestionFeedbackPanel extends PureComponent {
   }
 
   getFeedbackSettings(question) {
-    const defaultSettings = fromJS({
-      feedbackEnabled: false,
-      scoreEnabled: false,
-      maxScore: MAX_SCORE_DEFAULT
-    });
-    return this.props.settings.getIn(["questionSettings", question.get("id")]) || defaultSettings;
+    return this.props.settings.getIn(["questionSettings", question.get("id")]) || Map({});
   }
 
   getFeedback(answer) {

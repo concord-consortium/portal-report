@@ -1,4 +1,4 @@
-import { enableActivityFeedback } from "./index";
+import { updateActivityFeedbackSettings } from "./index";
 import { API_FETCH_RUBRIC } from "../api-middleware";
 
 export const LOAD_RUBRIC = "LOAD_RUBRIC";
@@ -41,7 +41,7 @@ const receiveRubric = (data) => {
       };
       // Event will trigger API call that will update the rubric in the portal.
       // Doesn't require that we invalidate student answers though.
-      dispatch(enableActivityFeedback(activityId, feedbackFlags, false));
+      dispatch(updateActivityFeedbackSettings(activityId, feedbackFlags, false));
     });
   };
 };

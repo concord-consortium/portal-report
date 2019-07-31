@@ -11,8 +11,6 @@ import {
   SET_ANSWER_SELECTED_FOR_COMPARE,
   SHOW_COMPARE_VIEW,
   HIDE_COMPARE_VIEW,
-  ENABLE_FEEDBACK,
-  ENABLE_ACTIVITY_FEEDBACK,
   RECEIVE_ANSWERS
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
@@ -113,12 +111,7 @@ function showUnselectedQuestions(state) {
   });
 }
 
-function updateQuestionFeedbackSettings(state, action) {
-  const {embeddableKey, feedbackFlags} = action;
-  return state.mergeIn(["questions", embeddableKey], feedbackFlags);
-}
-
-function enableActivityFeedback(state, action) {
+function updateActivityFeedbackSettings(state, action) {
   const {activityId, feedbackFlags} = action;
   const statePath = ["activities", activityId.toString()];
   // We have to unset 'RUBRIC_SCORE' scoretypes when
@@ -235,10 +228,6 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state.set("compareViewAnswers", Set(selectedAnswerIds));
     case HIDE_COMPARE_VIEW:
       return state.set("compareViewAnswers", null);
-    case ENABLE_FEEDBACK:
-      return updateQuestionFeedbackSettings(state, action);
-    case ENABLE_ACTIVITY_FEEDBACK:
-      return enableActivityFeedback(state, action);
     default:
       return state;
   }

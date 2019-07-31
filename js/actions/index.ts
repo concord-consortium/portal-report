@@ -33,9 +33,7 @@ export const SET_ANSWER_SELECTED_FOR_COMPARE = "SET_ANSWER_SELECTED_FOR_COMPARE"
 export const SHOW_COMPARE_VIEW = "SHOW_COMPARE_VIEW";
 export const HIDE_COMPARE_VIEW = "HIDE_COMPARE_VIEW";
 export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
-export const ENABLE_FEEDBACK = "ENABLE_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
-export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
 
@@ -370,25 +368,16 @@ export function updateActivityFeedback(activityFeedbackKey: string, feedback: an
   };
 }
 
-export function enableActivityFeedback(activityId: string, feedbackFlags: any, invalidatePreviousFeedback = true) {
-  const mappings = {
-    enableTextFeedback: "enable_text_feedback",
-    scoreType: "score_type",
-    maxScore: "max_score",
-    activityFeedbackId: "activity_feedback_id",
-    useRubric: "use_rubric",
-  };
-  const feedbackSettings = mappedCopy(feedbackFlags, mappings);
+export function updateActivityFeedbackSettings(activityId: string, feedbackFlags: any) {
+  const settings = mappedCopy(feedbackFlags, {});
   return {
-    type: ENABLE_ACTIVITY_FEEDBACK,
-    activityId,
-    invalidatePreviousFeedback,
-    feedbackFlags,
+    type: API_CALL,
     callAPI: {
-      type: API_UPDATE_REPORT_SETTINGS,
+      type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        actvity_feedback_opts: feedbackSettings,
+        activityId,
+        settings
       },
     },
   };
