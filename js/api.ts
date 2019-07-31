@@ -5,6 +5,7 @@ import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl } from "./util/misc";
+import humps from "humps";
 import * as db from "./db";
 
 const FIREBASE_APP = "report-service-dev";
@@ -21,7 +22,7 @@ export interface IStateAnswer {
   id: string;
 }
 export interface IStateReportPartial extends ILTIPartial {
-  answers: IStateAnswer[];
+  answers: {[key: string]: IStateAnswer};
 }
 
 export interface IPortalRawData extends ILTIPartial{
@@ -208,13 +209,13 @@ export function reportQuestionFeedbacksFireStorePath(LTIData: ILTIPartial, answe
   return `/sources/${sourceId}/context_id/${contextId}/resource_links/${resourceLinkId}/question_feedbacks`;
 }
 
-function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial) {
+function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial, answerKey: string) {
   const {platformUserId, resourceLinkId, contextId, answers } = reportState;
-  const questionId = answers[feedback.answerKey].questionId;
-  feedback.resource_link_id = resourceLinkId;
-  feedback.context_id = contextId;
-  feedback.question_id = questionId;
-  feedback.platform_user_id = platformUserId;
+  feedback.resourceLinkId = resourceLinkId;
+  feedback.contextId = contextId;
+  feedback.platformUserId = platformUserId;
+  feedback.questionId = answers[answerKey].questionId;
+  feedback.answerKey = answerKey;
   return feedback;
 }
 
@@ -222,12 +223,12 @@ function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial) {
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateFeedbacks(data: any, state: IStateReportPartial) {
+export function updateQuestionFeedbacks(data: any, state: IStateReportPartial) {
   const { answerKey, feedback } = data;
   const path = reportQuestionFeedbacksFireStorePath(state, answerKey);
   return firebase.firestore()
       .doc(path)
-      .set(addFeedbackMetaData(feedback, state), {merge: true});
+      .set(humps.decamelizeKeys(addFeedbackMetaData(feedback, state, answerKey)), {merge: true});
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.

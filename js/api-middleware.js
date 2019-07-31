@@ -1,7 +1,7 @@
 import {
   fetchPortalDataAndAuthFirestore,
   updateReportSettings,
-  updateFeedbacks,
+  updateQuestionFeedbacks,
   APIError,
   fetchRubric
 } from "./api";
@@ -37,7 +37,7 @@ export default store => next => action => {
   return next(action);
 };
 
-export const API_UPDATE_REPORT_FEEDBACK = "updateReportFeedback";
+export const API_UPDATE_QUESTION_FEEDBACK = "updateQuestionFeedback";
 export const API_UPDATE_REPORT_SETTINGS = "updateReportSettings";
 export const API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE = "fetchPortalDataAndAuthFirestore";
 export const API_FETCH_RUBRIC = "fetchRubric";
@@ -48,8 +48,8 @@ function callApi(type, data, state) {
       return fetchPortalDataAndAuthFirestore();
     case API_UPDATE_REPORT_SETTINGS:
       return updateReportSettings(data, state.get("report").toJS());
-    case API_UPDATE_REPORT_FEEDBACK:
-      return updateFeedbacks(data, state.get("report").toJS());
+    case API_UPDATE_QUESTION_FEEDBACK:
+      return updateQuestionFeedbacks(data, state.get("report").toJS());
     case API_FETCH_RUBRIC:
       return fetchRubric(data);
   }

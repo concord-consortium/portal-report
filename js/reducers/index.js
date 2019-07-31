@@ -1,13 +1,10 @@
 import Immutable, { Map, Set} from "immutable";
-import {updateReportSettings} from "../api";
 import {
   REQUEST_PORTAL_DATA,
   RECEIVE_RESOURCE_STRUCTURE,
   RECEIVE_USER_SETTINGS,
   FETCH_ERROR,
   SET_NOW_SHOWING,
-  SET_ANONYMOUS,
-  SET_QUESTION_SELECTED,
   HIDE_UNSELECTED_QUESTIONS,
   SHOW_UNSELECTED_QUESTIONS,
   RECEIVE_PORTAL_DATA,
@@ -19,7 +16,7 @@ import {
   RECEIVE_ANSWERS
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
-import feedbackReducer from "./feedback-reducer";
+import questionFeedbackReducer from "./question-feedback-reducer";
 import { rubricReducer } from "./rubric-reducer";
 import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
@@ -253,9 +250,9 @@ export default function reducer(state = Map(), action) {
     view: view(state.get("view"), action),
     data: data(state.get("data"), action),
     report: report(state.get("report"), action),
-    feedbacks: feedbackReducer(state.get("feedbacks"), action),
-    rubrics: rubricReducer(state.get("rubrics"), action),
+    questionFeedbacks: questionFeedbackReducer(state.get("questionFeedbacks"), action),
     activityFeedbacks: activityFeedbackReducer(state.get("activityFeedbacks"), action),
+    rubrics: rubricReducer(state.get("rubrics"), action),
     dashboard: dashboardReducer(state.get("dashboard"), action),
   });
 }

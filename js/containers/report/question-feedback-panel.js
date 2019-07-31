@@ -10,11 +10,11 @@ import SummaryIndicator from "../../components/report/summary-indicator";
 import FeedbackOptionsView from "../../components/report/feedback-options-view";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
-import { updateFeedback, enableFeedback } from "../../actions/index";
+import { updateQuestionFeedback, enableFeedback } from "../../actions/index";
 import { MANUAL_SCORE, MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
 import "../../../css/report/feedback-panel.less";
 
-class FeedbackPanel extends PureComponent {
+class QuestionFeedbackPanel extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -201,7 +201,7 @@ class FeedbackPanel extends PureComponent {
                         feedbackEnabled={feedbackEnabled}
                         maxScore={maxScore}
                         feedback={this.getFeedback(answer)}
-                        updateFeedback={this.props.updateFeedback}
+                        updateQuestionFeedback={this.props.updateQuestionFeedback}
                         showOnlyNeedsRiew={this.state.showOnlyNeedReview}
                       />
                     </CSSTransition>,
@@ -228,19 +228,19 @@ class FeedbackPanel extends PureComponent {
       classHash: answer.get("classHash"),
       platformUserId: answer.get("platformUserId")
     });
-    return this.props.feedbacks.get(answer.get("id")) || newFeedback;
+    return this.props.questionFeedbacks.get(answer.get("id")) || newFeedback;
   }
 }
 
 function mapStateToProps(state) {
-  return { feedbacks: state.get("feedbacks") };
+  return { questionFeedbacks: state.get("questionFeedbacks") };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateFeedback: (answerKey, feedback) => dispatch(updateFeedback(answerKey, feedback)),
+    updateQuestionFeedback: (answerKey, feedback) => dispatch(updateQuestionFeedback(answerKey, feedback)),
     enableFeedback: (embeddableKey, feedbackFlags) => dispatch(enableFeedback(embeddableKey, feedbackFlags)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedbackPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionFeedbackPanel);

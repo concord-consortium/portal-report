@@ -15,7 +15,7 @@ export default class FeedbackRow extends PureComponent {
   }
 
   changeFeedback(answerKey, feedback) {
-    this.props.updateFeedback(answerKey, feedback);
+    this.props.updateQuestionFeedback(answerKey, feedback);
   }
 
   scoreChange(e, answerKey) {
@@ -60,7 +60,7 @@ export default class FeedbackRow extends PureComponent {
     );
   }
 
-  renderFeedbackSection(answer) {
+  renderFeedbackSection() {
     const feedbackRecord = this.props.feedback;
     const answerKey = feedbackRecord.get("answerKey");
     const feedback = feedbackRecord.get("feedback");

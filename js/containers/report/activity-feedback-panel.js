@@ -190,7 +190,7 @@ class ActivityFeedbackPanel extends PureComponent {
                           activityId={activityId}
                           rubric={rubric}
                           maxScore={maxScore}
-                          updateFeedback={this.props.updateActivityFeedback}
+                          updateQuestionFeedbacks={this.props.updateActivityFeedback}
                           showOnlyNeedReview={this.state.showOnlyNeedReview}
                         />
                       </CSSTransition>

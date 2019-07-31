@@ -11,7 +11,7 @@ import {
   reportQuestionFeedbacksFireStorePath
 } from "../api";
 import {
-  API_UPDATE_REPORT_FEEDBACK,
+  API_UPDATE_QUESTION_FEEDBACK,
   API_UPDATE_REPORT_SETTINGS,
   API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE
 } from "../api-middleware";
@@ -21,7 +21,7 @@ export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
-export const RECEIVE_FEEDBACKS = "RECEIVE_FEEDBACKS";
+export const RECEIVE_QUESTION_FEEDBACKS = "RECEIVE_QUESTION_FEEDBACKS";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -32,7 +32,7 @@ export const SET_ANSWER_SELECTED_FOR_COMPARE = "SET_ANSWER_SELECTED_FOR_COMPARE"
 export const SHOW_COMPARE_VIEW = "SHOW_COMPARE_VIEW";
 export const HIDE_COMPARE_VIEW = "HIDE_COMPARE_VIEW";
 export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
-export const UPDATE_FEEDBACK = "UPDATE_FEEDBACK";
+export const UPDATE_QUESTION_FEEDBACK = "UPDATE_QUESTION_FEEDBACK";
 export const ENABLE_FEEDBACK = "ENABLE_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
@@ -139,7 +139,7 @@ function fireStoreError(dispatchType: string, dispatch: Dispatch) {
 }
 
 function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-   // Create Firestore document oberserver for settings:
+   // Create Firestore document observer for settings:
    const resourceLinkId = getResourceLink(rawPortalData);
    const settingsFileStorePath = reportSettingsFireStorePath(
     { resourceLinkId,
@@ -178,11 +178,11 @@ function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch:
   feedbacksQuery.onSnapshot(snapshot => {
     if (!snapshot.empty) {
       dispatch({
-        type: RECEIVE_FEEDBACKS,
+        type: RECEIVE_QUESTION_FEEDBACKS,
         response: snapshot.docs.map(doc => doc.data())
       });
     }},
-    fireStoreError(RECEIVE_FEEDBACKS, dispatch)
+    fireStoreError(RECEIVE_QUESTION_FEEDBACKS, dispatch)
   );
 }
 
@@ -302,15 +302,14 @@ export function showFeedbackView(embeddableKey: string) {
   return {type: SHOW_FEEDBACK, embeddableKey};
 }
 
-export function updateFeedback(answerKey: string, feedback: any) {
+export function updateQuestionFeedback(answerKey: string, feedback: any) {
   const feedbackData = mappedCopy(feedback, {});
-  feedbackData.answerKey = answerKey;
   return {
-    type: UPDATE_FEEDBACK,
+    type: UPDATE_QUESTION_FEEDBACK,
     answerKey,
     feedbackData,
     callAPI: {
-      type: API_UPDATE_REPORT_FEEDBACK,
+      type: API_UPDATE_QUESTION_FEEDBACK,
       errorAction: fetchError,
       data: {
         feedback: feedbackData,

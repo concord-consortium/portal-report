@@ -22,43 +22,7 @@ class Feedback extends PureComponent {
       return null;
     }
     const answer = this.props.answer;
-    return this.props.feedbacks.get(answer.get("id"));
-    // return this.props.answer.get("feedback");
-    // const feedbackKey = this.props.answer.get("feedbacks") && this.props.answer.get("feedbacks").last();
-    // return this.props.feedbacks.get(feedbackKey);
-  }
-
-  renderScore(feedback) {
-    const score = feedback.get("score");
-    if (this.scoreEnabled()) {
-      return (
-        <div className="feedback-section score">
-          <h1>
-            Score:
-          </h1>
-          <span className="score">
-            {score}
-          </span>
-        </div>
-      );
-    }
-    return "";
-  }
-
-  renderFeedback(feedback) {
-    if (this.feedbackEnabled()) {
-      return (
-        <div className="feedback-section written-feedback">
-          <h1>
-            Teacher Feedback:
-          </h1>
-          <span>
-            {feedback.get("feedback")}
-          </span>
-        </div>
-      );
-    }
-    return "";
+    return this.props.questionFeedbacks.get(answer.get("id"));
   }
 
   render() {
@@ -94,7 +58,7 @@ class Feedback extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  return { feedbacks: state.get("feedbacks") };
+  return { questionFeedbacks: state.get("questionFeedbacks") };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
