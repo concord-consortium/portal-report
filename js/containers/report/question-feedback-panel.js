@@ -221,7 +221,7 @@ class QuestionFeedbackPanel extends PureComponent {
 
   getFeedback(answer) {
     const newFeedback = fromJS({
-      answerKey: answer.get("id"),
+      answerId: answer.get("id"),
       feedback: "✖ No Feedback Yet",
       score: "0",
       hasBeenReviewed: false,
@@ -238,7 +238,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateQuestionFeedback: (answerKey, feedback) => dispatch(updateQuestionFeedback(answerKey, feedback)),
+    updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
     enableFeedback: (embeddableKey, feedbackFlags) => dispatch(enableFeedback(embeddableKey, feedbackFlags)),
   };
 };

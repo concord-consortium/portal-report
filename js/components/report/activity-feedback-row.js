@@ -16,53 +16,53 @@ export default class ActivityFeedbackRow extends PureComponent {
     this.rubricChange = this.rubricChange.bind(this);
   }
 
-  changeFeedback(answerKey, newData) {
+  changeFeedback(answerId, newData) {
     const oldData = this.fieldValues();
     const newRecord = Object.assign({}, oldData, newData);
-    this.props.updateQuestionFeedbacks(answerKey, newRecord);
+    this.props.updateQuestionFeedbacks(answerId, newRecord);
   }
 
-  scoreChange(e, answerKey) {
+  scoreChange(e, answerId) {
     const value = parseInt(e.target.value, 10) || 0;
-    this.changeFeedback(answerKey, {score: value});
+    this.changeFeedback(answerId, {score: value});
   }
 
-  completeChange(e, answerKey) {
-    this.changeFeedback(answerKey, {hasBeenReviewed: e.target.checked});
+  completeChange(e, answerId) {
+    this.changeFeedback(answerId, {hasBeenReviewed: e.target.checked});
   }
 
-  rubricChange(answerKey, rubricFeedback) {
-    this.changeFeedback(answerKey, {rubricFeedback});
+  rubricChange(answerId, rubricFeedback) {
+    this.changeFeedback(answerId, {rubricFeedback});
   }
 
-  renderFeedbackForm(answerKey, disableFeedback, feedback) {
+  renderFeedbackForm(answerId, disableFeedback, feedback) {
     return (
       <FeedbackBox
         rows="10"
         cols="20"
         disabled={disableFeedback}
-        onChange={(textValue) => this.changeFeedback(answerKey, {feedback: textValue})}
+        onChange={(textValue) => this.changeFeedback(answerId, {feedback: textValue})}
         initialFeedback={feedback} />
     );
   }
 
-  renderScore(answerKey, disableScore, score) {
+  renderScore(answerId, disableScore, score) {
     return (
       <ScoreBox
         disabled={disableScore}
-        onChange={(value) => this.changeFeedback(answerKey, {score: value})}
+        onChange={(value) => this.changeFeedback(answerId, {score: value})}
         score={score} />
     );
   }
 
-  renderComplete(answerKey, complete) {
+  renderComplete(answerId, complete) {
     return (
       <div className="feedback-complete">
         <span>Feedback Complete</span>
         <input
           checked={complete}
           type="checkbox"
-          onChange={(e) => this.completeChange(e, answerKey)} />
+          onChange={(e) => this.completeChange(e, answerId)} />
       </div>
     );
   }

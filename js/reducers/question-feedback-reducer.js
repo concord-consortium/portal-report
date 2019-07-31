@@ -10,7 +10,7 @@ export default function questionFeedbackReducer(state = INITIAL_FEEDBACK_STATE, 
   switch (action.type) {
     case RECEIVE_QUESTION_FEEDBACKS:
       const feedbacks = preprocessFeedbacks(action.response).reduce((map, feedback) => {
-        map[feedback.answerKey] = feedback;
+        map[feedback.answerId] = feedback;
         return map;
       }, {});
       return Immutable.fromJS(feedbacks);

@@ -203,25 +203,25 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
       .set(update, {merge: true});
 }
 
-export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerKey?: string) {
+export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?: string) {
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.authoring.system/question_feedbacks/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
   const path = `/sources/${sourceId}/question_feedbacks`;
-  if (answerKey) {
-    return path + `/${answerKey}`;
+  if (answerId) {
+    return path + `/${answerId}`;
   }
   return path;
 }
 
-function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial, answerKey: string) {
+function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial, answerId: string) {
   const {platformUserId, resourceLinkId, contextId, answers } = reportState;
   feedback.resourceLinkId = resourceLinkId;
   feedback.contextId = contextId;
   feedback.platformUserId = platformUserId;
-  feedback.questionId = answers[answerKey].questionId;
-  feedback.answerKey = answerKey;
+  feedback.questionId = answers[answerId].questionId;
+  feedback.answerId = answerId;
   return feedback;
 }
 
@@ -230,11 +230,11 @@ function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial, an
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
 export function updateQuestionFeedbacks(data: any, state: IStateReportPartial) {
-  const { answerKey, feedback } = data;
-  const path = reportQuestionFeedbacksFireStorePath(state.sourceId, answerKey);
+  const { answerId, feedback } = data;
+  const path = reportQuestionFeedbacksFireStorePath(state.sourceId, answerId);
   return firebase.firestore()
       .doc(path)
-      .set(humps.decamelizeKeys(addFeedbackMetaData(feedback, state, answerKey)), {merge: true});
+      .set(humps.decamelizeKeys(addFeedbackMetaData(feedback, state, answerId)), {merge: true});
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.

@@ -300,7 +300,7 @@ export function showFeedbackView(embeddableKey: string) {
   return {type: SHOW_FEEDBACK, embeddableKey};
 }
 
-export function updateQuestionFeedback(answerKey: string, feedback: any) {
+export function updateQuestionFeedback(answerId: string, feedback: any) {
   const feedbackData = mappedCopy(feedback, {});
   return {
     type: API_CALL,
@@ -309,7 +309,7 @@ export function updateQuestionFeedback(answerKey: string, feedback: any) {
       errorAction: fetchError,
       data: {
         feedback: feedbackData,
-        answerKey
+        answerId
       },
     }
   };

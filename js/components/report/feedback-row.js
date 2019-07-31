@@ -14,55 +14,55 @@ export default class FeedbackRow extends PureComponent {
     this.changeFeedback = this.changeFeedback.bind(this);
   }
 
-  changeFeedback(answerKey, feedback) {
-    this.props.updateQuestionFeedback(answerKey, feedback);
+  changeFeedback(answerId, feedback) {
+    this.props.updateQuestionFeedback(answerId, feedback);
   }
 
-  scoreChange(e, answerKey) {
+  scoreChange(e, answerId) {
     const value = parseInt(e.target.value, 10) || 0;
-    this.changeFeedback(answerKey, {score: value});
+    this.changeFeedback(answerId, {score: value});
   }
 
-  completeChange(e, answerKey) {
-    this.changeFeedback(answerKey, {hasBeenReviewed: e.target.checked});
+  completeChange(e, answerId) {
+    this.changeFeedback(answerId, {hasBeenReviewed: e.target.checked});
   }
 
-  renderFeedbackForm(answerKey, disableFeedback, feedback) {
+  renderFeedbackForm(answerId, disableFeedback, feedback) {
     return (
       <FeedbackBox
         rows="10"
         cols="20"
         disabled={disableFeedback}
-        onChange={(textValue) => this.changeFeedback(answerKey, {feedback: textValue})}
+        onChange={(textValue) => this.changeFeedback(answerId, {feedback: textValue})}
         initialFeedback={feedback} />
     );
   }
 
-  renderScore(answerKey, disableScore, score) {
+  renderScore(answerId, disableScore, score) {
     return (
       <ScoreBox
         disabled={disableScore}
-        onChange={(value) => this.changeFeedback(answerKey, {score: value})}
+        onChange={(value) => this.changeFeedback(answerId, {score: value})}
         score={score}
       />
     );
   }
 
-  renderComplete(answerKey, complete) {
+  renderComplete(answerId, complete) {
     return (
       <div className="feedback-complete">
         <span> Feedback Complete </span>
         <input
           checked={complete}
           type="checkbox"
-          onChange={(e) => this.completeChange(e, answerKey)} />
+          onChange={(e) => this.completeChange(e, answerId)} />
       </div>
     );
   }
 
   renderFeedbackSection() {
     const feedbackRecord = this.props.feedback;
-    const answerKey = feedbackRecord.get("answerKey");
+    const answerId = feedbackRecord.get("answerId");
     const feedback = feedbackRecord.get("feedback");
     const scoreString = feedbackRecord.get("score");
     const complete = feedbackRecord.get("hasBeenReviewed");
@@ -77,11 +77,11 @@ export default class FeedbackRow extends PureComponent {
         <h4>Your Feedback</h4>
         <div className="feedback-content grid">
           <div className="grid-left">
-            { feedbackEnabled ? this.renderFeedbackForm(answerKey, disableFeedback, feedback) : ""}
+            { feedbackEnabled ? this.renderFeedbackForm(answerId, disableFeedback, feedback) : ""}
           </div>
           <div className="grid-right">
-            { scoreEnabled ? this.renderScore(answerKey, disableFeedback, score) : "" }
-            { feedbackEnabled || scoreEnabled ? this.renderComplete(answerKey, complete) : ""}
+            { scoreEnabled ? this.renderScore(answerId, disableFeedback, score) : "" }
+            { feedbackEnabled || scoreEnabled ? this.renderComplete(answerId, complete) : ""}
           </div>
         </div>
       </div>

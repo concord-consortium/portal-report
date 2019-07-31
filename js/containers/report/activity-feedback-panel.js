@@ -234,7 +234,7 @@ function makeMapStateToProps() {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateActivityFeedback: (answerKey, feedback) => dispatch(updateActivityFeedback(answerKey, feedback)),
+    updateActivityFeedback: (answerId, feedback) => dispatch(updateActivityFeedback(answerId, feedback)),
 
     enableActivityFeedback: (activityKey, feedbackFlags) => dispatch(enableActivityFeedback(activityKey, feedbackFlags)),
   };
