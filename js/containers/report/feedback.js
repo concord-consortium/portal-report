@@ -9,14 +9,6 @@ class Feedback extends PureComponent {
     this.state = {};
   }
 
-  feedbackEnabled() {
-    return this.props.question.get("feedbackEnabled");
-  }
-
-  scoreEnabled() {
-    return this.props.question.get("scoreEnabled");
-  }
-
   getLatestFeedback() {
     if (!this.props.answer) {
       return null;
@@ -26,11 +18,15 @@ class Feedback extends PureComponent {
   }
 
   render() {
-    const {student} = this.props;
-    const showScore = this.scoreEnabled();
-    const showText = this.feedbackEnabled();
+    const { student, question, settings } = this.props;
+    const questionSettings = settings.getIn(["questionSettings", question.get("id")]);
+    if (!questionSettings) {
+      return null;
+    }
+    const showScore = questionSettings.get("scoreEnabled");
+    const showText = questionSettings.get("feedbackEnabled");
     const feedbackEnabled = showText || showScore;
-    const maxScore = this.props.question.get("maxScore");
+    const maxScore = questionSettings.get("maxScore");
     const feedback = this.getLatestFeedback();
     if (!feedback) {
       return null;
@@ -58,7 +54,10 @@ class Feedback extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  return { questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]) };
+  return {
+    settings: state.getIn(["feedback", "settings"]),
+    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"])
+  };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

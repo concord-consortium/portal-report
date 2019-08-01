@@ -117,8 +117,9 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       }, fireStoreError(RECEIVE_ANSWERS, dispatch));
     }
 
-    // Always watch for settings and feedback updates:
-    watchFireStoreReportSettings(rawPortalData, dispatch);
+    if (rawPortalData.userType === "teacher") {
+      watchFireStoreReportSettings(rawPortalData, dispatch);
+    }
     watchFirestoreFeedbackSettings(rawPortalData, dispatch);
     watchFirestoreQuestionFeedback(rawPortalData, dispatch);
   };
@@ -177,17 +178,15 @@ function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch:
 
 function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
   const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceId);
-  let feedbacksQuery;
+  let feedbacksQuery = db.collection(feedbackFireStorePath)
+    .where("platformId", "==", rawPortalData.platformId)
+    .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
   if (rawPortalData.userType === "learner") {
-    feedbacksQuery = db.collection(feedbackFireStorePath)
-      .where("platformUserId", "==", rawPortalData.platformUserId.toString());
+      feedbacksQuery = feedbacksQuery.where("platformStudentId", "==", rawPortalData.platformUserId.toString());
   } else {
-    feedbacksQuery = db.collection(feedbackFireStorePath)
       // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
       // but that lets us use context_id value in the Firestore security rules.
-      .where("contextId", "==", rawPortalData.contextId)
-      .where("platformId", "==", rawPortalData.platformId)
-      .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
+      feedbacksQuery = feedbacksQuery.where("contextId", "==", rawPortalData.contextId);
   }
   feedbacksQuery.onSnapshot(snapshot => {
     if (!snapshot.empty) {

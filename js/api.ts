@@ -20,6 +20,7 @@ export interface ILTIPartial {
 
 export interface IStateAnswer {
   questionId: string;
+  platformUserId: string;
   id: string;
 }
 
@@ -269,10 +270,11 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
   const { answerId, feedback } = data;
   const { platformId, platformUserId, resourceLinkId, contextId, answers } = reportState;
   feedback.platformId = platformId;
-  feedback.platformUserId = platformUserId;
   feedback.resourceLinkId = resourceLinkId;
-  feedback.questionId = answers[answerId].questionId;
   feedback.answerId = answerId;
+  feedback.questionId = answers[answerId].questionId;
+  feedback.platformTeacherId = platformUserId;
+  feedback.platformStudentId = answers[answerId].platformUserId;
   // contextId is used by security rules.
   feedback.contextId = contextId;
   const path = reportQuestionFeedbacksFireStorePath(reportState.sourceId, answerId);
