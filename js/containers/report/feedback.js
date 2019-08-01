@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import FeedbackPanelForStudent from "../../components/report/feedback-panel-for-student";
 import "../../../css/report/answer-feedback.less";
+import { MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
 
 class Feedback extends PureComponent {
   constructor(props) {
@@ -9,12 +10,12 @@ class Feedback extends PureComponent {
     this.state = {};
   }
 
-  getLatestFeedback() {
-    if (!this.props.answer) {
+  getFeedback() {
+    const { answer, questionFeedbacks } = this.props;
+    if (!answer) {
       return null;
     }
-    const answer = this.props.answer;
-    return this.props.questionFeedbacks.get(answer.get("id"));
+    return questionFeedbacks.get(answer.get("id"));
   }
 
   render() {
@@ -23,14 +24,14 @@ class Feedback extends PureComponent {
     if (!questionSettings) {
       return null;
     }
-    const showScore = questionSettings.get("scoreEnabled");
-    const showText = questionSettings.get("feedbackEnabled");
-    const feedbackEnabled = showText || showScore;
-    const maxScore = questionSettings.get("maxScore");
-    const feedback = this.getLatestFeedback();
+    const feedback = this.getFeedback();
     if (!feedback) {
       return null;
     }
+    const showScore = questionSettings.get("scoreEnabled");
+    const showText = questionSettings.get("feedbackEnabled");
+    const maxScore = questionSettings.get("maxScore") || MAX_SCORE_DEFAULT;
+    const feedbackEnabled = showText || showScore;
     const score = feedback && feedback.get("score");
     const textFeedback = feedback && feedback.get("feedback");
     const hasBeenReviewed = feedback && feedback.get("hasBeenReviewed");

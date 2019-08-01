@@ -64,7 +64,7 @@ export default class FeedbackRow extends PureComponent {
     const feedbackRecord = this.props.feedback;
     const answerId = feedbackRecord.get("answerId");
     const feedback = feedbackRecord.get("feedback");
-    const scoreString = feedbackRecord.get("score");
+    const scoreString = feedbackRecord.get("score") || "0";
     const complete = feedbackRecord.get("hasBeenReviewed") || false;
     const score = parseInt(scoreString, 10);
 
