@@ -1,4 +1,5 @@
 import { enableActivityFeedback } from "./index";
+import { API_FETCH_RUBRIC } from "../api-middleware";
 
 export const LOAD_RUBRIC = "LOAD_RUBRIC";
 export const REQUEST_RUBRIC = "REQUEST_RUBRIC";
@@ -68,7 +69,7 @@ export function requestRubric() {
         dispatch({
           type: REQUEST_RUBRIC,
           callAPI: {
-            type: "fetchRubric",
+            type: API_FETCH_RUBRIC,
             data: url,
             successAction: receiveRubric,
           },

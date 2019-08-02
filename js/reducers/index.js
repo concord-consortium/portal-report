@@ -1,13 +1,10 @@
 import Immutable, { Map, Set} from "immutable";
-import {updateReportSettings} from "../api";
 import {
   REQUEST_PORTAL_DATA,
   RECEIVE_RESOURCE_STRUCTURE,
   RECEIVE_USER_SETTINGS,
   FETCH_ERROR,
   SET_NOW_SHOWING,
-  SET_ANONYMOUS,
-  SET_QUESTION_SELECTED,
   HIDE_UNSELECTED_QUESTIONS,
   SHOW_UNSELECTED_QUESTIONS,
   RECEIVE_PORTAL_DATA,
@@ -16,15 +13,20 @@ import {
   HIDE_COMPARE_VIEW,
   ENABLE_FEEDBACK,
   ENABLE_ACTIVITY_FEEDBACK,
-  RECEIVE_ANSWERS,
+  RECEIVE_ANSWERS
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
-import feedbackReducer from "./feedback-reducer";
+import questionFeedbackReducer from "./question-feedback-reducer";
 import { rubricReducer } from "./rubric-reducer";
 import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
 import config from "../config";
-import { normalizeResourceJSON, preprocessPortalDataJSON, preprocessAnswersJSON } from "../core/transform-json-response";
+import {
+  normalizeResourceJSON,
+  preprocessPortalDataJSON,
+  preprocessAnswersJSON
+} from "../core/transform-json-response";
+
 import queryString from "query-string";
 
 export const FULL_REPORT = "fullReport";
@@ -73,8 +75,6 @@ function setAnonymous(state, anonymous) {
 function setUserSettings(state, response) {
   const {visibility_filter, anonymous_report} = response;
   const selectedQuestions = visibility_filter.questions || [];
-  const filterActive = visibility_filter.active || false;
-  const someSelected = selectedQuestions.length > 0;
   return state.withMutations(state => {
     state.get("questions").forEach((value, key) => {
       const selected = selectedQuestions.indexOf(key) > -1;
@@ -83,7 +83,6 @@ function setUserSettings(state, response) {
     state = setAnonymous(state, anonymous_report);
     return state;
   });
-  return state;
 }
 
 // This action has to be explicit, otherwise, a question will disappear
@@ -181,8 +180,9 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
         .set("platformUserId", data.platformUserId)
         .set("contextId", data.contextId)
-        .set("resourceLinkId", data.offering.id)
-        .set("platformId", data.platformId);
+        .set("resourceLinkId", data.offering.id.toString())
+        .set("platformId", data.platformId)
+        .set("sourceId", data.sourceId);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);
@@ -195,6 +195,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state;
     case RECEIVE_ANSWERS:
       return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
+
     case SET_NOW_SHOWING:
       return state.set("nowShowing", action.value);
 
@@ -248,9 +249,9 @@ export default function reducer(state = Map(), action) {
     view: view(state.get("view"), action),
     data: data(state.get("data"), action),
     report: report(state.get("report"), action),
-    feedbacks: feedbackReducer(state.get("feedbacks"), action),
-    rubrics: rubricReducer(state.get("rubrics"), action),
+    questionFeedbacks: questionFeedbackReducer(state.get("questionFeedbacks"), action),
     activityFeedbacks: activityFeedbackReducer(state.get("activityFeedbacks"), action),
+    rubrics: rubricReducer(state.get("rubrics"), action),
     dashboard: dashboardReducer(state.get("dashboard"), action),
   });
 }

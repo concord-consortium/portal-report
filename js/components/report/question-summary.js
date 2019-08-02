@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import Prompt from "./prompt";
-import FeedbackPanel from "../../containers/report/feedback-panel";
+import FeedbackPanel from "../../containers/report/question-feedback-panel";
 import { fromJS } from "immutable";
 
 import "../../../css/report/question-summary.less";

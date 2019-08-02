@@ -1,6 +1,7 @@
 import {
   fetchPortalDataAndAuthFirestore,
   updateReportSettings,
+  updateQuestionFeedbacks,
   APIError,
   fetchRubric
 } from "./api";
@@ -19,16 +20,16 @@ export default store => next => action => {
         if (error instanceof APIError && errorAction) {
           return next(errorAction(error.response));
         }
-        // if (error instanceof TypeError && errorAction) {
-        //   // This happens when there is a network error while fetching
-        //   // Use a fake error code 599 so the errorAction code can render something informative
-        //   const response = {
-        //     url: type,
-        //     status: 599,
-        //     statusText: error.message,
-        //   };
-        //   return next(errorAction(response));
-        // }
+        if (error instanceof TypeError && errorAction) {
+          // This happens when there is a network error while fetching
+          // Use a fake error code 599 so the errorAction code can render something informative
+          const response = {
+            url: type,
+            status: 599,
+            statusText: error.message,
+          };
+          return next(errorAction(response));
+        }
         // Remember to throw original error, as otherwise we would swallow every kind of error.
         throw error;
       });
@@ -36,13 +37,20 @@ export default store => next => action => {
   return next(action);
 };
 
+export const API_UPDATE_QUESTION_FEEDBACK = "updateQuestionFeedback";
+export const API_UPDATE_REPORT_SETTINGS = "updateReportSettings";
+export const API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE = "fetchPortalDataAndAuthFirestore";
+export const API_FETCH_RUBRIC = "fetchRubric";
+
 function callApi(type, data, state) {
   switch (type) {
-    case "fetchPortalDataAndAuthFirestore":
+    case API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE:
       return fetchPortalDataAndAuthFirestore();
-    case "updateReportSettings":
+    case API_UPDATE_REPORT_SETTINGS:
       return updateReportSettings(data, state.get("report").toJS());
-    case "fetchRubric":
+    case API_UPDATE_QUESTION_FEEDBACK:
+      return updateQuestionFeedbacks(data, state.get("report").toJS());
+    case API_FETCH_RUBRIC:
       return fetchRubric(data);
   }
 }

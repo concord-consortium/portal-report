@@ -9,8 +9,7 @@ import "../../../css/report/answers-table.less";
 
 class AnswersTable extends PureComponent {
   getLatestFeedback(answer) {
-    const feedbackKey = answer.get("feedbacks") && answer.get("feedbacks").last();
-    return this.props.feedbacks && this.props.feedbacks.get(feedbackKey);
+    return this.props.feedbacks.get(answer.get("id"));
   }
 
   getAnswerForStudent(student) {

@@ -17,10 +17,10 @@ export default class Question extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  return {
-    answers: getAnswerTrees(state).toList().filter(answer => answer.get("questionId") === ownProps.question.get("id")),
-    students: getSortedStudents(state)
-  };
+  const answers = getAnswerTrees(state).toList()
+    .filter(answer => answer.get("questionId") === ownProps.question.get("id"));
+  const students = getSortedStudents(state);
+  return {answers, students};
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

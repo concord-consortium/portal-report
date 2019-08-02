@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react"; // eslint-disable-line
 import ReactDom from "react-dom";
-
+import { fromJS } from "immutable";
 import Button from "../../components/common/button";
 import FeedbackFilter from "../../components/report/feedback-filter";
 import FeedbackOverview from "../../components/report/feedback-overview";
@@ -10,11 +10,11 @@ import SummaryIndicator from "../../components/report/summary-indicator";
 import FeedbackOptionsView from "../../components/report/feedback-options-view";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
-import { updateFeedback, enableFeedback } from "../../actions/index";
+import { updateQuestionFeedback, enableFeedback } from "../../actions/index";
 import { MANUAL_SCORE, MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
 import "../../../css/report/feedback-panel.less";
 
-class FeedbackPanel extends PureComponent {
+class QuestionFeedbackPanel extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,8 +55,7 @@ class FeedbackPanel extends PureComponent {
   }
 
   answerIsMarkedComplete(answer) {
-    const feedbackId = answer.get("feedbacks") && answer.get("feedbacks").last();
-    const feedback = this.props.feedbacks.get(feedbackId);
+    const feedback = this.getFeedback(answer);
     return feedback && feedback.get("hasBeenReviewed");
   }
 
@@ -109,7 +108,7 @@ class FeedbackPanel extends PureComponent {
     const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a));
 
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers;
-    const scores = this.props.feedbacks
+    const scores = answers.map( (a) => this.getFeedback(a))
       .map(f => f.get("score"))
       .filter(f => f != null)
       .toArray();
@@ -201,8 +200,8 @@ class FeedbackPanel extends PureComponent {
                         scoreEnabled={scoreEnabled}
                         feedbackEnabled={feedbackEnabled}
                         maxScore={maxScore}
-                        feedbacks={this.props.feedbacks}
-                        updateFeedback={this.props.updateFeedback}
+                        feedback={this.getFeedback(answer)}
+                        updateQuestionFeedback={this.props.updateQuestionFeedback}
                         showOnlyNeedsRiew={this.state.showOnlyNeedReview}
                       />
                     </CSSTransition>,
@@ -219,17 +218,29 @@ class FeedbackPanel extends PureComponent {
 
     );
   }
+
+  getFeedback(answer) {
+    const newFeedback = fromJS({
+      answerId: answer.get("id"),
+      feedback: "✖ No Feedback Yet",
+      score: "0",
+      hasBeenReviewed: false,
+      classHash: answer.get("classHash"),
+      platformUserId: answer.get("platformUserId")
+    });
+    return this.props.questionFeedbacks.get(answer.get("id")) || newFeedback;
+  }
 }
 
 function mapStateToProps(state) {
-  return { feedbacks: state.get("feedbacks") };
+  return { questionFeedbacks: state.get("questionFeedbacks") };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateFeedback: (answerKey, feedback) => dispatch(updateFeedback(answerKey, feedback)),
+    updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
     enableFeedback: (embeddableKey, feedbackFlags) => dispatch(enableFeedback(embeddableKey, feedbackFlags)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedbackPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionFeedbackPanel);

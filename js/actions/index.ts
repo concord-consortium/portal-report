@@ -4,13 +4,24 @@ import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
 import {Dispatch} from "redux";
 import { Map } from "immutable";
-import { IPortalRawData, IResponse, reportSettingsFireStorePath } from "../api";
+import {
+  IPortalRawData,
+  IResponse,
+  reportSettingsFireStorePath,
+  reportQuestionFeedbacksFireStorePath
+} from "../api";
+import {
+  API_UPDATE_QUESTION_FEEDBACK,
+  API_UPDATE_REPORT_SETTINGS,
+  API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE
+} from "../api-middleware";
 
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
+export const RECEIVE_QUESTION_FEEDBACKS = "RECEIVE_QUESTION_FEEDBACKS";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -21,11 +32,11 @@ export const SET_ANSWER_SELECTED_FOR_COMPARE = "SET_ANSWER_SELECTED_FOR_COMPARE"
 export const SHOW_COMPARE_VIEW = "SHOW_COMPARE_VIEW";
 export const HIDE_COMPARE_VIEW = "HIDE_COMPARE_VIEW";
 export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
-export const UPDATE_FEEDBACK = "UPDATE_FEEDBACK";
 export const ENABLE_FEEDBACK = "ENABLE_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
+export const API_CALL = "API_CALL";
 
 type StateMap = Map<string, any>;
 
@@ -37,7 +48,7 @@ export function fetchAndObserveData() {
     type: REQUEST_PORTAL_DATA,
     // Start with fetching portal data. It will cause other actions to be chained later.
     callAPI: {
-      type: "fetchPortalDataAndAuthFirestore",
+      type: API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE,
       successAction: receivePortalData,
       errorAction: fetchError,
     },
@@ -51,14 +62,13 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       response: rawPortalData
     });
     let resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
-    const resourceLinkId = rawPortalData.offering.id.toString();
     if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
       // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
       // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
       // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
       resourceUrl = resourceUrl.replace("http", "https");
     }
-    const source = parseUrl(resourceUrl).hostname;
+    const source = rawPortalData.sourceId;
     if (source === "fake.authoring.system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
@@ -105,37 +115,73 @@ function receivePortalData(rawPortalData: IPortalRawData) {
             response: snapshot.docs.map(doc => doc.data())
           });
         }
-      }, (err: Error) => {
-        // tslint:disable-next-line no-console
-        console.error("Firestore answers fetch error", err);
-        dispatch(fetchError({
-          status: 500,
-          statusText: `Firestore answers fetch error: ${err.message}`
-        }));
-      });
+      }, fireStoreError(RECEIVE_ANSWERS, dispatch));
     }
-    // Create Firestore document oberserver for settings:
-    const fireStorePath = reportSettingsFireStorePath(
-      { resourceLinkId,
-        contextId: rawPortalData.contextId,
-        platformId: rawPortalData.platformId,
-        platformUserId: rawPortalData.platformUserId
-      }
-    );
-    db.doc(fireStorePath)
-      .onSnapshot(
-        (snapshot)   => {
-          dispatch({
-            type: RECEIVE_USER_SETTINGS,
-            response: snapshot.data()
-          });
-        },
-        (err: Error) => {
-          // tslint:disable-next-line no-console
-          console.error(err);
-        }
-      );
+
+    // Always watch for settings and feedback updates:
+    watchFireStoreReportSettings(rawPortalData, dispatch);
+    watchFirestoreQuestionFeedback(rawPortalData, dispatch);
   };
+}
+function getResourceLink(rawPortalData: IPortalRawData) {
+  return rawPortalData.offering.id.toString();
+}
+
+function fireStoreError(dispatchType: string, dispatch: Dispatch) {
+  return (err: Error) => {
+    // tslint:disable-next-line no-console
+    console.error(err);
+    dispatch(fetchError({
+      status: 500,
+      statusText: `Firestore ${dispatchType} fetch error: ${err.message}`
+    }));
+  };
+}
+
+function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
+   // Create Firestore document observer for settings:
+   const resourceLinkId = getResourceLink(rawPortalData);
+   const settingsFileStorePath = reportSettingsFireStorePath(
+    { resourceLinkId,
+      contextId: rawPortalData.contextId,
+      platformId: rawPortalData.platformId,
+      platformUserId: rawPortalData.platformUserId
+    }
+  );
+   db.doc(settingsFileStorePath)
+     .onSnapshot(
+      (snapshot: any) => {
+        dispatch({
+          type: RECEIVE_USER_SETTINGS,
+          response: snapshot.data()
+        });
+      },
+      fireStoreError(RECEIVE_USER_SETTINGS, dispatch)
+     );
+}
+
+function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceId);
+  let feedbacksQuery;
+  if (rawPortalData.userType === "learner") {
+    feedbacksQuery = db.collection(feedbackFireStorePath)
+      .where("platform_learner_id", "==", rawPortalData.platformUserId.toString());
+  } else {
+    feedbacksQuery = db.collection(feedbackFireStorePath)
+      // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
+      // but that lets us use context_id value in the Firestore security rules.
+      .where("context_id", "==", rawPortalData.contextId)
+      .where("resource_link_id", "==", rawPortalData.resourceLinkId);
+  }
+  feedbacksQuery.onSnapshot(snapshot => {
+    if (!snapshot.empty) {
+      dispatch({
+        type: RECEIVE_QUESTION_FEEDBACKS,
+        response: snapshot.docs.map(doc => doc.data())
+      });
+    }},
+    fireStoreError(RECEIVE_QUESTION_FEEDBACKS, dispatch)
+  );
 }
 
 function fetchError(response: IResponse) {
@@ -151,7 +197,10 @@ function mappedCopy(src: any, fieldMappings: any) {
   for (const key in src) {
     if (src.hasOwnProperty(key)) {
       dstKey = fieldMappings[key] || key;
-      dst[dstKey] = src[key];
+      // remove undefined values;
+      if (src[key] !== undefined) {
+        dst[dstKey] = src[key];
+      }
     }
   }
   return dst;
@@ -171,7 +220,7 @@ export function setQuestionSelected(key: string, value: boolean) {
       value,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
       callAPI: {
-        type: "updateReportSettings",
+        type: API_UPDATE_REPORT_SETTINGS,
         data: {
           visibility_filter: {
             questions: selectedQuestionKeys,
@@ -188,7 +237,7 @@ export function hideUnselectedQuestions() {
       type: HIDE_UNSELECTED_QUESTIONS,
       // Send data to server. Don't care about success or failure. See: api-middleware.js
       callAPI: {
-        type: "updateReportSettings",
+        type: API_UPDATE_REPORT_SETTINGS,
         data: {
           visibility_filter: {
             active: true,
@@ -204,7 +253,7 @@ export function showUnselectedQuestions() {
     type: SHOW_UNSELECTED_QUESTIONS,
     // Send data to server. Don't care about success or failure. See: api-middleware.js
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       data: {
         visibility_filter: {
           active: false,
@@ -227,7 +276,7 @@ export function setAnonymous(value: boolean) {
     value,
     // Send data to server. Don't care about success or failure. See: api-middleware.js
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       data: {
         anonymous_report: value,
       },
@@ -251,21 +300,18 @@ export function showFeedbackView(embeddableKey: string) {
   return {type: SHOW_FEEDBACK, embeddableKey};
 }
 
-export function updateFeedback(answerKey: string, feedback: any) {
-  const feedbackData = mappedCopy(feedback, {hasBeenReviewed: "has_been_reviewed"});
-  feedbackData.answer_key = answerKey;
+export function updateQuestionFeedback(answerId: string, feedback: any) {
+  const feedbackData = mappedCopy(feedback, {});
   return {
-    type: UPDATE_FEEDBACK,
-    answerKey,
-    feedback,
+    type: API_CALL,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_QUESTION_FEEDBACK,
       errorAction: fetchError,
       data: {
         feedback: feedbackData,
+        answerId
       },
-    },
-
+    }
   };
 }
 
@@ -284,7 +330,7 @@ export function enableFeedback(embeddableKey: string, feedbackFlags: any) {
     embeddableKey,
     feedbackFlags,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       errorAction: fetchError,
       data: {
         feedback_opts: feedbackSettings,
@@ -307,7 +353,7 @@ export function updateActivityFeedback(activityFeedbackKey: string, feedback: an
     activityFeedbackKey,
     feedback,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       errorAction: fetchError,
       data: {
         activity_feedback: feedbackData,
@@ -331,7 +377,7 @@ export function enableActivityFeedback(activityId: string, feedbackFlags: any, i
     invalidatePreviousFeedback,
     feedbackFlags,
     callAPI: {
-      type: "updateReportSettings",
+      type: API_UPDATE_REPORT_SETTINGS,
       errorAction: fetchError,
       data: {
         actvity_feedback_opts: feedbackSettings,

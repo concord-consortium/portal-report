@@ -5,6 +5,7 @@ import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl } from "./util/misc";
+import humps from "humps";
 import * as db from "./db";
 
 const FIREBASE_APP = "report-service-dev";
@@ -15,6 +16,16 @@ export interface ILTIPartial {
   platformUserId: string;
   contextId: string;       // class hash
   resourceLinkId?: string;  // offering ID
+}
+
+export interface IStateAnswer {
+  questionId: string;
+  id: string;
+}
+
+export interface IStateReportPartial extends ILTIPartial {
+  answers: {[key: string]: IStateAnswer};
+  sourceId: string;
 }
 
 export interface IPortalRawData extends ILTIPartial{
@@ -28,6 +39,7 @@ export interface IPortalRawData extends ILTIPartial{
     students: IStudentRawData[];
   };
   userType: "teacher" | "learner";
+  sourceId: string;
 }
 
 export interface IStudentRawData {
@@ -127,12 +139,11 @@ export function authFirestore(rawFirestoreJWT: string) {
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
-  return classPromise.then(classInfo => {
-    const firestoreJWTPromise = fetchFirestoreJWT(classInfo.class_hash);
-    return Promise.all([offeringPromise, classPromise, firestoreJWTPromise]).then(result => {
+  return classPromise.then(classData => {
+    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash);
+    return Promise.all([offeringPromise, firestoreJWTPromise]).then(result => {
       const offeringData = result[0];
-      const classData = result[1];
-      const rawFirestoreJWT = result[2].token;
+      const rawFirestoreJWT = result[1].token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {
         // We're not using fake data.
         const decodedFirebaseJWT = jwt.decode(rawFirestoreJWT);
@@ -145,22 +156,26 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
         const verifiedFirebaseJWT = decodedFirebaseJWT as IFirebaseJWT;
         return authFirestore(rawFirestoreJWT).then(() => ({
             offering: offeringData,
+            resourceLinkId: offeringData.id.toString(),
             classInfo: classData,
             userType: verifiedFirebaseJWT.claims.user_type,
             platformId: verifiedFirebaseJWT.claims.platform_id,
             platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
-            contextId: classInfo.class_hash
+            contextId: classData.class_hash,
+            sourceId: parseUrl(offeringData.activity_url.toLowerCase()).hostname
           })
         );
       } else {
         // We're using fake data, including fake JWT.
         return {
           offering: offeringData,
+          resourceLinkId: offeringData.id.toString(),
           classInfo: classData,
           userType: "teacher",
           platformId: "https://fake.portal",
           platformUserId: "1",
-          contextId: "class123"
+          contextId: classData.class_hash,
+          sourceId: parseUrl(offeringData.activity_url.toLowerCase()).hostname
         };
       }
     });
@@ -186,6 +201,40 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
   return firebase.firestore()
       .doc(path)
       .set(update, {merge: true});
+}
+
+export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?: string) {
+  // NP: 2019-06-28 In the case of fake portal data we will return
+  // `/sources/fake.authoring.system/question_feedbacks/1/` which has
+  // special FireStore Rules to allow universal read and write to that document.
+  // Allows us to test limited report settings with fake portal data, without a JWT.
+  const path = `/sources/${sourceId}/question_feedbacks`;
+  if (answerId) {
+    return path + `/${answerId}`;
+  }
+  return path;
+}
+
+function addFeedbackMetaData(feedback: any, reportState: IStateReportPartial, answerId: string) {
+  const {platformUserId, resourceLinkId, contextId, answers } = reportState;
+  feedback.resourceLinkId = resourceLinkId;
+  feedback.contextId = contextId;
+  feedback.platformUserId = platformUserId;
+  feedback.questionId = answers[answerId].questionId;
+  feedback.answerId = answerId;
+  return feedback;
+}
+
+// The updateReportSettings API middleware calls out to the FireStore API.
+// `firestore().path().set()` returns a Promise that will resolve immediately.
+// This due to a feature in the FireStore API called "latency compensation."
+// See: https://firebase.google.com/docs/firestore/query-data/listen
+export function updateQuestionFeedbacks(data: any, state: IStateReportPartial) {
+  const { answerId, feedback } = data;
+  const path = reportQuestionFeedbacksFireStorePath(state.sourceId, answerId);
+  return firebase.firestore()
+      .doc(path)
+      .set(humps.decamelizeKeys(addFeedbackMetaData(feedback, state, answerId)), {merge: true});
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.

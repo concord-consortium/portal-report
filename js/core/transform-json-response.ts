@@ -129,6 +129,10 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
   return result;
 }
 
+export function preprocessFeedbacks(feedbacksJSON: any) {
+  return camelizeKeys(feedbacksJSON);
+}
+
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {
   const camelizedJson = camelizeKeys(portalData) as IPortalData;
   camelizedJson.classInfo.students.forEach(student => {

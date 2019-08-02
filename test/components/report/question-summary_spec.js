@@ -25,7 +25,7 @@ describe("<QuestionSummary />", () => {
 
   it("should have the specified prompt", () => {
     const component = renderIntoDocument(
-      <Provider store={mockStore(fromJS({feedbacks: {}}))}>
+      <Provider store={mockStore(fromJS({questionFeedbacks: {}}))}>
         <QuestionSummary question={question} answers={List()} students={students} />
       </Provider>
     );
@@ -35,7 +35,7 @@ describe("<QuestionSummary />", () => {
 
   it("should have a summary of answered questions", () => {
     const component = renderIntoDocument(
-      <Provider store={mockStore(fromJS({feedbacks: {}}))}>
+      <Provider store={mockStore(fromJS({questionFeedbacks: {}}))}>
         <QuestionSummary question={question} answers={question.get("answers")} students={students} />
       </Provider>
     );

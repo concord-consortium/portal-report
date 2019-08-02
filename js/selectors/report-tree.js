@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import Immutable, { Map } from "immutable";
+import Immutable, { Map, fromJS } from "immutable";
 import { FULL_REPORT, DASHBOARD } from "../reducers";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
@@ -44,9 +44,10 @@ const isQuestionVisible = (question, viewType, featuredOnly) => {
 
 // Selectors
 export const getAnswerTrees = createSelector(
-  [ getAnswers, getStudents, getQuestions ],
-  (answers, students, questions) =>
-    answers
+  [ getAnswers, getStudents, getQuestions],
+  (answers, students, questions) => {
+
+  return answers
       // Filter out answers that are not matching any students in the class. Class could have been updated.
       // Also, filter out answers that are not matching any question. It might happen if the activity gets updated and
       // some questions are deleted.
@@ -62,8 +63,10 @@ export const getAnswerTrees = createSelector(
             .set("selectedChoices", selectedChoices)
             .set("correct", selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size);
         }
-        return answer.set("student", students.get(answer.get("platformUserId")));
-      })
+        return answer
+          .set("student", students.get(answer.get("platformUserId")));
+      });
+    }
 );
 
 export const getQuestionTrees = createSelector(
