@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import FeedbackPanelForStudent from "../../components/report/feedback-panel-for-student";
 import "../../../css/report/answer-feedback.less";
 import { MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
+import { feedbackValidForAnswer } from "../../util/misc";
 
 class Feedback extends PureComponent {
   constructor(props) {
@@ -19,7 +20,7 @@ class Feedback extends PureComponent {
   }
 
   render() {
-    const { student, question, settings } = this.props;
+    const { student, question, settings, answer } = this.props;
     const questionSettings = settings.getIn(["questionSettings", question.get("id")]);
     if (!questionSettings) {
       return null;
@@ -34,7 +35,7 @@ class Feedback extends PureComponent {
     const feedbackEnabled = showText || showScore;
     const score = feedback && feedback.get("score");
     const textFeedback = feedback && feedback.get("feedback");
-    const hasBeenReviewed = feedback && feedback.get("hasBeenReviewed");
+    const hasBeenReviewed = feedback && feedbackValidForAnswer(feedback, answer);
     return (
       <FeedbackPanelForStudent
         student={student}
