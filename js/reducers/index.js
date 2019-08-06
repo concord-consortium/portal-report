@@ -11,12 +11,10 @@ import {
   SET_ANSWER_SELECTED_FOR_COMPARE,
   SHOW_COMPARE_VIEW,
   HIDE_COMPARE_VIEW,
-  ENABLE_FEEDBACK,
-  ENABLE_ACTIVITY_FEEDBACK,
   RECEIVE_ANSWERS
 } from "../actions";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
-import questionFeedbackReducer from "./question-feedback-reducer";
+import feedbackReducer from "./feedback-reducer";
 import { rubricReducer } from "./rubric-reducer";
 import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
@@ -113,12 +111,7 @@ function showUnselectedQuestions(state) {
   });
 }
 
-function enableFeedback(state, action) {
-  const {embeddableKey, feedbackFlags} = action;
-  return state.mergeIn(["questions", embeddableKey], feedbackFlags);
-}
-
-function enableActivityFeedback(state, action) {
+function updateActivityFeedbackSettings(state, action) {
   const {activityId, feedbackFlags} = action;
   const statePath = ["activities", activityId.toString()];
   // We have to unset 'RUBRIC_SCORE' scoretypes when
@@ -235,10 +228,6 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state.set("compareViewAnswers", Set(selectedAnswerIds));
     case HIDE_COMPARE_VIEW:
       return state.set("compareViewAnswers", null);
-    case ENABLE_FEEDBACK:
-      return enableFeedback(state, action);
-    case ENABLE_ACTIVITY_FEEDBACK:
-      return enableActivityFeedback(state, action);
     default:
       return state;
   }
@@ -249,7 +238,7 @@ export default function reducer(state = Map(), action) {
     view: view(state.get("view"), action),
     data: data(state.get("data"), action),
     report: report(state.get("report"), action),
-    questionFeedbacks: questionFeedbackReducer(state.get("questionFeedbacks"), action),
+    feedback: feedbackReducer(state.get("feedback"), action),
     activityFeedbacks: activityFeedbackReducer(state.get("activityFeedbacks"), action),
     rubrics: rubricReducer(state.get("rubrics"), action),
     dashboard: dashboardReducer(state.get("dashboard"), action),

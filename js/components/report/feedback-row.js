@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import Answer from "./answer";
 import FeedbackBox from "./feedback-box";
 import ScoreBox from "./score-box";
+import { feedbackValidForAnswer, answerHash } from "../../util/misc";
 
 export default class FeedbackRow extends PureComponent {
   constructor(props) {
@@ -24,7 +25,7 @@ export default class FeedbackRow extends PureComponent {
   }
 
   completeChange(e, answerId) {
-    this.changeFeedback(answerId, {hasBeenReviewed: e.target.checked});
+    this.changeFeedback(answerId, {hasBeenReviewedForAnswerHash: e.target.checked ? answerHash(this.props.answer) : ""});
   }
 
   renderFeedbackForm(answerId, disableFeedback, feedback) {
@@ -53,8 +54,8 @@ export default class FeedbackRow extends PureComponent {
       <div className="feedback-complete">
         <span> Feedback Complete </span>
         <input
-          checked={complete}
           type="checkbox"
+          checked={complete}
           onChange={(e) => this.completeChange(e, answerId)} />
       </div>
     );
@@ -64,8 +65,8 @@ export default class FeedbackRow extends PureComponent {
     const feedbackRecord = this.props.feedback;
     const answerId = feedbackRecord.get("answerId");
     const feedback = feedbackRecord.get("feedback");
-    const scoreString = feedbackRecord.get("score");
-    const complete = feedbackRecord.get("hasBeenReviewed");
+    const scoreString = feedbackRecord.get("score") || "0";
+    const complete = feedbackValidForAnswer(feedbackRecord, this.props.answer);
     const score = parseInt(scoreString, 10);
 
     const scoreEnabled = this.props.scoreEnabled;

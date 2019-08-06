@@ -1,4 +1,5 @@
 import { Map } from "immutable";
+import md5 from "md5";
 
 // Truncate strings eg:
 // truncate("this is a sentence", 5) // → "this i…"
@@ -20,4 +21,19 @@ export const compareStudentsByName = (student1: Map<string, any>, student2: Map<
   } else {
     return student1.get("firstName").localeCompare(student2.get("firstName"));
   }
+};
+
+export const answerHash = (answer: Map<string, any>) => {
+  let answerContent = answer.get("answer");
+  if (typeof answerContent !== "string") {
+    answerContent = JSON.stringify(answerContent.toJS());
+  }
+  return md5(answerContent);
+};
+
+export const feedbackValidForAnswer = (feedback: Map<string, any>, answer: Map<string, any>) => {
+  if (!feedback || !answer) {
+    return false;
+  }
+  return feedback.get("hasBeenReviewedForAnswerHash") === answerHash(answer);
 };

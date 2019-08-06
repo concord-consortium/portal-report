@@ -62,7 +62,7 @@ class Activity extends PureComponent {
     const isClassReport = true;
     const isStudentReport = !isClassReport;
     const activityName = activity.get("name");
-    const showText = activity.get("enableTextFeedback");
+    const showText = activity.get("textFeedbackEnabled");
     const scoreType = activity.get("scoreType");
     const maxScore = scoreType === MANUAL_SCORE ? activity.get("maxScore") : computedMaxScore;
     const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS());

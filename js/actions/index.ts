@@ -1,5 +1,4 @@
 import db from "../db";
-import { parseUrl } from "../util/misc";
 import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
 import {Dispatch} from "redux";
@@ -8,11 +7,12 @@ import {
   IPortalRawData,
   IResponse,
   reportSettingsFireStorePath,
-  reportQuestionFeedbacksFireStorePath
+  reportQuestionFeedbacksFireStorePath, feedbackSettingsFirestorePath
 } from "../api";
 import {
   API_UPDATE_QUESTION_FEEDBACK,
   API_UPDATE_REPORT_SETTINGS,
+  API_UPDATE_FEEDBACK_SETTINGS,
   API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE
 } from "../api-middleware";
 
@@ -22,6 +22,7 @@ export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
 export const RECEIVE_QUESTION_FEEDBACKS = "RECEIVE_QUESTION_FEEDBACKS";
+export const RECEIVE_FEEDBACK_SETTINGS = "RECEIVE_FEEDBACK_SETTINGS";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -32,9 +33,7 @@ export const SET_ANSWER_SELECTED_FOR_COMPARE = "SET_ANSWER_SELECTED_FOR_COMPARE"
 export const SHOW_COMPARE_VIEW = "SHOW_COMPARE_VIEW";
 export const HIDE_COMPARE_VIEW = "HIDE_COMPARE_VIEW";
 export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
-export const ENABLE_FEEDBACK = "ENABLE_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
-export const ENABLE_ACTIVITY_FEEDBACK = "ENABLE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
 
@@ -118,8 +117,10 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       }, fireStoreError(RECEIVE_ANSWERS, dispatch));
     }
 
-    // Always watch for settings and feedback updates:
-    watchFireStoreReportSettings(rawPortalData, dispatch);
+    if (rawPortalData.userType === "teacher") {
+      watchFireStoreReportSettings(rawPortalData, dispatch);
+    }
+    watchFirestoreFeedbackSettings(rawPortalData, dispatch);
     watchFirestoreQuestionFeedback(rawPortalData, dispatch);
   };
 }
@@ -160,18 +161,32 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
      );
 }
 
+function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  const path = feedbackSettingsFirestorePath(rawPortalData.sourceId);
+  db.collection(path)
+    .where("contextId", "==", rawPortalData.contextId)
+    .where("platformId", "==", rawPortalData.platformId)
+    .where("resourceLinkId", "==", rawPortalData.resourceLinkId)
+    .onSnapshot(snapshot => {
+      if (!snapshot.empty) {
+        dispatch({
+          type: RECEIVE_FEEDBACK_SETTINGS,
+          response: snapshot.docs[0].data()
+        });
+      }}, fireStoreError(RECEIVE_FEEDBACK_SETTINGS, dispatch));
+}
+
 function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
   const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceId);
-  let feedbacksQuery;
+  let feedbacksQuery = db.collection(feedbackFireStorePath)
+    .where("platformId", "==", rawPortalData.platformId)
+    .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
   if (rawPortalData.userType === "learner") {
-    feedbacksQuery = db.collection(feedbackFireStorePath)
-      .where("platform_learner_id", "==", rawPortalData.platformUserId.toString());
+      feedbacksQuery = feedbacksQuery.where("platformStudentId", "==", rawPortalData.platformUserId.toString());
   } else {
-    feedbacksQuery = db.collection(feedbackFireStorePath)
       // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
       // but that lets us use context_id value in the Firestore security rules.
-      .where("context_id", "==", rawPortalData.contextId)
-      .where("resource_link_id", "==", rawPortalData.resourceLinkId);
+      feedbacksQuery = feedbacksQuery.where("contextId", "==", rawPortalData.contextId);
   }
   feedbacksQuery.onSnapshot(snapshot => {
     if (!snapshot.empty) {
@@ -179,8 +194,7 @@ function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch:
         type: RECEIVE_QUESTION_FEEDBACKS,
         response: snapshot.docs.map(doc => doc.data())
       });
-    }},
-    fireStoreError(RECEIVE_QUESTION_FEEDBACKS, dispatch)
+    }}, fireStoreError(RECEIVE_QUESTION_FEEDBACKS, dispatch)
   );
 }
 
@@ -315,25 +329,16 @@ export function updateQuestionFeedback(answerId: string, feedback: any) {
   };
 }
 
-export function enableFeedback(embeddableKey: string, feedbackFlags: any) {
-  const mappings = {
-    feedbackEnabled: "enable_text_feedback",
-    rubricEnabled: "rubric_enabled",
-    scoreEnabled: "enable_score",
-    maxScore: "max_score",
-  };
-  const feedbackSettings: any = mappedCopy(feedbackFlags, mappings);
-  feedbackSettings.embeddable_key = embeddableKey;
-
+export function updateQuestionFeedbackSettings(questionId: string, feedbackFlags: any) {
+  const settings: any = mappedCopy(feedbackFlags, {});
   return {
-    type: ENABLE_FEEDBACK,
-    embeddableKey,
-    feedbackFlags,
+    type: API_CALL,
     callAPI: {
-      type: API_UPDATE_REPORT_SETTINGS,
+      type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        feedback_opts: feedbackSettings,
+        questionId,
+        settings
       },
     },
   };
@@ -362,25 +367,16 @@ export function updateActivityFeedback(activityFeedbackKey: string, feedback: an
   };
 }
 
-export function enableActivityFeedback(activityId: string, feedbackFlags: any, invalidatePreviousFeedback = true) {
-  const mappings = {
-    enableTextFeedback: "enable_text_feedback",
-    scoreType: "score_type",
-    maxScore: "max_score",
-    activityFeedbackId: "activity_feedback_id",
-    useRubric: "use_rubric",
-  };
-  const feedbackSettings = mappedCopy(feedbackFlags, mappings);
+export function updateActivityFeedbackSettings(activityId: string, feedbackFlags: any) {
+  const settings = mappedCopy(feedbackFlags, {});
   return {
-    type: ENABLE_ACTIVITY_FEEDBACK,
-    activityId,
-    invalidatePreviousFeedback,
-    feedbackFlags,
+    type: API_CALL,
     callAPI: {
-      type: API_UPDATE_REPORT_SETTINGS,
+      type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        actvity_feedback_opts: feedbackSettings,
+        activityId,
+        settings
       },
     },
   };

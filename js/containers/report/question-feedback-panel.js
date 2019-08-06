@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react"; // eslint-disable-line
 import ReactDom from "react-dom";
-import { fromJS } from "immutable";
+import { fromJS, Map } from "immutable";
 import Button from "../../components/common/button";
 import FeedbackFilter from "../../components/report/feedback-filter";
 import FeedbackOverview from "../../components/report/feedback-overview";
@@ -10,9 +10,10 @@ import SummaryIndicator from "../../components/report/summary-indicator";
 import FeedbackOptionsView from "../../components/report/feedback-options-view";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
-import { updateQuestionFeedback, enableFeedback } from "../../actions/index";
+import { updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../actions/index";
 import { MANUAL_SCORE, MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
 import "../../../css/report/feedback-panel.less";
+import { feedbackValidForAnswer } from "../../util/misc";
 
 class QuestionFeedbackPanel extends PureComponent {
   constructor(props) {
@@ -56,21 +57,21 @@ class QuestionFeedbackPanel extends PureComponent {
 
   answerIsMarkedComplete(answer) {
     const feedback = this.getFeedback(answer);
-    return feedback && feedback.get("hasBeenReviewed");
+    return feedbackValidForAnswer(feedback, answer);
   }
 
   enableText(event) {
-    this.props.enableFeedback(this.props.question.get("id"), { feedbackEnabled: event.target.checked });
+    this.props.updateQuestionFeedbackSettings(this.props.question.get("id"), { feedbackEnabled: event.target.checked });
   }
 
   enableScore(event) {
-    this.props.enableFeedback(this.props.question.get("id"), { scoreEnabled: event.target.checked });
+    this.props.updateQuestionFeedbackSettings(this.props.question.get("id"), { scoreEnabled: event.target.checked });
   }
 
   setMaxScore(value) {
-    const {enableFeedback, question} = this.props;
-    if (enableFeedback) {
-      enableFeedback(question.get("id"), { maxScore: value });
+    const {updateQuestionFeedbackSettings, question} = this.props;
+    if (updateQuestionFeedbackSettings) {
+      updateQuestionFeedbackSettings(question.get("id"), { maxScore: value });
     }
   }
 
@@ -100,7 +101,7 @@ class QuestionFeedbackPanel extends PureComponent {
   }
 
   render() {
-    const { question, answers } = this.props;
+    const { question, answers, settings } = this.props;
     const showing = this.state.showFeedbackPanel;
     const prompt = question.get("prompt");
     const num = question.get("questionNumber");
@@ -118,9 +119,11 @@ class QuestionFeedbackPanel extends PureComponent {
     let numNeedsFeedback = needingFeedback.count();
     let numFeedbackGiven = numAnswers - numNeedsFeedback;
 
-    const scoreEnabled = question.get("scoreEnabled") || false;
-    const feedbackEnabled = question.get("feedbackEnabled") || false;
-    const maxScore = question.get("maxScore") || MAX_SCORE_DEFAULT;
+    const questionSettings = this.getFeedbackSettings(question);
+    const scoreEnabled = questionSettings.get("scoreEnabled") || false;
+    const feedbackEnabled = questionSettings.get("feedbackEnabled") || false;
+    const maxScore = questionSettings.get("maxScore") || MAX_SCORE_DEFAULT;
+
     const showGettingStarted = !scoreEnabled && !feedbackEnabled;
     const studentsPulldown = filteredAnswers.map((a) => {
       return {
@@ -219,12 +222,16 @@ class QuestionFeedbackPanel extends PureComponent {
     );
   }
 
+  getFeedbackSettings(question) {
+    return this.props.settings.getIn(["questionSettings", question.get("id")]) || Map({});
+  }
+
   getFeedback(answer) {
     const newFeedback = fromJS({
       answerId: answer.get("id"),
       feedback: "✖ No Feedback Yet",
       score: "0",
-      hasBeenReviewed: false,
+      hasBeenReviewedForAnswerHash: "",
       classHash: answer.get("classHash"),
       platformUserId: answer.get("platformUserId")
     });
@@ -233,13 +240,16 @@ class QuestionFeedbackPanel extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  return { questionFeedbacks: state.get("questionFeedbacks") };
+  return {
+    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
+    settings: state.getIn(["feedback", "settings"])
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
-    enableFeedback: (embeddableKey, feedbackFlags) => dispatch(enableFeedback(embeddableKey, feedbackFlags)),
+    updateQuestionFeedbackSettings: (embeddableKey, feedbackFlags) => dispatch(updateQuestionFeedbackSettings(embeddableKey, feedbackFlags)),
   };
 };
 

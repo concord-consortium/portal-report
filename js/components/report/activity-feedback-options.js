@@ -20,17 +20,17 @@ export default class ActivityFeedbackOptions extends PureComponent {
   enableText(event) {
     const activityId = this.props.activity.get("id");
     const activityFeedbackId = this.props.activity.get("activityFeedbackId");
-    this.props.enableActivityFeedback(
+    this.props.updateActivityFeedbackSettings(
       activityId, {
         activityFeedbackId,
-        enableTextFeedback: event.target.checked,
+        textFeedbackEnabled: event.target.checked,
       });
   }
 
   enableRubric(event) {
     const activityId = this.props.activity.get("id");
     const activityFeedbackId = this.props.activity.get("activityFeedbackId");
-    this.props.enableActivityFeedback(
+    this.props.updateActivityFeedbackSettings(
       activityId, {
         activityFeedbackId,
         useRubric: event.target.checked,
@@ -40,7 +40,7 @@ export default class ActivityFeedbackOptions extends PureComponent {
   setMaxScore(value) {
     const activityId = this.props.activity.get("id");
     const activityFeedbackId = this.props.activity.get("activityFeedbackId");
-    this.props.enableActivityFeedback(activityId, {
+    this.props.updateActivityFeedbackSettings(activityId, {
       activityFeedbackId,
       maxScore: value,
     });
@@ -56,19 +56,14 @@ export default class ActivityFeedbackOptions extends PureComponent {
     if (isAutoScoring(newV)) {
       newFlags.maxScore = this.props.computedMaxScore;
     }
-    this.props.enableActivityFeedback(activityId, newFlags);
+    this.props.updateActivityFeedbackSettings(activityId, newFlags);
   }
 
   render() {
-    const { activity, computedMaxScore, rubric } = this.props;
-    const scoreType = activity.get("scoreType") || NO_SCORE;
-    const showText = activity.get("enableTextFeedback");
+    const { activity, rubric, showText, scoreType, maxScore } = this.props;
     const rubricAvailable = !!rubric;
+    const scoreEnabled = !!scoreType && scoreType !== NO_SCORE;
     const useRubric = rubricAvailable && activity.get("useRubric");
-    const scoreEnabled = scoreType !== NO_SCORE;
-    const maxScore = isAutoScoring(scoreType)
-      ? computedMaxScore
-      : activity.get("maxScore");
     const toggleScoreEnabled = () => {
       if (scoreEnabled) {
         this.changeScoreType(NO_SCORE);

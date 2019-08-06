@@ -7,7 +7,8 @@ import ActivityFeedbackOptions from "../../components/report/activity-feedback-o
 import ActivityFeedbackRow from "../../components/report/activity-feedback-row";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
-import { updateActivityFeedback, enableActivityFeedback } from "../../actions/index";
+import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
+import { Map } from "immutable";
 
 import {
   makeGetStudentFeedbacks,
@@ -26,6 +27,7 @@ import {
   isAutoScoring,
 } from "../../util/scoring-constants";
 import { truncate } from "../../util/misc";
+import { fromJS } from "immutable";
 
 class ActivityFeedbackPanel extends PureComponent {
   constructor(props) {
@@ -62,7 +64,7 @@ class ActivityFeedbackPanel extends PureComponent {
     if (isAutoScoring(newV)) {
       newFlags.maxScore = this.props.computedMaxScore;
     }
-    this.props.enableActivityFeedback(activityId, newFlags);
+    this.props.updateActivityFeedbackSettings(activityId, newFlags);
   }
 
   studentRowRef(index) {
@@ -77,6 +79,10 @@ class ActivityFeedbackPanel extends PureComponent {
       const domNode = ReactDom.findDOMNode(itemComponent);
       domNode.scrollIntoView();
     }
+  }
+
+  getFeedbackSettings(activity) {
+    return this.props.settings.getIn(["activitySettings", activity.get("id")]) || Map({});
   }
 
   renderGettingStarted() {
@@ -100,25 +106,28 @@ class ActivityFeedbackPanel extends PureComponent {
       feedbacksNotAnswered,
       autoScores,
       computedMaxScore,
-      rubric,
+      rubric
     } = this.props;
     const numNotAnswered = feedbacksNotAnswered.size;
     const prompt = truncate(activity.get("name") || "", 200);
-    const scoreType = activity.get("scoreType") || NO_SCORE;
     const activityId = activity.get("id");
-    const showText = activity.get("enableTextFeedback");
-    const useRubric = activity.get("useRubric");
-    const activityFeedbackId = activity.get("activityFeedbackId");
-    const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks;
-    let maxScore = MAX_SCORE_DEFAULT;
+
+    const settings = this.getFeedbackSettings(activity);
+    const showText = settings.get("textFeedbackEnabled") || false;
+    const scoreType = settings.get("scoreType") || NO_SCORE;
+    const useRubric = settings.get("useRubric") || false;
+    let maxScore;
     switch (scoreType) {
       case AUTOMATIC_SCORE:
       case RUBRIC_SCORE:
         maxScore = computedMaxScore;
         break;
       default:
-        maxScore = activity.get("maxScore");
+        maxScore = settings.get("maxScore") || MAX_SCORE_DEFAULT;
     }
+
+    const activityFeedbackId = activity.get("activityFeedbackId");
+    const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks;
 
     const showGettingStarted = scoreType === NO_SCORE && !showText && !useRubric;
 
@@ -148,9 +157,10 @@ class ActivityFeedbackPanel extends PureComponent {
             />
             <ActivityFeedbackOptions
               activity={this.props.activity}
-              scoreEnabled={this.state.scoreEnabled}
-              toggleScoreEnabled={this.toggleScoreEnabled}
-              enableActivityFeedback={this.props.enableActivityFeedback}
+              showText={showText}
+              scoreType={scoreType}
+              maxScore={maxScore}
+              updateActivityFeedbackSettings={this.props.updateActivityFeedbackSettings}
               computedMaxScore={this.props.computedMaxScore}
               rubric={rubric}
             />
@@ -228,15 +238,18 @@ function makeMapStateToProps() {
     const computedMaxScore = getMaxSCore(state, ownProps);
     // const autoScores = getAutoscores(state, ownProps);
     const autoScores = [];
-    return { rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview, feedbacksNotAnswered, computedMaxScore, autoScores };
+    return {
+      rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
+      feedbacksNotAnswered, computedMaxScore, autoScores,
+      settings: state.getIn(["feedback", "settings"])
+    };
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateActivityFeedback: (answerId, feedback) => dispatch(updateActivityFeedback(answerId, feedback)),
-
-    enableActivityFeedback: (activityKey, feedbackFlags) => dispatch(enableActivityFeedback(activityKey, feedbackFlags)),
+    updateActivityFeedbackSettings: (activityId, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, feedbackFlags)),
   };
 };
 
