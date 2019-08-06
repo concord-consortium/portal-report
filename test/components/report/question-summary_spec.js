@@ -10,8 +10,8 @@ const mockStore = configureStore();
 describe("<QuestionSummary />", () => {
   const prompt = "Why is the sky blue?";
   const answers = fromJS([
-    {type: "multiple_choice"},
-    {type: "open_response"}
+    {type: "multiple_choice", answer: "test"},
+    {type: "open_response", answer: "test"}
   ]);
   const students = fromJS({
     "test1@student": {},

@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import { updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../actions/index";
 import { MANUAL_SCORE, MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
 import "../../../css/report/feedback-panel.less";
+import { feedbackValidForAnswer } from "../../util/misc";
 
 class QuestionFeedbackPanel extends PureComponent {
   constructor(props) {
@@ -56,7 +57,7 @@ class QuestionFeedbackPanel extends PureComponent {
 
   answerIsMarkedComplete(answer) {
     const feedback = this.getFeedback(answer);
-    return feedback && feedback.get("hasBeenReviewed");
+    return feedbackValidForAnswer(feedback, answer);
   }
 
   enableText(event) {
@@ -230,7 +231,7 @@ class QuestionFeedbackPanel extends PureComponent {
       answerId: answer.get("id"),
       feedback: "✖ No Feedback Yet",
       score: "0",
-      hasBeenReviewed: false,
+      hasBeenReviewedForAnswerHash: "",
       classHash: answer.get("classHash"),
       platformUserId: answer.get("platformUserId")
     });
