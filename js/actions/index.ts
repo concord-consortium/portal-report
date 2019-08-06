@@ -7,10 +7,13 @@ import {
   IPortalRawData,
   IResponse,
   reportSettingsFireStorePath,
-  reportQuestionFeedbacksFireStorePath, feedbackSettingsFirestorePath
+  reportQuestionFeedbacksFireStorePath,
+  reportActivityFeedbacksFireStorePath,
+  feedbackSettingsFirestorePath,
 } from "../api";
 import {
   API_UPDATE_QUESTION_FEEDBACK,
+  API_UPDATE_ACTIVITY_FEEDBACK,
   API_UPDATE_REPORT_SETTINGS,
   API_UPDATE_FEEDBACK_SETTINGS,
   API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE
@@ -23,6 +26,7 @@ export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
 export const RECEIVE_QUESTION_FEEDBACKS = "RECEIVE_QUESTION_FEEDBACKS";
 export const RECEIVE_FEEDBACK_SETTINGS = "RECEIVE_FEEDBACK_SETTINGS";
+export const RECEIVE_ACTIVITY_FEEDBACKS = "RECEIVE_ACTIVITY_FEEDBACKS";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SET_NOW_SHOWING = "SET_NOW_SHOWING";
 export const SET_ANONYMOUS = "SET_ANONYMOUS";
@@ -198,6 +202,27 @@ function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch:
   );
 }
 
+function watchFirestoreActivityFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  const feedbackFireStorePath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceId);
+  let feedbacksQuery = db.collection(feedbackFireStorePath)
+    .where("platformId", "==", rawPortalData.platformId)
+    .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
+  if (rawPortalData.userType === "learner") {
+      feedbacksQuery = feedbacksQuery.where("platformStudentId", "==", rawPortalData.platformUserId.toString());
+  } else {
+      // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
+      // but that lets us use context_id value in the Firestore security rules.
+      feedbacksQuery = feedbacksQuery.where("contextId", "==", rawPortalData.contextId);
+  }
+  feedbacksQuery.onSnapshot(snapshot => {
+    if (!snapshot.empty) {
+      dispatch({
+        type: RECEIVE_ACTIVITY_FEEDBACKS,
+        response: snapshot.docs.map(doc => doc.data())
+      });
+    }}, fireStoreError(RECEIVE_ACTIVITY_FEEDBACKS, dispatch)
+  );
+}
 function fetchError(response: IResponse) {
   return {
     type: FETCH_ERROR,
@@ -329,6 +354,22 @@ export function updateQuestionFeedback(answerId: string, feedback: any) {
   };
 }
 
+export function updateActivityFeedback(activityId: string, platformStudentId: string, feedback: any) {
+  const feedbackData = mappedCopy(feedback, {});
+  return {
+    type: API_CALL,
+    callAPI: {
+      type: API_UPDATE_ACTIVITY_FEEDBACK,
+      errorAction: fetchError,
+      data: {
+        feedback: feedbackData,
+        activityId,
+        platformStudentId
+      },
+    },
+  };
+}
+
 export function updateQuestionFeedbackSettings(questionId: string, feedbackFlags: any) {
   const settings: any = mappedCopy(feedbackFlags, {});
   return {
@@ -339,29 +380,6 @@ export function updateQuestionFeedbackSettings(questionId: string, feedbackFlags
       data: {
         questionId,
         settings
-      },
-    },
-  };
-}
-
-export function updateActivityFeedback(activityFeedbackKey: string, feedback: any) {
-  const feedbackData = mappedCopy(feedback, {
-    hasBeenReviewed: "has_been_reviewed",
-    activityFeedbackId: "activity_feedback_id",
-    learnerId: "learner_id",
-    feedback: "text_feedback",
-    rubricFeedback: "rubric_feedback",
-  });
-  feedbackData.feedback_key = activityFeedbackKey;
-  return {
-    type: UPDATE_ACTIVITY_FEEDBACK,
-    activityFeedbackKey,
-    feedback,
-    callAPI: {
-      type: API_UPDATE_REPORT_SETTINGS,
-      errorAction: fetchError,
-      data: {
-        activity_feedback: feedbackData,
       },
     },
   };

@@ -4,7 +4,8 @@ import * as jwt from "jsonwebtoken";
 import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
-import { parseUrl } from "./util/misc";
+import { parseUrl, validFsId } from "./util/misc";
+import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
 import humps from "humps";
 import * as db from "./db";
 
@@ -92,21 +93,6 @@ const getPortalFirebaseJWTUrl = (classHash: string) => {
 };
 
 const getAuthHeader = () => `Bearer ${urlParam("token")}`;
-
-// Returns path that only includes allowed Firestore characters.
-// Firestore docs say:
-// Must be valid UTF-8 characters
-// Must be no longer than 1,500 bytes
-// Cannot contain a forward slash (/)
-// Cannot solely consist of a single period (.) or double periods (..)
-// Cannot match the regular expression __.*__
-const validFsId = (anyPath: string) => {
-  const safeCharacter = "%";
-  return anyPath
-    .replace(/\//g, safeCharacter)
-    .replace(/\.\./g, safeCharacter)
-    .replace(/__/g, safeCharacter);
-};
 
 export function fetchOfferingData() {
   const offeringUrl = urlParam("offering");
@@ -227,7 +213,7 @@ export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?:
   return path;
 }
 
-// The updateQuestionFeedbackSettings API middleware calls out to the FireStore API.
+// The updateFeedbackSettings API middleware calls out to the FireStore API.
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
@@ -262,7 +248,20 @@ export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?
   return path;
 }
 
-// The updateReportSettings API middleware calls out to the FireStore API.
+export function reportActivityFeedbacksFireStorePath(sourceId: string, activityUserKey?: string) {
+  // NP: 2019-06-28 In the case of fake portal data we will return
+  // `/sources/fake.authoring.system/question_feedbacks/1/` which has
+  // special FireStore Rules to allow universal read and write to that document.
+  // Allows us to test limited report settings with fake portal data, without a JWT.
+  const path = `/sources/${sourceId}/activity_feedbacks`;
+  if (activityUserKey) {
+    return path + `/${activityUserKey}`;
+  }
+  return path;
+}
+
+
+// The updateQuestionFeedbacks API middleware calls out to the FireStore API.
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
@@ -278,6 +277,27 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
   // contextId is used by security rules.
   feedback.contextId = contextId;
   const path = reportQuestionFeedbacksFireStorePath(reportState.sourceId, answerId);
+  return firebase.firestore()
+      .doc(path)
+      .set(feedback, {merge: true});
+}
+
+// The updateActivityFeedbacks API middleware calls out to the FireStore API.
+// `firestore().path().set()` returns a Promise that will resolve immediately.
+// This due to a feature in the FireStore API called "latency compensation."
+// See: https://firebase.google.com/docs/firestore/query-data/listen
+export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportState: IStateReportPartial) {
+  const { activityId, platformStudentId, feedback } = data;
+  const { platformId, platformUserId, resourceLinkId, contextId, answers } = reportState;
+  const activityStudentKey = getActivityStudentFeedbackKey(data);
+  feedback.platformId = platformId;
+  feedback.resourceLinkId = resourceLinkId;
+  feedback.activityId = activityId;
+  feedback.platformTeacherId = platformUserId;
+  feedback.platformStudentId = platformStudentId;
+  feedback.contextId = contextId;
+
+  const path = reportActivityFeedbacksFireStorePath(reportState.sourceId, activityStudentKey);
   return firebase.firestore()
       .doc(path)
       .set(feedback, {merge: true});
