@@ -260,7 +260,6 @@ export function reportActivityFeedbacksFireStorePath(sourceId: string, activityU
   return path;
 }
 
-
 // The updateQuestionFeedbacks API middleware calls out to the FireStore API.
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."

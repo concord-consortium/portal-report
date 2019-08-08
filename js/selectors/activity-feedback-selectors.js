@@ -81,10 +81,10 @@ const formatStudents = (students) => students
 const getReport = (state) => state.get("report");
 const getActivity = (state, props) => props.activity;
 const getActivityFeedbacks = (state) => {
-  const actFeedbacks = state.getIn(["feedback","activityFeedbacks"]);
+  const actFeedbacks = state.getIn(["feedback", "activityFeedbacks"]);
   return actFeedbacks;
-}
-const getQuestionFeedbacks = (state) => state.getIn(["feedback","questionFeedbacks"]);
+};
+const getQuestionFeedbacks = (state) => state.getIn(["feedback", "questionFeedbacks"]);
 const getStudents = (state) => state.getIn(["report", "students"]);
 const getRubics = (state) => state.get("rubrics");
 
