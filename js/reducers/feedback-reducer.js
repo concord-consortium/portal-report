@@ -23,7 +23,7 @@ export default function feedbackReducer(state = INITIAL_FEEDBACK_STATE, action) 
       return state.set("questionFeedbacks", fromJS(feedbacks));
     case RECEIVE_ACTIVITY_FEEDBACKS:
       const actFeedbacks = action.response.reduce((map, feedback) => {
-        map[feedback.activityId] = feedback;
+        map[`${feedback.activityId}-${feedback.platformStudentId}`] = feedback;
         return map;
       }, {});
       return state.set("activityFeedbacks", fromJS(actFeedbacks));

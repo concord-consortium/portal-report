@@ -126,6 +126,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
     }
     watchFirestoreFeedbackSettings(rawPortalData, dispatch);
     watchFirestoreQuestionFeedback(rawPortalData, dispatch);
+    watchFirestoreActivityFeedback(rawPortalData, dispatch);
   };
 }
 function getResourceLink(rawPortalData: IPortalRawData) {

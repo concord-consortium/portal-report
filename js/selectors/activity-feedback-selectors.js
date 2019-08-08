@@ -35,7 +35,7 @@ const newFeedback = (activityMap, studentMap) => {
     student,
     key,
     studentId: student.id,
-    feedbacks: [{ feedback: "", score: 0, hasBeenReviewed: false }],
+    feedback: { feedback: "", score: 0, hasBeenReviewed: false },
   };
   return fromJS(newFeedbackRecord);
 };
@@ -57,7 +57,7 @@ const activityFeedbackFor = (activity, student, feedbacks) => {
 };
 
 const feedbackIsMarkedComplete = (fb) => {
-  const feedback = fb.get("feedbacks") && fb.get("feedbacks").first();
+  const feedback = fb.get("feedbacks") && fb.get("feedbacks");
   return feedback && feedback.get("hasBeenReviewed");
 };
 
@@ -80,8 +80,11 @@ const formatStudents = (students) => students
  *************************************************************************/
 const getReport = (state) => state.get("report");
 const getActivity = (state, props) => props.activity;
-const getActivityFeedbacks = (state) => state.get("activityFeedbacks");
-const getQuestionFeedbacks = (state) => state.get("feedbacks");
+const getActivityFeedbacks = (state) => {
+  const actFeedbacks = state.getIn(["feedback","activityFeedbacks"]);
+  return actFeedbacks;
+}
+const getQuestionFeedbacks = (state) => state.getIn(["feedback","questionFeedbacks"]);
 const getStudents = (state) => state.getIn(["report", "students"]);
 const getRubics = (state) => state.get("rubrics");
 
@@ -174,7 +177,7 @@ export const getStudentFeedbacks = (activity, students, activityFeedbacks) => {
   const numFeedbacksNeedingReview = feedbacksNeedingReview.size;
 
   const lastFeedbacks = activityFeedbacks
-    .map(f => f.get("feedbacks").first())
+    .map(f => f.get("feedbacks"))
     .filter(f => f && f.get("hasBeenReviewed"));
 
   const scores = lastFeedbacks
@@ -272,7 +275,7 @@ export const getRubricScores = (rubric, feedbacks) => {
   let scores = IMap({});
   feedbacks.feedbacks
     .forEach(feedbackRecord => {
-      const feedback = feedbackRecord.get("feedbacks").first();
+      const feedback = feedbackRecord.get("feedbacks");
       const key = feedbackRecord.get("studentId");
       let score = null;
       if (feedback && feedback.get("rubricFeedback")) {
