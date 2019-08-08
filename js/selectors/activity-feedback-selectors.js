@@ -33,9 +33,11 @@ const newFeedback = (activityMap, studentMap) => {
   const key = keyFor(activityMap, studentMap);
   const newFeedbackRecord = {
     student,
-    key,
-    platFormStudentId: student.id,
-    feedback: { feedback: "", score: 0, hasBeenReviewed: false },
+    platformStudentId: student.id,
+    feedback: "",
+    score: 0,
+    activityId: activityMap.get("id"),
+    hasBeenReviewed: false
   };
   return fromJS(newFeedbackRecord);
 };
