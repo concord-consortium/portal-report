@@ -5,7 +5,7 @@ import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl, validFsId } from "./util/misc";
-import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
+import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/activity-feedback-helper";
 import humps from "humps";
 import * as db from "./db";
 

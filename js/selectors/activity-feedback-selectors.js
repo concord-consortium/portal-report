@@ -34,7 +34,7 @@ const newFeedback = (activityMap, studentMap) => {
   const newFeedbackRecord = {
     student,
     key,
-    studentId: student.id,
+    platFormStudentId: student.id,
     feedback: { feedback: "", score: 0, hasBeenReviewed: false },
   };
   return fromJS(newFeedbackRecord);
@@ -176,17 +176,16 @@ export const getStudentFeedbacks = (activity, students, activityFeedbacks) => {
   const feedbacksNotAnswered = getFeedbacksNotAnswered(feedbacks);
   const numFeedbacksNeedingReview = feedbacksNeedingReview.size;
 
-  const lastFeedbacks = activityFeedbacks
-    .map(f => f.get("feedbacks"))
-    .filter(f => f && f.get("hasBeenReviewed"));
+  const reviewedFeedback = activityFeedbacks
+    .filter(f => f.get("hasBeenReviewed"));
 
-  const scores = lastFeedbacks
+  const scores = reviewedFeedback
     .map(f => f.get("score"))
     .filter(x => x)
     .toList()
     .toJS();
 
-  const rubricFeedbacks = lastFeedbacks
+  const rubricFeedbacks = reviewedFeedback
     .map(f => f.get("rubricFeedback"))
     .filter(x => x)
     .toList()
@@ -248,7 +247,7 @@ export const makeGetQuestionAutoScores = () => {
         .map(q => q.get("answers"))
         .flatten();
         // .map(answerId => report.getIn(["answers", answerId]))
-        // .groupBy(answer => answer.get("studentId"))
+        // .groupBy(answer => answer.get("platFormStudentId"))
         // .map(studentAnswer => studentAnswer
         //   .filter(ans => ans.get("feedbacks"))
         //   .map(ans => ans.get("feedbacks").last())
@@ -273,12 +272,10 @@ export const makeGetQuestionAutoScores = () => {
  ******************************************************************************/
 export const getRubricScores = (rubric, feedbacks) => {
   let scores = IMap({});
-  feedbacks.feedbacks
-    .forEach(feedbackRecord => {
-      const feedback = feedbackRecord.get("feedbacks");
-      const key = feedbackRecord.get("studentId");
+  feedbacks.feedbacks.forEach(feedback => {
+      const key = feedback.get("platFormStudentId");
       let score = null;
-      if (feedback && feedback.get("rubricFeedback")) {
+      if (feedback.get("rubricFeedback")) {
         const rubricFeedback = feedback.get("rubricFeedback");
         score = rubricFeedback.map((v, k) => v.get("score")).reduce((p, n) => p + n);
         scores.set(key, score);
