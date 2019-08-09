@@ -59,18 +59,15 @@ const activityFeedbackFor = (activity, student, feedbacks) => {
 };
 
 const feedbackIsMarkedComplete = (fb) => {
-  const feedback = fb.get("feedbacks") && fb.get("feedbacks");
-  return feedback && feedback.get("hasBeenReviewed");
+  return fb && fb.get("hasBeenReviewed");
 };
 
-const hasLearner = (feedback) => !!feedback.get("learnerId");
-
-const getFeedbacksNotAnswered = (fbs) => fbs.filter(f => !hasLearner(f));
+const getFeedbacksNotAnswered = (fbs) => fbs
+// TODO: ⬆  How do we know if a student hasn't started yet?
 
 const getFeedbacksNeedingReview = (feedbacks) => {
   return feedbacks
     .filter(f => !feedbackIsMarkedComplete(f))
-    .filter(f => hasLearner(f));
 };
 
 const formatStudents = (students) => students
@@ -179,7 +176,7 @@ export const getStudentFeedbacks = (activity, students, activityFeedbacks) => {
   const numFeedbacksNeedingReview = feedbacksNeedingReview.size;
 
   const reviewedFeedback = activityFeedbacks
-    .filter(f => f.get("hasBeenReviewed"));
+    .filter(f => f.get("hasBeenReviewed") === true);
 
   const scores = reviewedFeedback
     .map(f => f.get("score"))
