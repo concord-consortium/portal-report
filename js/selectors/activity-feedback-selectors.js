@@ -62,12 +62,12 @@ const feedbackIsMarkedComplete = (fb) => {
   return fb && fb.get("hasBeenReviewed");
 };
 
-const getFeedbacksNotAnswered = (fbs) => fbs
+const getFeedbacksNotAnswered = (fbs) => fbs;
 // TODO: ⬆  How do we know if a student hasn't started yet?
 
 const getFeedbacksNeedingReview = (feedbacks) => {
   return feedbacks
-    .filter(f => !feedbackIsMarkedComplete(f))
+    .filter(f => !feedbackIsMarkedComplete(f));
 };
 
 const formatStudents = (students) => students
