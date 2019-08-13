@@ -179,7 +179,7 @@ class ActivityFeedbackPanel extends PureComponent {
               <div className="feedback-for-students">
                 <TransitionGroup>
                   { filteredFeedbacks.map((studentActivityFeedback, i) => {
-                    const studentId = studentActivityFeedback.get("studentId");
+                    const studentId = studentActivityFeedback.get("platformStudentId");
                     return (
                       <CSSTransition
                         key={i}

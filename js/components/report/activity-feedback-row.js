@@ -21,7 +21,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     const { activityId, studentId, updateActivityFeedback } = this.props;
     const oldData = this.fieldValues();
     const newRecord = Object.assign({}, oldData, newData);
-    this.props.updateActivityFeedback(activityId, studentId, newRecord);
+    updateActivityFeedback(activityId, studentId, newRecord);
   }
 
   scoreChange(e) {

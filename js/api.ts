@@ -287,7 +287,7 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
 // See: https://firebase.google.com/docs/firestore/query-data/listen
 export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportState: IStateReportPartial) {
   const { activityId, platformStudentId, feedback } = data;
-  const { platformId, platformUserId, resourceLinkId, contextId, answers } = reportState;
+  const { platformId, platformUserId, resourceLinkId, contextId } = reportState;
   const activityStudentKey = getActivityStudentFeedbackKey(data);
   feedback.platformId = platformId;
   feedback.resourceLinkId = resourceLinkId;
