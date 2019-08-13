@@ -53,7 +53,6 @@ class ActivityFeedbackPanel extends PureComponent {
 
   changeScoreType(newV) {
     const activityId = this.props.activity.get("id").toString();
-    const activityFeedbackId = this.props.activity.get("activityFeedbackId");
     const newFlags = {
       activityFeedbackId,
       scoreType: newV,
@@ -126,7 +125,6 @@ class ActivityFeedbackPanel extends PureComponent {
         maxScore = settings.get("maxScore") || MAX_SCORE_DEFAULT;
     }
 
-    const activityFeedbackId = activity.get("activityFeedbackId");
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks;
 
     const showGettingStarted = scoreType === NO_SCORE && !showText && !useRubric;
@@ -190,17 +188,18 @@ class ActivityFeedbackPanel extends PureComponent {
                       >
                         <ActivityFeedbackRow
                           studentActivityFeedback={studentActivityFeedback}
-                          activityFeedbackId={activityFeedbackId}
-                          key={`${activityFeedbackId}-${studentId}`}
+                          activityId={activityId}
+                          key={`${activityId}-${studentId}`}
+                          studentId={studentId}
                           ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
                           scoreType={scoreType}
-                          autoScore={autoScores.get(studentId)}
+                          autoScore={0}
+                          // TODO ⬆ fix direct assignment of autoscore
                           feedbackEnabled={showText}
                           useRubric={useRubric}
-                          activityId={activityId}
                           rubric={rubric}
                           maxScore={maxScore}
-                          updateQuestionFeedbacks={this.props.updateActivityFeedback}
+                          updateActivityFeedback={this.props.updateActivityFeedback}
                           showOnlyNeedReview={this.state.showOnlyNeedReview}
                         />
                       </CSSTransition>
@@ -248,7 +247,7 @@ function makeMapStateToProps() {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateActivityFeedback: (answerId, feedback) => dispatch(updateActivityFeedback(answerId, feedback)),
+    updateActivityFeedback: (activityId, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, platformStudentId, feedback)),
     updateActivityFeedbackSettings: (activityId, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, feedbackFlags)),
   };
 };

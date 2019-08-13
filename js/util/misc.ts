@@ -37,3 +37,18 @@ export const feedbackValidForAnswer = (feedback: Map<string, any>, answer: Map<s
   }
   return feedback.get("hasBeenReviewedForAnswerHash") === answerHash(answer);
 };
+
+// Returns path that only includes allowed Firestore characters.
+// Firestore docs say:
+// Must be valid UTF-8 characters
+// Must be no longer than 1,500 bytes
+// Cannot contain a forward slash (/)
+// Cannot solely consist of a single period (.) or double periods (..)
+// Cannot match the regular expression __.*__
+export const validFsId = (anyPath: string) => {
+  const safeCharacter = "%";
+  return anyPath
+    .replace(/\//g, safeCharacter)
+    .replace(/\.\./g, safeCharacter)
+    .replace(/__/g, safeCharacter);
+};

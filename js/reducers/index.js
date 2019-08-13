@@ -16,7 +16,6 @@ import {
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
 import feedbackReducer from "./feedback-reducer";
 import { rubricReducer } from "./rubric-reducer";
-import { activityFeedbackReducer } from "./activity-feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
 import config from "../config";
 import {
@@ -239,8 +238,7 @@ export default function reducer(state = Map(), action) {
     data: data(state.get("data"), action),
     report: report(state.get("report"), action),
     feedback: feedbackReducer(state.get("feedback"), action),
-    activityFeedbacks: activityFeedbackReducer(state.get("activityFeedbacks"), action),
     rubrics: rubricReducer(state.get("rubrics"), action),
-    dashboard: dashboardReducer(state.get("dashboard"), action),
+    dashboard: dashboardReducer(state.get("dashboard"), action)
   });
 }

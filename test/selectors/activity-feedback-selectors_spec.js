@@ -36,55 +36,48 @@ describe("activity-feedback-selectors", () => {
     {
       "1-1": {
         key: "1-1",
-        studentId: 1,
+        platFormStudentId: 1,
         learnerId: 201,
-        feedbacks: [
-          {
-            feedback: "good",
-            hasBeenReviewed: true,
-            rubricFeedback: {
-              C1: {
-                description: "Not meeting expected goals.",
-                id: "R1",
-                label: "Beginning",
-                score: 1
-              },
-              C2: {
-                description: "Not meeting expected goals.",
-                id: "R1",
-                label: "Beginning",
-                score: 1
-              }
-            },
+        feedback: "good",
+        hasBeenReviewed: true,
+        rubricFeedback: {
+          C1: {
+            description: "Not meeting expected goals.",
+            id: "R1",
+            label: "Beginning",
+            score: 1
+          },
+          C2: {
+            description: "Not meeting expected goals.",
+            id: "R1",
+            label: "Beginning",
             score: 1
           }
-        ]
-      },
+        },
+        score: 1
+
+    },
       "1-2": {
         key: "1-2",
-        studentId: 2,
+        platFormStudentId: 2,
         learnerId: 202,
-        feedbacks: [
-          {
-            feedback: "better",
-            hasBeenReviewed: true,
-            rubricFeedback: {
-              C1: {
-                description: "better",
-                id: "R1",
-                label: "better",
-                score: 2
-              },
-              C2: {
-                description: "better",
-                id: "R1",
-                label: "better",
-                score: 2
-              }
-            },
+        feedback: "better",
+        hasBeenReviewed: true,
+        rubricFeedback: {
+          C1: {
+            description: "better",
+            id: "R1",
+            label: "better",
+            score: 2
+          },
+          C2: {
+            description: "better",
+            id: "R1",
+            label: "better",
             score: 2
           }
-        ]
+        },
+        score: 2
       }
     }
   );
@@ -111,7 +104,7 @@ describe("activity-feedback-selectors", () => {
           studentFeedbacks = getStudentFeedbacks(
             activity,
             students,
-            activityFeedbacks.setIn(["1-2", "feedbacks", "0", "hasBeenReviewed"], false)
+            activityFeedbacks.setIn(["1-2", "hasBeenReviewed"], false)
           );
         });
         it("should have one score", () => {
@@ -195,47 +188,24 @@ describe("activity-feedback-selectors", () => {
     let feedbacks = {feedbacks: fromJS({
       "1-1": {
         key: "1-1",
-        studentId: 1,
+        platFormStudentId: 1,
         learnerId: 201,
-        // Most recent items are delivered first from the portal.
-        feedbacks: [
-          {
-            feedback: "second answer",
-            hasBeenReviewed: true,
-            rubricFeedback: {
-              C1: {
-                description: "Not meeting expected goals.",
-                id: "R1",
-                label: "Beginning",
-                score: 1
-              },
-              C2: {
-                description: "Not meeting expected goals.",
-                id: "R1",
-                label: "Beginning",
-                score: 1
-              }
-            }
-          }, {
-            feedback: "first answer",
-            hasBeenReviewed: true,
-            rubricFeedback: {
-              C1: {
-                description: "Not meeting expected goals.",
-                id: "R2",
-                label: "Beginning",
-                score: 3
-              },
-              C2: {
-                description: "Not meeting expected goals.",
-                id: "R2",
-                label: "Beginning",
-                score: 3
-              }
-            },
+        feedback: "second answer",
+        hasBeenReviewed: true,
+        rubricFeedback: {
+          C1: {
+            description: "Not meeting expected goals.",
+            id: "R1",
+            label: "Beginning",
+            score: 1
+          },
+          C2: {
+            description: "Not meeting expected goals.",
+            id: "R1",
+            label: "Beginning",
             score: 1
           }
-        ]
+        }
       }
     })};
     // the collection of feedbacks …
