@@ -6,7 +6,6 @@ import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl, validFsId } from "./util/misc";
 import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/activity-feedback-helper";
-import humps from "humps";
 import * as db from "./db";
 
 const FIREBASE_APP = "report-service-dev";

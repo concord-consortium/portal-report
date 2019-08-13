@@ -57,9 +57,7 @@ class Activity extends PureComponent {
     } = this.props;
     const { showFeedbackPanel } = this.state;
 
-    // const isClassReport = reportFor === "class";
-    // @important TODO ⬆ Why don't it work?
-    const isClassReport = true;
+    const isClassReport = reportFor === "class";
     const isStudentReport = !isClassReport;
     const activityName = activity.get("name");
     const showText = activity.get("textFeedbackEnabled");
