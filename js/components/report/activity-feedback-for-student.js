@@ -14,17 +14,12 @@ export default class ActivityFeedbackForStudent extends PureComponent {
       showText,
       autoScore,
     } = this.props;
-    let feedback = null;
     if (!feedbackEnabled) { return null; }
-    const matchingFeedbacks = feedbacks.find((f) => f.get("studentId") === student.get("id"));
-
-    if (matchingFeedbacks) {
-      const fblist = matchingFeedbacks.get("feedbacks");
-      if (fblist && fblist.size > 0) {
-        feedback = fblist.first().toJS();
-      }
+    let feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
+    if (feedback) {
+      feedback = feedback.toJS();
     }
-    const showFeedback = (feedback && feedback.hasBeenReviewed);
+    const showFeedback = feedback && feedback.hasBeenReviewed;
     const score = (autoScore != null) ? autoScore : feedback && feedback.score;
     const textFeedback = feedback && feedback.feedback;
     const hasBeenReviewed = feedback && feedback.hasBeenReviewed;

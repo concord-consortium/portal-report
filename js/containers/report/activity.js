@@ -6,7 +6,7 @@ import FeedbackButton from "../../components/report/feedback-button";
 import ActivityFeedbackForStudent from "../../components/report/activity-feedback-for-student";
 import ActivityFeedbackPanel from "./activity-feedback-panel";
 import SummaryIndicator from "../../components/report/summary-indicator";
-import { fromJS } from "immutable";
+import { fromJS, Map } from "immutable";
 import {
   makeGetStudentFeedbacks,
   makeGetRubric,
@@ -43,6 +43,10 @@ class Activity extends PureComponent {
     });
   }
 
+  getFeedbackSettings(activity) {
+    return this.props.feedbackSettings.getIn(["activitySettings", activity.get("id")]) || Map({});
+  }
+
   render() {
     const {
       activity,
@@ -57,15 +61,16 @@ class Activity extends PureComponent {
     } = this.props;
     const { showFeedbackPanel } = this.state;
 
+    const feedbackSettings = this.getFeedbackSettings(activity);
     const isClassReport = reportFor === "class";
     const isStudentReport = !isClassReport;
     const activityName = activity.get("name");
-    const showText = activity.get("textFeedbackEnabled");
-    const scoreType = activity.get("scoreType");
-    const maxScore = scoreType === MANUAL_SCORE ? activity.get("maxScore") : computedMaxScore;
+    const showText = feedbackSettings.get("textFeedbackEnabled");
+    const scoreType = feedbackSettings.get("scoreType");
+    const maxScore = scoreType === MANUAL_SCORE ? feedbackSettings.get("maxScore") : computedMaxScore;
     const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS());
     const showScore = scoreType !== "none";
-    const useRubric = activity.get("useRubric");
+    const useRubric = feedbackSettings.get("useRubric");
     const feedbackEnabled = showScore || showText || useRubric;
     let autoScore = null;
 
@@ -136,8 +141,8 @@ function makeMapStateToProps() {
       scores,
       rubricFeedbacks } = getFeedbacks(state, ownProps);
     const needsReviewCount = feedbacksNeedingReview.size;
-
-    return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore };
+    const feedbackSettings = state.getIn(["feedback", "settings"]);
+    return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore, feedbackSettings };
   };
 }
 
