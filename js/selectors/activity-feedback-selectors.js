@@ -74,16 +74,20 @@ const formatStudents = (students) => students
   .sort((student1, student2) => compareStudentsByName(student1, student2))
   .map(s => addRealName(s));
 
+const getActivitySettings = (feedbackSettings, activity) =>
+  feedbackSettings.getIn(["activitySettings", activity.get("id")]) || IMap({});
+
+const getQuestionSettings = (feedbackSettings, question) =>
+  feedbackSettings.getIn(["questionSettings", question.get("id")]) || IMap({});
+
 /*************************************************************************
  * Simple selectors:
  *************************************************************************/
 const getReport = (state) => state.get("report");
 const getActivity = (state, props) => props.activity;
-const getActivityFeedbacks = (state) => {
-  const actFeedbacks = state.getIn(["feedback", "activityFeedbacks"]);
-  return actFeedbacks;
-};
+const getActivityFeedbacks = (state) => state.getIn(["feedback", "activityFeedbacks"]);
 const getQuestionFeedbacks = (state) => state.getIn(["feedback", "questionFeedbacks"]);
+const getFeedbackSettings = (state) => state.getIn(["feedback", "settings"]);
 const getStudents = (state) => state.getIn(["report", "students"]);
 const getRubics = (state) => state.get("rubrics");
 
@@ -100,7 +104,8 @@ const getRubics = (state) => state.get("rubrics");
 // Updates when the activity Changes
 const makeGetScoreType = () => createSelector(
   getActivity,
-  (activity) => activity.get("scoreType"),
+  getFeedbackSettings,
+  (activity, feedbackSettings) => getActivitySettings(feedbackSettings, activity).get("scoreType")
 );
 
 // Memoization factory for the rubric
@@ -108,11 +113,11 @@ const makeGetScoreType = () => createSelector(
 export const makeGetRubric = () => createSelector(
   getRubics,
   getActivity,
-  (rubrics, activity) => {
-    const rubricUrl = activity.get("rubricUrl");
-    const rubric = rubrics.get(rubricUrl) ? rubrics.get(rubricUrl).toJS() : null;
-    return rubric;
-  },
+  getFeedbackSettings,
+  (rubrics, activity, feedbackSettings) => {
+    const rubricUrl = getActivitySettings(feedbackSettings, activity).get("rubricUrl");
+    return rubricUrl && rubrics.get(rubricUrl) ? rubrics.get(rubricUrl).toJS() : null;
+  }
 );
 
 /*******************************************************************************
@@ -326,11 +331,12 @@ const makeGetAutoMaxScore = () => {
   const getQuestions = makeGetQuestions();
   return createSelector(
     getQuestions,
-    (questions) => {
+    getFeedbackSettings,
+    (questions, feedbackSettings) => {
       return questions
-        .filter(question => question.get("scoreEnabled"))
-        .map(question => isNumeric(question.get("maxScore"))
-          ? question.get("maxScore")
+        .filter(question => getQuestionSettings(feedbackSettings, question).get("scoreEnabled"))
+        .map(question => isNumeric(getQuestionSettings(feedbackSettings, question).get("maxScore"))
+          ? getQuestionSettings(feedbackSettings, question).get("maxScore")
           : MAX_SCORE_DEFAULT)
         .reduce((total, score) => total + score, 0);
     },

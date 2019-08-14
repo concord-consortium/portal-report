@@ -129,12 +129,11 @@ function makeMapStateToProps() {
     const getRubric = makeGetRubric();
     const getFeedbacks = makeGetStudentFeedbacks();
     const getAutoMaxScore = makeGetComputedMaxScore();
-    // const getAutoScores = makeGetAutoScores();
+    const getAutoScores = makeGetAutoScores();
 
     const rubric = getRubric(state, ownProps);
     const computedMaxScore = getAutoMaxScore(state, ownProps);
-    // const autoScores = getAutoScores(state, ownProps);
-    const autoScores = fromJS([]);
+    const autoScores = getAutoScores(state, ownProps);
     const {
       feedbacksNeedingReview,
       feedbacks,
