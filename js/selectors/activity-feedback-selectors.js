@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { fromJS, Map as IMap } from "immutable";
-import { compareStudentsByName } from "../util/misc";
+import { compareStudentsByName, feedbackValidForAnswer } from "../util/misc";
 import {
   AUTOMATIC_SCORE,
   MAX_SCORE_DEFAULT,
@@ -239,28 +239,29 @@ export const makeGetQuestionAutoScores = () => {
     getReport,
     getQuestions,
     getQuestionFeedbacks,
-    (report, questions, questionFeedbacks) => {
-      const getFeedbackScore = (feedbackId) => {
-        const score = questionFeedbacks.getIn([feedbackId, "score"]);
-        const reviewed = questionFeedbacks.getIn([feedbackId, "hasBeenReviewed"]);
-        const computedScore = reviewed ? (score || 0) : false;
-        return computedScore;
+    getFeedbackSettings,
+    (report, questions, questionFeedbacks, feedbackSettings) => {
+      const getFeedbackScore = (answer) => {
+        const feedback = questionFeedbacks.get(answer.get("id"));
+        if (!feedbackValidForAnswer(feedback, answer)) {
+          return false;
+        }
+        return feedback.get("score") || 0;
       };
-      const scores = questions
-        .filter(question => question.get("scoreEnabled"))
-        .map(q => q.get("answers"))
-        .flatten();
-        // .map(answerId => report.getIn(["answers", answerId]))
-        // .groupBy(answer => answer.get("platFormStudentId"))
-        // .map(studentAnswer => studentAnswer
-        //   .filter(ans => ans.get("feedbacks"))
-        //   .map(ans => ans.get("feedbacks").last())
-        //   .map(feedbackId => getFeedbackScore(feedbackId))
-        //   .filter(a => isNumeric(a)),
-        // );
-        // TODO ⬆
-      const sums = scores.map(s => s.reduce((sum, v) => sum + v, 0));
-      return sums;
+
+      const scoredQuestionIds = questions
+        .filter(question => getQuestionSettings(feedbackSettings, question).get("scoreEnabled"))
+        .map(question => question.get("id"));
+
+      const scores = report.get("answers")
+        .toList()
+        .filter(answer => scoredQuestionIds.indexOf(answer.get("questionId")) !== -1)
+        .groupBy(answer => answer.get("platformUserId"))
+        .map(studentAnswers => studentAnswers
+          .map(studentAnswer => getFeedbackScore(studentAnswer))
+          .filter(a => isNumeric(a))
+        );
+      return scores.map(s => s.reduce((sum, v) => sum + v, 0));
     },
   );
 };
