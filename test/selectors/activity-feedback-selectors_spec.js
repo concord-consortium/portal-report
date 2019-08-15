@@ -81,6 +81,15 @@ describe("activity-feedback-selectors", () => {
     }
   );
 
+  let progress = fromJS({
+    "1": {
+      "1": 0.5
+    },
+    "2": {
+      "1": 0.5
+    }
+  });
+
   describe("getStudentFeedbacks", () => {
     it("should be a function", () => {
       expect(typeof getStudentFeedbacks).toBe("function");
@@ -92,7 +101,8 @@ describe("activity-feedback-selectors", () => {
         studentFeedbacks = getStudentFeedbacks(
           activity,
           students,
-          activityFeedbacks
+          activityFeedbacks,
+          progress
         );
       });
       it("should have two scores", () => {
@@ -103,7 +113,8 @@ describe("activity-feedback-selectors", () => {
           studentFeedbacks = getStudentFeedbacks(
             activity,
             students,
-            activityFeedbacks.setIn(["1-2", "hasBeenReviewed"], false)
+            activityFeedbacks.setIn(["1-2", "hasBeenReviewed"], false),
+            progress
           );
         });
         it("should have one score", () => {

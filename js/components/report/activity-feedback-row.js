@@ -145,17 +145,16 @@ export default class ActivityFeedbackRow extends PureComponent {
   }
 
   render() {
-    const { studentActivityFeedback, activityId, studentId } = this.props;
+    const { studentActivityFeedback, activityId } = this.props;
     const student = studentActivityFeedback.get("student");
     const name = student.get("realName");
-    const started = true; // TODO NP: We used to look for learnerId ...
-    const displayFeedback = started;
+    const started = studentActivityFeedback.get("activityStarted");
     const noFeedbackSection =
       <p>
         This user hasn't finished yet.
       </p>;
 
-    const feedbackSection = displayFeedback
+    const feedbackSection = started
       ? this.renderFeedbackSection(studentActivityFeedback)
       : noFeedbackSection;
 
