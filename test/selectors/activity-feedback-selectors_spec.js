@@ -26,7 +26,6 @@ describe("activity-feedback-selectors", () => {
   let activity = fromJS(
     {
       id: 1,
-      activityFeedbackId: 1,
       activityFeedback: ["1-1", "1-2"],
       scoreType: "manual"
     }
@@ -36,7 +35,7 @@ describe("activity-feedback-selectors", () => {
     {
       "1-1": {
         key: "1-1",
-        platFormStudentId: 1,
+        platformStudentId: 1,
         learnerId: 201,
         feedback: "good",
         hasBeenReviewed: true,
@@ -59,7 +58,7 @@ describe("activity-feedback-selectors", () => {
     },
       "1-2": {
         key: "1-2",
-        platFormStudentId: 2,
+        platformStudentId: 2,
         learnerId: 202,
         feedback: "better",
         hasBeenReviewed: true,
@@ -188,7 +187,7 @@ describe("activity-feedback-selectors", () => {
     let feedbacks = {feedbacks: fromJS({
       "1-1": {
         key: "1-1",
-        platFormStudentId: 1,
+        platformStudentId: 1,
         learnerId: 201,
         feedback: "second answer",
         hasBeenReviewed: true,

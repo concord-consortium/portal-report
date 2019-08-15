@@ -12,7 +12,6 @@ import { Map } from "immutable";
 
 import {
   makeGetStudentFeedbacks,
-  makeGetRubric,
   makeGetAutoScores,
   makeGetComputedMaxScore,
 } from "../../selectors/activity-feedback-selectors";
@@ -53,7 +52,6 @@ class ActivityFeedbackPanel extends PureComponent {
   changeScoreType(newV) {
     const activityId = this.props.activity.get("id").toString();
     const newFlags = {
-      activityFeedbackId,
       scoreType: newV,
     };
     if (newV !== NO_SCORE) {
@@ -157,6 +155,7 @@ class ActivityFeedbackPanel extends PureComponent {
               showText={showText}
               scoreType={scoreType}
               maxScore={maxScore}
+              useRubric={useRubric}
               updateActivityFeedbackSettings={this.props.updateActivityFeedbackSettings}
               computedMaxScore={this.props.computedMaxScore}
               rubric={rubric}
@@ -221,10 +220,8 @@ class ActivityFeedbackPanel extends PureComponent {
 function makeMapStateToProps() {
   return (state, ownProps) => {
     const getFeedbacks = makeGetStudentFeedbacks();
-    const getRubric = makeGetRubric();
     const getMaxSCore = makeGetComputedMaxScore();
     const getAutoscores = makeGetAutoScores();
-    const rubric = getRubric(state, ownProps);
     const {
       feedbacks,
       feedbacksNeedingReview,
@@ -234,10 +231,12 @@ function makeMapStateToProps() {
     const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - feedbacksNotAnswered.size;
     const computedMaxScore = getMaxSCore(state, ownProps);
     const autoScores = getAutoscores(state, ownProps);
+    const rubric = state.getIn(["feedback", "settings", "rubric"]);
     return {
-      rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
+      feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
       feedbacksNotAnswered, computedMaxScore, autoScores,
-      settings: state.getIn(["feedback", "settings"])
+      settings: state.getIn(["feedback", "settings"]),
+      rubric: rubric && rubric.toJS()
     };
   };
 }
