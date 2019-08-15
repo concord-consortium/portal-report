@@ -57,8 +57,8 @@ class Dashboard {
     }
 
     //Activity Info
-    getActivityQuestions() {
-        return getByCypressTag('activity-question-toggle')
+    getActivityQuestions(actIdx) {
+        return cy.get('.activity-questions--content--r733iL4d').eq(actIdx)
     }
     getActivityQuestionsText() {
         return getByCypressTag('activityQuestionsText')
@@ -69,14 +69,14 @@ class Dashboard {
     getActivityNames () {
         return getByCypressTag('activityName')
     }
-    //Portal Report 
-    getFeedbackBox () {
-        return getByCypressTag('feedbackBox')
-    }
-    getFeedbackButton () {
-        return getByCypressTag('feedbackButton')
+    //Feedback Buttons
+    getFeedbackForStudent(activityIdx, questionIdx) {
+        this.getActivityNames().eq(activityIdx).click({force:true})
+        this.getActivityQuestions(ActivityIdx).eq(questionIdx).click({force:true})
+        
     }
     
+
 }
 
 export default Dashboard;

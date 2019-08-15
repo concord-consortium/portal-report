@@ -3,6 +3,7 @@ import Dashboard from "../support/elements/geode-dashboard/dashboard";
 context('Geode Dashboard Smoke Test', () => {
 
     const dashboard = new Dashboard;
+    const studentsToTest = ['', '', '']
 
     beforeEach(() => {
         cy.visit('/?dashboard=true')
@@ -13,10 +14,8 @@ context('Geode Dashboard Smoke Test', () => {
         let students;
 
         students = classData.class.students
-
-        for (let i=0; i< students.length; i++) {
+        for (let i = 0; i < students.length; i++) {
             if (students[i].id === id) {
-
                 let student = students[i]
                 return student.name
             } else {
@@ -25,20 +24,17 @@ context('Geode Dashboard Smoke Test', () => {
         }
     }
 
-    function getActivityData(data) {
+
+    function getActivityData(classData) {
         let activityData;
 
-        activityData = data.report.children
+        activityData = classData.report.children
         if (activityData != null) {
             return activityData;
         } else {
             cy.log('There was no activity with this index')
         }
     }
-
-    // This script skips the selection of sections within an activity
-    // Ahould not be difficult to add in, no current examples with multiple
-    // sections
 
     function getPageData(activityData) {
         let pageData;
@@ -71,13 +67,13 @@ context('Geode Dashboard Smoke Test', () => {
         }
     }
 
-    function getAnswer(allAnswers, studentID) {   
-        for (let i=0;i<allAnswers.length;i++) {
-            let answerData = allAnswers[i]
+    function getStudentAnswer(answerData, studentID) {
+        for (let i = 0; i < answerData.length; i++) {
             let answer;
 
-            if (answerData.student_id === studentID) {
-                answer = getAnswerType(answerData)
+            let studentAnswerData = answerData[i]
+            if (studentAnswerData.student_id === studentID) {
+                answer = getAnswerType(studentAnswerData)
                 return answer
             }
         }
@@ -89,17 +85,17 @@ context('Geode Dashboard Smoke Test', () => {
         questionType = answerData.type
 
         if (answerData.type != null) {
-            switch(questionType) {
-                case("Embeddable::MultipleChoice"):
+            switch (questionType) {
+                case ("Embeddable::MultipleChoice"):
                     answer = answerData.answer[0].choice
                     break;
-                case("Embeddable::OpenResponse"):
+                case ("Embeddable::OpenResponse"):
                     answer = answerData.answer
                     break;
-                case("Embeddable::ImageQuestion"):
+                case ("Embeddable::ImageQuestion"):
                     answer = answerData.answer.image_url
                     break;
-                case("Embeddable::Iframe"):
+                case ("Embeddable::Iframe"):
                     answer = answerData.answer
                     break;
             }
@@ -109,22 +105,71 @@ context('Geode Dashboard Smoke Test', () => {
         }
     }
 
-    describe('Student Names', function () {
-
-        it('Checks for student names', () => {
+    describe('Verifies setting functionality', () => {
+        it('can sort by least progress', () => {
+            dashboard.getSortDropdown()
+                .select('Least Progress')
+                .should('be.visible')
             cy.get('@classData').then((classData) => {
-                const students = classData.class.students
-
-                dashboard.getStudentNames()
-                    .should('have.length', students.length)
-
-                for (let i=0;i<students.length;i++) {
-                    let student = students[i]
-                    dashboard.getStudentNames()
-                        .should('contain', student.last_name + ", " + student.first_name)
-                }
+                const student = classData.class.students[1]
+                dashboard.getStudentNames().eq(0)
+                    .should('contain', student.last_name + ', ' + student.first_name)
+                dashboard.getStudentAnswersRow().eq(0)
+                    .within(() => {
+                        dashboard.getProgressBar()
+                            .should('not.be.visible')
+                    })
             })
         })
+        it('can sort by most progress', () => {
+            dashboard.getSortDropdown()
+                .select('Most Progress')
+                .should('be.visible')
+            cy.get('@classData').then((classData) => {
+                const student = classData.class.students[3]
+                dashboard.getStudentNames().eq(0)
+                    .should('contain', student.last_name + ', ' + student.first_name)
+                dashboard.getStudentAnswersRow().eq(0)
+                    .within(() => {
+                        dashboard.getProgressBar().eq(0)
+                            .should('be.visible')
+                            .and('have.attr', 'style', 'width: 100%;')
+                    })
+            })
+        })
+        it('can sort by student name', () => {
+            dashboard.getSortDropdown()
+                .should('be.visible')
+                .select('Student Name')
+            cy.get('@classData').then((classData) => {
+                const student = classData.class.students[0]
+                dashboard.getStudentNames().eq(0)
+                    .should('contain', student.last_name + ', ' + student.first_name)
+            })
+        })
+        it('can open and close student list', () => {
+            dashboard.getStudentAnswersRow()
+                .should('not.have.class', dashboard.answersOpen)
+            dashboard.getOpenCloseStudents()
+                .should('exist')
+                .and('be.visible')
+                .click({ force: true })
+            dashboard.getStudentAnswersRow()
+                .should('have.class', dashboard.answersOpen)
+            dashboard.getOpenCloseStudents()
+                .click({ force: true })
+            dashboard.getStudentAnswersRow()
+                .should('not.have.class', dashboard.answersOpen)
+        })
+        it('can scroll across the different activities', () => {
+            dashboard.getOpenCloseStudents()
+                .click({ force: true })
+            dashboard.getActivityNames().last()
+                .scrollIntoView({ duration: 2000 })
+        })
+    })
+
+    describe('Verifies for Activity/Seq data', function () {
 
         it('Checks for activity names', () => {
             cy.get('@classData').then((classData) => {
@@ -133,11 +178,72 @@ context('Geode Dashboard Smoke Test', () => {
                 dashboard.getActivityNames()
                     .should('have.length', activities.length)
 
-                for (let i=0;i<activities.length;i++) {
+                for (let i = 0; i < activities.length; i++) {
                     let activity = activities[i]
                     dashboard.getActivityNames()
                         .should('contain', activity.name)
                 }
+            })
+            it('can expand activity questions', () => {
+                cy.get('@classData').then((classData) => {
+                    const pageData = getPageData(getActivityData(classData)[0])
+    
+                    let questionData = getQuestionData(pageData[0])
+                    let questionTotal = questionData.length
+                    let currentQuestionPrompt;
+    
+                    dashboard.getExpandQuestionDetails()
+                        .should('not.exist')
+                    dashboard.getOpenCloseStudents()
+                        .click({ force: true })
+                    dashboard.getExpandQuestionDetails()
+                        .should('exist')
+                        .and('be.visible')
+                        .and('have.length', questionTotal)
+    
+                    for (let i = 0; i < questionTotal; i++) {
+                        currentQuestionPrompt = questionData[i]["prompt"]
+                        dashboard.getActivityQuestionsText()
+                            .should('contain', currentQuestionPrompt)
+                    }
+    
+                    dashboard.getExpandedMCAnswerDetails()
+                        .should('not.be.visible')
+                        .and('not.exist')
+                    dashboard.getExpandQuestionDetails().eq(0)
+                        .click({ force: true })
+                    dashboard.getExpandedQuestionPanel()
+                        .should('be.visible')
+                    dashboard.getExpandedMCAnswerDetails()
+                        .should('be.visible')
+                        .and('exist')
+                    dashboard.getCloseExpandedQuestion()
+                        .should('exist')
+                        .click({ force: true })
+                    dashboard.getExpandedQuestionPanel()
+                        .should('not.be.visible')
+                })
+            })
+            it('can expand activities to show questions', () => {
+                dashboard.getActivityNames().eq(0)
+                    .click({ force: true })
+                cy.get('@classData').then((classData) => {
+                    const questionData = getQuestionData(getPageData(getActivityData(classData)[0])[0])
+    
+                    dashboard.getActivityQuestions()
+                        .should('exist')
+                        .and('have.length', questionData.length)
+                })
+                dashboard.getActivityQuestionsText()
+                    .should('not.be.visible')
+                dashboard.getActivityQuestions().eq(0)
+                    .click({ force: true })
+                dashboard.getActivityQuestionsText()
+                    .should('be.visible')
+                dashboard.getActivityQuestionsText().eq(0)
+                    .click({ force: true })
+                dashboard.getActivityQuestionsText()
+                    .should('not.be.visible')
             })
         })
 
@@ -179,162 +285,31 @@ context('Geode Dashboard Smoke Test', () => {
         //         }
         //     })
         // })
-
-        it('can sort by least progress', () => {
-            dashboard.getSortDropdown()
-                .select('Least Progress')
-                .should('be.visible')
-            cy.get('@classData').then((classData) => {
-                const student = classData.class.students[1]
-                dashboard.getStudentNames().eq(0)
-                    .should('contain', student.last_name+', '+student.first_name)
-                dashboard.getStudentAnswersRow().eq(0)
-                    .within(() => {
-                        dashboard.getProgressBar()
-                            .should('not.be.visible')
-                    })
-            })
-        })
-        it('can sort by most progress', () => {
-            dashboard.getSortDropdown()
-                .select('Most Progress')
-                .should('be.visible')
-            cy.get('@classData').then((classData) => {
-                const student = classData.class.students[3]
-                dashboard.getStudentNames().eq(0)
-                    .should('contain', student.last_name+', '+student.first_name)
-                dashboard.getStudentAnswersRow().eq(0)
-                    .within(() => {
-                        dashboard.getProgressBar().eq(0)
-                            .should('be.visible')
-                            .and('have.attr', 'style', 'width: 100%;')
-                    })
-            })
-        })
-        it('can sort by student name', () => {
-            dashboard.getSortDropdown()
-                .should('be.visible')
-                .select('Student Name')
-            cy.get('@classData').then((classData) => {
-                const student = classData.class.students[0]
-                dashboard.getStudentNames().eq(0)
-                    .should('contain', student.last_name+', '+student.first_name)
-            })
-        })
-        it('can close student list', () => {
-            dashboard.getStudentAnswersRow()
-                .should('not.have.class', dashboard.answersOpen)
-            dashboard.getOpenCloseStudents()
-                .should('exist')
-                .and('be.visible')
-                .click({ force: true })
-            dashboard.getStudentAnswersRow()
-                .should('have.class', dashboard.answersOpen)
-            dashboard.getOpenCloseStudents()
-                .click({ force: true })
-            dashboard.getStudentAnswersRow()
-                .should('not.have.class', dashboard.answersOpen)
-        })
     })
 
-    describe('Question section', () => {
-        it('can expand activity questions', () => {
+    describe('Student Data', () => {
+
+        it('Checks for student names', () => {
             cy.get('@classData').then((classData) => {
-                const activityData = getActivityData(classData)
-                const pageData = getPageData(activityData[0])
+                const students = classData.class.students
 
-                let questionData = getQuestionData(pageData[0])
-                let questionTotal = questionData.length
-                let currentQuestionPrompt;
+                dashboard.getStudentNames()
+                    .should('have.length', students.length)
 
-                dashboard.getExpandQuestionDetails()
-                    .should('not.exist')
-                dashboard.getOpenCloseStudents()
-                    .click({ force: true })
-                dashboard.getExpandQuestionDetails()
-                    .should('exist')
-                    .and('be.visible')
-                    .and('have.length', questionTotal)
-
-                for(let i=0;i<questionTotal;i++) {
-                    currentQuestionPrompt = questionData[i]["prompt"]
-                    dashboard.getActivityQuestionsText()
-                        .should('contain', currentQuestionPrompt)
+                for (let i = 0; i < students.length; i++) {
+                    let student = students[i]
+                    dashboard.getStudentNames()
+                        .should('contain', student.last_name + ", " + student.first_name)
                 }
-
-                dashboard.getExpandedMCAnswerDetails()
-                    .should('not.be.visible')
-                    .and('not.exist')
-                dashboard.getExpandQuestionDetails().eq(0)
-                    .click({ force: true })
-                dashboard.getExpandedQuestionPanel()
-                    .should('be.visible')
-                dashboard.getExpandedMCAnswerDetails()
-                    .should('be.visible')
-                    .and('exist')
-                dashboard.getCloseExpandedQuestion()
-                    .should('exist')
-                    .click({ force: true })
-                dashboard.getExpandedQuestionPanel()
-                    .should('not.be.visible')
             })
-
         })
-        it('can scroll across the different activities', () => {
-            dashboard.getOpenCloseStudents()
-                .click({force:true})
-            dashboard.getActivityNames().last()
-                .scrollIntoView({ duration: 2000 })
-
-        })
-        it('can contract activity questions', () => {
-            dashboard.getProgressBar()
-                .should('be.visible')
-            dashboard.getOpenCloseStudents()
-                .click({force:true})
-            dashboard.getProgressBar()
-                .should('not.be.visible')
-            dashboard.getActivityNames().eq(0)
-                .click({force:true})
-            dashboard.getActivityQuestions()
-                .should('not.exist')
-            dashboard.getProgressBar()
-                .should('be.visible')
-
-        })
-        it('can expand question', () => {
-            dashboard.getActivityNames().eq(0)
-                .click({force:true})
-            cy.get('@classData').then((classData) => {
-                const activityData = getActivityData(classData)
-                const questionData = getQuestionData(getPageData(getActivityData(classData)[0])[0])
-
-                dashboard.getActivityQuestions()
-                .should('exist')
-                .and('have.length', questionData.length)
-            })
-            dashboard.getActivityQuestionsText()
-                .should('not.be.visible')
-            dashboard.getActivityQuestions().eq(0)
-                .click({force:true})
-            dashboard.getActivityQuestionsText()
-                .should('be.visible')
-            dashboard.getActivityQuestionsText().eq(0)
-                .click({force:true})
-            dashboard.getActivityQuestionsText()
-                .should('not.be.visible')
-        })
-    })
-
-    describe('Expanded Question dialog', () => {
         it('show responses', () => {
             dashboard.getOpenCloseStudents()
-                .click({force:true})
+                .click({ force: true })
             dashboard.getExpandQuestionDetails().eq(0)
-                .click({force:true})
+                .click({ force: true })
             cy.get('@classData').then((classData) => {
                 const questionData = getQuestionData(getPageData(getActivityData(classData)[0])[0])[0]
-                const answerData = getAnswerData(questionData)
                 const studentName = getStudentName(classData, 14)
 
                 dashboard.getExpandedMCAnswerDetails()
@@ -353,24 +328,24 @@ context('Geode Dashboard Smoke Test', () => {
                             .should('exist')
                             .and('contain', studentName)
                     })
-                })
-                dashboard.getCloseExpandedQuestion()
-                    .should('exist')
-                    .click({ force: true })
-                dashboard.getExpandedQuestionPanel()
-                    .should('not.be.visible')
+            })
+            dashboard.getCloseExpandedQuestion()
+                .should('exist')
+                .click({ force: true })
+            dashboard.getExpandedQuestionPanel()
+                .should('not.be.visible')
         })
         it('hide responses', () => {
             dashboard.getOpenCloseStudents()
-                .click({force:true})
+                .click({ force: true })
             dashboard.getExpandedMCAnswers()
                 .should('not.be.visible')
                 .and('not.exist')
             dashboard.getExpandQuestionDetails().eq(0)
-                .click({force:true})
+                .click({ force: true })
             cy.get('@classData').then((classData) => {
                 const answerData = getAnswerData(getQuestionData(getPageData(getActivityData(classData)[0])[0])[0])
-                const studentScore = getAnswer(answerData, 14)
+                const studentScore = getStudentAnswer(answerData, 14)
                 dashboard.getShowHideResponse()
                     .should('exist')
                     .click({ force: true })
@@ -379,12 +354,67 @@ context('Geode Dashboard Smoke Test', () => {
                             .should('exist')
                             .and('contain', studentScore)
                     })
-                })
+            })
+            dashboard.getShowHideResponse()
+                .should('exist')
+                .click({ force: true })
+            dashboard.getExpandedMCAnswers()
+                .should('not.exist')
+        })
+        it('shows MC question response', () => {
+            dashboard.getOpenCloseStudents()
+                .click({ force: true })
+            dashboard.getExpandQuestionDetails().eq(0)
+                .click({ force: true })
+            cy.get('@classData').then((classData) => {
+                const questionData = getQuestionData(getPageData(getActivityData(classData)[0])[0])[0]
+                const studentName = getStudentName(classData, 14)
+
+                dashboard.getExpandedMCAnswerDetails()
+                    .should('exist')
+                    .and('contain', questionData.choices[0].choice)
+                    .and('contain', 'No response')
+
+                dashboard.getExpandedMCAnswers()
+                    .should('not.exist')
+                    .and('not.be.visible')
                 dashboard.getShowHideResponse()
                     .should('exist')
                     .click({ force: true })
-                dashboard.getExpandedMCAnswers()
-                    .should('not.exist')
+                    .then(() => {
+                        dashboard.getExpandedMCAnswers()
+                            .should('exist')
+                            .and('contain', studentName)
+                    })
+            })
+            dashboard.getCloseExpandedQuestion()
+                .should('exist')
+                .click({ force: true })
+            dashboard.getExpandedQuestionPanel()
+                .should('not.be.visible')
+        })
+
+    })
+
+    describe('Feedback Section', () => {
+        it('Verifies teacher feedback for student', () => {
+
+            // I need to check each activity_feedback[i] for a
+            //  score : integer
+            //  feedback : string
+            //  rubric : integer
+
+            //I need to go into the student answers[i]
+                //feedbacks[0].score + .feedback + .has_been_reviewed
+                //score and feedback will be null for students with no feedback
+            let activityIndex = 0
+
+            cy.get('@classData').then(() => {
+                
+                dashboard.getActivityNames().eq()
+
+            })
+
         })
     })
 })
