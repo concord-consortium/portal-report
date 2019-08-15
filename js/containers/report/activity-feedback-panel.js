@@ -27,7 +27,6 @@ import {
   isAutoScoring,
 } from "../../util/scoring-constants";
 import { truncate } from "../../util/misc";
-import { fromJS } from "immutable";
 
 class ActivityFeedbackPanel extends PureComponent {
   constructor(props) {
@@ -179,7 +178,7 @@ class ActivityFeedbackPanel extends PureComponent {
               <div className="feedback-for-students">
                 <TransitionGroup>
                   { filteredFeedbacks.map((studentActivityFeedback, i) => {
-                    const studentId = studentActivityFeedback.get("studentId");
+                    const studentId = studentActivityFeedback.get("platformStudentId");
                     return (
                       <CSSTransition
                         key={i}
@@ -193,8 +192,7 @@ class ActivityFeedbackPanel extends PureComponent {
                           studentId={studentId}
                           ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
                           scoreType={scoreType}
-                          autoScore={0}
-                          // TODO ⬆ fix direct assignment of autoscore
+                          autoScore={autoScores.get(studentId)}
                           feedbackEnabled={showText}
                           useRubric={useRubric}
                           rubric={rubric}
@@ -225,7 +223,7 @@ function makeMapStateToProps() {
     const getFeedbacks = makeGetStudentFeedbacks();
     const getRubric = makeGetRubric();
     const getMaxSCore = makeGetComputedMaxScore();
-    // const getAutoscores = makeGetAutoScores();
+    const getAutoscores = makeGetAutoScores();
     const rubric = getRubric(state, ownProps);
     const {
       feedbacks,
@@ -235,8 +233,7 @@ function makeMapStateToProps() {
     } = getFeedbacks(state, ownProps);
     const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - feedbacksNotAnswered.size;
     const computedMaxScore = getMaxSCore(state, ownProps);
-    // const autoScores = getAutoscores(state, ownProps);
-    const autoScores = [];
+    const autoScores = getAutoscores(state, ownProps);
     return {
       rubric, feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
       feedbacksNotAnswered, computedMaxScore, autoScores,

@@ -6,7 +6,6 @@ import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl, validFsId } from "./util/misc";
 import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/activity-feedback-helper";
-import humps from "humps";
 import * as db from "./db";
 
 const FIREBASE_APP = "report-service-dev";
@@ -287,7 +286,7 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
 // See: https://firebase.google.com/docs/firestore/query-data/listen
 export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportState: IStateReportPartial) {
   const { activityId, platformStudentId, feedback } = data;
-  const { platformId, platformUserId, resourceLinkId, contextId, answers } = reportState;
+  const { platformId, platformUserId, resourceLinkId, contextId } = reportState;
   const activityStudentKey = getActivityStudentFeedbackKey(data);
   feedback.platformId = platformId;
   feedback.resourceLinkId = resourceLinkId;

@@ -5,8 +5,7 @@ import { mountWithStore } from "../../setupTest";
 
 describe("<AnswersTable />", () => {
   const question = fromJS({
-    scoreEnabled: true,
-    feedbackEnabled: true
+    id: "q1"
   });
   const hidden = false;
   const showCompare = false;
@@ -19,7 +18,17 @@ describe("<AnswersTable />", () => {
     report: {
       anonymous: false,
     },
-    feedbacks: fromJS({})
+    feedback: fromJS({
+      questionFeedbacks: {},
+      settings: {
+        questionSettings: {
+          q1: {
+            scoreEnabled: true,
+            feedbackEnabled: true
+          }
+        }
+      }
+    })
   });
   const params = { answers, hidden, showCompare, question, students };
 
@@ -40,8 +49,7 @@ describe("<AnswersTable />", () => {
   });
 
   describe("With out a question", () => {
-    const question = null;
-    const params = { answers, hidden, showCompare, question, students };
+    const params = { answers, hidden, showCompare, students };
 
     it("should render <AnswersTable> without Score or Feedback text", () => {
       const wrapper = mountWithStore(<AnswersTable {...params} />, state);

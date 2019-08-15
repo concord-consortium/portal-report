@@ -21,7 +21,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     const { activityId, studentId, updateActivityFeedback } = this.props;
     const oldData = this.fieldValues();
     const newRecord = Object.assign({}, oldData, newData);
-    this.props.updateActivityFeedback(activityId, studentId, newRecord);
+    updateActivityFeedback(activityId, studentId, newRecord);
   }
 
   scoreChange(e) {
@@ -102,7 +102,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     const automaticScoring = isAutoScoring(scoreType);
     const disableFeedback = complete;
     const disableScore = disableFeedback || automaticScoring;
-    const scoreToRender = automaticScoring ? autoScore : score;
+    const scoreToRender = (automaticScoring ? autoScore : score) || 0;
 
     return (
       <div className="feedback-interface">
