@@ -2,7 +2,7 @@ import Dashboard from "../support/elements/geode-dashboard/dashboard";
 
 context('Geode Dashboard Smoke Test', () => {
 
-    const dashboard = new Dashboard;
+    const dashboard = new Dashboard();
     const studentsToTest = ['', '', '']
 
     beforeEach(() => {
