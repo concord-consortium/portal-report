@@ -172,7 +172,6 @@ class QuestionFeedbackPanel extends PureComponent {
               scoreEnabled={scoreEnabled}
               scoreType={MANUAL_SCORE}
               maxScore={maxScore}
-              enableRubric={this.enableRubric}
               enableText={this.enableText}
               toggleScoreEnabled={this.enableScore}
               showText={feedbackEnabled}

@@ -37,7 +37,7 @@ export default class RubricBox extends PureComponent {
       <input
         name={`${learnerId}_${critId}`}
         type="radio"
-        checked={checked}
+        checked={checked || false}
         value={ratingId}
         onChange={onChange}
         disabled={ disabled && !checked }

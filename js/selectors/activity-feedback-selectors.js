@@ -89,14 +89,14 @@ const getActivityFeedbacks = (state) => state.getIn(["feedback", "activityFeedba
 const getQuestionFeedbacks = (state) => state.getIn(["feedback", "questionFeedbacks"]);
 const getFeedbackSettings = (state) => state.getIn(["feedback", "settings"]);
 const getStudents = (state) => state.getIn(["report", "students"]);
-const getRubics = (state) => state.get("rubrics");
+const getRubric = (state) => state.getIn(["feedback", "settings", "rubric"]) && state.getIn(["feedback", "settings", "rubric"]).toJS();
 
 /*************************************************************************
  * Composite selectors (composed of other selectors).
  * These are created via factory methods so each component has its own instance.
- * Most of these depend (via cascaded selector input) on the activty.
+ * Most of these depend (via cascaded selector input) on the activity.
  * We partition our selectors based on the activity to limit cascading cache
- * invadliations. Because the activityID is not part of the state tree
+ * invalidations. Because the activityID is not part of the state tree
  * we get the value from the component `props`.
  *************************************************************************/
 
@@ -106,18 +106,6 @@ const makeGetScoreType = () => createSelector(
   getActivity,
   getFeedbackSettings,
   (activity, feedbackSettings) => getActivitySettings(feedbackSettings, activity).get("scoreType")
-);
-
-// Memoization factory for the rubric
-// Updates when the rubric, or activity Changes
-export const makeGetRubric = () => createSelector(
-  getRubics,
-  getActivity,
-  getFeedbackSettings,
-  (rubrics, activity, feedbackSettings) => {
-    const rubricUrl = getActivitySettings(feedbackSettings, activity).get("rubricUrl");
-    return rubricUrl && rubrics.get(rubricUrl) ? rubrics.get(rubricUrl).toJS() : null;
-  }
 );
 
 /*******************************************************************************
@@ -195,7 +183,7 @@ export const getStudentFeedbacks = (activity, students, activityFeedbacks) => {
     .toList()
     .toJS();
 
-  const returnValue = {
+  return {
     feedbacks,
     activityFeedbacks,
     feedbacksNeedingReview,
@@ -204,7 +192,6 @@ export const getStudentFeedbacks = (activity, students, activityFeedbacks) => {
     scores,
     rubricFeedbacks,
   };
-  return returnValue;
 };
 
 // Memoization factory for student activty feedback
@@ -278,7 +265,7 @@ export const makeGetQuestionAutoScores = () => {
 export const getRubricScores = (rubric, feedbacks) => {
   let scores = IMap({});
   feedbacks.feedbacks.forEach(feedback => {
-      const key = feedback.get("platFormStudentId");
+      const key = feedback.get("platformStudentId");
       let score = null;
       if (feedback.get("rubricFeedback")) {
         const rubricFeedback = feedback.get("rubricFeedback");
@@ -294,7 +281,6 @@ export const getRubricScores = (rubric, feedbacks) => {
 // updates whenever rubric or feedbacks change
 const makeGetRubricScores = () => {
   const getFeedbacks = makeGetStudentFeedbacks();
-  const getRubric = makeGetRubric();
   return createSelector(
     getRubric,
     getFeedbacks,
@@ -348,7 +334,6 @@ const makeGetAutoMaxScore = () => {
 // Updates when rubric changes.
 const makeGetRubricMaxScore = () => {
   const maxReducer = (prev, current) => current > prev ? current : prev;
-  const getRubric = makeGetRubric();
   return createSelector(
     getRubric,
     (rubric) => {
