@@ -1,73 +1,1052 @@
 {
+  "report_version": "1.0.3",
+  "report_for": "class",
+  "report": {
+    "id": 18,
+    "type": "Investigation",
+    "name": "HAS Climate module: What is the future of Earth's climate? 2018 edition.",
+    "children": [
+      {
+        "id": 29,
+        "activity_feedback_id": 29,
+        "type": "Activity",
+        "name": "Test Activity 1: Constructing an argument: climate as imported with long title.",
+        "enable_text_feedback": true,
+        "score_type": "manual",
+        "use_rubric": true,
+        "rubric_url": "sample-rubric.json",
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "learner_id": 215,
+            "feedbacks": [
+              {
+                "score": 9,
+                "feedback": "good",
+                "has_been_reviewed": true,
+                "rubric_feedback": {
+                  "C1": {
+                    "id": "R1",
+                    "score": 1,
+                    "label": "Beginning",
+                    "description": "Not meeting expected goals."
+                    },
+                    "C2": {
+                    "id": "R2",
+                    "score": 2,
+                    "label": "Developing",
+                    "description": "Approaching proficiency."
+                    }
+                }
+              }
+            ]
+          },
+          {
+            "student_id": 16,
+            "learner_id": 216,
+            "feedbacks": []
+          },
+          {
+            "student_id": 14,
+            "learner_id": 214,
+            "feedbacks": []
+          },
+          {
+            "student_id": 13,
+            "learner_id": 213,
+            "feedbacks": []
+          }
+        ],
+        "children": [
+          {
+            "id": 68,
+            "type": "Section",
+            "name": "Activity 1: Constructing an argument: climate",
+            "children": [
+              {
+                "id": 242,
+                "type": "Page",
+                "name": "What will Earth's climates be in the future?\n\n\nWhat will Earth's climates be in the future?\n\nWhat will Earth's climates be in the future?",
+                "url": "http://authoring.concord.org/activities/802/pages/4532/",
+                "children": [
+                  {
+                    "id": 116,
+                    "name": "Multiple Choice Question element",
+                    "question_number": 1,
+                    "description": "description ...",
+                    "prompt": "In this activity, you will use a computer model to explore what happens to the Sun’s energy when it strikes Earth.",
+                    "enable_rationale": false,
+                    "rationale_prompt": "Explain your choice. Give specific examples.",
+                    "allow_multiple_selection": null,
+                    "is_required": false,
+                    "show_in_featured_question_report": true,
+                    "feedback_enabled": true,
+                    "score_enabled": true,
+                    "max_score": 10,
+                    "key": "Embeddable::MultipleChoice|116",
+                    "type": "Embeddable::MultipleChoice",
+                    "answers": [
+                      {
+                        "answer": [
+                          {
+                            "id": 423,
+                            "choice": "c",
+                            "is_correct": false
+                          }
+                        ],
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::MultipleChoice|116-15",
+                            "score": 10,
+                            "feedback": "great job",
+                            "has_been_reviewed": true
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": false,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|116",
+                        "student_id": 15
+                      },
+                      {
+                        "answer": [
+                          {
+                            "id": 421,
+                            "choice": "very long multiple choice answer very long multiple choice answer",
+                            "is_correct": true
+                          }
+                        ],
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::MultipleChoice|116-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|116",
+                        "student_id": 13
+                      },
+                      {
+                        "answer": [
+                          {
+                            "id": 421,
+                            "choice": "very long multiple choice answer very long multiple choice answer",
+                            "is_correct": true
+                          }
+                        ],
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::MultipleChoice|116-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "is_correct": true,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|116",
+                        "student_id": 14
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::MultipleChoice|116"
+                      }
+                    ],
+                    "choices": [
+                      {
+                        "id": 421,
+                        "choice": "very long multiple choice answer very long multiple choice answer",
+                        "is_correct": true
+                      },
+                      {
+                        "id": 422,
+                        "choice": "b",
+                        "is_correct": false
+                      },
+                      {
+                        "id": 423,
+                        "choice": "c",
+                        "is_correct": false
+                      }
+                    ]
+                  },
+                  {
+                    "id": 252,
+                    "name": "Open Response Question",
+                    "question_number": 2,
+                    "description": "What is the purpose of this question ...?",
+                    "prompt": "why does ...",
+                    "default_response": "",
+                    "rows": 5,
+                    "columns": 32,
+                    "font_size": 12,
+                    "is_required": false,
+                    "show_in_featured_question_report": true,
+                    "key": "Embeddable::OpenResponse|252",
+                    "type": "Embeddable::OpenResponse",
+                    "answers": [
+                      {
+                        "answer": "j3 answer",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::OpenResponse|252-15",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|252",
+                        "student_id": 15
+                      },
+                      {
+                        "answer": "j1 answer",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::OpenResponse|252-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|252",
+                        "student_id": 13
+                      },
+                      {
+                        "answer": "very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::OpenResponse|252-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|252",
+                        "student_id": 14
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::OpenResponse|252"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "activity_feedback_id": 30,
+        "type": "Activity",
+        "name": "Test Activity 2 (sequence part)",
+        "enable_text_feedback": true,
+        "score_type": "none",
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "learner_id": 215,
+            "feedbacks": [
+              {
+                "score": null,
+                "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]},{
+            "student_id": 16,
+            "learner_id": 216,
+            "feedbacks": [
+              {
+                "score": 10,
+                "feedback": "good",
+                "has_been_reviewed": false
+              }
+            ]
+          }
+        ],
+        "children": [
+          {
+            "id": 69,
+            "type": "Section",
+            "name": "Test Activity 2 (sequence part) Section",
+            "children": [
+              {
+                "id": 243,
+                "type": "Page",
+                "name": "1",
+                "url": "http://authoring.concord.org/activities/802/pages/4589",
+                "children": [
+                  {
+                    "id": 117,
+                    "name": "Multiple Choice Question element",
+                    "question_number": 1,
+                    "description": "description ...",
+                    "prompt": "why does ...",
+                    "enable_rationale": false,
+                    "rationale_prompt": "Explain your choice. Give specific examples.",
+                    "allow_multiple_selection": null,
+                    "is_required": false,
+                    "show_in_featured_question_report": true,
+                    "key": "Embeddable::MultipleChoice|117",
+                    "type": "Embeddable::MultipleChoice",
+                    "answers": [
+                      {
+                        "answer": [
+                          {
+                            "id": 424,
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::MultipleChoice|117-15",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|117",
+                        "student_id": 15
+                      },
+                      {
+                        "answer": [
+                          {
+                            "id": 424,
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::MultipleChoice|117-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|117",
+                        "student_id": 13
+                      },
+                      {
+                        "answer": [
+                          {
+                            "id": 424,
+                            "choice": "a",
+                            "is_correct": null
+                          }
+                        ],
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::MultipleChoice|117-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::MultipleChoice",
+                        "embeddable_key": "Embeddable::MultipleChoice|117",
+                        "student_id": 14
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::MultipleChoice|117"
+                      }
+                    ],
+                    "choices": [
+                      {
+                        "id": 424,
+                        "choice": "a",
+                        "is_correct": null
+                      },
+                      {
+                        "id": 425,
+                        "choice": "b",
+                        "is_correct": null
+                      },
+                      {
+                        "id": 426,
+                        "choice": "c",
+                        "is_correct": null
+                      }
+                    ]
+                  },
+                  {
+                    "id": 253,
+                    "name": "Open Response Question",
+                    "question_number": 2,
+                    "description": "What is the purpose of this question ...?",
+                    "prompt": "why does ...",
+                    "default_response": "",
+                    "rows": 5,
+                    "columns": 32,
+                    "font_size": 12,
+                    "is_required": false,
+                    "show_in_featured_question_report": true,
+                    "key": "Embeddable::OpenResponse|253",
+                    "type": "Embeddable::OpenResponse",
+                    "answers": [
+                      {
+                        "answer": "j3 answer!",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::OpenResponse|253-15",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|253",
+                        "student_id": 15
+                      },
+                      {
+                        "answer": "j1 answer",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::OpenResponse|253-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|253",
+                        "student_id": 13
+                      },
+                      {
+                        "answer": "j2 answer!",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::OpenResponse|253-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::OpenResponse",
+                        "embeddable_key": "Embeddable::OpenResponse|253",
+                        "student_id": 14
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::OpenResponse|253"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": 244,
+                "type": "Page",
+                "name": "Image Question, LabBooks, and Interactives",
+                "url": "http://authoring.concord.org/activities/802/pages/4543",
+                "children": [
+                  {
+                    "id": 12,
+                    "name": "Embeddable::ImageQuestion element",
+                    "question_number": 3,
+                    "prompt": "longer prompt longer prompt longer prompt longer prompt longer prompt longer prompt ",
+                    "drawing_prompt": "draw a picture of seagull",
+                    "is_required": false,
+                    "show_in_featured_question_report": true,
+                    "key": "Embeddable::ImageQuestion|12",
+                    "type": "Embeddable::ImageQuestion",
+                    "answers": [
+                      {
+                        "answer": {
+                          "image_url": "https://unsplash.it/600/600?image=100",
+                          "note": ""
+                        },
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::ImageQuestion|12-15",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 15
+                      },
+                      {
+                        "answer": {
+                          "image_url": "https://unsplash.it/600/600?image=101",
+                          "note": "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control."
+                        },
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::ImageQuestion|12-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 13
+                      },
+                      {
+                        "answer": {
+                          "image_url": "https://unsplash.it/600/600?image=102",
+                          "note": "j2 note"
+                        },
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::ImageQuestion|12-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 14
+                      },
+                      {
+                        "answer": {
+                          "image_url": "https://unsplash.it/600/600?image=103",
+                          "note": ""
+                        },
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::ImageQuestion|12-16",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|12",
+                        "student_id": 16
+                      }
+                    ]
+                  },
+                  {
+                    "id": 7000,
+                    "name": "Labbook album ",
+                    "question_number": 4,
+                    "description": "description ...",
+                    "width": 600,
+                    "height": 500,
+                    "url": null,
+                    "show_in_featured_question_report": false,
+                    "display_in_iframe": true,
+                    "key": "Embeddable::Iframe|7-1",
+                    "type": "Embeddable::Iframe",
+                    "answers": [
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
+                        "answered": true,
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks":[
+                          {
+                            "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
+                            "answer_key": "Embeddable::Iframe|7-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7",
+                        "student_id": 13,
+                        "display_in_iframe": true,
+                        "url": null,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
+                        "answered": true,
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks":[
+                          {
+                            "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
+                            "answer_key": "Embeddable::Iframe|7-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7",
+                        "student_id": 14,
+                        "display_in_iframe": true,
+                        "url": null,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|7"
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|7"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 7,
+                    "name": "Labbook report from before Portal 1.21.0",
+                    "question_number": 5,
+                    "description": "description ...",
+                    "width": 600,
+                    "height": 500,
+                    "url": null,
+                    "display_in_iframe": true,
+                    "show_in_featured_question_report": false,
+                    "key": "Embeddable::Iframe|7",
+                    "type": "Embeddable::Iframe",
+                    "answers": [
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=bb479315a27125ce86aa88a6e2a92b7f",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::Iframe|7-13",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7",
+                        "student_id": 13,
+                        "display_in_iframe": true,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=e892a86e0c709308dd0ddcc574020b63",
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::Iframe|7-14",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|7",
+                        "student_id": 14,
+                        "display_in_iframe": true,
+                        "width": 600,
+                        "height": 500
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::Iframe|7"
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::Iframe|7"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 1245,
+                    "name": "CODAP example, should not show iframe in report",
+                    "description": "description ...",
+                    "width": 576,
+                    "height": 435,
+                    "url": "https://document-store.concord.org/v2/documents/31165/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Fstaging%2F&buttonText=Launch",
+                    "display_in_iframe": false,
+                    "key": "Embeddable::Iframe|1245",
+                    "type": "Embeddable::Iframe",
+                    "question_number": 6,
+                    "show_in_featured_question_report": true,
+                    "answers": [
+                      {
+                        "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks": [
+                          {
+                            "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                            "answer_key": "Saveable::ExternalLinkUrl|1408",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|1245",
+                        "student_id": 13,
+                        "display_in_iframe": false,
+                        "url": "https://document-store.concord.org/v2/documents/31165/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Fstaging%2F&buttonText=Launch",
+                        "width": 576,
+                        "height": 435
+                      },
+                      {
+                        "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                        "answer_type": "Saveable::ExternalLinkUrl",
+                        "feedbacks": [
+                          {
+                            "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?launchFromLara=eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+                            "answer_key": "Saveable::ExternalLinkUrl|1410",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|1245",
+                        "student_id": 14,
+                        "display_in_iframe": false,
+                        "url": "https://document-store.concord.org/v2/documents/31165/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Fstaging%2F&buttonText=Launch",
+                        "width": 576,
+                        "height": 435
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      }
+                    ],
+                    "feedback_enabled": false,
+                    "score_enabled": false,
+                    "max_score": 10
+                  },
+                  {
+                    "id": 1022,
+                    "name": "table that saves state and has report view",
+                    "description": "table that saves state and has report view",
+                    "width": 576,
+                    "height": 435,
+                    "url": "https://concord-consortium.github.io/table-interactive/",
+                    "display_in_iframe": true,
+                    "key": "Embeddable::Iframe|1022",
+                    "type": "Embeddable::Iframe",
+                    "question_number": 7,
+                    "show_in_featured_question_report": true,
+                    "answers": [
+                      {
+                        "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Trial\\\",\\\"readOnly\\\":true,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Description\\\",\\\"readOnly\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature A (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature B (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"something\\\",\\\"3\\\",\\\"2\\\"],[\\\"b\\\",\\\"else\\\",\\\"1.5\\\",\\\"3\\\"],[\\\"c\\\",\\\"more\\\",\\\"0.5\\\",\\\"1\\\"]]}\"}",
+                        "answer_type": "Saveable::InteractiveState",
+                        "feedbacks": [
+                          {
+                            "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Trial\\\",\\\"readOnly\\\":true,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Description\\\",\\\"readOnly\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature A (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Temperature B (degC)\\\",\\\"readOnly\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"something\\\",\\\"3\\\",\\\"2\\\"],[\\\"b\\\",\\\"else\\\",\\\"1.5\\\",\\\"3\\\"],[\\\"c\\\",\\\"more\\\",\\\"0.5\\\",\\\"1\\\"]]}\"}",
+                            "answer_key": "Saveable::InteractiveState|7",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "answered": true,
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::Iframe",
+                        "embeddable_key": "Embeddable::Iframe|1022",
+                        "student_id": 13,
+                        "display_in_iframe": true,
+                        "url": "https://concord-consortium.github.io/table-interactive/",
+                        "width": 576,
+                        "height": 435
+                      },
+                      {
+                        "student_id": 14,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      },
+                      {
+                        "student_id": 16,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "feedback": null,
+                        "needs_review": false,
+                        "score": null,
+                        "feedbacks": [],
+                        "embeddable_key": "Embeddable::Iframe|1245"
+                      }
+                    ],
+                    "feedback_enabled": false,
+                    "score_enabled": false,
+                    "max_score": 10
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "activity_feedback_id": 31,
+        "type": "Activity",
+        "name": "Test activity 3 (sequence part)",
+        "enable_text_feedback": true,
+        "score_type": "manual",
+        "max_score": 10,
+        "activity_feedback":[
+          {
+            "student_id": 15,
+            "learner_id": 215,
+            "feedbacks": [
+              {
+                "score": null,
+                "feedback": null,
+                "has_been_reviewed": false
+              }
+            ]},{
+            "student_id": 16,
+            "learner_id": 216,
+            "feedbacks": [
+              {
+                "score": 1,
+                "feedback": "Boo",
+                "has_been_reviewed": false
+              }
+            ]
+          }
+        ],
+        "children": [
+          {
+            "id": 70,
+            "type": "Section",
+            "name": "Test activity 3 (sequence part) Section",
+            "children": [
+              {
+                "id": 245,
+                "type": "Page",
+                "name": "1",
+                "url": "http://authoring.concord.org/activities/802/pages/4590",
+                "children": [
+                  {
+                    "id": 13,
+                    "name": "Embeddable::ImageQuestion element",
+                    "question_number": 1,
+                    "prompt": "why does ...",
+                    "drawing_prompt": "",
+                    "is_required": false,
+                    "show_in_featured_question_report": true,
+                    "key": "Embeddable::ImageQuestion|13",
+                    "type": "Embeddable::ImageQuestion",
+                    "answers": [
+                      {
+                        "answer": {
+                          "image_url": "https://unsplash.it/600/600?image=110",
+                          "note": "123"
+                        },
+                        "answered": true,
+                        "feedbacks":[
+                          {
+                            "answer_key": "Embeddable::ImageQuestion|13-16",
+                            "score": null,
+                            "feedback": null,
+                            "has_been_reviewed": false
+                          }
+                        ],
+                        "submitted": true,
+                        "question_required": false,
+                        "type": "Embeddable::ImageQuestion",
+                        "embeddable_key": "Embeddable::ImageQuestion|13",
+                        "student_id": 16
+                      },
+                      {
+                        "student_id": 13,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::ImageQuestion|13"
+                      },
+                      {
+                        "student_id": 14,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::ImageQuestion|13"
+                      },
+                      {
+                        "student_id": 15,
+                        "answer": null,
+                        "type": "NoAnswer",
+                        "embeddable_key": "Embeddable::ImageQuestion|13"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "class": {
     "name": "Test Class",
-    "activity": {
-      "activityName":"Test Activity 1: Constructing an argument: climate as imported with long title",
-      "questionTotal": 2,
-      "questions": [
-        {
-          "Q1": "What happens when sunlight strikes Earth?",
-          "correctTotal": "2",
-          "studentScore": "10"
-        },
-        {
-          "Q2": "why does ...",
-          "correctTotal": "0"
-        }
-      ]
-    },
     "students": [
       {
-        "id": 13,
-        "name": "Jenkins, John",
-        "first_name": "John",
-        "last_name": "Jenkins",
-        "started_offering": true,
-        "A1Q1Answer": "very long multiple choice answer very long multiple choice answer",
-        "A1Q2Answer": "j1 answer",
-        "A1Q1Feedback": "",
-        "A1Q1Score": ""
-      },
-      {
         "id": 14,
-        "name": "Armstrong, Jenna",
+        "name": "Jenna Armstrong",
         "first_name": "Jenna",
         "last_name": "Armstrong",
-        "started_offering": true,
-        "A1Q1Answer": "very long multiple choice answer very long multiple choice answer",
-        "A1Q2Answer": "very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer very long open response answer",
-        "A1Q1Feedback": "",
-        "A1Q1Score": ""
-      },
-      {
-        "id": 15,
-        "name": "Galloway, Amy",
-        "first_name": "Amy",
-        "last_name": "Galloway",
-        "started_offering": true,
-        "A1Q1Answer": "c",
-        "A1Q2Answer": "j3 answer",
-        "A1Q1Feedback": "",
-        "A1Q1Score": "10"
-      },
-      {
-        "id": 16,
-        "name": "Ross, John",
-        "first_name": "John",
-        "last_name": "Ross",
-        "started_offering": true,
-        "A1Q1Answer": "",
-        "A1Q2Answer": ""
+        "started_offering": true
       },
       {
         "id": 18,
-        "name": "Crosby, Kate",
+        "name": "Kate Crosby",
         "first_name": "Kate",
         "last_name": "Crosby",
-        "started_offering": false,
-        "A1Q1Answer": "",
-        "A1Q2Answer": ""
+        "started_offering": false
+      },
+      {
+        "id": 15,
+        "name": "Amy Galloway",
+        "first_name": "Amy",
+        "last_name": "Galloway",
+        "started_offering": true
+      },
+      {
+        "id": 13,
+        "name": "John Jenkins",
+        "first_name": "John",
+        "last_name": "Jenkins",
+        "started_offering": true
+      },
+      {
+        "id": 16,
+        "name": "John Ross",
+        "first_name": "John",
+        "last_name": "Ross",
+        "started_offering": true
       }
+
     ]
-  }
+  },
+  "visibility_filter": {
+    "active": false,
+    "questions": [
+      "Embeddable::MultipleChoice|116"
+    ]
+  },
+  "anonymous_report": false,
+  "is_offering_external": true,
+  "hide_controls": false
 }
