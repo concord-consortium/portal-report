@@ -2,7 +2,8 @@ import { getByCypressTag } from '../../../utils'
 
 class Feedback {
     getActivityHeader() {
-        return cy.get('.feedback-panel > .prompt')
+        return cy.get('.feedback-panel')
+            .find('.prompt')
     }
     // Student Counts
     getStudentWaitingForFeedbackCount() {
@@ -25,17 +26,18 @@ class Feedback {
     getGiveScoreCheckbox() {
         return cy.get('#giveScore')
     }
-
-    // Scoring Options
-    getGiveScoreOptions(option) {
-        let idx
-        switch (option) {
-            case 'manual': idx = 0
-            case 'auto': idx = 1
-            case 'rubric': idx = 2
-        }
-        return cy.get('.score-options')
-            .find(input).eq(idx)
+    // Options: manual, auto, rubric
+    getManualScoringOption() {
+        return cy.get('.score-options').find('input').eq(0)
+    }
+    getManualMaxScore() {
+        return cy.get('.score-options').find('input').eq(1)
+    }
+    getAutoScoringOption() {
+        return cy.get('.score-options').find('input').eq(2)
+    }
+    getRubricScoringOption() {
+        return cy.get('.score-options').find('input').eq(3)
     }
 
     // Toggle current visible students
@@ -43,10 +45,54 @@ class Feedback {
         return cy.get('#needsReview')
     }
     getShowAllStudentsToggle() {
-        return cy.get('#all')
+        return cy.get('input#all')
     }
     getStudentSelection() {
-        cy.get('select')
+        return cy.get('select')
+    }
+
+    //Feedback Student Row
+    getStudentWorkLink(stuIdx) {
+        return cy.get('.feedback-row').eq(stuIdx).find('a')
+    }
+    getWrittenFeedbackTextarea(stuIdx) {
+        return cy.get('.feedback-row').eq(stuIdx).find('textarea')
+    }
+    getStudentScoreInput(stuIdx) {
+        return cy.get('.feedback-row').eq(stuIdx).within(() => {
+            cy.get('.score').find('input')
+        })
+    }
+    getCompleteStudentFeedback(stuIdx) {
+        return cy.get('.feedback-row').eq(stuIdx).within(() => {
+            cy.get('.feedback-complete').find('input')
+        })
+    }
+
+    getStudentsAwaitingFeedbackCount(answersData) {
+        let studentsAwaitingFeedbackCount = 0
+
+        for(i=0; i < answersData.length; i++) {
+            let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed
+
+            if(feedbackStatus != true) {
+                studentsAwaitingFeedbackCount += 1
+            }
+        }
+        return studentsAwaitingFeedbackCount
+    }
+
+    getStudentsProvidedFeedback(answersData) {
+        let studentsProvidedFeedbackCount = 0
+
+        for(i=0; i < answersData.length; i++) {
+            let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed
+
+            if(feedbackStatus == true) {
+                studentsProvidedFeedbackCount += 1
+            }
+        }
+        return studentsProvidedFeedbackCount
     }
 
 }

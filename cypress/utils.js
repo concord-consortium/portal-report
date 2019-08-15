@@ -4,6 +4,6 @@ module.exports = {
   // https://docs.cypress.io/guides/references/best-practices.html#Selecting-Elements
   getByCypressTag: function ( cypressTag ) {
     return cy.get(`[data-cy=${cypressTag}]`)
-  },
+}
 
 };

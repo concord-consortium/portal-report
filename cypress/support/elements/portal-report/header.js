@@ -10,23 +10,38 @@ class Header {
     }
 
     getShowSelectedButton() {
-        return getByCypressTag('button').eq(0)
+        return cy.get('.report-content').not('.hidden')
+            .within(() => {
+                cy.get('.controls').eq(0).children().eq(0)
+            })
     }
 
     getShowAll() {
-        return getByCypressTag('button').eq(2)
+        return cy.get('.report-content').not('.hidden')
+            .within(() => {
+                cy.get('.controls').eq(0).children().eq(1)
+            })
     }
 
     getHideShowNames() {
-        return getByCypressTag('button').eq(3)
+        return cy.get('.report-content').not('.hidden')
+            .within(() => {
+                cy.get('.controls').eq(0).children().eq(2)
+            })
     }
 
     getPrintStudentReports() {
-        return getByCypressTag('button').eq(4)
-    }
+        return cy.get('.report-content').not('.hidden')
+        .within(() => {
+            cy.get('.controls').eq(0).children().eq(3)
+        })    }
 
-    getCheckbox() {
-        return getByCypressTag('checkbox')
+    getCheckbox(i) {
+        return cy.get('.report-content')
+            .not('.hidden').within(() => {
+                cy.get('.question-header').eq(i)
+                    .children().eq(0)
+            })
     }
     getLogo() {
         return cy.get('.logo')

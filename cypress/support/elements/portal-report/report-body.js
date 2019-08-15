@@ -10,9 +10,6 @@ class ReportBody {
     getModuleName() {
         return cy.get('.sticky-inner-wrapper > h2').eq(0)
     }
-    getActivity() {
-        return cy.get('.report-content').eq(0).find('.activity')
-    }
     getActivityName(idx) {
         return cy.get('.activity').children('first').eq(idx)
     }
@@ -20,8 +17,14 @@ class ReportBody {
     //Activity Level
     //
     getProvideOverallFeedback(aIdx) {
-        return getByCypressTag('feedbackButton').eq(0)
+        return cy.get('.activity').eq(aIdx).within( () => {
+            getByCypressTag('feedbackButton').eq(0)
+        })
     }
+    getActivities() {
+        return cy.get('div [data-cy = "activity"]')
+    }
+    
     getAverageScore() {
         return getByCypressTag('average-score')
     }
@@ -31,7 +34,7 @@ class ReportBody {
     getQuestionText() {
         return getByCypressTag('question-text')
     }
-    getQuestionCheckBox(aIdx, qIdx) {
+    getQuestionCheckBox() {
         return getByCypressTag('question-checkbox')
     }
     getQuestionLink() {
@@ -47,7 +50,11 @@ class ReportBody {
     //Question Response Level
     //
     getShowResponses(qIdx) {
-        return cy.get('.question-header').eq(qIdx).contains('Show responses')
+        return cy.get('.answers-toggle').eq(qIdx).contains('Show responses')
+    }
+    getHideResponses(qIdx) {
+        return cy.get('.answers-toggle').eq(qIdx).contains('Hide responses')
+
     }
     getResponseTable() {
         return cy.get('.answers-table')
@@ -68,9 +75,11 @@ class ReportBody {
             const students = classData.class.students
             let i = 0;
             for (i; i < students.length; i++) {
-                let studentName = students[i].first_name
-                cy.get('.report-content')
-                    .should(status, studentName)
+                if(students[i].started_offering == true) {
+                    let studentName = students[i].first_name
+                    cy.get('.report-content')
+                        .should(status, studentName)
+                }
             }
         })
     }
@@ -84,11 +93,16 @@ class ReportBody {
             const students = classData.class.students
             let i = 0;
             for (i; i < students.length; i++) {
-                let studentID = students[i].student_id
+                let studentID = students[i].id
                 cy.get('.report-content')
                     .should(status, studentID)
             }
         })
+    }
+    pullUpFeedbackForActivity(idx) {
+        this.getProvideOverallFeedback(idx)
+            .should('be.visible')
+            .click({force:true})
     }
 }
 
