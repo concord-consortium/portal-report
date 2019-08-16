@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import { fromJS, Map as IMap } from "immutable";
 import { compareStudentsByName, feedbackValidForAnswer } from "../util/misc";
+import { getStudentProgress } from "./dashboard-selectors";
 import {
   AUTOMATIC_SCORE,
   MAX_SCORE_DEFAULT,
@@ -49,25 +50,15 @@ const addRealName = (student) => {
 
 // return existing or now activityFeedback for a student
 // Includes merged student data
-const activityFeedbackFor = (activity, student, feedbacks) => {
+const activityFeedbackFor = (activity, student, feedbacks, progress) => {
   const key = keyFor(activity, student);
   const found = feedbacks.get(key);
   if (found) {
-    return found.set("student", student);
+    return found
+      .set("student", student)
+      .set("activityStarted", progress.getIn([student.get("id"), activity.get("id")]) > 0);
   }
   return newFeedback(activity, student);
-};
-
-const feedbackIsMarkedComplete = (fb) => {
-  return fb && fb.get("hasBeenReviewed");
-};
-
-const getFeedbacksNotAnswered = (fbs) => fbs;
-// TODO: ⬆  How do we know if a student hasn't started yet?
-
-const getFeedbacksNeedingReview = (feedbacks) => {
-  return feedbacks
-    .filter(f => !feedbackIsMarkedComplete(f));
 };
 
 const formatStudents = (students) => students
@@ -161,11 +152,11 @@ IActivityFeedbacks {
     rubricFeedbacks:
   }
  ******************************************************************************/
-export const getStudentFeedbacks = (activity, students, activityFeedbacks) => {
+export const getStudentFeedbacks = (activity, students, activityFeedbacks, progress) => {
   students = formatStudents(students);
-  const feedbacks = students.map(s => activityFeedbackFor(activity, s, activityFeedbacks)).toList();
-  const feedbacksNeedingReview = getFeedbacksNeedingReview(feedbacks);
-  const feedbacksNotAnswered = getFeedbacksNotAnswered(feedbacks);
+  const feedbacks = students.map(s => activityFeedbackFor(activity, s, activityFeedbacks, progress)).toList();
+  const feedbacksNotAnswered = feedbacks.filter(fb => !fb.get("activityStarted"));
+  const feedbacksNeedingReview = feedbacks.filter(fb => fb.get("activityStarted") && !fb.get("hasBeenReviewed"));
   const numFeedbacksNeedingReview = feedbacksNeedingReview.size;
 
   const reviewedFeedback = activityFeedbacks
@@ -201,7 +192,8 @@ export const makeGetStudentFeedbacks = () => {
     getActivity,
     getStudents,
     getActivityFeedbacks,
-    (activity, students, activityFeedbacks) => getStudentFeedbacks(activity, students, activityFeedbacks),
+    getStudentProgress,
+    (activity, students, activityFeedbacks, progress) => getStudentFeedbacks(activity, students, activityFeedbacks, progress),
   );
 };
 

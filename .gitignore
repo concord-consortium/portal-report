@@ -4,6 +4,7 @@ _site
 .env
 .idea
 .DS_Store
+coverage
 
 /cypress/screenshots
 /cypress/fixtures/example.json
