@@ -102,7 +102,7 @@ class QuestionFeedbackPanel extends PureComponent {
 
   render() {
     const { question, answers, students } = this.props;
-    const answerByStudentId = {}
+    const answerByStudentId = {};
     answers.forEach(a => answerByStudentId[a.get("platformUserId")] = a);
     const answersIncNoResponse = students.map(s => answerByStudentId[s.get("id")] || fromJS({ student: s, questionType: "NoAnswer" }));
     const showing = this.state.showFeedbackPanel;
