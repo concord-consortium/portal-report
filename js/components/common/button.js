@@ -19,9 +19,9 @@ export default class Button extends PureComponent {
     return `cc-button ${className} ${disabled ? "disabled" : ""}`;
   }
 
-  render () {
-    const { children } = this.props
-    return <a className={this.className} onClick={this.handleClick} data-cy="button">{children}</a>
+  render() {
+    const { children } = this.props;
+    return <a className={this.className} onClick={this.handleClick} data-cy="button">{children}</a>;
   }
 }
 

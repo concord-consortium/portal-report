@@ -11,6 +11,6 @@ export default class SelectionCheckbox extends PureComponent {
     if (hideControls) {
       return null;
     }
-    return (<input type='checkbox' checked={selected} onChange={this.onChange.bind(this)} data-cy="checkbox"/>);
+    return (<input type="checkbox" checked={selected} onChange={this.onChange.bind(this)} data-cy="checkbox"/>);
   }
 }

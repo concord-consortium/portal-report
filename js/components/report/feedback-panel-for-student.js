@@ -60,7 +60,7 @@ export default class FeedbackPanelForStudent extends PureComponent {
     }
 
     return (
-      <div className='activity-feedback' data-test="activity-feedback">
+      <div className="activity-feedback" data-test="activity-feedback">
         { feedbackDiv }
       </div>
     );

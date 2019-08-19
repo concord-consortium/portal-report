@@ -1,0 +1,37 @@
+{
+  "class_hash": "class123",
+  "id": 3,
+  "name": "Test Class",
+  "students": [
+    {
+      "user_id": 1,
+      "first_name": "John",
+      "last_name": "Jenkins",
+      "started_offereing": true
+    },
+    {
+      "user_id": 2,
+      "first_name": "Jenna",
+      "last_name": "Armstrong",
+      "started_offereing": true
+    },
+    {
+      "user_id": 3,
+      "first_name": "Amy",
+      "last_name": "Galloway",
+      "started_offereing": true
+    },
+    {
+      "user_id": 4,
+      "first_name": "John",
+      "last_name": "Ross",
+      "started_offereing": true
+    },
+    {
+      "user_id": 5,
+      "first_name": "Kate",
+      "last_name": "Crosby",
+      "started_offereing": false
+    }
+  ]
+}

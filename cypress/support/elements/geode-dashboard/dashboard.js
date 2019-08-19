@@ -1,81 +1,79 @@
-import { getByCypressTag } from '../../../utils'
+import { getByCypressTag } from "../../../utils";
 
 class Dashboard {
 
-    answersOpen = 'dashboard--fullAnswers--1-gA5Yaq'
+    answersOpen = "dashboard--fullAnswers--1-gA5Yaq";
 
     //Sort, Help, and Open/Close Students
-    getSortDropdown () {
-        return getByCypressTag('sortDropdown')
+    getSortDropdown() {
+        return getByCypressTag("sortDropdown");
     }
-    getHelpPanel () {
-        return getByCypressTag('helpPanel')
+    getHelpPanel() {
+        return getByCypressTag("helpPanel");
     }
-    getOpenCloseStudents () {
-        return getByCypressTag('openCloseStudents').find('a')
+    getOpenCloseStudents() {
+        return getByCypressTag("openCloseStudents").find("a");
     }
 
     //Students
-    getStudentNames () {
-        return getByCypressTag('studentName')
+    getStudentNames() {
+        return getByCypressTag("studentName");
     }
-    getStudentAnswersRow () {
-        return getByCypressTag('studentAnswersRow')
+    getStudentAnswersRow() {
+        return getByCypressTag("studentAnswersRow");
     }
-    getProgressBar () {
-        return getByCypressTag('progressBar')
+    getProgressBar() {
+        return getByCypressTag("progressBar");
     }
-    
 
     //Icons
-    getOpenResponseIcon () {
-        return getByCypressTag('openResponseIcon')
+    getOpenResponseIcon() {
+        return getByCypressTag("openResponseIcon");
     }
-    getMultipleChoiceIcon () {
-        return getByCypressTag('multipleChoiceIcon')
+    getMultipleChoiceIcon() {
+        return getByCypressTag("multipleChoiceIcon");
     }
-    
+
     //Expand Question
     getExpandedQuestionPanel() {
-        return cy.get('div.modal-content')
+        return cy.get("div.modal-content");
     }
-    getExpandQuestionDetails () {
-        return getByCypressTag('expand-question-details')
+    getExpandQuestionDetails() {
+        return getByCypressTag("expand-question-details");
     }
     getExpandedMCAnswerDetails() {
-        return getByCypressTag('multiple-choice-details')
+        return getByCypressTag("multiple-choice-details");
     }
     getExpandedMCAnswers() {
-        return getByCypressTag('multiple-choice-answers-table')
+        return getByCypressTag("multiple-choice-answers-table");
     }
 
     getShowHideResponse() {
-        return cy.get('.modal-body').find('.cc-button')
+        return cy.get(".modal-body").find(".cc-button");
     }
     getCloseExpandedQuestion() {
-        return cy.get('.modal-footer > .cc-button')
+        return cy.get(".modal-footer > .cc-button");
     }
 
     //Activity Info
     getActivityQuestions(actIdx) {
-        return cy.get('.activity-questions--content--r733iL4d').eq(actIdx)
+        return cy.get(".activity-questions--content--r733iL4d").eq(actIdx);
     }
     getActivityQuestionsText() {
-        return getByCypressTag('activityQuestionsText')
+        return getByCypressTag("activityQuestionsText");
     }
-    getActivityAnswers () {
-        return getByCypressTag('activityAnswers')
+    getActivityAnswers() {
+        return getByCypressTag("activityAnswers");
     }
-    getActivityNames () {
-        return getByCypressTag('activityName')
+    getActivityNames() {
+        return getByCypressTag("activityName");
     }
     //Feedback Buttons
     getFeedbackForStudent(activityIdx, questionIdx) {
-        this.getActivityNames().eq(activityIdx).click({force:true})
-        this.getActivityQuestions(ActivityIdx).eq(questionIdx).click({force:true})
-        
+        this.getActivityNames().eq(activityIdx).click({force: true});
+        this.getActivityQuestions(ActivityIdx).eq(questionIdx).click({force: true});
+
     }
-    
 
 }
 

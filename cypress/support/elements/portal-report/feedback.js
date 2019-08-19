@@ -1,98 +1,98 @@
-import { getByCypressTag } from '../../../utils'
+import { getByCypressTag } from "../../../utils";
 
 class Feedback {
     getActivityHeader() {
-        return cy.get('.feedback-panel')
-            .find('.prompt')
+        return cy.get(".feedback-panel")
+            .find(".prompt");
     }
     // Student Counts
     getStudentWaitingForFeedbackCount() {
-        return cy.get('.feedback-overview > :nth-child(1) > .value')
+        return cy.get(".feedback-overview > :nth-child(1) > .value");
     }
     getScoredStudentsCount() {
-        return cy.get('.feedback-overview > :nth-child(2) > .value')
+        return cy.get(".feedback-overview > :nth-child(2) > .value");
     }
     getNoAnswerStudentsCount() {
-        return cy.get('.feedback-overview > :nth-child(3) > .value')
+        return cy.get(".feedback-overview > :nth-child(3) > .value");
     }
 
     // Rubric Options
     getRubricCheckbox() {
-        return getByCypressTag('rubric-checkbox')
+        return getByCypressTag("rubric-checkbox");
     }
     getWrittenFeedbackCheckbox() {
-        return cy.get('#feedbackEnabled')
+        return cy.get("#feedbackEnabled");
     }
     getGiveScoreCheckbox() {
-        return cy.get('#giveScore')
+        return cy.get("#giveScore");
     }
     // Options: manual, auto, rubric
     getManualScoringOption() {
-        return cy.get('.score-options').find('input').eq(0)
+        return cy.get(".score-options").find("input").eq(0);
     }
     getManualMaxScore() {
-        return cy.get('.score-options').find('input').eq(1)
+        return cy.get(".score-options").find("input").eq(1);
     }
     getAutoScoringOption() {
-        return cy.get('.score-options').find('input').eq(2)
+        return cy.get(".score-options").find("input").eq(2);
     }
     getRubricScoringOption() {
-        return cy.get('.score-options').find('input').eq(3)
+        return cy.get(".score-options").find("input").eq(3);
     }
 
     // Toggle current visible students
     getShowStudentNeedingReviewToggle() {
-        return cy.get('#needsReview')
+        return cy.get("#needsReview");
     }
     getShowAllStudentsToggle() {
-        return cy.get('input#all')
+        return cy.get("input#all");
     }
     getStudentSelection() {
-        return cy.get('select')
+        return cy.get("select");
     }
 
     //Feedback Student Row
     getStudentWorkLink(stuIdx) {
-        return cy.get('.feedback-row').eq(stuIdx).find('a')
+        return cy.get(".feedback-row").eq(stuIdx).find("a");
     }
     getWrittenFeedbackTextarea(stuIdx) {
-        return cy.get('.feedback-row').eq(stuIdx).find('textarea')
+        return cy.get(".feedback-row").eq(stuIdx).find("textarea");
     }
     getStudentScoreInput(stuIdx) {
-        return cy.get('.feedback-row').eq(stuIdx).within(() => {
-            cy.get('.score').find('input')
-        })
+        return cy.get(".feedback-row").eq(stuIdx).within(() => {
+            cy.get(".score").find("input");
+        });
     }
     getCompleteStudentFeedback(stuIdx) {
-        return cy.get('.feedback-row').eq(stuIdx).within(() => {
-            cy.get('.feedback-complete').find('input')
-        })
+        return cy.get(".feedback-row").eq(stuIdx).within(() => {
+            cy.get(".feedback-complete").find("input");
+        });
     }
 
     getStudentsAwaitingFeedbackCount(answersData) {
-        let studentsAwaitingFeedbackCount = 0
+        let studentsAwaitingFeedbackCount = 0;
 
-        for(i=0; i < answersData.length; i++) {
-            let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed
+        for (i = 0; i < answersData.length; i++) {
+            let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed;
 
-            if(feedbackStatus != true) {
-                studentsAwaitingFeedbackCount += 1
+            if (feedbackStatus !== true) {
+                studentsAwaitingFeedbackCount += 1;
             }
         }
-        return studentsAwaitingFeedbackCount
+        return studentsAwaitingFeedbackCount;
     }
 
     getStudentsProvidedFeedback(answersData) {
-        let studentsProvidedFeedbackCount = 0
+        let studentsProvidedFeedbackCount = 0;
 
-        for(i=0; i < answersData.length; i++) {
-            let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed
+        for (i = 0; i < answersData.length; i++) {
+            let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed;
 
-            if(feedbackStatus == true) {
-                studentsProvidedFeedbackCount += 1
+            if (feedbackStatus === true) {
+                studentsProvidedFeedbackCount += 1;
             }
         }
-        return studentsProvidedFeedbackCount
+        return studentsProvidedFeedbackCount;
     }
 
 }

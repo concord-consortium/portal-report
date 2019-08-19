@@ -97,7 +97,7 @@ export default class Report extends PureComponent {
     const anyQuestionSelected = report.get("questions").filter(question => question.get("selected") === true).size > 0;
     if (!hideControls) {
       return (
-        <div className='controls'>
+        <div className="controls">
           <Button onClick={this.onShowSelectedClick} disabled={!anyQuestionSelected} data-cy="show-selected">Show selected</Button>
           <Button onClick={this.onShowUnselectedClick} data-cy="show-all">Show all</Button>
           <Button onClick={() => this.onShowHideNamesClick(isAnonymous)} data-cy="hide-show-names">{isAnonymous ? "Show names" : "Hide names"}</Button>

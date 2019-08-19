@@ -38,7 +38,7 @@ export default class ActivityQuestions extends PureComponent {
                     key={q.get("id")}
                     className={headerClassName}
                     onClick={() => {
-                      setQuestionExpanded(q.get('id'), false);
+                      setQuestionExpanded(q.get("id"), false);
                       trackEvent("Dashboard", trackAction, trackLabel);
                     }}
                     data-cy="activityQuestionsText">
@@ -59,12 +59,12 @@ export default class ActivityQuestions extends PureComponent {
                     key={q.get("id")}
                     className={headerClassName}
                     onClick={() => {
-                      setQuestionExpanded(q.get('id'), true);
+                      setQuestionExpanded(q.get("id"), true);
                       trackEvent("Dashboard", trackAction, trackLabel);
                     }}
                     data-cy="activity-question-toggle">
-                    Q{ q.get('questionNumber') }.
-                    
+                    Q{ q.get("questionNumber") }.
+
                   </div>
                 );
               }

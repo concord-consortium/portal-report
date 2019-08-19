@@ -19,7 +19,7 @@ export default class Answer extends PureComponent {
     if (typeof answer === "undefined") {
       // TODO:  This should be set, but in the case of sequences
       // it seems its not. TBD later.
-      return <div data-cy="no-response">No response</div>
+      return <div data-cy="no-response">No response</div>;
     }
     const AComponent = AnswerComponent[answer.get("questionType")];
     if (!AComponent) {

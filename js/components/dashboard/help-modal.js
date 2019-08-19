@@ -12,7 +12,7 @@ export default class HelpModal extends PureComponent {
     return (
       <Modal show={helpViewVisible} onHide={toggleHelpModal}>
         <Modal.Body>
-          <div className={css.helpContent} data-cy='helpPanel'>
+          <div className={css.helpContent} data-cy="helpPanel">
             <h2>Help</h2>
             <h3>Navigating the Dashboard</h3>
             <img className={css.helpNav} src={helpNavImg} alt="Navigating the Dashboard - Use the 'Sort by' menu to sort. Click 'Open Students' to expand the table. Click a column header to expand a column." />
