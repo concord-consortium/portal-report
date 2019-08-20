@@ -101,21 +101,23 @@ class QuestionFeedbackPanel extends PureComponent {
   }
 
   render() {
-    const { question, answers, settings } = this.props;
+    const { question, answers, students } = this.props;
+    const answerByStudentId = {};
+    answers.forEach(a => answerByStudentId[a.get("platformUserId")] = a);
+    const answersIncNoResponse = students.map(s => answerByStudentId[s.get("id")] || fromJS({ student: s, questionType: "NoAnswer" }));
     const showing = this.state.showFeedbackPanel;
     const prompt = question.get("prompt");
     const num = question.get("questionNumber");
-    const realAnswers = answers.filter(a => a.get("type") !== "NoAnswer");
-    const needingFeedback = realAnswers.filter(a => !this.answerIsMarkedComplete(a));
+    const needingFeedback = answers.filter(a => !this.answerIsMarkedComplete(a));
 
-    const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answers;
+    const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answersIncNoResponse;
     const scores = answers.map( (a) => this.getFeedback(a))
       .map(f => f.get("score"))
       .filter(f => f != null)
       .toArray();
 
-    const numAnswers = realAnswers.count();
-    const numNoAnswers = answers.count() - realAnswers.count();
+    const numAnswers = answers.count();
+    const numNoAnswers = students.count() - numAnswers;
     let numNeedsFeedback = needingFeedback.count();
     let numFeedbackGiven = numAnswers - numNeedsFeedback;
 
@@ -172,7 +174,6 @@ class QuestionFeedbackPanel extends PureComponent {
               scoreEnabled={scoreEnabled}
               scoreType={MANUAL_SCORE}
               maxScore={maxScore}
-              enableRubric={this.enableRubric}
               enableText={this.enableText}
               toggleScoreEnabled={this.enableScore}
               showText={feedbackEnabled}

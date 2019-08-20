@@ -6,10 +6,9 @@ import FeedbackButton from "../../components/report/feedback-button";
 import ActivityFeedbackForStudent from "../../components/report/activity-feedback-for-student";
 import ActivityFeedbackPanel from "./activity-feedback-panel";
 import SummaryIndicator from "../../components/report/summary-indicator";
-import { fromJS } from "immutable";
+import { Map } from "immutable";
 import {
   makeGetStudentFeedbacks,
-  makeGetRubric,
   makeGetAutoScores,
   makeGetComputedMaxScore,
 } from "../../selectors/activity-feedback-selectors";
@@ -43,6 +42,10 @@ class Activity extends PureComponent {
     });
   }
 
+  getFeedbackSettings(activity) {
+    return this.props.feedbackSettings.getIn(["activitySettings", activity.get("id")]) || Map({});
+  }
+
   render() {
     const {
       activity,
@@ -57,17 +60,16 @@ class Activity extends PureComponent {
     } = this.props;
     const { showFeedbackPanel } = this.state;
 
-    // const isClassReport = reportFor === "class";
-    // @important TODO ⬆ Why don't it work?
-    const isClassReport = true;
+    const feedbackSettings = this.getFeedbackSettings(activity);
+    const isClassReport = reportFor === "class";
     const isStudentReport = !isClassReport;
     const activityName = activity.get("name");
-    const showText = activity.get("textFeedbackEnabled");
-    const scoreType = activity.get("scoreType");
-    const maxScore = scoreType === MANUAL_SCORE ? activity.get("maxScore") : computedMaxScore;
+    const showText = feedbackSettings.get("textFeedbackEnabled");
+    const scoreType = feedbackSettings.get("scoreType");
+    const maxScore = scoreType === MANUAL_SCORE ? feedbackSettings.get("maxScore") : computedMaxScore;
     const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS());
     const showScore = scoreType !== "none";
-    const useRubric = activity.get("useRubric");
+    const useRubric = feedbackSettings.get("useRubric");
     const feedbackEnabled = showScore || showText || useRubric;
     let autoScore = null;
 
@@ -123,23 +125,23 @@ class Activity extends PureComponent {
 
 function makeMapStateToProps() {
   return (state, ownProps) => {
-    const getRubric = makeGetRubric();
     const getFeedbacks = makeGetStudentFeedbacks();
     const getAutoMaxScore = makeGetComputedMaxScore();
-    // const getAutoScores = makeGetAutoScores();
-
-    const rubric = getRubric(state, ownProps);
+    const getAutoScores = makeGetAutoScores();
     const computedMaxScore = getAutoMaxScore(state, ownProps);
-    // const autoScores = getAutoScores(state, ownProps);
-    const autoScores = fromJS([]);
+    const autoScores = getAutoScores(state, ownProps);
     const {
       feedbacksNeedingReview,
       feedbacks,
       scores,
       rubricFeedbacks } = getFeedbacks(state, ownProps);
     const needsReviewCount = feedbacksNeedingReview.size;
-
-    return { scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, rubric, needsReviewCount, autoScores, computedMaxScore };
+    const feedbackSettings = state.getIn(["feedback", "settings"]);
+    const rubric = state.getIn(["feedback", "settings", "rubric"]);
+    return {
+      scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, needsReviewCount, autoScores, computedMaxScore, feedbackSettings,
+      rubric: rubric && rubric.toJS()
+    };
   };
 }
 

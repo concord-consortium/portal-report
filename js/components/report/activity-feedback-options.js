@@ -19,37 +19,30 @@ export default class ActivityFeedbackOptions extends PureComponent {
 
   enableText(event) {
     const activityId = this.props.activity.get("id");
-    const activityFeedbackId = this.props.activity.get("activityFeedbackId");
     this.props.updateActivityFeedbackSettings(
       activityId, {
-        activityFeedbackId,
         textFeedbackEnabled: event.target.checked,
       });
   }
 
   enableRubric(event) {
     const activityId = this.props.activity.get("id");
-    const activityFeedbackId = this.props.activity.get("activityFeedbackId");
     this.props.updateActivityFeedbackSettings(
       activityId, {
-        activityFeedbackId,
         useRubric: event.target.checked,
       });
   }
 
   setMaxScore(value) {
     const activityId = this.props.activity.get("id");
-    const activityFeedbackId = this.props.activity.get("activityFeedbackId");
     this.props.updateActivityFeedbackSettings(activityId, {
-      activityFeedbackId,
       maxScore: value,
     });
   }
 
   changeScoreType(newV) {
     const activityId = this.props.activity.get("id").toString();
-    const activityFeedbackId = this.props.activity.get("activityFeedbackId");
-    const newFlags = { activityFeedbackId, scoreType: newV };
+    const newFlags = { scoreType: newV };
     if (newV !== NO_SCORE) {
       this.setState({lastScoreType: newV});
     }
@@ -60,10 +53,9 @@ export default class ActivityFeedbackOptions extends PureComponent {
   }
 
   render() {
-    const { activity, rubric, showText, scoreType, maxScore } = this.props;
+    const { rubric, showText, scoreType, maxScore, useRubric } = this.props;
     const rubricAvailable = !!rubric;
     const scoreEnabled = !!scoreType && scoreType !== NO_SCORE;
-    const useRubric = rubricAvailable && activity.get("useRubric");
     const toggleScoreEnabled = () => {
       if (scoreEnabled) {
         this.changeScoreType(NO_SCORE);

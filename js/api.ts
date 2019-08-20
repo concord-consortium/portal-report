@@ -6,7 +6,6 @@ import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl, validFsId } from "./util/misc";
 import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/activity-feedback-helper";
-import humps from "humps";
 import * as db from "./db";
 
 const FIREBASE_APP = "report-service-dev";
@@ -34,6 +33,7 @@ export interface IPortalRawData extends ILTIPartial{
   offering: {
     id: number,
     activity_url: string;
+    rubric_url: string;
   };
   classInfo: {
     id: number;
@@ -217,23 +217,15 @@ export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?:
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateFeedbackSettings(data: {questionId?: string, activityId?: string, settings: any}, state: IStateReportPartial) {
-  const { questionId, activityId, settings } = data;
-  let finalData: any;
-  // Depending what's provided as an argument, we'll either update question settings or activity setting.
-  if (questionId !== undefined) {
-    finalData = { questionSettings: { [questionId]: settings } };
-  } else if (activityId) {
-    finalData = { activitySettings: { [activityId]: settings } };
-  }
-  finalData.platformId = state.platformId;
-  finalData.resourceLinkId = state.resourceLinkId;
+export function updateFeedbackSettings(settings: any, state: IStateReportPartial) {
+  settings.platformId = state.platformId;
+  settings.resourceLinkId = state.resourceLinkId;
   // contextId is used by security rules.
-  finalData.contextId = state.contextId;
+  settings.contextId = state.contextId;
   const path = feedbackSettingsFirestorePath(state.sourceId, {platformId: state.platformId, resourceLinkId: state.resourceLinkId});
   return firebase.firestore()
     .doc(path)
-    .set(finalData, {merge: true});
+    .set(settings, {merge: true});
 }
 
 export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?: string) {
@@ -287,7 +279,7 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
 // See: https://firebase.google.com/docs/firestore/query-data/listen
 export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportState: IStateReportPartial) {
   const { activityId, platformStudentId, feedback } = data;
-  const { platformId, platformUserId, resourceLinkId, contextId, answers } = reportState;
+  const { platformId, platformUserId, resourceLinkId, contextId } = reportState;
   const activityStudentKey = getActivityStudentFeedbackKey(data);
   feedback.platformId = platformId;
   feedback.resourceLinkId = resourceLinkId;

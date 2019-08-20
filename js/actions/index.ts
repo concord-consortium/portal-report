@@ -1,7 +1,7 @@
 import db from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
-import {Dispatch} from "redux";
+import {AnyAction, Dispatch} from "redux";
 import { Map } from "immutable";
 import {
   IPortalRawData,
@@ -18,6 +18,7 @@ import {
   API_UPDATE_FEEDBACK_SETTINGS,
   API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE
 } from "../api-middleware";
+import {requestRubric} from "./rubric";
 
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
@@ -168,6 +169,7 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
 
 function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
   const path = feedbackSettingsFirestorePath(rawPortalData.sourceId);
+  let rubricRequested = false;
   db.collection(path)
     .where("contextId", "==", rawPortalData.contextId)
     .where("platformId", "==", rawPortalData.platformId)
@@ -178,7 +180,13 @@ function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch:
           type: RECEIVE_FEEDBACK_SETTINGS,
           response: snapshot.docs[0].data()
         });
-      }}, fireStoreError(RECEIVE_FEEDBACK_SETTINGS, dispatch));
+      }
+      // Note that this should be called even if snapshot is empty (no feedback settings saved yet).
+      if (!rubricRequested) {
+        dispatch(requestRubric(rawPortalData.offering.rubric_url) as any as AnyAction);
+        rubricRequested = true;
+      }
+    }, fireStoreError(RECEIVE_FEEDBACK_SETTINGS, dispatch));
 }
 
 function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
@@ -371,33 +379,46 @@ export function updateActivityFeedback(activityId: string, platformStudentId: st
   };
 }
 
-export function updateQuestionFeedbackSettings(questionId: string, feedbackFlags: any) {
-  const settings: any = mappedCopy(feedbackFlags, {});
+export function updateQuestionFeedbackSettings(questionId: string, settings: any) {
   return {
     type: API_CALL,
     callAPI: {
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        questionId,
-        settings
-      },
-    },
+        questionSettings: {
+          [questionId]: settings
+        }
+      }
+    }
   };
 }
 
-export function updateActivityFeedbackSettings(activityId: string, feedbackFlags: any) {
-  const settings = mappedCopy(feedbackFlags, {});
+export function updateActivityFeedbackSettings(activityId: string, settings: any) {
   return {
     type: API_CALL,
     callAPI: {
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        activityId,
-        settings
-      },
-    },
+        activitySettings: {
+          [activityId]: settings
+        }
+      }
+    }
+  };
+}
+
+export function saveRubric(rubricContent: any) {
+  return {
+    type: API_CALL,
+    callAPI: {
+      type: API_UPDATE_FEEDBACK_SETTINGS,
+      errorAction: fetchError,
+      data: {
+        rubric: rubricContent
+      }
+    }
   };
 }
 

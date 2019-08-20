@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import Prompt from "./prompt";
-import FeedbackPanel from "../../containers/report/question-feedback-panel";
+import QuestionFeedbackPanel from "../../containers/report/question-feedback-panel";
 import { fromJS } from "immutable";
 
 import "../../../css/report/question-summary.less";
@@ -23,7 +23,7 @@ export default class QuestionSummary extends PureComponent {
           }
           {
             showFeedback &&
-            <FeedbackPanel question={this.props.question} answers={this.props.answers} />
+            <QuestionFeedbackPanel question={this.props.question} answers={this.props.answers} students={this.props.students} />
           }
         </div>
         <div className="clear-fix" />

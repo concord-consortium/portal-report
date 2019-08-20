@@ -3,13 +3,17 @@ import Answer from "../../components/report/answer";
 import { CompareAnswerCheckboxContainer } from "./compare-answer";
 import ShowCompareContainer from "./show-compare";
 import { connect } from "react-redux";
-import { fromJS } from "immutable";
+import { fromJS, Map } from "immutable";
 
 import "../../../css/report/answers-table.less";
 
 class AnswersTable extends PureComponent {
-  getLatestFeedback(answer) {
-    return this.props.feedbacks.get(answer.get("id"));
+  getFeedback(answer) {
+    return this.props.questionFeedbacks.get(answer.get("id"));
+  }
+
+  getFeedbackSettings(question) {
+    return question && this.props.feedbackSettings.getIn(["questionSettings", question.get("id")]) || Map({});
   }
 
   getAnswerForStudent(student) {
@@ -26,8 +30,9 @@ class AnswersTable extends PureComponent {
 
   render() {
     const {question, students, hidden, showCompare, anonymous} = this.props;
-    const scoreEnabled = (!anonymous) && question && question.get("scoreEnabled");
-    const feedbackEnabled = (!anonymous) && question && question.get("feedbackEnabled");
+    const feedbackSettings = this.getFeedbackSettings(question);
+    const scoreEnabled = (!anonymous) && feedbackSettings.get("scoreEnabled") || false;
+    const feedbackEnabled = (!anonymous) && feedbackSettings.get("feedbackEnabled") || false;
     const feedbackTH = feedbackEnabled ? <th>Feedback</th> : null;
     const scoreTH = scoreEnabled ? <th>Score</th> : null;
     const selectTH = showCompare ? <th className="select-header">Select</th> : null;
@@ -45,7 +50,7 @@ class AnswersTable extends PureComponent {
           {
             students.map(student => {
               const answer = this.getAnswerForStudent(student);
-              const feedback = this.getLatestFeedback(answer);
+              const feedback = this.getFeedback(answer);
               return (<AnswerRow
                 key={student.get("id")}
                 student={student}
@@ -92,7 +97,8 @@ function AnswerRow({student, answer, question, feedback, showScore, showFeedback
 
 function mapStateToProps(state, ownProps) {
   return {
-    feedbacks: state.get("feedbacks"),
+    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
+    feedbackSettings: state.getIn(["feedback", "settings"]),
     anonymous: state.getIn(["report", "anonymous"]),
   };
 }

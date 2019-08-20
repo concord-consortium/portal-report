@@ -47,7 +47,7 @@ export default class RubricSummary extends PureComponent {
     };
     return (
       <div key={index} className="rubric-row">
-        {rowNumbers.map((value, idx) => <div key={index} style={style(value, idx)} />)}
+        {rowNumbers.map((value, idx) => <div key={idx} style={style(value, idx)} />)}
       </div>
     );
   }

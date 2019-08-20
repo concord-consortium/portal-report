@@ -26,7 +26,6 @@ describe("activity-feedback-selectors", () => {
   let activity = fromJS(
     {
       id: 1,
-      activityFeedbackId: 1,
       activityFeedback: ["1-1", "1-2"],
       scoreType: "manual"
     }
@@ -36,7 +35,7 @@ describe("activity-feedback-selectors", () => {
     {
       "1-1": {
         key: "1-1",
-        platFormStudentId: 1,
+        platformStudentId: 1,
         learnerId: 201,
         feedback: "good",
         hasBeenReviewed: true,
@@ -59,7 +58,7 @@ describe("activity-feedback-selectors", () => {
     },
       "1-2": {
         key: "1-2",
-        platFormStudentId: 2,
+        platformStudentId: 2,
         learnerId: 202,
         feedback: "better",
         hasBeenReviewed: true,
@@ -82,6 +81,15 @@ describe("activity-feedback-selectors", () => {
     }
   );
 
+  let progress = fromJS({
+    "1": {
+      "1": 0.5
+    },
+    "2": {
+      "1": 0.5
+    }
+  });
+
   describe("getStudentFeedbacks", () => {
     it("should be a function", () => {
       expect(typeof getStudentFeedbacks).toBe("function");
@@ -93,7 +101,8 @@ describe("activity-feedback-selectors", () => {
         studentFeedbacks = getStudentFeedbacks(
           activity,
           students,
-          activityFeedbacks
+          activityFeedbacks,
+          progress
         );
       });
       it("should have two scores", () => {
@@ -104,7 +113,8 @@ describe("activity-feedback-selectors", () => {
           studentFeedbacks = getStudentFeedbacks(
             activity,
             students,
-            activityFeedbacks.setIn(["1-2", "hasBeenReviewed"], false)
+            activityFeedbacks.setIn(["1-2", "hasBeenReviewed"], false),
+            progress
           );
         });
         it("should have one score", () => {
@@ -188,7 +198,7 @@ describe("activity-feedback-selectors", () => {
     let feedbacks = {feedbacks: fromJS({
       "1-1": {
         key: "1-1",
-        platFormStudentId: 1,
+        platformStudentId: 1,
         learnerId: 201,
         feedback: "second answer",
         hasBeenReviewed: true,
