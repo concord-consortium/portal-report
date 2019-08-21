@@ -1,6 +1,7 @@
 import { normalize, schema } from "normalizr";
 import humps from "humps";
 import { IPortalRawData } from "../api";
+import queryString from "query-string";
 
 export interface IResource {
   id: number;
@@ -116,6 +117,15 @@ export function preprocessResourceJSON(resourceJson: IResource) {
       });
     });
   });
+
+  // If `activityId` is provided as a URL parameter, filter activities to include only this one.
+  const { activityIndex } = queryString.parse(window.location.search);
+  if (activityIndex != null) {
+    resourceJson.children = [ resourceJson.children[Number(activityIndex)] ];
+    // Also, hide sequence name to make it more clear that we're looking just at one activity.
+    resourceJson.name = "";
+  }
+
   return resourceJson;
 }
 

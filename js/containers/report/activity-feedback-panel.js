@@ -102,7 +102,8 @@ class ActivityFeedbackPanel extends PureComponent {
       feedbacksNotAnswered,
       autoScores,
       computedMaxScore,
-      rubric
+      rubric,
+      activityIndex
     } = this.props;
     const numNotAnswered = feedbacksNotAnswered.size;
     const prompt = truncate(activity.get("name") || "", 200);
@@ -187,6 +188,7 @@ class ActivityFeedbackPanel extends PureComponent {
                         <ActivityFeedbackRow
                           studentActivityFeedback={studentActivityFeedback}
                           activityId={activityId}
+                          activityIndex={activityIndex}
                           key={`${activityId}-${studentId}`}
                           studentId={studentId}
                           ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
@@ -236,7 +238,8 @@ function makeMapStateToProps() {
       feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),
-      rubric: rubric && rubric.toJS()
+      rubric: rubric && rubric.toJS(),
+      activityIndex: state.getIn(["report", "sequences"]).first().get("children").indexOf(ownProps.activity.get("id"))
     };
   };
 }
