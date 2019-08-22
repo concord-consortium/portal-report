@@ -118,7 +118,7 @@ export function preprocessResourceJSON(resourceJson: IResource) {
     });
   });
 
-  // If `activityId` is provided as a URL parameter, filter activities to include only this one.
+  // If `activityIndex` is provided as a URL parameter, filter activities to include only this one.
   const { activityIndex } = queryString.parse(window.location.search);
   if (activityIndex != null) {
     resourceJson.children = [ resourceJson.children[Number(activityIndex)] ];
