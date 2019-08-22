@@ -145,7 +145,7 @@ export default class ActivityFeedbackRow extends PureComponent {
   }
 
   render() {
-    const { studentActivityFeedback, activityId } = this.props;
+    const { studentActivityFeedback, activityIndex } = this.props;
     const student = studentActivityFeedback.get("student");
     const name = student.get("realName");
     const started = studentActivityFeedback.get("activityStarted");
@@ -163,7 +163,7 @@ export default class ActivityFeedbackRow extends PureComponent {
         <div className="student-answer">
           <h3>{name}'s work</h3>
           <p>
-            <StudentReportLink activityId={activityId} student={student} started={started} />
+            <StudentReportLink activityIndex={activityIndex} student={student} started={started} />
           </p>
         </div>
         {feedbackSection}

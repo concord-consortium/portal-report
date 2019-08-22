@@ -22,7 +22,6 @@ import {
   preprocessPortalDataJSON,
   preprocessAnswersJSON
 } from "../core/transform-json-response";
-
 import queryString from "query-string";
 
 export const FULL_REPORT = "fullReport";
