@@ -153,6 +153,7 @@ class ActivityFeedbackPanel extends PureComponent {
             />
             <ActivityFeedbackOptions
               activity={this.props.activity}
+              activityIndex={activityIndex}
               showText={showText}
               scoreType={scoreType}
               maxScore={maxScore}
@@ -244,10 +245,10 @@ function makeMapStateToProps() {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateActivityFeedback: (activityId, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, platformStudentId, feedback)),
-    updateActivityFeedbackSettings: (activityId, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, feedbackFlags)),
+    updateActivityFeedback: (activityId, activityIndex, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, activityIndex, platformStudentId, feedback)),
+    updateActivityFeedbackSettings: (activityId, activityIndex, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, activityIndex, feedbackFlags)),
   };
 };
 

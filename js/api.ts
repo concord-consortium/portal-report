@@ -7,6 +7,7 @@ import queryString from "query-string";
 import { parseUrl, validFsId } from "./util/misc";
 import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/activity-feedback-helper";
 import * as db from "./db";
+import set = Reflect.set;
 
 const FIREBASE_APP = "report-service-dev";
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
@@ -90,6 +91,16 @@ const getPortalFirebaseJWTUrl = (classHash: string) => {
     return null;
   }
   return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${FIREBASE_APP}&class_hash=${classHash}`;
+};
+
+const gePortalReportAPIUrl = () => {
+  const offeringUrl = urlParam("offering");
+  if (offeringUrl) {
+    // When this report is used an external report, it will be launched with offering URL parameter.
+    // Modify this URL to point to get the deprecated Report API URL.
+    return offeringUrl.replace("/offerings/", "/reports/");
+  }
+  return null;
 };
 
 const getAuthHeader = () => `Bearer ${urlParam("token")}`;
@@ -205,6 +216,28 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
       .set(update, {merge: true});
 }
 
+// The updateReportSettings API middleware calls out to the deprecated Portal Report API.
+// It's necessary to keep the Portal progress table valid and updated.
+export function updateReportSettingsInPortal(data: any) {
+  const reportUrl = gePortalReportAPIUrl();
+  const authHeader = getAuthHeader();
+  if (reportUrl) {
+    return fetch(reportUrl, {
+      method: "put",
+      headers: {
+        "Authorization": authHeader,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then(checkStatus);
+  } else {
+    // tslint:disable-next-line:no-console
+    console.warn("No OFFERING/REPORT_URL. Faking put method.");
+    return new Promise(resolve => resolve({}));
+  }
+}
+
 export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?: { platformId?: string, resourceLinkId?: string }) {
   const path = `/sources/${sourceId}/feedback_settings`;
   if (instanceParams) {
@@ -217,7 +250,26 @@ export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?:
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateFeedbackSettings(settings: any, state: IStateReportPartial) {
+export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
+  const { settings } = data;
+
+  if (settings.activitySettings) {
+    const { activityId, activityIndex } = data;
+    const actSettings = settings.activitySettings[activityId];
+    // Send data to Portal to keep progress table working. This is only one-way communication,
+    // Portal Report never reads this data back from Portal.
+    updateReportSettingsInPortal({
+      activity_feedback_opts_v2: {
+        enable_text_feedback: actSettings.textFeedbackEnabled,
+        score_type: actSettings.scoreType,
+        max_score: actSettings.maxScore,
+        use_rubric: actSettings.useRubric,
+        activity_index: activityIndex
+      }
+    });
+  }
+
+  // Then, send it to Firestore.
   settings.platformId = state.platformId;
   settings.resourceLinkId = state.resourceLinkId;
   // contextId is used by security rules.
@@ -277,8 +329,21 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportState: IStateReportPartial) {
-  const { activityId, platformStudentId, feedback } = data;
+export function updateActivityFeedbacks(data: any, reportState: IStateReportPartial) {
+  const { activityId, platformStudentId, feedback, activityIndex } = data;
+  // Send data to Portal to keep progress table working. This is only one-way communication,
+  // Portal Report never reads this data back from Portal.
+  updateReportSettingsInPortal({
+    activity_feedback_v2: {
+      has_been_reviewed: feedback.hasBeenReviewed,
+      text_feedback: feedback.feedback,
+      score: feedback.score,
+      rubric_feedback: feedback.rubricFeedback,
+      activity_index: activityIndex,
+      student_user_id: platformStudentId
+    }
+  });
+  // Then, send it to Firestore.
   const { platformId, platformUserId, resourceLinkId, contextId } = reportState;
   const activityStudentKey = getActivityStudentFeedbackKey(data);
   feedback.platformId = platformId;
@@ -287,7 +352,6 @@ export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportSta
   feedback.platformTeacherId = platformUserId;
   feedback.platformStudentId = platformStudentId;
   feedback.contextId = contextId;
-
   const path = reportActivityFeedbacksFireStorePath(reportState.sourceId, activityStudentKey);
   return firebase.firestore()
       .doc(path)
