@@ -76,7 +76,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     score = parseInt(score, 10) || 0;
     feedback = feedback || "";
     const complete = hasBeenReviewed || false;
-    rubricFeedback = rubricFeedback || {};
+    rubricFeedback = rubricFeedback || null;
 
     return {
       score,

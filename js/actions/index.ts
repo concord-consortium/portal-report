@@ -169,6 +169,7 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
 
 function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
   const path = feedbackSettingsFirestorePath(rawPortalData.sourceId);
+  const rubricUrl = rawPortalData.offering.rubric_url;
   let rubricRequested = false;
   db.collection(path)
     .where("contextId", "==", rawPortalData.contextId)
@@ -182,8 +183,8 @@ function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch:
         });
       }
       // Note that this should be called even if snapshot is empty (no feedback settings saved yet).
-      if (!rubricRequested) {
-        dispatch(requestRubric(rawPortalData.offering.rubric_url) as any as AnyAction);
+      if (rubricUrl && !rubricRequested) {
+        dispatch(requestRubric(rubricUrl) as any as AnyAction);
         rubricRequested = true;
       }
     }, fireStoreError(RECEIVE_FEEDBACK_SETTINGS, dispatch));

@@ -29,16 +29,16 @@ const keyFor = (activity, student) => `${activity.get("id")}-${student.get("id")
 const isNumeric = obj => obj !== undefined && typeof (obj) === "number" && !isNaN(obj);
 
 // If a student has no feedback yet, use this template:
-const newFeedback = (activityMap, studentMap) => {
+const newFeedback = (activityMap, studentMap, activityStarted) => {
   const student = studentMap.toJS();
-  const key = keyFor(activityMap, studentMap);
   const newFeedbackRecord = {
     student,
     platformStudentId: student.id,
     feedback: "",
     score: 0,
     activityId: activityMap.get("id"),
-    hasBeenReviewed: false
+    hasBeenReviewed: false,
+    activityStarted
   };
   return fromJS(newFeedbackRecord);
 };
@@ -53,12 +53,13 @@ const addRealName = (student) => {
 const activityFeedbackFor = (activity, student, feedbacks, progress) => {
   const key = keyFor(activity, student);
   const found = feedbacks.get(key);
+  const activityStarted = progress.getIn([student.get("id"), activity.get("id")]) > 0;
   if (found) {
     return found
       .set("student", student)
-      .set("activityStarted", progress.getIn([student.get("id"), activity.get("id")]) > 0);
+      .set("activityStarted", activityStarted);
   }
-  return newFeedback(activity, student);
+  return newFeedback(activity, student, activityStarted);
 };
 
 const formatStudents = (students) => students
