@@ -18,15 +18,15 @@ const receiveRubric = (data) => {
 export function requestRubric(rubricUrl) {
   return (dispatch, getState) => {
     const state = getState();
-    const cachedRubrics = state.getIn(["feedback", "settings", "rubrics"]);
-    if (!cachedRubrics || !cachedRubrics.has(rubricUrl)) {
+    const cachedRubric = state.getIn(["feedback", "settings", "rubric"]);
+    if (!cachedRubric) {
       dispatch({
         type: REQUEST_RUBRIC,
         callAPI: {
           type: API_FETCH_RUBRIC,
           data: rubricUrl,
           successAction: receiveRubric,
-        },
+        }
       });
     }
   };

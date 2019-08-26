@@ -268,6 +268,13 @@ export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
       }
     });
   }
+  if (settings.rubric) {
+    updateReportSettingsInPortal({
+      rubric_v2: {
+        rubric: settings.rubric
+      }
+    });
+  }
 
   // Then, send it to Firestore.
   settings.platformId = state.platformId;
