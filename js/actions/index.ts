@@ -169,6 +169,7 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
 
 function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
   const path = feedbackSettingsFirestorePath(rawPortalData.sourceId);
+  const rubricUrl = rawPortalData.offering.rubric_url;
   let rubricRequested = false;
   db.collection(path)
     .where("contextId", "==", rawPortalData.contextId)
@@ -182,8 +183,8 @@ function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch:
         });
       }
       // Note that this should be called even if snapshot is empty (no feedback settings saved yet).
-      if (!rubricRequested) {
-        dispatch(requestRubric(rawPortalData.offering.rubric_url) as any as AnyAction);
+      if (rubricUrl && !rubricRequested) {
+        dispatch(requestRubric(rubricUrl) as any as AnyAction);
         rubricRequested = true;
       }
     }, fireStoreError(RECEIVE_FEEDBACK_SETTINGS, dispatch));
@@ -363,7 +364,7 @@ export function updateQuestionFeedback(answerId: string, feedback: any) {
   };
 }
 
-export function updateActivityFeedback(activityId: string, platformStudentId: string, feedback: any) {
+export function updateActivityFeedback(activityId: string, activityIndex: number, platformStudentId: string, feedback: any) {
   const feedbackData = mappedCopy(feedback, {});
   return {
     type: API_CALL,
@@ -373,7 +374,8 @@ export function updateActivityFeedback(activityId: string, platformStudentId: st
       data: {
         feedback: feedbackData,
         activityId,
-        platformStudentId
+        platformStudentId,
+        activityIndex
       },
     },
   };
@@ -386,24 +388,30 @@ export function updateQuestionFeedbackSettings(questionId: string, settings: any
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        questionSettings: {
-          [questionId]: settings
+        settings: {
+          questionSettings: {
+            [questionId]: settings
+          }
         }
       }
     }
   };
 }
 
-export function updateActivityFeedbackSettings(activityId: string, settings: any) {
+export function updateActivityFeedbackSettings(activityId: string, activityIndex: number, settings: any) {
   return {
     type: API_CALL,
     callAPI: {
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        activitySettings: {
-          [activityId]: settings
-        }
+        settings: {
+          activitySettings: {
+            [activityId]: settings
+          }
+        },
+        activityId,
+        activityIndex
       }
     }
   };
@@ -416,7 +424,9 @@ export function saveRubric(rubricContent: any) {
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        rubric: rubricContent
+        settings: {
+          rubric: rubricContent
+        }
       }
     }
   };

@@ -18,10 +18,10 @@ export default class ActivityFeedbackRow extends PureComponent {
   }
 
   changeFeedback(newData) {
-    const { activityId, studentId, updateActivityFeedback } = this.props;
+    const { activityId, studentId, activityIndex, updateActivityFeedback } = this.props;
     const oldData = this.fieldValues();
     const newRecord = Object.assign({}, oldData, newData);
-    updateActivityFeedback(activityId, studentId, newRecord);
+    updateActivityFeedback(activityId, activityIndex, studentId, newRecord);
   }
 
   scoreChange(e) {
@@ -76,7 +76,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     score = parseInt(score, 10) || 0;
     feedback = feedback || "";
     const complete = hasBeenReviewed || false;
-    rubricFeedback = rubricFeedback || {};
+    rubricFeedback = rubricFeedback || null;
 
     return {
       score,
