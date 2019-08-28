@@ -12,7 +12,7 @@ import {
   makeGetAutoScores,
   makeGetComputedMaxScore,
 } from "../../selectors/activity-feedback-selectors";
-import { isAutoScoring, MANUAL_SCORE, MAX_SCORE_DEFAULT } from '../../util/scoring-constants'
+import { isAutoScoring, MANUAL_SCORE, MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
 
 import "../../../css/report/activity.less";
 
