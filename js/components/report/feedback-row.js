@@ -90,7 +90,7 @@ export default class FeedbackRow extends PureComponent {
   }
 
   render() {
-    const answer = this.props.answer;
+    const { answer, question } = this.props;
     const answered = answer.get("answer");
     const name = answer.get("student").get("realName");
 
@@ -98,7 +98,7 @@ export default class FeedbackRow extends PureComponent {
       <div className="feedback-row">
         <div className="student-answer">
           <h3>{name}'s Answer</h3>
-          <Answer answer={answer} />
+          <Answer answer={answer} question={question} />
         </div>
         { answered ? this.renderFeedbackSection(answer) : null }
       </div>
