@@ -50,12 +50,12 @@ context("Portal Report Smoke Test", () => {
         }
     }
 
-    function getAnswerByQuestionType(answersData) {
+    function getAnswerByQuestionType(answerData) {
         let answer;
         let questionType;
-        questionType = answersData.type;
+        questionType = answerData.type;
 
-        if (answersData.type != null) {
+        if (answerData.type != null) {
             switch (questionType) {
                 case ("Embeddable::MultipleChoice"):
                     answer = answerData.answer[0].choice;
@@ -77,19 +77,9 @@ context("Portal Report Smoke Test", () => {
     }
 
     context("Header components", () => {
-
-        // it("Refreshes the page", () => {
-        //     header.getRefreshButton().should("be.visible").and("exist").click({ force: true });
-        // });
-
-        // it("Verifies the time is accurate", () => {
-        //     header.getTime().should("contain", "Last updated at");
-        // });
-
         it("Verifies the logo appears correctly", () => {
             header.getLogo().should("exist").and("have.length", 1).and("be.visible");
         });
-
     });
 
     context("Module Details", () => {
@@ -142,20 +132,77 @@ context("Portal Report Smoke Test", () => {
         });
 
         it("Shows/Hides student names", () => { // Add into context
-            body.getResponseTable().should("not.exist");
-            body.getActivities().eq(activityIndex).within(() => {
-                body.getShowResponses(questionIndex).should("exist").and("be.visible").click({ force: true });
-            });
-            body.getResponseTable().should("exist").and("be.visible");
-            body.checkForStudentNames("T");
-            header.getHideShowNames().should("be.visible").click({ force: true });
-            body.checkForStudentNames("F");
+            cy.get('@classData').then((classData) => {
+                const students = classData.students;
+                let student;
+
+                body.getResponseTable().should("not.exist");
+                body.getActivities().eq(activityIndex).within(() => {
+                    body.getShowResponses(questionIndex).should("exist").and("be.visible").click({ force: true });
+                });
+                body.getResponseTable().should("exist").and("be.visible");
+                for (let i = 0; i < students.length; i++) {
+                    student = students[i]
+                    if (students[i].started_offering === true) {
+                        body.checkForStudentNames(true, student[i].first_name);
+                    }
+                }
+                header.getHideShowNames().should("be.visible").click({ force: true });
+                for (let i = 0; i < students.length; i++) {
+                    student = students[i]
+                    if (students[i].started_offering === true) {
+                        body.checkForStudentNames(false, student[i].first_name);
+                    }
+                }
+            })
         });
 
-        it("Shows activity 1 responses for students with answers", () => {
-            body.getShowResponses(questionIndex).should("be.visible").click({ force: true });
-            body.checkForStudentNames("T");
-            body.getHideResponses(questionIndex).click({ force: true });
+        it.only("Shows activity 1 responses for students with answers", () => {
+            cy.get('@sequenceData').then((sequenceData) => {
+                let activityData = getActivityData(sequenceData);
+    
+                cy.get('@answerData').then((answerData) => {
+                    let pages;
+                    let questions;
+                    let answers = answerData;
+
+                    let currentActivity;
+                    let currentPage;
+                    let currentQuestion;
+
+
+                    for(let i = 0; i <= activityData.length; i++) {
+                        currentActivity = activityData[i];
+                        pages = getPageData(currentActivity)
+
+                        for(let j = 0; j <= pages.length; j++){
+                            currentPage = pages[j];
+                            questions = getQuestionData(currentPage)
+
+                            for(let k = 0; k < questions.length; k++) {
+                                currentQuestion = questions[k]
+
+                                
+
+                            }
+
+                        }
+
+
+                    }
+
+                    body.getActivities().should('have.length', activityNum)
+                    body.getShowResponses(questionIndex).should("be.visible").click({ force: true });
+                    /**
+                     * i = 1
+                     * cy.get the sequence data
+                     * for each i
+                     * get question_number i
+                     */
+                    body.getHideResponses(questionIndex).click({ force: true });
+                    cy.wait(10000)
+                })
+            })
         });
     });
 
@@ -178,9 +225,9 @@ context("Portal Report Smoke Test", () => {
         it("checks student response status counts", () => {
             cy.get("@sequenceData").then((sequenceData) => {
                 body.pullUpFeedbackForActivity(activityIndex);
-                feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
-                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "3");
-                feedback.getNoAnswerStudentsCount().should("be.visible").and("contain", "1");
+                feedback.getScoredStudentsCount().should("be.visible").and("contain", "3");
+                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "0");
+                feedback.getNoAnswerStudentsCount().should("be.visible").and("contain", "2");
             });
         });
 
@@ -216,36 +263,9 @@ context("Portal Report Smoke Test", () => {
             feedback.getStudentScoreInput(studentIndex).type(studentScore);
             feedback.getCompleteStudentFeedback(studentIndex).click();
         });
-        // This should work when testing in Firestore
-        //
-        // it('Checks student report for feedback', () => {
-        //     feedback.getStudentWorkLink(studentIndex).should('be.visible').click({force:true})
-        // })
+
+        it('Checks student report for feedback', () => {
+            feedback.getStudentWorkLink(studentIndex).should('be.visible').click({ force: true })
+        });
     });
 });
-
-    // function getStudentAnswer(answerData, studentID) {
-    //     for (let i = 0; i < allAnswers.length; i++) {
-    //         let answerData = allAnswers[i]
-    //         let answer;
-
-    //         if (answerData.student_id === studentID) {
-    //             answer = getAnswerType(answerData)
-    //             return answer
-    //         }
-    //     }
-    // }
-
-        // function getStudentName(classData, id) {
-    //     let students;
-
-    //     students = classData.class.students
-    //     for (let i = 0; i < students.length; i++) {
-    //         if (students[i].id === id) {
-    //             let student = students[i]
-    //             return student.name
-    //         } else {
-    //             cy.log('No student with this ID found in class')
-    //         }
-    //     }
-    // }

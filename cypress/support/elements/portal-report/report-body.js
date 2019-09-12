@@ -65,46 +65,18 @@ class ReportBody {
     //
     //Misc Actions
     //
-    checkForStudentNames(status) {
-        if (status === "T") {
+    checkForStudentNames(status, studentName) {
+        if (status === true) {
             status = "contain";
         }
-        else if (status === "F") {
+        else if (status === false) {
             status = "not.contain";
         }
 
-        return cy.get("@classData").then((classData) => {
-            const students = classData.students;
-            let i = 0;
-            for (i; i < students.length; i++) {
-                if (students[i].started_offering === true) {
-                    let studentName = students[i].first_name;
-                    cy.get(".report-content")
-                        .should(status, studentName);
-                }
-            }
-        });
+        return cy.get(".report-content").should(status, studentName);
+  
     }
-    checkForStudentIDs(status) {
-        if (status === "T") {
-            status = "contain";
-        }
-        else if (status === "F") {
-            status = "not.contain";
-        }
 
-        return cy.get("@classData").then((classData) => {
-            const students = classData.students;
-            let i = 0;
-            for (i; i < students.length; i++) {
-                if (students[i].started_offering === true) {
-                    let studentID = students[i].user_id;
-                    cy.get(".report-content")
-                        .should(status, studentID);
-                }
-            }
-        });
-    }
     pullUpFeedbackForActivity(idx) {
         this.getProvideOverallFeedback(idx)
             .should("be.visible")
