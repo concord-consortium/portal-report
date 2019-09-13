@@ -1,4 +1,4 @@
-import db from "../db";
+import { db } from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
 import {AnyAction, Dispatch} from "redux";
