@@ -9,7 +9,9 @@ import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/a
 import * as db from "./db";
 import set = Reflect.set;
 
-const FIREBASE_APP = "report-service-dev";
+const FIREBASE_APP = urlParam("firebase-app") || "report-service-dev";
+db.initializeDB(FIREBASE_APP);
+
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
 export interface ILTIPartial {
@@ -65,7 +67,7 @@ export interface IFirebaseJWT {
   };
 }
 
-const urlParam = (name: string): string | null => {
+function urlParam(name: string): string | null{
   const result = queryString.parse(window.location.search)[name];
   if (typeof result === "string") {
     return result;
@@ -74,7 +76,7 @@ const urlParam = (name: string): string | null => {
   } else {
     return null;
   }
-};
+}
 
 const getPortalBaseUrl = () => {
   const portalUrl = urlParam("class") || urlParam("offering");
