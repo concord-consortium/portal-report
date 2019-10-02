@@ -29,7 +29,7 @@ export interface IStateAnswer {
 
 export interface IStateReportPartial extends ILTIPartial {
   answers: {[key: string]: IStateAnswer};
-  sourceId: string;
+  sourceKey: string;
 }
 
 export interface IPortalRawData extends ILTIPartial{
@@ -44,7 +44,7 @@ export interface IPortalRawData extends ILTIPartial{
     students: IStudentRawData[];
   };
   userType: "teacher" | "learner";
-  sourceId: string;
+  sourceKey: string;
 }
 
 export interface IStudentRawData {
@@ -177,7 +177,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
             platformId: verifiedFirebaseJWT.claims.platform_id,
             platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
             contextId: classData.class_hash,
-            sourceId: parseUrl(offeringData.activity_url.toLowerCase()).hostname
+            sourceKey: parseUrl(offeringData.activity_url.toLowerCase()).hostname
           })
         );
       } else {
@@ -190,7 +190,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: "https://fake.portal",
           platformUserId: "1",
           contextId: classData.class_hash,
-          sourceId: parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          sourceKey: parseUrl(offeringData.activity_url.toLowerCase()).hostname
         };
       }
     });
@@ -199,12 +199,12 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
 
 export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
   const {platformId, platformUserId, resourceLinkId} = LTIData;
-  const sourceId = platformId.replace(/https?:\/\//, "");
+  const sourceKey = platformId.replace(/https?:\/\//, "");
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.portal/user_settings/1/offering/class123` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, sans JWT.
-  return `/sources/${sourceId}/user_settings/${validFsId(platformUserId)}/resource_link/${validFsId(resourceLinkId)}`;
+  return `/sources/${sourceKey}/user_settings/${validFsId(platformUserId)}/resource_link/${validFsId(resourceLinkId)}`;
 }
 
 // The updateReportSettings API middleware calls out to the FireStore API.
@@ -240,8 +240,8 @@ export function updateReportSettingsInPortal(data: any) {
   }
 }
 
-export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?: { platformId?: string, resourceLinkId?: string }) {
-  const path = `/sources/${sourceId}/feedback_settings`;
+export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?: { platformId?: string, resourceLinkId?: string }) {
+  const path = `/sources/${sourceKey}/feedback_settings`;
   if (instanceParams) {
     return path + `/${validFsId(instanceParams.platformId + "-" + instanceParams.resourceLinkId)}`;
   }
@@ -283,30 +283,30 @@ export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
   settings.resourceLinkId = state.resourceLinkId;
   // contextId is used by security rules.
   settings.contextId = state.contextId;
-  const path = feedbackSettingsFirestorePath(state.sourceId, {platformId: state.platformId, resourceLinkId: state.resourceLinkId});
+  const path = feedbackSettingsFirestorePath(state.sourceKey, {platformId: state.platformId, resourceLinkId: state.resourceLinkId});
   return firebase.firestore()
     .doc(path)
     .set(settings, {merge: true});
 }
 
-export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?: string) {
+export function reportQuestionFeedbacksFireStorePath(sourceKey: string, answerId?: string) {
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.authoring.system/question_feedbacks/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
-  const path = `/sources/${sourceId}/question_feedbacks`;
+  const path = `/sources/${sourceKey}/question_feedbacks`;
   if (answerId) {
     return path + `/${answerId}`;
   }
   return path;
 }
 
-export function reportActivityFeedbacksFireStorePath(sourceId: string, activityUserKey?: string) {
+export function reportActivityFeedbacksFireStorePath(sourceKey: string, activityUserKey?: string) {
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.authoring.system/question_feedbacks/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
-  const path = `/sources/${sourceId}/activity_feedbacks`;
+  const path = `/sources/${sourceKey}/activity_feedbacks`;
   if (activityUserKey) {
     return path + `/${activityUserKey}`;
   }
@@ -328,7 +328,7 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
   feedback.platformStudentId = answers[answerId].platformUserId;
   // contextId is used by security rules.
   feedback.contextId = contextId;
-  const path = reportQuestionFeedbacksFireStorePath(reportState.sourceId, answerId);
+  const path = reportQuestionFeedbacksFireStorePath(reportState.sourceKey, answerId);
   return firebase.firestore()
       .doc(path)
       .set(feedback, {merge: true});
@@ -361,7 +361,7 @@ export function updateActivityFeedbacks(data: any, reportState: IStateReportPart
   feedback.platformTeacherId = platformUserId;
   feedback.platformStudentId = platformStudentId;
   feedback.contextId = contextId;
-  const path = reportActivityFeedbacksFireStorePath(reportState.sourceId, activityStudentKey);
+  const path = reportActivityFeedbacksFireStorePath(reportState.sourceKey, activityStudentKey);
   return firebase.firestore()
       .doc(path)
       .set(feedback, {merge: true});

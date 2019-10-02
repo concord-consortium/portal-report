@@ -172,7 +172,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("contextId", data.contextId)
         .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId)
-        .set("sourceId", data.sourceId);
+        .set("sourceKey", data.sourceKey);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);

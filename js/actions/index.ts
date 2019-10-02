@@ -72,7 +72,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
       resourceUrl = resourceUrl.replace("http", "https");
     }
-    const source = rawPortalData.sourceId;
+    const source = rawPortalData.sourceKey;
     if (source === "fake.authoring.system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
@@ -168,7 +168,7 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
 }
 
 function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const path = feedbackSettingsFirestorePath(rawPortalData.sourceId);
+  const path = feedbackSettingsFirestorePath(rawPortalData.sourceKey);
   const rubricUrl = rawPortalData.offering.rubric_url;
   let rubricRequested = false;
   db.collection(path)
@@ -191,7 +191,7 @@ function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch:
 }
 
 function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceId);
+  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceKey);
   let feedbacksQuery = db.collection(feedbackFireStorePath)
     .where("platformId", "==", rawPortalData.platformId)
     .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
@@ -213,7 +213,7 @@ function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch:
 }
 
 function watchFirestoreActivityFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const feedbackFireStorePath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceId);
+  const feedbackFireStorePath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceKey);
   let feedbacksQuery = db.collection(feedbackFireStorePath)
     .where("platformId", "==", rawPortalData.platformId)
     .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
