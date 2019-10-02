@@ -12,6 +12,9 @@ import set = Reflect.set;
 const FIREBASE_APP = urlParam("firebase-app") || "report-service-dev";
 db.initializeDB(FIREBASE_APP);
 
+const TOOL_ID = urlParam("tool-id");
+const SOURCE_KEY = TOOL_ID ? makeSourceKey(TOOL_ID) : null;
+
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
 export interface ILTIPartial {
@@ -76,6 +79,11 @@ function urlParam(name: string): string | null{
   } else {
     return null;
   }
+}
+
+// This matches the make_source_key method in LARA's report_service.rb
+function makeSourceKey(toolId: string): string | null{
+  return toolId.replace(/https?:\/\/([^\/]+)/, "$1")
 }
 
 const getPortalBaseUrl = () => {
@@ -177,7 +185,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
             platformId: verifiedFirebaseJWT.claims.platform_id,
             platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
             contextId: classData.class_hash,
-            sourceKey: parseUrl(offeringData.activity_url.toLowerCase()).hostname
+            sourceKey: SOURCE_KEY || parseUrl(offeringData.activity_url.toLowerCase()).hostname
           })
         );
       } else {
@@ -190,7 +198,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: "https://fake.portal",
           platformUserId: "1",
           contextId: classData.class_hash,
-          sourceKey: parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          sourceKey: SOURCE_KEY || parseUrl(offeringData.activity_url.toLowerCase()).hostname
         };
       }
     });
@@ -199,6 +207,10 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
 
 export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
   const {platformId, platformUserId, resourceLinkId} = LTIData;
+  // Note this is similiar to the makeSourceKey function however in this case it is just
+  // stripping off the protocol if there is one. It will also leave any trailing slashes.
+  // It would be best to unify these two approaches. If makeSourceKey is changed then
+  // the LARA make_source_key should be updated as well.
   const sourceKey = platformId.replace(/https?:\/\//, "");
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.portal/user_settings/1/offering/class123` which has
