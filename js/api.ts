@@ -83,7 +83,7 @@ function urlParam(name: string): string | null{
 
 // This matches the make_source_key method in LARA's report_service.rb
 function makeSourceKey(toolId: string): string | null{
-  return toolId.replace(/https?:\/\/([^\/]+)/, "$1")
+  return toolId.replace(/https?:\/\/([^\/]+)/, "$1");
 }
 
 const getPortalBaseUrl = () => {
