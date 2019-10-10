@@ -5,9 +5,8 @@ import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl, validFsId } from "./util/misc";
-import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/activity-feedback-helper";
+import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
 import * as db from "./db";
-import set = Reflect.set;
 
 const FIREBASE_APP = urlParam("firebase-app") || "report-service-dev";
 db.initializeDB(FIREBASE_APP);
@@ -92,7 +91,7 @@ const getPortalBaseUrl = () => {
     return null;
   }
   const { hostname, protocol } = parseUrl(portalUrl);
-  return `${protocol}//${hostname}/`;
+  return `${protocol}//${hostname}`;
 };
 
 const getPortalFirebaseJWTUrl = (classHash: string) => {
