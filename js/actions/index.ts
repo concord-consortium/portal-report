@@ -312,10 +312,11 @@ export function showUnselectedQuestions() {
   };
 }
 
-export function setNowShowing(value: boolean) {
+export function setNowShowing(nowShowingValue: boolean, selectedStudentIds?: string[]) {
   return {
     type: SET_NOW_SHOWING,
-    value,
+    nowShowingValue,
+    selectedStudentIds
   };
 }
 
