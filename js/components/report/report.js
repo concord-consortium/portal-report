@@ -7,11 +7,24 @@ import Sticky from "react-stickynode";
 
 const MAX_STUDENT_REPORTS = 20;
 
+const print = () => {
+  // based on https://stackoverflow.com/a/31732310:
+  const isSafari = navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
+    navigator.userAgent &&
+    navigator.userAgent.indexOf("CriOS") === -1 &&
+    navigator.userAgent.indexOf("FxiOS") === -1;
+  // Why? No idea, but on 10/2019 Safari doesn't react to window.print() calls...
+  if (isSafari) {
+    document.execCommand("print", false, null);
+  } else {
+    window.print();
+  }
+};
+
 export default class Report extends PureComponent {
   constructor(props) {
     super(props);
     this.printStudentReports = this.printStudentReports.bind(this);
-    this.printMediaQueryListener = this.printMediaQueryListener.bind(this);
   }
 
   componentDidMount() {
@@ -137,8 +150,15 @@ export default class Report extends PureComponent {
     const studentSubset = sortedStudents.slice(studentStartIdx, studentEndIdx).map(s => s.get("id"));
     setNowShowing("student", studentSubset);
     // setTimeout is necessary, as and re-render is async. Not the nicest way, but it's simple and self-contained.
-    setTimeout(() => window.print(), 1);
-    this.setupAfterPrintListener();
+    setTimeout(print, 100);
+    window.onafterprint = () => {
+      // setTimeout fixes a React problem. Without it, React complains about:
+      // "Uncaught Invariant Violation: Maximum update depth exceeded. This can happen when a component
+      // repeatedly calls setState inside componentWillUpdate or componentDidUpdate."
+      // My blind guess might be that print dialog stops execution of the main JS thread and another state update
+      // happens too early.
+      setTimeout(() => { this.afterPrint(); }, 1);
+    };
     trackEvent("Report", "Print Student Reports", reportTree.get("name"));
   }
 
@@ -147,30 +167,7 @@ export default class Report extends PureComponent {
     const { setNowShowing, report } = this.props;
     const type = report.get("type");
     setNowShowing(type);
-    this.cleanupAfterPrintListener();
-  }
-
-  // It's difficult to detect when user closes the print dialog in a cross-browser way.
-  // This method seems to work for our needs in modern browsers. See:
-  // http://stackoverflow.com/a/11060206
-  setupAfterPrintListener() {
-    this.mediaQueryList = window.matchMedia("print");
-    this.mediaQueryList.addListener(this.printMediaQueryListener);
-  }
-
-  cleanupAfterPrintListener() {
-    this.mediaQueryList.removeListener(this.printMediaQueryListener);
-  }
-
-  printMediaQueryListener(mql) {
-    if (!mql.matches) {
-      // setTimeout fixes a React problem. Without it, React complains about:
-      // "Uncaught Invariant Violation: Maximum update depth exceeded. This can happen when a component
-      // repeatedly calls setState inside componentWillUpdate or componentDidUpdate."
-      // My blind guess might be that print dialog stops execution of the main JS thread and another state update
-      // happens too early.
-      setTimeout(() => { this.afterPrint(); }, 1);
-    }
+    window.onafterprint = undefined;
   }
 
   render() {
