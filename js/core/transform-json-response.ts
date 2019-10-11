@@ -10,6 +10,10 @@ export interface IResource {
   children: IResource[] | IQuestion[];
 }
 
+export interface IActivity extends IResource {
+  activityIndex: number;
+}
+
 export interface IQuestion extends IResource {
   prompt: string;
   selected: boolean;
@@ -103,7 +107,8 @@ export function preprocessResourceJSON(resourceJson: IResource) {
     };
   }
   // Add some question properties, e.g. question numbers, selection, visibility.
-  resourceJson.children.forEach((activity: IResource) => {
+  resourceJson.children.forEach((activity: IActivity, idx: number) => {
+    activity.activityIndex = idx;
     activity.children.forEach(section => {
       section.children.forEach(page => {
         page.children.forEach((question: IQuestion) => {
