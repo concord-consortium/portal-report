@@ -83,7 +83,7 @@ export default class Report extends PureComponent {
           {
             const min = idx * MAX_STUDENT_REPORTS;
             const max = Math.min((idx + 1) * MAX_STUDENT_REPORTS, sortedStudents.size);
-            return <Button onClick={this.printStudentReports.bind(this, min, max)}>
+            return <Button key={idx} onClick={this.printStudentReports.bind(this, min, max)}>
               { idx === 0 ? "Print student reports: " : ""} {min + 1}-{max}
             </Button>;
           })
