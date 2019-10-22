@@ -240,7 +240,7 @@ function makeMapStateToProps() {
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),
       rubric: rubric && rubric.toJS(),
-      activityIndex: state.getIn(["report", "sequences"]).first().get("children").indexOf(ownProps.activity.get("id"))
+      activityIndex: ownProps.activity.get("activityIndex")
     };
   };
 }
