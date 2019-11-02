@@ -37,7 +37,10 @@ describe("<Dashboard />", () => {
   });
 
   it("should render visible activity answers", () => {
-    const activities = fromJS({ 1: { id: 1, visible: true }, 2: { id: 2, visible: true }, 3: { id: 3, visible: false } });
+    const activities = fromJS({
+      1: { id: 1, visible: true },
+      2: { id: 2, visible: true },
+      3: { id: 3, visible: false } });
     const students = fromJS([ { id: 1 } ]);
     const wrapper1 = mountWithStore(<Dashboard students={students} activities={activities} />, state);
     expect(wrapper1.find(ActivityAnswers)).toHaveLength(2);
@@ -50,7 +53,15 @@ describe("<Dashboard />", () => {
 
   it("synchronizes width of activity name, question prompts and activity answers", () => {
     const students = fromJS([ { id: 1 } ]);
-    const activities = fromJS({ 1: { id: 1, visible: true, questions: [ { id: 1, visible: true, type: "Embeddable:MultipleChoice" }, { id: 2, visible: true, type: "Embeddable:MultipleChoice" } ] }, 2: { id: 3, visible: true, type: "Embeddable:MultipleChoice" } });
+    const activities = fromJS({
+      1: { id: 1, visible: true, questions: [
+        { id: 1, visible: true, type: "Embeddable:MultipleChoice" },
+        { id: 2, visible: true, type: "Embeddable:MultipleChoice" }
+      ] },
+      2: { id: 3, visible: true, questions: [
+        { id: 3, type: "Embeddable:MultipleChoice" }
+      ] }
+    });
     const expandedActivities = fromJS({ 1: true }); // expand the first activity
     const wrapper = mountWithStore(<Dashboard students={students} activities={activities} expandedActivities={expandedActivities} />, state);
 
