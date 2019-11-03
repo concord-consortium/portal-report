@@ -15,8 +15,8 @@ describe("Open response questions", function() {
   });
 
   it("Expand to show full answer text", function() {
-    cy.contains("open response answer").should("not.exist");
-    getByCypressTag("studentName").first().click();
-    cy.contains("open response answer").should("exist");
+    cy.contains("test answer 2").should("not.exist");
+    getByCypressTag("studentName").contains("Galloway").first().click();
+    cy.contains("test answer 2").should("exist");
   });
 });
