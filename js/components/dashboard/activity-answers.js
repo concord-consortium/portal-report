@@ -64,14 +64,11 @@ function mapStateToProps(state, ownProps) {
     // for the questions we were passed.
     // this is only used to compute a score, so it might be better to just compute
     // the score here instead of passing around answers
-    answers: answerTreeList.filter((answer) => {
-      // This is not very efficient because we are iterating over every questionId in the
-      // the activity for each answer in the activity
-      return questionIds.includes(answer.get("questionId")) &&
-      answer.get("platformUserId") === ownProps.student.get("id")
 
-    }
-    )
+    // This is not very efficient because we are iterating over every questionId in the
+    // the activity for each answer in the activity
+    answers: answerTreeList.filter((answer) => questionIds.includes(answer.get("questionId")) &&
+      answer.get("platformUserId") === ownProps.student.get("id"))
   };
 }
 

@@ -48,7 +48,6 @@ describe("<ActivityAnswers />", () => {
     expect(wrapper.find(ProgressBar)).toHaveLength(1);
   });
 
-
   it("should render answers when expanded", () => {
     const activity = fromJS({questions: [{id: 1, visible: true}]});
     const expandedQuestions = fromJS({1: true});
