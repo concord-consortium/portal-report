@@ -45,7 +45,8 @@ export class ActivityAnswers extends PureComponent {
         }
         {
           expanded && multChoiceSummary &&
-          <div className={css.answer + " " + css.multChoiceSummary}>
+          <div className={css.answer + " " + css.multChoiceSummary}
+            data-cy="correctCell">
             { this.renderMultChoiceSummary() }
           </div>
         }
