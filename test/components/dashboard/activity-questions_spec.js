@@ -50,7 +50,7 @@ describe("<ActivityQuestions />", () => {
             selectQuestion={onClick}
             trackEvent={onClick}
           />);
-        const opener = wrapper.find('[data-cy="expand-question-details"]');
+        const opener = wrapper.find('[data-cy="expandQuestionDetails"]');
         expect(clickCount).toBe(0);
         opener.simulate("click");
         expect(clickCount).toBe(2);
