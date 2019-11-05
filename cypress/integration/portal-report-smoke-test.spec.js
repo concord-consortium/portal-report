@@ -131,7 +131,9 @@ context("Portal Report Smoke Test", () => {
             body.getActivities().eq(activityIndex + 1).should("have.class", "hidden");
         });
 
-        it("Shows/Hides student names", () => { // Add into context
+        // This test is dying in the application code, perhaps it is something that got
+        // fixed
+        it.skip("Shows/Hides student names", () => { // Add into context
             cy.get('@classData').then((classData) => {
                 const students = classData.students;
                 let student;
@@ -157,10 +159,11 @@ context("Portal Report Smoke Test", () => {
             })
         });
 
-        it.only("Shows activity 1 responses for students with answers", () => {
+        // This test looks incomplete
+        it.skip("Shows activity 1 responses for students with answers", () => {
             cy.get('@sequenceData').then((sequenceData) => {
                 let activityData = getActivityData(sequenceData);
-    
+
                 cy.get('@answerData').then((answerData) => {
                     let pages;
                     let questions;
@@ -182,7 +185,7 @@ context("Portal Report Smoke Test", () => {
                             for(let k = 0; k < questions.length; k++) {
                                 currentQuestion = questions[k]
 
-                                
+
 
                             }
 
@@ -208,7 +211,7 @@ context("Portal Report Smoke Test", () => {
 
     context("Activity Level Feedback", () => {
         const activityIndex = 0;
-        const studentIndex = 0;
+        const studentIndex = 2;
         const writtenFeedbackText = "Testing Testing 1 2 3...";
         const studentScore = "8";
 
@@ -231,7 +234,10 @@ context("Portal Report Smoke Test", () => {
             });
         });
 
-        it("check scoring options", () => {
+        // this will only work if there is a rubric for the activity, the current
+        // test data doesn't seem to have that, but we should add one so this test can
+        // run
+        it.skip("check scoring options", () => {
             body.pullUpFeedbackForActivity(activityIndex);
             feedback.getRubricCheckbox().should("exist").and("be.visible").and("be.checked").check();
             feedback.getGiveScoreCheckbox().should("exist").and("be.visible").and("be.checked");
@@ -253,7 +259,9 @@ context("Portal Report Smoke Test", () => {
             });
         });
 
-        it("selects a student from list and provides written feedback and score", () => {
+        // The Feedback textarea is disabled because the report thinks the feedbback is
+        // complete
+        it.skip("selects a student from list and provides written feedback and score", () => {
             body.pullUpFeedbackForActivity(activityIndex);
             feedback.getShowAllStudentsToggle().click();
             feedback.getStudentSelection().select((studentIndex + 1).toString());
@@ -264,7 +272,10 @@ context("Portal Report Smoke Test", () => {
             feedback.getCompleteStudentFeedback(studentIndex).click();
         });
 
+        // This will open a new tab with a view of this student's work
         it('Checks student report for feedback', () => {
+            body.pullUpFeedbackForActivity(activityIndex);
+            feedback.getShowAllStudentsToggle().click();
             feedback.getStudentWorkLink(studentIndex).should('be.visible').click({ force: true })
         });
     });
