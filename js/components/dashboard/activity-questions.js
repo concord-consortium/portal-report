@@ -17,7 +17,7 @@ export default class ActivityQuestions extends PureComponent {
 
     return (
       <div className={css.activityQuestions} style={{minWidth: width, width}}>
-        <div className={css.content}>
+        <div className={css.content} data-cy="activityQuestions">
           {
             expanded && activity.get("questions").filter(q => q.get("visible")).map(q => {
               const questionIsExpanded = expandedQuestions.get(q.get("id").toString());

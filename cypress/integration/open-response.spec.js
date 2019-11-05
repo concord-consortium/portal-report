@@ -16,7 +16,7 @@ describe("Open response questions", function() {
 
   it("Expand to show full answer text", function() {
     cy.contains("open response answer").should("not.exist");
-    getByCypressTag("studentName").first().click();
-    cy.contains("open response answer").should("exist");
+    getByCypressTag("studentName").eq(2).click();
+    cy.contains("test answer 2").should("exist");
   });
 });

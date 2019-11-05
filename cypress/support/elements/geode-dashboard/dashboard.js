@@ -56,8 +56,12 @@ class Dashboard {
     }
 
     //Activity Info
-    getActivityQuestions(actIdx) {
-        return cy.get(".activity-questions--content--r733iL4d").eq(actIdx);
+    // This is the container of the questions
+    getActivityQuestions() {
+        return getByCypressTag("activityQuestions");
+    }
+    getActivityQuestionToggle() {
+        return getByCypressTag("activity-question-toggle");
     }
     getActivityQuestionsText() {
         return getByCypressTag("activityQuestionsText");

@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, cy, expect */
 /* eslint-disable-next-line */
 import React from "react";
-import fakeData from "../../js/data/report.json";
+// import fakeData from "../../js/data/report.json";
 import sampleRubric from "../../public/sample-rubric";
 
 describe("Provide Feedback", function() {
@@ -15,18 +15,18 @@ describe("Provide Feedback", function() {
     cy.server();
 
     // Return the fake report data
-    cy.route({
-      method: "GET",
-      url: "/",
-      response: fakeData
-    });
-
-    // Fake report data references sample-rubric.json file, so it has to be stubbed too
-    cy.route({
-      method: "GET",
-      url: "/sample-rubric.json",
-      response: sampleRubric
-    });
+    // cy.route({
+    //   method: "GET",
+    //   url: "/",
+    //   response: fakeData
+    // });
+    //
+    // // Fake report data references sample-rubric.json file, so it has to be stubbed too
+    // cy.route({
+    //   method: "GET",
+    //   url: "/sample-rubric.json",
+    //   response: sampleRubric
+    // });
 
     // On first load portal-report does a PUT request to save some report settings
     cy.route({
@@ -48,7 +48,7 @@ describe("Provide Feedback", function() {
     cy.get(".feedback-panel").should("be.visible");
   });
 
-  it("Sends feedback to the server", function() {
+  it.skip("Sends feedback to the server", function() {
     // This is the first put that happens when the UI is initialized
     cy.wait("@putReportSettings");
     cy.get(".question [data-cy=feedbackButton]").first().click();
@@ -62,7 +62,7 @@ describe("Provide Feedback", function() {
     });
   });
 
-  it("Shows error if feedback fails to send", function() {
+  it.skip("Shows error if feedback fails to send", function() {
     // This is the first put that happens when the UI is initialized
     cy.wait("@putReportSettings");
 
