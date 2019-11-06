@@ -1,12 +1,17 @@
 import { normalize, schema } from "normalizr";
 import humps from "humps";
 import { IPortalRawData } from "../api";
+import queryString from "query-string";
 
 export interface IResource {
   id: number;
   name: string;
   type: string;
   children: IResource[] | IQuestion[];
+}
+
+export interface IActivity extends IResource {
+  activityIndex: number;
 }
 
 export interface IQuestion extends IResource {
@@ -102,7 +107,8 @@ export function preprocessResourceJSON(resourceJson: IResource) {
     };
   }
   // Add some question properties, e.g. question numbers, selection, visibility.
-  resourceJson.children.forEach((activity: IResource) => {
+  resourceJson.children.forEach((activity: IActivity, idx: number) => {
+    activity.activityIndex = idx;
     activity.children.forEach(section => {
       section.children.forEach(page => {
         page.children.forEach((question: IQuestion) => {
@@ -116,6 +122,15 @@ export function preprocessResourceJSON(resourceJson: IResource) {
       });
     });
   });
+
+  // If `activityIndex` is provided as a URL parameter, filter activities to include only this one.
+  const { activityIndex } = queryString.parse(window.location.search);
+  if (activityIndex != null) {
+    resourceJson.children = [ resourceJson.children[Number(activityIndex)] ];
+    // Also, hide sequence name to make it more clear that we're looking just at one activity.
+    resourceJson.name = "";
+  }
+
   return resourceJson;
 }
 

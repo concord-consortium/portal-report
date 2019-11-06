@@ -12,11 +12,7 @@ import {
   makeGetAutoScores,
   makeGetComputedMaxScore,
 } from "../../selectors/activity-feedback-selectors";
-
-import {
-  isAutoScoring,
-  MANUAL_SCORE,
-} from "../../util/scoring-constants";
+import { isAutoScoring, MANUAL_SCORE, MAX_SCORE_DEFAULT } from "../../util/scoring-constants";
 
 import "../../../css/report/activity.less";
 
@@ -66,7 +62,7 @@ class Activity extends PureComponent {
     const activityName = activity.get("name");
     const showText = feedbackSettings.get("textFeedbackEnabled");
     const scoreType = feedbackSettings.get("scoreType");
-    const maxScore = scoreType === MANUAL_SCORE ? feedbackSettings.get("maxScore") : computedMaxScore;
+    const maxScore = scoreType === MANUAL_SCORE ? (feedbackSettings.get("maxScore") || MAX_SCORE_DEFAULT) : computedMaxScore;
     const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS());
     const showScore = scoreType !== "none";
     const useRubric = feedbackSettings.get("useRubric");

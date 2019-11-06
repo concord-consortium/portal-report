@@ -22,7 +22,6 @@ import {
   preprocessPortalDataJSON,
   preprocessAnswersJSON
 } from "../core/transform-json-response";
-
 import queryString from "query-string";
 
 export const FULL_REPORT = "fullReport";
@@ -132,7 +131,7 @@ const INITIAL_REPORT_STATE = Map({
   clazzId: "",
   students: Immutable.fromJS([]),
   answers: Immutable.fromJS([]),
-  selectedStudentId: null,
+  selectedStudentIds: null,
   hideControls: false,
   hideSectionNames: false,
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
@@ -141,15 +140,16 @@ const INITIAL_REPORT_STATE = Map({
 
 function report(state = INITIAL_REPORT_STATE, action) {
   let data;
+  // Report type depends on what kind of user is launching the report and whether `studentId` URL param is provided.
+  // Students can only see their own report. Teachers can see either class report or individual student report.
+  // Theoretically student can easily modify URL parameter to open report of the other student. But this report
+  // will be always empty, as student-oriented report queries only student own answers (student user id is coming
+  // from JWT info) and Firestore security rules also ensure that.
+  const { studentId } = queryString.parse(window.location.search);
+  const urlBasedStudentSelection = studentId ? Immutable.fromJS([ studentId ]) : null;
   switch (action.type) {
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
-      // Report type depends on what kind of user is launching the report and whether `studentId` URL param is provided.
-      // Students can only see their own report. Teachers can see either class report or individual student report.
-      // Theoretically student can easily modify URL parameter to open report of the other student. But this report
-      // will be always empty, as student-oriented report queries only student own answers (student user id is coming
-      // from JWT info) and Firestore security rules also ensure that.
-      const { studentId } = queryString.parse(window.location.search);
       let type;
       let hideControls;
       if (studentId) {
@@ -164,7 +164,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
       state = state
         .set("type", type)
         .set("nowShowing", type)
-        .set("selectedStudentId", studentId)
+        .set("selectedStudentIds", urlBasedStudentSelection)
         .set("hideControls", hideControls)
         .set("clazzName", data.classInfo.name)
         .set("clazzId", data.classInfo.id)
@@ -173,7 +173,7 @@ function report(state = INITIAL_REPORT_STATE, action) {
         .set("contextId", data.contextId)
         .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId)
-        .set("sourceId", data.sourceId);
+        .set("sourceKey", data.sourceKey);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);
@@ -186,9 +186,10 @@ function report(state = INITIAL_REPORT_STATE, action) {
       return state;
     case RECEIVE_ANSWERS:
       return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
-
     case SET_NOW_SHOWING:
-      return state.set("nowShowing", action.value);
+      return state
+        .set("nowShowing", action.nowShowingValue)
+        .set("selectedStudentIds", action.selectedStudentIds ? action.selectedStudentIds : urlBasedStudentSelection);
 
     // The following actions trigger API middleware that invokes the FireStore API.
     // The results of middleware invocation are handled by the `RECEIVE_USER_SETTINGS` action.

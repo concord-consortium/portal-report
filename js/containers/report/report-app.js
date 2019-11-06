@@ -97,7 +97,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     hideUnselectedQuestions: () => dispatch(hideUnselectedQuestions()),
     showUnselectedQuestions: () => dispatch(showUnselectedQuestions()),
-    setNowShowing: value => dispatch(setNowShowing(value)),
+    setNowShowing: (nowShowingValue, selectedStudentIds) => dispatch(setNowShowing(nowShowingValue, selectedStudentIds)),
     setAnonymous: value => dispatch(setAnonymous(value)),
     hideCompareView: () => dispatch(hideCompareView()),
     trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label)),

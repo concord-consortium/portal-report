@@ -18,29 +18,33 @@ export default class ActivityFeedbackOptions extends PureComponent {
   }
 
   enableText(event) {
+    const { activityIndex, updateActivityFeedbackSettings } = this.props;
     const activityId = this.props.activity.get("id");
-    this.props.updateActivityFeedbackSettings(
-      activityId, {
+    updateActivityFeedbackSettings(
+      activityId, activityIndex, {
         textFeedbackEnabled: event.target.checked,
       });
   }
 
   enableRubric(event) {
+    const { activityIndex, updateActivityFeedbackSettings } = this.props;
     const activityId = this.props.activity.get("id");
-    this.props.updateActivityFeedbackSettings(
-      activityId, {
+    updateActivityFeedbackSettings(
+      activityId, activityIndex, {
         useRubric: event.target.checked,
       });
   }
 
   setMaxScore(value) {
+    const { activityIndex, updateActivityFeedbackSettings } = this.props;
     const activityId = this.props.activity.get("id");
-    this.props.updateActivityFeedbackSettings(activityId, {
+    updateActivityFeedbackSettings(activityId, activityIndex, {
       maxScore: value,
     });
   }
 
   changeScoreType(newV) {
+    const { activityIndex, updateActivityFeedbackSettings } = this.props;
     const activityId = this.props.activity.get("id").toString();
     const newFlags = { scoreType: newV };
     if (newV !== NO_SCORE) {
@@ -49,7 +53,7 @@ export default class ActivityFeedbackOptions extends PureComponent {
     if (isAutoScoring(newV)) {
       newFlags.maxScore = this.props.computedMaxScore;
     }
-    this.props.updateActivityFeedbackSettings(activityId, newFlags);
+    updateActivityFeedbackSettings(activityId, activityIndex, newFlags);
   }
 
   render() {

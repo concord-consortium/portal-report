@@ -5,10 +5,15 @@ import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/class-data.json";
 import queryString from "query-string";
 import { parseUrl, validFsId } from "./util/misc";
-import { getActivityStudentFeedbackKey, IActivityFeedbackRecord } from "./util/activity-feedback-helper";
+import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
 import * as db from "./db";
 
-const FIREBASE_APP = "report-service-dev";
+const FIREBASE_APP = urlParam("firebase-app") || "report-service-dev";
+db.initializeDB(FIREBASE_APP);
+
+const TOOL_ID = urlParam("tool-id");
+const SOURCE_KEY = TOOL_ID ? makeSourceKey(TOOL_ID) : null;
+
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
 export interface ILTIPartial {
@@ -26,7 +31,7 @@ export interface IStateAnswer {
 
 export interface IStateReportPartial extends ILTIPartial {
   answers: {[key: string]: IStateAnswer};
-  sourceId: string;
+  sourceKey: string;
 }
 
 export interface IPortalRawData extends ILTIPartial{
@@ -41,7 +46,7 @@ export interface IPortalRawData extends ILTIPartial{
     students: IStudentRawData[];
   };
   userType: "teacher" | "learner";
-  sourceId: string;
+  sourceKey: string;
 }
 
 export interface IStudentRawData {
@@ -64,7 +69,7 @@ export interface IFirebaseJWT {
   };
 }
 
-const urlParam = (name: string): string | null => {
+function urlParam(name: string): string | null{
   const result = queryString.parse(window.location.search)[name];
   if (typeof result === "string") {
     return result;
@@ -73,7 +78,12 @@ const urlParam = (name: string): string | null => {
   } else {
     return null;
   }
-};
+}
+
+// This matches the make_source_key method in LARA's report_service.rb
+function makeSourceKey(toolId: string): string | null{
+  return toolId.replace(/https?:\/\/([^\/]+)/, "$1");
+}
 
 const getPortalBaseUrl = () => {
   const portalUrl = urlParam("class") || urlParam("offering");
@@ -81,7 +91,7 @@ const getPortalBaseUrl = () => {
     return null;
   }
   const { hostname, protocol } = parseUrl(portalUrl);
-  return `${protocol}//${hostname}/`;
+  return `${protocol}//${hostname}`;
 };
 
 const getPortalFirebaseJWTUrl = (classHash: string) => {
@@ -90,6 +100,16 @@ const getPortalFirebaseJWTUrl = (classHash: string) => {
     return null;
   }
   return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${FIREBASE_APP}&class_hash=${classHash}`;
+};
+
+const gePortalReportAPIUrl = () => {
+  const offeringUrl = urlParam("offering");
+  if (offeringUrl) {
+    // When this report is used an external report, it will be launched with offering URL parameter.
+    // Modify this URL to point to get the deprecated Report API URL.
+    return offeringUrl.replace("/offerings/", "/reports/");
+  }
+  return null;
 };
 
 const getAuthHeader = () => `Bearer ${urlParam("token")}`;
@@ -164,7 +184,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
             platformId: verifiedFirebaseJWT.claims.platform_id,
             platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
             contextId: classData.class_hash,
-            sourceId: parseUrl(offeringData.activity_url.toLowerCase()).hostname
+            sourceKey: SOURCE_KEY || parseUrl(offeringData.activity_url.toLowerCase()).hostname
           })
         );
       } else {
@@ -177,7 +197,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: "https://fake.portal",
           platformUserId: "1",
           contextId: classData.class_hash,
-          sourceId: parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          sourceKey: SOURCE_KEY || parseUrl(offeringData.activity_url.toLowerCase()).hostname
         };
       }
     });
@@ -186,12 +206,16 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
 
 export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
   const {platformId, platformUserId, resourceLinkId} = LTIData;
-  const sourceId = platformId.replace(/https?:\/\//, "");
+  // Note this is similiar to the makeSourceKey function however in this case it is just
+  // stripping off the protocol if there is one. It will also leave any trailing slashes.
+  // It would be best to unify these two approaches. If makeSourceKey is changed then
+  // the LARA make_source_key should be updated as well.
+  const sourceKey = platformId.replace(/https?:\/\//, "");
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.portal/user_settings/1/offering/class123` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, sans JWT.
-  return `/sources/${sourceId}/user_settings/${validFsId(platformUserId)}/resource_link/${validFsId(resourceLinkId)}`;
+  return `/sources/${sourceKey}/user_settings/${validFsId(platformUserId)}/resource_link/${validFsId(resourceLinkId)}`;
 }
 
 // The updateReportSettings API middleware calls out to the FireStore API.
@@ -205,8 +229,30 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
       .set(update, {merge: true});
 }
 
-export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?: { platformId?: string, resourceLinkId?: string }) {
-  const path = `/sources/${sourceId}/feedback_settings`;
+// The updateReportSettings API middleware calls out to the deprecated Portal Report API.
+// It's necessary to keep the Portal progress table valid and updated.
+export function updateReportSettingsInPortal(data: any) {
+  const reportUrl = gePortalReportAPIUrl();
+  const authHeader = getAuthHeader();
+  if (reportUrl) {
+    return fetch(reportUrl, {
+      method: "put",
+      headers: {
+        "Authorization": authHeader,
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then(checkStatus);
+  } else {
+    // tslint:disable-next-line:no-console
+    console.warn("No OFFERING/REPORT_URL. Faking put method.");
+    return new Promise(resolve => resolve({}));
+  }
+}
+
+export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?: { platformId?: string, resourceLinkId?: string }) {
+  const path = `/sources/${sourceKey}/feedback_settings`;
   if (instanceParams) {
     return path + `/${validFsId(instanceParams.platformId + "-" + instanceParams.resourceLinkId)}`;
   }
@@ -217,35 +263,61 @@ export function feedbackSettingsFirestorePath(sourceId: string, instanceParams?:
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateFeedbackSettings(settings: any, state: IStateReportPartial) {
+export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
+  const { settings } = data;
+
+  if (settings.activitySettings) {
+    const { activityId, activityIndex } = data;
+    const actSettings = settings.activitySettings[activityId];
+    // Send data to Portal to keep progress table working. This is only one-way communication,
+    // Portal Report never reads this data back from Portal.
+    updateReportSettingsInPortal({
+      activity_feedback_opts_v2: {
+        enable_text_feedback: actSettings.textFeedbackEnabled,
+        score_type: actSettings.scoreType,
+        max_score: actSettings.maxScore,
+        use_rubric: actSettings.useRubric,
+        activity_index: activityIndex
+      }
+    });
+  }
+  if (settings.rubric) {
+    updateReportSettingsInPortal({
+      rubric_v2: {
+        rubric: settings.rubric
+      }
+    });
+  }
+
+  // Then, send it to Firestore.
   settings.platformId = state.platformId;
   settings.resourceLinkId = state.resourceLinkId;
   // contextId is used by security rules.
   settings.contextId = state.contextId;
-  const path = feedbackSettingsFirestorePath(state.sourceId, {platformId: state.platformId, resourceLinkId: state.resourceLinkId});
+  const path = feedbackSettingsFirestorePath(state.sourceKey, {platformId: state.platformId, resourceLinkId: state.resourceLinkId});
   return firebase.firestore()
     .doc(path)
     .set(settings, {merge: true});
 }
 
-export function reportQuestionFeedbacksFireStorePath(sourceId: string, answerId?: string) {
+export function reportQuestionFeedbacksFireStorePath(sourceKey: string, answerId?: string) {
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.authoring.system/question_feedbacks/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
-  const path = `/sources/${sourceId}/question_feedbacks`;
+  const path = `/sources/${sourceKey}/question_feedbacks`;
   if (answerId) {
     return path + `/${answerId}`;
   }
   return path;
 }
 
-export function reportActivityFeedbacksFireStorePath(sourceId: string, activityUserKey?: string) {
+export function reportActivityFeedbacksFireStorePath(sourceKey: string, activityUserKey?: string) {
   // NP: 2019-06-28 In the case of fake portal data we will return
   // `/sources/fake.authoring.system/question_feedbacks/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
-  const path = `/sources/${sourceId}/activity_feedbacks`;
+  const path = `/sources/${sourceKey}/activity_feedbacks`;
   if (activityUserKey) {
     return path + `/${activityUserKey}`;
   }
@@ -267,7 +339,7 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
   feedback.platformStudentId = answers[answerId].platformUserId;
   // contextId is used by security rules.
   feedback.contextId = contextId;
-  const path = reportQuestionFeedbacksFireStorePath(reportState.sourceId, answerId);
+  const path = reportQuestionFeedbacksFireStorePath(reportState.sourceKey, answerId);
   return firebase.firestore()
       .doc(path)
       .set(feedback, {merge: true});
@@ -277,8 +349,21 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
-export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportState: IStateReportPartial) {
-  const { activityId, platformStudentId, feedback } = data;
+export function updateActivityFeedbacks(data: any, reportState: IStateReportPartial) {
+  const { activityId, platformStudentId, feedback, activityIndex } = data;
+  // Send data to Portal to keep progress table working. This is only one-way communication,
+  // Portal Report never reads this data back from Portal.
+  updateReportSettingsInPortal({
+    activity_feedback_v2: {
+      has_been_reviewed: feedback.hasBeenReviewed,
+      text_feedback: feedback.feedback,
+      score: feedback.score,
+      rubric_feedback: feedback.rubricFeedback,
+      activity_index: activityIndex,
+      student_user_id: platformStudentId
+    }
+  });
+  // Then, send it to Firestore.
   const { platformId, platformUserId, resourceLinkId, contextId } = reportState;
   const activityStudentKey = getActivityStudentFeedbackKey(data);
   feedback.platformId = platformId;
@@ -287,8 +372,7 @@ export function updateActivityFeedbacks(data: IActivityFeedbackRecord, reportSta
   feedback.platformTeacherId = platformUserId;
   feedback.platformStudentId = platformStudentId;
   feedback.contextId = contextId;
-
-  const path = reportActivityFeedbacksFireStorePath(reportState.sourceId, activityStudentKey);
+  const path = reportActivityFeedbacksFireStorePath(reportState.sourceKey, activityStudentKey);
   return firebase.firestore()
       .doc(path)
       .set(feedback, {merge: true});

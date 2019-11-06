@@ -1,4 +1,4 @@
-import db from "../db";
+import { db } from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
 import {AnyAction, Dispatch} from "redux";
@@ -72,7 +72,7 @@ function receivePortalData(rawPortalData: IPortalRawData) {
       // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
       resourceUrl = resourceUrl.replace("http", "https");
     }
-    const source = rawPortalData.sourceId;
+    const source = rawPortalData.sourceKey;
     if (source === "fake.authoring.system") { // defined in data/offering-data.json
       // Use fake data.
       dispatch({
@@ -168,7 +168,8 @@ function watchFireStoreReportSettings(rawPortalData: IPortalRawData, dispatch: D
 }
 
 function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const path = feedbackSettingsFirestorePath(rawPortalData.sourceId);
+  const path = feedbackSettingsFirestorePath(rawPortalData.sourceKey);
+  const rubricUrl = rawPortalData.offering.rubric_url;
   let rubricRequested = false;
   db.collection(path)
     .where("contextId", "==", rawPortalData.contextId)
@@ -182,15 +183,15 @@ function watchFirestoreFeedbackSettings(rawPortalData: IPortalRawData, dispatch:
         });
       }
       // Note that this should be called even if snapshot is empty (no feedback settings saved yet).
-      if (!rubricRequested) {
-        dispatch(requestRubric(rawPortalData.offering.rubric_url) as any as AnyAction);
+      if (rubricUrl && !rubricRequested) {
+        dispatch(requestRubric(rubricUrl) as any as AnyAction);
         rubricRequested = true;
       }
     }, fireStoreError(RECEIVE_FEEDBACK_SETTINGS, dispatch));
 }
 
 function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceId);
+  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceKey);
   let feedbacksQuery = db.collection(feedbackFireStorePath)
     .where("platformId", "==", rawPortalData.platformId)
     .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
@@ -212,7 +213,7 @@ function watchFirestoreQuestionFeedback(rawPortalData: IPortalRawData, dispatch:
 }
 
 function watchFirestoreActivityFeedback(rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const feedbackFireStorePath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceId);
+  const feedbackFireStorePath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceKey);
   let feedbacksQuery = db.collection(feedbackFireStorePath)
     .where("platformId", "==", rawPortalData.platformId)
     .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
@@ -311,10 +312,11 @@ export function showUnselectedQuestions() {
   };
 }
 
-export function setNowShowing(value: boolean) {
+export function setNowShowing(nowShowingValue: boolean, selectedStudentIds?: string[]) {
   return {
     type: SET_NOW_SHOWING,
-    value,
+    nowShowingValue,
+    selectedStudentIds
   };
 }
 
@@ -363,7 +365,7 @@ export function updateQuestionFeedback(answerId: string, feedback: any) {
   };
 }
 
-export function updateActivityFeedback(activityId: string, platformStudentId: string, feedback: any) {
+export function updateActivityFeedback(activityId: string, activityIndex: number, platformStudentId: string, feedback: any) {
   const feedbackData = mappedCopy(feedback, {});
   return {
     type: API_CALL,
@@ -373,7 +375,8 @@ export function updateActivityFeedback(activityId: string, platformStudentId: st
       data: {
         feedback: feedbackData,
         activityId,
-        platformStudentId
+        platformStudentId,
+        activityIndex
       },
     },
   };
@@ -386,24 +389,30 @@ export function updateQuestionFeedbackSettings(questionId: string, settings: any
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        questionSettings: {
-          [questionId]: settings
+        settings: {
+          questionSettings: {
+            [questionId]: settings
+          }
         }
       }
     }
   };
 }
 
-export function updateActivityFeedbackSettings(activityId: string, settings: any) {
+export function updateActivityFeedbackSettings(activityId: string, activityIndex: number, settings: any) {
   return {
     type: API_CALL,
     callAPI: {
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        activitySettings: {
-          [activityId]: settings
-        }
+        settings: {
+          activitySettings: {
+            [activityId]: settings
+          }
+        },
+        activityId,
+        activityIndex
       }
     }
   };
@@ -416,7 +425,9 @@ export function saveRubric(rubricContent: any) {
       type: API_UPDATE_FEEDBACK_SETTINGS,
       errorAction: fetchError,
       data: {
-        rubric: rubricContent
+        settings: {
+          rubric: rubricContent
+        }
       }
     }
   };

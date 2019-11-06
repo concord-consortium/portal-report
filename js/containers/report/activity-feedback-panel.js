@@ -102,7 +102,8 @@ class ActivityFeedbackPanel extends PureComponent {
       feedbacksNotAnswered,
       autoScores,
       computedMaxScore,
-      rubric
+      rubric,
+      activityIndex
     } = this.props;
     const numNotAnswered = feedbacksNotAnswered.size;
     const prompt = truncate(activity.get("name") || "", 200);
@@ -152,6 +153,7 @@ class ActivityFeedbackPanel extends PureComponent {
             />
             <ActivityFeedbackOptions
               activity={this.props.activity}
+              activityIndex={activityIndex}
               showText={showText}
               scoreType={scoreType}
               maxScore={maxScore}
@@ -187,6 +189,7 @@ class ActivityFeedbackPanel extends PureComponent {
                         <ActivityFeedbackRow
                           studentActivityFeedback={studentActivityFeedback}
                           activityId={activityId}
+                          activityIndex={activityIndex}
                           key={`${activityId}-${studentId}`}
                           studentId={studentId}
                           ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
@@ -236,15 +239,16 @@ function makeMapStateToProps() {
       feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),
-      rubric: rubric && rubric.toJS()
+      rubric: rubric && rubric.toJS(),
+      activityIndex: ownProps.activity.get("activityIndex")
     };
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    updateActivityFeedback: (activityId, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, platformStudentId, feedback)),
-    updateActivityFeedbackSettings: (activityId, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, feedbackFlags)),
+    updateActivityFeedback: (activityId, activityIndex, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, activityIndex, platformStudentId, feedback)),
+    updateActivityFeedbackSettings: (activityId, activityIndex, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, activityIndex, feedbackFlags)),
   };
 };
 

@@ -199,6 +199,7 @@ class QuestionFeedbackPanel extends PureComponent {
                     <CSSTransition key={i} timeout={500} classNames="answer" >
                       <FeedbackRow
                         answer={answer}
+                        question={question}
                         ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
                         key={answer.get("id")}
                         scoreEnabled={scoreEnabled}
