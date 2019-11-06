@@ -10,10 +10,9 @@ script:
   - WEBPACK_TARGET=lib webpack
   - npm run lint
   - npm run test
-#  Disable integration tests while portal-report is being refactored to support new data format and Firebase
-#  - npm run start &
-#  - wait-on http://localhost:8080
-#  - $(npm bin)/cypress run --config video=false
+  - npm run start &
+  - wait-on http://localhost:8080
+  - $(npm bin)/cypress run --config video=false
 after_success:
   - ./s3_deploy.sh
 cache:

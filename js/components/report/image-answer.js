@@ -17,8 +17,8 @@ export default class ImageAnswer extends PureComponent {
     return (
       <div>
         <div className="image-answer">
-          <img src={imgAnswer.get("imageUrl")} onClick={() => this.setState({modalOpen: true})} />
-          <div className="image-answer-note">{imgAnswer.get("text")}</div>
+          <img src={imgAnswer.get("imageUrl")} onClick={() => this.setState({modalOpen: true})} data-cy="answer-image"/>
+          <div className="image-answer-note">{imgAnswer.get("note")}</div>
         </div>
         <ImageAnswerModal answer={answer} show={this.state.modalOpen} onHide={() => this.setState({modalOpen: false})} />
       </div>

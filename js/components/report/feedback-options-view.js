@@ -20,7 +20,7 @@ export default class FeedbackOptionsView extends PureComponent {
     if (scoreType === MANUAL_SCORE) {
       return (
         <span>
-          <label className="max-score">Max. Score</label>
+          <label className="max-score" data-cy="max-score">Max. Score</label>
           <NumericTextField
             className="max-score-input"
             value={maxScore}
@@ -34,7 +34,7 @@ export default class FeedbackOptionsView extends PureComponent {
     }
     return (
       <span>
-        <label className="max-score disabled">Max. Score</label>
+        <label className="max-score disabled" data-cy="max-score-disabled">Max. Score</label>
         <input className="max-score-input disabled" disabled value={maxScore} />
       </span>
     );
@@ -60,6 +60,7 @@ export default class FeedbackOptionsView extends PureComponent {
           checked={useRubric}
           disabled={!rubricAvailable}
           onChange={enableRubric}
+          data-cy="rubric-checkbox"
         />
         <label
           disabled={!rubricAvailable}
