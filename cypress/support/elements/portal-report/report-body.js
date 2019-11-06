@@ -74,7 +74,6 @@ class ReportBody {
         }
 
         return cy.get(".report-content").should(status, studentName);
-  
     }
 
     pullUpFeedbackForActivity(idx) {

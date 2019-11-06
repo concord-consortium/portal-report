@@ -8,7 +8,7 @@ context("Geode Dashboard Smoke Test", () => {
     beforeEach(() => {
         cy.visit("/?dashboard=true");
         cy.fixture("class-data.json").as("classData");
-        cy.fixture("sequence-structure.json").as("sequenceStructure")
+        cy.fixture("sequence-structure.json").as("sequenceStructure");
     });
 
     function getStudentName(classData, id) {
@@ -61,10 +61,10 @@ context("Geode Dashboard Smoke Test", () => {
     function getActivityQuestionData(activityData) {
         let questionData = [];
 
-        let pageData = getPageData(activityData) || []
+        let pageData = getPageData(activityData) || [];
         pageData.forEach(page => {
           questionData = questionData.concat(getPageQuestionData(page) || []);
-        })
+        });
         if (questionData.length > 0) {
             return questionData;
         } else {
@@ -189,73 +189,73 @@ context("Geode Dashboard Smoke Test", () => {
                         .should("contain", activity.name);
                 }
             });
-          });
-          it("can expand activity questions", () => {
-              cy.get("@sequenceStructure").then((structure) => {
-                  const activityData = getActivityData(structure)[0];
+        });
+        it("can expand activity questions", () => {
+            cy.get("@sequenceStructure").then((structure) => {
+                const activityData = getActivityData(structure)[0];
 
-                  let questionData = getActivityQuestionData(activityData);
-                  let questionTotal = questionData.length;
-                  let currentQuestionPrompt;
+                let questionData = getActivityQuestionData(activityData);
+                let questionTotal = questionData.length;
+                let currentQuestionPrompt;
 
-                  dashboard.getExpandQuestionDetails()
-                      .should("not.exist");
-                  dashboard.getOpenCloseStudents()
-                      .click({ force: true });
-                  dashboard.getExpandQuestionDetails()
-                      .should("exist")
-                      .and("be.visible")
-                      .and("have.length", questionTotal);
-
-                  for (let i = 0; i < questionTotal; i++) {
-                      // strip html chars from the prompt
-                      currentQuestionPrompt = Cypress.$(questionData[i].prompt).text();
-                      dashboard.getActivityQuestionsText()
-                          .should("contain", currentQuestionPrompt);
-                  }
-
-                  dashboard.getExpandedMCAnswerDetails()
-                      .should("not.be.visible")
-                      .and("not.exist");
-
-                  // This is assuming the 2nd question is a multiple choice question
-                  dashboard.getExpandQuestionDetails().eq(1)
-                      .click({ force: true });
-                  dashboard.getExpandedQuestionPanel()
-                      .should("be.visible");
-                  dashboard.getExpandedMCAnswerDetails()
-                      .should("be.visible")
-                      .and("exist");
-                  dashboard.getCloseExpandedQuestion()
-                      .should("exist")
-                      .click({ force: true });
-                  dashboard.getExpandedQuestionPanel()
-                      .should("not.be.visible");
-              });
-          });
-          it("can expand activities to show questions", () => {
-              dashboard.getActivityNames().eq(0)
-                  .click({ force: true });
-              cy.get("@sequenceStructure").then((structure) => {
-                  const questionData = getActivityQuestionData(getActivityData(structure)[0]);
-
-                  dashboard.getActivityQuestions().eq(0).within(() => {
-                    dashboard.getActivityQuestionToggle()
+                dashboard.getExpandQuestionDetails()
+                    .should("not.exist");
+                dashboard.getOpenCloseStudents()
+                    .click({ force: true });
+                dashboard.getExpandQuestionDetails()
                     .should("exist")
-                    .and("have.length", questionData.length);
-                  })
-              });
-              dashboard.getActivityQuestionsText()
-                  .should("not.be.visible");
-              dashboard.getActivityQuestionToggle().eq(0)
-                  .click({ force: true });
-              dashboard.getActivityQuestionsText()
-                  .should("be.visible");
-              dashboard.getActivityQuestionsText().eq(0)
-                  .click({ force: true });
-              dashboard.getActivityQuestionsText()
-                  .should("not.be.visible");
-          });
+                    .and("be.visible")
+                    .and("have.length", questionTotal);
+
+                for (let i = 0; i < questionTotal; i++) {
+                    // strip html chars from the prompt
+                    currentQuestionPrompt = Cypress.$(questionData[i].prompt).text();
+                    dashboard.getActivityQuestionsText()
+                        .should("contain", currentQuestionPrompt);
+                }
+
+                dashboard.getExpandedMCAnswerDetails()
+                    .should("not.be.visible")
+                    .and("not.exist");
+
+                // This is assuming the 2nd question is a multiple choice question
+                dashboard.getExpandQuestionDetails().eq(1)
+                    .click({ force: true });
+                dashboard.getExpandedQuestionPanel()
+                    .should("be.visible");
+                dashboard.getExpandedMCAnswerDetails()
+                    .should("be.visible")
+                    .and("exist");
+                dashboard.getCloseExpandedQuestion()
+                    .should("exist")
+                    .click({ force: true });
+                dashboard.getExpandedQuestionPanel()
+                    .should("not.be.visible");
+            });
+        });
+        it("can expand activities to show questions", () => {
+            dashboard.getActivityNames().eq(0)
+                .click({ force: true });
+            cy.get("@sequenceStructure").then((structure) => {
+                const questionData = getActivityQuestionData(getActivityData(structure)[0]);
+
+                dashboard.getActivityQuestions().eq(0).within(() => {
+                  dashboard.getActivityQuestionToggle()
+                  .should("exist")
+                  .and("have.length", questionData.length);
+                });
+            });
+            dashboard.getActivityQuestionsText()
+                .should("not.be.visible");
+            dashboard.getActivityQuestionToggle().eq(0)
+                .click({ force: true });
+            dashboard.getActivityQuestionsText()
+                .should("be.visible");
+            dashboard.getActivityQuestionsText().eq(0)
+                .click({ force: true });
+            dashboard.getActivityQuestionsText()
+                .should("not.be.visible");
+        });
 
         // it.only('Checks for one students data', () => {
         //     cy.get('@classData').then((classData) => {
@@ -358,7 +358,7 @@ context("Geode Dashboard Smoke Test", () => {
                 .click({ force: true });
             dashboard.getShowHideResponse()
                 .should("exist")
-                .click({ force: true })
+                .click({ force: true });
             dashboard.getExpandedMCAnswers()
                 .should("exist")
                 // Student 1 has an answer of b

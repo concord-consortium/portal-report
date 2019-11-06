@@ -134,7 +134,7 @@ context("Portal Report Smoke Test", () => {
         // This test is dying in the application code, perhaps it is something that got
         // fixed
         it.skip("Shows/Hides student names", () => { // Add into context
-            cy.get('@classData').then((classData) => {
+            cy.get("@classData").then((classData) => {
                 const students = classData.students;
                 let student;
 
@@ -144,27 +144,27 @@ context("Portal Report Smoke Test", () => {
                 });
                 body.getResponseTable().should("exist").and("be.visible");
                 for (let i = 0; i < students.length; i++) {
-                    student = students[i]
+                    student = students[i];
                     if (students[i].started_offering === true) {
                         body.checkForStudentNames(true, student[i].first_name);
                     }
                 }
                 header.getHideShowNames().should("be.visible").click({ force: true });
                 for (let i = 0; i < students.length; i++) {
-                    student = students[i]
+                    student = students[i];
                     if (students[i].started_offering === true) {
                         body.checkForStudentNames(false, student[i].first_name);
                     }
                 }
-            })
+            });
         });
 
         // This test looks incomplete
         it.skip("Shows activity 1 responses for students with answers", () => {
-            cy.get('@sequenceData').then((sequenceData) => {
+            cy.get("@sequenceData").then((sequenceData) => {
                 let activityData = getActivityData(sequenceData);
 
-                cy.get('@answerData').then((answerData) => {
+                cy.get("@answerData").then((answerData) => {
                     let pages;
                     let questions;
                     let answers = answerData;
@@ -173,28 +173,21 @@ context("Portal Report Smoke Test", () => {
                     let currentPage;
                     let currentQuestion;
 
-
-                    for(let i = 0; i <= activityData.length; i++) {
+                    for (let i = 0; i <= activityData.length; i++) {
                         currentActivity = activityData[i];
-                        pages = getPageData(currentActivity)
+                        pages = getPageData(currentActivity);
 
-                        for(let j = 0; j <= pages.length; j++){
+                        for (let j = 0; j <= pages.length; j++){
                             currentPage = pages[j];
-                            questions = getQuestionData(currentPage)
+                            questions = getQuestionData(currentPage);
 
-                            for(let k = 0; k < questions.length; k++) {
-                                currentQuestion = questions[k]
-
-
-
+                            for (let k = 0; k < questions.length; k++) {
+                                currentQuestion = questions[k];
                             }
-
                         }
-
-
                     }
 
-                    body.getActivities().should('have.length', activityNum)
+                    body.getActivities().should("have.length", activityNum);
                     body.getShowResponses(questionIndex).should("be.visible").click({ force: true });
                     /**
                      * i = 1
@@ -203,9 +196,9 @@ context("Portal Report Smoke Test", () => {
                      * get question_number i
                      */
                     body.getHideResponses(questionIndex).click({ force: true });
-                    cy.wait(10000)
-                })
-            })
+                    cy.wait(10000);
+                });
+            });
         });
     });
 
@@ -273,10 +266,10 @@ context("Portal Report Smoke Test", () => {
         });
 
         // This will open a new tab with a view of this student's work
-        it('Checks student report for feedback', () => {
+        it("Checks student report for feedback", () => {
             body.pullUpFeedbackForActivity(activityIndex);
             feedback.getShowAllStudentsToggle().click();
-            feedback.getStudentWorkLink(studentIndex).should('be.visible').click({ force: true })
+            feedback.getStudentWorkLink(studentIndex).should("be.visible").click({ force: true });
         });
     });
 });
