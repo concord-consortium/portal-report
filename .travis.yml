@@ -17,8 +17,6 @@ script:
   - WEBPACK_TARGET=lib webpack
   - npm run lint
   - npm run test:coverage
-  # CHECKME: will this result in the dist folder being modified with instrumented files?
-  #   if if is, then the s3_deploy will upload these instrumented files, which is not good
   - CODE_COVERAGE=true npm run start &
   - wait-on http://localhost:8080
   - $(npm bin)/cypress run --config video=false
