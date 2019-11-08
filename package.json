@@ -32,8 +32,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:full": "npm run test && npm run cypress:test",
-    "test:full:coverage": "npm run test:coverage && npm run cypress:test",
+    "test:full": "npm run test && npm run cypress:test"
   },
   "jest": {
     "roots": [
