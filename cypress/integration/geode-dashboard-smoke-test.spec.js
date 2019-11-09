@@ -1,9 +1,19 @@
 import Dashboard from "../support/elements/geode-dashboard/dashboard";
+import {
+  getAnswerByQuestionType,
+  getPageQuestionData,
+  getActivityData,
+  getPageData,
+  getActivityQuestionData
+ } from "../utils";
 
 context("Geode Dashboard Smoke Test", () => {
 
     const dashboard = new Dashboard();
     const studentsToTest = ["", "", ""];
+
+    before(() => {
+    });
 
     beforeEach(() => {
         cy.visit("/?dashboard=true");
@@ -25,53 +35,7 @@ context("Geode Dashboard Smoke Test", () => {
         }
     }
 
-    function getActivityData(structure) {
-        let activityData;
-
-        activityData = structure.children;
-        if (activityData != null) {
-            return activityData;
-        } else {
-            cy.log("There was no activity with this index");
-        }
-    }
-
-    function getPageData(activityData) {
-        let pageData;
-
-        pageData = activityData.children[0].children;
-        if (pageData != null) {
-            return pageData;
-        } else {
-            cy.log("There was no activity page data");
-        }
-    }
-
-    function getPageQuestionData(pageData) {
-        let questionData;
-
-        questionData = pageData.children;
-        if (questionData != null) {
-            return questionData;
-        } else {
-            cy.log("There was no question data");
-        }
-    }
-
-    function getActivityQuestionData(activityData) {
-        let questionData = [];
-
-        let pageData = getPageData(activityData) || [];
-        pageData.forEach(page => {
-          questionData = questionData.concat(getPageQuestionData(page) || []);
-        });
-        if (questionData.length > 0) {
-            return questionData;
-        } else {
-            cy.log("There was no question data");
-        }
-    }
-
+    // This isn't valid anymore
     function getAnswerData(questionData) {
         let allAnswers;
 
@@ -87,35 +51,9 @@ context("Geode Dashboard Smoke Test", () => {
 
             let studentAnswerData = answerData[i];
             if (studentAnswerData.student_id === studentID) {
-                answer = getAnswerType(studentAnswerData);
+                answer = getAnswerByQuestionType(studentAnswerData);
                 return answer;
             }
-        }
-    }
-
-    function getAnswerType(answerData) {
-        let answer;
-        let questionType;
-        questionType = answerData.type;
-
-        if (answerData.type != null) {
-            switch (questionType) {
-                case ("Embeddable::MultipleChoice"):
-                    answer = answerData.answer[0].choice;
-                    break;
-                case ("Embeddable::OpenResponse"):
-                    answer = answerData.answer;
-                    break;
-                case ("Embeddable::ImageQuestion"):
-                    answer = answerData.answer.image_url;
-                    break;
-                case ("Embeddable::Iframe"):
-                    answer = answerData.answer;
-                    break;
-            }
-            return answer;
-        } else {
-            cy.log("Could not find answer for question type " + questionType);
         }
     }
 
@@ -175,11 +113,12 @@ context("Geode Dashboard Smoke Test", () => {
     });
 
     describe("Verifies for Activity/Seq data", function() {
+        beforeEach(() => {
+            cy.get("@sequenceStructure").its('children').as('activities');
+        });
 
         it("Checks for activity names", () => {
-            cy.get("@sequenceStructure").then((structure) => {
-                const activities = structure.children;
-
+            cy.get('@activities').then(activities => {
                 dashboard.getActivityNames()
                     .should("have.length", activities.length);
 
@@ -191,10 +130,9 @@ context("Geode Dashboard Smoke Test", () => {
             });
         });
         it("can expand activity questions", () => {
-            cy.get("@sequenceStructure").then((structure) => {
-                const activityData = getActivityData(structure)[0];
-
-                let questionData = getActivityQuestionData(activityData);
+            cy.get('@activities').then(activities => {
+                let firstActivity = activities[0];
+                let questionData = getActivityQuestionData(firstActivity);
                 let questionTotal = questionData.length;
                 let currentQuestionPrompt;
 
@@ -236,8 +174,8 @@ context("Geode Dashboard Smoke Test", () => {
         it("can expand activities to show questions", () => {
             dashboard.getActivityNames().eq(0)
                 .click({ force: true });
-            cy.get("@sequenceStructure").then((structure) => {
-                const questionData = getActivityQuestionData(getActivityData(structure)[0]);
+            cy.get("@activities").then((activities) => {
+                const questionData = getActivityQuestionData(activities[0]);
 
                 dashboard.getActivityQuestions().eq(0).within(() => {
                   dashboard.getActivityQuestionToggle()
@@ -320,8 +258,10 @@ context("Geode Dashboard Smoke Test", () => {
                 .click({ force: true });
             dashboard.getExpandQuestionDetails().eq(multipleChoiceQuestionIndex)
                 .click({ force: true });
-            cy.get("@sequenceStructure").then((structure) => {
-                const questionData = getActivityQuestionData(getActivityData(structure)[0])[multipleChoiceQuestionIndex];
+            cy.get("@sequenceStructure")
+              .its('children')
+              .then((activities) => {
+                const questionData = getActivityQuestionData(activities[0])[multipleChoiceQuestionIndex];
 
                 dashboard.getExpandedMCAnswerDetails()
                     .should("exist")

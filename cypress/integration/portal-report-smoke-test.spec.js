@@ -1,6 +1,13 @@
 import Header from "../support/elements/portal-report/header";
 import ReportBody from "../support/elements/portal-report/report-body";
 import Feedback from "../support/elements/portal-report/feedback";
+import {
+  getAnswerByQuestionType,
+  getPageQuestionData,
+  getActivityData,
+  getPageData,
+  getActivityQuestionData
+ } from "../utils";
 
 context("Portal Report Smoke Test", () => {
 
@@ -17,64 +24,6 @@ context("Portal Report Smoke Test", () => {
     const body = new ReportBody();
     const feedback = new Feedback();
 
-    function getActivityData(sequenceData) {
-        let activityData;
-
-        activityData = sequenceData.children;
-        if (activityData != null) {
-            return activityData;
-        } else {
-            cy.log("There was no activity with this index");
-        }
-    }
-
-    function getPageData(activityData) {
-        let pageData;
-
-        pageData = activityData.children[0].children;
-        if (pageData != null) {
-            return pageData;
-        } else {
-            cy.log("There was no activity page data");
-        }
-    }
-
-    function getQuestionData(pageData) {
-        let questionData;
-
-        questionData = pageData.children;
-        if (questionData != null) {
-            return questionData;
-        } else {
-            cy.log("There was no question data");
-        }
-    }
-
-    function getAnswerByQuestionType(answerData) {
-        let answer;
-        let questionType;
-        questionType = answerData.type;
-
-        if (answerData.type != null) {
-            switch (questionType) {
-                case ("Embeddable::MultipleChoice"):
-                    answer = answerData.answer[0].choice;
-                    break;
-                case ("Embeddable::OpenResponse"):
-                    answer = answerData.answer;
-                    break;
-                case ("Embeddable::ImageQuestion"):
-                    answer = answerData.answer.image_url;
-                    break;
-                case ("Embeddable::Iframe"):
-                    answer = answerData.answer;
-                    break;
-            }
-            return answer;
-        } else {
-            cy.log("Could not find answer for question type " + questionType);
-        }
-    }
 
     context("Header components", () => {
         it("Verifies the logo appears correctly", () => {
@@ -119,7 +68,7 @@ context("Portal Report Smoke Test", () => {
                 let questionData;
                 // Get unhidden report, for each page check each question header for checkbox then check
                 for (let i = 0; i < pageData.length; i++) {
-                    questionData = getQuestionData(pageData[i]);
+                    questionData = getPageQuestionData(pageData[i]);
                     for (let j = 0; j < questionData.length; j++) {
                         header.getCheckbox(checkboxCount).check().should("be.checked");
                         checkboxCount++;
@@ -179,7 +128,7 @@ context("Portal Report Smoke Test", () => {
 
                         for (let j = 0; j <= pages.length; j++){
                             currentPage = pages[j];
-                            questions = getQuestionData(currentPage);
+                            questions = getPageQuestionData(currentPage);
 
                             for (let k = 0; k < questions.length; k++) {
                                 currentQuestion = questions[k];
