@@ -50,6 +50,19 @@ module.exports = (env, argv) => {
             transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
           }
         },
+        // This code coverage instrumentation should only be added when needed. It makes
+        // the code larger and slower
+        process.env.CODE_COVERAGE ? {
+          test: /\.[tj]sx?$/,
+          loader: 'istanbul-instrumenter-loader',
+          options: { esModules: true },
+          enforce: 'post',
+          // I'm not sure but I don't think it is necessary to exclude the cypress and
+          // tests folder. I think Jest does its own loading of tests. And cypress does
+          // its own loading of cypress
+          exclude: path.join(__dirname, 'node_modules'),
+
+        } : {},
         {
           test: /\.css$/,
           use: [

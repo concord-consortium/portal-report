@@ -2,19 +2,31 @@ sudo: false
 dist: trusty
 language: node_js
 node_js: lts/*
+env:
+  global:
+    - CC_TEST_REPORTER_ID=f89fc8c93253ff5697e8405237ea9afd7ada1db23b90b2cc199c73712e125154
 install:
   - travis_retry gem install s3_website -v 3.4.0
   - travis_retry npm ci
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
   - webpack
   - WEBPACK_TARGET=lib webpack
   - npm run lint
-  - npm run test
-  - npm run start &
+  - npm run test:coverage
+  - CODE_COVERAGE=true npm run start &
   - wait-on http://localhost:8080
   - $(npm bin)/cypress run --config video=false
 after_success:
   - ./s3_deploy.sh
+after_script:
+  - ./cc-test-reporter format-coverage -t lcov -o codeclimate.jest.json coverage-jest/lcov.info"
+  - ./cc-test-reporter format-coverage -t lcov -o codeclimate.cypress.json coverage-cypress/lcov.info"
+  - ./cc-test-reporter sum-coverage -p 2 codeclimate.*.json
+  - ./cc-test-reporter upload-coverage
 cache:
   bundler: true
   npm: true

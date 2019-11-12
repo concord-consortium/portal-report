@@ -5,6 +5,9 @@ _site
 .idea
 .DS_Store
 coverage
+coverage-cypress
+coverage-jest
 
 /cypress/screenshots
+/cypress/videos
 /cypress/fixtures/example.json
