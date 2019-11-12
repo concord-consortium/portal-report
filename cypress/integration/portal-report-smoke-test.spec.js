@@ -24,7 +24,6 @@ context("Portal Report Smoke Test", () => {
     const body = new ReportBody();
     const feedback = new Feedback();
 
-
     context("Header components", () => {
         it("Verifies the logo appears correctly", () => {
             header.getLogo().should("exist").and("have.length", 1).and("be.visible");

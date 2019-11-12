@@ -22,9 +22,8 @@ context("Geode Dashboard Smoke Test", () => {
     });
 
     function getStudentName(classData, id) {
-        let students;
+        let students = classData.students;
 
-        students = classData.students;
         for (let i = 0; i < students.length; i++) {
             if (students[i].id === id) {
                 let student = students[i];
@@ -114,11 +113,11 @@ context("Geode Dashboard Smoke Test", () => {
 
     describe("Verifies for Activity/Seq data", function() {
         beforeEach(() => {
-            cy.get("@sequenceStructure").its('children').as('activities');
+            cy.get("@sequenceStructure").its("children").as("activities");
         });
 
         it("Checks for activity names", () => {
-            cy.get('@activities').then(activities => {
+            cy.get("@activities").then(activities => {
                 dashboard.getActivityNames()
                     .should("have.length", activities.length);
 
@@ -130,7 +129,7 @@ context("Geode Dashboard Smoke Test", () => {
             });
         });
         it("can expand activity questions", () => {
-            cy.get('@activities').then(activities => {
+            cy.get("@activities").then(activities => {
                 let firstActivity = activities[0];
                 let questionData = getActivityQuestionData(firstActivity);
                 let questionTotal = questionData.length;
@@ -259,7 +258,7 @@ context("Geode Dashboard Smoke Test", () => {
             dashboard.getExpandQuestionDetails().eq(multipleChoiceQuestionIndex)
                 .click({ force: true });
             cy.get("@sequenceStructure")
-              .its('children')
+              .its("children")
               .then((activities) => {
                 const questionData = getActivityQuestionData(activities[0])[multipleChoiceQuestionIndex];
 

@@ -8,11 +8,11 @@ function getChildrenData(parent, label) {
     }
 }
 
-function getByCypressTag ( cypressTag ) {
+function getByCypressTag(cypressTag) {
   return cy.get(`[data-cy=${cypressTag}]`);
 }
 
-function getAnswerByQuestionType (answerData) {
+function getAnswerByQuestionType(answerData) {
     let answer;
     let questionType;
     questionType = answerData.type;
@@ -39,15 +39,15 @@ function getAnswerByQuestionType (answerData) {
 }
 
 function getPageQuestionData(pageData) {
-    return getChildrenData(pageData, 'questions');
+    return getChildrenData(pageData, "questions");
 }
 
 function getActivityData(sequenceData) {
-    return getChildrenData(sequenceData, 'activities');
+    return getChildrenData(sequenceData, "activities");
 }
 
 function getSectionData(activityData) {
-  return getChildrenData(activityData, 'sections');
+  return getChildrenData(activityData, "sections");
 }
 
 function getPageData(activityData) {
