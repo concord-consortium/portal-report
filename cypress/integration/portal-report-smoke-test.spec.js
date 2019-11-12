@@ -79,31 +79,28 @@ context("Portal Report Smoke Test", () => {
             body.getActivities().eq(activityIndex + 1).should("have.class", "hidden");
         });
 
-        // This test is dying in the application code, perhaps it is something that got
-        // fixed
+        function checkStudentNames(students, contains) {
+          students.forEach(student => {
+            body.checkForStudentNames(contains, student.first_name);
+          });
+        }
+
+        // This test is failing becuase firestore is not returning a valid reponse
+        // when the show/hide student names button is pressed. It seems like the connection
+        // to firestore is failing here. When running the report directly the state of the
+        // button is saved in firestore even when using the mock data
         it.skip("Shows/Hides student names", () => { // Add into context
             cy.get("@classData").then((classData) => {
                 const students = classData.students;
-                let student;
 
                 body.getResponseTable().should("not.exist");
                 body.getActivities().eq(activityIndex).within(() => {
                     body.getShowResponses(questionIndex).should("exist").and("be.visible").click({ force: true });
                 });
                 body.getResponseTable().should("exist").and("be.visible");
-                for (let i = 0; i < students.length; i++) {
-                    student = students[i];
-                    if (students[i].started_offering === true) {
-                        body.checkForStudentNames(true, student[i].first_name);
-                    }
-                }
+                checkStudentNames(students, true);
                 header.getHideShowNames().should("be.visible").click({ force: true });
-                for (let i = 0; i < students.length; i++) {
-                    student = students[i];
-                    if (students[i].started_offering === true) {
-                        body.checkForStudentNames(false, student[i].first_name);
-                    }
-                }
+                checkStudentNames(students, false);
             });
         });
 
