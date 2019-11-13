@@ -220,6 +220,8 @@ export function reportSettingsFireStorePath(LTIData: ILTIPartial) {
   // `/sources/fake.portal/user_settings/1/offering/class123` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, sans JWT.
+  // SC: 2019-11-12 this has been updated so the firestore network is disabled so these
+  // fake user_settings should not be saved to or loaded from the actual firestore database
   return `/sources/${sourceKey}/user_settings/${validFsId(platformUserId)}/resource_link/${validFsId(resourceLinkId)}`;
 }
 
@@ -310,6 +312,8 @@ export function reportQuestionFeedbacksFireStorePath(sourceKey: string, answerId
   // `/sources/fake.authoring.system/question_feedbacks/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
+  // SC: 2019-11-12 this has been updated so the firestore network is disabled so these
+  // fake question_feedbacks should not be saved to or loaded from the actual firestore database
   const path = `/sources/${sourceKey}/question_feedbacks`;
   if (answerId) {
     return path + `/${answerId}`;
@@ -322,6 +326,8 @@ export function reportActivityFeedbacksFireStorePath(sourceKey: string, activity
   // `/sources/fake.authoring.system/question_feedbacks/1/` which has
   // special FireStore Rules to allow universal read and write to that document.
   // Allows us to test limited report settings with fake portal data, without a JWT.
+  // SC: 2019-11-12 this has been updated so the firestore network is disabled so these
+  // fake activity_feedbacks should not be saved to or loaded from the actual firestore database
   const path = `/sources/${sourceKey}/activity_feedbacks`;
   if (activityUserKey) {
     return path + `/${activityUserKey}`;
