@@ -220,7 +220,12 @@ context("Portal Report Smoke Test", () => {
             body.pullUpFeedbackForActivity(activityIndex);
             feedback.getGiveScoreCheckbox().click();
             feedback.getShowAllStudentsToggle().click();
-            feedback.getStudentWorkLink(studentIndex).should("be.visible").click({ force: true });
+            feedback.getStudentWorkLink(studentIndex).should("be.visible")
+              .then(($studentWorkLink) => {
+                // remove target=_blank so the link opens in the same window
+                $studentWorkLink.attr("target", null);
+              }).click();
+            cy.contains("Amy Galloway");
         });
     });
 });
