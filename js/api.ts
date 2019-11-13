@@ -188,6 +188,11 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           })
         );
       } else {
+        // disable the network when faking the JWT. This way the demo report will not update
+        // a shared settings in firestore, and any tests running against it will be
+        // repeatable
+        firebase.firestore().disableNetwork();
+
         // We're using fake data, including fake JWT.
         return {
           offering: offeringData,

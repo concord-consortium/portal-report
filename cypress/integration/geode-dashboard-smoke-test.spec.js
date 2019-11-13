@@ -276,9 +276,7 @@ context("Geode Dashboard Smoke Test", () => {
                     .then(() => {
                         dashboard.getExpandedMCAnswers()
                             .should("exist")
-                            // FIXME: this seems to be an error in the code student names
-                            // should always be shown in the dashboard
-                            .and("contain", "Student 1");
+                            .and("contain", "Jenna Armstrong");
                     });
             });
             dashboard.getCloseExpandedQuestion()
@@ -326,7 +324,7 @@ context("Geode Dashboard Smoke Test", () => {
             dashboard.getExpandedMCAnswers()
                 .should("exist")
                 // FIXME should be a real student name here
-                .and("contain", "Student 1");
+                .and("contain", "Jenna Armstrong");
             dashboard.getCloseExpandedQuestion()
                 .should("exist")
                 .click({ force: true });

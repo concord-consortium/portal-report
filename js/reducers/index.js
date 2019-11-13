@@ -69,7 +69,11 @@ function setAnonymous(state, anonymous) {
 
 function setUserSettings(state, response) {
   const {visibility_filter, anonymous_report} = response;
-  const selectedQuestions = visibility_filter.questions || [];
+  let selectedQuestions = [];
+  // The visibility_filter might not be setup on the user settings yet
+  if (visibility_filter && visibility_filter.questions) {
+    selectedQuestions = visibility_filter.questions;
+  }
   return state.withMutations(state => {
     state.get("questions").forEach((value, key) => {
       const selected = selectedQuestions.indexOf(key) > -1;

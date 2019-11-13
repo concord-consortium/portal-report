@@ -13,6 +13,12 @@ context("Portal Report Smoke Test", () => {
 
     //const dashboard = new Dashboard;
 
+    // It might be good to have an afterEach:
+    // firebase.firestore().terminate();
+    // firebase.firestore().clearPersistence();
+    // However it seems firestore is clearing any cached information on each test
+    // run, so this doesn't seem necessary.
+
     beforeEach(() => {
         cy.visit("/");
         cy.fixture("sequence-structure.json").as("sequenceData");
@@ -89,7 +95,7 @@ context("Portal Report Smoke Test", () => {
         // when the show/hide student names button is pressed. It seems like the connection
         // to firestore is failing here. When running the report directly the state of the
         // button is saved in firestore even when using the mock data
-        it.skip("Shows/Hides student names", () => { // Add into context
+        it("Shows/Hides student names", () => { // Add into context
             cy.get("@classData").then((classData) => {
                 const students = classData.students;
 
@@ -166,24 +172,25 @@ context("Portal Report Smoke Test", () => {
         it("checks student response status counts", () => {
             cy.get("@sequenceData").then((sequenceData) => {
                 body.pullUpFeedbackForActivity(activityIndex);
-                feedback.getScoredStudentsCount().should("be.visible").and("contain", "3");
-                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "0");
+                feedback.getGiveScoreCheckbox().click();
+                feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
+                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "3");
                 feedback.getNoAnswerStudentsCount().should("be.visible").and("contain", "2");
             });
         });
 
-        // this will only work if there is a rubric for the activity, the current
-        // test data doesn't seem to have that, but we should add one so this test can
-        // run
-        it.skip("check scoring options", () => {
+
+        it("check scoring options", () => {
             body.pullUpFeedbackForActivity(activityIndex);
-            feedback.getRubricCheckbox().should("exist").and("be.visible").and("be.checked").check();
-            feedback.getGiveScoreCheckbox().should("exist").and("be.visible").and("be.checked");
-            feedback.getWrittenFeedbackCheckbox().should("exist").and("be.visible").and("be.checked");
-            feedback.getManualScoringOption().should("exist").and("be.visible").and("be.checked");
+            // the rubric only shows up if there is a rubric defined for the resource
+            // feedback.getRubricCheckbox().should("exist").and("be.visible").and("be.checked").check();
+            feedback.getGiveScoreCheckbox().should("exist").and("be.visible").and("not.be.checked");
+            feedback.getWrittenFeedbackCheckbox().should("exist").and("be.visible").and("not.be.checked");
+            feedback.getManualScoringOption().should("exist").and("be.visible").and("not.be.checked");
             cy.root();
             feedback.getAutoScoringOption().should("exist").and("be.visible").and("not.be.checked");
-            feedback.getRubricScoringOption().should("exist").and("be.visible").and("not.be.checked");
+            // the rubric only shows up if there is a rubric defined for the resource
+            // feedback.getRubricScoringOption().should("exist").and("be.visible").and("not.be.checked");
         });
 
         it("checks toggle for show all students", () => {
@@ -191,16 +198,17 @@ context("Portal Report Smoke Test", () => {
                 let studentTotal = classData.students.length;
 
                 body.pullUpFeedbackForActivity(activityIndex);
+                feedback.getGiveScoreCheckbox().click();
                 feedback.getShowAllStudentsToggle().should("not.be.checked");
                 feedback.getShowAllStudentsToggle().click();
                 cy.get(".feedback-row").should("have.length", studentTotal);
             });
         });
 
-        // The Feedback textarea is disabled because the report thinks the feedbback is
-        // complete
-        it.skip("selects a student from list and provides written feedback and score", () => {
+        it("selects a student from list and provides written feedback and score", () => {
             body.pullUpFeedbackForActivity(activityIndex);
+            feedback.getWrittenFeedbackCheckbox().click();
+            feedback.getGiveScoreCheckbox().click();
             feedback.getShowAllStudentsToggle().click();
             feedback.getStudentSelection().select((studentIndex + 1).toString());
             feedback.getWrittenFeedbackTextarea(studentIndex).focus();
@@ -213,6 +221,7 @@ context("Portal Report Smoke Test", () => {
         // This will open a new tab with a view of this student's work
         it("Checks student report for feedback", () => {
             body.pullUpFeedbackForActivity(activityIndex);
+            feedback.getGiveScoreCheckbox().click();
             feedback.getShowAllStudentsToggle().click();
             feedback.getStudentWorkLink(studentIndex).should("be.visible").click({ force: true });
         });
