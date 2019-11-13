@@ -181,15 +181,13 @@ context("Portal Report Smoke Test", () => {
 
         it("check scoring options", () => {
             body.pullUpFeedbackForActivity(activityIndex);
-            // the rubric only shows up if there is a rubric defined for the resource
-            // feedback.getRubricCheckbox().should("exist").and("be.visible").and("be.checked").check();
+            feedback.getRubricCheckbox().should("exist").and("be.visible").and("not.be.checked").check();
             feedback.getGiveScoreCheckbox().should("exist").and("be.visible").and("not.be.checked");
             feedback.getWrittenFeedbackCheckbox().should("exist").and("be.visible").and("not.be.checked");
             feedback.getManualScoringOption().should("exist").and("be.visible").and("not.be.checked");
             cy.root();
             feedback.getAutoScoringOption().should("exist").and("be.visible").and("not.be.checked");
-            // the rubric only shows up if there is a rubric defined for the resource
-            // feedback.getRubricScoringOption().should("exist").and("be.visible").and("not.be.checked");
+            feedback.getRubricScoringOption().should("exist").and("be.visible").and("not.be.checked");
         });
 
         it("checks toggle for show all students", () => {
