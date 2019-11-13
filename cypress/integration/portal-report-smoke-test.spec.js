@@ -179,7 +179,6 @@ context("Portal Report Smoke Test", () => {
             });
         });
 
-
         it("check scoring options", () => {
             body.pullUpFeedbackForActivity(activityIndex);
             // the rubric only shows up if there is a rubric defined for the resource
