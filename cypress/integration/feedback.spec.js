@@ -51,7 +51,7 @@ describe("Provide Feedback", function() {
     cy.get(".feedback-panel").should("be.visible");
   });
 
-  it.only("Allows teacher to provide written feedback on a question", function() {
+  it("Allows teacher to provide written feedback on a question", function() {
     cy.get(".question [data-cy=feedbackButton]").first().click();
     cy.get("#feedbackEnabled").click();
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
