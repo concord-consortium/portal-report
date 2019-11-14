@@ -39,7 +39,7 @@ class Dashboard {
         return cy.get("div.modal-content");
     }
     getExpandQuestionDetails() {
-        return getByCypressTag("expandQuestionDetails");
+        return getByCypressTag("expand-question-details");
     }
     getExpandedMCAnswerDetails() {
         return getByCypressTag("multiple-choice-details");
