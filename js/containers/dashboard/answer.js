@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Map } from "immutable";
 import MultipleChoiceAnswer from "../../components/dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
-import { getAnswerTrees } from "../../selectors/report-tree";
+import { getAnswerTreesNew } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 
 import css from "../../../css/dashboard/answer.less";
@@ -46,10 +46,8 @@ Answer.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    answer: getAnswerTrees(state).toList().find(answer =>
-      answer.get("questionId") === ownProps.question.get("id") &&
-      answer.get("platformUserId") === ownProps.student.get("id")
-    )
+    answer: getAnswerTreesNew(state)
+      .getIn([ownProps.question.get("id"), ownProps.student.get("id")])
   };
 }
 
