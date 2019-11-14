@@ -12,9 +12,6 @@ context("Geode Dashboard Smoke Test", () => {
     const dashboard = new Dashboard();
     const studentsToTest = ["", "", ""];
 
-    before(() => {
-    });
-
     beforeEach(() => {
         cy.visit("/?dashboard=true");
         cy.fixture("class-data.json").as("classData");
@@ -31,16 +28,6 @@ context("Geode Dashboard Smoke Test", () => {
             } else {
                 cy.log("No student with this ID found in class");
             }
-        }
-    }
-
-    // This isn't valid anymore
-    function getAnswerData(questionData) {
-        let allAnswers;
-
-        allAnswers = questionData.answers;
-        if (allAnswers != null) {
-            return allAnswers;
         }
     }
 
@@ -323,7 +310,6 @@ context("Geode Dashboard Smoke Test", () => {
                 .click({ force: true });
             dashboard.getExpandedMCAnswers()
                 .should("exist")
-                // FIXME should be a real student name here
                 .and("contain", "Jenna Armstrong");
             dashboard.getCloseExpandedQuestion()
                 .should("exist")

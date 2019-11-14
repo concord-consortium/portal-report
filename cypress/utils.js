@@ -8,11 +8,13 @@ function getChildrenData(parent, label) {
     }
 }
 
-function getByCypressTag(cypressTag) {
+// CSS modules randomize class names, so it is safest to select with explicit data-* attributes
+// https://docs.cypress.io/guides/references/best-practices.html#Selecting-Elements
+export function getByCypressTag(cypressTag) {
   return cy.get(`[data-cy=${cypressTag}]`);
 }
 
-function getAnswerByQuestionType(answerData) {
+export function getAnswerByQuestionType(answerData) {
     let answer;
     let questionType;
     questionType = answerData.type;
@@ -38,19 +40,19 @@ function getAnswerByQuestionType(answerData) {
     }
 }
 
-function getPageQuestionData(pageData) {
+export function getPageQuestionData(pageData) {
     return getChildrenData(pageData, "questions");
 }
 
-function getActivityData(sequenceData) {
+export function getActivityData(sequenceData) {
     return getChildrenData(sequenceData, "activities");
 }
 
-function getSectionData(activityData) {
+export function getSectionData(activityData) {
   return getChildrenData(activityData, "sections");
 }
 
-function getPageData(activityData) {
+export function getPageData(activityData) {
     let pageData;
 
     // this is only looking at the first section
@@ -62,7 +64,7 @@ function getPageData(activityData) {
     }
 }
 
-function getActivityQuestionData(activityData) {
+export function getActivityQuestionData(activityData) {
     let questionData = [];
 
     let pageData = getPageData(activityData) || [];
@@ -75,17 +77,3 @@ function getActivityQuestionData(activityData) {
         cy.log("There was no question data");
     }
 }
-
-module.exports = {
-
-  // CSS modules randomize class names, so it is safest to select with explicit data-* attributes
-  // https://docs.cypress.io/guides/references/best-practices.html#Selecting-Elements
-  getByCypressTag: getByCypressTag,
-
-  getAnswerByQuestionType: getAnswerByQuestionType,
-  getPageQuestionData: getPageQuestionData,
-  getActivityData: getActivityData,
-  getSectionData:  getSectionData,
-  getPageData:  getPageData,
-  getActivityQuestionData: getActivityQuestionData
-};

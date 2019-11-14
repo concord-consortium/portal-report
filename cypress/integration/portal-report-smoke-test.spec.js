@@ -91,10 +91,6 @@ context("Portal Report Smoke Test", () => {
           });
         }
 
-        // This test is failing becuase firestore is not returning a valid reponse
-        // when the show/hide student names button is pressed. It seems like the connection
-        // to firestore is failing here. When running the report directly the state of the
-        // button is saved in firestore even when using the mock data
         it("Shows/Hides student names", () => { // Add into context
             cy.get("@classData").then((classData) => {
                 const students = classData.students;
