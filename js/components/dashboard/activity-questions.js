@@ -48,7 +48,7 @@ export default class ActivityQuestions extends PureComponent {
                         trackEvent("Dashboard", "Opened Question Details", trackLabel);
                       }}
                       className={css["icomoon-expander"]}
-                      data-cy="expandQuestionDetails" />
+                      data-cy="expand-question-details" />
                     Q{ q.get("questionNumber") }. { striptags(q.get("prompt")) }
                   </div>
                 );
