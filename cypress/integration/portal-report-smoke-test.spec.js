@@ -1,10 +1,23 @@
 import Header from "../support/elements/portal-report/header";
 import ReportBody from "../support/elements/portal-report/report-body";
 import Feedback from "../support/elements/portal-report/feedback";
+import {
+  getAnswerByQuestionType,
+  getPageQuestionData,
+  getActivityData,
+  getPageData,
+  getActivityQuestionData
+ } from "../utils";
 
 context("Portal Report Smoke Test", () => {
 
     //const dashboard = new Dashboard;
+
+    // It might be good to have an afterEach:
+    // firebase.firestore().terminate();
+    // firebase.firestore().clearPersistence();
+    // However it seems firestore is clearing any cached information on each test
+    // run, so this doesn't seem necessary.
 
     beforeEach(() => {
         cy.visit("/");
@@ -16,65 +29,6 @@ context("Portal Report Smoke Test", () => {
     const header = new Header();
     const body = new ReportBody();
     const feedback = new Feedback();
-
-    function getActivityData(sequenceData) {
-        let activityData;
-
-        activityData = sequenceData.children;
-        if (activityData != null) {
-            return activityData;
-        } else {
-            cy.log("There was no activity with this index");
-        }
-    }
-
-    function getPageData(activityData) {
-        let pageData;
-
-        pageData = activityData.children[0].children;
-        if (pageData != null) {
-            return pageData;
-        } else {
-            cy.log("There was no activity page data");
-        }
-    }
-
-    function getQuestionData(pageData) {
-        let questionData;
-
-        questionData = pageData.children;
-        if (questionData != null) {
-            return questionData;
-        } else {
-            cy.log("There was no question data");
-        }
-    }
-
-    function getAnswerByQuestionType(answerData) {
-        let answer;
-        let questionType;
-        questionType = answerData.type;
-
-        if (answerData.type != null) {
-            switch (questionType) {
-                case ("Embeddable::MultipleChoice"):
-                    answer = answerData.answer[0].choice;
-                    break;
-                case ("Embeddable::OpenResponse"):
-                    answer = answerData.answer;
-                    break;
-                case ("Embeddable::ImageQuestion"):
-                    answer = answerData.answer.image_url;
-                    break;
-                case ("Embeddable::Iframe"):
-                    answer = answerData.answer;
-                    break;
-            }
-            return answer;
-        } else {
-            cy.log("Could not find answer for question type " + questionType);
-        }
-    }
 
     context("Header components", () => {
         it("Verifies the logo appears correctly", () => {
@@ -119,7 +73,7 @@ context("Portal Report Smoke Test", () => {
                 let questionData;
                 // Get unhidden report, for each page check each question header for checkbox then check
                 for (let i = 0; i < pageData.length; i++) {
-                    questionData = getQuestionData(pageData[i]);
+                    questionData = getPageQuestionData(pageData[i]);
                     for (let j = 0; j < questionData.length; j++) {
                         header.getCheckbox(checkboxCount).check().should("be.checked");
                         checkboxCount++;
@@ -131,31 +85,24 @@ context("Portal Report Smoke Test", () => {
             body.getActivities().eq(activityIndex + 1).should("have.class", "hidden");
         });
 
-        // This test is dying in the application code, perhaps it is something that got
-        // fixed
-        it.skip("Shows/Hides student names", () => { // Add into context
+        function checkStudentNames(students, contains) {
+          students.forEach(student => {
+            body.checkForStudentNames(contains, student.first_name);
+          });
+        }
+
+        it("Shows/Hides student names", () => { // Add into context
             cy.get("@classData").then((classData) => {
                 const students = classData.students;
-                let student;
 
                 body.getResponseTable().should("not.exist");
                 body.getActivities().eq(activityIndex).within(() => {
                     body.getShowResponses(questionIndex).should("exist").and("be.visible").click({ force: true });
                 });
                 body.getResponseTable().should("exist").and("be.visible");
-                for (let i = 0; i < students.length; i++) {
-                    student = students[i];
-                    if (students[i].started_offering === true) {
-                        body.checkForStudentNames(true, student[i].first_name);
-                    }
-                }
+                checkStudentNames(students, true);
                 header.getHideShowNames().should("be.visible").click({ force: true });
-                for (let i = 0; i < students.length; i++) {
-                    student = students[i];
-                    if (students[i].started_offering === true) {
-                        body.checkForStudentNames(false, student[i].first_name);
-                    }
-                }
+                checkStudentNames(students, false);
             });
         });
 
@@ -179,7 +126,7 @@ context("Portal Report Smoke Test", () => {
 
                         for (let j = 0; j <= pages.length; j++){
                             currentPage = pages[j];
-                            questions = getQuestionData(currentPage);
+                            questions = getPageQuestionData(currentPage);
 
                             for (let k = 0; k < questions.length; k++) {
                                 currentQuestion = questions[k];
@@ -221,21 +168,19 @@ context("Portal Report Smoke Test", () => {
         it("checks student response status counts", () => {
             cy.get("@sequenceData").then((sequenceData) => {
                 body.pullUpFeedbackForActivity(activityIndex);
-                feedback.getScoredStudentsCount().should("be.visible").and("contain", "3");
-                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "0");
+                feedback.getGiveScoreCheckbox().click();
+                feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
+                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "3");
                 feedback.getNoAnswerStudentsCount().should("be.visible").and("contain", "2");
             });
         });
 
-        // this will only work if there is a rubric for the activity, the current
-        // test data doesn't seem to have that, but we should add one so this test can
-        // run
-        it.skip("check scoring options", () => {
+        it("check scoring options", () => {
             body.pullUpFeedbackForActivity(activityIndex);
-            feedback.getRubricCheckbox().should("exist").and("be.visible").and("be.checked").check();
-            feedback.getGiveScoreCheckbox().should("exist").and("be.visible").and("be.checked");
-            feedback.getWrittenFeedbackCheckbox().should("exist").and("be.visible").and("be.checked");
-            feedback.getManualScoringOption().should("exist").and("be.visible").and("be.checked");
+            feedback.getRubricCheckbox().should("exist").and("be.visible").and("not.be.checked").check();
+            feedback.getGiveScoreCheckbox().should("exist").and("be.visible").and("not.be.checked");
+            feedback.getWrittenFeedbackCheckbox().should("exist").and("be.visible").and("not.be.checked");
+            feedback.getManualScoringOption().should("exist").and("be.visible").and("not.be.checked");
             cy.root();
             feedback.getAutoScoringOption().should("exist").and("be.visible").and("not.be.checked");
             feedback.getRubricScoringOption().should("exist").and("be.visible").and("not.be.checked");
@@ -246,16 +191,17 @@ context("Portal Report Smoke Test", () => {
                 let studentTotal = classData.students.length;
 
                 body.pullUpFeedbackForActivity(activityIndex);
+                feedback.getGiveScoreCheckbox().click();
                 feedback.getShowAllStudentsToggle().should("not.be.checked");
                 feedback.getShowAllStudentsToggle().click();
                 cy.get(".feedback-row").should("have.length", studentTotal);
             });
         });
 
-        // The Feedback textarea is disabled because the report thinks the feedbback is
-        // complete
-        it.skip("selects a student from list and provides written feedback and score", () => {
+        it("selects a student from list and provides written feedback and score", () => {
             body.pullUpFeedbackForActivity(activityIndex);
+            feedback.getWrittenFeedbackCheckbox().click();
+            feedback.getGiveScoreCheckbox().click();
             feedback.getShowAllStudentsToggle().click();
             feedback.getStudentSelection().select((studentIndex + 1).toString());
             feedback.getWrittenFeedbackTextarea(studentIndex).focus();
@@ -268,8 +214,14 @@ context("Portal Report Smoke Test", () => {
         // This will open a new tab with a view of this student's work
         it("Checks student report for feedback", () => {
             body.pullUpFeedbackForActivity(activityIndex);
+            feedback.getGiveScoreCheckbox().click();
             feedback.getShowAllStudentsToggle().click();
-            feedback.getStudentWorkLink(studentIndex).should("be.visible").click({ force: true });
+            feedback.getStudentWorkLink(studentIndex).should("be.visible")
+              .then(($studentWorkLink) => {
+                // remove target=_blank so the link opens in the same window
+                $studentWorkLink.attr("target", null);
+              }).click();
+            cy.contains("Amy Galloway");
         });
     });
 });

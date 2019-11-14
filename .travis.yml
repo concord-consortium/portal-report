@@ -23,8 +23,8 @@ script:
 after_success:
   - ./s3_deploy.sh
 after_script:
-  - ./cc-test-reporter format-coverage -t lcov -o codeclimate.jest.json coverage-jest/lcov.info"
-  - ./cc-test-reporter format-coverage -t lcov -o codeclimate.cypress.json coverage-cypress/lcov.info"
+  - ./cc-test-reporter format-coverage -t lcov -o codeclimate.jest.json coverage-jest/lcov.info
+  - ./cc-test-reporter format-coverage -t lcov -o codeclimate.cypress.json coverage-cypress/lcov.info
   - ./cc-test-reporter sum-coverage -p 2 codeclimate.*.json
   - ./cc-test-reporter upload-coverage
 cache:

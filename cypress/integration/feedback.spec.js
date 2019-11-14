@@ -3,8 +3,11 @@
 import React from "react";
 // import fakeData from "../../js/data/report.json";
 import sampleRubric from "../../public/sample-rubric";
+import Feedback from "../support/elements/portal-report/feedback";
 
 describe("Provide Feedback", function() {
+  const feedback = new Feedback();
+
   beforeEach(() => {
     // cypress currently doesn't handle window.fetch so:
     // disable browser's fetch this way the fetch polyfill is used which uses XHR
@@ -48,18 +51,15 @@ describe("Provide Feedback", function() {
     cy.get(".feedback-panel").should("be.visible");
   });
 
-  it.skip("Sends feedback to the server", function() {
-    // This is the first put that happens when the UI is initialized
-    cy.wait("@putReportSettings");
+  it("Allows teacher to provide written feedback on a question", function() {
     cy.get(".question [data-cy=feedbackButton]").first().click();
-    cy.get("[data-cy=feedbackBox]").first().type("Your answer was great!").blur();
-    // This is the second put that happens when the user finishes typing
-    cy.wait("@putReportSettings");
-    cy.get("@putReportSettings").should((xhr) => {
-      // Newer versions of Chai have a 'nested' chained method that would simplify this
-      expect(xhr.requestBody).to.have.property("feedback");
-      expect(xhr.requestBody.feedback).to.have.property("feedback", "Your answer was great!");
+    cy.get("#feedbackEnabled").click();
+    feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
+    cy.get(".feedback-row").first().within(() => {
+      cy.get("[data-cy=feedbackBox]").type("Your answer was great!").blur();
+      cy.get(".feedback-complete input").check();
     });
+    feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
   });
 
   it.skip("Shows error if feedback fails to send", function() {

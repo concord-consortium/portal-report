@@ -10,31 +10,20 @@ class Header {
     }
 
     getShowSelectedButton() {
-        return cy.get(".report-content").not(".hidden")
-            .within(() => {
-                cy.get(".controls").eq(0).children().eq(0);
-            });
+        return cy.contains(".report-content .controls a", /show selected/i);
     }
 
     getShowAll() {
-        return cy.get(".report-content").not(".hidden")
-            .within(() => {
-                cy.get(".controls").eq(0).children().eq(1);
-            });
+        return cy.contains(".report-content .controls a", /show all/i);
     }
 
     getHideShowNames() {
-        return cy.get(".report-content").not(".hidden")
-            .within(() => {
-                cy.get(".controls").eq(0).children().eq(2);
-            });
+        return cy.contains(".report-content .controls a", /names/i);
     }
 
     getPrintStudentReports() {
-        return cy.get(".report-content").not(".hidden")
-        .within(() => {
-            cy.get(".controls").eq(0).children().eq(3);
-        });    }
+        return cy.contains(".report-content .controls a", /print/i);
+    }
 
     getCheckbox(i) {
         return cy.get(".report-content")
