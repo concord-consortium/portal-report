@@ -69,6 +69,21 @@ export const getAnswerTrees = createSelector(
     }
 );
 
+export const getAnswerTreesNew = createSelector(
+  [ getAnswerTrees, getStudents, getQuestions],
+  (answers, students, questions) => {
+
+    // We should probably use an mutableWith here so we don't create lots of extra objects
+    const answerTreeResult = answers.reduce((answerTree, answer) => {
+      const questionId = answer.get("questionId");
+      let studentMap = answerTree.get(questionId) || Map();
+      studentMap = studentMap.set(answer.get("platformUserId"), answer);
+      return answerTree.set(questionId, studentMap);
+    }, Map());
+    return answerTreeResult;
+  }
+);
+
 export const getQuestionTrees = createSelector(
   [ getActivities, getSections, getPages, getQuestions, getViewType, getShowFeaturedQuestionsOnly ],
   ( activities, sections, pages, questions, viewType, showFeaturedQuestionsOnly) => {
