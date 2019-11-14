@@ -9,7 +9,7 @@ export default class ProgressBar extends PureComponent {
       <div className={css.progressBarCell}>
         <div className={css.progressBar}>
           <div className={`${css.bar} ${progress === 1 ? css.completed : ""}`}
-            style={{width: `${progress * 100}%`}} />
+            style={{width: `${progress * 100}%`}} data-cy="progressBar"/>
         </div>
       </div>
     );

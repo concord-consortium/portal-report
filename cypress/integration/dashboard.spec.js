@@ -40,19 +40,20 @@ describe("Dashboard", function() {
     });
   });
 
-  let expandedRowHeight = null;
   it("Has equal height rows after a student is clicked", function() {
     getByCypressTag("studentName").click({ multiple: true });
-    cy.wait(1000); // Wait for the animations to finish
-    getByCypressTag("studentName").should("be.visible").then((students) => {
-      Array.from(students).forEach((student) => {
-        if (expandedRowHeight == null) {
-          expandedRowHeight = student.clientHeight;
-          expect(expandedRowHeight).to.be.greaterThan(rowHeight);
-        }
-        expect(student.clientHeight).to.equal(expandedRowHeight);
+    // there is an animation that happens here, but because of cypress' automatic retry
+    // behavior it will keep running the expectations until they pass
+    getByCypressTag("studentName")
+      .should("be.visible")
+      .and(($students) => {
+        let expandedRowHeight = $students[0].clientHeight;
+        expect(expandedRowHeight).to.be.greaterThan(rowHeight);
+
+        $students.each((index, student) => {
+          expect(student.clientHeight).to.equal(expandedRowHeight);
+        });
       });
-    });
   });
 
   function getStudentAnswerRow(studentName) {
@@ -66,7 +67,7 @@ describe("Dashboard", function() {
       });
   }
 
-  it("Shows 0/1 in the correct column for a user without correct answers", function () {
+  it("Shows 0/1 in the correct column for a user without correct answers", function() {
     // expand the first activity
     getByCypressTag("activityName").eq(0).click();
 
@@ -76,7 +77,7 @@ describe("Dashboard", function() {
 
   });
 
-  it("Shows 1/1 in the correct column for a user with correct answers", function () {
+  it("Shows 1/1 in the correct column for a user with correct answers", function() {
     // expand the first activity
     getByCypressTag("activityName").eq(0).click();
 

@@ -29,7 +29,7 @@ export default class ExpandStudents extends PureComponent {
     return (
       <div className={css.expandStudents}>
         <div className={css.title} />
-        <div className={css.buttonCell}>
+        <div className={css.buttonCell} data-cy="openCloseStudents">
           <ExpandStudentsButton
             students={students}
             onSetStudentsExpanded={setStudentsExpanded}

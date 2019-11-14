@@ -6,7 +6,7 @@ import css from "../../../css/dashboard/open-response-answer.less";
 export default class OpenResponseAnswer extends PureComponent {
   renderIcon() {
     return (
-      <div className={css.icon}>
+      <div className={css.icon} data-cy="openResponseIcon">
         <i className={"icomoon-file-text"} />
       </div>
     );
@@ -15,7 +15,7 @@ export default class OpenResponseAnswer extends PureComponent {
   renderFullAnswer() {
     const { answer } = this.props;
     return (
-      <div>
+      <div data-cy="openResponseText">
         { answer.get("answer") }
       </div>
     );

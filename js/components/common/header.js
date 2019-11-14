@@ -12,8 +12,8 @@ export default class Header extends PureComponent {
       <div className="header" style={{background: background || "#bddfdf"}}>
         <div className="header-content">
           <img src={ccLogoSrc} className="logo" />
-          <div className="status">
-            {onHelpButtonClick && <Button className="help" onClick={onHelpButtonClick}>Help</Button>}
+          <div className="status" data-cy="time">
+            {onHelpButtonClick && <Button className="help" onClick={onHelpButtonClick} data-cy="help">Help</Button>}
           </div>
         </div>
       </div>

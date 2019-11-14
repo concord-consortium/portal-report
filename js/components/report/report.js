@@ -96,7 +96,8 @@ export default class Report extends PureComponent {
           {
             const min = idx * MAX_STUDENT_REPORTS;
             const max = Math.min((idx + 1) * MAX_STUDENT_REPORTS, sortedStudents.size);
-            return <Button key={idx} onClick={this.printStudentReports.bind(this, min, max)}>
+            return <Button key={idx} onClick={this.printStudentReports.bind(this, min, max)}
+                       data-cy="print-reports">
               { idx === 0 ? "Print student reports: " : ""} {min + 1}-{max}
             </Button>;
           })
@@ -114,9 +115,9 @@ export default class Report extends PureComponent {
     if (!hideControls) {
       return (
         <div className="controls">
-          <Button onClick={this.onShowSelectedClick} disabled={!anyQuestionSelected}>Show selected</Button>
-          <Button onClick={this.onShowUnselectedClick}>Show all</Button>
-          <Button onClick={() => this.onShowHideNamesClick(isAnonymous)}>{isAnonymous ? "Show names" : "Hide names"}</Button>
+          <Button onClick={this.onShowSelectedClick} disabled={!anyQuestionSelected} data-cy="show-selected">Show selected</Button>
+          <Button onClick={this.onShowUnselectedClick} data-cy="show-all">Show all</Button>
+          <Button onClick={() => this.onShowHideNamesClick(isAnonymous)} data-cy="hide-show-names">{isAnonymous ? "Show names" : "Hide names"}</Button>
           { this.renderPrintButtons() }
         </div>
       );
@@ -172,7 +173,7 @@ export default class Report extends PureComponent {
 
   render() {
     return (
-      <div>
+      <div data-cy="report">
         {this.renderClassReport()}
         {this.renderStudentReports()}
       </div>

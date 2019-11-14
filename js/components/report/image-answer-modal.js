@@ -25,7 +25,7 @@ export default class ImageAnswerModal extends PureComponent {
       <Modal show={show} onHide={onHide}>
         <Modal.Header closeButton closeLabel="" />
         <Modal.Body>
-          <img src={answer.getIn(["answer", "imageUrl"])} style={{display: "block", margin: "0 auto"}} />
+          <img src={answer.getIn(["answer", "imageUrl"])} style={{display: "block", margin: "0 auto"}} data-cy="image-answer-modal"/>
         </Modal.Body>
         <Modal.Footer>
           <div style={{fontWeight: "bold"}}>{answer.getIn(["student", "name"])}</div>

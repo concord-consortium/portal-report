@@ -75,7 +75,7 @@ class Activity extends PureComponent {
     }
 
     return (
-      <div className={`activity ${activity.get("visible") ? "" : "hidden"}`}>
+      <div className={`activity ${activity.get("visible") ? "" : "hidden"}`} data-cy= "activity">
         <Sticky top={60}>
           <h3>{activityName} </h3>
         </Sticky>
