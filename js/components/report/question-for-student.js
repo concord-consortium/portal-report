@@ -9,9 +9,9 @@ import Prompt from "./prompt";
 
 export default class QuestionForStudent extends PureComponent {
   render() {
-    const { question, url, student, answers } = this.props;
+    const { question, url, student, answerMap } = this.props;
     const studentId = student.get("id");
-    const answer = answers.find(a => a.get("platformUserId") === studentId);
+    const answer = answerMap.get(studentId);
     return (
       <div className={`question for-student ${question.get("visible") ? "" : "hidden"}`}>
         <div className="question-header">

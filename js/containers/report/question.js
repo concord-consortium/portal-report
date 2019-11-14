@@ -12,7 +12,7 @@ export default class Question extends PureComponent {
     if (reportFor === "class") {
       return <QuestionForClass question={question} answerMap={answerMap} answerList={answerList} students={students} url={url} />;
     } else {
-      return <QuestionForStudent question={question} answers={answerList} student={reportFor} url={url} />;
+      return <QuestionForStudent question={question} answerMap={answerMap} student={reportFor} url={url} />;
     }
   }
 }
