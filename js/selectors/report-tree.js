@@ -73,13 +73,20 @@ export const getAnswerTreesNew = createSelector(
   [ getAnswerTrees, getStudents, getQuestions],
   (answers, students, questions) => {
 
-    // We should probably use an mutableWith here so we don't create lots of extra objects
-    const answerTreeResult = answers.reduce((answerTree, answer) => {
-      const questionId = answer.get("questionId");
-      let studentMap = answerTree.get(questionId) || Map();
-      studentMap = studentMap.set(answer.get("platformUserId"), answer);
-      return answerTree.set(questionId, studentMap);
-    }, Map());
+    // Use withMutations so this isn't creating a lot of new objects
+    const answerTreeResult = Map().withMutations(mutableTree => {
+      // Create tree like:
+      // { question1.id: {student1.id: answer1, student2.id: answer2, ...},
+      //   question2.id: {student3.id: answer3, student4.id: answer4, ...}
+      //   ... }
+      return answers.reduce((answerTree, answer) => {
+        const questionId = answer.get("questionId");
+        let studentMap = answerTree.get(questionId) || Map();
+        studentMap = studentMap.set(answer.get("platformUserId"), answer);
+        return answerTree.set(questionId, studentMap);
+      }, mutableTree);
+    });
+
     return answerTreeResult;
   }
 );
