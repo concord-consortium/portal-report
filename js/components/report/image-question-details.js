@@ -46,17 +46,17 @@ export default class ImageQuestionDetails extends PureComponent {
     this.setState({selectedAnswer: index});
   }
 
-  get images() {
+  get answersWithImage() {
     const { answers } = this.props;
     return answers.filter(a => a.getIn(["answer", "imageUrl"]) !== null);
   }
 
   get selectedAnswerProps() {
-    return this.images.get(this.state.selectedAnswer);
+    return this.answersWithImage.get(this.state.selectedAnswer);
   }
 
   renderImages() {
-    return this.images.map(a => {
+    return this.answersWithImage.map(a => {
       return renderImage(a.getIn(["answer", "imageUrl"]), a.getIn(["student", "name"]), a.getIn(["student", "id"]), a.getIn(["answer", "text"]));
     }).toJS();
   }
@@ -64,7 +64,7 @@ export default class ImageQuestionDetails extends PureComponent {
   renderCarousel() {
     // react-responsive-carousel fails when we pass empty array. Probably it's related to this issue:
     // https://github.com/leandrowd/react-responsive-carousel/issues/30
-    if (this.images.size === 0) { return null; }
+    if (this.answersWithImage.size === 0) { return null; }
     return <Carousel axis="horizontal" selectedItem={this.state.selectedAnswer} onChange={this.saveSelectedAnswer}
       showIndicators={false} showThumbs showArrows onClickItem={this.openModal}>
       {this.renderImages()}
