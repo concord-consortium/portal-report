@@ -17,14 +17,14 @@ class AnswersTable extends PureComponent {
   }
 
   getAnswerForStudent(student) {
-    const { answers } = this.props;
-    const result = answers.filter(answer => answer.get("platformUserId") === student.get("id"));
-    if (result.size === 0) {
+    const { answerMap } = this.props;
+    const result = answerMap.get(student.get("id"));
+    if (result) {
+      return result;
+    } else {
       return fromJS({
         questionType: "NoAnswer"
       });
-    } else {
-      return result.get(0);
     }
   }
 
@@ -111,5 +111,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(AnswersTable);
 
 AnswersTable.defaultProps = {
   showCompare: true,
-  answers: fromJS([])
+  answerMap: fromJS({})
 };

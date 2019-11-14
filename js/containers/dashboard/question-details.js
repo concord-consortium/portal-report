@@ -4,8 +4,9 @@ import Button from "../../components/common/button";
 import ReportQuestionDetails from "../../components/report/question-details";
 import AnswersTable from "../report/answers-table";
 import css from "../../../css/dashboard/question-details.less";
-import { getAnswerTrees } from "../../selectors/report-tree";
+import { getAnswerTreesNew } from "../../selectors/report-tree";
 import { connect } from "react-redux";
+import { Map } from "immutable";
 
 export default class QuestionDetails extends PureComponent {
   constructor(props) {
@@ -21,7 +22,7 @@ export default class QuestionDetails extends PureComponent {
   }
 
   render() {
-    const { selectedQuestion, answers, students, onClose } = this.props;
+    const { selectedQuestion, answerMap, answerList, students, onClose } = this.props;
     const { answersVisible } = this.state;
     const prompt = selectedQuestion && selectedQuestion.get("prompt");
     return (
@@ -35,11 +36,11 @@ export default class QuestionDetails extends PureComponent {
             <div
               className={css.question} >
               <div dangerouslySetInnerHTML={{ __html: prompt }} />
-              <ReportQuestionDetails question={selectedQuestion} answers={answers} students={students} />
+              <ReportQuestionDetails question={selectedQuestion} answers={answerList} students={students} />
               <Button onClick={this.toggleAnswersVisibility}>
                 {answersVisible ? "Hide responses" : "Show responses"}
               </Button>
-              {answersVisible ? <AnswersTable question={selectedQuestion} answers={answers} students={students} showCompare={false} /> : ""}
+              {answersVisible ? <AnswersTable question={selectedQuestion} answerMap={answerMap} students={students} showCompare={false} /> : ""}
             </div>
           }
         </Modal.Body>
@@ -54,9 +55,16 @@ export default class QuestionDetails extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
+  // Is there a better way to do this?
+  const answerMap = ownProps.selectedQuestion ?
+    getAnswerTreesNew(state).get(ownProps.selectedQuestion.get("id")) || Map() :
+    Map();
+
   return {
-    answers: ownProps.selectedQuestion ?
-      getAnswerTrees(state).toList().filter(answer => answer.get("questionId") === ownProps.selectedQuestion.get("id")) : []
+    answerMap,
+    // This could probably be optimized, by having all of the children work with the
+    // the answerMap, but I'd guess that toList is pretty efficient
+    answerList: answerMap.toList()
   };
 }
 
