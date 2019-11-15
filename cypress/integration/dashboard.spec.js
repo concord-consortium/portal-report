@@ -2,8 +2,11 @@
 /* eslint-disable-next-line */
 import React from "react";
 import { getByCypressTag } from "../utils";
+import Dashboard from "../support/elements/geode-dashboard/dashboard";
 
 describe("Dashboard", function() {
+  const dashboard = new Dashboard();
+
   beforeEach(() => {
     cy.visit("/?dashboard=true");
   });
@@ -86,4 +89,19 @@ describe("Dashboard", function() {
     });
 
   });
+
+  it("Shows incomplete if required answers are not submitted", () => {
+    getStudentAnswerRow("Jerome").within((studentAnswersRow) => {
+      dashboard.getProgressBar().eq(0)
+          .should("be.visible")
+          .and(($progressBar) => {
+            const widthPercent = $progressBar[0].style.width;
+            const widthString = widthPercent.match(/([\d.]+)%/)[1];
+            const width = parseFloat(widthString);
+            expect(width).to.be.greaterThan(83);
+            expect(width).to.be.lessThan(84);
+          });
+    });
+  });
+
 });
