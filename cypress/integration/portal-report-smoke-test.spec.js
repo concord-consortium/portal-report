@@ -170,7 +170,7 @@ context("Portal Report Smoke Test", () => {
                 body.pullUpFeedbackForActivity(activityIndex);
                 feedback.getGiveScoreCheckbox().click();
                 feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
-                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "3");
+                feedback.getStudentWaitingForFeedbackCount().should("be.visible").and("contain", "4");
                 feedback.getNoAnswerStudentsCount().should("be.visible").and("contain", "2");
             });
         });

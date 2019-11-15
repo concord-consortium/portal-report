@@ -2,8 +2,11 @@
 /* eslint-disable-next-line */
 import React from "react";
 import { getByCypressTag } from "../utils";
+import Dashboard from "../support/elements/geode-dashboard/dashboard";
 
 describe("Dashboard", function() {
+  const dashboard = new Dashboard();
+
   beforeEach(() => {
     cy.visit("/?dashboard=true");
   });
@@ -55,4 +58,50 @@ describe("Dashboard", function() {
         });
       });
   });
+
+  function getStudentAnswerRow(studentName) {
+    return getByCypressTag("studentName")
+      .filter(":contains('" + studentName + "')")
+       // this is counting on the [data-cy=studentName] elements to be siblings
+       // jQuery's index function looks at the index of the element compared to its siblings
+      .invoke("index")
+      .then(function(studentIndex){
+        getByCypressTag("studentAnswersRow").eq(studentIndex);
+      });
+  }
+
+  it("Shows 0/1 in the correct column for a user without correct answers", function() {
+    // expand the first activity
+    getByCypressTag("activityName").eq(0).click();
+
+    getStudentAnswerRow("Jenkins").within((studentAnswersRow) => {
+      getByCypressTag("correctCell").should("contain", "0 / 1");
+    });
+
+  });
+
+  it("Shows 1/1 in the correct column for a user with correct answers", function() {
+    // expand the first activity
+    getByCypressTag("activityName").eq(0).click();
+
+    getStudentAnswerRow("Jerome").within((studentAnswersRow) => {
+      getByCypressTag("correctCell").should("contain", "1 / 1");
+    });
+
+  });
+
+  it("Shows incomplete if required answers are not submitted", () => {
+    getStudentAnswerRow("Jerome").within((studentAnswersRow) => {
+      dashboard.getProgressBar().eq(0)
+          .should("be.visible")
+          .and(($progressBar) => {
+            const widthPercent = $progressBar[0].style.width;
+            const widthString = widthPercent.match(/([\d.]+)%/)[1];
+            const width = parseFloat(widthString);
+            expect(width).to.be.greaterThan(83);
+            expect(width).to.be.lessThan(84);
+          });
+    });
+  });
+
 });

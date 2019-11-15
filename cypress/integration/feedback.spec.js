@@ -62,6 +62,7 @@ describe("Provide Feedback", function() {
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
   });
 
+  // with the switch to firestore this test needs to be updated
   it.skip("Shows error if feedback fails to send", function() {
     // This is the first put that happens when the UI is initialized
     cy.wait("@putReportSettings");

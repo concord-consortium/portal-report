@@ -1,19 +1,21 @@
 import React, { PureComponent } from "react";
 import ProgressBar from "./progress-bar";
 import Answer from "../../containers/dashboard/answer";
+import { getAnswersByQuestion } from "../../selectors/report-tree";
+import { connect } from "react-redux";
 
 import css from "../../../css/dashboard/activity-answers.less";
 
-export default class ActivityAnswers extends PureComponent {
+export class ActivityAnswers extends PureComponent {
   renderMultChoiceSummary() {
-    const { student, activity } = this.props;
+    const { activity, answers, student } = this.props;
     const scoredQuestions = activity.get("questions").filter(q =>
       q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
     );
-    const correctAnswers = scoredQuestions.filter(question =>
-      question.get("answers").find(answer => answer.get("studentId") === student.get("id") && answer.get("isCorrect")),
+    const questionsWithCorrectAnswer = scoredQuestions.filter(
+      question => answers.getIn([question.get("id"), student.get("id"), "correct"])
     );
-    return `${correctAnswers.count()} / ${scoredQuestions.count()}`;
+    return `${questionsWithCorrectAnswer.count()} / ${scoredQuestions.count()}`;
   }
 
   render() {
@@ -43,7 +45,8 @@ export default class ActivityAnswers extends PureComponent {
         }
         {
           expanded && multChoiceSummary &&
-          <div className={css.answer + " " + css.multChoiceSummary}>
+          <div className={css.answer + " " + css.multChoiceSummary}
+            data-cy="correctCell">
             { this.renderMultChoiceSummary() }
           </div>
         }
@@ -51,3 +54,16 @@ export default class ActivityAnswers extends PureComponent {
     );
   }
 }
+
+function mapStateToProps(state, ownProps) {
+  const questions = ownProps.activity.get("questions") || [];
+  const answers = getAnswersByQuestion(state);
+
+  return { answers };
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityAnswers);

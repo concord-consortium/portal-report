@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { getActivityTrees, getQuestionTrees, getAnswerTrees } from "./report-tree";
+import { getActivityTrees, getQuestionTrees, getAnswersByQuestion } from "./report-tree";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../actions/dashboard";
 import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
@@ -38,24 +38,30 @@ export const getSelectedQuestion = createSelector(
 //   },
 //   (...)
 // }
+
+function countCompletedAnswers(activityQuestions, answers, student) {
+  return activityQuestions.reduce((count, question) => {
+    const answer = answers.getIn([question.get("id"), student.get("id")]);
+    if (answer &&
+      // If question is required, its answer must be submitted.
+      (!question.get("required") || answer.get("submitted") === true)) {
+      return count + 1;
+    } else {
+      return count;
+    }
+  // start the counter off at 0
+  }, 0);
+}
+
 export const getStudentProgress = createSelector(
-  [ getStudents, getActivityTrees, getAnswerTrees ],
+  [ getStudents, getActivityTrees, getAnswersByQuestion ],
   (students, activities, answers) => {
-    const answersList = answers.toList();
     return students.map(student =>
       activities.map(activity => {
         const activityQuestions = activity.get("questions").filter(q => q.get("visible"));
-        const studentSubmittedAnswers = activityQuestions.map(question =>
-          answersList
-            .find(answer =>
-              answer.get("questionId") === question.get("id") &&
-              answer.get("platformUserId") === student.get("id") &&
-              // If question is required, its answer must be submitted.
-              (!question.get("required") || answer.get("submitted") === true)
-            )
-        // Filter out undefined / falsy values, which mean that answer has not been found.
-        ).filter(answer => !!answer);
-        return studentSubmittedAnswers.size / activityQuestions.size;
+
+        return countCompletedAnswers(activityQuestions, answers, student) /
+          activityQuestions.size;
       }),
     );
   },

@@ -21,7 +21,7 @@ export default class QuestionForClass extends PureComponent {
   }
 
   render() {
-    const { question, answers, students, url } = this.props;
+    const { question, answerMap, answerList, students, url } = this.props;
     const { answersVisible } = this.state;
     return (
       <div>
@@ -33,9 +33,9 @@ export default class QuestionForClass extends PureComponent {
               {answersVisible ? "Hide responses" : "Show responses"}
             </a>
           </div>
-          <QuestionSummary question={question} answers={answers} students={students} />
-          <QuestionDetails question={question} answers={answers} students={students} />
-          { answersVisible && <AnswersTable question={question} answers={answers} students={students} /> }
+          <QuestionSummary question={question} answers={answerList} students={students} />
+          <QuestionDetails question={question} answers={answerList} students={students} />
+          { answersVisible && <AnswersTable question={question} answerMap={answerMap} students={students} /> }
         </div>
       </div>
     );
