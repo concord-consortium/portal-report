@@ -38,6 +38,21 @@ export const getSelectedQuestion = createSelector(
 //   },
 //   (...)
 // }
+
+function countCompletedAnswers(activityQuestions, answers, student) {
+  return activityQuestions.reduce((count, question) => {
+    const answer = answers.getIn([question.get("id"), student.get("id")]);
+    if (answer &&
+      // If question is required, its answer must be submitted.
+      (!question.get("required") || answer.get("submitted") === true)) {
+      return count + 1;
+    } else {
+      return count;
+    }
+  // start the counter off at 0
+  }, 0);
+}
+
 export const getStudentProgress = createSelector(
   [ getStudents, getActivityTrees, getAnswersByQuestion ],
   (students, activities, answers) => {
@@ -45,20 +60,8 @@ export const getStudentProgress = createSelector(
       activities.map(activity => {
         const activityQuestions = activity.get("questions").filter(q => q.get("visible"));
 
-        // count submitted ansers
-        const studentSubmittedAnswerCount = activityQuestions.reduce((count, question) => {
-          const answer = answers.getIn([question.get("id"), student.get("id")]);
-          if (answer &&
-            // If question is required, its answer must be submitted.
-            (!question.get("required") || answer.get("submitted") === true)) {
-            return count + 1;
-          } else {
-            return count;
-          }
-        // start the counter off at 0
-        }, 0);
-
-        return studentSubmittedAnswerCount / activityQuestions.size;
+        return countCompletedAnswers(activityQuestions, answers, student) /
+          activityQuestions.size;
       }),
     );
   },
