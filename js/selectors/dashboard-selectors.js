@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { getActivityTrees, getQuestionTrees, getAnswerTreesNew } from "./report-tree";
+import { getActivityTrees, getQuestionTrees, getAnswersByQuestion } from "./report-tree";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../actions/dashboard";
 import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
@@ -39,7 +39,7 @@ export const getSelectedQuestion = createSelector(
 //   (...)
 // }
 export const getStudentProgress = createSelector(
-  [ getStudents, getActivityTrees, getAnswerTreesNew ],
+  [ getStudents, getActivityTrees, getAnswersByQuestion ],
   (students, activities, answers) => {
     return students.map(student =>
       activities.map(activity => {

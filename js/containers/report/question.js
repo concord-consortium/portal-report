@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import QuestionForClass from "../../components/report/question-for-class";
 import QuestionForStudent from "../../components/report/question-for-student";
-import { getAnswerTreesNew } from "../../selectors/report-tree";
+import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { getSortedStudents } from "../../selectors/report";
 import { connect } from "react-redux";
 import { Map } from "immutable";
@@ -18,7 +18,7 @@ export default class Question extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  const answerMap = getAnswerTreesNew(state).get(ownProps.question.get("id")) || Map();
+  const answerMap = getAnswersByQuestion(state).get(ownProps.question.get("id")) || Map();
   const students = getSortedStudents(state);
   return {
     answerMap,

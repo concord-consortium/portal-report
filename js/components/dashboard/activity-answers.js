@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import ProgressBar from "./progress-bar";
 import Answer from "../../containers/dashboard/answer";
-import { getAnswerTreesNew } from "../../selectors/report-tree";
+import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 
 import css from "../../../css/dashboard/activity-answers.less";
@@ -57,9 +57,9 @@ export class ActivityAnswers extends PureComponent {
 
 function mapStateToProps(state, ownProps) {
   const questions = ownProps.activity.get("questions") || [];
-  const answerTrees = getAnswerTreesNew(state);
+  const answers = getAnswersByQuestion(state);
 
-  return { answers: answerTrees };
+  return { answers };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

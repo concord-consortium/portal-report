@@ -4,7 +4,7 @@ import Button from "../../components/common/button";
 import ReportQuestionDetails from "../../components/report/question-details";
 import AnswersTable from "../report/answers-table";
 import css from "../../../css/dashboard/question-details.less";
-import { getAnswerTreesNew } from "../../selectors/report-tree";
+import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 import { Map } from "immutable";
 
@@ -57,7 +57,7 @@ export default class QuestionDetails extends PureComponent {
 function mapStateToProps(state, ownProps) {
   // Is there a better way to do this?
   const answerMap = ownProps.selectedQuestion ?
-    getAnswerTreesNew(state).get(ownProps.selectedQuestion.get("id")) || Map() :
+    getAnswersByQuestion(state).get(ownProps.selectedQuestion.get("id")) || Map() :
     Map();
 
   return {

@@ -69,7 +69,7 @@ export const getAnswerTrees = createSelector(
     }
 );
 
-export const getAnswerTreesNew = createSelector(
+export const getAnswersByQuestion = createSelector(
   [ getAnswerTrees, getStudents, getQuestions],
   (answers, students, questions) => {
 
