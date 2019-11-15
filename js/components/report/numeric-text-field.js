@@ -55,7 +55,21 @@ class NumericTextField extends PureComponent {
 
   render() {
     const { className, disabled } = this.props;
-    const { value } = this.state;
+    // If the parent component changes the props.value after the component is mounted
+    // this change isn't reflected in the UI.
+    // I think this use case only happens when the parent component also disables the
+    // NumericTextField, so the code below fixes it by ignoring the state.value.
+    //
+    // However, this doesnt seem like the right way to solve the problem. This component
+    // is trying to be an input and output at the same time. And in most cases the parent
+    // is actually managing the state. So it might be better to stop using state.value
+    // all together.
+    //
+    // It might not be useful, but this post talks about something of a similiar scenario:
+    // https://stackoverflow.com/a/49868300/3195497
+    // However the main use case of mixing state and props seems to be when computing an
+    // expensive state value. That isn't the case for us.
+    const value = disabled ? this.props.value : this.state.value;
     return (
       <input
         className={className}
