@@ -53,7 +53,7 @@ describe("Provide Feedback", function() {
 
   it("Allows teacher to provide written feedback on a question", function() {
     cy.get(".question [data-cy=feedbackButton]").first().click();
-    cy.get("#feedbackEnabled").click();
+    cy.get("#feedbackEnabled").check();
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row").first().within(() => {
       cy.get("[data-cy=feedbackBox]").type("Your answer was great!").blur();
@@ -61,6 +61,25 @@ describe("Provide Feedback", function() {
     });
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
   });
+
+  it("Allows teacher to use the sum of question scores as the activity score", function() {
+    // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
+    cy.get(".question [data-cy=feedbackButton]").first().click();
+    cy.get("#giveScore").check();
+    cy.get(".feedback-row:contains('Jenkins')").within(() => {
+      cy.get("[data-cy=question-feedback-score] input").type("10");
+      cy.get(".feedback-complete input").check();
+    });
+    cy.get("[data-cy=feedback-done-button]").click();
+    cy.get("[data-cy=feedbackButton]").first().click();
+    cy.get("#giveScore").check();
+    cy.get("[data-cy=automatic-score-option]").check();
+
+    cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
+      cy.get("[data-cy=question-feedback-score] input").should("have.value", "10");
+    });
+  });
+
 
   // with the switch to firestore this test needs to be updated
   it.skip("Shows error if feedback fails to send", function() {

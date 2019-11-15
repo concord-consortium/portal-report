@@ -8,7 +8,7 @@ export default class ScoreBox extends PureComponent {
   render() {
     const {score} = this.props;
     return (
-      <div className="score">
+      <div className="score" data-cy="question-feedback-score">
         Score:
         <NumericTextField
           className="score-input"

@@ -89,7 +89,7 @@ export default class FeedbackOptionsView extends PureComponent {
         onChange={changeScoreType}
       >
         <div>
-          <Radio value={MANUAL_SCORE} />
+          <Radio value={MANUAL_SCORE} data-cy="manual-score-option"/>
           <span className="tooltip" data-tip data-for="MANUAL_SCORE">
             {MANUAL_SCORE_L}
           </span>
@@ -97,14 +97,14 @@ export default class FeedbackOptionsView extends PureComponent {
         </div>
 
         <div>
-          <Radio value={AUTOMATIC_SCORE} />
+          <Radio value={AUTOMATIC_SCORE} data-cy="automatic-score-option"/>
           <span className="tooltip" data-tip data-for="AUTOMATIC_SCORE">
             {AUTOMATIC_SCORE_L}
           </span>
         </div>
         { rubricAvailable
           ? <div className={useRubric ? "" : "disabled"}>
-            <Radio value={RUBRIC_SCORE} disabled={!useRubric} />
+            <Radio value={RUBRIC_SCORE} disabled={!useRubric} data-cy="rubric-score-option"/>
             <span className="tooltip" data-tip data-for="RUBRIC_SCORE">
               {RUBRIC_SCORE_L}
             </span>
