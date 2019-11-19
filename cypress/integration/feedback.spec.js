@@ -62,19 +62,153 @@ describe("Provide Feedback", function() {
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
   });
 
-  it("Allows teacher to use the sum of question scores as the activity score", function() {
+  it("shows the same question level score after closing and opening the dialog", function () {
     // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
     cy.get(".question [data-cy=feedbackButton]").first().click();
     cy.get("#giveScore").check();
+
+    // Give Jenkins a score 10 on one question
     cy.get(".feedback-row:contains('Jenkins')").within(() => {
       cy.get("[data-cy=question-feedback-score] input").type("10");
       cy.get(".feedback-complete input").check();
     });
     cy.get("[data-cy=feedback-done-button]").click();
+
+    // Open the feedback for a another question
+    cy.get(".question [data-cy=feedbackButton]").eq(1).click();
+    cy.get("#giveScore").check();
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    cy.get(".question [data-cy=feedbackButton]").first().click();
+    cy.get("#all").check();
+    cy.get(".feedback-row:contains('Jenkins')").within(() => {
+      cy.get("[data-cy=question-feedback-score] input").should("have.value", "10");
+    });
+  });
+
+  it("shows the same max question score after closing and opening the dialog", function () {
+    // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
+    cy.get(".question [data-cy=feedbackButton]").first().click();
+    cy.get("#giveScore").check();
+    cy.get(".max-score-input").should("have.value", "10");
+    cy.get(".max-score-input").clear().type("11");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    // Open the feedback for a another question
+    cy.get(".question [data-cy=feedbackButton]").eq(1).click();
+    cy.get("#giveScore").check();
+    cy.get(".max-score-input").clear().type("12");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    cy.get(".question [data-cy=feedbackButton]").first().click();
+    cy.get(".max-score-input").should("have.value", "11");
+  });
+
+  it("shows the same activity level score after closing and opening the dialog", function () {
+    // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
+    cy.get("[data-cy=feedbackButton]:contains('overall')").first().click();
+    cy.get("#giveScore").check();
+
+    // Give Jenkins a score 12 on activity 1
+    cy.get(".feedback-row:contains('Jenkins')").within(() => {
+      cy.get("[data-cy=question-feedback-score] input").type("12");
+      cy.get(".feedback-complete input").check();
+    });
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    // Give Jenkins a score 13 on activity 2
+    cy.get("[data-cy=feedbackButton]:contains('overall')").eq(1).click();
+    cy.get("#giveScore").check();
+    cy.get(".feedback-row:contains('Jenkins')").within(() => {
+      cy.get("[data-cy=question-feedback-score] input").type("13");
+      cy.get(".feedback-complete input").check();
+    });
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    // Check original score is remembered
+    cy.get("[data-cy=feedbackButton]:contains('overall')").first().click();
+    cy.get("#all").check();
+    cy.get(".feedback-row:contains('Jenkins')").within(() => {
+      cy.get("[data-cy=question-feedback-score] input").should("have.value", "12");
+    });
+  });
+
+
+  it("shows the same max activity score after closing and opening the dialog", function() {
+    // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
+    cy.get("[data-cy=feedbackButton]:contains('overall')").first().click();
+    cy.get("#giveScore").check();
+    cy.get("[data-cy=manual-score-option]").check();
+    cy.get(".max-score-input").clear().type("13");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    cy.get("[data-cy=feedbackButton]:contains('overall')").eq(1).click();
+    cy.get("#giveScore").check();
+    cy.get("[data-cy=manual-score-option]").check();
+    cy.get(".max-score-input").clear().type("14");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    cy.get("[data-cy=feedbackButton]:contains('overall')").first().click();
+    cy.get(".max-score-input").should("have.value", "13");
+  });
+
+  // TODO: check that the manually entered maxScore returns if the box is checked again
+  // this seems like it is working on the deployed master but locally it is not working
+  // for me.
+  it("shows the max activity score based on the sum of question max scores", function() {
+    // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
+    cy.get(".question [data-cy=feedbackButton]").eq(0).click();
+    cy.get("#giveScore").check();
+    cy.get(".max-score-input").clear().type("9");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    cy.get(".question [data-cy=feedbackButton]").eq(1).click();
+    cy.get("#giveScore").check();
+    cy.get(".max-score-input").clear().type("8");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    // Turn on automatic scoring at the activity Level
+    cy.get("[data-cy=feedbackButton]").first().click();
+    cy.get("#giveScore").check();
+    cy.get("[data-cy=automatic-score-option]").check();
+    cy.get(".max-score-input").should("have.value", "17").and("be.disabled");
+
+    // Switch to manual scoring
+    cy.get("[data-cy=manual-score-option]").check();
+    // FIXME: specify what the max score should start out with
+    cy.get(".max-score-input").should("be.enabled");
+    cy.get(".max-score-input").clear().type("19");
+
+    // Switch automatic scoring
+    cy.get("[data-cy=automatic-score-option]").check();
+    cy.get(".max-score-input").should("have.value", "17").and("be.disabled");
+
+    // Switch to manual scoring
+    cy.get("[data-cy=manual-score-option]").check();
+
+    // It should remember the original manual max score, it currently doesn't
+    // cy.get(".max-score-input").should("have.value", "19").and("be.enabled");
+
+  });
+
+  it("Allows teacher to use the sum of question scores as the activity score", function() {
+    // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
+    cy.get(".question [data-cy=feedbackButton]").first().click();
+    cy.get("#giveScore").check();
+
+    // Give Jenkins a score 10 on one question
+    cy.get(".feedback-row:contains('Jenkins')").within(() => {
+      cy.get("[data-cy=question-feedback-score] input").type("10");
+      cy.get(".feedback-complete input").check();
+    });
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    // Turn on automatic scoring at the activity Level
     cy.get("[data-cy=feedbackButton]").first().click();
     cy.get("#giveScore").check();
     cy.get("[data-cy=automatic-score-option]").check();
 
+    // Make sure the score for the activity is 10
     cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
       cy.get("[data-cy=question-feedback-score] input").should("have.value", "10");
     });
