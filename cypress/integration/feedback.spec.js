@@ -62,7 +62,7 @@ describe("Provide Feedback", function() {
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
   });
 
-  it("shows the same question level score after closing and opening the dialog", function () {
+  it("shows the same question level score after closing and opening the dialog", function() {
     // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
     cy.get(".question [data-cy=feedbackButton]").first().click();
     cy.get("#giveScore").check();
@@ -86,7 +86,7 @@ describe("Provide Feedback", function() {
     });
   });
 
-  it("shows the same max question score after closing and opening the dialog", function () {
+  it("shows the same max question score after closing and opening the dialog", function() {
     // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
     cy.get(".question [data-cy=feedbackButton]").first().click();
     cy.get("#giveScore").check();
@@ -104,7 +104,7 @@ describe("Provide Feedback", function() {
     cy.get(".max-score-input").should("have.value", "11");
   });
 
-  it("shows the same activity level score after closing and opening the dialog", function () {
+  it("shows the same activity level score after closing and opening the dialog", function() {
     // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
     cy.get("[data-cy=feedbackButton]:contains('overall')").first().click();
     cy.get("#giveScore").check();
@@ -132,7 +132,6 @@ describe("Provide Feedback", function() {
       cy.get("[data-cy=question-feedback-score] input").should("have.value", "12");
     });
   });
-
 
   it("shows the same max activity score after closing and opening the dialog", function() {
     // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
@@ -213,7 +212,6 @@ describe("Provide Feedback", function() {
       cy.get("[data-cy=question-feedback-score] input").should("have.value", "10");
     });
   });
-
 
   // with the switch to firestore this test needs to be updated
   it.skip("Shows error if feedback fails to send", function() {
