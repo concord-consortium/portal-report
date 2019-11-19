@@ -51,6 +51,18 @@ export default class ActivityFeedbackOptions extends PureComponent {
       this.setState({lastScoreType: newV});
     }
     if (isAutoScoring(newV)) {
+      // When switching from manual to automatic scores, this sets the maxScore to the
+      // default Max Score (10), and then it doesn't seem to
+      // update this maxScore in the settings when the computation changes
+      // I suspect this is because the computedMaxScore prop is based on the old score type
+      // and it defaults to 10 when the score type is manual.
+      // Perhaps this code handles switching other modes better.
+      //
+      // TODO: tests for rubric, auto, manual, and no score to see if this
+      // line is doing something worth while in some case
+      //
+      // TODO: see if there is any reason why the computedMaxScore
+      // needs to actually be saved as the maxScore
       newFlags.maxScore = this.props.computedMaxScore;
     }
     updateActivityFeedbackSettings(activityId, activityIndex, newFlags);
