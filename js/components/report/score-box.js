@@ -5,19 +5,35 @@ export default class ScoreBox extends PureComponent {
     super(props);
   }
 
+  // The score property is a little confusing here
+  // when the ScoreBox is disabled changes to the score property will be shown
+  // when it is not disable, the score property just initializes the text field.
+  // If you need the score to update you'll need to recreate the ScoreBox or switch it
+  // to disabled and then enabled.
+  renderScore(props) {
+    const {score, onChange, disabled } = props;
+    if (disabled) {
+      return <input
+        className="score-input"
+        value={score}
+        disabled="true"
+      />;
+    } else {
+      return <NumericTextField
+        className="score-input"
+        initialValue={score}
+        min={0}
+        onChange={onChange}
+        disabled={disabled}
+      />;
+    }
+  }
+
   render() {
-    const {score} = this.props;
     return (
       <div className="score" data-cy="question-feedback-score">
         Score:
-        <NumericTextField
-          className="score-input"
-          value={score}
-          min={0}
-          default={0}
-          onChange={this.props.onChange}
-          disabled={this.props.disabled}
-        />
+        {this.renderScore(this.props)}
       </div>
     );
   }

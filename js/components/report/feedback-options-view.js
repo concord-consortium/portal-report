@@ -18,14 +18,14 @@ export default class FeedbackOptionsView extends PureComponent {
   renderMaxScore() {
     const {scoreType, maxScore, setMaxScore, scoreEnabled} = this.props;
     if (scoreType === MANUAL_SCORE) {
+      const initialValue = typeof maxScore === "undefined" ? MAX_SCORE_DEFAULT : maxScore;
       return (
         <span>
           <label className="max-score" data-cy="max-score">Max. Score</label>
           <NumericTextField
             className="max-score-input"
-            value={maxScore}
+            initialValue={initialValue}
             min={1}
-            default={MAX_SCORE_DEFAULT}
             onChange={setMaxScore}
             disabled={!scoreEnabled}
           />
