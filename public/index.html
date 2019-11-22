@@ -17,6 +17,10 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'UA-6899787-60');
+    // Add dev tools support when debugging cypress tests
+    if (window.Cypress) {
+      window['__REACT_DEVTOOLS_GLOBAL_HOOK__'] = window.parent['__REACT_DEVTOOLS_GLOBAL_HOOK__'];
+    }
   </script>
   <script src='https://use.typekit.com/juj7nhw.js'></script>
   <script>
