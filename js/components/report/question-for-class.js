@@ -17,11 +17,14 @@ export default class QuestionForClass extends PureComponent {
   }
 
   toggleAnswersVisibility() {
+    const { trackEvent } = this.props;
+    const trackAction = this.state.answersVisible ? "Hide responses" : "Show responses";
+    trackEvent("Report", trackAction, '');
     this.setState({answersVisible: !this.state.answersVisible});
   }
 
   render() {
-    const { question, answerMap, answerList, students, url } = this.props;
+    const { question, answerMap, answerList, students, url, trackEvent } = this.props;
     const { answersVisible } = this.state;
     return (
       <div>
