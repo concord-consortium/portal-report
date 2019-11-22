@@ -1,5 +1,6 @@
 import { Map } from "immutable";
 import md5 from "md5";
+import queryString from "query-string";
 
 // Truncate strings eg:
 // truncate("this is a sentence", 5) // → "this i…"
@@ -52,3 +53,14 @@ export const validFsId = (anyPath: string) => {
     .replace(/\.\./g, safeCharacter)
     .replace(/__/g, safeCharacter);
 };
+
+export function urlParam(name: string): string | null{
+  const result = queryString.parse(window.location.search)[name];
+  if (typeof result === "string") {
+    return result;
+  } else if (result && result.length) {
+    return result[0];
+  } else {
+    return null;
+  }
+}
