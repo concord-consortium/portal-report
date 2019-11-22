@@ -9,7 +9,7 @@ import Prompt from "./prompt";
 
 export default class QuestionForStudent extends PureComponent {
   render() {
-    const { question, url, student, answerMap } = this.props;
+    const { question, url, student, answerMap, trackEvent } = this.props;
     const studentId = student.get("id");
     const answer = answerMap.get(studentId);
     return (
