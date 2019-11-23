@@ -93,50 +93,25 @@ function _receivePortalData(db: firebase.firestore.Firestore,
       response: fakeAnswers,
     });
   } else {
-    // Setup Firebase observer. It will fire each time the resource structure is updated.
-    db.collection(`sources/${source}/resources`)
-      .where("url", "==", resourceUrl)
-      .onSnapshot(snapshot => {
-        if (!snapshot.empty) {
-          dispatch({
-            type: RECEIVE_RESOURCE_STRUCTURE,
-            response: snapshot.docs[0].data(),
-          });
-        }
-      }, (err: Error) => {
-        // tslint:disable-next-line no-console
-        console.error("Firestore resource fetch error", err);
-        dispatch(fetchError({
-          status: 500,
-          statusText: `Firestore resource fetch error: ${err.message}`
-        }));
-      });
-    // Setup another Firebase observer, this time for answers.
-    let answersQuery = db.collection(`sources/${source}/answers`)
-      // This first where clause seems redundant, but it's necessary for Firestore auth rules to work fine
-      // (they are based on context_id value).
-      .where("context_id", "==", rawPortalData.contextId)
-      .where("platform_id", "==", rawPortalData.platformId)
-      .where("resource_link_id", "==", rawPortalData.offering.id.toString());
-    if (rawPortalData.userType === "learner") {
-      answersQuery = answersQuery.where("platform_user_id", "==", rawPortalData.platformUserId.toString());
-    }
-    answersQuery.onSnapshot(snapshot => {
-      if (!snapshot.empty) {
-        dispatch({
-          type: RECEIVE_ANSWERS,
-          response: snapshot.docs.map(doc => doc.data())
-        });
-      }
-    }, fireStoreError(RECEIVE_ANSWERS, dispatch));
+    watchResourceStructure(db, source, resourceUrl, dispatch);
+
+    // Watch the Answers
+    watchCollection(db, `sources/${source}/answers`, RECEIVE_ANSWERS,
+      rawPortalData, dispatch);
   }
 
   if (rawPortalData.userType === "teacher") {
     watchFireStoreReportSettings(db, rawPortalData, dispatch);
   }
   watchFirestoreFeedbackSettings(db, rawPortalData, dispatch);
-  watchFirestoreQuestionFeedback(db, rawPortalData, dispatch);
-  watchFirestoreActivityFeedback(db, rawPortalData, dispatch);
+
+  const questionFeedbacksPath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceKey);
+  watchCollection(db, questionFeedbacksPath, RECEIVE_QUESTION_FEEDBACKS,
+    rawPortalData, dispatch);
+
+  const activityFeedbacksPath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceKey);
+  watchCollection(db, activityFeedbacksPath, RECEIVE_ACTIVITY_FEEDBACKS,
+    rawPortalData, dispatch);
 }
 
 function getResourceLink(rawPortalData: IPortalRawData) {
@@ -152,6 +127,29 @@ function fireStoreError(dispatchType: string, dispatch: Dispatch) {
       statusText: `Firestore ${dispatchType} fetch error: ${err.message}`
     }));
   };
+}
+
+function addSnapshotDispatchListener(query: firebase.firestore.Query, receiveMsg: string,
+                                     dispatch: Dispatch, handler: function) {
+  query.onSnapshot(snapshot => {
+    if (!snapshot.empty) {
+      dispatch({
+        type: receiveMsg,
+        response: handler(snapshot)
+      });
+
+    }
+  }, fireStoreError(receiveMsg, dispatch));
+}
+
+function watchResourceStructure(db: firebase.firestore.Firestore,
+                                source: string, resourceUrl: string, dispatch: Dispatch) {
+  // Setup Firebase observer. It will fire each time the resource structure is updated.
+  const query = db.collection(`sources/${source}/resources`)
+    .where("url", "==", resourceUrl);
+
+  addSnapshotDispatchListener(query, RECEIVE_RESOURCE_STRUCTURE, dispatch,
+    snapshot => snapshot.docs[0].data());
 }
 
 function watchFireStoreReportSettings(db: firebase.firestore.Firestore, rawPortalData: IPortalRawData, dispatch: Dispatch) {
@@ -180,68 +178,41 @@ function watchFirestoreFeedbackSettings(db: firebase.firestore.Firestore, rawPor
   const path = feedbackSettingsFirestorePath(rawPortalData.sourceKey);
   const rubricUrl = rawPortalData.offering.rubric_url;
   let rubricRequested = false;
-  db.collection(path)
+  const query = db.collection(path)
     .where("contextId", "==", rawPortalData.contextId)
     .where("platformId", "==", rawPortalData.platformId)
-    .where("resourceLinkId", "==", rawPortalData.resourceLinkId)
-    .onSnapshot(snapshot => {
-      if (!snapshot.empty) {
-        dispatch({
-          type: RECEIVE_FEEDBACK_SETTINGS,
-          response: snapshot.docs[0].data()
-        });
-      }
-      // Note that this should be called even if snapshot is empty (no feedback settings saved yet).
-      if (rubricUrl && !rubricRequested) {
-        dispatch(requestRubric(rubricUrl) as any as AnyAction);
-        rubricRequested = true;
-      }
-    }, fireStoreError(RECEIVE_FEEDBACK_SETTINGS, dispatch));
+    .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
+
+  addSnapshotDispatchListener(query, RECEIVE_FEEDBACK_SETTINGS, dispatch,
+    snapshot => snapshot.docs[0].data());
+
+  // Unlike the listener added above, this should be called even if snapshot is empty
+  // (no feedback settings saved yet).
+  query.onSnapshot(snapshot => {
+    if (rubricUrl && !rubricRequested) {
+      dispatch(requestRubric(rubricUrl) as any as AnyAction);
+      rubricRequested = true;
+    }
+  });
 }
 
-function watchFirestoreQuestionFeedback(db: firebase.firestore.Firestore, rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const feedbackFireStorePath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceKey);
-  let feedbacksQuery = db.collection(feedbackFireStorePath)
-    .where("platformId", "==", rawPortalData.platformId)
-    .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
+function watchCollection(db: firebase.firestore.Firestore, path: string, receiveMsg: string,
+                         rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  let query = db.collection(path)
+   .where("platformId", "==", rawPortalData.platformId)
+   .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
   if (rawPortalData.userType === "learner") {
-      feedbacksQuery = feedbacksQuery.where("platformStudentId", "==", rawPortalData.platformUserId.toString());
+     query = query.where("platformStudentId", "==", rawPortalData.platformUserId.toString());
   } else {
-      // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
-      // but that lets us use context_id value in the Firestore security rules.
-      feedbacksQuery = feedbacksQuery.where("contextId", "==", rawPortalData.contextId);
+     // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
+     // but that lets us use context_id value in the Firestore security rules.
+     query = query.where("contextId", "==", rawPortalData.contextId);
   }
-  feedbacksQuery.onSnapshot(snapshot => {
-    if (!snapshot.empty) {
-      dispatch({
-        type: RECEIVE_QUESTION_FEEDBACKS,
-        response: snapshot.docs.map(doc => doc.data())
-      });
-    }}, fireStoreError(RECEIVE_QUESTION_FEEDBACKS, dispatch)
-  );
+
+  addSnapshotDispatchListener(query, receiveMsg, dispatch,
+    snapshot => snapshot.docs.map(doc => doc.data()));
 }
 
-function watchFirestoreActivityFeedback(db: firebase.firestore.Firestore, rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  const feedbackFireStorePath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceKey);
-  let feedbacksQuery = db.collection(feedbackFireStorePath)
-    .where("platformId", "==", rawPortalData.platformId)
-    .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
-  if (rawPortalData.userType === "learner") {
-      feedbacksQuery = feedbacksQuery.where("platformStudentId", "==", rawPortalData.platformUserId.toString());
-  } else {
-      // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
-      // but that lets us use context_id value in the Firestore security rules.
-      feedbacksQuery = feedbacksQuery.where("contextId", "==", rawPortalData.contextId);
-  }
-  feedbacksQuery.onSnapshot(snapshot => {
-    if (!snapshot.empty) {
-      dispatch({
-        type: RECEIVE_ACTIVITY_FEEDBACKS,
-        response: snapshot.docs.map(doc => doc.data())
-      });
-    }}, fireStoreError(RECEIVE_ACTIVITY_FEEDBACKS, dispatch)
-  );
-}
 function fetchError(response: IResponse) {
   return {
     type: FETCH_ERROR,
