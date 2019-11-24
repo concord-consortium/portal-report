@@ -129,15 +129,17 @@ function fireStoreError(dispatchType: string, dispatch: Dispatch) {
   };
 }
 
+type SnapshotHandler = (snapshot: firebase.firestore.QuerySnapshot) => any;
+
 function addSnapshotDispatchListener(query: firebase.firestore.Query, receiveMsg: string,
-                                     dispatch: Dispatch, handler: function) {
+                                     dispatch: Dispatch,
+                                     handler: SnapshotHandler) {
   query.onSnapshot(snapshot => {
     if (!snapshot.empty) {
       dispatch({
         type: receiveMsg,
         response: handler(snapshot)
       });
-
     }
   }, fireStoreError(receiveMsg, dispatch));
 }
