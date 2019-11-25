@@ -3,13 +3,9 @@ import fetch from "isomorphic-fetch";
 import * as jwt from "jsonwebtoken";
 import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/class-data.json";
-import queryString from "query-string";
-import { parseUrl, validFsId } from "./util/misc";
+import { parseUrl, validFsId, urlParam } from "./util/misc";
 import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
-import * as db from "./db";
-
-const FIREBASE_APP = urlParam("firebase-app") || "report-service-dev";
-db.initializeDB(FIREBASE_APP);
+import { FIREBASE_APP, signInWithToken } from "./db";
 
 const TOOL_ID = urlParam("tool-id");
 const SOURCE_KEY = TOOL_ID ? makeSourceKey(TOOL_ID) : null;
@@ -67,17 +63,6 @@ export interface IFirebaseJWT {
     platform_id: string;
     platform_user_id: number;
   };
-}
-
-function urlParam(name: string): string | null{
-  const result = queryString.parse(window.location.search)[name];
-  if (typeof result === "string") {
-    return result;
-  } else if (result && result.length) {
-    return result[0];
-  } else {
-    return null;
-  }
 }
 
 // This matches the make_source_key method in LARA's report_service.rb
@@ -148,7 +133,7 @@ export function fetchFirestoreJWT(classHash: string) {
 }
 
 export function authFirestore(rawFirestoreJWT: string) {
-  return db.signInWithToken(rawFirestoreJWT).catch(err => {
+  return signInWithToken(rawFirestoreJWT).catch(err => {
     // tslint:disable-next-line no-console
     console.error("Firebase auth failed", err);
     throw new APIError("Firebase failed", {
@@ -159,6 +144,14 @@ export function authFirestore(rawFirestoreJWT: string) {
 }
 
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
+  if (!getPortalBaseUrl()) {
+    // disable the network when we don't have a portal url. This way the demo report will not update
+    // data in firestore, and any tests running against it will be repeatable.
+    // Even if this doesn't work and data does go to firestore, the data will be stored
+    // in a seperate 'fake.portal' location
+    firebase.firestore().disableNetwork();
+  }
+
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
   return classPromise.then(classData => {
@@ -188,10 +181,6 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           })
         );
       } else {
-        // disable the network when faking the JWT. This way the demo report will not update
-        // a shared settings in firestore, and any tests running against it will be
-        // repeatable
-        firebase.firestore().disableNetwork();
 
         // We're using fake data, including fake JWT.
         return {
@@ -202,6 +191,9 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: "https://fake.portal",
           platformUserId: "1",
           contextId: classData.class_hash,
+          // In most cases when using fake data the SOURCE_KEY will be null
+          // so the sourceKey will be based on the fake offeringData
+          // and this offering data has a hostname of 'fake.authoring.system'
           sourceKey: SOURCE_KEY || parseUrl(offeringData.activity_url.toLowerCase()).hostname
         };
       }

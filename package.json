@@ -108,7 +108,7 @@
     "aws-sdk": "^2.451.0",
     "bootstrap": "^3.3.6",
     "chroma-js": "^2.0.3",
-    "firebase": "^6.0.4",
+    "firebase": "^7.4.0",
     "formik": "^1.5.4",
     "humps": "^2.0.1",
     "iframe-phone": "^1.2.0",
