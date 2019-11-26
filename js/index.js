@@ -1,3 +1,6 @@
+// import * as firebase from "firebase";
+// firebase.firestore.setLogLevel("debug");
+
 import { Provider } from "react-redux";
 import React from "react";
 import { render } from "react-dom";

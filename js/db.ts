@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
 import "firebase/firestore";
+import { urlParam } from "./util/misc";
 
 interface IConfig {
   apiKey: string;
@@ -34,13 +35,44 @@ const configurations: IConfigs = {
   }
 };
 
-export let db: firebase.firestore.Firestore;
-
-export function initializeDB(name: string) {
+async function initializeDB(name: string) {
   const config = configurations[name];
   firebase.initializeApp(config);
-  db = firebase.firestore();
+
+  // The following flags are useful for tests. It makes it possible to clear the persistence
+  // at the beginning of a test, and enable perisistence on each visit call
+  // this way the tests can run offline but still share firestore state across visits
+  //
+  // WARNING: as far as I can tell persistence is based on the domain of the page.
+  // So if persistence is enabled on a page loaded from the
+  // portal-report.concord.org domain this will likely affect all tabs in the same browser
+  // regardless of what branch or version of the portal report code that tab is running.
+  // Cypress runs its test in a different browser instance so its persistence should not pollute
+  // non-cypress tabs
+  if (urlParam("clearFirestorePersistence")) {
+    // debugger;
+    // we cannot enable the persistence until the
+    // clearing is complete, so this await is necessary
+    await firebase.firestore().clearPersistence();
+  }
+
+  if (urlParam("enableFirestorePersistence")) {
+    await firebase.firestore().enablePersistence({ synchronizeTabs: true });
+  }
+
+  // The disableNetwork call happens in the api.ts fetchPortalDataAndAuthFirestore
+  // it is currently disabled whenever fake data is being used
+
+  return firebase.firestore();
 }
+
+export const FIREBASE_APP = urlParam("firebase-app") || "report-service-dev";
+
+// Intended usage is firestoreInitialized.then(db => [do something with the db]);
+// The code using this promise could ignore the result here and just call firebase.firestore()
+// inside of the then, but using the result makes it easier to to say all direct calls to
+// firebase.firestore() should be here in db.ts
+export const firestoreInitialized = initializeDB(FIREBASE_APP);
 
 // Useful only for manual testing Firebase rules.
 const SKIP_SIGN_IN = false;

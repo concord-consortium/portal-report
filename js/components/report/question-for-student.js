@@ -9,13 +9,13 @@ import Prompt from "./prompt";
 
 export default class QuestionForStudent extends PureComponent {
   render() {
-    const { question, url, student, answerMap } = this.props;
+    const { question, url, student, answerMap, trackEvent } = this.props;
     const studentId = student.get("id");
     const answer = answerMap.get(studentId);
     return (
       <div className={`question for-student ${question.get("visible") ? "" : "hidden"}`}>
         <div className="question-header">
-          <SelectionCheckbox selected={question.get("selected")} questionKey={question.get("id")} />
+          <SelectionCheckbox selected={question.get("selected")} questionKey={question.get("id")} trackEvent={trackEvent} />
           <QuestionHeader question={question} url={url} />
         </div>
         <Prompt question={question} />

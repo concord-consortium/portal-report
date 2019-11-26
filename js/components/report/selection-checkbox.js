@@ -2,8 +2,10 @@ import React, { PureComponent } from "react";
 
 export default class SelectionCheckbox extends PureComponent {
   onChange(evt) {
-    const {questionKey, setQuestionSelected} = this.props;
+    const {questionKey, setQuestionSelected, trackEvent} = this.props;
     setQuestionSelected(questionKey, evt.target.checked);
+    const trackAction = evt.target.checked ? "Select question" : "Unselect question";
+    trackEvent("Report", trackAction, "");
   }
 
   render() {
