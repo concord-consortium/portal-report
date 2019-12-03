@@ -20,7 +20,7 @@ script:
   - CODE_COVERAGE=true npm run start &
   - wait-on http://localhost:8080
   # The recording key is stored in a ENV variable
-  - $(npm bin)/cypress run --record --config video=false
+  - $(npm bin)/cypress run --record
 after_success:
   - ./s3_deploy.sh
 after_script:
