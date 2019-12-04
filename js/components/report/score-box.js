@@ -16,7 +16,7 @@ export default class ScoreBox extends PureComponent {
       return <input
         className="score-input"
         value={score}
-        disabled="true"
+        disabled={true}
       />;
     } else {
       return <NumericTextField
