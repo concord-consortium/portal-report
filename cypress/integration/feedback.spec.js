@@ -177,9 +177,6 @@ describe("Provide Feedback", function() {
     cy.get(".max-score-input").should("have.value", "13");
   });
 
-  // TODO: check that the manually entered maxScore returns if the box is checked again
-  // this seems like it is working on the deployed master but locally it is not working
-  // for me.
   it("shows the max activity score based on the sum of question max scores", function() {
     // Note: I'm not using the feedback helper object. I'm not sure it is really worth it
     cy.get(".question [data-cy=feedbackButton]").eq(0).click();
@@ -211,7 +208,9 @@ describe("Provide Feedback", function() {
     // Switch to manual scoring
     cy.get("[data-cy=manual-score-option]").check();
 
-    // It should remember the original manual max score, it currently doesn't
+    // TODO: It would be nice if the manually entered max score was remembered incase the user
+    // clicks the automatic scoring option by mistake. However currently this doesn't
+    // work
     // cy.get(".max-score-input").should("have.value", "19").and("be.enabled");
 
   });
@@ -239,10 +238,23 @@ describe("Provide Feedback", function() {
     });
   });
 
-  it("Shows student the feedback from the teacher", function() {
+  it("Shows student the feedback and manual score from the teacher", function() {
     cy.get("[data-cy=feedbackButton]:contains('overall')").first().click();
     cy.get("#feedbackEnabled").check();
     cy.get("#giveScore").check();
+    // Without this 'be.enable' check,
+    // the clear on the .max-score-input gets a 'detached from dom' error.
+    // Cypress does retry the clear for 4 seconds waiting for the element to be actionable.
+    // The documentation implies this is the same as adding checks with should(...),
+    // but it seems like these internal checks do not requery the dom
+    // for the element, they just use the first element found by the get(...) call.
+    // But the should(...) call does seem to cause the get(...) to requery the dom.
+    // This makes some sense because the 'actionable' checks by clear should be fast,
+    // and it would be slower to re-run the dom query on each check.
+    // This is still confusing though and should at least be documented by Cypress.
+    cy.get(".max-score-input").should("be.enabled");
+    cy.get(".max-score-input").clear().type("14");
+
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row:contains('Galloway')").first().within(() => {
       cy.get("[data-cy=feedbackBox]").type("Your work was great!").blur();
@@ -258,6 +270,67 @@ describe("Provide Feedback", function() {
     cy.visit("/?studentId=3&enableFirestorePersistence=true");
     cy.get(".act-feedback-panel").should("contain", "Your work was great!");
     cy.get(".studentScore").should("contain", "5");
+    cy.get(".maxScore").should("contain", "14");
+  });
+
+  it("Shows student the feedback and automatic score from the teacher", function() {
+    // Provide feedback on Question 1
+    cy.get(".question [data-cy=feedbackButton]").eq(0).click();
+    cy.get("#feedbackEnabled").check();
+    cy.get("#giveScore").check();
+    cy.get(".max-score-input").clear().type("9");
+    feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
+    cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
+      cy.get("[data-cy=feedbackBox]").type("Your work on Question 1 was great!").blur();
+      cy.get("input.score-input").clear().type("3");
+      // TODO improve the feedbackBox so it doesn't wait a second before sending
+      // the data to the store
+      cy.wait(1000);
+      cy.get(".feedback-complete input").check();
+    });
+    feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    // Provide feedback on Question 2
+    cy.get(".question [data-cy=feedbackButton]").eq(1).click();
+    cy.get("#feedbackEnabled").check();
+    cy.get("#giveScore").check();
+    cy.get(".max-score-input").clear().type("8");
+    cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
+      cy.get("[data-cy=feedbackBox]").type("Your work on Question 2 was great!").blur();
+      cy.get("input.score-input").clear().type("4");
+      // TODO improve the feedbackBox so it doesn't wait a second before sending
+      // the data to the store
+      cy.wait(1000);
+      cy.get(".feedback-complete input").check();
+    });
+    feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
+    cy.get("[data-cy=feedback-done-button]").click();
+
+    // Turn on automatic scoring and text feedback at the activity Level
+    cy.get("[data-cy=feedbackButton]").first().click();
+    cy.get("#feedbackEnabled").check();
+    cy.get("#giveScore").check();
+    cy.get("[data-cy=automatic-score-option]").check();
+
+    // Provide activity level feedback
+    feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
+    cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
+      cy.get("[data-cy=feedbackBox]").type("Your work was great!").blur();
+      cy.get(".feedback-complete input").check();
+    });
+    feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
+    cy.get("[data-cy=feedback-done-button]").click();
+    // We need to make sure the api call which saves the feedback actually is called
+    // before the page changes. Ideally there'd be something on the page we could watch
+    // Since I can't find anything a wait is necessary
+    cy.wait(1000);
+
+    // Open the student page
+    cy.visit("/?studentId=1&enableFirestorePersistence=true");
+    cy.get(".act-feedback-panel").should("contain", "Your work was great!");
+    cy.get(".act-feedback-panel .studentScore").should("contain", "7");
+    cy.get(".act-feedback-panel .maxScore").should("contain", "17");
   });
 
   // with the switch to firestore this test needs to be updated
