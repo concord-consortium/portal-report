@@ -156,9 +156,17 @@ describe("Provide Feedback", function() {
     cy.get("[data-cy=feedbackButton]:contains('overall')").first().click();
     cy.get("#giveScore").check();
     cy.get("[data-cy=manual-score-option]").check();
+
+    // for some reason the following clear fails sometimes in travis with a detached
+    // element error. The clear should wait 4 seconds for the element to be 'actionable',
+    // but that isn't working properly. So here is an explicit check to see if it helps
+    // or reveals more infomration.
+    cy.get(".max-score-input").should("be.enabled");
     cy.get(".max-score-input").clear().type("13");
     cy.get("[data-cy=feedback-done-button]").click();
 
+    // Open the second activity feedback box, just to make sure they aren't sharing
+    // data for some reason
     cy.get("[data-cy=feedbackButton]:contains('overall')").eq(1).click();
     cy.get("#giveScore").check();
     cy.get("[data-cy=manual-score-option]").check();
