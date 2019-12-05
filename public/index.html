@@ -20,6 +20,8 @@
     // Add dev tools support when debugging cypress tests
     if (window.Cypress) {
       window['__REACT_DEVTOOLS_GLOBAL_HOOK__'] = window.parent['__REACT_DEVTOOLS_GLOBAL_HOOK__'];
+      window['__REDUX_DEVTOOLS_EXTENSION__'] = window.parent['__REDUX_DEVTOOLS_EXTENSION__'];
+      window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] = window.parent['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'];
     }
   </script>
   <script src='https://use.typekit.com/juj7nhw.js'></script>

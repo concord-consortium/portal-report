@@ -21,7 +21,8 @@ export default class Button extends PureComponent {
 
   render() {
     const { children } = this.props;
-    return <a className={this.className} onClick={this.handleClick} data-cy="button">{children}</a>;
+    return <a className={this.className} onClick={this.handleClick}
+      data-cy={this.props["data-cy"] || "button"}>{children}</a>;
   }
 }
 

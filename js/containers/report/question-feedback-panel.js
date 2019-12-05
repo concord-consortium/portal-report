@@ -216,7 +216,7 @@ class QuestionFeedbackPanel extends PureComponent {
             </div>
           </div>
           <div className="footer">
-            <Button onClick={this.hideFeedback}>Done</Button>
+            <Button onClick={this.hideFeedback} data-cy="feedback-done-button">Done</Button>
           </div>
         </div>
       </div>

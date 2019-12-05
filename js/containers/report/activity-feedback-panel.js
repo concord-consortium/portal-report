@@ -211,7 +211,7 @@ class ActivityFeedbackPanel extends PureComponent {
             </div>
           </div>
           <div className="footer">
-            <Button onClick={hide}>Done</Button>
+            <Button onClick={hide} data-cy="feedback-done-button">Done</Button>
           </div>
         </div>
       </div>
