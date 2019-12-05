@@ -170,6 +170,7 @@ describe("Provide Feedback", function() {
     cy.get("[data-cy=feedbackButton]:contains('overall')").eq(1).click();
     cy.get("#giveScore").check();
     cy.get("[data-cy=manual-score-option]").check();
+    cy.get(".max-score-input").should("be.enabled");
     cy.get(".max-score-input").clear().type("14");
     cy.get("[data-cy=feedback-done-button]").click();
 
