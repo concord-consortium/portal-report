@@ -201,16 +201,16 @@ function watchFirestoreFeedbackSettings(db: firebase.firestore.Firestore, rawPor
 // Ugh the feedback system uses diffent keys than the answer system
 function correctKey(keyName: string, receiveMsg: string) {
   const feedbackKeys = {
-    "platform_id": "platformId",
-    "platform_user_id": "platformStudentId",
-    "resource_link_id": "resourceLinkId",
-    "context_id": "contextId"
-  }
+    platform_id: "platformId",
+    platform_user_id: "platformStudentId",
+    resource_link_id: "resourceLinkId",
+    context_id: "contextId"
+  };
 
   switch (receiveMsg){
     case RECEIVE_QUESTION_FEEDBACKS:
     case RECEIVE_ACTIVITY_FEEDBACKS:
-      return feedbackKeys[keyName]
+      return feedbackKeys[keyName];
     case RECEIVE_ANSWERS:
     default:
       return keyName;
