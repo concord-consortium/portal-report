@@ -198,17 +198,42 @@ function watchFirestoreFeedbackSettings(db: firebase.firestore.Firestore, rawPor
   });
 }
 
+interface IStringMap {
+  [key: string]: string;
+}
+
+// Ugh the feedback system uses diffent keys than the answer system
+// export this function so we can test it
+export function correctKey(keyName: string, receiveMsg: string) {
+  const feedbackKeys: IStringMap = {
+    platform_id: "platformId",
+    platform_user_id: "platformStudentId",
+    resource_link_id: "resourceLinkId",
+    context_id: "contextId"
+  };
+
+  switch (receiveMsg){
+    case RECEIVE_QUESTION_FEEDBACKS:
+    case RECEIVE_ACTIVITY_FEEDBACKS:
+      return feedbackKeys[keyName];
+    case RECEIVE_ANSWERS:
+    default:
+      return keyName;
+  }
+}
+
 function watchCollection(db: firebase.firestore.Firestore, path: string, receiveMsg: string,
                          rawPortalData: IPortalRawData, dispatch: Dispatch) {
   let query = db.collection(path)
-   .where("platformId", "==", rawPortalData.platformId)
-   .where("resourceLinkId", "==", rawPortalData.resourceLinkId);
+   .where(correctKey("platform_id", receiveMsg), "==", rawPortalData.platformId)
+   .where(correctKey("resource_link_id", receiveMsg), "==", rawPortalData.resourceLinkId);
   if (rawPortalData.userType === "learner") {
-     query = query.where("platformStudentId", "==", rawPortalData.platformUserId.toString());
+     query = query.where(correctKey("platform_user_id", receiveMsg), "==",
+       rawPortalData.platformUserId.toString());
   } else {
      // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
      // but that lets us use context_id value in the Firestore security rules.
-     query = query.where("contextId", "==", rawPortalData.contextId);
+     query = query.where(correctKey("context_id", receiveMsg), "==", rawPortalData.contextId);
   }
 
   addSnapshotDispatchListener(query, receiveMsg, dispatch,

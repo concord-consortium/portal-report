@@ -7,7 +7,7 @@ context("Student Report", () => {
   const body = new ReportBody();
 
   beforeEach(() => {
-    cy.visit("/?studentId=3");
+    cy.visit("/?studentId=3&fake-user-type=learner");
     cy.fixture("sequence-structure.json").as("sequenceData");
 
   });
