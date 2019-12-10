@@ -143,6 +143,14 @@ export function authFirestore(rawFirestoreJWT: string) {
   });
 }
 
+function fakeUserType(): "teacher" | "learner" {
+  const userType = urlParam("fake-user-type");
+  if (userType === "teacher" || userType === "learner") {
+    return userType;
+  }
+  return "teacher";
+}
+
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   if (!getPortalBaseUrl()) {
     // disable the network when we don't have a portal url. This way the demo report will not update
@@ -187,7 +195,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           offering: offeringData,
           resourceLinkId: offeringData.id.toString(),
           classInfo: classData,
-          userType: "teacher",
+          userType: fakeUserType(),
           platformId: "https://fake.portal",
           platformUserId: "1",
           contextId: classData.class_hash,

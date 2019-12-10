@@ -198,9 +198,14 @@ function watchFirestoreFeedbackSettings(db: firebase.firestore.Firestore, rawPor
   });
 }
 
+interface IStringMap {
+  [key: string]: string;
+}
+
 // Ugh the feedback system uses diffent keys than the answer system
-function correctKey(keyName: string, receiveMsg: string) {
-  const feedbackKeys = {
+// export this function so we can test it
+export function correctKey(keyName: string, receiveMsg: string) {
+  const feedbackKeys: IStringMap = {
     platform_id: "platformId",
     platform_user_id: "platformStudentId",
     resource_link_id: "resourceLinkId",
