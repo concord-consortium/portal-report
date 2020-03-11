@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import Immutable, { Map, fromJS } from "immutable";
+import Immutable, { Map } from "immutable";
 import { FULL_REPORT, DASHBOARD } from "../reducers";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
@@ -94,7 +94,7 @@ export const getAnswersByQuestion = createSelector(
 export const getQuestionTrees = createSelector(
   [ getActivities, getSections, getPages, getQuestions, getViewType, getShowFeaturedQuestionsOnly ],
   ( activities, sections, pages, questions, viewType, showFeaturedQuestionsOnly) => {
-    return questions.map(question =>
+    return (questions || Immutable.fromJS({})).map(question =>
       question
         // This is only a temporal solution. Answers should no longer be added to a report tree.
         // Components that need answer content should become containers and request answers from redux state.
