@@ -11,3 +11,5 @@ coverage-jest
 /cypress/screenshots
 /cypress/videos
 /cypress/fixtures/example.json
+
+LocalhostCertificates

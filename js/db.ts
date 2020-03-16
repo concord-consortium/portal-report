@@ -50,7 +50,6 @@ async function initializeDB(name: string) {
   // Cypress runs its test in a different browser instance so its persistence should not pollute
   // non-cypress tabs
   if (urlParam("clearFirestorePersistence")) {
-    // debugger;
     // we cannot enable the persistence until the
     // clearing is complete, so this await is necessary
     await firebase.firestore().clearPersistence();

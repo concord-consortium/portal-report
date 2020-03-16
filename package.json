@@ -23,6 +23,8 @@
   "homepage": "https://github.com/concord-consortium/portal-report#readme",
   "scripts": {
     "start": "webpack-dev-server",
+    "start:secure": "webpack-dev-server --https --inline --hot --content-base dist/ --cert ./LocalhostCertificates/localhost.pem --key ./LocalhostCertificates/localhost.key",
+    "start:secure:no-certs": "webpack-dev-server --https --inline --hot --content-base dist/",
     "build": "webpack --mode production",
     "prepublishOnly": "WEBPACK_TARGET=lib webpack --mode production",
     "lint": "tslint -c tslint.json 'js/**/*.{js,ts,tsx}' 'test/**/*.{js,ts,tsx}' 'cypress/**/*.{js,ts,tsx}'",
@@ -67,7 +69,7 @@
     "@types/jsonwebtoken": "^8.3.2",
     "@types/md5": "^2.1.33",
     "autoprefixer": "^9.5.1",
-    "copy-webpack-plugin": "^5.0.3",
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^2.1.1",
     "cypress": "^3.6.0",
     "enzyme": "^3.9.0",
