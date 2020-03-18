@@ -133,7 +133,15 @@ export default class Dashboard extends PureComponent {
     const anyStudentExpanded = expandedStudents.includes(true);
     const anyQuestionExpanded = expandedQuestions.includes(true);
     const showTallQuestionHeader = anyStudentExpanded || anyQuestionExpanded;
-    const activitiesList = activities.toList().filter(activity => activity.get("visible"));
+    const compareActivityByIndex = (a1, a2) => {
+      return a1.get("activityIndex") - a2.get("activityIndex");
+    };
+
+    const activitiesList = activities
+      .toList()
+      .filter(activity => activity.get("visible"))
+      .sort(compareActivityByIndex);
+
     return (
       <div ref={el => { this.mainContainer = el; }} className={css.dashboard}>
         <div className={css.innerContainer}>
