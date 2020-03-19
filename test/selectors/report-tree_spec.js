@@ -32,12 +32,16 @@ describe("report tree selectors", () => {
         1: { id: 1, children: [ 1 ], someSectionProp: "x" },
         2: { id: 2, children: [ 2 ], someSectionProp: "y" }
       },
+
+      // NB: Activities is a map, its order is not guarenteed:
       activities: {
-        1: { id: 1, children: [ 1 ], someActivityProp: "x" },
-        2: { id: 2, children: [ 2 ], someActivityProp: "y" }
+        "1-act": { id: "1-act", children: [ 2 ], someActivityProp: "y" },
+        "2-act": { id: "2-act", children: [ 1 ], someActivityProp: "x" }
       },
+
+      // NB: In the sequence 2-act comes before 1-act
       sequences: {
-        1: { id: 1, children: [ 1, 2 ], someSequenceProp: "x" }
+        1: { id: 1, children: [ "2-act", "1-act" ], someSequenceProp: "x" }
       },
       // additional props that get merged into tree:
       hideSectionNames: hideSectionNames
@@ -99,17 +103,19 @@ describe("report tree selectors", () => {
       children: [ expectedPageTrees({})[2] ]
     }
   });
+
+  // NB: 2-act is the first activity, 1-act is the second activity
   const expectedActivityTrees = ({ questionVisible = true }) => ({
-    1: {
-      id: 1,
+    "2-act": {
+      id: "2-act",
       someActivityProp: "x",
       visible: questionVisible,
       children: [ expectedSectionTrees({ questionVisible })[1] ],
       pages: [ expectedPageTrees({ questionVisible })[1] ],
       questions: [ expectedQuestionTrees({ questionVisible })["open_response-1"] ]
     },
-    2: {
-      id: 2,
+    "1-act": {
+      id: "1-act",
       someActivityProp: "y",
       visible: true,
       children: [ expectedSectionTrees({})[2] ],
@@ -117,12 +123,14 @@ describe("report tree selectors", () => {
       questions: [ expectedQuestionTrees({})["image_question-2"] ]
     }
   });
+
   const expectedSequenceTree = ({ questionVisible = true }) => ({
     id: 1,
     someSequenceProp: "x",
     children: [
-      expectedActivityTrees({ questionVisible })[1],
-      expectedActivityTrees({})[2]
+      // NB: 2-act is the first activity, 1-act is the second activity
+      expectedActivityTrees({ questionVisible })["2-act"],
+      expectedActivityTrees({})["1-act"]
     ]
   });
 
