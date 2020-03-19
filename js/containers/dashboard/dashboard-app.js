@@ -15,7 +15,7 @@ import Header from "../../components/common/header";
 import HelpModal from "../../components/dashboard/help-modal";
 import DataFetchError from "../../components/report/data-fetch-error";
 import LoadingIcon from "../../components/report/loading-icon";
-import { getActivityTrees } from "../../selectors/report-tree";
+import { getActivityTrees, getSequenceTree } from "../../selectors/report-tree";
 import { getStudentProgress, getSortedStudents, getSelectedQuestion } from "../../selectors/dashboard-selectors";
 import css from "../../../css/dashboard/dashboard-app.less";
 
@@ -51,7 +51,11 @@ class DashboardApp extends PureComponent {
 
   render() {
     const { initialLoading } = this.state;
-    const { error, clazzName, activityTrees, students, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props;
+    const { error, clazzName, sequenceTree, students, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props;
+
+    // In order to get list the activies in correct right order,
+    // they must be obtained via the child reference in the sequenceTree …
+    const activityTrees = sequenceTree && sequenceTree.get("children");
     return (
       <div className={css.dashboardApp}>
         <Header onHelpButtonClick={this.toggleHelpModal} background="#6fc6da" />
@@ -96,7 +100,7 @@ function mapStateToProps(state) {
     error: error,
     clazzName: dataDownloaded && state.getIn(["report", "clazzName"]),
     students: dataDownloaded && getSortedStudents(state),
-    activityTrees: dataDownloaded && getActivityTrees(state),
+    sequenceTree: dataDownloaded && getSequenceTree(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     expandedStudents: state.getIn(["dashboard", "expandedStudents"]),
