@@ -79,7 +79,7 @@ const getPortalBaseUrl = () => {
   return `${protocol}//${hostname}`;
 };
 
-const getPortalFirebaseJWTUrl = (classHash: string, firebaseApp: string = FIREBASE_APP) => {
+export const getPortalFirebaseJWTUrl = (classHash: string, firebaseApp: string = FIREBASE_APP) => {
   const baseUrl = getPortalBaseUrl();
   if (!baseUrl) {
     return null;
