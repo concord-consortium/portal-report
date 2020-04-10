@@ -141,6 +141,10 @@ describe("report tree selectors", () => {
   });
 
   describe("getQuestionTrees", () => {
+    it("should not fail when there are no questions", () => {
+      expect(getQuestionTrees(state({}).deleteIn(["report", "questions"])).toJS()).toEqual({});
+    });
+
     it("should return questions with answers keys mapped to answers", () => {
       expect(getQuestionTrees(state({})).toJS()).toEqual(expectedQuestionTrees({}));
     });

@@ -79,12 +79,12 @@ const getPortalBaseUrl = () => {
   return `${protocol}//${hostname}`;
 };
 
-const getPortalFirebaseJWTUrl = (classHash: string) => {
+export const getPortalFirebaseJWTUrl = (classHash: string, firebaseApp: string = FIREBASE_APP) => {
   const baseUrl = getPortalBaseUrl();
   if (!baseUrl) {
     return null;
   }
-  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${FIREBASE_APP}&class_hash=${classHash}`;
+  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`;
 };
 
 const gePortalReportAPIUrl = () => {
@@ -121,8 +121,8 @@ export function fetchClassData() {
   }
 }
 
-export function fetchFirestoreJWT(classHash: string) {
-  const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash);
+export function fetchFirestoreJWT(classHash: string, firebaseApp?: string) {
+  const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, firebaseApp);
   if (firestoreJWTUrl) {
     return fetch(firestoreJWTUrl, {headers: {Authorization: getAuthHeader()}})
       .then(checkStatus)
