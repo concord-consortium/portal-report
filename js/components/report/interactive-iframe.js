@@ -20,13 +20,18 @@ export default class InteractiveIframe extends PureComponent {
     };
     this.iframePhone = new iframePhone.ParentEndpoint(this.refs.iframe, phoneAnswered);
 
-    this.iframePhone.addListener("getFirebaseJWT", (options) => {
-      fetchClassData()
-        .then(classData => fetchFirestoreJWT(classData.class_hash, options.firebase_app))
-        .then(json => this.iframePhone.post("firebaseJWT", json))
-        // tslint:disable-next-line no-console
-        .catch(console.error);
-    });
+    this.iframePhone.addListener("getFirebaseJWT", this.handleGetFirebaseJWT);
+  }
+
+  handleGetFirebaseJWT = (options) => {
+    return fetchClassData()
+      .then(classData => fetchFirestoreJWT(classData.class_hash, options.firebase_app))
+      .then(json => {
+        this.iframePhone.post("firebaseJWT", json);
+        return json;
+      })
+      // tslint:disable-next-line no-console
+      .catch(console.error);
   }
 
   disconnect() {
