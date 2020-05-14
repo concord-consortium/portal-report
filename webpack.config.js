@@ -25,8 +25,12 @@ module.exports = (env, argv) => {
       library: lib ? 'PortalReport' : undefined,
       libraryTarget: lib ? 'umd' : undefined
     },
+    performance: {
+      // turn off bundle size warnings
+      hints: false
+    },
     resolve: {
-      extensions: ['.ts', '.js', '.json']
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
     mode: devMode ? 'development' : 'production',
     module: {

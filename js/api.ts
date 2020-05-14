@@ -133,7 +133,8 @@ export function fetchFirestoreJWT(classHash: string, firebaseApp?: string) {
 }
 
 export function authFirestore(rawFirestoreJWT: string) {
-  return signInWithToken(rawFirestoreJWT).catch(err => {
+  const authResult = signInWithToken(rawFirestoreJWT) as Promise<any>;
+  return authResult.catch(err => {
     // tslint:disable-next-line no-console
     console.error("Firebase auth failed", err);
     throw new APIError("Firebase failed", {
@@ -162,9 +163,9 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
 
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
-  return classPromise.then(classData => {
+  return classPromise.then((classData: any) => {
     const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash);
-    return Promise.all([offeringPromise, firestoreJWTPromise]).then(result => {
+    return Promise.all([offeringPromise, firestoreJWTPromise]).then((result: any) => {
       const offeringData = result[0];
       const rawFirestoreJWT = result[1].token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {
