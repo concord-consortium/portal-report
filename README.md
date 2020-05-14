@@ -8,7 +8,9 @@ Demo: http://portal-report.concord.org/version/v1.7.0/
 
 Check recent git tags to open the most recent version.
 
-It expects two URL params: `reportUrl` and `token`. If they are not provided, it will be using fake data, so it's easy to work on some features without connecting to the real Portal instance.
+It expects two URL params: `reportUrl` and `token`. If they are not provided, it will use fake data, so it's easy to work on some features without connecting to the real Portal instance.
+
+At this time the portal report data can be presented in report view or in dashboard view. By default the report view is shown; add the URL parameter `dashboard=true` (or any value other than "false") to show the tabular dashboard view.
 
 ## Library
 
@@ -26,24 +28,26 @@ There are two ways to use this library:
 First, you need to make sure that webpack is installed and all the NPM packages required by this project are available:
 
 ```
-npm install -g webpack
 npm install
 ```
 Then you can build the project files using:
 ```
-webpack
+npm run build
 ```
 or start webpack dev server:
 ```
-npm install -g webpack-dev-server
-webpack-dev-server
+npm start
 ```
 and open http://localhost:8080/ or http://localhost:8080/webpack-dev-server/ (auto-reload after each code change).
 
-## Test
-There are two scripts defined in `package.json`: `test` and `test:watch`.  These commands can be run from the terminal using the syntax `npm run test` and `npm run test:watch` respectively. The former script run the mocha test suite one time. The latter watches `test/**/*.js?x` files for changes, and runs the given test suite when the file changes.
+As of 2020 TypeScript is supported and future development is expected to be in TypeScript. ESLint is used for linting as TSLint is deprecated. Use `npm run lint` to lint the source files and `npm run lint:fix` to auto-fix any fixable lint issues.
 
- These tests were setup using [this tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html#unit-testing-support) as a guide.  They use [mocha](https://mochajs.org/), [chai](http://chaijs.com/api/bdd/), and [react test utils](https://facebook.github.io/react/docs/test-utils.html).
+## Testing
+There are two test scripts defined in `package.json`: `test` and `test:watch`.  These commands can be run from the terminal using the syntax `npm run test` and `npm run test:watch` respectively. The former script runs the jest test suite a single time. The latter watches `test/**/*.[jt]s?x` files for changes, and runs the given test suite when the file changes.
+
+The tests use [Jest](https://jestjs.io/), [ts-jest](https://github.com/kulshekhar/ts-jest), [Enzyme](https://enzymejs.github.io/enzyme/), and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro).
+
+Integration (Cypress) tests can be run from the command line with `npm run cypress:test`.
 
 ## Deployment
 
@@ -56,7 +60,7 @@ You can build a simple github page deployment by following these steps:
 1. push the changes to github: `git push`
 
 #### Travis S3 Deployment:
-Travis automatically builds and deploys branches and tags. A simple `git push` initiates a deployment of the current branch to amazon S3. Once completed the build will be available at `http://portal-report.concord.org/branch/<branchname>`.  The production branch deploys to [http://portal-report.concord.org/](http://portal-report.concord.org/branch/master/)
+Travis automatically builds and deploys branches and tags. A simple `git push` initiates a deployment of the current branch to amazon S3. Once completed the build will be available at `http://portal-report.concord.org/branch/<branchname>/`.  The production branch deploys to [http://portal-report.concord.org/](http://portal-report.concord.org/)
 
 #### Manual S3 Deployment
 If you want to do a manual deployment, put your S3 credentials in `.env` and copy `s3_deploy.sh` to a local git-ignored script. Fill in missing ENV vars, and then run that script.
@@ -98,6 +102,7 @@ Additional, useful resources:
 * I would try to make sure that each component specifies all its necessary styles to look reasonably good and it doesn't depend on styles defined somewhere else (e.g. in parent components). Parent components or global styles could be used to theme components, but they should work just fine without them too.
 * When you modify the component style, please check how it looks while printed.
 
+Note that conventions in the dashboard part of the code base are somewhat different than in the report part.
 
 ## License
 
