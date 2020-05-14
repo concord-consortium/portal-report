@@ -1,5 +1,5 @@
 import React from "react";
-import { renderIntoDocument, findRenderedDOMComponentWithClass } from "react-dom/test-utils";
+import { render } from "@testing-library/react";
 import { List, Map, fromJS } from "immutable";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
@@ -24,22 +24,25 @@ describe("<QuestionSummary />", () => {
   });
 
   it("should have the specified prompt", () => {
-    const component = renderIntoDocument(
+    const { getByText } = render(
       <Provider store={mockStore(fromJS({feedback: {questionFeedbacks: {}, settings: {}}}))}>
         <QuestionSummary question={question} answers={List()} students={students} />
       </Provider>
     );
-    const promptComp = findRenderedDOMComponentWithClass(component, "prompt");
-    expect(promptComp.textContent).toBe(prompt);
+    expect(getByText(prompt)).toBeDefined();
   });
 
   it("should have a summary of answered questions", () => {
-    const component = renderIntoDocument(
+    const { container, getByText } = render(
       <Provider store={mockStore(fromJS({feedback: {questionFeedbacks: {}, settings: {}}}))}>
         <QuestionSummary question={question} answers={question.get("answers")} students={students} />
       </Provider>
     );
-    const statsComp = findRenderedDOMComponentWithClass(component, "stats");
-    expect(statsComp.textContent).toEqual(expect.stringContaining("Not answered: 1"));
+    const statsElt = container.querySelector(".stats");
+    expect(statsElt).toBeDefined();
+    expect(getByText((content, element) => {
+      // need to check textContent in function: <div><strong>Not answered: </strong>1</div>
+      return element.textContent === "Not answered: 1";
+    })).toBeDefined();
   });
 });
