@@ -1,5 +1,3 @@
-/* global describe, it, beforeEach, cy, expect */
-/* eslint-disable-next-line */
 import React from "react";
 // import fakeData from "../../js/data/report.json";
 import sampleRubric from "../../public/sample-rubric";

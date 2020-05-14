@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react"; // eslint-disable-line
+import React, { PureComponent } from "react";
 import "../../../css/report/feedback-overview.less";
 
 export default class FeedbackOverview extends PureComponent {

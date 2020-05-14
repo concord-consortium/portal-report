@@ -1,5 +1,3 @@
-/* global describe, it, beforeEach, cy, expect */
-/* eslint-disable-next-line */
 import React from "react";
 import { getByCypressTag } from "../utils";
 import Dashboard from "../support/elements/geode-dashboard/dashboard";

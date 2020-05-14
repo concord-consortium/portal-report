@@ -69,6 +69,7 @@ export default class ActivityFeedbackRow extends PureComponent {
 
   fieldValues() {
     const { studentActivityFeedback } = this.props;
+    // eslint-disable-next-line prefer-const
     let {score, feedback, hasBeenReviewed, rubricFeedback } = studentActivityFeedback.toJS();
     score = score || "";
     score = parseInt(score, 10) || 0;

@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { showCompareView, trackEvent } from "../../actions/index";
-import Report from "../../components/report/report";
 import getReportTree from "../../selectors/report-tree";
 import Button from "../../components/common/button";
 

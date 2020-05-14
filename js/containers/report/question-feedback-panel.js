@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react"; // eslint-disable-line
+import React, { PureComponent } from "react";
 import ReactDom from "react-dom";
 import { fromJS, Map } from "immutable";
 import Button from "../../components/common/button";
@@ -84,6 +84,7 @@ class QuestionFeedbackPanel extends PureComponent {
     const ref = this.studentRowRef(index - 1);
     const itemComponent = this.studentRowRefs[ref];
     if (itemComponent) {
+      // eslint-disable-next-line react/no-find-dom-node
       const domNode = ReactDom.findDOMNode(itemComponent);
       domNode.scrollIntoView();
     }

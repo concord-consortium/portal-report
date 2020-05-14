@@ -15,7 +15,7 @@ import Header from "../../components/common/header";
 import HelpModal from "../../components/dashboard/help-modal";
 import DataFetchError from "../../components/report/data-fetch-error";
 import LoadingIcon from "../../components/report/loading-icon";
-import { getActivityTrees, getSequenceTree } from "../../selectors/report-tree";
+import { getSequenceTree } from "../../selectors/report-tree";
 import { getStudentProgress, getSortedStudents, getSelectedQuestion } from "../../selectors/dashboard-selectors";
 import css from "../../../css/dashboard/dashboard-app.less";
 

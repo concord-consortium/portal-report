@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react"; // eslint-disable-line
+import React, { PureComponent } from "react";
 import FeedbackOptionsView from "./feedback-options-view";
 
 import {

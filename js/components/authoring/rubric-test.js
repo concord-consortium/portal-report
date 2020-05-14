@@ -54,7 +54,6 @@ class RubricTest extends PureComponent {
         this.setState({rubric: migrate(newRubric), hasBug: false});
       }
     } catch (e) {
-      // tslint:disable-next-line:no-console
       console.error(e);
       this.setState({hasBug: true});
     }

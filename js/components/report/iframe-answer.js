@@ -13,7 +13,7 @@ export default class IframeAnswer extends PureComponent {
   }
 
   toggleIframe(event) {
-    const { answer, question } = this.props;
+    const { question } = this.props;
     if (question.get("displayInIframe")) {
       // If displayInIframe == true, we won't follow the link.
       event.preventDefault();
@@ -46,7 +46,7 @@ export default class IframeAnswer extends PureComponent {
   renderLink() {
     const { answer, question } = this.props;
     const linkUrl = this.getLinkURL(answer.get("answer"));
-    let decorator = question.get("displayInIframe") ? "" : <span className="pr-icon-external-link" />;
+    const decorator = question.get("displayInIframe") ? "" : <span className="pr-icon-external-link" />;
     return <a href={linkUrl} onClick={this.toggleIframe} target="_blank">View Work {decorator}</a>;
   }
 

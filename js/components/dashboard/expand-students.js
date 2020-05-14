@@ -8,7 +8,7 @@ class ExpandStudentsButton extends PureComponent {
   handleClick = () => {
     const { onSetStudentsExpanded, students, anyStudentsExpanded, trackEvent } = this.props;
     onSetStudentsExpanded(students.map(student => student.get("id")), !anyStudentsExpanded);
-    let trackAction = anyStudentsExpanded ? "Closed All Students" : "Opened All Students";
+    const trackAction = anyStudentsExpanded ? "Closed All Students" : "Opened All Students";
     trackEvent("Dashboard", trackAction, "");
   }
 

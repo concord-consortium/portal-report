@@ -41,7 +41,7 @@ module.exports = (env, argv) => {
           enforce: 'pre',
           use: [
             {
-              loader: 'tslint-loader',
+              loader: 'eslint-loader',
               options: {}
             }
           ]

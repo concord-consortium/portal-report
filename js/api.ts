@@ -32,7 +32,7 @@ export interface IStateReportPartial extends ILTIPartial {
 
 export interface IPortalRawData extends ILTIPartial{
   offering: {
-    id: number,
+    id: number;
     activity_url: string;
     rubric_url: string;
   };
@@ -135,7 +135,6 @@ export function fetchFirestoreJWT(classHash: string, firebaseApp?: string) {
 export function authFirestore(rawFirestoreJWT: string) {
   const authResult = signInWithToken(rawFirestoreJWT) as Promise<any>;
   return authResult.catch(err => {
-    // tslint:disable-next-line no-console
     console.error("Firebase auth failed", err);
     throw new APIError("Firebase failed", {
       status: 401, // this will render nice error message that mentions authorization problems
@@ -253,13 +252,12 @@ export function updateReportSettingsInPortal(data: any) {
       body: JSON.stringify(data),
     }).then(checkStatus);
   } else {
-    // tslint:disable-next-line:no-console
     console.warn("No OFFERING/REPORT_URL. Faking put method.");
     return new Promise(resolve => resolve({}));
   }
 }
 
-export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?: { platformId?: string, resourceLinkId?: string }) {
+export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?: { platformId?: string; resourceLinkId?: string }) {
   const path = `/sources/${sourceKey}/feedback_settings`;
   if (instanceParams) {
     return path + `/${validFsId(instanceParams.platformId + "-" + instanceParams.resourceLinkId)}`;
@@ -404,7 +402,6 @@ export function fetchRubric(rubricUrl: string) {
           resolve({ url: rubricUrl, rubric: newRubric });
         })
         .catch(e => {
-          // tslint:disable-next-line:no-console
           console.error(`unable to load rubric at: ${rubricUrl}`);
           reject(e);
         });

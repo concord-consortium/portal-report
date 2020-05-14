@@ -112,6 +112,7 @@ function showUnselectedQuestions(state) {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function updateActivityFeedbackSettings(state, action) {
   const {activityId, feedbackFlags} = action;
   const statePath = ["activities", activityId.toString()];
