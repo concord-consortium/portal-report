@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import Immutable, { Map } from "immutable";
-import { FULL_REPORT, DASHBOARD } from "../reducers";
+import { FULL_REPORT, isDashboardView } from "../reducers";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // Redux state has flat structure. This selector maps all the IDs and keys and creates a tree-like hierarchy.
@@ -30,13 +30,13 @@ const isQuestionVisible = (question, viewType, featuredOnly) => {
   if (viewType === FULL_REPORT && question.get("hiddenByUser")) {
     return false;
   }
-  // Only dashboard is considered to be featured question report". In the future, when there's a toggle
+  // Only dashboard is considered to be "featured question report". In the future, when there's a toggle
   // letting user switch `showFeaturedQuestionsOnly` on and off, this might not be the case anymore.
   // Note that === false check is explicit and it's like that by design. If API does not provide this property
   // (so the value is undefined or null), assume that the question is visible in the featured question report.
   // It's necessary so this report works before Portal (API) is updated to provide this flag. Later, it will be
-  // less important.
-  if (viewType === DASHBOARD && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
+  // less important. Additionally, for now we assume that the newer portal-dashboard follows the same logic.
+  if (isDashboardView(viewType) && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
     return false;
   }
   return true;
