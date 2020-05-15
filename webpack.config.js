@@ -81,7 +81,7 @@ module.exports = (env, argv) => {
           ]
         },
         {
-          test: /css\/dashboard\/.*\.less$/,
+          test: /css[\\\/]dashboard[\\\/].*\.less$/,
           use: [
             'style-loader',
             {
@@ -97,7 +97,7 @@ module.exports = (env, argv) => {
           ]
         },
         {
-          test: /css\/(common|report|authoring)\/.*\.less$/,
+          test: /css[\\\/](common|report|authoring)[\\\/].*\.less$/,
           loader: 'style-loader!css-loader!less-loader'
         },
         {
