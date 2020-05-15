@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react"; // eslint-disable-line
+import React, { PureComponent } from "react";
 
 const DEFAULT_NUMERIC_MIN_VALUE = 0;
 

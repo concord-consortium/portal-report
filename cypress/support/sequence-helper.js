@@ -17,10 +17,10 @@ function generate(childrenFunction, label) {
   };
 }
 
-getQuestions = generate(null, "questions");
-getPages = generate(getQuestions, "pages");
-getSections = generate(getPages, "sections");
-getActivities = generate(getSections, "activities");
+const getQuestions = generate(null, "questions");
+const getPages = generate(getQuestions, "pages");
+const getSections = generate(getPages, "sections");
+const getActivities = generate(getSections, "activities");
 
 function sequenceHelper(sequence) {
   sequence.getActivities = getActivities;

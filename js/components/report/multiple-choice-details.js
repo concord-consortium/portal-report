@@ -3,7 +3,7 @@ import React, { PureComponent } from "react";
 import "../../../css/report/multiple-choice-details.less";
 
 function getChoicesStats(choices, answers, students) {
-  let stats = {};
+  const stats = {};
   const noResponseCount = students.length - answers.length;
   const allSelectedChoicesFlat = answers.reduce((res, answer) => res.concat(answer.selectedChoices), []);
   const totalAnswers = allSelectedChoicesFlat.length + noResponseCount;

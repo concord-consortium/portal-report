@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react"; // eslint-disable-line
+import React, { PureComponent } from "react";
 import { RadioGroup, Radio } from "react-radio-group";
 import ReactTooltip from "react-tooltip";
 import "../../../css/report/feedback-options.less";

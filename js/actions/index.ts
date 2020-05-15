@@ -120,7 +120,6 @@ function getResourceLink(rawPortalData: IPortalRawData) {
 
 function fireStoreError(dispatchType: string, dispatch: Dispatch) {
   return (err: Error) => {
-    // tslint:disable-next-line no-console
     console.error(err);
     dispatch(fetchError({
       status: 500,
@@ -251,7 +250,7 @@ function mappedCopy(src: any, fieldMappings: any) {
   const dst: any = {};
   let dstKey;
   for (const key in src) {
-    if (src.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(src, key)) {
       dstKey = fieldMappings[key] || key;
       // remove undefined values;
       if (src[key] !== undefined) {

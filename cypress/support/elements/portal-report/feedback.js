@@ -72,7 +72,7 @@ class Feedback {
     getStudentsAwaitingFeedbackCount(answersData) {
         let studentsAwaitingFeedbackCount = 0;
 
-        for (i = 0; i < answersData.length; i++) {
+        for (let i = 0; i < answersData.length; i++) {
             let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed;
 
             if (feedbackStatus !== true) {
@@ -85,7 +85,7 @@ class Feedback {
     getStudentsProvidedFeedback(answersData) {
         let studentsProvidedFeedbackCount = 0;
 
-        for (i = 0; i < answersData.length; i++) {
+        for (let i = 0; i < answersData.length; i++) {
             let feedbackStatus = answersData[i].feedbacks[0].has_been_reviewed;
 
             if (feedbackStatus === true) {

@@ -25,8 +25,12 @@ module.exports = (env, argv) => {
       library: lib ? 'PortalReport' : undefined,
       libraryTarget: lib ? 'umd' : undefined
     },
+    performance: {
+      // turn off bundle size warnings
+      hints: false
+    },
     resolve: {
-      extensions: ['.ts', '.js', '.json']
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
     mode: devMode ? 'development' : 'production',
     module: {
@@ -37,7 +41,7 @@ module.exports = (env, argv) => {
           enforce: 'pre',
           use: [
             {
-              loader: 'tslint-loader',
+              loader: 'eslint-loader',
               options: {}
             }
           ]
@@ -77,23 +81,23 @@ module.exports = (env, argv) => {
           ]
         },
         {
-          test: /css\/dashboard\/.*\.less$/,
+          test: /css[\\\/]dashboard[\\\/].*\.less$/,
           use: [
             'style-loader',
             {
               loader: 'css-loader',
               options: {
-                modules: true,
-                sourceMap: true,
-                importLoaders: 1,
-                localIdentName: '[name]--[local]--[hash:base64:8]'
+                modules: {
+                  localIdentName: '[name]--[local]--[hash:base64:8]'
+                },
+                importLoaders: 1
               }
             },
             'less-loader'
           ]
         },
         {
-          test: /css\/(common|report|authoring)\/.*\.less$/,
+          test: /css[\\\/](common|report|authoring)[\\\/].*\.less$/,
           loader: 'style-loader!css-loader!less-loader'
         },
         {

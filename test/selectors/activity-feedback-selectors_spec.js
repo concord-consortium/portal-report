@@ -6,7 +6,7 @@ import {
 } from "../../js/selectors/activity-feedback-selectors";
 
 describe("activity-feedback-selectors", () => {
-  let students = fromJS(
+  const students = fromJS(
     [
       {
         lastName: "Paessel",
@@ -23,7 +23,7 @@ describe("activity-feedback-selectors", () => {
     ]
   );
 
-  let activity = fromJS(
+  const activity = fromJS(
     {
       id: 1,
       activityFeedback: ["1-1", "1-2"],
@@ -31,7 +31,7 @@ describe("activity-feedback-selectors", () => {
     }
   );
 
-  let activityFeedbacks = fromJS(
+  const activityFeedbacks = fromJS(
     {
       "1-1": {
         key: "1-1",
@@ -81,7 +81,7 @@ describe("activity-feedback-selectors", () => {
     }
   );
 
-  let progress = fromJS({
+  const progress = fromJS({
     "1": {
       "1": 0.5
     },
@@ -126,8 +126,8 @@ describe("activity-feedback-selectors", () => {
 
   describe("getAutoscores", () => {
     let scoreType = "auto";
-    let rubricScores = fromJS({1: 10, 2: 20});
-    let questionAutoScores = fromJS({1: 1, 2: 2});
+    const rubricScores = fromJS({1: 10, 2: 20});
+    const questionAutoScores = fromJS({1: 1, 2: 2});
     let autoScores = null;
     describe("with auto scoreType", () => {
       beforeEach(() => {
@@ -160,7 +160,7 @@ describe("activity-feedback-selectors", () => {
 
   describe("getRubricScores", () => {
     // The rubric we are using to score with …
-    let rubricDef = {
+    const rubricDef = {
       "id": "RBK1",
       "formatVersion": "1.0.0",
       "version": "12",
@@ -195,7 +195,7 @@ describe("activity-feedback-selectors", () => {
       ]
     };
 
-    let feedbacks = {feedbacks: fromJS({
+    const feedbacks = {feedbacks: fromJS({
       "1-1": {
         key: "1-1",
         platformStudentId: 1,

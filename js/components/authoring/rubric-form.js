@@ -119,7 +119,7 @@ const RatingDescriptionsForStudent = ({name, values, setFieldValue}) => {
   const ratings = values.ratings;
   const key = `${name}.ratingDescriptionsForStudent`;
   const nonApplicableRatings = getIn(values, `${name}.nonApplicableRatings`, []);
-  let hasForStudent = getIn(values, key);
+  const hasForStudent = getIn(values, key);
   // hasForStudent = hasForStudent && Object.keys(hasForStudent).length > 0
   if (hasForStudent) {
     const ratingDescriptions = ratings.map((rating, index) => {

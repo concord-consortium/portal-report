@@ -56,7 +56,7 @@ export class ActivityAnswers extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  const questions = ownProps.activity.get("questions") || [];
+  // const questions = ownProps.activity.get("questions") || [];
   const answers = getAnswersByQuestion(state);
 
   return { answers };

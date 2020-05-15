@@ -75,7 +75,7 @@ class Dashboard {
     //Feedback Buttons
     getFeedbackForStudent(activityIdx, questionIdx) {
         this.getActivityNames().eq(activityIdx).click({force: true});
-        this.getActivityQuestions(ActivityIdx).eq(questionIdx).click({force: true});
+        this.getActivityQuestions(activityIdx).eq(questionIdx).click({force: true});
 
     }
 

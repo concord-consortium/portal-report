@@ -74,7 +74,7 @@ export function camelizeKeys(json: any) {
 export function normalizeResourceJSON(json: any) {
   // preprocessResourceJSON transforms response a bit, e.g. provides additional properties that can be calculated
   // at this point or ensures that we always deal with a sequence.
-  const camelizedJson = preprocessResourceJSON(camelizeKeys(json) as IResource);
+  const camelizedJson = preprocessResourceJSON(camelizeKeys(json) as unknown as IResource);
 
   const sequence = new schema.Entity("sequences");
   const activity = new schema.Entity("activities");
@@ -145,7 +145,7 @@ export function preprocessAnswersJSON(answersJSON: any): IAnswerDataHash {
 }
 
 export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalData {
-  const camelizedJson = camelizeKeys(portalData) as IPortalData;
+  const camelizedJson = camelizeKeys(portalData) as unknown as IPortalData;
   camelizedJson.classInfo.students.forEach(student => {
     student.id = student.userId.toString();
     student.name = `${student.firstName} ${student.lastName}`;

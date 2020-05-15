@@ -4,17 +4,19 @@
 
 [Portal](https://github.com/concord-consortium/rigse) report for teachers.
 
-Demo: http://portal-report.concord.org/version/v1.7.0/ 
+Demo: http://portal-report.concord.org/version/v1.7.0/
 
 Check recent git tags to open the most recent version.
 
-It expects two URL params: `reportUrl` and `token`. If they are not provided, it will be using fake data, so it's easy to work on some features without connecting to the real Portal instance.
+It expects two URL params: `reportUrl` and `token`. If they are not provided, it will use fake data, so it's easy to work on some features without connecting to the real Portal instance.
 
-## Library 
+At this time the portal report data can be presented in report view or in dashboard view. By default the report view is shown; add the URL parameter `dashboard=true` (or any value other than "false") to show the tabular dashboard view.
+
+## Library
 
 Portal Report is a standalone application, but it also provides some React components that can be used by other projects
-(https://github.com/concord-consortium/portal-pages). Check the `js/library.js` entry point to see what's available or 
-to add more components. 
+(https://github.com/concord-consortium/portal-pages). Check the `js/library.js` entry point to see what's available or
+to add more components.
 
 There are two ways to use this library:
 - NPM module: `@concord-consortium/portal-report`
@@ -26,24 +28,26 @@ There are two ways to use this library:
 First, you need to make sure that webpack is installed and all the NPM packages required by this project are available:
 
 ```
-npm install -g webpack
 npm install
 ```
 Then you can build the project files using:
 ```
-webpack
+npm run build
 ```
 or start webpack dev server:
 ```
-npm install -g webpack-dev-server 
-webpack-dev-server
+npm start
 ```
 and open http://localhost:8080/ or http://localhost:8080/webpack-dev-server/ (auto-reload after each code change).
 
-## Test
-There are two scripts defined in `package.json`: `test` and `test:watch`.  These commands can be run from the terminal using the syntax `npm run test` and `npm run test:watch` respectively. The former script run the mocha test suite one time. The latter watches `test/**/*.js?x` files for changes, and runs the given test suite when the file changes.
+As of 2020 TypeScript is supported and future development is expected to be in TypeScript. ESLint is used for linting as TSLint is deprecated. Use `npm run lint` to lint the source files and `npm run lint:fix` to auto-fix any fixable lint issues.
 
- These tests were setup using [this tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html#unit-testing-support) as a guide.  They use [mocha](https://mochajs.org/), [chai](http://chaijs.com/api/bdd/), and [react test utils](https://facebook.github.io/react/docs/test-utils.html).
+## Testing
+There are two test scripts defined in `package.json`: `test` and `test:watch`.  These commands can be run from the terminal using the syntax `npm run test` and `npm run test:watch` respectively. The former script runs the jest test suite a single time. The latter watches `test/**/*.[jt]s?x` files for changes, and runs the given test suite when the file changes.
+
+The tests use [Jest](https://jestjs.io/), [ts-jest](https://github.com/kulshekhar/ts-jest), [Enzyme](https://enzymejs.github.io/enzyme/), and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro).
+
+Integration (Cypress) tests can be run from the command line with `npm run cypress:test`.
 
 ## Deployment
 
@@ -56,11 +60,10 @@ You can build a simple github page deployment by following these steps:
 1. push the changes to github: `git push`
 
 #### Travis S3 Deployment:
-Travis automatically builds and deploys branches and tags. A simple `git push` initiate a deployment of the current branch to amazon S3. Once completed the build we be available at `http://portal-report.concord.org/branch/<branchname>`.  The production branch deploys to [http://portal-report.concord.org/](http://portal-report.concord.org/branch/master/)
+Travis automatically builds and deploys branches and tags. A simple `git push` initiates a deployment of the current branch to amazon S3. Once completed the build will be available at `http://portal-report.concord.org/branch/<branchname>/`.  The production branch deploys to [http://portal-report.concord.org/](http://portal-report.concord.org/)
 
 #### Manual S3 Deployment
 If you want to do a manual deployment, put your S3 credentials in `.env` and copy `s3_deploy.sh` to a local git-ignored script. Fill in missing ENV vars, and then run that script.
-
 
 #### Library
 
@@ -85,7 +88,7 @@ Some things that may be confusing when you start working with Redux (or at least
 
 > When you notice that some components don’t use the props they receive but merely forward them down and you have to rewire all those intermediate components any time the children need more data, it’s a good time to introduce some container components. This way you can get the data and the behavior props to the leaf components without burdening the unrelated components in the middle of the tree.
 
-* Is it okay to still use React's state? I think so, and so does [Redux's author](https://github.com/reactjs/redux/issues/1287). 
+* Is it okay to still use React's state? I think so, and so does [Redux's author](https://github.com/reactjs/redux/issues/1287).
 
 Additional, useful resources:
 * [Redux examples](https://github.com/reactjs/redux/tree/master/examples)
@@ -95,11 +98,11 @@ Additional, useful resources:
 
 * Browser specific prefixes are not necessary, as this project uses [autoprefixer](https://github.com/postcss/autoprefixer), which will add them automatically.
 * Webpack parses URLs in CSS too, so it will either copy resources automatically to `/dist` or inline them in CSS file. That applies to images and fonts (take a look at webpack config).
-* All the styles are included by related components in JS files. Please make sure that those styles are scoped to the top-level component class, so we don't pollute the whole page. It's not very important right now, but might become important if this page becomes part of the larger UI. And I believe it's a good practice anyway. 
+* All the styles are included by related components in JS files. Please make sure that those styles are scoped to the top-level component class, so we don't pollute the whole page. It's not very important right now, but might become important if this page becomes part of the larger UI. And I believe it's a good practice anyway.
 * I would try to make sure that each component specifies all its necessary styles to look reasonably good and it doesn't depend on styles defined somewhere else (e.g. in parent components). Parent components or global styles could be used to theme components, but they should work just fine without them too.
 * When you modify the component style, please check how it looks while printed.
 
-
+Note that conventions in the dashboard part of the code base are somewhat different than in the report part.
 
 ## License
 

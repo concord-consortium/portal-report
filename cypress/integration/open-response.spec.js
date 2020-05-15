@@ -1,5 +1,3 @@
-/* global describe, it, beforeEach, cy */
-/* eslint-disable-next-line */
 import React from "react";
 import { getByCypressTag } from "../utils";
 

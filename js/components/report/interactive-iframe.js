@@ -18,6 +18,7 @@ export default class InteractiveIframe extends PureComponent {
     const phoneAnswered = () => {
       this.iframePhone.post("initInteractive", typeof state === "string" ? JSON.parse(state) : state);
     };
+    // eslint-disable-next-line react/no-string-refs
     this.iframePhone = new iframePhone.ParentEndpoint(this.refs.iframe, phoneAnswered);
 
     this.iframePhone.addListener("getFirebaseJWT", this.handleGetFirebaseJWT);
@@ -30,7 +31,6 @@ export default class InteractiveIframe extends PureComponent {
         this.iframePhone.post("firebaseJWT", json);
         return json;
       })
-      // tslint:disable-next-line no-console
       .catch(console.error);
   }
 
@@ -44,6 +44,7 @@ export default class InteractiveIframe extends PureComponent {
   render() {
     const { src, width, height } = this.props;
     return (
+      // eslint-disable-next-line react/no-string-refs
       <iframe ref="iframe"
         src={src}
         width={width || "300px"}

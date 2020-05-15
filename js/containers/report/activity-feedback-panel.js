@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react"; // eslint-disable-line
+import React, { PureComponent } from "react";
 import ReactDom from "react-dom";
 import Button from "../../components/common/button";
 import FeedbackFilter from "../../components/report/feedback-filter";
@@ -72,6 +72,7 @@ class ActivityFeedbackPanel extends PureComponent {
     const ref = this.studentRowRef(index - 1);
     const itemComponent = this.studentRowRefs[ref];
     if (itemComponent) {
+      // eslint-disable-next-line react/no-find-dom-node
       const domNode = ReactDom.findDOMNode(itemComponent);
       domNode.scrollIntoView();
     }

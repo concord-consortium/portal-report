@@ -238,6 +238,5 @@ Dashboard.defaultProps = {
   expandedQuestions: Map(),
   studentProgress: Map(),
   selectedQuestion: Map(),
-  // tslint:disable-next-line:no-console
-  selectQuestion: (e) => console.log("selectQuestion prop undefined"),
+  selectQuestion: (e) => console.warn("selectQuestion prop undefined"),
 };
