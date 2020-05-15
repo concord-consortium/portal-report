@@ -4,7 +4,7 @@ import DashboardApp from "./dashboard/dashboard-app";
 import { connect } from "react-redux";
 import { DASHBOARD, PORTAL_DASHBOARD } from "../reducers";
 
-const PortalDashboardApp = function() {
+const PortalDashboardApp = () => {
   return (
     <div>
       <div>Portal Dashboard Under Construction</div>
@@ -13,7 +13,11 @@ const PortalDashboardApp = function() {
   );
 };
 
-export class App extends React.PureComponent {
+interface IProps {
+  viewType: string;
+}
+
+export class App extends React.PureComponent<IProps> {
   render() {
     const { viewType } = this.props;
     return (
@@ -26,7 +30,7 @@ export class App extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: any) => ({
   viewType: state.getIn(["view", "type"]),
 });
 
