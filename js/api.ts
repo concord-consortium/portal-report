@@ -133,7 +133,7 @@ export function fetchFirestoreJWT(classHash: string, firebaseApp?: string) {
 }
 
 export function authFirestore(rawFirestoreJWT: string) {
-  const authResult = signInWithToken(rawFirestoreJWT) as Promise<any>;
+  const authResult = signInWithToken(rawFirestoreJWT) as Promise<firebase.auth.UserCredential | void>;
   return authResult.catch(err => {
     console.error("Firebase auth failed", err);
     throw new APIError("Firebase failed", {
