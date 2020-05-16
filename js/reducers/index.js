@@ -16,7 +16,7 @@ import {
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
 import feedbackReducer from "./feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
-import config from "../config";
+import { configBool } from "../config";
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
@@ -26,9 +26,16 @@ import queryString from "query-string";
 
 export const FULL_REPORT = "fullReport";
 export const DASHBOARD = "dashboard";
+export const PORTAL_DASHBOARD = "portalDashboard";
+
+export function isDashboardView(viewType) {
+  return (viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD);
+}
 
 const INITIAL_VIEW = Map({
-  type: config("dashboard") ? DASHBOARD : FULL_REPORT,
+  type: configBool("portal-dashboard")
+          ? PORTAL_DASHBOARD
+          : (configBool("dashboard") ? DASHBOARD : FULL_REPORT)
 });
 
 // Defines which view / app is going to be used. A full report or a compact dashboard.
