@@ -1,0 +1,27 @@
+@import "../variables";
+
+.studentRow {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: white;
+  height: 45px;
+
+  .name {
+    height: 45px;
+    width: 240px;
+  }
+  .responses {
+    border-style: solid none none none;
+    border-width: 1px;
+    border-color: #DEDEDE;
+    flex-grow: 1;
+  }
+
+}
+.studentRow:nth-child(even) .name {
+  background-color: @nav-color;
+}
+.studentRow:last-child .responses {
+  border-bottom-style: solid;
+}

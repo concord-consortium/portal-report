@@ -1,17 +1,9 @@
 import React from "react";
 import ReportApp from "./report/report-app";
 import DashboardApp from "./dashboard/dashboard-app";
+import PortalDashboardApp from "./portal-dashboard/portal-dashboard-app";
 import { connect } from "react-redux";
 import { DASHBOARD, PORTAL_DASHBOARD } from "../reducers";
-
-const PortalDashboardApp = () => {
-  return (
-    <div>
-      <div>Portal Dashboard Under Construction</div>
-      <div>Please check back later</div>
-    </div>
-  );
-};
 
 interface IProps {
   viewType: string;
