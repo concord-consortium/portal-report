@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import queryString from "query-string";
 import InteractiveIframe from "./interactive-iframe";
 
 import "../../../css/report/iframe-answer.less";
@@ -12,13 +13,8 @@ export default class IframeAnswer extends PureComponent {
     this.toggleIframe = this.toggleIframe.bind(this);
   }
 
-  toggleIframe(event) {
-    const { question } = this.props;
-    if (question.get("displayInIframe")) {
-      // If displayInIframe == true, we won't follow the link.
-      event.preventDefault();
-      this.setState({iframeVisible: !this.state.iframeVisible});
-    }
+  toggleIframe() {
+    this.setState({iframeVisible: !this.state.iframeVisible});
   }
 
   getLinkURL(answer) {
@@ -36,22 +32,47 @@ export default class IframeAnswer extends PureComponent {
     */
     try {
       const json = JSON.parse(answer);
-      const interactiveState = JSON.parse(json.interactiveState);
-      return interactiveState.lara_options.reporting_url;
+      const interactiveState = json.interactiveState ? JSON.parse(json.interactiveState) : null;
+      if (interactiveState && interactiveState.lara_options && interactiveState.lara_options.reporting_url) {
+        return interactiveState.lara_options.reporting_url;
+      }
+      return null;
     } catch (e) {
       return answer;
     }
   }
 
+  /**
+   * Adds a studentId and iframeQuestionId to the existing url
+   */
+  getStandaloneLinkUrl(question, answer) {
+    const baseUrl = `${window.location.origin}${window.location.pathname}`;
+    const params = queryString.parse(window.location.search);
+    params.studentId = answer.get("platformUserId");
+    params.iframeQuestionId = question.get("id");
+    const newSearch = queryString.stringify(params);
+    return `${baseUrl}?${newSearch}`;
+  }
+
   renderLink() {
     const { answer, question } = this.props;
+    const { iframeVisible } = this.state;
     const linkUrl = this.getLinkURL(answer.get("answer"));
-    const decorator = question.get("displayInIframe") ? "" : <span className="pr-icon-external-link" />;
-    return <a href={linkUrl} onClick={this.toggleIframe} target="_blank">View Work {decorator}</a>;
+    const externalLinkIcon = <span className="pr-icon-external-link" />;
+    if (question.get("displayInIframe")) {
+      const toggleText = iframeVisible ? "Hide" : "View Work";
+      const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
+      return <React.Fragment>
+      <a onClick={this.toggleIframe} target="_blank">{toggleText}</a> |{" "}
+      <a href={standaloneLinkUrl} target="_blank">Open in new tab {externalLinkIcon}</a>
+    </React.Fragment>;
+    } else {
+      return <a href={linkUrl} target="_blank">View work in new tab {externalLinkIcon}</a>;
+    }
   }
 
   renderIframe() {
-    const { answer, question, alwaysOpen } = this.props;
+    const { answer, question } = this.props;
     let url;
     let state;
     // There are two supported answer types handled by iframe question: simple link or interactive state.
@@ -67,7 +88,6 @@ export default class IframeAnswer extends PureComponent {
     }
     return (
       <div>
-        {!alwaysOpen ? <div><a href="#" onClick={this.toggleIframe}>Hide</a></div> : ""}
         <InteractiveIframe src={url} state={state} width={question.get("width")} height={question.get("height")} />
       </div>
     );
@@ -85,9 +105,11 @@ export default class IframeAnswer extends PureComponent {
   }
 
   render() {
+    const { alwaysOpen } = this.props;
     return (
       <div className="iframe-answer" data-cy="iframe-answer">
-        {this.shouldRenderIframe() ? this.renderIframe() : this.renderLink()}
+        {!alwaysOpen && this.renderLink()}
+        {this.shouldRenderIframe() && this.renderIframe()}
       </div>
     );
   }
