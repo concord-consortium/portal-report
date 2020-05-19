@@ -4,22 +4,30 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  background-color: white;
   height: 45px;
+  background-color: white;
 
-  .name {
+  .student {
+    display: flex;
+    align-items: center;
     height: 45px;
     width: 240px;
+
+    .name {
+      margin: 0 0 0 20px;
+    }
+
   }
+
   .responses {
+    flex-grow: 1;
     border-style: solid none none none;
     border-width: 1px;
     border-color: #DEDEDE;
-    flex-grow: 1;
   }
 
 }
-.studentRow:nth-child(even) .name {
+.studentRow:nth-child(even) .student {
   background-color: @nav-color;
 }
 .studentRow:last-child .responses {

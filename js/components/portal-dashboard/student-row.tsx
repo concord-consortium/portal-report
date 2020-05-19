@@ -11,7 +11,9 @@ export class StudentRow extends React.PureComponent<IProps> {
     const { name } = this.props;
     return (
       <div className={css.studentRow}>
-        <div className={css.name}>{name}</div>
+        <div className={css.student}>
+          <div className={css.name}>{name}</div>
+        </div>
         <div className={css.responses}>response content</div>
       </div>
     );

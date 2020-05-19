@@ -6,20 +6,47 @@
   align-items: center;
   box-sizing: border-box;
   height: 60px;
-  background-color: @header-color;
   margin-bottom: 3px;
+  background-color: @header-color;
+
+  .appInfo {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 60px;
+    margin: 0 10px 0 20px;
+  }
 
   .logo {
-    height: 65%;
-    margin: 0 10px 0 10px;
+    height: 60%;
   }
+
   .title {
-    margin: 0 10px 0 10px;
+    font-size: 16px;
   }
+
+  .pin {
+    height: 5px;
+    width: 5px;
+    margin: 0 8px 0 8px;
+    border-radius: 50%;
+    border: 3px solid white;
+    background-color: #FF8415;
+  }
+
   .assignment {
+    display: flex;
+    flex: 1;
+    justify-content: center;
     margin: 0 10px 0 10px;
   }
+
   .login {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
     margin: 0 10px 0 10px;
   }
 
