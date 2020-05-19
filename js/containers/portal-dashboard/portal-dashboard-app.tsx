@@ -9,12 +9,13 @@ import { StudentList } from "../../components/portal-dashboard/student-list";
 import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
+import { IResponse } from "../../api";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
 interface IProps {
   isFetching: boolean;
-  error: any;
+  error: IResponse;
   clazzName: string;
   students: any;
   fetchAndObserveData: () => void;

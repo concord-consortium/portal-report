@@ -3,7 +3,7 @@ import * as React from "react";
 import css from "../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
-  clazzName: string;
+  clazzName: string; // TODO: temporary, update props as component is built
 }
 
 export class ClassNav extends React.PureComponent<IProps> {
