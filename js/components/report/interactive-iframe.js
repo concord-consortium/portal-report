@@ -42,14 +42,14 @@ export default class InteractiveIframe extends PureComponent {
   }
 
   render() {
-    const { src, width, height } = this.props;
+    const { src, width, height, style } = this.props;
     return (
       // eslint-disable-next-line react/no-string-refs
       <iframe ref="iframe"
         src={src}
         width={width || "300px"}
         height={height || "300px"}
-        style={{border: "none", marginTop: "0.5em"}}
+        style={style || {border: "none", marginTop: "0.5em"}}
         allow={"fullscreen"} />
     );
   }

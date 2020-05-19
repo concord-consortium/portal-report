@@ -129,6 +129,8 @@ Besides the parameters needed for loading data, the report also supports
 
 * `studentId`:  This shows the report for a single student, and removes some UI affordances. The filtering of the student
                 data happens client-side.
+* `iframeQuestionId`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing the
+                model referenced by iframeQuestionId, and the answer saved by studentId (either as state or as a url).
 
 ## License
 

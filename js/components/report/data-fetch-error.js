@@ -18,7 +18,7 @@ export default class DataFetchError extends PureComponent {
     </div>;
   }
 
-  renderGenericInfo(error) {
+  renderGenericUrlInfo(error) {
     return (
       <div>
         <div>URL: {error.url}</div>
@@ -28,7 +28,18 @@ export default class DataFetchError extends PureComponent {
     );
   }
 
+  renderGenericMessage(error) {
+    return (
+      <div>
+        <div>{error}</div>
+      </div>
+    );
+  }
+
   renderError(error) {
+    if (error.body) {
+      return this.renderGenericMessage(error.body);
+    }
     switch (error.status) {
       case 401:
         return this.renderUnauthorized();
@@ -37,7 +48,7 @@ export default class DataFetchError extends PureComponent {
       case 599:
         return this.renderNetworkError(error);
       default:
-        return this.renderGenericInfo(error);
+        return this.renderGenericUrlInfo(error);
     }
   }
 
@@ -45,7 +56,7 @@ export default class DataFetchError extends PureComponent {
     const { error } = this.props;
     return (
       <div className="data-fetch-error">
-        <h2>Connection to server failed</h2>
+        <h2>{error.title || "Connection to server failed"}</h2>
         {this.renderError(error)}
       </div>
     );
