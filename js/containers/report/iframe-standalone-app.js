@@ -83,9 +83,9 @@ function mapStateToProps(state) {
   return {
     report: dataDownloaded && reportState,
     iframeQuestionId: iframeQuestionId,
-    answers: answers,
+    answers,
     isFetching: data.get("isFetching"),
-    error: error,
+    error,
   };
 }
 

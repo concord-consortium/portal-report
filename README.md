@@ -108,7 +108,7 @@ Note that conventions in the dashboard part of the code base are somewhat differ
 
 Data is fetched using `api.js`.
 
-If the query parameters of the url does not include values for `offering` and `class`, we will load in fake data from
+If the query parameters of the url do not include values for `offering` and `class`, we will load in fake data from
 the `js/data` folder. This data gets loaded in much the same way as real data, so can be used for testing.
 
 If we do have `offering` and `class` parameters, then `api.js` will first attempt to get the data for the offering and
@@ -118,7 +118,7 @@ the classHash (from the fetched class data) and the token. Using this JWT, we ca
 have successfully authenticated, `receivePortalData` is called in `index.ts`, which starts watching the sequence
 structure and answer data.
 
-To test the portal using real data, the easiest way is simply to open a report as a teachers from the portal, and then
+To test the portal using real data, the easiest way is simply to open a report as a teacher from the portal, and then
 replace the url host and path with `localhost:8080`. Alternatively, if you are able to edit the portal settings for the
 offering, you can add the "Developers Tracked Questions (Local)" report to the External Reports of the offering, and
 when you view the class details, you will see a "Local Tracked Q" button next to "Report" which will link to localhost.

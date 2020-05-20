@@ -62,10 +62,12 @@ export default class IframeAnswer extends PureComponent {
     if (question.get("displayInIframe")) {
       const toggleText = iframeVisible ? "Hide" : "View Work";
       const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
-      return <React.Fragment>
-      <a onClick={this.toggleIframe} target="_blank">{toggleText}</a> |{" "}
-      <a href={standaloneLinkUrl} target="_blank">Open in new tab {externalLinkIcon}</a>
-    </React.Fragment>;
+      return (
+        <React.Fragment>
+          <a onClick={this.toggleIframe} target="_blank">{toggleText}</a> |{" "}
+          <a href={standaloneLinkUrl} target="_blank">Open in new tab {externalLinkIcon}</a>
+        </React.Fragment>
+      );
     } else {
       return <a href={linkUrl} target="_blank">View work in new tab {externalLinkIcon}</a>;
     }
