@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { fetchAndObserveData } from "../../actions/index";
 import { getSortedStudents } from "../../selectors/dashboard-selectors";
@@ -50,7 +50,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   render() {
     const { clazzName, students, error, sequenceTree } = this.props;
     const { initialLoading } = this.state;
-    // In order to get list the activies in correct right order,
+    // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees = sequenceTree && sequenceTree.get("children");
     return (

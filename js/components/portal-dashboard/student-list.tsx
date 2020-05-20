@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { StudentRow } from "./student-row";
 
 import css from "../../../css/portal-dashboard/student-list.less";

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 import ccLogoSrc from "../../../img/cc-logo.png";
 import css from "../../../css/portal-dashboard/header.less";

@@ -53,7 +53,7 @@ class DashboardApp extends PureComponent {
     const { initialLoading } = this.state;
     const { error, clazzName, sequenceTree, students, studentProgress, expandedStudents, expandedActivities, expandedQuestions, setActivityExpanded, setStudentExpanded, setQuestionExpanded, setStudentsExpanded, setStudentSort, selectedQuestion, selectQuestion, trackEvent } = this.props;
 
-    // In order to get list the activies in correct right order,
+    // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees = sequenceTree && sequenceTree.get("children");
     return (
