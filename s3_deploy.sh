@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # this will deploy the current public folder to a subfolder in the s3 bucket
 # the subfolder is the name of the TRAVIS_BRANCH
@@ -19,8 +19,19 @@ else
     mkdir -p _site/version
     DEPLOY_DIR=version/$TRAVIS_BRANCH
   else
+    # strip PT ID from branch name for branch builds
+    DEPLOY_DIR_NAME=$TRAVIS_BRANCH
+    PT_PREFIX_REGEX="^([0-9]{8,}-)(.+)$"
+    PT_SUFFIX_REGEX="^(.+)(-[0-9]{8,})$"
+    if [[ $DEPLOY_DIR_NAME =~ $PT_PREFIX_REGEX ]]; then
+      DEPLOY_DIR_NAME=${BASH_REMATCH[2]}
+    fi
+    if [[ $DEPLOY_DIR_NAME =~ $PT_SUFFIX_REGEX ]]; then
+      DEPLOY_DIR_NAME=${BASH_REMATCH[1]}
+    fi
+
     mkdir -p _site/branch
-    DEPLOY_DIR=branch/$TRAVIS_BRANCH
+    DEPLOY_DIR=branch/$DEPLOY_DIR_NAME
   fi
   mv dist _site/$DEPLOY_DIR
   export DEPLOY_DIR
