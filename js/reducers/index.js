@@ -1,9 +1,7 @@
 import Immutable, { Map, Set} from "immutable";
 import {
-  REQUEST_PORTAL_DATA,
   RECEIVE_RESOURCE_STRUCTURE,
   RECEIVE_USER_SETTINGS,
-  FETCH_ERROR,
   SET_NOW_SHOWING,
   HIDE_UNSELECTED_QUESTIONS,
   SHOW_UNSELECTED_QUESTIONS,
@@ -17,6 +15,7 @@ import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
 import feedbackReducer from "./feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
 import view from "./view-reducer";
+import data from "./data-reducer";
 import config from "../config";
 import {
   normalizeResourceJSON,
@@ -24,23 +23,6 @@ import {
   preprocessAnswersJSON
 } from "../core/transform-json-response";
 import queryString from "query-string";
-
-const INITIAL_DATA = Map({
-  isFetching: true
-});
-function data(state = INITIAL_DATA, action) {
-  switch (action.type) {
-    case REQUEST_PORTAL_DATA:
-      return state.set("isFetching", true);
-    case RECEIVE_RESOURCE_STRUCTURE:
-      return state.set("isFetching", false);
-    case FETCH_ERROR:
-      return state.set("isFetching", false)
-                  .set("error", action.response);
-    default:
-      return state;
-  }
-}
 
 function setAnonymous(state, anonymous) {
   let idx = 1;
