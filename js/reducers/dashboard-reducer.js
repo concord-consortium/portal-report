@@ -14,7 +14,7 @@ const INITIAL_DASHBOARD_STATE = Map({
   selectedQuestion: null,
 });
 
-export default function dashboardReducer(state = INITIAL_DASHBOARD_STATE, action) {
+export default function dashboard(state = INITIAL_DASHBOARD_STATE, action) {
   switch (action.type) {
     case SET_ACTIVITY_EXPANDED:
       return state.setIn(["expandedActivities", action.activityId.toString()], action.value);

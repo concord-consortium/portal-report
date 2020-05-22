@@ -11,7 +11,7 @@ const INITIAL_FEEDBACK_STATE = fromJS({
   activityFeedbacks: {}
 });
 
-export default function feedbackReducer(state = INITIAL_FEEDBACK_STATE, action) {
+export default function feedback(state = INITIAL_FEEDBACK_STATE, action) {
   switch (action.type) {
     case RECEIVE_FEEDBACK_SETTINGS:
       return state.set("settings", fromJS(action.response));
