@@ -1,16 +1,21 @@
-import { Map } from "immutable";
+import { RecordFactory } from "../util/record-factory";
 import {
   REQUEST_PORTAL_DATA,
   RECEIVE_RESOURCE_STRUCTURE,
   FETCH_ERROR,
 } from "../actions";
 
-const INITIAL_DATA_STATE = Map({
+export interface IDataState {
+  isFetching: boolean;
+  error?: any;
+}
+
+const INITIAL_DATA_STATE = RecordFactory<IDataState>({
   isFetching: true
 });
 
-export default function data(state = INITIAL_DATA_STATE, action) {
-  switch (action.type) {
+export default function data(state = new INITIAL_DATA_STATE({}), action: any) {
+  switch (action && action.type) {
     case REQUEST_PORTAL_DATA:
       return state.set("isFetching", true);
     case RECEIVE_RESOURCE_STRUCTURE:

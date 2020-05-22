@@ -1,4 +1,4 @@
-import { Map } from "immutable";
+import { RecordFactory } from "../util/record-factory";
 import config, { configBool } from "../config";
 
 export const FULL_REPORT = "fullReport";
@@ -6,17 +6,23 @@ export const DASHBOARD = "dashboard";
 export const PORTAL_DASHBOARD = "portalDashboard";
 export const IFRAME_STANDALONE = "iframeStandalone";
 
+type ViewType = typeof FULL_REPORT | typeof DASHBOARD | typeof PORTAL_DASHBOARD | typeof IFRAME_STANDALONE;
+
+export interface IViewState {
+  type: string;
+}
+
 const initialType =
   config("iframeQuestionId") ? IFRAME_STANDALONE :
   configBool("portal-dashboard") ? PORTAL_DASHBOARD :
   configBool("dashboard") ? DASHBOARD : FULL_REPORT;
 
-const INITIAL_VIEW_STATE = Map({
+const INITIAL_VIEW_STATE = RecordFactory<IViewState>({
   type: initialType
 });
 
-export default function view(state = INITIAL_VIEW_STATE, action) {
-  switch (action) {
+export default function view(state = new INITIAL_VIEW_STATE({}), action: any) {
+  switch (action && action.type) {
     // Nothing to do here now. In the future, we might let users toggle between full report and dashboard.
     // Implementation can look like:
     // case SWITCH_REPORT_VIEW:
@@ -26,6 +32,6 @@ export default function view(state = INITIAL_VIEW_STATE, action) {
   }
 }
 
-export function isDashboardView(viewType) {
+export function isDashboardView(viewType: string) {
   return (viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD);
 }
