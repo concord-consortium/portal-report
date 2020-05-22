@@ -16,42 +16,14 @@ import {
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
 import feedbackReducer from "./feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
-import config, { configBool } from "../config";
+import view from "./view-reducer";
+import config from "../config";
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
   preprocessAnswersJSON
 } from "../core/transform-json-response";
 import queryString from "query-string";
-
-export const FULL_REPORT = "fullReport";
-export const DASHBOARD = "dashboard";
-export const PORTAL_DASHBOARD = "portalDashboard";
-export const IFRAME_STANDALONE = "iframe-standalone";
-
-export function isDashboardView(viewType) {
-  return (viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD);
-}
-
-const INITIAL_VIEW = Map({
-  type: config("iframeQuestionId")
-          ? IFRAME_STANDALONE :
-          configBool("portal-dashboard")
-            ? PORTAL_DASHBOARD
-            : (configBool("dashboard") ? DASHBOARD : FULL_REPORT)
-});
-
-// Defines which view / app is going to be used. A full report or a compact dashboard.
-function view(state = INITIAL_VIEW, action) {
-  switch (action.type) {
-    // Nothing to do here now. In the future, we might let users toggle between full report and dashboard.
-    // Implementation can look like:
-    // case SWITCH_REPORT_VIEW:
-    //   return state.set('type', action.viewType)
-    default:
-      return state;
-  }
-}
 
 const INITIAL_DATA = Map({
   isFetching: true

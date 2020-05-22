@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import Immutable, { Map } from "immutable";
-import { FULL_REPORT, isDashboardView } from "../reducers";
+import { FULL_REPORT, isDashboardView } from "../reducers/view-reducer";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // Redux state has flat structure. This selector maps all the IDs and keys and creates a tree-like hierarchy.

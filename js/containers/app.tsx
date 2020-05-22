@@ -4,7 +4,7 @@ import DashboardApp from "./dashboard/dashboard-app";
 import PortalDashboardApp from "./portal-dashboard/portal-dashboard-app";
 import IframeStandaloneApp from "./report/iframe-standalone-app";
 import { connect } from "react-redux";
-import { DASHBOARD, PORTAL_DASHBOARD, IFRAME_STANDALONE, FULL_REPORT } from "../reducers";
+import { DASHBOARD, PORTAL_DASHBOARD, IFRAME_STANDALONE, FULL_REPORT } from "../reducers/view-reducer";
 
 interface IProps {
   viewType: string;
