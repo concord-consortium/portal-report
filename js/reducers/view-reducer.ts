@@ -21,7 +21,13 @@ const INITIAL_VIEW_STATE = RecordFactory<IViewState>({
   type: initialType
 });
 
-export default function view(state = new INITIAL_VIEW_STATE({}), action: any) {
+export class ViewState extends INITIAL_VIEW_STATE {
+  constructor(config: Partial<IViewState>) {
+    super(config);
+  }
+}
+
+export default function view(state = new ViewState({}), action: any) {
   switch (action && action.type) {
     // Nothing to do here now. In the future, we might let users toggle between full report and dashboard.
     // Implementation can look like:

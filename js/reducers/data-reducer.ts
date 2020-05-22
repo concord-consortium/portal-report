@@ -14,7 +14,13 @@ const INITIAL_DATA_STATE = RecordFactory<IDataState>({
   isFetching: true
 });
 
-export default function data(state = new INITIAL_DATA_STATE({}), action: any) {
+export class DataState extends INITIAL_DATA_STATE {
+  constructor(config: Partial<IDataState>) {
+    super(config);
+  }
+}
+
+export default function data(state = new DataState({}), action: any) {
   switch (action && action.type) {
     case REQUEST_PORTAL_DATA:
       return state.set("isFetching", true);

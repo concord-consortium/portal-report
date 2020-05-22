@@ -8,6 +8,8 @@ interface Constructable<T> {
 
 export interface StaticallyTypedRecord<T> extends Constructable<T> {
   get<K extends keyof T>(key: K): T[K];
+  getIn<K1 extends keyof T, K2 extends keyof T[K1]>(keys: [K1, K2]): T[K1][K2];
+  getIn<K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(keys: [K1, K2, K3]): T[K1][K2][K3];
   set<K extends keyof T, V extends T[K]>(key: K, value: V): this;
   withMutations(cb: (r: StaticallyTypedRecord<T>) => StaticallyTypedRecord<T>): this;
   setIn<K1 extends keyof T, V extends T[K1]>(keys: [K1], val: V): this;

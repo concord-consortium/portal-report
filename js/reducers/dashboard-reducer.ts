@@ -27,7 +27,13 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   selectedQuestion: null,
 });
 
-export default function dashboard(state = new INITIAL_DASHBOARD_STATE({}), action: any) {
+export class DashboardState extends INITIAL_DASHBOARD_STATE {
+  constructor(config: Partial<IDashboardState>) {
+    super(config);
+  }
+}
+
+export default function dashboard(state = new DashboardState({}), action: any) {
   switch (action.type) {
     case SET_ACTIVITY_EXPANDED:
       return state.setIn(["expandedActivities", action.activityId.toString()], action.value);

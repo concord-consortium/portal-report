@@ -1,5 +1,6 @@
-import Immutable, { Map, Set } from "immutable";
+import Immutable, { Map, List, Set } from "immutable";
 import queryString from "query-string";
+import { RecordFactory } from "../util/record-factory";
 import config from "../config";
 import {
   normalizeResourceJSON,
@@ -19,24 +20,70 @@ import {
   RECEIVE_ANSWERS
 } from "../actions";
 
-const INITIAL_REPORT_STATE = Map({
+export type ReportType = "class" | "student";
+
+export interface IReportState {
   // Type: 'class' or 'student'. Used by regular report only. 'class' displays all the answers,
   // while 'student' focuses on one student only.
+  type: ReportType;
+  nowShowing: ReportType;
+  clazzName: string;
+  clazzId: number;
+  students: Map<any, any>;
+  answers: Map<any, any>;
+  sequences: Map<any, any>;
+  activities: Map<any, any>;
+  sections: Map<any, any>;
+  pages: Map<any, any>;
+  questions: Map<any, any>;
+  selectedStudentIds: List<string>;
+  hideControls: boolean;
+  hideSectionNames: boolean;
+  platformUserId: string;
+  contextId: string;
+  resourceLinkId: string;
+  platformId: string;
+  sourceKey: string;
+  anonymous: boolean;
+  compareViewAnswers: Set<string> | null;
+  // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
+  showFeaturedQuestionsOnly: boolean;
+  iframeQuestionId: string;
+}
+
+const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   type: "class",
   nowShowing: "class",
   clazzName: "",
-  clazzId: "",
+  clazzId: -1,
   students: Immutable.fromJS([]),
   answers: Immutable.fromJS([]),
-  selectedStudentIds: null,
+  sequences: Immutable.fromJS([]),
+  activities: Immutable.fromJS([]),
+  sections: Immutable.fromJS([]),
+  pages: Immutable.fromJS([]),
+  questions: Immutable.fromJS([]),
+  selectedStudentIds: Immutable.fromJS([]),
   hideControls: false,
   hideSectionNames: false,
-  // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
+  platformUserId: "",
+  contextId: "",
+  resourceLinkId: "",
+  platformId: "",
+  sourceKey: "",
+  anonymous: false,
+  compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
-  iframeQuestionId: config("iframeQuestionId") || "",
+  iframeQuestionId: config("iframeQuestionId") as string || "",
 });
 
-export default function report(state = INITIAL_REPORT_STATE, action) {
+export class ReportState extends INITIAL_REPORT_STATE {
+  constructor(config: Partial<IReportState>) {
+    super(config);
+  }
+}
+
+export default function report(state = new ReportState({}), action?: any) {
   let data;
   // Report type depends on what kind of user is launching the report and whether `studentId` URL param is provided.
   // Students can only see their own report. Teachers can see either class report or individual student report.
@@ -45,15 +92,12 @@ export default function report(state = INITIAL_REPORT_STATE, action) {
   // from JWT info) and Firestore security rules also ensure that.
   const { studentId } = queryString.parse(window.location.search);
   const urlBasedStudentSelection = studentId ? Immutable.fromJS([ studentId ]) : null;
-  switch (action.type) {
+  switch (action && action.type) {
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
-      let type;
-      let hideControls;
-      if (studentId) {
-        type = "student";
-        hideControls = true;
-      } else if (data.userType === "teacher") {
+      let type: ReportType = "student";
+      let hideControls = true;
+      if (!studentId && data.userType === "teacher") {
         // Ensure that Portal data also indicates that the user is a teacher. Otherwise, student could just
         // remove "studentId" URL parameter to see the full class report.
         type = "class";
@@ -134,10 +178,10 @@ export default function report(state = INITIAL_REPORT_STATE, action) {
 // immediately when teacher has selection filter active and unselects given
 // question. Instead, the question should stay visible until teacher clicks
 // "Show selected" again.
-function hideUnselectedQuestions(state) {
+function hideUnselectedQuestions(state: ReportState) {
   return state.withMutations(state => {
     const someSelected = state.get("questions").size > 0;
-    state.get("questions").forEach((value, key) => {
+    state.get("questions").forEach((value: any, key: any) => {
       const selected = state.getIn(["questions", key, "selected"]);
       if (someSelected) {
         state = state.setIn(["questions", key, "hiddenByUser"], !selected);
@@ -149,7 +193,7 @@ function hideUnselectedQuestions(state) {
   });
 }
 
-function showUnselectedQuestions(state) {
+function showUnselectedQuestions(state: ReportState) {
   return state.withMutations(state => {
     state.get("questions").forEach((value, key) => {
       state = state.setIn(["questions", key, "hiddenByUser"], false);
@@ -158,14 +202,14 @@ function showUnselectedQuestions(state) {
   });
 }
 
-function setUserSettings(state, response) {
+function setUserSettings(state: ReportState, response: any) {
   const {visibility_filter, anonymous_report} = response;
-  let selectedQuestions = [];
+  let selectedQuestions: any[] = [];
   // The visibility_filter might not be setup on the user settings yet
   if (visibility_filter && visibility_filter.questions) {
     selectedQuestions = visibility_filter.questions;
   }
-  return state.withMutations(state => {
+  return state.withMutations((state: ReportState) => {
     state.get("questions").forEach((value, key) => {
       const selected = selectedQuestions.indexOf(key) > -1;
       state = state.setIn(["questions", key, "selected"], selected);
@@ -175,9 +219,9 @@ function setUserSettings(state, response) {
   });
 }
 
-function setAnonymous(state, anonymous) {
+function setAnonymous(state: ReportState, anonymous: boolean) {
   let idx = 1;
   const newStudents = state.get("students")
-    .map(s => s.set("name", anonymous ? `Student ${idx++}` : s.get("realName")));
+    .map(s => s.set("name", anonymous ? `Student ${idx++}` : s.get("realName"))) as Map<any, any>;
   return state.set("anonymous", anonymous).set("students", newStudents);
 }

@@ -30,6 +30,7 @@ export interface IChoice {
 export interface IPortalData {
   offering: {
     activityUrl: string;
+    id: number;
   };
   classInfo: {
     id: number;
@@ -38,6 +39,10 @@ export interface IPortalData {
     students: IStudentData[];
   };
   userType: "teacher" | "learner";
+  platformUserId: string;
+  contextId: string;
+  platformId: string;
+  sourceKey: string;
 }
 
 export interface IStudentData {
