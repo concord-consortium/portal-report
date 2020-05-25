@@ -5,6 +5,7 @@ import PortalDashboardApp from "./portal-dashboard/portal-dashboard-app";
 import IframeStandaloneApp from "./report/iframe-standalone-app";
 import { connect } from "react-redux";
 import { DASHBOARD, PORTAL_DASHBOARD, IFRAME_STANDALONE, FULL_REPORT } from "../reducers/view-reducer";
+import { RootState } from "../reducers";
 
 interface IProps {
   viewType: string;
@@ -27,7 +28,7 @@ export class App extends React.PureComponent<IProps> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: RootState) => ({
   viewType: state.getIn(["view", "type"]),
 });
 

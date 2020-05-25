@@ -12,6 +12,7 @@ import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
+import { RootState } from "../../reducers";
 
 interface IProps {
   isFetching: boolean;
@@ -72,7 +73,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 }
 
-function mapStateToProps(state: any) {
+function mapStateToProps(state: RootState) {
   const data = state.get("data");
   const error = data.get("error");
   const dataDownloaded = !error && !data.get("isFetching");

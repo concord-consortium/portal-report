@@ -14,10 +14,12 @@ const INITIAL_DATA_STATE = RecordFactory<IDataState>({
   isFetching: true
 });
 
-export class DataState extends INITIAL_DATA_STATE {
+export class DataState extends INITIAL_DATA_STATE implements IDataState {
   constructor(config: Partial<IDataState>) {
     super(config);
   }
+  isFetching: boolean;
+  error?: any;
 }
 
 export default function data(state = new DataState({}), action: any) {

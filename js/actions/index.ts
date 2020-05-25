@@ -2,7 +2,6 @@ import { firestoreInitialized } from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
 import fakeAnswers from "../data/answers.json";
 import {AnyAction, Dispatch} from "redux";
-import { Map } from "immutable";
 import {
   IPortalRawData,
   IResponse,
@@ -22,6 +21,7 @@ import {requestRubric} from "./rubric";
 // Get the Firestore type, I'd think there'd be a better way than this
 import * as firebase from "firebase/app";
 import "firebase/firestore";
+import { RootState } from "../reducers";
 
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
@@ -44,8 +44,6 @@ export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
-
-type StateMap = Map<string, any>;
 
 // When fetch succeeds, receivePortalData action will be called with the response object (json in this case).
 // REQUEST_PORTAL_DATA action will be processed by the reducer immediately.
@@ -262,13 +260,15 @@ function mappedCopy(src: any, fieldMappings: any) {
 }
 
 export function setQuestionSelected(key: string, value: boolean) {
-  return (dispatch: Dispatch, getState: () => StateMap) => {
+  return (dispatch: Dispatch, getState: () => RootState) => {
     const questionsMap = getState().getIn(["report", "questions"]);
     // the questionsMap represents the previous state of the checkboxes
     // so the filter needs to special case the current key
-    const selectedQuestionKeys = Array.from(questionsMap.values())
-      .filter((q: StateMap) => q.get("id") === key ? value : q.get("selected"))
-      .map((q: StateMap) => q.get("id"));
+    // Note: questionsMap.valueSeq().toArray() was Array.from(questionsMap.values())
+    // but Typescript prefers this, even though it probably runs through the array twice...
+    const selectedQuestionKeys = questionsMap.valueSeq().toArray()
+      .filter((q) => q.get("id") === key ? value : q.get("selected"))
+      .map((q) => q.get("id"));
     dispatch({
       type: SET_QUESTION_SELECTED,
       key,
@@ -440,7 +440,7 @@ export function saveRubric(rubricContent: any) {
 }
 
 export function trackEvent(category: string, action: string, label: string) {
-  return (dispatch: Dispatch, getState: () => StateMap) => {
+  return (dispatch: Dispatch, getState: () => RootState) => {
     dispatch({
       type: TRACK_EVENT,
       category,

@@ -77,10 +77,33 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   iframeQuestionId: config("iframeQuestionId") as string || "",
 });
 
-export class ReportState extends INITIAL_REPORT_STATE {
+export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   constructor(config: Partial<IReportState>) {
     super(config);
   }
+  type: ReportType;
+  nowShowing: ReportType;
+  clazzName: string;
+  clazzId: number;
+  students: Map<any, any>;
+  answers: Map<any, any>;
+  sequences: Map<any, any>;
+  activities: Map<any, any>;
+  sections: Map<any, any>;
+  pages: Map<any, any>;
+  questions: Map<any, any>;
+  selectedStudentIds: List<string>;
+  hideControls: boolean;
+  hideSectionNames: boolean;
+  platformUserId: string;
+  contextId: string;
+  resourceLinkId: string;
+  platformId: string;
+  sourceKey: string;
+  anonymous: boolean;
+  compareViewAnswers: Set<string> | null;
+  showFeaturedQuestionsOnly: boolean;
+  iframeQuestionId: string;
 }
 
 export default function report(state = new ReportState({}), action?: any) {

@@ -21,10 +21,11 @@ const INITIAL_VIEW_STATE = RecordFactory<IViewState>({
   type: initialType
 });
 
-export class ViewState extends INITIAL_VIEW_STATE {
+export class ViewState extends INITIAL_VIEW_STATE implements IViewState {
   constructor(config: Partial<IViewState>) {
     super(config);
   }
+  type: string;
 }
 
 export default function view(state = new ViewState({}), action: any) {

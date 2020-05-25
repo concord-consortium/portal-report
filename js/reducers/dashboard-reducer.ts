@@ -27,10 +27,15 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   selectedQuestion: null,
 });
 
-export class DashboardState extends INITIAL_DASHBOARD_STATE {
+export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboardState {
   constructor(config: Partial<IDashboardState>) {
     super(config);
   }
+  sortBy: SortType;
+  expandedActivities: Map<any, any>;
+  expandedStudents: Map<any, any>;
+  expandedQuestions: Map<any, any>;
+  selectedQuestion: Map<any, any> | null;
 }
 
 export default function dashboard(state = new DashboardState({}), action: any) {

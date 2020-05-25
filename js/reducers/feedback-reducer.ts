@@ -18,10 +18,13 @@ const INITIAL_FEEDBACK_STATE = RecordFactory<IFeedbackState>({
   activityFeedbacks: fromJS({})
 });
 
-export class FeedbackState extends INITIAL_FEEDBACK_STATE {
+export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackState {
   constructor(config: Partial<IFeedbackState>) {
     super(config);
   }
+  settings: Map<any, any>;
+  questionFeedbacks: Map<any, any>;
+  activityFeedbacks: Map<any, any>;
 }
 
 export default function feedback(state = new FeedbackState({}), action: any) {
