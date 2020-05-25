@@ -18,7 +18,13 @@ const INITIAL_FEEDBACK_STATE = RecordFactory<IFeedbackState>({
   activityFeedbacks: fromJS({})
 });
 
-export default function feedback(state = new INITIAL_FEEDBACK_STATE({}), action: any) {
+export class FeedbackState extends INITIAL_FEEDBACK_STATE {
+  constructor(config: Partial<IFeedbackState>) {
+    super(config);
+  }
+}
+
+export default function feedback(state = new FeedbackState({}), action: any) {
   switch (action.type) {
     case RECEIVE_FEEDBACK_SETTINGS:
       return state.set("settings", fromJS(action.response));
