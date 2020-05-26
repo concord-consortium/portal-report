@@ -3,7 +3,7 @@ import React from "react";
 import css from "../../../css/portal-dashboard/student-row.less";
 
 interface IProps {
-  name: string; // TODO: temporary, update props as component is built
+  name: string;
 }
 
 export class StudentRow extends React.PureComponent<IProps> {

@@ -70,7 +70,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
               <LevelViewer/>
             </div>
-            <StudentList students={students}/>
+            <StudentList
+              students={students}
+              isAnonymous={true}
+            />
           </div>
         }
         { error && <DataFetchError error={error} /> }
