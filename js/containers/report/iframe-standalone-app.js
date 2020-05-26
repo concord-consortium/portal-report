@@ -91,13 +91,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchAndObserveData: () => dispatch(fetchAndObserveData()),
-    hideUnselectedQuestions: () => dispatch(hideUnselectedQuestions()),
-    showUnselectedQuestions: () => dispatch(showUnselectedQuestions()),
-    setNowShowing: (nowShowingValue, selectedStudentIds) => dispatch(setNowShowing(nowShowingValue, selectedStudentIds)),
-    setAnonymous: value => dispatch(setAnonymous(value)),
-    hideCompareView: () => dispatch(hideCompareView()),
-    trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label)),
+    fetchAndObserveData: () => dispatch(fetchAndObserveData())
   };
 };
 
