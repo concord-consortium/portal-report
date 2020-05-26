@@ -64,12 +64,12 @@ export default class IframeAnswer extends PureComponent {
       const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
       return (
         <React.Fragment>
-          <a onClick={this.toggleIframe} target="_blank">{toggleText}</a> |{" "}
-          <a href={standaloneLinkUrl} target="_blank">Open in new tab {externalLinkIcon}</a>
+          <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a> |{" "}
+          <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>
         </React.Fragment>
       );
     } else {
-      return <a href={linkUrl} target="_blank">View work in new tab {externalLinkIcon}</a>;
+      return <a href={linkUrl} target="_blank" data-cy="externalIframe">View work in new tab {externalLinkIcon}</a>;
     }
   }
 

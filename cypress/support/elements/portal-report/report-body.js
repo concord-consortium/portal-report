@@ -81,6 +81,10 @@ class ReportBody {
             .should("be.visible")
             .click({ force: true });
     }
+
+    openAnswersForQuestion(questionId) {
+        cy.get(`[data-cy=${questionId}] .answers-toggle`).click({force: true})
+    }
 }
 
 export default ReportBody;
