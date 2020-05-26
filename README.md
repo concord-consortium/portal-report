@@ -127,10 +127,13 @@ when you view the class details, you will see a "Local Tracked Q" button next to
 
 Besides the parameters needed for loading data, the report also supports
 
-* `studentId`:  This shows the report for a single student, and removes some UI affordances. The filtering of the student
-                data happens client-side.
-* `iframeQuestionId`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing the
-                model referenced by iframeQuestionId, and the answer saved by studentId (either as state or as a url).
+* `studentId={id}`:   This shows the report for a single student, and removes some UI affordances. The filtering of the
+                      student data happens client-side.
+* `iframeQuestionId={id}`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing
+                      the model referenced by iframeQuestionId, and the answer saved by studentId (either as state or as
+                      a url).
+* `enableFirestorePersistence=true`: Uses a local firestore DB for data persistance across sessions and tabs. Clear the
+                      DB by going to `dev tools > Application > IndexedDB > firebaseLocalStorageDb > Delete database`
 
 ## License
 
