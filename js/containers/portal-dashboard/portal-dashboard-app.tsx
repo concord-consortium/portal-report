@@ -72,7 +72,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             </div>
             <StudentList
               students={students}
-              isAnonymous={true}
+              isAnonymous={false}
             />
           </div>
         }
