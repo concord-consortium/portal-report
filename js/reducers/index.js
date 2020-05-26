@@ -16,7 +16,7 @@ import {
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
 import feedbackReducer from "./feedback-reducer";
 import dashboardReducer from "./dashboard-reducer";
-import { configBool } from "../config";
+import config, { configBool } from "../config";
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
@@ -27,15 +27,18 @@ import queryString from "query-string";
 export const FULL_REPORT = "fullReport";
 export const DASHBOARD = "dashboard";
 export const PORTAL_DASHBOARD = "portalDashboard";
+export const IFRAME_STANDALONE = "iframe-standalone";
 
 export function isDashboardView(viewType) {
   return (viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD);
 }
 
 const INITIAL_VIEW = Map({
-  type: configBool("portal-dashboard")
-          ? PORTAL_DASHBOARD
-          : (configBool("dashboard") ? DASHBOARD : FULL_REPORT)
+  type: config("iframeQuestionId")
+          ? IFRAME_STANDALONE :
+          configBool("portal-dashboard")
+            ? PORTAL_DASHBOARD
+            : (configBool("dashboard") ? DASHBOARD : FULL_REPORT)
 });
 
 // Defines which view / app is going to be used. A full report or a compact dashboard.
@@ -148,6 +151,7 @@ const INITIAL_REPORT_STATE = Map({
   hideSectionNames: false,
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: true,
+  iframeQuestionId: config("iframeQuestionId") || "",
 });
 
 function report(state = INITIAL_REPORT_STATE, action) {

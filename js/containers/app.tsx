@@ -2,8 +2,9 @@ import React from "react";
 import ReportApp from "./report/report-app";
 import DashboardApp from "./dashboard/dashboard-app";
 import PortalDashboardApp from "./portal-dashboard/portal-dashboard-app";
+import IframeStandaloneApp from "./report/iframe-standalone-app";
 import { connect } from "react-redux";
-import { DASHBOARD, PORTAL_DASHBOARD } from "../reducers";
+import { DASHBOARD, PORTAL_DASHBOARD, IFRAME_STANDALONE, FULL_REPORT } from "../reducers";
 
 interface IProps {
   viewType: string;
@@ -12,13 +13,17 @@ interface IProps {
 export class App extends React.PureComponent<IProps> {
   render() {
     const { viewType } = this.props;
-    return (
-      viewType === PORTAL_DASHBOARD
-        ? <PortalDashboardApp />
-        : viewType === DASHBOARD
-          ? <DashboardApp />
-          : <ReportApp />
-    );
+    switch (viewType) {
+      case DASHBOARD:
+        return <DashboardApp />;
+      case PORTAL_DASHBOARD:
+        return <PortalDashboardApp />;
+      case IFRAME_STANDALONE:
+        return <IframeStandaloneApp />;
+      case FULL_REPORT:
+      default:
+        return <ReportApp />;
+    }
   }
 }
 
