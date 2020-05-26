@@ -1,0 +1,39 @@
+@import "../variables";
+
+.customSelect {
+  width: 200px;
+  height: 30px;
+  border-radius: 4px;
+  border: solid 1.5px #979797;
+  background-color: #e2f4f8;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 29px;
+    width: 199px;
+    &:hover {
+      background-color: #B7E2EC;
+    }
+  }
+
+  .list {
+    position: absolute;
+    box-shadow: -2px 2px 5px grey;
+
+    .listItem {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 40px;
+      width: 200px;
+      background-color: white;
+
+      &:hover {
+        background-color: #e2f4f8;
+      }
+
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { fetchAndObserveData } from "../../actions/index";
+import { fetchAndObserveData, trackEvent } from "../../actions/index";
 import { getSortedStudents } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
@@ -10,6 +10,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
+import { setStudentSort } from "../../actions/dashboard";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 import { RootState } from "../../reducers";
@@ -60,7 +61,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
         { activityTrees &&
           <div>
             <div className={css.navigation}>
-              <ClassNav clazzName={clazzName}/>
+              <ClassNav
+                clazzName={clazzName}
+                setStudentSort={setStudentSort}
+                trackEvent={trackEvent}
+              />
               <LevelViewer/>
             </div>
             <StudentList students={students}/>
@@ -89,6 +94,8 @@ function mapStateToProps(state: RootState) {
 const mapDispatchToProps = (dispatch: any, ownProps: any) => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
+    setStudentSort: (value: any) => dispatch(setStudentSort(value)),
+    trackEvent: (category: any, action: any, label: any) => dispatch(trackEvent(category, action, label)),
   };
 };
 
