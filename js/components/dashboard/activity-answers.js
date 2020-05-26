@@ -25,7 +25,7 @@ export class ActivityAnswers extends PureComponent {
     } = this.props;
     const visibleQuestions = activity.get("questions", []).filter(q => q.get("visible"));
     return (
-      <div className={css.activityAnswers} style={{ minWidth: width, width: width }} data-cy="activityAnswers">
+      <div className={css.activityAnswers} style={{ minWidth: width, width }} data-cy="activityAnswers">
         {
           !expanded && <ProgressBar progress={progress} />
         }

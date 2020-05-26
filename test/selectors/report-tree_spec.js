@@ -44,7 +44,7 @@ describe("report tree selectors", () => {
         1: { id: 1, children: [ "2-act", "1-act" ], someSequenceProp: "x" }
       },
       // additional props that get merged into tree:
-      hideSectionNames: hideSectionNames
+      hideSectionNames
     }
   });
 
@@ -92,14 +92,14 @@ describe("report tree selectors", () => {
       id: 1,
       someSectionProp: "x",
       visible: questionVisible,
-      nameHidden: nameHidden,
+      nameHidden,
       children: [ expectedPageTrees({ questionVisible })[1] ]
     },
     2: {
       id: 2,
       someSectionProp: "y",
       visible: true,
-      nameHidden: nameHidden,
+      nameHidden,
       children: [ expectedPageTrees({})[2] ]
     }
   });

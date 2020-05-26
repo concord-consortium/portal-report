@@ -36,7 +36,7 @@ export function setQuestionExpanded(questionId, value) {
   return {
     type: SET_QUESTION_EXPANDED,
     questionId,
-    value: value,
+    value,
   };
 }
 

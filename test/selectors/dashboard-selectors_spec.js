@@ -107,7 +107,7 @@ describe("dashboard selectors", () => {
           activities: {}
         },
         dashboard: {
-          selectedQuestion: selectedQuestion
+          selectedQuestion
         }
       });
 

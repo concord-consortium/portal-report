@@ -83,7 +83,7 @@ class ReportBody {
     }
 
     openAnswersForQuestion(questionId) {
-        cy.get(`[data-cy=${questionId}] .answers-toggle`).click({force: true})
+        cy.get(`[data-cy=${questionId}] .answers-toggle`).click({force: true});
     }
 }
 

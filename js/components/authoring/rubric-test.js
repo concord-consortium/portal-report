@@ -34,7 +34,7 @@ class RubricTest extends PureComponent {
     super(props);
     const rubric = migrate(sampleRubric);
     this.state = {
-      rubric: rubric,
+      rubric,
       rubricText: JSON.stringify(rubric, null, "  "),
       learnerId: "noah123",
       rubricFeedback: {},

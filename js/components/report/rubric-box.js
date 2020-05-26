@@ -20,8 +20,8 @@ export default class RubricBox extends PureComponent {
     const label = rating.label;
     change[critId] = {
       id: ratingId,
-      score: score,
-      label: label,
+      score,
+      label,
       description: criteria.ratingDescriptions[ratingId],
     };
     const newFeedback = Object.assign({}, rubricFeedback, change);
