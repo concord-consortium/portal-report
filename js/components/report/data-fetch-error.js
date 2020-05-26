@@ -55,7 +55,7 @@ export default class DataFetchError extends PureComponent {
   render() {
     const { error } = this.props;
     return (
-      <div className="data-fetch-error">
+      <div className="data-fetch-error" data-cy="dataError">
         <h2>{error.title || "Connection to server failed"}</h2>
         {this.renderError(error)}
       </div>

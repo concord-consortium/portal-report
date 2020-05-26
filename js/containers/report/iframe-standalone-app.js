@@ -63,7 +63,7 @@ class IframeStandaloneApp extends PureComponent {
     const { report, error, isFetching } = this.props;
     return (
       <div className="report-app full-size">
-        <div className="report full-size" style={{ opacity: isFetching ? 0.3 : 1 }}>
+        <div className="report full-size" style={{ opacity: isFetching ? 0.3 : 1 }} data-cy="standaloneIframe">
           {report && this.renderIframe()}
           {error && <DataFetchError error={error} />}
         </div>
