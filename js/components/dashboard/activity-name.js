@@ -20,7 +20,7 @@ export default class ActivityName extends PureComponent {
     const { activity, width, expanded } = this.props;
     const num = this.props.number;
     return (
-      <div className={css.activityName} onClick={this.onActivityNameClick} style={{ width: width }}
+      <div className={css.activityName} onClick={this.onActivityNameClick} style={{ width }}
            data-cy="activityName">
         <div className={css.content}>
           <div className={css.name}>

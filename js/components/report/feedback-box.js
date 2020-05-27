@@ -20,7 +20,7 @@ export default class FeedbackBox extends PureComponent {
   updateText(e) {
     const value = e.target.value;
     this.clearUpdateTimer();
-    this.setState({value: value});
+    this.setState({value});
     this.updateTimer = setTimeout(() => this.props.onChange(this.state.value), this.props.updateInterval || UPDATE_INTERVAL);
   }
 

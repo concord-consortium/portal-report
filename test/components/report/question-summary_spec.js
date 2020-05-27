@@ -19,8 +19,8 @@ describe("<QuestionSummary />", () => {
     "test3@student": {}
   });
   const question = Map({
-    prompt: prompt,
-    answers: answers
+    prompt,
+    answers
   });
 
   it("should have the specified prompt", () => {

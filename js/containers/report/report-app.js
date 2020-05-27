@@ -88,7 +88,7 @@ function mapStateToProps(state) {
     sortedStudents: dataDownloaded && getSortedStudents(state),
     compareViewAnswers: compareViewAnswers && getCompareViewData(state),
     isFetching: data.get("isFetching"),
-    error: error,
+    error,
   };
 }
 

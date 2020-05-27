@@ -1,9 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import {
-  fetchAndObserveData, hideCompareView,
-  hideUnselectedQuestions, showUnselectedQuestions, setNowShowing,
-  setAnonymous, trackEvent } from "../../actions/index";
+import { fetchAndObserveData } from "../../actions/index";
 import DataFetchError from "../../components/report/data-fetch-error";
 import LoadingIcon from "../../components/report/loading-icon";
 import InteractiveIframe from "../../components/report/interactive-iframe";
@@ -82,7 +79,7 @@ function mapStateToProps(state) {
   const dataDownloaded = !error && !data.get("isFetching");
   return {
     report: dataDownloaded && reportState,
-    iframeQuestionId: iframeQuestionId,
+    iframeQuestionId,
     answers,
     isFetching: data.get("isFetching"),
     error,

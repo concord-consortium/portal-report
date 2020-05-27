@@ -97,7 +97,7 @@ function mapStateToProps(state) {
   const dataDownloaded = !error && !data.get("isFetching");
   return {
     isFetching: data.get("isFetching"),
-    error: error,
+    error,
     clazzName: dataDownloaded && state.getIn(["report", "clazzName"]),
     students: dataDownloaded && getSortedStudents(state),
     sequenceTree: dataDownloaded && getSequenceTree(state),
