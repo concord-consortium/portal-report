@@ -1,4 +1,4 @@
-@import "../variables";
+@import "./variables";
 
 .customSelect {
   user-select: none;
@@ -9,32 +9,60 @@
     align-items: center;
     width: 200px;
     height: 30px;
-    padding: 0 5px 0 5px;
     border-radius: 4px;
-    border: solid 1.5px #979797;
-    background-color: #e2f4f8;
+    border: solid 1.5px @cc-charcoal-light1;
+    background-color: @cc-teal-light6;
     cursor: pointer;
 
     &:hover {
-      background-color: #B7E2EC;
+      background-color: @cc-teal-light4;
     }
 
     &.showList, &:active {
-      background-color: #0592AF;
+      background-color: @cc-teal;
       color: white;
       border-color: white;
     }
+
+    .icon {
+      height: 20px;
+      width: 20px;
+      margin: 0 5px 0 5px;
+      fill: @cc-teal;
+
+      &.showList {
+        fill: white;
+      }
+    }
+
+    .current {
+      flex-grow: 1;
+    }
+
+    .arrow {
+      height: 24px;
+      width: 24px;
+      margin: 0 5px 0 5px;
+      fill: @cc-teal;
+
+      &.showList {
+        fill: white;
+        transform: rotate(180deg);
+      }
+    }
+
   }
 
   .list {
     position: absolute;
     margin-top: 1px;
-    box-shadow: -2px 2px 5px grey;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
 
     .listItem {
       display: flex;
       flex-direction: row;
       align-items: center;
+      box-sizing: border-box;
       height: 40px;
       width: 200px;
       padding: 0 5px 0 5px;
@@ -46,11 +74,22 @@
       }
 
       &:hover {
-        background-color: #e2f4f8;
+        background-color: @cc-teal-light6;
       }
 
       &:active {
-        background-color: #B7E2EC;
+        background-color: @cc-teal-light4;
+      }
+
+      .check {
+        height: 24px;
+        width: 24px;
+        margin: 0 5px 0 5px;
+        fill: white;
+
+        &.selected {
+          fill: @cc-teal;
+        }
       }
 
     }

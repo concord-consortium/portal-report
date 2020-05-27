@@ -6,6 +6,7 @@ interface IProps {
   items: SelectItem[];
   setStudentSort: any;
   trackEvent: any;
+  iconId: string;
 }
 
 interface IState {
@@ -20,7 +21,6 @@ export interface SelectItem {
 
 export class CustomSelect extends React.PureComponent<IProps, IState> {
   private divRef = React.createRef<HTMLDivElement>();
-  // private setDivRef: (element: any) => void;
   private setDivRef = (element: any) => {
     this.divRef = element;
   };
@@ -31,10 +31,6 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
       current: props.items[0].action,
       showList: false
     };
-
-    //this.setDivRef = (element) => {
-    //  this.divRef = element;
-    //};
   }
 
   public componentDidMount() {
@@ -46,14 +42,18 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   public render() {
-    const { items } = this.props;
+    const { items, iconId } = this.props;
     const currentItem = items.find(i => i.action === this.state.current);
     return (
       <div className={css.customSelect} ref={this.setDivRef}>
         <div className={css.header + " " + (this.state.showList ? css.showList : "")} onClick={this.handleHeaderClick}>
-          <div className={css.icon}/>
-          <div>{currentItem && currentItem.name}</div>
-          <div className={css.icon}/>
+          <svg className={css.icon + " " + (this.state.showList ? css.showList : "")}>
+            <use xlinkHref={`#${iconId}`} />
+          </svg>
+          <div className={css.current}>{currentItem && currentItem.name}</div>
+          <svg className={css.arrow + " " + (this.state.showList ? css.showList : "")}>
+            <use xlinkHref="#icon-up-arrow" />
+          </svg>
         </div>
         { this.state.showList &&
           <div className={css.list}>
@@ -63,7 +63,9 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
                 className={css.listItem + " " + (this.state.current === item.action ? css.selected : "")}
                 onClick={this.handleListClick(item.action)}
               >
-                <div className={css.icon}/>
+                <svg className={css.check + " " + (this.state.current === item.action ? css.selected : "")}>
+                  <use xlinkHref="#icon-check" />
+                </svg>
                 <div>{item.name}</div>
               </div>
             )) }

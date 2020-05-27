@@ -23,6 +23,7 @@ export class ClassNav extends React.PureComponent<IProps> {
           items={items}
           setStudentSort={setStudentSort}
           trackEvent={trackEvent}
+          iconId={"icon-sort"}
         />
       </div>
     );
