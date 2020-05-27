@@ -21,6 +21,8 @@ interface IProps {
   clazzName: string;
   students: any;
   fetchAndObserveData: () => void;
+  setStudentSort: (value: any) => void;
+  trackEvent: (category: any, action: any, label: any) => void;
   sequenceTree: any;
 }
 
@@ -50,7 +52,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, students, error, sequenceTree } = this.props;
+    const { clazzName, students, error, sequenceTree, setStudentSort, trackEvent } = this.props;
     const { initialLoading } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -91,7 +93,7 @@ function mapStateToProps(state: RootState) {
   };
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: any) => {
+const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setStudentSort: (value: any) => dispatch(setStudentSort(value)),
