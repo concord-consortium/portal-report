@@ -115,7 +115,7 @@ export default function report(state = new ReportState({}), action?: any) {
   // from JWT info) and Firestore security rules also ensure that.
   const { studentId } = queryString.parse(window.location.search);
   const urlBasedStudentSelection = studentId ? Immutable.fromJS([ studentId ]) : null;
-  switch (action && action.type) {
+  switch (action.type) {
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
       let type: ReportType = "student";
@@ -229,7 +229,7 @@ function setUserSettings(state: ReportState, response: any) {
   const {visibility_filter, anonymous_report} = response;
   let selectedQuestions: any[] = [];
   // The visibility_filter might not be setup on the user settings yet
-  if (visibility_filter && visibility_filter.questions) {
+  if (visibility_filter?.questions) {
     selectedQuestions = visibility_filter.questions;
   }
   return state.withMutations((state: ReportState) => {

@@ -23,7 +23,7 @@ export class DataState extends INITIAL_DATA_STATE implements IDataState {
 }
 
 export default function data(state = new DataState({}), action: any) {
-  switch (action && action.type) {
+  switch (action.type) {
     case REQUEST_PORTAL_DATA:
       return state.set("isFetching", true);
     case RECEIVE_RESOURCE_STRUCTURE:

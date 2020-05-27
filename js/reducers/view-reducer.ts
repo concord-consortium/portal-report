@@ -29,7 +29,7 @@ export class ViewState extends INITIAL_VIEW_STATE implements IViewState {
 }
 
 export default function view(state = new ViewState({}), action: any) {
-  switch (action && action.type) {
+  switch (action.type) {
     // Nothing to do here now. In the future, we might let users toggle between full report and dashboard.
     // Implementation can look like:
     // case SWITCH_REPORT_VIEW:
