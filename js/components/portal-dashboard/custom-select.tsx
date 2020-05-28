@@ -38,36 +38,54 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   public render() {
-    const { items, iconId } = this.props;
-    const currentItem = items.find(i => i.action === this.state.current);
     return (
       <div className={css.customSelect} ref={this.divRef}>
-        <div className={css.header + " " + (this.state.showList ? css.showList : "")} onClick={this.handleHeaderClick}>
-          <svg className={css.icon + " " + (this.state.showList ? css.showList : "")}>
-            <use xlinkHref={`#${iconId}`} />
-          </svg>
-          <div className={css.current}>{currentItem && currentItem.name}</div>
-          <svg className={css.arrow + " " + (this.state.showList ? css.showList : "")}>
-            <use xlinkHref="#icon-up-arrow" />
-          </svg>
-        </div>
-        <div className={css.list + " " + (this.state.showList ? css.show : "")}>
-          { items && items.map((item: SelectItem, i: number) => (
+        { this.renderHeader() }
+        { this.renderList() }
+      </div>
+    );
+  }
+
+  private renderHeader = () => {
+    const { items, iconId } = this.props;
+    const currentItem = items.find(i => i.action === this.state.current);
+    const showListClass = this.state.showList ? css.showList : "";
+    return (
+      <div className={`${css.header} ${showListClass}`} onClick={this.handleHeaderClick}>
+        <svg className={`${css.icon} ${showListClass}`}>
+          <use xlinkHref={`#${iconId}`} />
+        </svg>
+        <div className={css.current}>{currentItem && currentItem.name}</div>
+        <svg className={`${css.arrow} ${showListClass}`}>
+          <use xlinkHref="#icon-up-arrow" />
+        </svg>
+      </div>
+    );
+  }
+
+  private renderList = () => {
+    const { items } = this.props;
+    return (
+      <div className={`${css.list} ${(this.state.showList ? css.show : "")}`}>
+        { items && items.map((item: SelectItem, i: number) => {
+          const currentClass = this.state.current === item.action ? css.selected : "";
+          return (
             <div
               key={`item ${i}`}
-              className={css.listItem + " " + (this.state.current === item.action ? css.selected : "")}
+              className={`${css.listItem} ${currentClass}`}
               onClick={this.handleListClick(item.action)}
             >
-              <svg className={css.check + " " + (this.state.current === item.action ? css.selected : "")}>
+              <svg className={`${css.check} ${currentClass}`}>
                 <use xlinkHref="#icon-check" />
               </svg>
               <div>{item.name}</div>
             </div>
-          )) }
-        </div>
+          );
+        }) }
       </div>
     );
   }
+
 
   private handleClick = (e: MouseEvent) => {
     if (this.divRef.current && e.target && !this.divRef.current.contains(e.target as Node)) {
