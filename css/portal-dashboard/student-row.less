@@ -4,17 +4,23 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 45px;
   background-color: white;
 
   .student {
     display: flex;
     align-items: center;
-    height: 45px;
+    height: 44px;
     width: 240px;
 
+    &.compact {
+      height: 32px;
+    }
+
     .name {
-      margin: 0 0 0 20px;
+      margin: 0 20px 0 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
   }
