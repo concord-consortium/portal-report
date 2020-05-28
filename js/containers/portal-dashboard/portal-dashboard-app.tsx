@@ -21,8 +21,8 @@ interface IProps {
   clazzName: string;
   students: any;
   fetchAndObserveData: () => void;
-  setStudentSort: (value: any) => void;
-  trackEvent: (category: any, action: any, label: any) => void;
+  setStudentSort: (value: string) => void;
+  trackEvent: (category: string, action: string, label: string) => void;
   sequenceTree: any;
 }
 
@@ -97,7 +97,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setStudentSort: (value: any) => dispatch(setStudentSort(value)),
-    trackEvent: (category: any, action: any, label: any) => dispatch(trackEvent(category, action, label)),
+    trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };
 

@@ -4,8 +4,8 @@ import css from "../../../css/portal-dashboard/custom-select.less";
 
 interface IProps {
   items: SelectItem[];
-  setStudentSort: any;
-  trackEvent: any;
+  onSelectItem: (value: string) => void;
+  trackEvent: (category: string, action: string, label: string) => void;
   iconId: string;
 }
 
@@ -21,10 +21,6 @@ export interface SelectItem {
 
 export class CustomSelect extends React.PureComponent<IProps, IState> {
   private divRef = React.createRef<HTMLDivElement>();
-  private setDivRef = (element: any) => {
-    this.divRef = element;
-  };
-
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -45,7 +41,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     const { items, iconId } = this.props;
     const currentItem = items.find(i => i.action === this.state.current);
     return (
-      <div className={css.customSelect} ref={this.setDivRef}>
+      <div className={css.customSelect} ref={this.divRef}>
         <div className={css.header + " " + (this.state.showList ? css.showList : "")} onClick={this.handleHeaderClick}>
           <svg className={css.icon + " " + (this.state.showList ? css.showList : "")}>
             <use xlinkHref={`#${iconId}`} />
@@ -73,7 +69,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private handleClick = (e: any) => {
+  private handleClick = (e: MouseEvent) => {
     if (this.divRef.current && e.target && !this.divRef.current.contains(e.target as Node)) {
       this.setState({
         showList: false
@@ -88,8 +84,8 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private handleListClick = (current: string) => () => {
-    this.props.setStudentSort(current);
-    this.props.trackEvent("Dashboard", "Sorted", current);
+    this.props.onSelectItem(current);
+    this.props.trackEvent("Portal-Dashboard", "Dropdown", current);
     this.setState({
       current,
       showList: false

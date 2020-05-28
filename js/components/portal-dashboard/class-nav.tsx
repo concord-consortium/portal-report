@@ -6,8 +6,8 @@ import css from "../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
   clazzName: string;
-  setStudentSort: any;
-  trackEvent: any;
+  setStudentSort: (value: string) => void;
+  trackEvent: (category: string, action: string, label: string) => void;
 }
 
 export class ClassNav extends React.PureComponent<IProps> {
@@ -21,7 +21,7 @@ export class ClassNav extends React.PureComponent<IProps> {
         class nav for {clazzName}
         <CustomSelect
           items={items}
-          setStudentSort={setStudentSort}
+          onSelectItem={setStudentSort}
           trackEvent={trackEvent}
           iconId={"icon-sort"}
         />
