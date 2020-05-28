@@ -52,14 +52,18 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     const showListClass = this.state.showList ? css.showList : "";
     return (
       <div className={`${css.header} ${showListClass}`} onClick={this.handleHeaderClick}>
-        <svg className={`${css.icon} ${showListClass}`}>
-          <use xlinkHref={`#${iconId}`} />
-        </svg>
+        { this.renderIcon(`${css.icon} ${showListClass}`, `#${iconId}` ) }
         <div className={css.current}>{currentItem && currentItem.name}</div>
-        <svg className={`${css.arrow} ${showListClass}`}>
-          <use xlinkHref="#icon-up-arrow" />
-        </svg>
+        { this.renderIcon(`${css.arrow} ${showListClass}`, "#icon-arrow" ) }
       </div>
+    );
+  }
+
+  private renderIcon = (cssClass: string, iconId: string) => {
+    return (
+      <svg className={cssClass}>
+        <use xlinkHref={iconId} />
+      </svg>
     );
   }
 
@@ -75,9 +79,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
               className={`${css.listItem} ${currentClass}`}
               onClick={this.handleListClick(item.action)}
             >
-              <svg className={`${css.check} ${currentClass}`}>
-                <use xlinkHref="#icon-check" />
-              </svg>
+              { this.renderIcon(`${css.check} ${currentClass}`, "#icon-check" ) }
               <div>{item.name}</div>
             </div>
           );
