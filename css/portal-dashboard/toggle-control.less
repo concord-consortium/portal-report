@@ -1,0 +1,54 @@
+@import "./variables";
+
+.toggle {
+  width: 34px;
+  height: 14px;
+  cursor: pointer;
+
+  .track {
+    width: 34px;
+    height: 14px;
+    border-radius: 7px;
+    background-color: @cc-charcoal-light1;
+
+    &.toggleOn {
+      background-color: @cc-teal;
+    }
+  }
+
+  .ball {
+    position: relative;
+    top: -17px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 2px solid @cc-charcoal-light1;
+    background-color: @cc-teal-light6;
+    transition-property: transform;
+    transition-duration: .25s;
+
+    &:hover {
+      background-color: @cc-teal-light4;
+    }
+    &:active {
+      background-color: @cc-teal;
+      border-color: white;
+    }
+
+    &.toggleOn {
+      transform: translate(17px, 0);
+      background-color: @cc-teal;
+      border-color: white;
+    }
+
+    &:hover.toggleOn {
+      background-color: @cc-teal-light4;
+    }
+    &:active.toggleOn {
+      background-color: @cc-teal-light6;
+      border-color: @cc-charcoal-light1;
+    }
+
+  }
+
+}

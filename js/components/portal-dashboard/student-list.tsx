@@ -15,7 +15,7 @@ export class StudentList extends React.PureComponent<IProps> {
       <div className={css.studentList} data-cy="student-list">
         { students && students.map((student: any, i: number) => {
           const formattedName = isAnonymous
-                                ? `Student ${i + 1}`
+                                ? `Student ${student.get("id")}`
                                 : `${student.get("lastName")}, ${student.get("firstName")}`;
           return (
             <StudentRow key={`student ${i}`} name={formattedName}/>
