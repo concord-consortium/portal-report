@@ -17,13 +17,14 @@ export class ClassNav extends React.PureComponent<IProps> {
                                  { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
     const { clazzName, setStudentSort, trackEvent } = this.props;
     return (
-      <div className={css.classNav}>
+      <div className={css.classNav} data-test="class-nav">
         class nav for {clazzName}
         <CustomSelect
           items={items}
           onSelectItem={setStudentSort}
           trackEvent={trackEvent}
           iconId={"icon-sort"}
+          dataTest={"sort-students"}
         />
       </div>
     );

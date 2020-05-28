@@ -7,6 +7,7 @@ interface IProps {
   onSelectItem: (value: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   iconId: string;
+  dataTest?: string;
 }
 
 interface IState {
@@ -39,7 +40,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
 
   public render() {
     return (
-      <div className={css.customSelect} ref={this.divRef}>
+      <div className={css.customSelect} ref={this.divRef} data-test={this.props.dataTest}>
         { this.renderHeader() }
         { this.renderList() }
       </div>
