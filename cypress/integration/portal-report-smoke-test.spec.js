@@ -133,7 +133,6 @@ context("Portal Report Smoke Test", () => {
                             }
                         }
                     }
-
                     // eslint-disable-next-line no-undef
                     body.getActivities().should("have.length", activityNum);
                     body.getShowResponses(questionIndex).should("be.visible").click({ force: true });
