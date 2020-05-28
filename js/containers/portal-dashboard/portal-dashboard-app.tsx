@@ -18,7 +18,7 @@ import { RootState } from "../../reducers";
 interface IProps {
   isFetching: boolean;
   error: IResponse;
-  clazzName: string;
+  clazzName: string | false;
   students: any;
   fetchAndObserveData: () => void;
   setStudentSort: (value: string) => void;
@@ -64,7 +64,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           <div>
             <div className={css.navigation}>
               <ClassNav
-                clazzName={clazzName}
+                clazzName={clazzName ? clazzName : ""}
                 setStudentSort={setStudentSort}
                 trackEvent={trackEvent}
               />
@@ -80,7 +80,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(state: RootState): Partial<IProps> {
   const data = state.get("data");
   const error = data.get("error");
   const dataDownloaded = !error && !data.get("isFetching");
@@ -96,7 +96,7 @@ function mapStateToProps(state: RootState) {
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
-    setStudentSort: (value: any) => dispatch(setStudentSort(value)),
+    setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };
