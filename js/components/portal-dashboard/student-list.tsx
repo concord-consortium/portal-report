@@ -4,17 +4,23 @@ import { StudentRow } from "./student-row";
 import css from "../../../css/portal-dashboard/student-list.less";
 
 interface IProps {
-  students: any; // TODO: temporary, update props as component is built
+  students: any; // TODO: add type
+  isAnonymous: boolean;
 }
 
 export class StudentList extends React.PureComponent<IProps> {
   render() {
-    const { students } = this.props;
+    const { students, isAnonymous } = this.props;
     return (
       <div className={css.studentList}>
-        { students && students.map((student: any, i: number) => (
-          <StudentRow key={`student ${i}`} name={student.get("name")}/>
-        )) }
+        { students && students.map((student: any, i: number) => {
+          const formattedName = isAnonymous
+                                ? `Student ${i + 1}`
+                                : `${student.get("lastName")}, ${student.get("firstName")}`;
+          return (
+            <StudentRow key={`student ${i}`} name={formattedName}/>
+          );
+        }) }
       </div>
     );
   }
