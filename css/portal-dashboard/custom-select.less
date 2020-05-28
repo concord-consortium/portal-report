@@ -12,6 +12,8 @@
     border-radius: 4px;
     border: solid 1.5px @cc-charcoal-light1;
     background-color: @cc-teal-light6;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
 
     &:hover {
@@ -22,6 +24,13 @@
       background-color: @cc-teal;
       color: white;
       border-color: white;
+    }
+
+    &:active .icon {
+      fill: white;
+    }
+    &:active .arrow {
+      fill: white;
     }
 
     .icon {
@@ -44,6 +53,8 @@
       width: 24px;
       margin: 0 5px 0 5px;
       fill: @cc-teal;
+      transition-property: transform;
+      transition-duration: .25s;
 
       &.showList {
         fill: white;
@@ -56,7 +67,15 @@
   .list {
     position: absolute;
     margin-top: 1px;
+    border-radius: 0 0 4px 4px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: .25s;
+
+    &.show {
+      opacity: 1;
+    }
 
     .listItem {
       display: flex;
@@ -67,6 +86,7 @@
       width: 200px;
       padding: 0 5px 0 5px;
       background-color: white;
+      font-size: 16px;
       cursor: pointer;
 
       &.selected {
@@ -79,6 +99,9 @@
 
       &:active {
         background-color: @cc-teal-light4;
+      }
+      &:active .check {
+        fill: @cc-teal;
       }
 
       .check {
@@ -93,5 +116,9 @@
       }
 
     }
+    .listItem:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+
   }
 }

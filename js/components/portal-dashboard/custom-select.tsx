@@ -55,22 +55,20 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
             <use xlinkHref="#icon-up-arrow" />
           </svg>
         </div>
-        { this.state.showList &&
-          <div className={css.list}>
-            { items && items.map((item: SelectItem, i: number) => (
-              <div
-                key={`item ${i}`}
-                className={css.listItem + " " + (this.state.current === item.action ? css.selected : "")}
-                onClick={this.handleListClick(item.action)}
-              >
-                <svg className={css.check + " " + (this.state.current === item.action ? css.selected : "")}>
-                  <use xlinkHref="#icon-check" />
-                </svg>
-                <div>{item.name}</div>
-              </div>
-            )) }
-          </div>
-        }
+        <div className={css.list + " " + (this.state.showList ? css.show : "")}>
+          { items && items.map((item: SelectItem, i: number) => (
+            <div
+              key={`item ${i}`}
+              className={css.listItem + " " + (this.state.current === item.action ? css.selected : "")}
+              onClick={this.handleListClick(item.action)}
+            >
+              <svg className={css.check + " " + (this.state.current === item.action ? css.selected : "")}>
+                <use xlinkHref="#icon-check" />
+              </svg>
+              <div>{item.name}</div>
+            </div>
+          )) }
+        </div>
       </div>
     );
   }
