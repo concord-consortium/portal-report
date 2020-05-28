@@ -56,7 +56,7 @@ describe("Provide Feedback", function() {
     cy.get("#feedbackEnabled").click();
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row").first().within(() => {
-      cy.get("[data-cy=feedbackBox]").type("Your work was great!").blur();
+      cy.get("[data-cy=feedbackBox]").clear().type(" Your work was great!").blur();
       cy.get(".feedback-complete input").check();
     });
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
@@ -72,7 +72,7 @@ describe("Provide Feedback", function() {
     cy.get("#feedbackEnabled").check();
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row").first().within(() => {
-      cy.get("[data-cy=feedbackBox]").type("Your answer was great!").blur();
+      cy.get("[data-cy=feedbackBox]").clear().type(" Your answer was great!").blur();
       cy.get(".feedback-complete input").check();
     });
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
@@ -256,7 +256,7 @@ describe("Provide Feedback", function() {
 
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row:contains('Galloway')").first().within(() => {
-      cy.get("[data-cy=feedbackBox]").type("Your work was great!").blur();
+      cy.get("[data-cy=feedbackBox]").clear().type(" Your work was great!").blur();
       cy.get("input.score-input").clear().type("5");
       // TODO improve the feedbackBox so it doesn't wait a second before sending
       // the data to the store
@@ -267,6 +267,7 @@ describe("Provide Feedback", function() {
 
     // Open the student page
     cy.visit("/?studentId=3&enableFirestorePersistence=true");
+    cy.wait(3000);
     cy.get(".act-feedback-panel").should("contain", "Your work was great!");
     cy.get(".studentScore").should("contain", "5");
     cy.get(".maxScore").should("contain", "14");
@@ -280,7 +281,7 @@ describe("Provide Feedback", function() {
     cy.get(".max-score-input").clear().type("9");
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
-      cy.get("[data-cy=feedbackBox]").type("Your work on Question 1 was great!").blur();
+      cy.get("[data-cy=feedbackBox]").clear().type(" Your work on Question 1 was great!").blur();
       cy.get("input.score-input").clear().type("3");
       // TODO improve the feedbackBox so it doesn't wait a second before sending
       // the data to the store
@@ -296,7 +297,7 @@ describe("Provide Feedback", function() {
     cy.get("#giveScore").check();
     cy.get(".max-score-input").clear().type("8");
     cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
-      cy.get("[data-cy=feedbackBox]").type("Your work on Question 2 was great!").blur();
+      cy.get("[data-cy=feedbackBox]").clear().type(" Your work on Question 2 was great!").blur();
       cy.get("input.score-input").clear().type("4");
       // TODO improve the feedbackBox so it doesn't wait a second before sending
       // the data to the store
@@ -315,7 +316,7 @@ describe("Provide Feedback", function() {
     // Provide activity level feedback
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row:contains('Jenkins')").first().within(() => {
-      cy.get("[data-cy=feedbackBox]").type("Your work was great!").blur();
+      cy.get("[data-cy=feedbackBox]").clear().type(" Your work was great!").blur();
       cy.get(".feedback-complete input").check();
     });
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
@@ -327,6 +328,7 @@ describe("Provide Feedback", function() {
 
     // Open the student page
     cy.visit("/?studentId=1&enableFirestorePersistence=true");
+    cy.wait(3000);
     cy.get(".act-feedback-panel").should("contain", "Your work was great!");
     cy.get(".act-feedback-panel .studentScore").should("contain", "7");
     cy.get(".act-feedback-panel .maxScore").should("contain", "17");
@@ -345,7 +347,7 @@ describe("Provide Feedback", function() {
     });
 
     cy.get(".question [data-cy=feedbackButton]").first().click();
-    cy.get("[data-cy=feedbackBox]").first().type("Your answer was great!").blur();
+    cy.get("[data-cy=feedbackBox]").first().clear().type(" Your answer was great!").blur();
     cy.contains("Connection to server failed");
   });
 });

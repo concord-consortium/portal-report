@@ -4,7 +4,8 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:cypress/recommended"
   ],
   env: {
     browser: true,
@@ -50,7 +51,8 @@ module.exports = {
     "react/jsx-no-target-blank": "off",
     "react/no-unescaped-entities": "off",
     "react/prop-types": "off",
-    semi: ["error", "always"]
+    semi: ["error", "always"],
+    "cypress/no-unnecessary-waiting": "off"
   },
   settings: {
     react: {
