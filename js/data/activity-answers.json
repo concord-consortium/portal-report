@@ -1,0 +1,481 @@
+[
+  {
+    "answer": {
+      "image_url": "https://ccshutterbug.s3.amazonaws.com/1559832112573-671081.png",
+      "text": "test note 1"
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "image_question_answer_2",
+    "question_id": "image_question_2",
+    "question_type": "image_question",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "image_question_answer",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "image_url": "https://ccshutterbug.s3.amazonaws.com/1560247701245-256667.png",
+      "text": "test note 2"
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "image_question_answer_3",
+    "question_id": "image_question_2",
+    "question_type": "image_question",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "image_question_answer",
+    "platform_user_id": "4",
+    "version": "1"
+  },
+  {
+    "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Read-only value\\\",\\\"readOnly\\\":true,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Test value\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 1 (m)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 2 (s)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240,\\\"rowLines\\\":1,\\\"chartAvgs\\\":false}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\"],[\\\"b\\\",\\\"4\\\",\\\"5\\\",\\\"6\\\"],[\\\"c\\\",\\\"7\\\",\\\"8\\\",\\\"9\\\"]]}\"}",
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_16",
+    "question_id": "mw_interactive_19",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "interactive_state",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Read-only value\\\",\\\"readOnly\\\":true,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Test value\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 1 (m)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 2 (s)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240,\\\"rowLines\\\":1,\\\"chartAvgs\\\":false}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\"],[\\\"b\\\",\\\"4\\\",\\\"5\\\",\\\"6\\\"],[\\\"c\\\",\\\"7\\\",\\\"8\\\",\\\"9\\\"]]}\"}",
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_18",
+    "question_id": "mw_interactive_19",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "interactive_state",
+    "platform_user_id": "6",
+    "version": "1"
+  },
+  {
+    "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_17",
+    "question_id": "mw_interactive_22",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "external_link",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_19",
+    "question_id": "mw_interactive_22",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "external_link",
+    "platform_user_id": "5",
+    "version": "1"
+  },
+  {
+    "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=53cb43a70d5b2c3bea0cd86bbdd50241",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "labbook_answer_1",
+    "question_id": "labbook_1",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "external_link",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": "https://labbook.concord.org/albums?todo=report&source=CC_LARA&user_id=53cb43a70d5b2c3bea0cd86bbdd50241",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "labbook_answer_2",
+    "question_id": "labbook_1",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "external_link",
+    "platform_user_id": "4",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        58
+      ]
+    },
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "multiple_choice_answer_90",
+    "question_id": "multiple_choice_19",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        69
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_96",
+    "question_id": "multiple_choice_22",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        68
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_97",
+    "question_id": "multiple_choice_22",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "5",
+    "version": "1"
+  },
+  {
+    "answer": "test answer 1",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_30",
+    "question_id": "open_response_60",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": "test answer 2",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_31",
+    "question_id": "open_response_60",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "3",
+    "version": "1"
+  },
+  {
+    "answer": "test answer 3",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_32",
+    "question_id": "open_response_60",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "6",
+    "version": "1"
+  },
+  {
+    "answer": "test required answer 2",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_33",
+    "question_id": "open_response_61",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "1",
+    "version": "1",
+    "submitted": true
+  },
+  {
+    "answer": "test required answer 2",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_34",
+    "question_id": "open_response_61",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "6",
+    "version": "1",
+    "submitted": false
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        59
+      ]
+    },
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "multiple_choice_answer_1000",
+    "question_id": "multiple_choice_19",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "6",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        70
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1001",
+    "question_id": "multiple_choice_22",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "6",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "image_url": "https://ccshutterbug.s3.amazonaws.com/1560247701245-256667.png",
+      "text": "test note 2"
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "image_question_answer_4",
+    "question_id": "image_question_2",
+    "question_type": "image_question",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "image_question_answer",
+    "platform_user_id": "6",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        88
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1002",
+    "question_id": "multiple_choice_23",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "2",
+    "version": "1",
+    "submitted":true
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        89
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1003",
+    "question_id": "multiple_choice_23",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "4",
+    "version": "1",
+    "submitted":true
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        88
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1004",
+    "question_id": "multiple_choice_23",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "6",
+    "version": "1",
+    "submitted":false
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        90
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1005",
+    "question_id": "multiple_choice_23",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "1",
+    "version": "1",
+    "submitted":false
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        90
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1005",
+    "question_id": "multiple_choice_23",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "1",
+    "version": "1",
+    "submitted":false
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        72,74
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1006",
+    "question_id": "multiple_choice_24",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "3",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        72,73
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1007",
+    "question_id": "multiple_choice_24",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "2",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        73
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1008",
+    "question_id": "multiple_choice_24",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "4",
+    "version": "1"
+  },
+  {
+    "answer": {
+      "choice_ids": [
+        74
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_1009",
+    "question_id": "multiple_choice_24",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "5",
+    "version": "1"
+  },
+  {
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_20",
+    "question_id": "mw_interactive_26",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "interactive_state",
+    "platform_user_id": "1",
+    "version": "1",
+    "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":null,\"interactiveState\":\"{\\\"version\\\":1,\\\"state\\\":{\\\"simulation\\\":{\\\"requireEruption\\\":true,\\\"requirePainting\\\":true,\\\"scenario\\\":\\\"Cerro Negro\\\",\\\"toolbox\\\":\\\"Everything\\\",\\\"initialCodeTitle\\\":\\\"Basic\\\",\\\"initialXmlCode\\\":\\\"\\u003Cxml xmlns=\\\\\\\"http://www.w3.org/1999/xhtml\\\\\\\"\\u003E\\\\n  \\u003Cblock type=\\\\\\\"create_sample_location\\\\\\\" id=\\\\\\\"eT(e4O(VTQS9Ij2FOic3\\\\\\\" x=\\\\\\\"16\\\\\\\" y=\\\\\\\"11\\\\\\\"\\u003E\\\\n    \\u003Cfield name=\\\\\\\"x\\\\\\\"\\u003E0\\u003C/field\\u003E\\\\n    \\u003Cfield name=\\\\\\\"y\\\\\\\"\\u003E0\\u003C/field\\u003E\\\\n    \\u003Cfield name=\\\\\\\"name\\\\\\\"\\u003Emoon\\u003C/field\\u003E\\\\n    \\u003Cnext\\u003E\\\\n      \\u003Cblock type=\\\\\\\"simulate_wind\\\\\\\" id=\\\\\\\"_+0@wO)r3`Y]OeZe{,+|\\\\\\\"\\u003E\\\\n        \\u003Cvalue name=\\\\\\\"wspeed\\\\\\\"\\u003E\\\\n          \\u003Cblock type=\\\\\\\"math_number\\\\\\\" id=\\\\\\\"kWGFyC-,h}=:cmT@~~d{\\\\\\\"\\u003E\\\\n            \\u003Cfield name=\\\\\\\"NUM\\\\\\\"\\u003E10\\u003C/field\\u003E\\\\n          \\u003C/block\\u003E\\\\n        \\u003C/value\\u003E\\\\n        \\u003Cvalue name=\\\\\\\"wdirection\\\\\\\"\\u003E\\\\n          \\u003Cblock type=\\\\\\\"math_number\\\\\\\" id=\\\\\\\"@}titckp)$rahpP1+?r;\\\\\\\"\\u003E\\\\n            \\u003Cfield name=\\\\\\\"NUM\\\\\\\"\\u003E90\\u003C/field\\u003E\\\\n          \\u003C/block\\u003E\\\\n        \\u003C/value\\u003E\\\\n        \\u003Cnext\\u003E\\\\n          \\u003Cblock type=\\\\\\\"create_sample_collection\\\\\\\" id=\\\\\\\"xvYo^t^BZPm;Y/s}G!#@\\\\\\\"\\u003E\\\\n            \\u003Cfield name=\\\\\\\"name\\\\\\\"\\u003Emoon data\\u003C/field\\u003E\\\\n            \\u003Cfield name=\\\\\\\"locations\\\\\\\"\\u003Emoon\\u003C/field\\u003E\\\\n            \\u003Cnext\\u003E\\\\n              \\u003Cblock type=\\\\\\\"graph_any_wind_data\\\\\\\" id=\\\\\\\"8cf$lk.MY`Z_T.B~[hpe\\\\\\\"\\u003E\\\\n                \\u003Cfield name=\\\\\\\"yAxis\\\\\\\"\\u003Edirection\\u003C/field\\u003E\\\\n                \\u003Cfield name=\\\\\\\"xAxis\\\\\\\"\\u003Edirection\\u003C/field\\u003E\\\\n                \\u003Cvalue name=\\\\\\\"wind data\\\\\\\"\\u003E\\\\n                  \\u003Cblock type=\\\\\\\"all_wind_data\\\\\\\" id=\\\\\\\"t_wWni-;;Fd7*x;*N:rA\\\\\\\"\\u003E\\u003C/block\\u003E\\\\n                \\u003C/value\\u003E\\\\n              \\u003C/block\\u003E\\\\n            \\u003C/next\\u003E\\\\n          \\u003C/block\\u003E\\\\n        \\u003C/next\\u003E\\\\n      \\u003C/block\\u003E\\\\n    \\u003C/next\\u003E\\\\n  \\u003C/block\\u003E\\\\n\\u003C/xml\\u003E\\\",\\\"stagingWindSpeed\\\":10,\\\"stagingWindDirection\\\":90,\\\"stagingMass\\\":10000000000000,\\\"stagingColHeight\\\":20000},\\\"uiStore\\\":{\\\"showBlocks\\\":true,\\\"showCode\\\":true,\\\"showControls\\\":true,\\\"showWindSpeed\\\":true,\\\"showWindDirection\\\":true,\\\"showEjectedVolume\\\":true,\\\"showColumnHeight\\\":true,\\\"showVEI\\\":true,\\\"showConditions\\\":true,\\\"showCrossSection\\\":false,\\\"showMonteCarlo\\\":true,\\\"showData\\\":true,\\\"showSpeedControls\\\":false,\\\"showBarHistogram\\\":false,\\\"showLog\\\":false,\\\"showDemoCharts\\\":false}}}\"}"
+  },
+  {
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_21",
+    "question_id": "mw_interactive_26",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "interactive_state",
+    "platform_user_id": "5",
+    "version": "1",
+    "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":null,\"interactiveState\":\"{\\\"version\\\":1,\\\"state\\\":{\\\"simulation\\\":{\\\"requireEruption\\\":true,\\\"requirePainting\\\":true,\\\"scenario\\\":\\\"Cerro Negro\\\",\\\"toolbox\\\":\\\"Everything\\\",\\\"initialCodeTitle\\\":\\\"Basic\\\",\\\"initialXmlCode\\\":\\\"\\u003Cxml xmlns=\\\\\\\"http://www.w3.org/1999/xhtml\\\\\\\"\\u003E\\\\n  \\u003Cblock type=\\\\\\\"create_sample_location\\\\\\\" id=\\\\\\\"eT(e4O(VTQS9Ij2FOic3\\\\\\\" x=\\\\\\\"16\\\\\\\" y=\\\\\\\"11\\\\\\\"\\u003E\\\\n    \\u003Cfield name=\\\\\\\"x\\\\\\\"\\u003E0\\u003C/field\\u003E\\\\n    \\u003Cfield name=\\\\\\\"y\\\\\\\"\\u003E0\\u003C/field\\u003E\\\\n    \\u003Cfield name=\\\\\\\"name\\\\\\\"\\u003Emoon\\u003C/field\\u003E\\\\n    \\u003Cnext\\u003E\\\\n      \\u003Cblock type=\\\\\\\"simulate_wind\\\\\\\" id=\\\\\\\"_+0@wO)r3`Y]OeZe{,+|\\\\\\\"\\u003E\\\\n        \\u003Cvalue name=\\\\\\\"wspeed\\\\\\\"\\u003E\\\\n          \\u003Cblock type=\\\\\\\"math_number\\\\\\\" id=\\\\\\\"kWGFyC-,h}=:cmT@~~d{\\\\\\\"\\u003E\\\\n            \\u003Cfield name=\\\\\\\"NUM\\\\\\\"\\u003E10\\u003C/field\\u003E\\\\n          \\u003C/block\\u003E\\\\n        \\u003C/value\\u003E\\\\n        \\u003Cvalue name=\\\\\\\"wdirection\\\\\\\"\\u003E\\\\n          \\u003Cblock type=\\\\\\\"math_number\\\\\\\" id=\\\\\\\"@}titckp)$rahpP1+?r;\\\\\\\"\\u003E\\\\n            \\u003Cfield name=\\\\\\\"NUM\\\\\\\"\\u003E90\\u003C/field\\u003E\\\\n          \\u003C/block\\u003E\\\\n        \\u003C/value\\u003E\\\\n        \\u003Cnext\\u003E\\\\n          \\u003Cblock type=\\\\\\\"create_sample_collection\\\\\\\" id=\\\\\\\"xvYo^t^BZPm;Y/s}G!#@\\\\\\\"\\u003E\\\\n            \\u003Cfield name=\\\\\\\"name\\\\\\\"\\u003Emoon data\\u003C/field\\u003E\\\\n            \\u003Cfield name=\\\\\\\"locations\\\\\\\"\\u003Emoon\\u003C/field\\u003E\\\\n            \\u003Cnext\\u003E\\\\n              \\u003Cblock type=\\\\\\\"graph_any_wind_data\\\\\\\" id=\\\\\\\"8cf$lk.MY`Z_T.B~[hpe\\\\\\\"\\u003E\\\\n                \\u003Cfield name=\\\\\\\"yAxis\\\\\\\"\\u003Edirection\\u003C/field\\u003E\\\\n                \\u003Cfield name=\\\\\\\"xAxis\\\\\\\"\\u003Edirection\\u003C/field\\u003E\\\\n                \\u003Cvalue name=\\\\\\\"wind data\\\\\\\"\\u003E\\\\n                  \\u003Cblock type=\\\\\\\"all_wind_data\\\\\\\" id=\\\\\\\"t_wWni-;;Fd7*x;*N:rA\\\\\\\"\\u003E\\u003C/block\\u003E\\\\n                \\u003C/value\\u003E\\\\n              \\u003C/block\\u003E\\\\n            \\u003C/next\\u003E\\\\n          \\u003C/block\\u003E\\\\n        \\u003C/next\\u003E\\\\n      \\u003C/block\\u003E\\\\n    \\u003C/next\\u003E\\\\n  \\u003C/block\\u003E\\\\n\\u003C/xml\\u003E\\\",\\\"stagingWindSpeed\\\":10,\\\"stagingWindDirection\\\":90,\\\"stagingMass\\\":10000000000000,\\\"stagingColHeight\\\":20000},\\\"uiStore\\\":{\\\"showBlocks\\\":true,\\\"showCode\\\":true,\\\"showControls\\\":true,\\\"showWindSpeed\\\":true,\\\"showWindDirection\\\":true,\\\"showEjectedVolume\\\":true,\\\"showColumnHeight\\\":true,\\\"showVEI\\\":true,\\\"showConditions\\\":true,\\\"showCrossSection\\\":false,\\\"showMonteCarlo\\\":true,\\\"showData\\\":true,\\\"showSpeedControls\\\":false,\\\"showBarHistogram\\\":false,\\\"showLog\\\":false,\\\"showDemoCharts\\\":false}}}\"}"
+  },
+  {
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_23",
+    "question_id": "mw_interactive_26",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "interactive_state",
+    "platform_user_id": "3",
+    "version": "1",
+    "answer": "{\"version\":1,\"mode\":\"report\",\"interactiveState\":\"{\\\"version\\\":1,\\\"state\\\":{\\\"simulation\\\":{\\\"requireEruption\\\":true,\\\"requirePainting\\\":true,\\\"scenario\\\":\\\"Cerro Negro\\\",\\\"toolbox\\\":\\\"Everything\\\",\\\"initialCodeTitle\\\":\\\"Basic\\\",\\\"initialXmlCode\\\":\\\"<xml xmlns=\\\\\\\"http:\/\/www.w3.org\/1999\/xhtml\\\\\\\">\\\\n  <variables>\\\\n    <variable type=\\\\\\\"\\\\\\\" id=\\\\\\\"]KR*#h=vTE}kXDVPE`@d\\\\\\\">Hi<\/variable>\\\\n  <\/variables>\\\\n  <block type=\\\\\\\"simulate_wind\\\\\\\" id=\\\\\\\"|.;e2cjlB`qA^7S;09x~\\\\\\\" x=\\\\\\\"98\\\\\\\" y=\\\\\\\"63\\\\\\\"><\/block>\\\\n  <block type=\\\\\\\"variables_get\\\\\\\" id=\\\\\\\"^hb1_}l0GP@H8OMw|yHa\\\\\\\" x=\\\\\\\"73\\\\\\\" y=\\\\\\\"154\\\\\\\">\\\\n    <field name=\\\\\\\"VAR\\\\\\\" id=\\\\\\\"]KR*#h=vTE}kXDVPE`@d\\\\\\\" variabletype=\\\\\\\"\\\\\\\">Imsamtwo<\/field>\\\\n  <\/block>\\\\n<\/xml>\\\",\\\"stagingWindSpeed\\\":6,\\\"stagingWindDirection\\\":0,\\\"stagingMass\\\":10000000000000,\\\"stagingColHeight\\\":20000},\\\"uiStore\\\":{\\\"showBlocks\\\":true,\\\"showCode\\\":true,\\\"showControls\\\":true,\\\"showWindSpeed\\\":true,\\\"showWindDirection\\\":true,\\\"showEjectedVolume\\\":true,\\\"showColumnHeight\\\":true,\\\"showVEI\\\":true,\\\"showConditions\\\":true,\\\"showCrossSection\\\":false,\\\"showMonteCarlo\\\":true,\\\"showData\\\":true,\\\"showSpeedControls\\\":false,\\\"showBarHistogram\\\":false,\\\"showLog\\\":false,\\\"showDemoCharts\\\":false}}}\"}"
+  },
+  {
+    "answer": "Basic answer to every question",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_35",
+    "question_id": "open_response_65",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
+    "answer": "Amidala dooku fett fett gonk endor moff darth. Mustafar ahsoka solo boba darth organa solo moff yoda. Calrissian wampa naboo darth jade tatooine jabba. Ewok wicket skywalker jinn. Kessel gonk jabba obi-wan dooku ventress. Mara droid windu darth moff boba secura. Mustafar hutt organa moff cade skywalker moff wicket. Chewbacca mustafar hutt jinn luuke yoda wedge antilles wookiee. Jango biggs darth solo organa. Skywalker dooku darth calamari antilles greedo mandalorians obi-wan. Gamorrean mandalorians tatooine skywalker tatooine aayla hutt ackbar.",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_36",
+    "question_id": "open_response_65",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "2",
+    "version": "1"
+  },
+  {
+    "answer": "Solo luuke wampa jawa owen. Gamorrean chewbacca antilles dooku sidious antilles. Jinn dagobah alderaan darth jango tatooine organa jawa. Mon skywalker zabrak gonk hutt calamari fett organa. Calrissian ackbar darth kenobi organa endor.",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_37",
+    "question_id": "open_response_65",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "3",
+    "version": "1"
+  },
+  {
+    "answer": "Kenobi darth leia hoth darth ackbar. Skywalker sebulba darth antilles droid dantooine kessel hutt. Twi'lek r2-d2 utapau wedge kessel. Tusken raider ackbar organa hutt hoth. Kit lando skywalker skywalker sidious jawa. Cade binks kit organa. Endor kit palpatine mon yoda chewbacca moff biggs moff.",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_38",
+    "question_id": "open_response_65",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "4",
+    "version": "1"
+  },
+  {
+    "answer": "Leia hutt r2-d2 antilles. Calrissian mustafar jade luke obi-wan hoth secura anakin solo. ",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_39",
+    "question_id": "open_response_65",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "5",
+    "version": "1"
+  },
+  {
+    "answer": "Ask the teacher",
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "open_response_answer_40",
+    "question_id": "open_response_65",
+    "question_type": "open_response",
+    "resource_url": "http://app.lara.docker/activities/9",
+    "type": "open_response_answer",
+    "platform_user_id": "6",
+    "version": "1"
+  }
+]
