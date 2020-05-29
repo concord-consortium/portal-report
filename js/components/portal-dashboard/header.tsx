@@ -6,7 +6,7 @@ import css from "../../../css/portal-dashboard/header.less";
 export class Header extends React.PureComponent {
   render() {
     return (
-      <div className={css.dashboardHeader} data-test="dashboard-header">
+      <div className={css.dashboardHeader} data-cy="dashboard-header">
         <div className={css.appInfo}>
           <img src={ccLogoSrc} className={css.logo} />
           <div className={css.pin}/>

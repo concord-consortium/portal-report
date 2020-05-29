@@ -25,11 +25,11 @@ export const progress: ProgressType[] =
 export class ProgressLegendContainer extends React.PureComponent {
   render() {
     return (
-      <div className={css.legendContainer} data-test="progress-legend">
+      <div className={css.legendContainer} data-cy="progress-legend">
         <div className={css.legendLabel}> Activity Progress:</div>
         { progress.map((progress, index) => {
           return (
-            <div key={index} className={css.legendKey} data-test={progress.name + "-legend"}>
+            <div key={index} className={css.legendKey} data-cy={progress.name + "-legend"}>
               <div className={`${css.progressIcon} ${progress.class}`}></div>
               <div className={css.legendText}>{progress.name}</div>
             </div>
