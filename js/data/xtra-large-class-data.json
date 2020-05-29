@@ -1,0 +1,547 @@
+{
+  "class_hash": "Class of 108 students",
+  "id": 5,
+  "name": "Xtra Large Class of 108 students",
+  "students": [
+    {
+      "user_id": 101,
+      "first_name": "Wilhelm",
+      "last_name": "Childs"
+    },
+    {
+      "user_id": 102,
+      "first_name": "Jerry",
+      "last_name": "Cherry"
+    },
+    {
+      "user_id": 103,
+      "first_name": "Manny",
+      "last_name": "Garcia"
+    },
+    {
+      "user_id": 104,
+      "first_name": "Miriam",
+      "last_name": "Strand"
+    },
+    {
+      "user_id": 105,
+      "first_name": "Lobela",
+      "last_name": "MacIntosh"
+    },
+    {
+      "user_id": 106,
+      "first_name": "Claudia",
+      "last_name": "Cairo"
+    },
+    {
+      "user_id": 107,
+      "first_name": "Lola",
+      "last_name": "Saryaya"
+    },
+    {
+      "user_id": 108,
+      "first_name": "Ramon",
+      "last_name": "Monteverde"
+    },
+    {
+      "user_id": 109,
+      "first_name": "Ryan",
+      "last_name": "Zhu"
+    },
+    {
+      "user_id": 110,
+      "first_name": "Bill",
+      "last_name": "Cameron"
+    },
+    {
+      "user_id": 111,
+      "first_name": "Zack",
+      "last_name": "Black"
+    },
+    {
+      "user_id": 112,
+      "first_name": "Millicent",
+      "last_name": "Green"
+    },
+    {
+      "user_id": 113,
+      "first_name": "Jabba",
+      "last_name": "Hut"
+    },
+    {
+      "user_id": 114,
+      "first_name": "なろと",
+      "last_name": "やました"
+    },
+    {
+      "user_id": 115,
+      "first_name": "LaTonya",
+      "last_name": "Cheng"
+    },
+    {
+      "user_id": 116,
+      "first_name": "Kimmy",
+      "last_name": "Lee"
+    },
+    {
+      "user_id": 117,
+      "first_name": "Jackson",
+      "last_name": "Gonzales"
+    },
+    {
+      "user_id": 118,
+      "first_name": "北",
+      "last_name": "東"
+    },
+    {
+      "user_id": 119,
+      "first_name": "Jerry",
+      "last_name": "Bantoto"
+    },
+    {
+      "user_id": 120,
+      "first_name": "Jean",
+      "last_name": "Bartholoma"
+    },
+    {
+      "user_id": 121,
+      "first_name": "Jacob",
+      "last_name": "Connor"
+    },
+    {
+      "user_id": 122,
+      "first_name": "Selby",
+      "last_name": "Swensen"
+    },
+    {
+      "user_id": 123,
+      "first_name": "Rose",
+      "last_name": "Wu"
+    },
+    {
+      "user_id": 124,
+      "first_name": "Daisy",
+      "last_name": "Xu"
+    },
+    {
+      "user_id": 125,
+      "first_name": "Daisy",
+      "last_name": "Wong"
+    },
+    {
+      "user_id": 126,
+      "first_name": "Clifford",
+      "last_name": "Huang"
+    },
+    {
+      "user_id": 127,
+      "first_name": "Dallas",
+      "last_name": "Austin"
+    },
+    {
+      "user_id": 128,
+      "first_name": "Patrick",
+      "last_name": "Ireland"
+    },
+    {
+      "user_id": 129,
+      "first_name": "Καλλιόπη",
+      "last_name": "Λεωνίδας"
+    },
+    {
+      "user_id": 130,
+      "first_name": "😖",
+      "last_name": "( ͡° ͜ʖ ͡°)( ͡° ͜ʖ ͡°)( ͡°ʖ ͡°)"
+    },
+    {
+      "user_id": 131,
+      "first_name": "Bill",
+      "last_name": "Science"
+    },
+    {
+      "user_id": 132,
+      "first_name": "Dora",
+      "last_name": "Explorer"
+    },
+    {
+      "user_id": 133,
+      "first_name": "ཀིདས པོལིཅེམཡ",
+      "last_name": "པཀདས"
+    },
+    {
+      "user_id": 134,
+      "first_name": "Maria",
+      "last_name": "Moreno"
+    },
+    {
+      "user_id": 135,
+      "first_name": "Bob",
+      "last_name": "Yu"
+    },
+    {
+      "user_id": 136,
+      "first_name": "Doris",
+      "last_name": "Week"
+    },
+    {
+      "user_id": 137,
+      "first_name": "John Jacob Jingle",
+      "last_name": "Heimer Schmidt"
+    },
+    {
+      "user_id": 138,
+      "first_name": "Shirley",
+      "last_name": "Surely"
+    },
+    {
+      "user_id": 139,
+      "first_name": "Amy",
+      "last_name": "Galloway"
+    },
+    {
+      "user_id": 140,
+      "first_name": "Ariel",
+      "last_name": "Galloway"
+    },
+    {
+      "user_id": 141,
+      "first_name": "Hubert",
+      "last_name": "Wolfe­schlegel­stein­hausen­berger­dorff"
+    },
+    {
+      "user_id": 142,
+      "first_name": "Zoé",
+      "last_name": "Gladstone"
+    },
+    {
+      "user_id": 143,
+      "first_name": "Marley",
+      "last_name": "Ghost"
+    },
+    {
+      "user_id": 144,
+      "first_name": "Letitia",
+      "last_name": "Grande"
+    },
+    {
+      "user_id": 145,
+      "first_name": "François",
+      "last_name": "Cubes"
+    },
+    {
+      "user_id": 146,
+      "first_name": "Cody",
+      "last_name": "Mack"
+    },
+    {
+      "user_id": 147,
+      "first_name": "Zeek",
+      "last_name": "Bleeck"
+    },
+    {
+      "user_id": 148,
+      "first_name": "Magna",
+      "last_name": "Maravillosa"
+    },
+    {
+      "user_id": 149,
+      "first_name": "Han",
+      "last_name": "Solo"
+    },
+    {
+      "user_id": 150,
+      "first_name": "Mickey",
+      "last_name": "Mouse"
+    },
+    {
+      "user_id": 151,
+      "first_name": "Minnie",
+      "last_name": "Cheng"
+    },
+    {
+      "user_id": 152,
+      "first_name": "Ronald",
+      "last_name": "Duck"
+    },
+    {
+      "user_id": 153,
+      "first_name": "Rose",
+      "last_name": "Tyler"
+    },
+    {
+      "user_id": 154,
+      "first_name": "Martha",
+      "last_name": "Jones"
+    },
+    {
+      "user_id": 155,
+      "first_name": "Donna",
+      "last_name": "Noble"
+    },
+    {
+      "user_id": 156,
+      "first_name": "Amy",
+      "last_name": "Pond"
+    },
+    {
+      "user_id": 157,
+      "first_name": "Rory",
+      "last_name": "Williams"
+    },
+    {
+      "user_id": 158,
+      "first_name": "Clara",
+      "last_name": "Oswald"
+    },
+    {
+      "user_id": 159,
+      "first_name": "Magenta",
+      "last_name": "Black"
+    },
+    {
+      "user_id": 160,
+      "first_name": "Billie",
+      "last_name": "Potts"
+    },
+    {
+      "user_id": 161,
+      "first_name": "Alan",
+      "last_name": "Mash"
+    },
+    {
+      "user_id": 162,
+      "first_name": "Allie",
+      "last_name": "Huang"
+    },
+    {
+      "user_id": 163,
+      "first_name": "Joshua",
+      "last_name": "Aspen"
+    },
+    {
+      "user_id": 164,
+      "first_name": "Patrick",
+      "last_name": "Swann"
+    },
+    {
+      "user_id": 165,
+      "first_name": "Jim",
+      "last_name": "Staghorn"
+    },
+    {
+      "user_id": 166,
+      "first_name": "Cleopatra",
+      "last_name": "Anthony"
+    },
+    {
+      "user_id": 167,
+      "first_name": "Marc",
+      "last_name": "Clemens"
+    },
+    {
+      "user_id": 168,
+      "first_name": "Tom",
+      "last_name": "Sawyer"
+    },
+    {
+      "user_id": 169,
+      "first_name": "Huck",
+      "last_name": "Phinneas"
+    },
+    {
+      "user_id": 170,
+      "first_name": "Susan",
+      "last_name": "Foreman"
+    },
+    {
+      "user_id": 171,
+      "first_name": "River",
+      "last_name": "Song"
+    },
+    {
+      "user_id": 172,
+      "first_name": "Melody",
+      "last_name": "Pond-Williams"
+    },
+    {
+      "user_id": 173,
+      "first_name": "Graham",
+      "last_name": "O'Brien"
+    },
+    {
+      "user_id": 174,
+      "first_name": "Ryan",
+      "last_name": "Sinclair"
+    },
+    {
+      "user_id": 175,
+      "first_name": "Amy",
+      "last_name": "Galloway"
+    },
+    {
+      "user_id": 176,
+      "first_name": "Sherry",
+      "last_name": "Bondaryk"
+    },
+    {
+      "user_id": 177,
+      "first_name": "Scott",
+      "last_name": "Hough"
+    },
+    {
+      "user_id": 178,
+      "first_name": "Nathan",
+      "last_name": "Horwitz"
+    },
+    {
+      "user_id": 179,
+      "first_name": "Rebecca",
+      "last_name": "McIntyre"
+    },
+    {
+      "user_id": 180,
+      "first_name": "Kiley",
+      "last_name": "Trudy"
+    },
+    {
+      "user_id": 181,
+      "first_name": "Jonathan",
+      "last_name": "Lewandowski"
+    },
+    {
+      "user_id": 182,
+      "first_name": "Kirk",
+      "last_name": "Fentress"
+    },
+    {
+      "user_id": 183,
+      "first_name": "Sam",
+      "last_name": "Farmer"
+    },
+    {
+      "user_id": 184,
+      "first_name": "Tom",
+      "last_name": "Collins"
+    },
+    {
+      "user_id": 185,
+      "first_name": "Dixon",
+      "last_name": "Curtis"
+    },
+    {
+      "user_id": 186,
+      "first_name": "Lisa",
+      "last_name": "Komomura"
+    },
+    {
+      "user_id": 187,
+      "first_name": "Jayden",
+      "last_name": "Lau"
+    },
+    {
+      "user_id": 188,
+      "first_name": "Kelly",
+      "last_name": "Leung"
+    },
+    {
+      "user_id": 189,
+      "first_name": "Sabina",
+      "last_name": "Gonzales"
+    },
+    {
+      "user_id": 190,
+      "first_name": "Jeannie",
+      "last_name": "Bottle"
+    },
+    {
+      "user_id": 191,
+      "first_name": "Paul",
+      "last_name": "Sherwin"
+    },
+    {
+      "user_id": 192,
+      "first_name": "Victoria",
+      "last_name": "Victoria"
+    },
+    {
+      "user_id": 193,
+      "first_name": "Peter",
+      "last_name": "Brunswick"
+    },
+    {
+      "user_id": 194,
+      "first_name": "Norma",
+      "last_name": "Blacksmith"
+    },
+    {
+      "user_id": 195,
+      "first_name": "Maximilian",
+      "last_name": "Vandeerwaal"
+    },
+    {
+      "user_id": 196,
+      "first_name": "Daisy Rose Lily Camilla",
+      "last_name": "Tan"
+    },
+    {
+      "user_id": 197,
+      "first_name": "Niels",
+      "last_name": "Fermi"
+    },
+    {
+      "user_id": 198,
+      "first_name": "Albert",
+      "last_name": "Hsi"
+    },
+    {
+      "user_id": 199,
+      "first_name": "Dallas",
+      "last_name": "Austin"
+    },
+    {
+      "user_id": 200,
+      "first_name": "Rhoshandiatellyneshiaunneveshenk",
+      "last_name": "Yu"
+    },
+    {
+      "user_id": 201,
+      "first_name": "Ruth",
+      "last_name": "Wells"
+    },
+    {
+      "user_id": 202,
+      "first_name": "Harry",
+      "last_name": "Charles"
+    },
+    {
+      "user_id": 203,
+      "first_name": "William",
+      "last_name": "Cambridge"
+    },
+    {
+      "user_id": 204,
+      "first_name": "Clementine",
+      "last_name": "Mayo"
+    },
+    {
+      "user_id": 205,
+      "first_name": "Xavier",
+      "last_name": "Cornwall"
+    },
+    {
+      "user_id": 206,
+      "first_name": "Frances",
+      "last_name": "Montenegro"
+    },
+    {
+      "user_id": 207,
+      "first_name": "Lea",
+      "last_name": "Co"
+    },
+    {
+      "user_id": 208,
+      "first_name": "Elliot",
+      "last_name": "Exeter"
+    }
+  ]
+}

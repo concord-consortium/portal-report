@@ -1,6 +1,8 @@
 import { firestoreInitialized } from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
+// import fakeActivityStructure from "../data/activity-structure.json";
 import fakeAnswers from "../data/answers.json";
+// import fakeAnswers from "../data/average-class-activity-answers.json";
 import {AnyAction, Dispatch} from "redux";
 import {
   IPortalRawData,
@@ -86,6 +88,10 @@ function _receivePortalData(db: firebase.firestore.Firestore,
       type: RECEIVE_RESOURCE_STRUCTURE,
       response: fakeSequenceStructure,
     });
+    // dispatch({
+    //   type: RECEIVE_RESOURCE_STRUCTURE,
+    //   response: fakeActivityStructure,
+    // });
     dispatch({
       type: RECEIVE_ANSWERS,
       response: fakeAnswers,

@@ -14,7 +14,7 @@ context("Geode Dashboard Smoke Test", () => {
 
     beforeEach(() => {
         cy.visit("/?dashboard=true");
-        cy.fixture("class-data.json").as("classData");
+        cy.fixture("small-class-data.json").as("classData");
         cy.fixture("sequence-structure.json").as("sequenceStructure");
     });
 

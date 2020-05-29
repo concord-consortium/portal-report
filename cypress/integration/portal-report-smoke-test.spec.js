@@ -22,7 +22,7 @@ context("Portal Report Smoke Test", () => {
     beforeEach(() => {
         cy.visit("/");
         cy.fixture("sequence-structure.json").as("sequenceData");
-        cy.fixture("class-data.json").as("classData");
+        cy.fixture("small-class-data.json").as("classData");
         cy.fixture("answers.json").as("answerData");
     });
 
