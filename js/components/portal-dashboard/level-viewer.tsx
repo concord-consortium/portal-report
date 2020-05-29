@@ -6,6 +6,7 @@ import { ProgressLegendContainer } from "./legend-container";
 
 interface IProps {
   activities: Map<any, any>;
+  currentActivity?: Map<string, any>;
   toggleCurrentActivity: (activityId: string) => void;
 }
 

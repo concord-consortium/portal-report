@@ -5,6 +5,8 @@ import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
 
 // Inputs
+const getActivities = state => state.getIn(["report", "activities"]);
+const getCurrentActivityId = state => state.getIn(["dashboard", "currentActivityId"]);
 const getStudents = state => state.getIn(["report", "students"]);
 const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
@@ -105,4 +107,11 @@ export const getSortedStudents = createSelector(
         return students.toList();
     }
   },
+);
+
+export const getCurrentActivity = createSelector(
+  [ getActivities, getCurrentActivityId ],
+  (activities, currentActivityId) => {
+    return activities.find(activity => activity.get("id") === currentActivityId);
+  }
 );

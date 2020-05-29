@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent } from "../../actions/index";
-import { getSortedStudents } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -21,12 +21,14 @@ interface IProps {
   error: IResponse;
   clazzName: string;
   students: any;
+  sequenceTree: Map<any, any>;
+  studentCount: number;
+  currentActivity?: Map<string, any>;
+
   fetchAndObserveData: () => void;
   setStudentSort: (value: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  sequenceTree: Map<any, any>;
-  studentCount: number;
 }
 
 interface IState {
@@ -55,7 +57,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, students, error, sequenceTree, setStudentSort, toggleCurrentActivity, trackEvent } = this.props;
+    const { clazzName, students, error, sequenceTree, currentActivity, setStudentSort, toggleCurrentActivity, trackEvent } = this.props;
     const { initialLoading } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -75,6 +77,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               <LevelViewer
                 activities={activityTrees}
                 toggleCurrentActivity={toggleCurrentActivity}
+                currentActivity={currentActivity}
               />
             </div>
             <StudentList
@@ -100,6 +103,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     students: dataDownloaded && getSortedStudents(state),
     sequenceTree: dataDownloaded && getSequenceTree(state),
+    currentActivity: getCurrentActivity(state),
   };
 }
 
