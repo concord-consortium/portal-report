@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent } from "../../actions/index";
 import { getSortedStudents } from "../../selectors/dashboard-selectors";
@@ -23,7 +24,7 @@ interface IProps {
   fetchAndObserveData: () => void;
   setStudentSort: (value: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  sequenceTree: any;
+  sequenceTree: Map<any, any>;
   studentCount: number;
 }
 
@@ -57,7 +58,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { initialLoading } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
-    const activityTrees = sequenceTree && sequenceTree.get("children");
+    const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
     return (
       <div className={css.portalDashboardApp}>
         <Header/>
@@ -70,7 +71,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 trackEvent={trackEvent}
                 studentCount = {students.size}
               />
-              <LevelViewer/>
+              <LevelViewer
+                activities={activityTrees}
+              />
             </div>
             <StudentList
               students={students}

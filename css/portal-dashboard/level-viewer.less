@@ -4,6 +4,110 @@
   width: calc(100vw - 240px);
   border-bottom:1.5px solid #979797;
   position: relative;
-  height: 205px;
-}
+  height: @top-nav-level-viewer-height;
+  user-select: none;
 
+  .activityButtons {
+    display: flex;
+    margin-top: 19px;
+    margin-left: 3px;
+
+    .activityButton {
+      position: relative;
+      width: 120px;
+      margin-left: 20px;
+
+      .activityInnerButton {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        height: 120px;
+        border: solid 1.5px @cc-charcoal-light1;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:hover {
+          background-color: @cc-teal-light4;
+        }
+        &:active {
+          color: white;
+          background-color: @cc-teal-dark1;
+
+          .activityTitle {
+            color: white;
+          }
+        }
+
+        .activityTitle {
+          width: 73px;
+          max-height: 48px;
+          padding: 6px 10px 0 10px;
+          font-family: 'Roboto', sans-serif;
+          font-size: 14px;
+          font-weight: 500;
+          color: @cc-teal-dark1;
+        }
+
+        .activityImage {
+          background-color: @cc-teal-light2;
+          height: 60px;
+        }
+
+      }
+
+      .externalLink {
+        position: absolute;
+        right: -3px;
+        bottom: 38px;
+        width: 38px;
+        height: 38px;
+        border-radius: 13px 0 0 0;
+        background-color: white;
+
+        .externalLinkButton {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 5px;
+          margin-left: 5px;
+          width: 30px;
+          height: 30px;
+          border-radius: 8px 0;
+          border: solid 1.5px @cc-charcoal-light1;
+          background-color: @cc-teal-light6;
+          cursor: pointer;
+
+          &:hover {
+            background-color: @cc-teal-light4;
+          }
+          &:active {
+            color: white;
+            background-color: @cc-teal-dark1;
+
+            .icon {
+              fill: white;
+            }
+          }
+
+          .icon {
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+            fill: @cc-teal;
+          }
+        }
+      }
+
+      .progressBar {
+        width: 120px;
+        height: 20px;
+        margin-top: 15px;
+        border-radius: 3px;
+        border: solid 1.5px @cc-orange;
+        background-color: white;
+      }
+    }
+  }
+}
