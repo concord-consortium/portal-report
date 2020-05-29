@@ -1,8 +1,8 @@
 import { RecordFactory } from "../util/record-factory";
 import { Map } from "immutable";
 import {
-  SET_ACTIVITY_EXPANDED, SET_STUDENT_EXPANDED,
-  SET_STUDENTS_EXPANDED, SET_STUDENT_SORT,
+  SET_ACTIVITY_EXPANDED, TOGGLE_CURRENT_ACTIVITY,
+  SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT,
   SORT_BY_NAME, SET_QUESTION_EXPANDED,
   SELECT_QUESTION,
   SORT_BY_MOST_PROGRESS,
@@ -12,11 +12,14 @@ import {
 type SortType = typeof SORT_BY_NAME | typeof SORT_BY_MOST_PROGRESS | typeof SORT_BY_LEAST_PROGRESS;
 
 export interface IDashboardState {
-  sortBy: SortType;
+  // Old dashboard props
   expandedActivities: Map<any, any>;
   expandedStudents: Map<any, any>;
   expandedQuestions: Map<any, any>;
   selectedQuestion: Map<any, any> | null;
+  // New/common dashboard props
+  sortBy: SortType;
+  currentActivityId: string | null;
 }
 
 const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
@@ -25,6 +28,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   expandedStudents: Map(),
   expandedQuestions: Map(),
   selectedQuestion: null,
+  currentActivityId: null,
 });
 
 export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboardState {
@@ -36,6 +40,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   expandedStudents: Map<any, any>;
   expandedQuestions: Map<any, any>;
   selectedQuestion: Map<any, any> | null;
+  currentActivityId: string | null;
 }
 
 export default function dashboard(state = new DashboardState({}), action: any) {
@@ -55,6 +60,12 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       return state.set("sortBy", action.value);
     case SELECT_QUESTION:
       return state.set("selectedQuestion", action.value);
+    case TOGGLE_CURRENT_ACTIVITY:
+      if (state.get("currentActivityId") === action.value) {
+        return state.set("currentActivityId", null);
+      } else {
+        return state.set("currentActivityId", action.value);
+      }
     default:
       return state;
   }

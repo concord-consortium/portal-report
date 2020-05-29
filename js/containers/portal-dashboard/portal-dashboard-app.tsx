@@ -11,7 +11,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort } from "../../actions/dashboard";
+import { setStudentSort, toggleCurrentActivity } from "../../actions/dashboard";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 import { RootState } from "../../reducers";
@@ -23,6 +23,7 @@ interface IProps {
   students: any;
   fetchAndObserveData: () => void;
   setStudentSort: (value: string) => void;
+  toggleCurrentActivity: (activityId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   sequenceTree: Map<any, any>;
   studentCount: number;
@@ -54,7 +55,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, students, error, sequenceTree, setStudentSort, trackEvent } = this.props;
+    const { clazzName, students, error, sequenceTree, setStudentSort, toggleCurrentActivity, trackEvent } = this.props;
     const { initialLoading } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -73,6 +74,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
               <LevelViewer
                 activities={activityTrees}
+                toggleCurrentActivity={toggleCurrentActivity}
               />
             </div>
             <StudentList
@@ -105,6 +107,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
+    toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };

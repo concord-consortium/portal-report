@@ -6,6 +6,7 @@ import { ProgressLegendContainer } from "./legend-container";
 
 interface IProps {
   activities: Map<any, any>;
+  toggleCurrentActivity: (activityId: string) => void;
 }
 
 export class LevelViewer extends React.PureComponent<IProps> {
@@ -23,10 +24,10 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderActivityButton(activity: Map<string, any>) {
+  private renderActivityButton = (activity: Map<string, any>) => {
     return (
       <div key={activity.get("id")} className={css.activityButton}>
-        <div className={css.activityInnerButton}>
+        <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
           <div className={css.activityTitle}>
             {activity.get("name")}
           </div>
@@ -42,5 +43,9 @@ export class LevelViewer extends React.PureComponent<IProps> {
         <div className={css.progressBar} />
       </div>
     );
+  }
+
+  private handleActivityButtonClick = (activityId: string) => () => {
+    this.props.toggleCurrentActivity(activityId);
   }
 }
