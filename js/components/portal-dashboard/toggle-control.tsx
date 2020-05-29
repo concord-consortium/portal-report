@@ -17,7 +17,7 @@ export const ToggleControl: React.FC<IProps> = (props) => {
   const onClass = toggleOn ? css.toggleOn : "";
 
   return (
-    <div className={css.toggle} onClick={handleToggle}>
+    <div className={css.toggle} onClick={handleToggle} data-cy="toggle-control">
       <div className={`${css.track} ${onClass}`}/>
       <div className={`${css.ball} ${onClass}`}/>
     </div>

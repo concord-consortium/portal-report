@@ -9,7 +9,7 @@ interface IProps {
 
 export const Feedback: React.FC<IProps> = (props) => {
   return (
-    <div className={css.feedback}>
+    <div className={css.feedback} data-cy="students-feedback">
       <ToggleControl />
       <div className={css.label}>
         Feedback

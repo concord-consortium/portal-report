@@ -18,6 +18,18 @@ context("Portal Dashboard UI",()=>{
         it('verify class nav loads',()=>{
             cy.get('[data-cy=class-nav]').should('be.visible');
             cy.get('[data-cy=sort-students]').should('be.visible');
+            cy.get('[data-cy=anonymize-students]').should('be.visible');
+            cy.get('[data-cy=anonymize-students]').within(() => {
+                cy.get('[data-cy=toggle-control]').click();
+            });
+            cy.get('[data-cy=student-name]')
+                .each(function(student, i){
+                    cy.get(student).should("contain", "Student");
+                });
+            cy.get('[data-cy=students-feedback]').should('be.visible');
+            cy.get('[data-cy=students-feedback]').within(() => {
+                cy.get('[data-cy=toggle-control]').click();
+            });
         });
     });
     describe('student list',()=>{

@@ -9,7 +9,7 @@ interface IProps {
 
 export const AnonymizeStudents: React.FC<IProps> = (props) => {
   return (
-    <div className={css.anonymizeStudents}>
+    <div className={css.anonymizeStudents} data-cy="anonymize-students">
       <ToggleControl onToggle={props.setAnonymous}/>
       <div className={css.label}>
         Anonymize students

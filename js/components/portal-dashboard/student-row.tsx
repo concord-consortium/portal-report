@@ -12,7 +12,7 @@ export class StudentRow extends React.PureComponent<IProps> {
     return (
       <div className={css.studentRow}>
         <div className={css.student}>
-          <div className={css.name}>{name}</div>
+          <div className={css.name} data-cy="student-name">{name}</div>
         </div>
         <div className={css.responses}>
           <div>response content</div>
