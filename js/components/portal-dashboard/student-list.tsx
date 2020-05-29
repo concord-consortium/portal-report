@@ -12,7 +12,7 @@ export class StudentList extends React.PureComponent<IProps> {
   render() {
     const { students, isAnonymous } = this.props;
     return (
-      <div className={css.studentList}>
+      <div className={css.studentList} data-cy="student-list">
         { students && students.map((student: any, i: number) => {
           const formattedName = isAnonymous
                                 ? `Student ${i + 1}`

@@ -6,7 +6,7 @@ import { ProgressLegendContainer } from "./legend-container";
 export class LevelViewer extends React.PureComponent {
   render() {
     return (
-      <div className={css.levelViewer}>
+      <div className={css.levelViewer} data-cy="level-viewer">
         level viewer content
         <ProgressLegendContainer />
       </div>
