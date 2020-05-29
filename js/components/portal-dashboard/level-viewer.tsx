@@ -33,11 +33,11 @@ export class LevelViewer extends React.PureComponent<IProps> {
           <div className={css.activityImage} />
         </div>
         <div className={css.externalLink}>
-          <div className={css.externalLinkButton}>
+          <a className={css.externalLinkButton} href={activity.get("url")} target="_blank">
             <svg className={css.icon}>
               <use xlinkHref="#external-link" />
             </svg>
-          </div>
+          </a>
         </div>
         <div className={css.progressBar} />
       </div>
