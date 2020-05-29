@@ -3,11 +3,13 @@ import { CustomSelect, SelectItem } from "./custom-select";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../actions/dashboard";
 
 import css from "../../../css/portal-dashboard/class-nav.less";
+import { NumberOfStudentsContainer } from "./num-students-container";
 
 interface IProps {
   clazzName: string;
   setStudentSort: (value: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
+  studentCount: number;
 }
 
 export class ClassNav extends React.PureComponent<IProps> {
@@ -26,6 +28,7 @@ export class ClassNav extends React.PureComponent<IProps> {
           iconId={"icon-sort"}
           dataCy={"sort-students"}
         />
+        <NumberOfStudentsContainer studentCount={this.props.studentCount} />
       </div>
     );
   }

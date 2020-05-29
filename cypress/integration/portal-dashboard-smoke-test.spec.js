@@ -33,4 +33,10 @@ context("Portal Dashboard UI",()=>{
             });
         });
     });
+    describe('Number of students in class',()=>{
+        let numStudents = 6; //TODO: it would be better if numStudents is not hard coded.
+        it('verify number of students in a class loads',()=>{
+            cy.get('[data-test=num-student-container]').should('be.visible').and('contain', numStudents+ ' students');
+        });
+    });
 });

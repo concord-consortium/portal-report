@@ -24,6 +24,7 @@ interface IProps {
   setStudentSort: (value: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   sequenceTree: any;
+  studentCount: number;
 }
 
 interface IState {
@@ -67,6 +68,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 clazzName={clazzName}
                 setStudentSort={setStudentSort}
                 trackEvent={trackEvent}
+                studentCount = {students.size}
               />
               <LevelViewer/>
             </div>
