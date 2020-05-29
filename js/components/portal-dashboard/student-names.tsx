@@ -1,14 +1,13 @@
 import React from "react";
-import { StudentRow } from "./student-row";
 
-import css from "../../../css/portal-dashboard/student-list.less";
+import css from "../../../css/portal-dashboard/student-names.less";
 
 interface IProps {
   students: any; // TODO: add type
   isAnonymous: boolean;
 }
 
-export class StudentList extends React.PureComponent<IProps> {
+export class StudentNames extends React.PureComponent<IProps> {
   render() {
     const { students, isAnonymous } = this.props;
     return (
@@ -18,7 +17,9 @@ export class StudentList extends React.PureComponent<IProps> {
                                 ? `Student ${student.get("id")}`
                                 : `${student.get("lastName")}, ${student.get("firstName")}`;
           return (
-            <StudentRow key={`student ${i}`} name={formattedName}/>
+            <div className={css.studentName} key={`student ${i}`}>
+              <div className={css.name}>{formattedName}</div>
+            </div>
           );
         }) }
       </div>

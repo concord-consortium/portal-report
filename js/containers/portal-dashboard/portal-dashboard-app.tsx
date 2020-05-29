@@ -6,7 +6,8 @@ import { getSortedStudents, getCurrentActivity } from "../../selectors/dashboard
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
-import { StudentList } from "../../components/portal-dashboard/student-list";
+import { StudentNames } from "../../components/portal-dashboard/student-names";
+import { StudentAnswers } from "../../components/portal-dashboard/student-answers";
 import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
@@ -83,10 +84,15 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 currentActivity={currentActivity}
               />
             </div>
-            <StudentList
-              students={students}
-              isAnonymous={isAnonymous}
-            />
+            <div className={css.progressTable}>
+              <StudentNames
+                students={students}
+                isAnonymous={false}
+              />
+              <StudentAnswers
+                students={students}
+              />
+            </div>
           </div>
         }
         { error && <DataFetchError error={error} /> }
