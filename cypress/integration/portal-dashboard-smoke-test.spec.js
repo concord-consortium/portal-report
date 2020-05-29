@@ -1,3 +1,4 @@
+import { getByCypressTag } from "../utils";
 
 context("Portal Dashboard UI",()=>{
     before(()=>{
@@ -26,11 +27,17 @@ context("Portal Dashboard UI",()=>{
     });
     describe('progress',()=>{
         it('verify progress legend loads',()=>{
-            const progress=["Completed","In progress", "Not yet started"];
-            cy.get('[data-cy=progress-legend]').should('be.visible');
+            const progress=["Completed","In-progress", "Not-yet-started"];
+            getByCypressTag('progress-legend').should('be.visible');
             progress.forEach((prog)=>{
-                cy.get('[data-cy="'+prog+'-legend"]').should('be.visible');
+                getByCypressTag(prog+'-legend').should('be.visible');
             });
+        });
+    });
+    describe('Number of students in class',()=>{
+        let numStudents = 6; //TODO: it would be better if numStudents is not hard coded.
+        it('verify number of students in a class loads',()=>{
+            getByCypressTag('num-student-container').should('be.visible').and('contain', numStudents+ ' students');
         });
     });
 });
