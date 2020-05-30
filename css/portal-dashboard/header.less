@@ -42,12 +42,43 @@
     justify-content: center;
     margin: 0 10px 0 10px;
   }
-
-  .login {
+  .headerRight{
     display: flex;
+    flex-direction: row;
+    align-items: center;
     flex: 1;
     justify-content: flex-end;
     margin: 0 10px 0 10px;
   }
+  .icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+  .headerMenu {
+    height: 32px;
+    width: 32px;
+    padding: 12px;
+  }
+  .menuIcon {
+    fill: @cc-teal;
+    cursor: pointer;
 
+    &:hover {
+      background-color: @cc-teal-light2;
+      border-radius: 4px;
+    }
+  }
+  .accountOwner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 12px 0 12px;
+  }
+  .accountOwnerName {
+    font-weight: bold;
+    color: @cc-charcoal;
+    font-size: 16px;
+    margin-right: 8px;
+  }
 }

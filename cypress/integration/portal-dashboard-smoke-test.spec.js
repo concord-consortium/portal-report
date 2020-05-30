@@ -41,9 +41,9 @@ context("Portal Dashboard UI",()=>{
     describe('progress',()=>{
         it('verify progress legend loads',()=>{
             const progress=["Completed","In-progress", "Not-yet-started"];
-            getByCypressTag('progress-legend').should('be.visible');
+            cy.get('[data-cy=progress-legend]').should('be.visible');
             progress.forEach((prog)=>{
-                getByCypressTag(prog+'-legend').should('be.visible');
+                cy.get('[data-cy="'+prog+'-legend"]').should('be.visible');
             });
         });
     });
@@ -51,6 +51,15 @@ context("Portal Dashboard UI",()=>{
         let numStudents = 6; //TODO: it would be better if numStudents is not hard coded.
         it('verify number of students in a class loads',()=>{
             getByCypressTag('num-students').should('be.visible').and('contain', numStudents+ ' students');
+        });
+    });
+    describe('header area',()=>{
+        it('verify menu is visible',()=>{
+            cy.get('[data-cy=header-menu] ').should('be.visible');
+        });
+        it('verify user name is visible',()=>{
+            const teacher = 'Kristen Teachername';
+            cy.get('[data-cy=account-owner').should('be.visible').and('contain',teacher);
         });
     });
 });
