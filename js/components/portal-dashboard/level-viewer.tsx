@@ -26,6 +26,14 @@ export class LevelViewer extends React.PureComponent<IProps> {
   }
 
   private renderActivityButton = (activity: Map<string, any>) => {
+    if (this.props.currentActivity && activity.get("id") === this.props.currentActivity.get("id")) {
+      return this.renderExpandedActivityButton(activity);
+    } else {
+      return this.renderCollapsedActivityButton(activity);
+    }
+  }
+
+  private renderCollapsedActivityButton = (activity: Map<string, any>) => {
     return (
       <div key={activity.get("id")} className={css.activityButton}>
         <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
@@ -42,6 +50,18 @@ export class LevelViewer extends React.PureComponent<IProps> {
           </a>
         </div>
         <div className={css.progressBar} />
+      </div>
+    );
+  }
+
+  private renderExpandedActivityButton = (activity: Map<string, any>) => {
+    return (
+      <div key={activity.get("id")} className={`${css.activityButton} ${css.expanded}`}
+          onClick={this.handleActivityButtonClick(activity.get("id"))}>
+        <div className={css.activityImage} />
+        <div className={css.activityTitle}>
+            {activity.get("name")}
+          </div>
       </div>
     );
   }
