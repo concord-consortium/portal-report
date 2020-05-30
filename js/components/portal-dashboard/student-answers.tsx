@@ -44,7 +44,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
 
   private renderProgress = (progress: number) => {
     const cssClass = progress > 0
-                      ? Math.round(progress) === 1 ? css.completed : css.inProgress
+                      ? progress === 1 ? css.completed : css.inProgress
                       : "";
     return (
       <div className={`${css.progressIcon} ${cssClass}`}/>
