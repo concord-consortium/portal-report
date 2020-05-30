@@ -4,6 +4,10 @@ import { Map } from "immutable";
 import css from "../../../css/portal-dashboard/level-viewer.less";
 import { ProgressLegendContainer } from "./legend-container";
 
+// from level-viewer.less
+const questionWidth = 50;
+const margin = 20;
+
 interface IProps {
   activities: Map<any, any>;
   currentActivity?: Map<string, any>;
@@ -35,7 +39,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
   private renderCollapsedActivityButton = (activity: Map<string, any>, idx: number) => {
     return (
-      <div key={activity.get("id")}>
+      <div key={activity.get("id")} className={css.animate} >
         <div className={css.activityButton}>
           <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
             <div className={css.activityTitle}>
@@ -61,8 +65,14 @@ export class LevelViewer extends React.PureComponent<IProps> {
     activity.get("children").forEach((section: Map<any, any>) => {
       section.get("children").forEach((page: Map<any, any>) => pages.push(page));
     });
+
+    // with an explicit width, we can animate the transition between the small and large sizes
+    let totalWidth = 0;
+    pages.forEach(p => totalWidth += ((p.get("children") as any).size * (questionWidth + margin)) - margin);
+    totalWidth += margin;
+
     return (
-      <div key={activity.get("id")}>
+      <div key={activity.get("id")} className={css.animate} style={{width: totalWidth}}>
         <div className={`${css.activityButton} ${css.expanded}`}
             onClick={this.handleActivityButtonClick(activity.get("id"))}>
           <div className={css.activityImage} />
@@ -79,8 +89,10 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
   private renderPage = (page: Map<string, any>, idx: number) => {
     const questions: Map<any, any>[] = page.get("children");
+    // explicit width so we are no larger than the question buttons
+    const totalWidth = ((questions as any).size * (questionWidth + margin)) - margin;
     return (
-      <div key={page.get("id")}>
+      <div key={page.get("id")} style={{width: totalWidth}}>
         <div className={css.page}>
             P{idx + 1}: {page.get("name")}
         </div>

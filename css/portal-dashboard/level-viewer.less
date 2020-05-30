@@ -1,5 +1,8 @@
 @import "./variables";
 
+@question-width: 50px;
+@margin: 20px;
+
 .levelViewer {
   width: calc(100vw - 240px);
   border-bottom:1.5px solid #979797;
@@ -16,11 +19,14 @@
     font-weight: 500;
     color: @cc-teal-dark1;
 
+    .animate {
+      width: 120px;
+      margin-left: @margin;
+      transition: all 0.5s ease;
+    }
+
     .activityButton {
       position: relative;
-      margin-left: 20px;
-      min-width: 120px;
-      max-width: 120px;
       height: 158px;
       transition: all 0.5s ease;
 
@@ -40,6 +46,7 @@
           width: 73px;
           height: 50%;
           padding: 6px 10px 0 10px;
+          text-overflow: ellipsis;
         }
 
         .activityImage {
@@ -113,16 +120,19 @@
       &.expanded {
         display: flex;
         align-items: center;
-        max-width: 100000px;
-        min-width: 120px;
+        width: 100%;
         height: 30px;
-        margin-left: 20px;
+        margin-left: @margin;
         box-sizing: border-box;
         border: solid 1.5px @cc-charcoal-light1;
         border-radius: 8px;
         overflow: hidden;
         background-color: @cc-teal-light6;
         cursor: pointer;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
 
         .activityImage {
           width: 60px;
@@ -131,6 +141,7 @@
 
         .activityTitle {
           padding: 0 10px;
+          text-overflow: ellipsis;
         }
 
         &:hover {
@@ -150,13 +161,23 @@
     .pagesContainer {
       display: flex;
 
+      &>div {
+        margin-left: @margin;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+
       .page {
         height: 45px;
         box-sizing: border-box;
         border-radius: 8px;
         border: solid 1.5px @cc-charcoal-light2;
-        margin: 10px 0 10px 20px;
+        margin: 10px 0;
         padding: 6px 10px 7px 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .questionsContainer {
@@ -167,13 +188,17 @@
           flex-direction: column;
           align-items: center;
           justify-content: space-between;
-          width: 50px;
+          width: @question-width;
           height: 60px;
           box-sizing: border-box;
-          margin-left: 20px;
+          margin-left: @margin;
           padding: 6px 0 5px 0;
           border-radius: 8px;
           border: solid 1.5px @cc-charcoal-light1;
+
+          &:first-of-type {
+            margin-left: 0;
+          }
 
           &:hover {
             background-color: @cc-teal-light4;
