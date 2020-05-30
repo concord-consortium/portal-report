@@ -25,20 +25,20 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderActivityButton = (activity: Map<string, any>) => {
+  private renderActivityButton = (activity: Map<string, any>, idx: number) => {
     if (this.props.currentActivity && activity.get("id") === this.props.currentActivity.get("id")) {
-      return this.renderExpandedActivityButton(activity);
+      return this.renderExpandedActivityButton(activity, idx);
     } else {
-      return this.renderCollapsedActivityButton(activity);
+      return this.renderCollapsedActivityButton(activity, idx);
     }
   }
 
-  private renderCollapsedActivityButton = (activity: Map<string, any>) => {
+  private renderCollapsedActivityButton = (activity: Map<string, any>, idx: number) => {
     return (
       <div key={activity.get("id")} className={css.activityButton}>
         <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
           <div className={css.activityTitle}>
-            {activity.get("name")}
+            {idx + 1} {activity.get("name")}
           </div>
           <div className={css.activityImage} />
         </div>
@@ -54,14 +54,14 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderExpandedActivityButton = (activity: Map<string, any>) => {
+  private renderExpandedActivityButton = (activity: Map<string, any>, idx: number) => {
     return (
       <div key={activity.get("id")} className={`${css.activityButton} ${css.expanded}`}
           onClick={this.handleActivityButtonClick(activity.get("id"))}>
         <div className={css.activityImage} />
         <div className={css.activityTitle}>
-            {activity.get("name")}
-          </div>
+          Activity {idx + 1}: {activity.get("name")}
+        </div>
       </div>
     );
   }
