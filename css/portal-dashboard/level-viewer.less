@@ -11,14 +11,18 @@
     display: flex;
     margin-top: 19px;
     margin-left: 3px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: @cc-teal-dark1;
 
     .activityButton {
       position: relative;
       margin-left: 20px;
-      width: 120px;
+      min-width: 120px;
+      max-width: 120px;
       height: 158px;
       transition: all 0.5s ease;
-      color: @cc-teal-dark1;
 
       .activityInnerButton {
         display: flex;
@@ -49,12 +53,6 @@
           color: white;
           background-color: @cc-teal-dark1;
         }
-      }
-
-      .activityTitle {
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
       }
 
       .activityImage {
@@ -115,7 +113,7 @@
       &.expanded {
         display: flex;
         align-items: center;
-        width: unset;
+        max-width: 100000px;
         min-width: 120px;
         height: 30px;
         margin-left: 20px;
@@ -132,7 +130,7 @@
         }
 
         .activityTitle {
-          padding-left: 10px;
+          padding: 0 10px;
         }
 
         &:hover {
@@ -146,7 +144,56 @@
             color: white;
           }
         }
+      }
+    }
 
+    .pagesContainer {
+      display: flex;
+
+      .page {
+        height: 45px;
+        box-sizing: border-box;
+        border-radius: 8px;
+        border: solid 1.5px @cc-charcoal-light2;
+        margin: 10px 0 10px 20px;
+        padding: 6px 10px 7px 10px;
+      }
+
+      .questionsContainer {
+        display: flex;
+
+        .question {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          width: 50px;
+          height: 60px;
+          box-sizing: border-box;
+          margin-left: 20px;
+          padding: 6px 0 5px 0;
+          border-radius: 8px;
+          border: solid 1.5px @cc-charcoal-light1;
+
+          &:hover {
+            background-color: @cc-teal-light4;
+          }
+          &:active {
+            color: white;
+            background-color: @cc-teal-dark1;
+
+            .activityTitle {
+              color: white;
+            }
+          }
+
+          .icon {
+            width: 30px;
+            height: 30px;
+            pointer-events: none;
+            fill: @cc-teal;
+          }
+        }
       }
     }
   }
