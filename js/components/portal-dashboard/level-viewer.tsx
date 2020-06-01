@@ -7,6 +7,7 @@ import { ProgressLegendContainer } from "./legend-container";
 // from level-viewer.less
 const questionWidth = 50;
 const margin = 20;
+const getTotalQuestionsWidth = (numQuestions: number) => numQuestions * (questionWidth + margin) - margin;
 
 interface IProps {
   activities: Map<any, any>;
@@ -39,7 +40,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
   private renderCollapsedActivityButton = (activity: Map<string, any>, idx: number) => {
     return (
-      <div key={activity.get("id")} className={css.animate} >
+      <div key={activity.get("id")} className={css.animateLevelButton} data-cy="collapsed-activity-button">
         <div className={css.activityButton}>
           <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
             <div className={css.activityTitle}>
@@ -68,11 +69,12 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
     // with an explicit width, we can animate the transition between the small and large sizes
     let totalWidth = 0;
-    pages.forEach(p => totalWidth += ((p.get("children") as any).size * (questionWidth + margin)) - margin);
+    pages.forEach(p => totalWidth += getTotalQuestionsWidth((p.get("children") as any).size));
     totalWidth += margin;
 
     return (
-      <div key={activity.get("id")} className={css.animate} style={{width: totalWidth}}>
+      <div key={activity.get("id")} className={css.animateLevelButton} style={{width: totalWidth}}
+          data-cy="expanded-activity-button">
         <div className={`${css.activityButton} ${css.expanded}`}
             onClick={this.handleActivityButtonClick(activity.get("id"))}>
           <div className={css.activityImage} />
@@ -90,7 +92,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
   private renderPage = (page: Map<string, any>, idx: number) => {
     const questions: Map<any, any>[] = page.get("children");
     // explicit width so we are no larger than the question buttons
-    const totalWidth = ((questions as any).size * (questionWidth + margin)) - margin;
+    const totalWidth = getTotalQuestionsWidth((questions as any).size);
     return (
       <div key={page.get("id")} style={{width: totalWidth}}>
         <div className={css.page}>
@@ -105,7 +107,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
   private renderQuestion = (question: Map<string, any>, idx: number) => {
     return (
-      <div key={question.get("id")} className={css.question}>
+      <div key={question.get("id")} className={css.question} data-cy="activity-question-button">
         <div>
             Q{idx + 1}
         </div>
