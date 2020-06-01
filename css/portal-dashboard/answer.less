@@ -1,0 +1,25 @@
+@import "./variables";
+
+.answer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 100%;
+  margin-left: 20px;
+  background-color: @cc-orange-light5;
+
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.noAnswer {
+    background-color: white;
+  }
+}
+
+.answer:last-child {
+  margin-left: 20px;
+}
+

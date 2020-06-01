@@ -21,6 +21,7 @@ interface IProps {
   clazzName: string;
   currentActivity?: Map<string, any>;
   error: IResponse;
+  expandedActivities: any;
   fetchAndObserveData: () => void;
   isFetching: boolean;
   report: any;
@@ -60,7 +61,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, currentActivity, error, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, toggleCurrentActivity, trackEvent } = this.props;
+    const { clazzName, currentActivity, error, expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, toggleCurrentActivity, trackEvent } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -92,6 +93,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
               <StudentAnswers
                 activities={activityTrees}
+                currentActivity={currentActivity}
+                expandedActivities={expandedActivities}
                 students={students}
                 studentProgress={studentProgress}
               />
@@ -114,6 +117,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     currentActivity: getCurrentActivity(state),
     error,
+    expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     isFetching: data.get("isFetching"),
     report: dataDownloaded && reportState,
     sequenceTree: dataDownloaded && getSequenceTree(state),

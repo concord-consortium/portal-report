@@ -18,7 +18,7 @@ export class StudentNames extends React.PureComponent<IProps> {
                                 : `${student.get("lastName")}, ${student.get("firstName")}`;
           return (
             <div className={css.studentName} key={`student ${i}`}>
-              <div className={css.name}>{formattedName}</div>
+              <div className={css.name} data-cy="student-name">{formattedName}</div>
             </div>
           );
         }) }
