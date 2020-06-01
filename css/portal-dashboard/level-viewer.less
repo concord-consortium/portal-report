@@ -1,9 +1,227 @@
 @import "./variables";
 
+@question-width: 50px;
+@margin: 20px;
+
 .levelViewer {
   width: calc(100vw - 240px);
   border-bottom:1.5px solid #979797;
   position: relative;
-  height: 205px;
-}
+  height: @top-nav-level-viewer-height;
+  user-select: none;
 
+  .activityButtons {
+    display: flex;
+    height: 158px;
+    margin-top: 19px;
+    margin-left: 3px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: @cc-teal-dark1;
+    overflow: hidden;
+
+    .animateLevelButton {
+      width: 120px;
+      margin-left: @margin;
+      transition: all 0.5s ease;
+    }
+
+    .activityButton {
+      position: relative;
+      height: 158px;
+      transition: all 0.5s ease;
+
+      .activityInnerButton {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        height: 76%;
+        box-sizing: border-box;
+        border: solid 1.5px @cc-charcoal-light1;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+
+        .activityTitle {
+          width: 73px;
+          height: 50%;
+          padding: 6px 10px 0 10px;
+          text-overflow: ellipsis;
+        }
+
+        .activityImage {
+          height: 50%;
+        }
+
+        &:hover {
+          background-color: @cc-teal-light4;
+        }
+        &:active {
+          color: white;
+          background-color: @cc-teal-dark1;
+        }
+      }
+
+      .activityImage {
+        background-color: @cc-teal-light2;
+      }
+
+      .externalLink {
+        position: absolute;
+        right: 0;
+        bottom: 38px;
+        width: 38px;
+        height: 38px;
+        border-radius: 13px 0 0 0;
+        background-color: white;
+
+        .externalLinkButton {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 5px;
+          margin-left: 5px;
+          width: 30px;
+          height: 30px;
+          border-radius: 8px 0;
+          border: solid 1.5px @cc-charcoal-light1;
+          background-color: @cc-teal-light6;
+          cursor: pointer;
+
+          &:hover {
+            background-color: @cc-teal-light4;
+          }
+          &:active {
+            color: white;
+            background-color: @cc-teal-dark1;
+
+            .icon {
+              fill: white;
+            }
+          }
+
+          .icon {
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+            fill: @cc-teal;
+          }
+        }
+      }
+
+      .progressBar {
+        height: 20px;
+        margin-top: 15px;
+        border-radius: 3px;
+        border: solid 1.5px @cc-orange;
+        background-color: white;
+      }
+
+      &.expanded {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 30px;
+        margin-left: @margin;
+        box-sizing: border-box;
+        border: solid 1.5px @cc-charcoal-light1;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: @cc-teal-light6;
+        cursor: pointer;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+
+        .activityImage {
+          width: 60px;
+          height: 100%;
+        }
+
+        .activityTitle {
+          padding: 0 10px;
+          text-overflow: ellipsis;
+        }
+
+        &:hover {
+          background-color: @cc-teal-light4;
+        }
+        &:active {
+          color: white;
+          background-color: @cc-teal-dark1;
+
+          .activityTitle {
+            color: white;
+          }
+        }
+      }
+    }
+
+    .pagesContainer {
+      display: flex;
+
+      &>div {
+        margin-left: @margin;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+
+      .page {
+        height: 45px;
+        box-sizing: border-box;
+        border-radius: 8px;
+        border: solid 1.5px @cc-charcoal-light2;
+        margin: 10px 0;
+        padding: 6px 10px 7px 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .questionsContainer {
+        display: flex;
+
+        .question {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          width: @question-width;
+          height: 60px;
+          box-sizing: border-box;
+          margin-left: @margin;
+          padding: 6px 0 5px 0;
+          border-radius: 8px;
+          border: solid 1.5px @cc-charcoal-light1;
+
+          &:first-of-type {
+            margin-left: 0;
+          }
+
+          &:hover {
+            background-color: @cc-teal-light4;
+          }
+          &:active {
+            color: white;
+            background-color: @cc-teal-dark1;
+
+            .activityTitle {
+              color: white;
+            }
+          }
+
+          .icon {
+            width: 30px;
+            height: 30px;
+            pointer-events: none;
+            fill: @cc-teal;
+          }
+        }
+      }
+    }
+  }
+}

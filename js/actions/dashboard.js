@@ -3,6 +3,8 @@ export const SET_STUDENT_EXPANDED = "SET_STUDENT_EXPANDED";
 export const SET_STUDENTS_EXPANDED = "SET_STUDENTS_EXPANDED";
 export const SET_STUDENT_SORT = "SET_STUDENT_SORT";
 
+export const TOGGLE_CURRENT_ACTIVITY = "TOGGLE_CURRENT_ACTIVITY";
+
 export const SORT_BY_NAME = "NAME";
 export const SORT_BY_MOST_PROGRESS = "MOST_PROGRESS";
 export const SORT_BY_LEAST_PROGRESS = "LEAST_PROGRESS";
@@ -31,6 +33,7 @@ export function setActivityExpanded(activityId, value) {
     }
   };
 }
+
 
 export function setQuestionExpanded(questionId, value) {
   return {
@@ -89,3 +92,11 @@ export function selectQuestion(value) {
     value,
   };
 }
+
+export function toggleCurrentActivity(activityId) {
+  return {
+    type: TOGGLE_CURRENT_ACTIVITY,
+    value: activityId,
+  };
+}
+

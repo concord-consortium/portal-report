@@ -1,7 +1,8 @@
 import React from "react";
+import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent } from "../../actions/index";
-import { getSortedStudents } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -10,7 +11,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort } from "../../actions/dashboard";
+import { setStudentSort, toggleCurrentActivity } from "../../actions/dashboard";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 import { RootState } from "../../reducers";
@@ -20,11 +21,14 @@ interface IProps {
   error: IResponse;
   clazzName: string;
   students: any;
+  sequenceTree: Map<any, any>;
+  studentCount: number;
+  currentActivity?: Map<string, any>;
+
   fetchAndObserveData: () => void;
   setStudentSort: (value: string) => void;
+  toggleCurrentActivity: (activityId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  sequenceTree: any;
-  studentCount: number;
 }
 
 interface IState {
@@ -53,11 +57,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, students, error, sequenceTree, setStudentSort, trackEvent } = this.props;
+    const { clazzName, students, error, sequenceTree, currentActivity, setStudentSort, toggleCurrentActivity, trackEvent } = this.props;
     const { initialLoading } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
-    const activityTrees = sequenceTree && sequenceTree.get("children");
+    const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
     return (
       <div className={css.portalDashboardApp}>
         <Header/>
@@ -70,7 +74,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 trackEvent={trackEvent}
                 studentCount = {students.size}
               />
-              <LevelViewer/>
+              <LevelViewer
+                activities={activityTrees}
+                toggleCurrentActivity={toggleCurrentActivity}
+                currentActivity={currentActivity}
+              />
             </div>
             <StudentList
               students={students}
@@ -95,6 +103,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     students: dataDownloaded && getSortedStudents(state),
     sequenceTree: dataDownloaded && getSequenceTree(state),
+    currentActivity: getCurrentActivity(state),
   };
 }
 
@@ -102,6 +111,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
+    toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };

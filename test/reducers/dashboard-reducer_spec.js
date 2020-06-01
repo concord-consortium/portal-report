@@ -8,7 +8,8 @@ describe("dashboard reducer", () => {
       expandedActivities: {},
       expandedQuestions: {},
       expandedStudents: {},
-      selectedQuestion: null
+      selectedQuestion: null,
+      currentActivityId: null,
     });
   });
 
