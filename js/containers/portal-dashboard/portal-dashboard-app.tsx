@@ -18,16 +18,16 @@ import { RootState } from "../../reducers";
 
 interface IProps {
   clazzName: string;
-  error: IResponse;
-  students: any;
-  sequenceTree: Map<any, any>;
-  studentCount: number;
   currentActivity?: Map<string, any>;
+  error: IResponse;
   fetchAndObserveData: () => void;
   isFetching: boolean;
   report: any;
+  sequenceTree: Map<any, any>;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
+  studentCount: number;
+  students: any;
   toggleCurrentActivity: (activityId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
 }
@@ -58,7 +58,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, students, error, sequenceTree, currentActivity, setAnonymous, report, setStudentSort, toggleCurrentActivity, trackEvent } = this.props;
+    const { clazzName, currentActivity, error, report, sequenceTree, setAnonymous, setStudentSort, students, toggleCurrentActivity, trackEvent } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -103,11 +103,11 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const dataDownloaded = !error && !data.get("isFetching");
   return {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
+    currentActivity: getCurrentActivity(state),
     error,
     isFetching: data.get("isFetching"),
     report: dataDownloaded && reportState,
     sequenceTree: dataDownloaded && getSequenceTree(state),
-    currentActivity: getCurrentActivity(state),
     students: dataDownloaded && getSortedStudents(state),
   };
 }
