@@ -88,7 +88,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             <div className={css.progressTable}>
               <StudentNames
                 students={students}
-                isAnonymous={false}
+                isAnonymous={isAnonymous}
               />
               <StudentAnswers
                 activities={activityTrees}
