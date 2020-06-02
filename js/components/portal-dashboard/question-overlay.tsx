@@ -38,13 +38,13 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
         <div className={css.titleWrapper}>
           <div className={css.nextQuestionButtons}>
             <div className={css.button + ( this.previousQuestion ? "" : " " + css.disabled )}
-                onClick={this.showQuestion(this.previousQuestion)}>
+                onClick={this.showQuestion(this.previousQuestion)} data-cy="question-overlay-previous-button">
               <svg className={css.icon}>
                 <use xlinkHref="#arrow-triangle-left"/>
               </svg>
             </div>
             <div className={css.button + ( this.nextQuestion ? "" : " " + css.disabled )}
-                onClick={this.showQuestion(this.nextQuestion)}>
+                onClick={this.showQuestion(this.nextQuestion)} data-cy="question-overlay-next-button">
               <svg className={css.icon}>
                 <use xlinkHref="#arrow-triangle-left"/>
               </svg>
