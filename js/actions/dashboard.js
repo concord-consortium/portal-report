@@ -3,6 +3,7 @@ export const SET_STUDENT_EXPANDED = "SET_STUDENT_EXPANDED";
 export const SET_STUDENTS_EXPANDED = "SET_STUDENTS_EXPANDED";
 export const SET_STUDENT_SORT = "SET_STUDENT_SORT";
 
+export const SET_CURRENT_ACTIVITY = "SET_CURRENT_ACTIVITY";
 export const TOGGLE_CURRENT_ACTIVITY = "TOGGLE_CURRENT_ACTIVITY";
 export const TOGGLE_CURRENT_QUESTION = "TOGGLE_CURRENT_QUESTION";
 
@@ -91,6 +92,13 @@ export function selectQuestion(value) {
   return {
     type: SELECT_QUESTION,
     value,
+  };
+}
+
+export function setCurrentActivity(activityId) {
+  return {
+    type: SET_CURRENT_ACTIVITY,
+    value: activityId,
   };
 }
 

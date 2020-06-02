@@ -7,6 +7,7 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   questions?: Map<string, any>;
   toggleCurrentQuestion: (questionId: string) => void;
+  setCurrentActivity: (activityId: string) => void;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
@@ -64,8 +65,13 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private showQuestion = (questionId: string | false) => () => {
-    if (!questionId) return;
+    if (!questionId || !this.props.questions) return;
+    const currentActivityId = this.props.currentQuestion?.get("activity");
+    const nextActivityId = this.props.questions.get(questionId).get("activity");
     this.props.toggleCurrentQuestion(questionId);
+    if (currentActivityId !== nextActivityId) {
+      this.props.setCurrentActivity(nextActivityId);
+    }
   }
 
   private get previousQuestion() {

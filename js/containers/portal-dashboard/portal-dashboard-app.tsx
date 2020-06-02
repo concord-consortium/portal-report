@@ -12,7 +12,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
+import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 
@@ -36,6 +36,7 @@ interface IProps {
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
+  setCurrentActivity: (activityId: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
@@ -70,7 +71,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   render() {
     const { clazzName, currentActivity, currentQuestion, error,
       report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, questions,
-      expandedActivities, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
+      expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -114,6 +115,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               currentQuestion={currentQuestion}
               questions={questions}
               toggleCurrentQuestion={toggleCurrentQuestion}
+              setCurrentActivity={setCurrentActivity}
             />
           </div>
         }
@@ -150,6 +152,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
+    setCurrentActivity: (activityId: string) =>  dispatch(setCurrentActivity(activityId)),
     toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),
     toggleCurrentQuestion: (questionId: string) =>  dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
