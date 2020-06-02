@@ -109,6 +109,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             </div>
             <QuestionOverlay
               currentQuestion={currentQuestion}
+              toggleCurrentQuestion={toggleCurrentQuestion}
             />
           </div>
         }

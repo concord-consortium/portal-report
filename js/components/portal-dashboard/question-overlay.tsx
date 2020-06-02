@@ -5,6 +5,7 @@ import css from "../../../css/portal-dashboard/question-overlay.less";
 
 interface IProps {
   currentQuestion?: Map<string, any>;
+  toggleCurrentQuestion: (questionId: string) => void;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
@@ -26,7 +27,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   private renderQuestionDetails = (question: Map<string, any>) => {
     return (
       <React.Fragment>
-        <div className={css.header}>
+        <div className={css.header} onClick={this.dismissCurrentQuestion}>
           <svg className={css.icon}>
             <use xlinkHref="#question-popout"/>
           </svg>
@@ -39,5 +40,11 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
         </div>
       </React.Fragment>
     );
+  }
+
+  private dismissCurrentQuestion = () => {
+    if (this.props.currentQuestion) {
+      this.props.toggleCurrentQuestion(this.props.currentQuestion.get("id"));
+    }
   }
 }
