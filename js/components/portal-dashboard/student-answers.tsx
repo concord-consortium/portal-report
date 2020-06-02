@@ -40,7 +40,21 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     );
   }
 
-  private renderActivityPage= (page: any, student: any) => {
+  private renderExpandedActivity = (activity: any, student: any) => {
+    const pages: Map<any, any>[] = [];
+    activity.get("children").forEach((section: Map<any, any>) => {
+      section.get("children").forEach((page: Map<any, any>) => pages.push(page));
+    });
+    // const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
+    return (
+      <div className={css.activityAnswers} key={activity.get("id")}>
+        { pages.map((page: any) => this.renderActivityPage(page, student)) }
+        { this.renderScore(activity, student) }
+      </div>
+    );
+  }
+
+  private renderActivityPage = (page: any, student: any) => {
     return (
       <div className={css.activityPage} key={page.get("id")}>
         { page.get("children").map((question: any) => {
@@ -53,15 +67,17 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     );
   }
 
-  private renderExpandedActivity = (activity: any, student: any) => {
-    const pages: Map<any, any>[] = [];
-    activity.get("children").forEach((section: Map<any, any>) => {
-      section.get("children").forEach((page: Map<any, any>) => pages.push(page));
-    });
-    // const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
+  private renderScore = (activity: any, student: any) => {
+    const { studentProgress } = this.props;
+    const numQuestions = activity.get("questions").size;
+    const progress = studentProgress.getIn([student.get("id"), activity.get("id")]);
+    const numAnswered = Math.round(progress * numQuestions);
+    const scoreClass = progress === 1 ? css.complete : "";
     return (
-      <div className={css.activityAnswers} key={activity.get("id")}>
-        { pages.map((page: any) => this.renderActivityPage(page, student)) }
+      <div className={css.scoreHolder}>
+        <div className={`${css.score} ${scoreClass}`}>
+          {`${numAnswered}/${numQuestions}`}
+        </div>
       </div>
     );
   }
