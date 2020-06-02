@@ -107,7 +107,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderQuestion = (question: Map<string, any>, idx: number) => {
+  private renderQuestion = (question: Map<string, any>) => {
     let questionClass = css.question;
     if (question.get("id") === this.props.currentQuestion?.get("id")) {
       questionClass += " " + css.active;
@@ -116,7 +116,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
       <div key={question.get("id")} className={questionClass} onClick={this.handleQuestionButtonClick(question.get("id"))}
           data-cy="activity-question-button">
         <div>
-            Q{idx + 1}
+            Q{question.get("questionNumber")}
         </div>
         <div className={css.pagesContainer}>
           <svg className={css.icon}>
