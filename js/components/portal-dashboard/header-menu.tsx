@@ -6,20 +6,37 @@ interface IState {
   showMenuItems: boolean;
   compactStudentList: boolean;
 }
+// actions are placeholder for future work on what should happen when that menu item is clicked
 export interface MenuItemsWithState {
   name: string;
+  action: string;
 }
 export interface MenuItemWithIcon {
   icon: string;
   name: string;
+  action: string;
 }
 export const itemsWithState: MenuItemsWithState[] = [
-  { name: "Compact student list" }
-];
+  {
+    name: "Compact student list",
+    action: "COMPACT_STUDENT_LIST" }
+  ]
 export const items: MenuItemWithIcon[] = [
-  { icon: "#icon-help", name: "Help" },
-  { icon: "#icon-download", name: "Download (.csv)" },
-  { icon: "#icon-print", name: "Print" }
+  {
+    icon: "#icon-help", 
+    name: "Help",
+    action: "OPEN_HELP"
+  },
+  {
+    icon: "#icon-download",
+    name: "Download (.csv)",
+    action: "DOWNLOAD_REPORT"
+  },
+  {
+    icon: "#icon-print",
+    name: "Print",
+    action: "PRINT_REPORT"
+  }
 ];
 
 export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
