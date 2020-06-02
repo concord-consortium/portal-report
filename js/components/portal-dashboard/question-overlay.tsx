@@ -34,6 +34,18 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           <div>Question Detail View</div>
         </div>
         <div className={css.titleWrapper}>
+          <div className={css.nextQuestionButtons}>
+            <div className={css.button + " " + css.disabled}>
+              <svg className={css.icon}>
+                <use xlinkHref="#arrow-triangle-left"/>
+              </svg>
+            </div>
+            <div className={css.button}>
+              <svg className={css.icon}>
+                <use xlinkHref="#arrow-triangle-left"/>
+              </svg>
+            </div>
+          </div>
           <div className={css.title}>
             Question #{ question.get("questionNumber") }
           </div>
