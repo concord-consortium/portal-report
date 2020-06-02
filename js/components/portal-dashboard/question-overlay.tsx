@@ -27,7 +27,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   private renderQuestionDetails = (question: Map<string, any>) => {
     return (
       <React.Fragment>
-        <div className={css.header} onClick={this.dismissCurrentQuestion}>
+        <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
           <svg className={css.icon}>
             <use xlinkHref="#question-popout"/>
           </svg>

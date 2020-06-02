@@ -18,6 +18,7 @@ context("Portal Dashboard Activity Buttons",()=>{
         cy.get('[data-cy=collapsed-activity-button]').should('have.length', 1);
         cy.get('[data-cy=activity-question-button]').should('be.visible');
         cy.get('[data-cy=activity-question-button]').should('have.length', 6);
+        cy.get('[data-cy=activity-question-button]').first().should("contain", "Q1");
       });
 
       it('verify we can click to open the other activity button and the first collapses',()=>{

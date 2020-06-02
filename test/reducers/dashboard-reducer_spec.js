@@ -10,6 +10,7 @@ describe("dashboard reducer", () => {
       expandedStudents: {},
       selectedQuestion: null,
       currentActivityId: null,
+      currentQuestionId: null,
     });
   });
 
