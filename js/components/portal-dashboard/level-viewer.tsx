@@ -12,7 +12,9 @@ const getTotalQuestionsWidth = (numQuestions: number) => numQuestions * (questio
 interface IProps {
   activities: Map<any, any>;
   currentActivity?: Map<string, any>;
+  currentQuestion?: Map<string, any>;
   toggleCurrentActivity: (activityId: string) => void;
+  toggleCurrentQuestion: (questionId: string) => void;
 }
 
 export class LevelViewer extends React.PureComponent<IProps> {

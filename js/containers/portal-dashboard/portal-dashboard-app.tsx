@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity, getStudentProgress } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getStudentProgress } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -12,7 +12,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, toggleCurrentActivity } from "../../actions/dashboard";
+import { setStudentSort, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
@@ -20,6 +20,7 @@ import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 interface IProps {
   clazzName: string;
   currentActivity?: Map<string, any>;
+  currentQuestion?: Map<string, any>;
   error: IResponse;
   expandedActivities: Map<any, any>;
   fetchAndObserveData: () => void;
@@ -32,6 +33,7 @@ interface IProps {
   studentProgress: Map<any, any>;
   students: any;
   toggleCurrentActivity: (activityId: string) => void;
+  toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   userName: string;
 }
@@ -62,7 +64,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, currentActivity, error, expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, toggleCurrentActivity, trackEvent, userName } = this.props;
+    const { clazzName, currentActivity, currentQuestion, error,
+      expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students,
+      toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -83,8 +87,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
               <LevelViewer
                 activities={activityTrees}
-                toggleCurrentActivity={toggleCurrentActivity}
                 currentActivity={currentActivity}
+                currentQuestion={currentQuestion}
+                toggleCurrentActivity={toggleCurrentActivity}
+                toggleCurrentQuestion={toggleCurrentQuestion}
               />
             </div>
             <div className={css.progressTable}>
@@ -117,6 +123,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   return {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     currentActivity: getCurrentActivity(state),
+    currentQuestion: getCurrentQuestion(state),
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     isFetching: data.get("isFetching"),
@@ -134,6 +141,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),
+    toggleCurrentQuestion: (questionId: string) =>  dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };
