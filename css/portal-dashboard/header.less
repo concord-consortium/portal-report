@@ -63,10 +63,18 @@
   .menuIcon {
     fill: @cc-teal;
     cursor: pointer;
+    transition-duration: 1.25s;
 
     &:hover {
       background-color: @cc-teal-light2;
       border-radius: 4px;
+    }
+    &.showList, &:active {
+      background-color: @cc-teal;
+      fill: white;
+    }
+    &.showList {
+      fill: white;
     }
   }
   .accountOwner {
@@ -81,4 +89,158 @@
     font-size: 16px;
     margin-right: 8px;
   }
+
+  // menu list
+  .topMenu {
+    border-bottom: solid 1px @cc-teal-light4;
+    text-align: center;
+  }
+  .menuList {
+    width: 210px;
+    height: 160px;
+    border-radius: 0 0 4px 4px;
+    position: absolute;
+    margin-top: 10px;
+    right: 20px;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: .25s;
+    pointer-events: none;
+
+    &.show {
+      opacity: 1;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+
+    .menuItemIcon {
+      height: 20px;
+      width: 20px;
+      fill: white;
+      padding: 0 10px 0 10px;
+    } 
+    .menuItemName {
+      color: @cc-charcoal;
+    }
+    .menuItem {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      box-sizing: border-box;
+      height: 40px;
+      width: 210px;
+      padding: 0 5px 0 5px;
+      background-color: white;
+      font-size: 16px;
+
+      &:hover {
+        background-color: @cc-teal-light6;
+      }
+
+      &:active {
+        background-color: @cc-teal-light4;
+      }
+      &:active .check {
+        fill: @cc-teal;
+      }
+
+      .check {
+        height: 24px;
+        width: 24px;
+        margin: 0 5px 0 5px;
+        fill: white;
+
+        &.selected {
+          fill: @cc-teal;
+        }
+      }
+    }
+  }
+  //Hamburger experiment
+  .hamBurger {
+    width: 110px;
+    height: 16px;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    animation: spin 5s infinite;
+  }
+  .hamBurger:before,
+  .hamBurger:after {
+    content: "";
+    width: 110px;
+    height: 16px;
+    background: #fff;
+    position: absolute;
+    left: 0;
+  }
+  .hamBurger:before {
+    top: -42px;
+    animation: translateBefore 5s infinite;
+  }
+  .hamBurger:after {
+    bottom: -42px;
+    animation: translateAfter 5s infinite;
+  }
+  @keyframes translateBefore {
+    20% {
+      transform: rotate(45deg);
+      width: 60px;
+      left: 52px;
+      top: -24px;
+    }
+    40% {
+      transform: rotate(45deg);
+      width: 60px;
+      left: 52px;
+      top: -24px;
+    }
+    60% {
+      transform: rotate(0deg);
+      width: 110px;
+      left: 0;
+      top: -42px;
+    }
+  }
+  @keyframes translateAfter {
+    20% {
+      transform: rotate(-45deg);
+      width: 60px;
+      left: 52px;
+      bottom: -24px;
+    }
+    40% {
+      transform: rotate(-45deg);
+      width: 60px;
+      left: 52px;
+      bottom: -24px;
+    }
+    60% {
+      transform: rotate(0deg);
+      width: 110px;
+      left: 0;
+      bottom: -42px;
+    }
+  }
+  @keyframes spin {
+    20% {
+      transform: rotate(180deg);
+    }
+    40% {
+      transform: rotate(180deg);
+    }
+    60% {
+      transform: rotate(360deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 }
+
