@@ -19,20 +19,23 @@ import { QuestionOverlay } from "../../components/portal-dashboard/question-over
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
 interface IProps {
+  // from mapStateToProps
   clazzName: string;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   error: IResponse;
   expandedActivities: Map<any, any>;
-  fetchAndObserveData: () => void;
   isFetching: boolean;
   report: any;
   sequenceTree: Map<any, any>;
-  setAnonymous: (value: boolean) => void;
-  setStudentSort: (value: string) => void;
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
+  questions?: Map<string, any>;
+  // from mapDispatchToProps
+  fetchAndObserveData: () => void;
+  setAnonymous: (value: boolean) => void;
+  setStudentSort: (value: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
@@ -66,8 +69,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   render() {
     const { clazzName, currentActivity, currentQuestion, error,
-      expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students,
-      toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
+      report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, questions,
+      expandedActivities, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -109,6 +112,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             </div>
             <QuestionOverlay
               currentQuestion={currentQuestion}
+              questions={questions}
               toggleCurrentQuestion={toggleCurrentQuestion}
             />
           </div>
@@ -137,6 +141,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
+    questions: dataDownloaded ? state.getIn(["report", "questions"]) : undefined,
   };
 }
 

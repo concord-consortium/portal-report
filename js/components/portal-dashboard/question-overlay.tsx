@@ -5,6 +5,7 @@ import css from "../../../css/portal-dashboard/question-overlay.less";
 
 interface IProps {
   currentQuestion?: Map<string, any>;
+  questions?: Map<string, any>;
   toggleCurrentQuestion: (questionId: string) => void;
 }
 
@@ -35,12 +36,14 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
         </div>
         <div className={css.titleWrapper}>
           <div className={css.nextQuestionButtons}>
-            <div className={css.button + " " + css.disabled}>
+            <div className={css.button + ( this.previousQuestion ? "" : " " + css.disabled )}
+                onClick={this.showQuestion(this.previousQuestion)}>
               <svg className={css.icon}>
                 <use xlinkHref="#arrow-triangle-left"/>
               </svg>
             </div>
-            <div className={css.button}>
+            <div className={css.button + ( this.nextQuestion ? "" : " " + css.disabled )}
+                onClick={this.showQuestion(this.nextQuestion)}>
               <svg className={css.icon}>
                 <use xlinkHref="#arrow-triangle-left"/>
               </svg>
@@ -58,5 +61,30 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     if (this.props.currentQuestion) {
       this.props.toggleCurrentQuestion(this.props.currentQuestion.get("id"));
     }
+  }
+
+  private showQuestion = (questionId: string | false) => () => {
+    if (!questionId) return;
+    this.props.toggleCurrentQuestion(questionId);
+  }
+
+  private get previousQuestion() {
+    if (!this.props.questions || !this.props.currentQuestion) return false;
+    const questionIds = this.props.questions.keySeq().toArray();
+    const idx = questionIds.indexOf(this.props.currentQuestion.get("id"));
+    if (idx > 0) {
+      return questionIds[idx - 1];
+    }
+    return false;
+  }
+
+  private get nextQuestion() {
+    if (!this.props.questions || !this.props.currentQuestion) return false;
+    const questionIds = this.props.questions.keySeq().toArray();
+    const idx = questionIds.indexOf(this.props.currentQuestion.get("id"));
+    if (idx < questionIds.length - 1) {
+      return questionIds[idx + 1];
+    }
+    return false;
   }
 }
