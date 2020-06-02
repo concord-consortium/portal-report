@@ -55,11 +55,15 @@ context("Portal Dashboard UI",()=>{
     });
     describe('header area',()=>{
         it('verify menu is visible',()=>{
-            cy.get('[data-cy=header-menu] ').should('be.visible');
+            cy.get('[data-cy=header-menu]').should('be.visible');
         });
         it('verify user name is visible',()=>{
             const teacher = 'Kristen Teachername';
             cy.get('[data-cy=account-owner').should('be.visible').and('contain',teacher);
+        });
+        it('verify menu opens on click',()=>{
+            cy.get('[data-cy=header-menu]').click();
+            cy.get('[data-cy="menu-list"]').should('be.visible');
         });
     });
 });

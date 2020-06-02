@@ -4,15 +4,16 @@ import css from "../../../css/portal-dashboard/header.less";
 
 interface IState {
   showMenuItems: boolean;
+  compactStudentList: boolean;
 }
-export interface MenuItemsNoIcon {
+export interface MenuItemsWithState {
   name: string;
 }
 export interface MenuItemWithIcon {
   icon: string;
   name: string;
 }
-export const itemsNoIcon: MenuItemsNoIcon[] = [
+export const itemsWithState: MenuItemsWithState[] = [
   { name: "Compact student list" }
 ];
 export const items: MenuItemWithIcon[] = [
@@ -25,9 +26,11 @@ export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
   constructor() {
     super({});
     this.state = {
-      showMenuItems: false
+      showMenuItems: false,
+      compactStudentList: false
     };
     this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
   }
 
   render() {
@@ -59,12 +62,17 @@ export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
   private renderMenuItems = () => {
     // eslint-disable-next-line no-console
     console.log("showMenuItems state: ", this.state.showMenuItems);
+    // eslint-disable-next-line no-console
+    console.log("compactStudentList state: ", this.state.compactStudentList);
     return (
-      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`}>
+      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} onClick={this.handleMenuItemClick}  data-cy="menu-list">
         <div className={`${css.topMenu}`}>
-          {itemsNoIcon && itemsNoIcon.map((item: any, i: number) => {
+          {itemsWithState && itemsWithState.map((item: any, i: number) => {
             return (
               <div key={`item ${i}`} className={`${css.menuItem}`}>
+                <div>
+                {this.state.compactStudentList ? this.renderIcon(`${css.check} ${css.selected}`, "#icon-check") : this.renderIcon(`${css.check}`, "#icon-check")}
+                </div>
                 <div className={`${css.menuItemName}`}>{item.name}</div>
               </div>
             );
@@ -84,6 +92,10 @@ export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
 
   private handleMenuClick() {
     this.setState({ showMenuItems: !this.state.showMenuItems });
+  }
+
+  private handleMenuItemClick() {
+    this.setState({ compactStudentList: !this.state.compactStudentList });
   }
 
 }

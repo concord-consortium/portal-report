@@ -102,7 +102,6 @@
     position: absolute;
     margin-top: 10px;
     right: 20px;
-    border-radius: 0 0 4px 4px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
     opacity: 0;
     transition-property: opacity;
@@ -113,16 +112,18 @@
       opacity: 1;
       pointer-events: auto;
       cursor: pointer;
+      z-index: 5;
     }
 
+    }
+    .menuItemName {
+      color: @cc-charcoal;
+    }
     .menuItemIcon {
       height: 20px;
       width: 20px;
       fill: white;
-      padding: 0 10px 0 10px;
-    } 
-    .menuItemName {
-      color: @cc-charcoal;
+      margin: 0 5px 0 5px;
     }
     .menuItem {
       display: flex;
@@ -149,13 +150,12 @@
       .check {
         height: 24px;
         width: 24px;
-        margin: 0 5px 0 5px;
+        margin: 0px;
         fill: white;
-
+  
         &.selected {
           fill: @cc-teal;
         }
-      }
     }
   }
   //Hamburger experiment
