@@ -23,7 +23,15 @@ export class ClassNav extends React.PureComponent<IProps> {
     const { clazzName, setStudentSort, trackEvent, setAnonymous } = this.props;
     return (
       <div className={css.classNav} data-cy="class-nav">
-        <div className={css.title}>{clazzName}</div>
+        <div className={css.chooseClass}>
+          <CustomSelect
+            items={[{action: "", name: clazzName}]}
+            onSelectItem={(() => {})}
+            trackEvent={trackEvent}
+            iconId={"icon-class"}
+            dataCy={"choose-class"}
+          />
+        </div>
         <AnonymizeStudents setAnonymous={setAnonymous} />
         <Feedback />
         <NumberOfStudentsContainer studentCount={this.props.studentCount} />

@@ -17,6 +17,7 @@ context("Portal Dashboard UI",()=>{
     describe('class nav',()=>{
         it('verify class nav loads',()=>{
             cy.get('[data-cy=class-nav]').should('be.visible');
+            cy.get('[data-cy=choose-class]').should('be.visible');
             cy.get('[data-cy=sort-students]').should('be.visible');
             cy.get('[data-cy=anonymize-students]').should('be.visible');
             cy.get('[data-cy=anonymize-students]').within(() => {
