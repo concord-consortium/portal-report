@@ -3,10 +3,13 @@
 .studentAnswers {
   width: 100%;
   background-color: white;
+  overflow-x: auto;
+  overflow-y: auto;
 
   .studentAnswersRow {
     display: flex;
     flex-direction: row;
+    flex-shrink: 0;
     box-sizing: border-box;
     height: 44px;
     border-style: solid;
@@ -18,6 +21,7 @@
     .activityAnswers {
       display: flex;
       flex-direction: row;
+      flex-shrink: 0;
       align-items: center;
       transition-duration: .25;
 
@@ -66,6 +70,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      flex-shrink: 0;
       width: 120px;
       margin: 0 10px 0 10px;
 

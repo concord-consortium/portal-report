@@ -4,6 +4,7 @@
   height: 100%;
   color: black;
   font-family: lato, arial, helvetica, sans-serif;
+  overflow: hidden;
 
   .navigation {
     display: flex;
@@ -16,7 +17,8 @@
     flex-direction: row;
     height: calc(100vh - @top-nav-height - @header-height - @top-margin);
     width: 100%;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: auto;
     background-color: white;
   }
 }
