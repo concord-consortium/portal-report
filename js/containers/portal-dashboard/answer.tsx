@@ -3,12 +3,14 @@ import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 import { MultipleChoiceAnswer } from "../../components/portal-dashboard/multiple-choice-answer";
 import { OpenResponseAnswer } from "../../components/portal-dashboard/open-response-answer";
+import { ImageAnswer } from "../../components/portal-dashboard/image-answer";
+import { IframeInteractiveAnswer } from "../../components/portal-dashboard/iframe-interactive-answer";
 import { GenericAnswer } from "../../components/portal-dashboard/generic-answer";
 import { NoAnswer } from "../../components/portal-dashboard/no-answer";
 
 interface IProps {
-  question: any;
   answer: any;
+  question: any;
   student: any;
 }
 
@@ -31,6 +33,10 @@ class Answer extends React.PureComponent<IProps> {
         return (<MultipleChoiceAnswer answer={answer} question={question} />);
       } else if(type === "open_response") {
         return (<OpenResponseAnswer />);
+      } else if(type === "image_question") {
+        return (<ImageAnswer />);
+      } else if(type === "iframe_interactive") {
+        return (<IframeInteractiveAnswer />);
       } else {
         return (<GenericAnswer />);
       }

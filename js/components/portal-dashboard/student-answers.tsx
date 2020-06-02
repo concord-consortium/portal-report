@@ -40,21 +40,28 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     );
   }
 
-  private renderExpandedActivity = (activity: any, student: any) => {
-    const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
+  private renderActivityPage= (page: any, student: any) => {
     return (
-      <div className={css.activityAnswers} key={activity.get("id")}>
-        { visibleQuestions.map((question: any) => {
-            //const questionIsExpanded = expandedQuestions.get(question.get("id"));
-            //const showFullAnswer = showFullAnswers || questionIsExpanded;
-            //const anyStudentExpanded = this.props.anyStudentExpanded;
-            //const showWide = showFullAnswer || anyStudentExpanded;
-            //const className = css.answer + " " + (showWide ? css.fullAnswer : "");
+      <div className={css.activityPage} key={page.get("id")}>
+        { page.get("children").map((question: any) => {
             return (
               <Answer key={question.get("id")} question={question} student={student} />
             );
           })
         }
+      </div>
+    );
+  }
+
+  private renderExpandedActivity = (activity: any, student: any) => {
+    const pages: Map<any, any>[] = [];
+    activity.get("children").forEach((section: Map<any, any>) => {
+      section.get("children").forEach((page: Map<any, any>) => pages.push(page));
+    });
+    // const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
+    return (
+      <div className={css.activityAnswers} key={activity.get("id")}>
+        { pages.map((page: any) => this.renderActivityPage(page, student)) }
       </div>
     );
   }
@@ -71,7 +78,6 @@ export class StudentAnswers extends React.PureComponent<IProps> {
         {(progress > 0 && progress < 1) && `${numAnswered}/${numQuestions}`}
       </div>
     );
-
   }
 
   private renderProgressIcon = (progress: number) => {
