@@ -14,6 +14,7 @@ import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
 import { setStudentSort, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
+import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -106,6 +107,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 studentProgress={studentProgress}
               />
             </div>
+            <QuestionOverlay
+              currentQuestion={currentQuestion}
+            />
           </div>
         }
         { error && <DataFetchError error={error} /> }
