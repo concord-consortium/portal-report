@@ -17,33 +17,47 @@ interface IProps {
 
 export class ClassNav extends React.PureComponent<IProps> {
   render() {
-    const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "Student Name" },
-                                 { action: SORT_BY_MOST_PROGRESS, name: "Most Progress" } ,
-                                 { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
-    const { clazzName, setStudentSort, trackEvent, setAnonymous } = this.props;
+    const { setAnonymous } = this.props;
     return (
       <div className={css.classNav} data-cy="class-nav">
-        <div className={css.chooseClass}>
-          <CustomSelect
-            items={[{action: "", name: clazzName}]}
-            onSelectItem={(() => {})}
-            trackEvent={trackEvent}
-            iconId={"icon-class"}
-            dataCy={"choose-class"}
-          />
-        </div>
+        { this.renderClassSelect() }
         <AnonymizeStudents setAnonymous={setAnonymous} />
         <Feedback />
         <NumberOfStudentsContainer studentCount={this.props.studentCount} />
-        <div className={css.studentSort}>
-          <CustomSelect
-            items={items}
-            onSelectItem={setStudentSort}
-            trackEvent={trackEvent}
-            iconId={"icon-sort"}
-            dataCy={"sort-students"}
-          />
-        </div>
+        { this.renderStudentSort() }
+      </div>
+    );
+  }
+
+  private renderClassSelect = () => {
+    const { clazzName, trackEvent } = this.props;
+    return (
+      <div className={css.chooseClass}>
+        <CustomSelect
+          items={[{action: "", name: clazzName}]}
+          onSelectItem={(() => {})}
+          trackEvent={trackEvent}
+          iconId={"icon-class"}
+          dataCy={"choose-class"}
+        />
+      </div>
+    );
+  }
+
+  private renderStudentSort = () => {
+    const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "Student Name" },
+                                 { action: SORT_BY_MOST_PROGRESS, name: "Most Progress" } ,
+                                 { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
+    const { setStudentSort, trackEvent } = this.props;
+    return (
+      <div className={css.studentSort}>
+        <CustomSelect
+          items={items}
+          onSelectItem={setStudentSort}
+          trackEvent={trackEvent}
+          iconId={"icon-sort"}
+          dataCy={"sort-students"}
+        />
       </div>
     );
   }
