@@ -45,6 +45,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     activity.get("children").forEach((section: Map<any, any>) => {
       section.get("children").forEach((page: Map<any, any>) => pages.push(page));
     });
+    // TODO: do we need to filter hidden questions?
     // const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
     return (
       <div className={css.activityAnswers} key={activity.get("id")}>
@@ -76,7 +77,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     return (
       <div className={css.scoreHolder}>
         <div className={`${css.score} ${scoreClass}`}>
-          {`${numAnswered}/${numQuestions}`}
+          { `${numAnswered}/${numQuestions}` }
         </div>
       </div>
     );
@@ -90,8 +91,8 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const progressClass = progress > 0 ? css.progress : "";
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>
-        {this.renderProgressIcon(progress)}
-        {(progress > 0 && progress < 1) && `${numAnswered}/${numQuestions}`}
+        { this.renderProgressIcon(progress) }
+        { (progress > 0 && progress < 1) && `${numAnswered}/${numQuestions}` }
       </div>
     );
   }

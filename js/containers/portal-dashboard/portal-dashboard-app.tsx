@@ -21,7 +21,7 @@ interface IProps {
   clazzName: string;
   currentActivity?: Map<string, any>;
   error: IResponse;
-  expandedActivities: any;
+  expandedActivities: Map<any, any>;
   fetchAndObserveData: () => void;
   isFetching: boolean;
   report: any;
@@ -29,7 +29,7 @@ interface IProps {
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   studentCount: number;
-  studentProgress: any;
+  studentProgress: Map<any, any>;
   students: any;
   toggleCurrentActivity: (activityId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;

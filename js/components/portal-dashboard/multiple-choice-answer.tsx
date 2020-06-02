@@ -3,8 +3,8 @@ import React from "react";
 import css from "../../../css/portal-dashboard/answer.less";
 
 interface IProps {
-  answer: any;
-  question: any;
+  answer: Map<any, any>;
+  question: Map<any, any>;
 }
 
 export const MultipleChoiceAnswer: React.FC<IProps> = (props) => {

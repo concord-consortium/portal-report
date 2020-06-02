@@ -9,9 +9,9 @@ import { GenericAnswer } from "../../components/portal-dashboard/generic-answer"
 import { NoAnswer } from "../../components/portal-dashboard/no-answer";
 
 interface IProps {
-  answer: any;
-  question: any;
-  student: any;
+  answer: Map<any, any>;
+  question: Map<any, any>;
+  student: Map<any, any>;
 }
 
 class Answer extends React.PureComponent<IProps> {
