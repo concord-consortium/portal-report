@@ -20,10 +20,10 @@ export const itemsWithState: MenuItemsWithState[] = [
   {
     name: "Compact student list",
     action: "COMPACT_STUDENT_LIST" }
-  ]
+  ];
 export const items: MenuItemWithIcon[] = [
   {
-    icon: "#icon-help", 
+    icon: "#icon-help",
     name: "Help",
     action: "OPEN_HELP"
   },

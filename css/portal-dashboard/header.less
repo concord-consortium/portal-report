@@ -42,6 +42,7 @@
     justify-content: center;
     margin: 0 10px 0 10px;
   }
+
   .headerRight{
     display: flex;
     flex-direction: row;
@@ -50,20 +51,23 @@
     justify-content: flex-end;
     margin: 0 10px 0 10px;
   }
+
   .icon {
     width: 32px;
     height: 32px;
     object-fit: contain;
   }
+
   .headerMenu {
     height: 32px;
     width: 32px;
     padding: 12px;
   }
+
   .menuIcon {
     fill: @cc-teal;
     cursor: pointer;
-    transition-duration: 1.25s;
+    transition-duration: .25s;
 
     &:hover {
       background-color: @cc-teal-light2;
@@ -83,6 +87,7 @@
     align-items: center;
     margin: 0 12px 0 12px;
   }
+  
   .accountOwnerName {
     font-weight: bold;
     color: @cc-charcoal;
@@ -95,6 +100,7 @@
     border-bottom: solid 1px @cc-teal-light4;
     text-align: center;
   }
+  
   .menuList {
     width: 210px;
     height: 160px;
@@ -115,39 +121,40 @@
       z-index: 5;
     }
 
-    }
-    .menuItemName {
+  }
+  
+  .menuItemName {
       color: @cc-charcoal;
-    }
-    .menuItemIcon {
+  }
+  
+  .menuItemIcon {
       height: 20px;
       width: 20px;
       fill: white;
       margin: 0 5px 0 5px;
-    }
-    .menuItem {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      box-sizing: border-box;
-      height: 40px;
-      width: 210px;
-      padding: 0 5px 0 5px;
-      background-color: white;
-      font-size: 16px;
+  }
+  .menuItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    height: 40px;
+    width: 210px;
+    padding: 0 5px 0 5px;
+    background-color: white;
+    font-size: 16px;
 
-      &:hover {
+    &:hover {
         background-color: @cc-teal-light6;
-      }
-
-      &:active {
+    }
+    &:active {
         background-color: @cc-teal-light4;
-      }
-      &:active .check {
+    }
+    &:active .check {
         fill: @cc-teal;
-      }
-
-      .check {
+    }
+    
+    .check {
         height: 24px;
         width: 24px;
         margin: 0px;
@@ -156,90 +163,6 @@
         &.selected {
           fill: @cc-teal;
         }
-    }
-  }
-  //Hamburger experiment
-  .hamBurger {
-    width: 110px;
-    height: 16px;
-    background: #fff;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    animation: spin 5s infinite;
-  }
-  .hamBurger:before,
-  .hamBurger:after {
-    content: "";
-    width: 110px;
-    height: 16px;
-    background: #fff;
-    position: absolute;
-    left: 0;
-  }
-  .hamBurger:before {
-    top: -42px;
-    animation: translateBefore 5s infinite;
-  }
-  .hamBurger:after {
-    bottom: -42px;
-    animation: translateAfter 5s infinite;
-  }
-  @keyframes translateBefore {
-    20% {
-      transform: rotate(45deg);
-      width: 60px;
-      left: 52px;
-      top: -24px;
-    }
-    40% {
-      transform: rotate(45deg);
-      width: 60px;
-      left: 52px;
-      top: -24px;
-    }
-    60% {
-      transform: rotate(0deg);
-      width: 110px;
-      left: 0;
-      top: -42px;
-    }
-  }
-  @keyframes translateAfter {
-    20% {
-      transform: rotate(-45deg);
-      width: 60px;
-      left: 52px;
-      bottom: -24px;
-    }
-    40% {
-      transform: rotate(-45deg);
-      width: 60px;
-      left: 52px;
-      bottom: -24px;
-    }
-    60% {
-      transform: rotate(0deg);
-      width: 110px;
-      left: 0;
-      bottom: -42px;
-    }
-  }
-  @keyframes spin {
-    20% {
-      transform: rotate(180deg);
-    }
-    40% {
-      transform: rotate(180deg);
-    }
-    60% {
-      transform: rotate(360deg);
-    }
-    100% {
-      transform: rotate(360deg);
     }
   }
 }

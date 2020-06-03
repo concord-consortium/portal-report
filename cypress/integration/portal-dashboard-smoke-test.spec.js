@@ -58,8 +58,7 @@ context("Portal Dashboard UI",()=>{
             cy.get('[data-cy=header-menu]').should('be.visible');
         });
         it('verify user name is visible',()=>{
-            const teacher = 'Kristen Teachername';
-            cy.get('[data-cy=account-owner').should('be.visible').and('contain',teacher);
+            cy.get('[data-cy=account-owner').should('be.visible').and('not.be.empty');
         });
         it('verify menu opens on click',()=>{
             cy.get('[data-cy=header-menu]').click();

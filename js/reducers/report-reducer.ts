@@ -40,6 +40,7 @@ export interface IReportState {
   hideControls: boolean;
   hideSectionNames: boolean;
   platformUserId: string;
+  platformUserName: string;
   contextId: string;
   resourceLinkId: string;
   platformId: string;
@@ -67,6 +68,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   hideControls: false,
   hideSectionNames: false,
   platformUserId: "",
+  platformUserName:"",
   contextId: "",
   resourceLinkId: "",
   platformId: "",
@@ -96,6 +98,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   hideControls: boolean;
   hideSectionNames: boolean;
   platformUserId: string;
+  platformUserName: string;
   contextId: string;
   resourceLinkId: string;
   platformId: string;
@@ -118,6 +121,9 @@ export default function report(state = new ReportState({}), action?: any) {
   switch (action.type) {
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
+      // eslint-disable-next-line no-console
+      // console.log("teacher name is: ", data.offering.teacher);
+
       let type: ReportType = "student";
       let hideControls = true;
       if (!studentId && data.userType === "teacher") {
@@ -135,6 +141,7 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("clazzId", data.classInfo.id)
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
         .set("platformUserId", data.platformUserId)
+        .set("platformUserName",data.offering.teacher)
         .set("contextId", data.contextId)
         .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId)

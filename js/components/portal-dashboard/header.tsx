@@ -1,12 +1,15 @@
 import React from "react";
 
 import ccLogoSrc from "../../../img/cc-logo.png";
-import css from "../../../css/portal-dashboard/header.less";
 import { HeaderMenuContainer } from "./header-menu";
-import { AccountOwnerContainer } from "./account-owner";
+import { AccountOwnerDiv } from "./account-owner";
+import css from "../../../css/portal-dashboard/header.less";
 
+interface IProps {
+  userName: string;
+}
 
-export class Header extends React.PureComponent {
+export class Header extends React.PureComponent <IProps> {
   render() {
     return (
       <div className={css.dashboardHeader} data-cy="dashboard-header">
@@ -17,7 +20,7 @@ export class Header extends React.PureComponent {
         </div>
         <div className={css.assignment}>Assignment:</div>
         <div className={css.headerRight}>
-          <AccountOwnerContainer />
+          <AccountOwnerDiv userName={this.props.userName}/>
           <HeaderMenuContainer />
         </div>
 
