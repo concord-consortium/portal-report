@@ -4,9 +4,6 @@ import ccLogoSrc from "../../../img/cc-logo.png";
 import { HeaderMenuContainer } from "./header-menu";
 import { AccountOwnerDiv } from "./account-owner";
 import css from "../../../css/portal-dashboard/header.less";
-import { HeaderMenuContainer } from "./header-menu";
-import { AccountOwnerContainer } from "./account-owner";
-
 
 interface IProps {
   userName: string;
