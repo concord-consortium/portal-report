@@ -20,7 +20,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
       {
         students.map((s: any) => {
           return (
-            <div key={s.get("id")} className={css.studentAnswersRow} data-cy="studentAnswersRow">
+            <div key={s.get("id")} className={css.studentAnswersRow} data-cy="student-answers-row">
               {
                 activitiesList.map((a: any) => {
                   return (

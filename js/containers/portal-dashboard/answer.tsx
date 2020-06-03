@@ -12,15 +12,15 @@ interface AnswerIcon {
 const AnswerIcons: AnswerIcon[] = [
   {
     type: "open_response",
-    icon: "#open-response-complete",
+    icon: "open-response-complete",
   },
   {
     type: "image_question",
-    icon: "#image-open-response-complete",
+    icon: "image-open-response-complete",
   },
   {
     type: "iframe_interactive",
-    icon: "#interactive-complete",
+    icon: "interactive-complete",
   },
 ];
 
@@ -38,7 +38,7 @@ class Answer extends React.PureComponent<IProps> {
   render() {
     const { answer, question } = this.props;
     return (
-      <div className={css.answer}>
+      <div className={css.answer} data-cy="student-answer">
       { answer && (!question.get("required") || answer.get("submitted"))
         ? this.renderAnswer()
         : this.renderNoAnswer() }
@@ -51,18 +51,18 @@ class Answer extends React.PureComponent<IProps> {
     const type = answer.get("questionType");
     let iconId = "";
     if (type === "multiple_choice") {
-      iconId = "#multiple-choice-non-scored";
+      iconId = "multiple-choice-non-scored";
       if (question.get("scored")) {
-        iconId = answer.get("correct") ? "#multiple-choice-correct" : "#multiple-choice-incorrect";
+        iconId = answer.get("correct") ? "multiple-choice-correct" : "multiple-choice-incorrect";
       }
     } else {
       const answerIcon = AnswerIcons.find(a => a.type === answer.get("questionType"));
-      iconId = answerIcon ? answerIcon.icon : "#interactive-complete";
+      iconId = answerIcon ? answerIcon.icon : "interactive-complete";
     }
     return (
-      <div className={css.answerContent}>
+      <div className={css.answerContent} data-cy={iconId}>
         <svg className={css.icon}>
-          <use xlinkHref={iconId} />
+          <use xlinkHref={`#${iconId}`} />
         </svg>
       </div>
     );
@@ -70,7 +70,7 @@ class Answer extends React.PureComponent<IProps> {
 
   renderNoAnswer = () => {
     return (
-      <div className={`${css.answerContent} ${css.noAnswer}`} />
+      <div className={`${css.answerContent} ${css.noAnswer}`} data-cy={"no-answer"}/>
     );
   }
 }
