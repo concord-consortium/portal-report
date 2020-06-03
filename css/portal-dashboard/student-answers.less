@@ -1,10 +1,9 @@
 @import "./variables";
 
 .studentAnswers {
+  display: inline-block;
   width: 100%;
   background-color: white;
-  overflow-x: auto;
-  overflow-y: auto;
 
   .studentAnswersRow {
     display: flex;
@@ -12,6 +11,8 @@
     flex-shrink: 0;
     box-sizing: border-box;
     height: 44px;
+    width: 100%;
+    min-width: fit-content;
     border-style: solid;
     border-width: 0 0 1px 0;
     border-color: @cc-charcoal-light2;
@@ -29,20 +30,17 @@
         align-items: center;
         height: 100%;
         border-style: solid;
-        border-width: 0 1px 0 1px;
+        border-width: 0 2px 0 0;
         border-color: @cc-teal-light4;
       }
       .activityPage:first-child {
-        border-width: 0 1px 0 0;
-      }
-      .activityPage:last-child {
-        border-width:  0 2px 0 1px;
+        border-width: 0 2px 0 2px;
       }
 
       .scoreHolder {
         height: 100%;
         border-style: solid;
-        border-width: 0 1px 0 1px;
+        border-width: 0 2px 0 0;
         border-color: @cc-teal-light4;
 
         .score {
