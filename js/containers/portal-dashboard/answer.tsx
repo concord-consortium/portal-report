@@ -1,12 +1,28 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { MultipleChoiceAnswer } from "../../components/portal-dashboard/multiple-choice-answer";
-import { OpenResponseAnswer } from "../../components/portal-dashboard/open-response-answer";
-import { ImageAnswer } from "../../components/portal-dashboard/image-answer";
-import { IframeInteractiveAnswer } from "../../components/portal-dashboard/iframe-interactive-answer";
-import { GenericAnswer } from "../../components/portal-dashboard/generic-answer";
-import { NoAnswer } from "../../components/portal-dashboard/no-answer";
+
+import css from "../../../css/portal-dashboard/answer.less";
+
+interface AnswerIcon {
+  type: string;
+  icon: string;
+}
+
+const AnswerIcons: AnswerIcon[] = [
+  {
+    type: "open_response",
+    icon: "#open-response-complete",
+  },
+  {
+    type: "image_question",
+    icon: "#image-complete",
+  },
+  {
+    type: "iframe_interactive",
+    icon: "#interactive-complete",
+  },
+];
 
 interface IProps {
   answer: Map<any, any>;
@@ -20,29 +36,42 @@ class Answer extends React.PureComponent<IProps> {
   }
 
   render() {
+    const { answer, question } = this.props;
     return (
-      this.renderAnswer()
+      <div className={css.answer}>
+      { answer && (!question.get("required") || answer.get("submitted"))
+        ? this.renderAnswer()
+        : this.renderNoAnswer() }
+      </div>
     );
   }
 
   private renderAnswer = () => {
     const { answer, question } = this.props;
-    if (answer && (!question.get("required") || answer.get("submitted"))) {
-      const type = answer.get("questionType");
-      if (type === "multiple_choice") {
-        return (<MultipleChoiceAnswer answer={answer} question={question} />);
-      } else if(type === "open_response") {
-        return (<OpenResponseAnswer />);
-      } else if(type === "image_question") {
-        return (<ImageAnswer />);
-      } else if(type === "iframe_interactive") {
-        return (<IframeInteractiveAnswer />);
-      } else {
-        return (<GenericAnswer />);
+    const type = answer.get("questionType");
+    let iconId = "";
+    if (type === "multiple_choice") {
+      iconId = "#multiple-choice-non-scored";
+      if (question.get("scored")) {
+        iconId = answer.get("correct") ? "#multiple-choice-correct" : "#multiple-choice-incorrect";
       }
     } else {
-      return (<NoAnswer />);
+      const answerIcon = AnswerIcons.find(a => a.type === answer.get("questionType"));
+      iconId = answerIcon ? answerIcon.icon : "#open-response-complete";
     }
+    return (
+      <div className={css.answerContent}>
+        <svg className={css.icon}>
+          <use xlinkHref={iconId} />
+        </svg>
+      </div>
+    );
+  }
+
+  renderNoAnswer = () => {
+    return (
+      <div className={`${css.answerContent} ${css.noAnswer}`} />
+    );
   }
 }
 
