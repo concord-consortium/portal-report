@@ -16,7 +16,7 @@ const AnswerIcons: AnswerIcon[] = [
   },
   {
     type: "image_question",
-    icon: "#image-complete",
+    icon: "#image-open-response-complete",
   },
   {
     type: "iframe_interactive",
@@ -57,7 +57,7 @@ class Answer extends React.PureComponent<IProps> {
       }
     } else {
       const answerIcon = AnswerIcons.find(a => a.type === answer.get("questionType"));
-      iconId = answerIcon ? answerIcon.icon : "#open-response-complete";
+      iconId = answerIcon ? answerIcon.icon : "#interactive-complete";
     }
     return (
       <div className={css.answerContent}>
