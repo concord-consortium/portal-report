@@ -22,9 +22,20 @@
     overflow: hidden;
 
     .animateLevelButton {
+      position: relative;
       width: 120px;
+      flex: 0 0 120px;
       margin-left: @margin;
       transition: all 0.5s ease;
+
+      .blueLine {
+        position: absolute;
+        right: -9px;
+        bottom: 0;
+        width: 2px;
+        height: 154px;
+        background-color: @cc-teal-light2;
+      }
     }
 
     .activityButton {
@@ -171,15 +182,33 @@
         }
       }
 
-      .page {
-        height: 45px;
-        box-sizing: border-box;
-        border-radius: 8px;
-        border: solid 1.5px @cc-charcoal-light2;
-        margin: 10px 0;
-        padding: 6px 10px 7px 10px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .pageWrapper {
+        position: relative;
+        height: 124px;
+
+        .page {
+          height: 45px;
+          box-sizing: border-box;
+          border-radius: 8px;
+          border: solid 1.5px @cc-charcoal-light2;
+          margin: 10px 0;
+          padding: 6px 10px 7px 10px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          &.noBorder {
+            border: none;
+          }
+        }
+
+        .blueLine {
+          position: absolute;
+          right: -10px;
+          bottom: 0;
+          width: 1px;
+          height: 110px;
+          background-color: @cc-teal-light2;
+        }
       }
 
       .questionsContainer {

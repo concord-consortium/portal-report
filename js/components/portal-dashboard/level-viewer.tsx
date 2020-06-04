@@ -24,7 +24,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
       <div className={css.levelViewer} data-cy="level-viewer">
         <div className={css.activityButtons}>
           {
-            activities.toArray().map(this.renderActivityButton)
+            activities.toArray().map(this.renderActivityButton(activities.toArray().length))
           }
         </div>
         <ProgressLegendContainer />
@@ -32,9 +32,9 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderActivityButton = (activity: Map<string, any>, idx: number) => {
+  private renderActivityButton = (totalActivities: number) => (activity: Map<string, any>, idx: number) => {
     if (this.props.currentActivity && activity.get("id") === this.props.currentActivity.get("id")) {
-      return this.renderExpandedActivityButton(activity, idx);
+      return this.renderExpandedActivityButton(activity, idx, idx === totalActivities - 1);
     } else {
       return this.renderCollapsedActivityButton(activity, idx);
     }
@@ -63,7 +63,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderExpandedActivityButton = (activity: Map<string, any>, idx: number) => {
+  private renderExpandedActivityButton = (activity: Map<string, any>, idx: number, isLast: boolean) => {
     const pages: Map<any, any>[] = [];
     activity.get("children").forEach((section: Map<any, any>) => {
       section.get("children").forEach((page: Map<any, any>) => pages.push(page));
@@ -86,6 +86,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
         <div className={css.pagesContainer}>
           { pages.map(this.renderPage) }
         </div>
+        { !isLast && <div className={css.blueLine} /> }
       </div>
     );
   }
@@ -96,13 +97,14 @@ export class LevelViewer extends React.PureComponent<IProps> {
     const totalWidth = getTotalQuestionsWidth((questions as any).size);
     if (totalWidth === 0) return;
     return (
-      <div key={page.get("id")} style={{width: totalWidth}}>
+      <div className={css.pageWrapper} key={page.get("id")} style={{width: totalWidth}}>
         <div className={css.page}>
             P{idx + 1}: {page.get("name")}
         </div>
         <div className={css.questionsContainer}>
           { questions.map(this.renderQuestion) }
         </div>
+        <div className={css.blueLine} />
       </div>
     );
   }
@@ -118,7 +120,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
         <div>
             Q{question.get("questionNumber")}
         </div>
-        <div className={css.pagesContainer}>
+        <div>
           <svg className={css.icon}>
             <use xlinkHref="#text-question"/>
           </svg>
