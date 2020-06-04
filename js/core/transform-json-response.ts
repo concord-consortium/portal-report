@@ -4,7 +4,7 @@ import { IPortalRawData } from "../api";
 import queryString from "query-string";
 
 export interface IResource {
-  id: number;
+  id: string;
   name: string;
   type: string;
   children: IResource[] | IQuestion[];
@@ -14,7 +14,19 @@ export interface IActivity extends IResource {
   activityIndex: number;
 }
 
+export interface ISection extends IResource {
+  activity: string;
+}
+
+export interface IPage extends IResource {
+  activity: string;
+  section: string;
+}
+
 export interface IQuestion extends IResource {
+  activity: string;
+  section: string;
+  page: string;
   prompt: string;
   selected: boolean;
   scored?: boolean; // multiple choice only
@@ -106,7 +118,7 @@ export function preprocessResourceJSON(resourceJson: IResource) {
   // Provide fake sequence if it's not present to simplify app logic.
   if (resourceJson.type === "activity") {
     resourceJson = {
-      id: 1,
+      id: "1",
       name: "",
       type: "sequence",
       children: [ resourceJson ],
@@ -115,9 +127,15 @@ export function preprocessResourceJSON(resourceJson: IResource) {
   // Add some question properties, e.g. question numbers, selection, visibility.
   resourceJson.children.forEach((activity: IActivity, idx: number) => {
     activity.activityIndex = idx;
-    activity.children.forEach(section => {
-      section.children.forEach(page => {
+    activity.children.forEach((section: ISection) => {
+      section.activity = activity.id;
+      section.children.forEach((page: IPage) => {
+        page.activity = activity.id;
+        page.section = section.id;
         page.children.forEach((question: IQuestion) => {
+          question.activity = activity.id;
+          question.section = section.id;
+          question.page = page.id;
           // Nothing is selected by default.
           question.selected = false;
           if (question.type === "multiple_choice" && question.choices) {

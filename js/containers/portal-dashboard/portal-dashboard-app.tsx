@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity, getStudentProgress } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getStudentProgress } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -12,26 +12,34 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, toggleCurrentActivity } from "../../actions/dashboard";
+import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
+import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
 interface IProps {
+  // from mapStateToProps
   clazzName: string;
   currentActivity?: Map<string, any>;
+  currentQuestion?: Map<string, any>;
   error: IResponse;
   expandedActivities: Map<any, any>;
-  fetchAndObserveData: () => void;
   isFetching: boolean;
   report: any;
   sequenceTree: Map<any, any>;
-  setAnonymous: (value: boolean) => void;
-  setStudentSort: (value: string) => void;
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
+  questions?: Map<string, any>;
+  sortedQuestionIds?: string[];
+  // from mapDispatchToProps
+  fetchAndObserveData: () => void;
+  setAnonymous: (value: boolean) => void;
+  setStudentSort: (value: string) => void;
+  setCurrentActivity: (activityId: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
+  toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   userName: string;
 }
@@ -62,7 +70,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, currentActivity, error, expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, toggleCurrentActivity, trackEvent, userName } = this.props;
+    const { clazzName, currentActivity, currentQuestion, error,
+      report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
+      expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -83,8 +93,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
               <LevelViewer
                 activities={activityTrees}
-                toggleCurrentActivity={toggleCurrentActivity}
                 currentActivity={currentActivity}
+                currentQuestion={currentQuestion}
+                toggleCurrentActivity={toggleCurrentActivity}
+                toggleCurrentQuestion={toggleCurrentQuestion}
               />
             </div>
             <div className={css.progressTable}>
@@ -100,6 +112,13 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 studentProgress={studentProgress}
               />
             </div>
+            <QuestionOverlay
+              currentQuestion={currentQuestion}
+              questions={questions}
+              sortedQuestionIds={sortedQuestionIds}
+              toggleCurrentQuestion={toggleCurrentQuestion}
+              setCurrentActivity={setCurrentActivity}
+            />
           </div>
         }
         { error && <DataFetchError error={error} /> }
@@ -114,9 +133,26 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const error = data.get("error");
   const reportState = state.get("report");
   const dataDownloaded = !error && !data.get("isFetching");
+  const questions = dataDownloaded ? state.getIn(["report", "questions"]) : undefined;
+  const activities = dataDownloaded ? state.getIn(["report", "activities"]) : undefined;
+  let sortedQuestionIds;
+  if (questions && activities) {
+    sortedQuestionIds = questions.keySeq().toArray().sort((q1Id: string, q2Id: string) => {
+      const question1 =  questions.get(q1Id);
+      const question2 =  questions.get(q2Id);
+      const act1 = question1.get("activity");
+      const act2 = question2.get("activity");
+      if (act1 !== act2) {
+        return (activities.get(act1).get("activityIndex") - activities.get(act2).get("activityIndex"));
+      } else {
+        return question1.get("questionNumber") - question2.get("questionNumber");
+      }
+    });
+  }
   return {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     currentActivity: getCurrentActivity(state),
+    currentQuestion: getCurrentQuestion(state),
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     isFetching: data.get("isFetching"),
@@ -125,6 +161,8 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
+    questions,
+    sortedQuestionIds,
   };
 }
 
@@ -133,7 +171,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
+    setCurrentActivity: (activityId: string) =>  dispatch(setCurrentActivity(activityId)),
     toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),
+    toggleCurrentQuestion: (questionId: string) =>  dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };

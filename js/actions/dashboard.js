@@ -3,7 +3,9 @@ export const SET_STUDENT_EXPANDED = "SET_STUDENT_EXPANDED";
 export const SET_STUDENTS_EXPANDED = "SET_STUDENTS_EXPANDED";
 export const SET_STUDENT_SORT = "SET_STUDENT_SORT";
 
+export const SET_CURRENT_ACTIVITY = "SET_CURRENT_ACTIVITY";
 export const TOGGLE_CURRENT_ACTIVITY = "TOGGLE_CURRENT_ACTIVITY";
+export const TOGGLE_CURRENT_QUESTION = "TOGGLE_CURRENT_QUESTION";
 
 export const SORT_BY_NAME = "NAME";
 export const SORT_BY_MOST_PROGRESS = "MOST_PROGRESS";
@@ -93,10 +95,24 @@ export function selectQuestion(value) {
   };
 }
 
+export function setCurrentActivity(activityId) {
+  return {
+    type: SET_CURRENT_ACTIVITY,
+    value: activityId,
+  };
+}
+
 export function toggleCurrentActivity(activityId) {
   return {
     type: TOGGLE_CURRENT_ACTIVITY,
     value: activityId,
+  };
+}
+
+export function toggleCurrentQuestion(questionId) {
+  return {
+    type: TOGGLE_CURRENT_QUESTION,
+    value: questionId,
   };
 }
 
