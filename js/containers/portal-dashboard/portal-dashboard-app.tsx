@@ -33,6 +33,7 @@ interface IProps {
   students: any;
   toggleCurrentActivity: (activityId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
+  userName: string;
 }
 
 interface IState {
@@ -61,7 +62,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, currentActivity, error, expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, toggleCurrentActivity, trackEvent } = this.props;
+    const { clazzName, currentActivity, error, expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, toggleCurrentActivity, trackEvent, userName } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -69,7 +70,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
     return (
       <div className={css.portalDashboardApp}>
-        <Header/>
+        <Header userName={userName}/>
         { activityTrees &&
           <div>
             <div className={css.navigation}>
@@ -123,6 +124,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     sequenceTree: dataDownloaded && getSequenceTree(state),
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
+    userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
   };
 }
 

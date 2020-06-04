@@ -43,11 +43,127 @@
     margin: 0 10px 0 10px;
   }
 
-  .login {
+  .headerRight{
     display: flex;
+    flex-direction: row;
+    align-items: center;
     flex: 1;
     justify-content: flex-end;
     margin: 0 10px 0 10px;
   }
 
+  .icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  .headerMenu {
+    height: 32px;
+    width: 32px;
+    padding: 12px;
+  }
+
+  .menuIcon {
+    fill: @cc-teal;
+    cursor: pointer;
+    transition-duration: .25s;
+
+    &:hover {
+      background-color: @cc-teal-light2;
+      border-radius: 4px;
+    }
+    &.showList, &:active {
+      background-color: @cc-teal;
+      fill: white;
+    }
+    &.showList {
+      fill: white;
+    }
+  }
+  .accountOwner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 12px 0 12px;
+  }
+  
+  .accountOwnerName {
+    font-weight: bold;
+    color: @cc-charcoal;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+
+  // menu list
+  .topMenu {
+    border-bottom: solid 1px @cc-teal-light4;
+    text-align: center;
+  }
+  
+  .menuList {
+    width: 210px;
+    height: 160px;
+    border-radius: 0 0 4px 4px;
+    position: absolute;
+    margin-top: 10px;
+    right: 20px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: .25s;
+    pointer-events: none;
+
+    &.show {
+      opacity: 1;
+      pointer-events: auto;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+  }
+  
+  .menuItemName {
+      color: @cc-charcoal;
+  }
+  
+  .menuItemIcon {
+      height: 20px;
+      width: 20px;
+      fill: white;
+      margin: 0 5px 0 5px;
+  }
+  .menuItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    height: 40px;
+    width: 210px;
+    padding: 0 5px 0 5px;
+    background-color: white;
+    font-size: 16px;
+
+    &:hover {
+        background-color: @cc-teal-light6;
+    }
+    &:active {
+        background-color: @cc-teal-light4;
+    }
+    &:active .check {
+        fill: @cc-teal;
+    }
+    
+    .check {
+        height: 24px;
+        width: 24px;
+        margin: 0px;
+        fill: white;
+  
+        &.selected {
+          fill: @cc-teal;
+        }
+    }
+  }
 }
+

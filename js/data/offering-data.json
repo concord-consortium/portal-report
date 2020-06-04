@@ -1,5 +1,6 @@
 {
   "activity_url": "http://fake.authoring.system/activity/1",
   "id": 1,
-  "rubric_url": "sample-rubric.json"
+  "rubric_url": "sample-rubric.json",
+  "teacher": "Kristen Teachername"
 }

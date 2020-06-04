@@ -31,6 +31,7 @@ export interface IPortalData {
   offering: {
     activityUrl: string;
     id: number;
+    teacher: string;
   };
   classInfo: {
     id: number;
