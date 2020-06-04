@@ -10,8 +10,17 @@
   height: @top-nav-level-viewer-height;
   user-select: none;
 
+  .cover {
+    width: 100%;
+    height: 44px;
+    background-color: white;
+    position: absolute;
+    bottom: -46px;
+  }
+
   .activityButtons {
     display: flex;
+    position: relative;
     height: 158px;
     margin-top: 19px;
     margin-left: 3px;
@@ -19,7 +28,6 @@
     font-size: 14px;
     font-weight: 500;
     color: @cc-teal-dark1;
-    overflow: hidden;
 
     .animateLevelButton {
       position: relative;

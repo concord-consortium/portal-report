@@ -1,8 +1,8 @@
 import React from "react";
 import { Map } from "immutable";
+import { ProgressLegendContainer } from "./legend-container";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
-import { ProgressLegendContainer } from "./legend-container";
 
 // from level-viewer.less
 const questionWidth = 50;
@@ -15,18 +15,23 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
+  leftPosition: number;
 }
 
 export class LevelViewer extends React.PureComponent<IProps> {
   render() {
-    const { activities } = this.props;
+    const { activities, leftPosition } = this.props;
+    const position = {
+      left: leftPosition,
+    };
     return (
       <div className={css.levelViewer} data-cy="level-viewer">
-        <div className={css.activityButtons}>
+        <div className={css.activityButtons} style={position}>
           {
             activities.toArray().map(this.renderActivityButton(activities.toArray().length))
           }
         </div>
+        <div className={css.cover} />
         <ProgressLegendContainer />
       </div>
     );

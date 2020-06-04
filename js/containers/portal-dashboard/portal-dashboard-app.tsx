@@ -46,13 +46,15 @@ interface IProps {
 
 interface IState {
   initialLoading: boolean;
+  scrollLeft: number;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      initialLoading: true
+      initialLoading: true,
+      scrollLeft: 0
     };
   }
 
@@ -97,9 +99,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 currentQuestion={currentQuestion}
                 toggleCurrentActivity={toggleCurrentActivity}
                 toggleCurrentQuestion={toggleCurrentQuestion}
+                leftPosition={this.state.scrollLeft}
               />
             </div>
-            <div className={css.progressTable}>
+            <div className={css.progressTable} onScroll={this.handleScroll}>
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
@@ -125,6 +128,13 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
         { initialLoading && <LoadingIcon /> }
       </div>
     );
+  }
+
+  private handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const element = e.target as HTMLElement;
+    if (element && element.scrollLeft) {
+      this.setState({ scrollLeft: -1 * element.scrollLeft });
+    }
   }
 }
 
