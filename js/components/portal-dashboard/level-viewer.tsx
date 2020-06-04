@@ -72,6 +72,8 @@ export class LevelViewer extends React.PureComponent<IProps> {
     // with an explicit width, we can animate the transition between the small and large sizes
     let totalWidth = 0;
     pages.forEach(p => totalWidth += getTotalQuestionsWidth((p.get("children") as any).size) + margin);
+    // add width for the score box
+    totalWidth += questionWidth + margin;
 
     return (
       <div key={activity.get("id")} className={css.animateLevelButton} style={{width: totalWidth}}
@@ -85,6 +87,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
         </div>
         <div className={css.pagesContainer}>
           { pages.map(this.renderPage) }
+          { this.renderScoreBox() }
         </div>
         { !isLast && <div className={css.blueLine} /> }
       </div>
@@ -124,6 +127,27 @@ export class LevelViewer extends React.PureComponent<IProps> {
           <svg className={css.icon}>
             <use xlinkHref="#text-question"/>
           </svg>
+        </div>
+      </div>
+    );
+  }
+
+  private renderScoreBox = () => {
+    return (
+      <div className={css.pageWrapper}>
+        <div className={css.page + " " + css.noBorder}>
+        </div>
+        <div className={css.questionsContainer}>
+          <div className={css.question} data-cy="activity-question-button">
+            <div>
+                Score
+            </div>
+            <div className={css.pagesContainer}>
+              <svg className={css.icon}>
+                <use xlinkHref="#multiple-choice-correct"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     );
