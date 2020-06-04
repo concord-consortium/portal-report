@@ -1,5 +1,8 @@
 @import "./variables";
 
+@legend-width: 477px;
+@half-width: @legend-width / 2;
+
 .legendContainer {
     font-size: 14px;
     font-weight: normal;
@@ -8,12 +11,11 @@
     box-sizing: border-box;
     border-radius: 16px;
     text-align: center;
-    width: 477px;
+    width: @legend-width;
     height: 32px;
     line-height: 32px;
     background-color: white;
-    left: 0px;
-    right:0px;
+    left: calc(((100vw - @left-panel-width) / 2) - @half-width);
     margin-left:auto;
     margin-right:auto;
     position: absolute;

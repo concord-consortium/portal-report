@@ -7,7 +7,7 @@ import { ProgressLegendContainer } from "./legend-container";
 // from level-viewer.less
 const questionWidth = 50;
 const margin = 20;
-const getTotalQuestionsWidth = (numQuestions: number) => numQuestions * (questionWidth + margin) - margin;
+const getTotalQuestionsWidth = (numQuestions: number) => Math.max(0, numQuestions * (questionWidth + margin) - margin);
 
 interface IProps {
   activities: Map<any, any>;
@@ -24,7 +24,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
       <div className={css.levelViewer} data-cy="level-viewer">
         <div className={css.activityButtons}>
           {
-            activities.toArray().map(this.renderActivityButton)
+            activities.toArray().map(this.renderActivityButton(activities.toArray().length))
           }
         </div>
         <ProgressLegendContainer />
@@ -32,9 +32,9 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderActivityButton = (activity: Map<string, any>, idx: number) => {
+  private renderActivityButton = (totalActivities: number) => (activity: Map<string, any>, idx: number) => {
     if (this.props.currentActivity && activity.get("id") === this.props.currentActivity.get("id")) {
-      return this.renderExpandedActivityButton(activity, idx);
+      return this.renderExpandedActivityButton(activity, idx, idx === totalActivities - 1);
     } else {
       return this.renderCollapsedActivityButton(activity, idx);
     }
@@ -63,7 +63,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderExpandedActivityButton = (activity: Map<string, any>, idx: number) => {
+  private renderExpandedActivityButton = (activity: Map<string, any>, idx: number, isLast: boolean) => {
     const pages: Map<any, any>[] = [];
     activity.get("children").forEach((section: Map<any, any>) => {
       section.get("children").forEach((page: Map<any, any>) => pages.push(page));
@@ -71,8 +71,9 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
     // with an explicit width, we can animate the transition between the small and large sizes
     let totalWidth = 0;
-    pages.forEach(p => totalWidth += getTotalQuestionsWidth((p.get("children") as any).size));
-    totalWidth += margin;
+    pages.forEach(p => totalWidth += getTotalQuestionsWidth((p.get("children") as any).size) + margin);
+    // add width for the score box
+    totalWidth += questionWidth + margin;
 
     return (
       <div key={activity.get("id")} className={css.animateLevelButton} style={{width: totalWidth}}
@@ -86,7 +87,9 @@ export class LevelViewer extends React.PureComponent<IProps> {
         </div>
         <div className={css.pagesContainer}>
           { pages.map(this.renderPage) }
+          { this.renderScoreBox() }
         </div>
+        { !isLast && <div className={css.blueLine} /> }
       </div>
     );
   }
@@ -95,14 +98,16 @@ export class LevelViewer extends React.PureComponent<IProps> {
     const questions: Map<any, any>[] = page.get("children");
     // explicit width so we are no larger than the question buttons
     const totalWidth = getTotalQuestionsWidth((questions as any).size);
+    if (totalWidth === 0) return;
     return (
-      <div key={page.get("id")} style={{width: totalWidth}}>
+      <div className={css.pageWrapper} key={page.get("id")} style={{width: totalWidth}}>
         <div className={css.page}>
             P{idx + 1}: {page.get("name")}
         </div>
         <div className={css.questionsContainer}>
           { questions.map(this.renderQuestion) }
         </div>
+        <div className={css.blueLine} />
       </div>
     );
   }
@@ -118,10 +123,31 @@ export class LevelViewer extends React.PureComponent<IProps> {
         <div>
             Q{question.get("questionNumber")}
         </div>
-        <div className={css.pagesContainer}>
+        <div>
           <svg className={css.icon}>
             <use xlinkHref="#text-question"/>
           </svg>
+        </div>
+      </div>
+    );
+  }
+
+  private renderScoreBox = () => {
+    return (
+      <div className={css.pageWrapper}>
+        <div className={css.page + " " + css.noBorder}>
+        </div>
+        <div className={css.questionsContainer}>
+          <div className={css.question} data-cy="activity-question-button">
+            <div>
+                Score
+            </div>
+            <div className={css.pagesContainer}>
+              <svg className={css.icon}>
+                <use xlinkHref="#multiple-choice-correct"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     );
