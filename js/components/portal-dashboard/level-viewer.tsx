@@ -7,7 +7,7 @@ import { ProgressLegendContainer } from "./legend-container";
 // from level-viewer.less
 const questionWidth = 50;
 const margin = 20;
-const getTotalQuestionsWidth = (numQuestions: number) => numQuestions * (questionWidth + margin) - margin;
+const getTotalQuestionsWidth = (numQuestions: number) => Math.max(0, numQuestions * (questionWidth + margin) - margin);
 
 interface IProps {
   activities: Map<any, any>;
@@ -71,8 +71,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
     // with an explicit width, we can animate the transition between the small and large sizes
     let totalWidth = 0;
-    pages.forEach(p => totalWidth += getTotalQuestionsWidth((p.get("children") as any).size));
-    totalWidth += margin;
+    pages.forEach(p => totalWidth += getTotalQuestionsWidth((p.get("children") as any).size) + margin);
 
     return (
       <div key={activity.get("id")} className={css.animateLevelButton} style={{width: totalWidth}}
@@ -95,6 +94,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
     const questions: Map<any, any>[] = page.get("children");
     // explicit width so we are no larger than the question buttons
     const totalWidth = getTotalQuestionsWidth((questions as any).size);
+    if (totalWidth === 0) return;
     return (
       <div key={page.get("id")} style={{width: totalWidth}}>
         <div className={css.page}>
