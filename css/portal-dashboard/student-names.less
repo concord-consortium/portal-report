@@ -1,0 +1,30 @@
+@import "./variables";
+
+.studentList {
+  display: inline-block;
+  width: 240px;
+
+  .studentName {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    width: 240px;
+    background-color: white;
+
+    &.compact {
+      height: 32px;
+    }
+
+    .name {
+      margin: 0 20px 0 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+  }
+  .studentName:nth-child(even) {
+    background-color: @cc-teal-light6;
+  }
+
+}

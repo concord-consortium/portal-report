@@ -1,0 +1,110 @@
+@import "./variables";
+
+.studentAnswers {
+  display: inline-block;
+  width: 100%;
+  background-color: white;
+  width: calc(100% - 240px);
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: auto;
+  height: fit-content;
+
+  .studentAnswersRow {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    height: 44px;
+    width: 100%;
+    min-width: fit-content;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    border-color: @cc-charcoal-light2;
+    padding: 0 0 0 10px;
+
+    .activityAnswers {
+      display: flex;
+      flex-direction: row;
+      flex-shrink: 0;
+      align-items: center;
+
+      .activityPage {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 100%;
+        border-style: solid;
+        border-width: 0 2px 0 0;
+        border-color: @cc-teal-light4;
+      }
+      .activityPage:first-child {
+        border-width: 0 2px 0 2px;
+      }
+
+      .scoreHolder {
+        height: 100%;
+        border-style: solid;
+        border-width: 0 2px 0 0;
+        border-color: @cc-teal-light4;
+
+        .score {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 50px;
+          height: 100%;
+          margin: 0 10px 0 10px;
+          color: @cc-charcoal;
+          opacity: .5;
+
+          &.complete {
+            background-color: @score-green-light;
+            opacity: 1;
+          }
+        }
+      }
+
+    }
+
+    .activityProgress {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-shrink: 0;
+      width: 120px;
+      margin: 0 10px 0 10px;
+
+      &.progress {
+        background-color:@cc-orange-light5
+      }
+
+      .progressIcon {
+        margin: 0 5px 0 52px;
+        box-sizing: border-box;
+        border: 1px solid @cc-orange;
+        height: 20px;
+        width: 20px;
+        border-radius: 20%;
+      }
+      .completed {
+        background-color: @cc-orange;
+        border-radius: 50%;
+      }
+      .inProgress {
+        background-color: @cc-orange-light3;
+        border-radius: 50% 20% 20% 50%;
+      }
+      .notYetStarted {
+        background-color: white;
+        border-radius: 20%;
+      }
+
+    }
+  }
+
+  .studentAnswersRow:first-child {
+    border-width: 1px 0 1px 0;
+  }
+
+}

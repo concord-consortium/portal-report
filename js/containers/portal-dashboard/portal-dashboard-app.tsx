@@ -2,24 +2,26 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity, getStudentProgress } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
-import { StudentList } from "../../components/portal-dashboard/student-list";
+import { StudentNames } from "../../components/portal-dashboard/student-names";
+import { StudentAnswers } from "../../components/portal-dashboard/student-answers";
 import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
 import { setStudentSort, toggleCurrentActivity } from "../../actions/dashboard";
+import { RootState } from "../../reducers";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
-import { RootState } from "../../reducers";
 
 interface IProps {
   clazzName: string;
   currentActivity?: Map<string, any>;
   error: IResponse;
+  expandedActivities: Map<any, any>;
   fetchAndObserveData: () => void;
   isFetching: boolean;
   report: any;
@@ -27,6 +29,7 @@ interface IProps {
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   studentCount: number;
+  studentProgress: Map<any, any>;
   students: any;
   toggleCurrentActivity: (activityId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
@@ -58,7 +61,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, currentActivity, error, report, sequenceTree, setAnonymous, setStudentSort, students, toggleCurrentActivity, trackEvent } = this.props;
+    const { clazzName, currentActivity, error, expandedActivities, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, toggleCurrentActivity, trackEvent } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -83,10 +86,19 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 currentActivity={currentActivity}
               />
             </div>
-            <StudentList
-              students={students}
-              isAnonymous={isAnonymous}
-            />
+            <div className={css.progressTable}>
+              <StudentNames
+                students={students}
+                isAnonymous={isAnonymous}
+              />
+              <StudentAnswers
+                activities={activityTrees}
+                currentActivity={currentActivity}
+                expandedActivities={expandedActivities}
+                students={students}
+                studentProgress={studentProgress}
+              />
+            </div>
           </div>
         }
         { error && <DataFetchError error={error} /> }
@@ -105,10 +117,12 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     currentActivity: getCurrentActivity(state),
     error,
+    expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     isFetching: data.get("isFetching"),
     report: dataDownloaded && reportState,
     sequenceTree: dataDownloaded && getSequenceTree(state),
     students: dataDownloaded && getSortedStudents(state),
+    studentProgress: dataDownloaded && getStudentProgress(state),
   };
 }
 

@@ -1,24 +1,25 @@
 import React from "react";
-import { StudentRow } from "./student-row";
 
-import css from "../../../css/portal-dashboard/student-list.less";
+import css from "../../../css/portal-dashboard/student-names.less";
 
 interface IProps {
   students: any; // TODO: add type
   isAnonymous: boolean;
 }
 
-export class StudentList extends React.PureComponent<IProps> {
+export class StudentNames extends React.PureComponent<IProps> {
   render() {
     const { students, isAnonymous } = this.props;
     return (
       <div className={css.studentList} data-cy="student-list">
         { students && students.map((student: any, i: number) => {
           const formattedName = isAnonymous
-                                ? `Student ${student.get("id")}`
+                                ? student.get("name")
                                 : `${student.get("lastName")}, ${student.get("firstName")}`;
           return (
-            <StudentRow key={`student ${i}`} name={formattedName}/>
+            <div className={css.studentName} key={`student ${i}`}>
+              <div className={css.name} data-cy="student-name">{formattedName}</div>
+            </div>
           );
         }) }
       </div>
