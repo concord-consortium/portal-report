@@ -5,11 +5,7 @@ import { HeaderMenuContainer } from "./header-menu";
 import { AccountOwnerDiv } from "./account-owner";
 import css from "../../../css/portal-dashboard/header.less";
 
-interface IProps {
-  userName: string;
-}
-
-export class Header extends React.PureComponent <IProps> {
+export class PopupHeader extends React.PureComponent{
   render() {
     return (
       <div className={css.dashboardHeader} data-cy="dashboard-header">
@@ -20,9 +16,9 @@ export class Header extends React.PureComponent <IProps> {
         </div>
         <div className={css.assignment}>Assignment:</div>
         <div className={css.headerRight}>
-          <AccountOwnerDiv userName={this.props.userName}/>
           <HeaderMenuContainer />
         </div>
+
       </div>
     );
   }

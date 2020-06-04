@@ -3,9 +3,10 @@ import { CustomSelect, SelectItem } from "./custom-select";
 import { AnonymizeStudents } from "./anonymize-students";
 import { Feedback } from "./feedback";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../actions/dashboard";
+import { NumberOfStudentsContainer } from "./num-students-container";
+import { StudentResponsePopup } from "./student-responses-popup";
 
 import css from "../../../css/portal-dashboard/class-nav.less";
-import { NumberOfStudentsContainer } from "./num-students-container";
 
 interface IProps {
   clazzName: string;
@@ -24,6 +25,7 @@ export class ClassNav extends React.PureComponent<IProps> {
         <AnonymizeStudents setAnonymous={setAnonymous} />
         <Feedback />
         <NumberOfStudentsContainer studentCount={this.props.studentCount} />
+        <button onClick={this.renderPopup}>Open Popup</button>
         { this.renderStudentSort() }
       </div>
     );
@@ -59,6 +61,18 @@ export class ClassNav extends React.PureComponent<IProps> {
           dataCy={"sort-students"}
         />
       </div>
+    );
+  }
+
+  private renderPopup = () => {
+    const { clazzName, setStudentSort, trackEvent, studentCount, setAnonymous } = this.props;
+    return (
+      <StudentResponsePopup
+      clazzName={clazzName}
+      setStudentSort={setStudentSort}
+      trackEvent={trackEvent}
+      studentCount={studentCount}
+      setAnonymous={setAnonymous}/>
     );
   }
 }
