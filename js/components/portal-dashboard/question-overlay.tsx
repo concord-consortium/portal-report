@@ -6,6 +6,7 @@ import css from "../../../css/portal-dashboard/question-overlay.less";
 interface IProps {
   currentQuestion?: Map<string, any>;
   questions?: Map<string, any>;
+  sortedQuestionIds?: string[];
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
 }
@@ -75,21 +76,21 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private get previousQuestion() {
-    if (!this.props.questions || !this.props.currentQuestion) return false;
-    const questionIds = this.props.questions.keySeq().toArray();
-    const idx = questionIds.indexOf(this.props.currentQuestion.get("id"));
+    const { sortedQuestionIds, currentQuestion } = this.props;
+    if (!sortedQuestionIds || !currentQuestion) return false;
+    const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
     if (idx > 0) {
-      return questionIds[idx - 1];
+      return sortedQuestionIds[idx - 1];
     }
     return false;
   }
 
   private get nextQuestion() {
-    if (!this.props.questions || !this.props.currentQuestion) return false;
-    const questionIds = this.props.questions.keySeq().toArray();
-    const idx = questionIds.indexOf(this.props.currentQuestion.get("id"));
-    if (idx < questionIds.length - 1) {
-      return questionIds[idx + 1];
+    const { sortedQuestionIds, currentQuestion } = this.props;
+    if (!sortedQuestionIds || !currentQuestion) return false;
+    const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
+    if (idx < sortedQuestionIds.length - 1) {
+      return sortedQuestionIds[idx + 1];
     }
     return false;
   }

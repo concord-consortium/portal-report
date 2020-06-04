@@ -32,6 +32,7 @@ interface IProps {
   studentProgress: Map<any, any>;
   students: any;
   questions?: Map<string, any>;
+  sortedQuestionIds?: string[];
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
@@ -70,7 +71,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   render() {
     const { clazzName, currentActivity, currentQuestion, error,
-      report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, questions,
+      report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
@@ -114,6 +115,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             <QuestionOverlay
               currentQuestion={currentQuestion}
               questions={questions}
+              sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
             />
@@ -131,6 +133,22 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const error = data.get("error");
   const reportState = state.get("report");
   const dataDownloaded = !error && !data.get("isFetching");
+  const questions = dataDownloaded ? state.getIn(["report", "questions"]) : undefined;
+  const activities = dataDownloaded ? state.getIn(["report", "activities"]) : undefined;
+  let sortedQuestionIds;
+  if (questions && activities) {
+    sortedQuestionIds = questions.keySeq().toArray().sort((q1Id: string, q2Id: string) => {
+      const question1 =  questions.get(q1Id);
+      const question2 =  questions.get(q2Id);
+      const act1 = question1.get("activity");
+      const act2 = question2.get("activity");
+      if (act1 !== act2) {
+        return (activities.get(act1).get("activityIndex") - activities.get(act2).get("activityIndex"));
+      } else {
+        return question1.get("questionNumber") - question2.get("questionNumber");
+      }
+    });
+  }
   return {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     currentActivity: getCurrentActivity(state),
@@ -143,7 +161,8 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
-    questions: dataDownloaded ? state.getIn(["report", "questions"]) : undefined,
+    questions,
+    sortedQuestionIds,
   };
 }
 
