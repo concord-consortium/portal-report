@@ -15,6 +15,7 @@ interface IProps {
 export interface MenuItemsWithState {
   name: string;
   action: string;
+  dataCy: string;
 }
 export interface MenuItemWithIcon {
   icon: string;
@@ -24,7 +25,8 @@ export interface MenuItemWithIcon {
 export const itemsWithState: MenuItemsWithState[] = [
   {
     name: "Compact student list",
-    action: "COMPACT_STUDENT_LIST" }
+    action: "COMPACT_STUDENT_LIST",
+    dataCy: "compact-menu-item" }
   ];
 export const items: MenuItemWithIcon[] = [
   {
@@ -83,11 +85,11 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
 
   private renderMenuItems = () => {
     return (
-      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`}  data-cy="menu-list">
+      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list">
         <div className={`${css.topMenu}`}>
-          {itemsWithState && itemsWithState.map((item: any, i: number) => {
+          {itemsWithState && itemsWithState.map((item: MenuItemsWithState, i: number) => {
             return (
-              <div key={`item ${i}`} className={`${css.menuItem}`} onClick={this.handleMenuCompactClick}>
+              <div key={`item ${i}`} className={`${css.menuItem}`} onClick={this.handleMenuCompactClick} data-cy={item.dataCy}>
                 <div>
                 {this.state.compactStudentList ? this.renderIcon(`${css.check} ${css.selected}`, "#icon-check") : this.renderIcon(`${css.check}`, "#icon-check")}
                 </div>
