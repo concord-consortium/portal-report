@@ -15,6 +15,8 @@ import { IResponse } from "../../api";
 import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
+import { StudentResponsePopup } from "../../components/portal-dashboard/student-responses-popup";
+
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -80,10 +82,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
     return (
       <div className={css.portalDashboardApp}>
-        <Header userName={userName}/>
+        {/* <Header userName={userName}/> */}
         { activityTrees &&
           <div>
-            <div className={css.navigation}>
+            {/* <div className={css.navigation}>
               <ClassNav
                 clazzName={clazzName}
                 setStudentSort={setStudentSort}
@@ -98,8 +100,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 toggleCurrentActivity={toggleCurrentActivity}
                 toggleCurrentQuestion={toggleCurrentQuestion}
               />
-            </div>
-            <div className={css.progressTable}>
+            </div> */}
+            {/* <div className={css.progressTable}>
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
@@ -111,13 +113,21 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 students={students}
                 studentProgress={studentProgress}
               />
-            </div>
+            </div> */}
             <QuestionOverlay
               currentQuestion={currentQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
+            />
+            <StudentResponsePopup
+              clazzName={clazzName}
+              setStudentSort={setStudentSort}
+              trackEvent={trackEvent}
+              studentCount={students.size}
+              setAnonymous={setAnonymous}
+              currentActivity={currentActivity}
             />
           </div>
         }

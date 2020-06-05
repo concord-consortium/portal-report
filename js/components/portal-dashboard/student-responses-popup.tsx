@@ -14,17 +14,22 @@ interface IProps {
     trackEvent: (category: string, action: string, label: string) => void;
     studentCount: number;
     setAnonymous: (value: boolean) => void;
+    currentActivity: any;
 }
 
 export class StudentResponsePopup extends React.PureComponent<IProps> {
     render() {
-        const { setAnonymous } = this.props;
+        const { setAnonymous, currentActivity } = this.props;
+        let wrapperClass = css.popup;
+        if (currentActivity) {
+          wrapperClass += " " + css.visible;
+        }
         return (
-            <div className={css.popup}>
-                <div><PopupHeader />
+            <div className={wrapperClass}>
+                <div><PopupHeader activityName={this.props.currentActivity}/>
                 </div>
                 <div>
-                    <div className={css.leftColumn}>
+                    <div className={css.studentListColumn}>
                         <div>View list by:</div>
                         <div className={cssClassNav.classNav} data-cy="class-nav">
                             {this.renderClassSelect()}
@@ -34,11 +39,11 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
                             <div>Project highlighted</div>
                         </div>
                     </div>
-                    <div className={css.middleColumn} data-cy="middle-column">
+                    <div className={css.responseColumn} data-cy="middle-column">
                         <div  data-cy="questionNav">Question here</div>
                         <div  data-cy="question-text">Question text here</div>
                     </div>
-                    <div className={css.rightColumn} data-cy="right-column">
+                    <div className={css.feedbackColumn} data-cy="right-column">
                         <div data-cy="provide-written-feedback-toggle">feedback toggle</div>
                         <div data-cy="give-score-toggle">give score toggle</div>
                         <div data-cy="max-score-input-field">max score input field</div>
