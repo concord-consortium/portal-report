@@ -40,8 +40,8 @@ export const items: MenuItemWithIcon[] = [
 ];
 
 export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
-  constructor() {
-    super({});
+  constructor(props: {}) {
+    super(props);
     this.state = {
       showMenuItems: false,
       compactStudentList: false
@@ -77,10 +77,6 @@ export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
   }
 
   private renderMenuItems = () => {
-    // eslint-disable-next-line no-console
-    console.log("showMenuItems state: ", this.state.showMenuItems);
-    // eslint-disable-next-line no-console
-    console.log("compactStudentList state: ", this.state.compactStudentList);
     return (
       <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} onClick={this.handleMenuItemClick}  data-cy="menu-list">
         <div className={`${css.topMenu}`}>
