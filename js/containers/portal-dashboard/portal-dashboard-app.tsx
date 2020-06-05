@@ -50,6 +50,7 @@ interface IState {
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
+  private studentAnswersComponentRef: any;
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -68,6 +69,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { isFetching } = this.props;
     if (initialLoading && !isFetching && prevProps.isFetching) {
       this.setState({ initialLoading: false });
+    }
+
+    const studentAnswersRef = this.studentAnswersComponentRef.getStudentAnswersRef();
+    if (studentAnswersRef && this.state.scrollLeft !== studentAnswersRef.scrollLeft * -1) {
+      this.setState({ scrollLeft: studentAnswersRef.scrollLeft * -1 });
     }
   }
 
@@ -113,6 +119,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 expandedActivities={expandedActivities}
                 students={students}
                 studentProgress={studentProgress}
+                ref={elt => this.studentAnswersComponentRef = elt}
               />
             </div>
             <QuestionOverlay
