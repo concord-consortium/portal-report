@@ -6,6 +6,11 @@ interface IState {
   showMenuItems: boolean;
   compactStudentList: boolean;
 }
+
+interface IProps {
+  setCompact: (value: boolean) => void;
+}
+
 // actions are placeholder for future work on what should happen when that menu item is clicked
 export interface MenuItemsWithState {
   name: string;
@@ -39,15 +44,15 @@ export const items: MenuItemWithIcon[] = [
   }
 ];
 
-export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
-  constructor(props: {}) {
+export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       showMenuItems: false,
       compactStudentList: false
     };
     this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+    this.handleMenuCompactClick = this.handleMenuCompactClick.bind(this);
   }
 
   render() {
@@ -78,11 +83,11 @@ export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
 
   private renderMenuItems = () => {
     return (
-      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} onClick={this.handleMenuItemClick}  data-cy="menu-list">
+      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`}  data-cy="menu-list">
         <div className={`${css.topMenu}`}>
           {itemsWithState && itemsWithState.map((item: any, i: number) => {
             return (
-              <div key={`item ${i}`} className={`${css.menuItem}`}>
+              <div key={`item ${i}`} className={`${css.menuItem}`} onClick={this.handleMenuCompactClick}>
                 <div>
                 {this.state.compactStudentList ? this.renderIcon(`${css.check} ${css.selected}`, "#icon-check") : this.renderIcon(`${css.check}`, "#icon-check")}
                 </div>
@@ -107,7 +112,8 @@ export class HeaderMenuContainer extends React.PureComponent<{}, IState> {
     this.setState({ showMenuItems: !this.state.showMenuItems });
   }
 
-  private handleMenuItemClick() {
+  private handleMenuCompactClick() {
+    this.props.setCompact(!this.state.compactStudentList);
     this.setState({ compactStudentList: !this.state.compactStudentList });
   }
 

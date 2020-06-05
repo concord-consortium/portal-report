@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getStudentProgress } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getStudentProgress, getCompactReport } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -12,7 +12,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
+import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 
@@ -21,6 +21,7 @@ import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 interface IProps {
   // from mapStateToProps
   clazzName: string;
+  compactReport: boolean;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   error: IResponse;
@@ -36,6 +37,7 @@ interface IProps {
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
+  setCompactReport: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   setCurrentActivity: (activityId: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
@@ -78,8 +80,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, currentActivity, currentQuestion, error,
-      report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
+    const { clazzName, compactReport, currentActivity, currentQuestion, error, report,
+      sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
@@ -88,7 +90,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
     return (
       <div className={css.portalDashboardApp}>
-        <Header userName={userName}/>
+        <Header userName={userName} setCompact={setCompactReport} />
         { activityTrees &&
           <div>
             <div className={css.navigation}>
@@ -112,6 +114,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
+                isCompact={compactReport}
               />
               <StudentAnswers
                 activities={activityTrees}
@@ -120,6 +123,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 students={students}
                 studentProgress={studentProgress}
                 ref={elt => this.studentAnswersComponentRef = elt}
+                isCompact={compactReport}
               />
             </div>
             <QuestionOverlay
@@ -168,6 +172,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   }
   return {
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
+    compactReport: getCompactReport(state),
     currentActivity: getCurrentActivity(state),
     currentQuestion: getCurrentQuestion(state),
     error,
@@ -187,6 +192,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
+    setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     setCurrentActivity: (activityId: string) =>  dispatch(setCurrentActivity(activityId)),
     toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),

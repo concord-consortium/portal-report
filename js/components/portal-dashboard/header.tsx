@@ -7,6 +7,7 @@ import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
   userName: string;
+  setCompact: (value: boolean) => void;
 }
 
 export class Header extends React.PureComponent <IProps> {
@@ -21,7 +22,7 @@ export class Header extends React.PureComponent <IProps> {
         <div className={css.assignment}>Assignment:</div>
         <div className={css.headerRight}>
           <AccountOwnerDiv userName={this.props.userName}/>
-          <HeaderMenuContainer />
+          <HeaderMenuContainer setCompact={this.props.setCompact} />
         </div>
 
       </div>

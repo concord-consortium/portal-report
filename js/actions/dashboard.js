@@ -14,6 +14,8 @@ export const SORT_BY_LEAST_PROGRESS = "LEAST_PROGRESS";
 export const SET_QUESTION_EXPANDED = "SET_QUESTION_EXPANDED";
 export const SELECT_QUESTION = "SELECT_QUESTION";
 
+export const SET_COMPACT_REPORT = "SET_COMPACT_REPORT";
+
 export const TRACK_EVENT = "TRACK_EVENT";
 
 export function setActivityExpanded(activityId, value) {
@@ -113,6 +115,13 @@ export function toggleCurrentQuestion(questionId) {
   return {
     type: TOGGLE_CURRENT_QUESTION,
     value: questionId,
+  };
+}
+
+export function setCompactReport(isCompact) {
+  return {
+    type: SET_COMPACT_REPORT,
+    value: isCompact,
   };
 }
 
