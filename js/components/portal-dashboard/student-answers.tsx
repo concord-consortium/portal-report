@@ -18,7 +18,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const { students, activities, currentActivity } = this.props;
     const activitiesList = activities.toList().filter((activity: any) => activity.get("visible"));
     return (
-      <div className={css.studentAnswers} id={"student-answers"} ref={elt => this.studentAnswersRef = elt}>
+      <div className={css.studentAnswers} ref={elt => this.studentAnswersRef = elt} data-cy="student-answers" >
       {
         students.map((s: any) => {
           return (
