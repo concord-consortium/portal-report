@@ -19,16 +19,16 @@ export class PopupHeader extends React.PureComponent<IProps>{
                     </svg>
                     <div className={css.title}>Hurricane Module V2 Activity 1:Hurricane Risk</div>
                 </div>
-                <div className={css.toggleResponsesFeedback}>
-                    <div className={css.responseToggle}>
-                        <svg className={css.icon}>
+                <div className={`${css.toggleResponsesFeedback}`}>
+                    <div className={`${css.responseToggle} `}>
+                        <svg className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`}>
                             <use xlinkHref={"#icon-group"} />
                         </svg>
-                        <span>All Student Responses</span>
+                        <div className={`${css.toggleTitle} ${css.responseTitle} `}>All Student Responses</div>
                     </div>
-                    <div className={css.feedbackToggle}>
-                        {/* <span>Feedback to Students</span> */}
-                        <svg className={css.icon}>
+                    <div className={`${css.feedbackToggle}  ${css.toggleOff}`}>
+                        <div className={`${css.toggleTitle} ${css.feedbackTitle}  ${css.toggleOff}`}>Feedback to Students</div>
+                        <svg className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}  ${css.toggleOff}`}>
                             <use xlinkHref={"#icon-feedback-button"} />
                         </svg>
                     </div>

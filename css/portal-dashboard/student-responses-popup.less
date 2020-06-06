@@ -11,6 +11,7 @@
     transition: all 0.5s ease;
     width: 100%;
     height: 0;
+    font-weight: bold;
 
     &.open {
         height: 100%;
@@ -19,12 +20,170 @@
     .popupHeader {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        box-sizing: border-box;
         height: @header-height;
         margin-bottom: 3px;
         background-color: @cc-teal;
         color: white;
+
+        .headerLeft {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            margin-left: 20px;
+    
+            .assignmentIcon {
+                display: flex;
+                justify-content: center;
+                align-self: flex-start;
+                position: relative;
+                top: -1px
+            }
+            .title {
+                flex: 1;
+                width: 200px;
+            }
+        }
+        .toggleResponsesFeedback {
+            display: flex;
+            flex-direction: row;
+            flex: 2;
+            justify-content: center;
+            align-items: center;
+            height: 30px;
+            box-sizing: border-box;
+    
+            .toggleIcon {
+                align-items: center;
+                position: relative;
+            }
+            .toggleTitle {
+                justify-content: right;
+                white-space: nowrap;
+            }
+            .responseToggle {
+                display: flex;
+                order: 1;
+                border: 1.5px solid white;
+                border-radius: 15px 0 0 15px;
+                justify-content: flex-end;
+                margin-right: 5px;
+                padding: 0 5px 0 5px;
+                align-items:center;
+                width: 204px;
+                height: 30px;
+                box-sizing: border-box;
+                transition-duration: .25s;
+                background-color: @cc-teal;
+                 
+                &:hover {
+                    background-color: @cc-teal-light4;
+                    border: @cc-teal-light4; 
+                }
+                &:hover .responseIcon {
+                    fill: @cc-teal;   
+                }
+                &:hover .responseTitle{
+                    color: black;   
+                }
+                &.toggleOff {
+                    width: 35px;
+                    transition-duration: .25s;
+                    border: @cc-teal-light4;
+                    background-color: @cc-teal-light6;
+
+
+                    &:hover {
+                        background-color: @cc-teal-light4;
+                        border: @cc-teal-light4; 
+                        width: 204px; 
+                    }
+                }
+                .responseIcon {
+                    fill: white;
+                    margin: 0 auto 0 ;
+                    flex-shrink: 0;
+                    &.toggleOff{
+                        fill: @cc-teal;
+                    }
+                }
+                .responseTitle {
+                    margin-right: 5px;
+                    &.toggleOff {
+                        display: none;
+                    }
+                }
+
+
+            }
+            .feedbackToggle {
+                display: flex;
+                order: 2;
+                border: 1.5px solid white;
+                border-radius: 0 15px 15px 0 ;
+                justify-content: flex-end;
+                margin-left: 5px;
+                padding: 0 5px 0 5px;
+                align-items:center;
+                width: 204px;
+                height: 30px;
+                box-sizing: border-box;
+                background-color: @feedback-green;
+    
+                &:hover {
+                    background-color: @feedback-green-light2;
+                    border: @feedback-green;
+                }
+                &:hover .feedbackIcon {
+                    fill: @feedback-green;   
+                }
+                &:hover .feedbackTitle{
+                    color: black;   
+                }
+                &.toggleOff {
+                    width: 35px;
+                    background-color: @feedback-green-light4;
+                    &:hover {
+                        background-color: @feedback-green-light2;
+                        border: @feedback-green;
+                        width: 204px;
+                        display: contents;
+                    }
+                }
+                .feedbackIcon {
+                    fill: white;
+                    flex-shrink: 0;
+                    margin: 0 auto 0;
+                    &.toggleOff {
+                        fill: @feedback-green;
+                    }
+                }
+                .feedbackTitle {
+                    margin-left: 5px;
+                    &.toggleOff {
+                        display: none;
+                    }
+                }
+
+            }
+        }
+        .headerRight {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex: 1;
+            justify-content: flex-end;
+            margin: 0 10px 0 10px;
+    
+            .closeIcon {
+                width: 32px;
+                height: 32px;
+                object-fit: contain; 
+            }
+        }
+    
     }
     .studentListColumn {
         width: 240px;
@@ -52,66 +211,73 @@
         fill: white;
         margin: 0 5px 0 5px;
     }
-    .headerLeft {
+
+    .viewListOption {
         display: flex;
         flex-direction: row;
+        justify-content: center;
         align-items: center;
-        justify-content: flex-start;
-        margin-left: 20px;
+        background-color: @cc-teal-light5;
+        height: 50px;
+        border-bottom: 1px solid @cc-teal;
+        color: @cc-charcoal;
 
-        .assignmentIcon {
+        .optionIcon{
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 0;
+        }
+        .listByStudents {
             display: flex;
             justify-content: center;
-            align-self: flex-start;
-            position: relative;
-            top: -3px
-        }
-        .title {
-            flex: 1;
-            width: 200px;
-            font-weight: bold;
-        }
-    }
-    .toggleResponsesFeedback {
-        display: flex;
-        flex-direction: row;
-        flex: 1;
-        justify-content: center;
-        margin: 0 10px 0 10px;
-
-        .responseToggle {
-            order: 1;
-            border: 1.5px solid white;
+            align-items: center;
+            width: 47px;
+            height: 30px;
             border-radius: 15px 0 0 15px;
-            justify-content: flex-start;
+            background-color: @cc-teal;
+            fill: white;
+            border: 1.5px solid @cc-charcoal-light1;
             margin-right: 5px;
+            margin-left: 11px;
+
         }
-        .feedbackToggle {
-            order: 2;
-            border: 1.5px solid white;
+        .listByQuestions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 47px;
+            height: 30px;
             border-radius: 0 15px 15px 0 ;
-            justify-content: flex-end;
-            fill: @feedback-green;
-            background-color: @feedback-green-light4;
-            display: 0;
-
-            // &:active {
-            //     fill: white
-            // }
+            background-color: @cc-teal-light5;
+            fill: @cc-teal;
+            border: 1.5px solid @cc-charcoal-light1;
+        }
+        .selected {
+            border: 1.5px solid white;
         }
     }
-    .headerRight {
+
+    .spotlightToggle {
         display: flex;
-        flex-direction: row;
+        justify-content: left;
         align-items: center;
-        flex: 1;
-        justify-content: flex-end;
-        margin: 0 10px 0 10px;
-
-        .closeIcon {
-            width: 32px;
-            height: 32px;
-            object-fit: contain; 
+        .spotlightContainer {
+            width: 30px;
+            height: 30px;
+            border: 1.5px solid @cc-charcoal-light1;
+            border-radius: 5px;
+            background-color: @cc-teal-light6;
+            margin: 30px;
+        }
+        .spotlightIcon {
+            width: 24px;
+            height: 24px;
+            fill: @cc-teal;
+            margin: auto ;
+        }
+        span {
+            color: @cc-charcoal;
         }
     }
+
 }  

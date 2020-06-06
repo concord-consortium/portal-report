@@ -22,26 +22,25 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
         const { setAnonymous, currentActivity } = this.props;
         let wrapperClass = css.popup;
         if (currentActivity) {
-          wrapperClass += " " + css.visible;
+            wrapperClass += " " + css.visible;
         }
         return (
             <div className={wrapperClass}>
-                <div><PopupHeader activityName={this.props.currentActivity}/>
+                <div><PopupHeader activityName={this.props.currentActivity} />
                 </div>
                 <div>
                     <div className={css.studentListColumn}>
-                        <div>View list by:</div>
+                        {this.renderViewListOptions()}
                         <div className={cssClassNav.classNav} data-cy="class-nav">
-                            {this.renderClassSelect()}
                             <AnonymizeStudents setAnonymous={setAnonymous} />
                             <NumberOfStudentsContainer studentCount={this.props.studentCount} />
                             {this.renderStudentSort()}
-                            <div>Project highlighted</div>
+                            {this.renderSpotlightToggle()}
                         </div>
                     </div>
                     <div className={css.responseColumn} data-cy="middle-column">
-                        <div  data-cy="questionNav">Question here</div>
-                        <div  data-cy="question-text">Question text here</div>
+                        <div data-cy="questionNav">Question here</div>
+                        <div data-cy="question-text">Question text here</div>
                     </div>
                     <div className={css.feedbackColumn} data-cy="right-column">
                         <div data-cy="provide-written-feedback-toggle">feedback toggle</div>
@@ -73,7 +72,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
     }
 
     private renderStudentSort = () => {
-        const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "Student Name" },
+        const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "All Students" },
         { action: SORT_BY_MOST_PROGRESS, name: "Most Progress" },
         { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
         const { setStudentSort, trackEvent } = this.props;
@@ -86,6 +85,36 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
                     iconId={"icon-sort"}
                     dataCy={"sort-students"}
                 />
+            </div>
+        );
+    }
+
+    private renderViewListOptions() {
+        return (
+            <div className={css.viewListOption}>View list by:
+                <div className={`${css.listByStudents} ${css.selected}`}>
+                    <svg className={`${css.optionIcon}  `}>
+                        <use xlinkHref={"#icon-student-view"} />
+                    </svg>
+                </div>
+                <div className={`${css.listByQuestions}`}>
+                <svg className={`${css.optionIcon}`}>
+                        <use xlinkHref={"#icon-question-view"} />
+                    </svg>
+                </div>
+            </div>
+        );
+    }
+
+    private renderSpotlightToggle() {
+        return (
+            <div className={`${css.spotlightToggle}`}>
+                <div className={`${css.spotlightContainer}`}>
+                <svg className={`${css.spotlightIcon}`}>
+                        <use xlinkHref={"#icon-spotlight"} />
+                    </svg>
+                </div>
+                <span>Spotlight selected</span>
             </div>
         );
     }
