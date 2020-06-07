@@ -31,7 +31,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
                 <div>
                     <div className={css.studentListColumn}>
                         {this.renderViewListOptions()}
-                        <div className={cssClassNav.classNav} data-cy="class-nav">
+                        <div className={`${cssClassNav.classNav} ${css.popupClassNav}`} data-cy="class-nav">
                             <AnonymizeStudents setAnonymous={setAnonymous} />
                             <NumberOfStudentsContainer studentCount={this.props.studentCount} />
                             {this.renderStudentSort()}
@@ -77,7 +77,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
         { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
         const { setStudentSort, trackEvent } = this.props;
         return (
-            <div className={css.studentSort}>
+            <div className={cssClassNav.studentSort}>
                 <CustomSelect
                     items={items}
                     onSelectItem={setStudentSort}
