@@ -3,21 +3,19 @@ import React from "react";
 import css from "../../../css/portal-dashboard/student-responses-popup.less";
 
 interface IProps {
-    currentActivity: any;
+    activityName: any;
 }
 
 export class PopupHeader extends React.PureComponent<IProps>{
-    render() {
-        // eslint-disable-next-line no-console
-        console.log("current activity: ", this.props.currentActivity);
 
+    render() {
         return (
             <div className={css.popupHeader} data-cy="popup-header">
                 <div className={css.headerLeft}>
                     <svg className={`${css.assignmentIcon} ${css.icon}`}>
                         <use xlinkHref={"#icon-assignment"} />
                     </svg>
-                    <div className={css.title}>Hurricane Module V2 Activity 1:Hurricane Risk</div>
+                    <div className={css.title}>{this.props.activityName}</div>
                 </div>
                 <div className={`${css.toggleResponsesFeedback}`}>
                     <div className={`${css.responseToggle} `}>

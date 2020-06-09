@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
@@ -80,12 +81,13 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
+
     return (
       <div className={css.portalDashboardApp}>
         {/* <Header userName={userName}/> */}
         { activityTrees &&
           <div>
-            {/* <div className={css.navigation}>
+            {/* { <div className={css.navigation}>
               <ClassNav
                 clazzName={clazzName}
                 setStudentSort={setStudentSort}
@@ -100,8 +102,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 toggleCurrentActivity={toggleCurrentActivity}
                 toggleCurrentQuestion={toggleCurrentQuestion}
               />
-            </div> */}
-            {/* <div className={css.progressTable}>
+            </div> } */}
+            {/* { <div className={css.progressTable}>
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
@@ -113,7 +115,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 students={students}
                 studentProgress={studentProgress}
               />
-            </div> */}
+            </div> } */}
             <QuestionOverlay
               currentQuestion={currentQuestion}
               questions={questions}
@@ -128,6 +130,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               studentCount={students.size}
               setAnonymous={setAnonymous}
               currentActivity={currentActivity}
+              currentQuestion={currentQuestion}
+              questions={questions}
+              sortedQuestionIds={sortedQuestionIds}
+              toggleCurrentQuestion={toggleCurrentQuestion}
+              setCurrentActivity={setCurrentActivity}
             />
           </div>
         }

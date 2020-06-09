@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Map } from "immutable";
+import { QuestionNavigator } from "./question-navigator";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -9,11 +11,14 @@ interface IProps {
   sortedQuestionIds?: string[];
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
+  // toggleAllResponsesToCurrentQuestion: (questionId: string) => void;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
-    const { currentQuestion } = this.props;
+    // const questionId = this.props.currentQuestion?.get("id");
+    const cssToUse = css;
+    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
     let wrapperClass = css.questionOverlay;
     if (currentQuestion) {
       wrapperClass += " " + css.visible;
@@ -21,77 +26,21 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     return (
       <div className={wrapperClass} data-cy="question-overlay">
         {
-          currentQuestion && this.renderQuestionDetails(currentQuestion)
+          < QuestionNavigator cssToUse={cssToUse}
+          currentQuestion={currentQuestion}
+          questions={questions}
+          sortedQuestionIds={sortedQuestionIds}
+          toggleCurrentQuestion={toggleCurrentQuestion}
+          setCurrentActivity={setCurrentActivity}/>
         }
+        {/* <div onClick={this.handleAllResponsesButtonClick(questionId)}> pop up button</div> */}
+
       </div>
     );
   }
 
-  private renderQuestionDetails = (question: Map<string, any>) => {
-    return (
-      <React.Fragment>
-        <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
-          <svg className={css.icon}>
-            <use xlinkHref="#question-popout"/>
-          </svg>
-          <div>Question Detail View</div>
-        </div>
-        <div className={css.titleWrapper}>
-          <div className={css.nextQuestionButtons}>
-            <div className={css.button + ( this.previousQuestion ? "" : " " + css.disabled )}
-                onClick={this.showQuestion(this.previousQuestion)} data-cy="question-overlay-previous-button">
-              <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left"/>
-              </svg>
-            </div>
-            <div className={css.button + ( this.nextQuestion ? "" : " " + css.disabled )}
-                onClick={this.showQuestion(this.nextQuestion)} data-cy="question-overlay-next-button">
-              <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left"/>
-              </svg>
-            </div>
-          </div>
-          <div className={css.title}>
-            Question #{ question.get("questionNumber") }
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-
-  private dismissCurrentQuestion = () => {
-    if (this.props.currentQuestion) {
-      this.props.toggleCurrentQuestion(this.props.currentQuestion.get("id"));
-    }
-  }
-
-  private showQuestion = (questionId: string | false) => () => {
-    if (!questionId || !this.props.questions) return;
-    const currentActivityId = this.props.currentQuestion?.get("activity");
-    const nextActivityId = this.props.questions.get(questionId).get("activity");
-    this.props.toggleCurrentQuestion(questionId);
-    if (currentActivityId !== nextActivityId) {
-      this.props.setCurrentActivity(nextActivityId);
-    }
-  }
-
-  private get previousQuestion() {
-    const { sortedQuestionIds, currentQuestion } = this.props;
-    if (!sortedQuestionIds || !currentQuestion) return false;
-    const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
-    if (idx > 0) {
-      return sortedQuestionIds[idx - 1];
-    }
-    return false;
-  }
-
-  private get nextQuestion() {
-    const { sortedQuestionIds, currentQuestion } = this.props;
-    if (!sortedQuestionIds || !currentQuestion) return false;
-    const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
-    if (idx < sortedQuestionIds.length - 1) {
-      return sortedQuestionIds[idx + 1];
-    }
-    return false;
-  }
+  // private handleAllResponsesButtonClick = (questionId: string) => () => {
+  //   alert('click on pop up button');
+  //   // this.props.toggleAllResponsesToCurrentQuestion(questionId);
+  // }
 }

@@ -1,7 +1,7 @@
 import { RecordFactory } from "../util/record-factory";
 import { Map } from "immutable";
 import {
-  SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION,
+  SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION, TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION,
   SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT,
   SORT_BY_NAME, SET_QUESTION_EXPANDED,
   SELECT_QUESTION,
@@ -72,6 +72,12 @@ export default function dashboard(state = new DashboardState({}), action: any) {
         return state.set("currentActivityId", action.value);
       }
     case TOGGLE_CURRENT_QUESTION:
+      if (state.get("currentQuestionId") === action.value) {
+        return state.set("currentQuestionId", null);
+      } else {
+        return state.set("currentQuestionId", action.value);
+      }
+    case TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION:
       if (state.get("currentQuestionId") === action.value) {
         return state.set("currentQuestionId", null);
       } else {

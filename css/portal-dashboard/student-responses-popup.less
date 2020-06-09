@@ -1,7 +1,8 @@
 @import "./variables";
 
 .popup {
-    top: @header-height;
+    position: fixed;
+    top: 0;
     bottom: 100%;
     right: 0;
     padding: 0;
@@ -14,7 +15,7 @@
     font-weight: bold;
 
     &.open {
-        height: 100%;
+        top:0;
     }
 
     .popupHeader {
@@ -23,7 +24,6 @@
         justify-content: space-between;
         align-items: center;
         height: @header-height;
-        margin-bottom: 3px;
         background-color: @cc-teal;
         color: white;
 
@@ -188,7 +188,18 @@
     .popupClassNav {
         width: 240px;
         height: 183px;
-        padding-top: 15px;
+    }
+    .column {
+        margin-right: 3px;
+        float: left;
+    }
+    .columnHeader{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        color: @cc-charcoal;
     }
     .studentListColumn {
         width: 240px;
@@ -196,9 +207,87 @@
         background-color: @cc-teal-light4;
     }
     .responseColumn {
-        width: 390px;
-        height: 214px;
-        background-color: @cc-teal-light4;
+        width: calc(100vw - 237px);
+        position: fixed;
+        top: @header-height;
+        left: 243px;
+
+        .popupQuestionNavigator {
+            display: flex;
+             align-items:center;
+
+            .icon {
+                width: 32px;
+                height: 32px;
+                padding: 0 8px 0 20px;
+            }
+            .titleWrapper {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 50px;
+                background-color: @cc-teal-light5;
+                user-select: none;
+            
+                .nextQuestionButtons {
+                display: flex;
+                align-items: center;
+                margin-left: 20px;
+            
+                    .button {
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 3px;
+                        box-sizing: border-box;
+                        border: solid 1.5px @cc-charcoal-light1;
+                        background-color: @cc-teal-light5;
+                        cursor: pointer;
+                
+                        &:nth-of-type(2) {
+                        margin-left: 13px;
+                        transform: rotate(180deg);
+                        }
+                
+                        .icon {
+                        width: 32px;
+                        height: 32px;
+                        margin-top: -2px;
+                        margin-left: -22px;
+                        fill: @cc-teal; 
+                        }
+                
+                        &:not(.disabled) {
+                            &:hover {
+                                background-color: @cc-teal-light3;
+                            }
+                            &:active {
+                                background-color: @cc-teal;
+                                border-color: white;
+                    
+                                .icon {
+                                fill: white;
+                                }
+                            }
+                        }
+                        &.disabled {
+                            cursor: auto;
+                            opacity: 0.35;
+                        }
+                    }
+                }
+            
+                .title {
+                width: 226px;
+                font-weight: bold;
+                color: @cc-charcoal;
+                text-align: center;
+                margin:0 auto 0;
+                }
+            }
+        }
+        .popupQuestionText {
+            
+        }
     }
     .feedbackColumn {
         width: 0;
@@ -218,14 +307,8 @@
     }
 
     .viewListOption {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
         background-color: @cc-teal-light5;
-        height: 50px;
         border-bottom: 1px solid @cc-teal;
-        color: @cc-charcoal;
 
         .optionIcon{
             width: 24px;

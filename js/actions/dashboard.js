@@ -6,6 +6,7 @@ export const SET_STUDENT_SORT = "SET_STUDENT_SORT";
 export const SET_CURRENT_ACTIVITY = "SET_CURRENT_ACTIVITY";
 export const TOGGLE_CURRENT_ACTIVITY = "TOGGLE_CURRENT_ACTIVITY";
 export const TOGGLE_CURRENT_QUESTION = "TOGGLE_CURRENT_QUESTION";
+export const TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION = "TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION";
 
 export const SORT_BY_NAME = "NAME";
 export const SORT_BY_MOST_PROGRESS = "MOST_PROGRESS";
@@ -116,3 +117,9 @@ export function toggleCurrentQuestion(questionId) {
   };
 }
 
+export function toggleAllResponsesToCurrentQuestion(questionId) {
+  return {
+    type: TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION,
+    value: questionId,
+  };
+}
