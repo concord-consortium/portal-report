@@ -187,7 +187,7 @@
     }
     .popupClassNav {
         width: 240px;
-        height: 183px;
+        height: 193px;
     }
     .column {
         margin-right: 3px;
@@ -215,6 +215,7 @@
         .popupQuestionNavigator {
             display: flex;
              align-items:center;
+             border-bottom: 1px solid @cc-teal;
 
             .icon {
                 width: 32px;
@@ -285,8 +286,118 @@
                 }
             }
         }
-        .popupQuestionText {
-            
+        .popupQuestionDiv {
+            background-color: @cc-teal-light6;
+            color: @cc-charcoal;
+            height: 193px;
+
+            .questionTypeHeader {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .icon{
+                    height: 30px;
+                    width: 30px;
+                }
+                .leftTitle{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    flex: 1;
+                    justify-content: flex-start;
+                    margin: 10px 0 10px 0;
+
+                    .questionTypeIcon {
+                        fill: @cc-teal;
+                        margin: 10px 0 10px 20px;
+                    }
+                    .questionTypeTitle{
+                        align-items: center;
+                    }
+                }
+
+                .rightIcons {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    flex: 1;
+                    justify-content: flex-end;
+                    margin: 10px 21px 10px 0;
+
+                    .externalLinkButton {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 8px 0;
+                        box-sizing: border-box;
+                        border: solid 1.5px @cc-charcoal-light1;
+                        background-color: @cc-teal-light6;
+                        cursor: pointer;
+              
+                        &:hover {
+                          background-color: @cc-teal-light4;
+                        }
+                        &:active {
+                          color: white;
+                          background-color: @cc-teal-dark1;
+              
+                          .icon {
+                            fill: white;
+                          }
+                        }
+              
+                        .icon {
+                          width: 24px;
+                          height: 24px;
+                          pointer-events: none;
+                          fill: @cc-teal;
+                          margin: 0;
+                        }                    
+                    }
+                    .teacherEditionButton {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-left: 13px;
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 8px 0;
+                        box-sizing: border-box;
+                        border: solid 1.5px white;
+                        background-color: @te-orange;
+                        cursor: pointer;
+              
+                        &:hover {
+                          background-color: @cc-teal-light4;
+                        }
+                        &:active {
+                          color: white;
+                          background-color: @cc-teal-dark1;
+              
+                          .icon {
+                            fill: white;
+                          }
+                        }
+              
+                        .icon {
+                          width: 24px;
+                          height: 24px;
+                          pointer-events: none;
+                          fill: white;
+                          margin: 0;
+                        }
+                      
+                    }
+                }
+                
+            }
+        }
+        .questionText {
+            color: @cc-charcoal;
+            margin: 2px 20px;
         }
     }
     .feedbackColumn {

@@ -61,7 +61,31 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
                                 toggleCurrentQuestion={toggleCurrentQuestion}
                                 setCurrentActivity={setCurrentActivity} />
                         </div>
-                        <div classNamedata-cy="question-text">Question text here</div>
+                        <div className={`${css.popupQuestionDiv}`} data-cy="question-text">
+                            <div className={`${css.questionTypeHeader}`}>
+                                <div className={`${css.leftTitle}`}>
+                                    <svg className={`${css.icon} ${css.questionTypeIcon}`}>
+                                        <use xlinkHref="#text-question" />
+                                    </svg>
+                                    <span className={css.questionTypeTitle}>Question Type</span>
+                                </div>
+                                <div className={`${css.rightIcons}`}>
+                                    <a className={`${css.externalLinkButton}`} target="_blank">
+                                        <svg className={`${css.icon}`}>
+                                            <use xlinkHref="#external-link" />
+                                        </svg>
+                                    </a>
+                                    <a className={`${css.teacherEditionButton}`} target="_blank">
+                                        <svg className={`${css.icon}`}>
+                                            <use xlinkHref="#external-link" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div className={css.questionText}>
+                                Question text here
+                            </div>
+                        </div>
                     </div>
                     {/* <div className={`${css.column} ${css.feedbackColumn}`} data-cy="right-column">
                         <div data-cy="provide-written-feedback-toggle">feedback toggle</div>
