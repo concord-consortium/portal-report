@@ -15,7 +15,7 @@ interface IProps {
 
 export class QuestionNavigator extends React.PureComponent<IProps> {
   render() {
-    const { currentQuestion } = this.props;
+    const { currentQuestion} = this.props;
     const css  = this.props.cssToUse;
     return (
           <div className={css.titleWrapper}>

@@ -13,7 +13,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion } from "../../actions/dashboard";
+import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, setQuestionExpanded } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/student-responses-popup";
@@ -29,12 +29,12 @@ interface IProps {
   error: IResponse;
   expandedActivities: Map<any, any>;
   isFetching: boolean;
+  questions?: Map<string, any>;
   report: any;
   sequenceTree: Map<any, any>;
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
-  questions?: Map<string, any>;
   sortedQuestionIds?: string[];
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
@@ -81,7 +81,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
-
+    const isAllResponsesReport=false;
     return (
       <div className={css.portalDashboardApp}>
         {/* <Header userName={userName}/> */}
@@ -107,6 +107,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
+                isAllResponsesReport={isAllResponsesReport}
               />
               <StudentAnswers
                 activities={activityTrees}
@@ -125,16 +126,20 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             />
             <StudentResponsePopup
               clazzName={clazzName}
-              setStudentSort={setStudentSort}
-              trackEvent={trackEvent}
-              studentCount={students.size}
-              setAnonymous={setAnonymous}
               currentActivity={currentActivity}
               currentQuestion={currentQuestion}
+              isAnonymous={isAnonymous}
               questions={questions}
+              report={report}
               sortedQuestionIds={sortedQuestionIds}
-              toggleCurrentQuestion={toggleCurrentQuestion}
+              studentCount={students.size}
+              students={students}
+              setAnonymous={setAnonymous}
               setCurrentActivity={setCurrentActivity}
+              setQuestionExpanded={setQuestionExpanded}
+              setStudentSort={setStudentSort}
+              trackEvent={trackEvent}
+              toggleCurrentQuestion={toggleCurrentQuestion}
             />
           </div>
         }
