@@ -96,7 +96,9 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>
         { this.renderProgressIcon(progress) }
-        { (progress > 0 && progress < 1) && `${numAnswered}/${numQuestions}` }
+        { (progress > 0 && progress < 1) &&
+            <div><span className={css.numAnswered}>{numAnswered}</span><span>/{numQuestions}</span></div>
+        }
       </div>
     );
   }
