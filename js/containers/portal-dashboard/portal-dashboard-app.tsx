@@ -50,7 +50,7 @@ interface IState {
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
-  private studentAnswersComponentRef: any;
+  private studentAnswersComponentRef: StudentAnswers | null;
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -71,7 +71,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       this.setState({ initialLoading: false });
     }
 
-    const studentAnswersRef = this.studentAnswersComponentRef.getStudentAnswersRef();
+    const studentAnswersRef = this.studentAnswersComponentRef?.getStudentAnswersRef();
     if (studentAnswersRef && this.state.scrollLeft !== studentAnswersRef.scrollLeft * -1) {
       this.setState({ scrollLeft: studentAnswersRef.scrollLeft * -1 });
     }
