@@ -2,7 +2,7 @@ import { RecordFactory } from "../util/record-factory";
 import { Map } from "immutable";
 import {
   SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION,
-  SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT,
+  SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT, SET_COMPACT_REPORT,
   SORT_BY_NAME, SET_QUESTION_EXPANDED,
   SELECT_QUESTION,
   SORT_BY_MOST_PROGRESS,
@@ -21,6 +21,7 @@ export interface IDashboardState {
   sortBy: SortType;
   currentActivityId: string | null;
   currentQuestionId: string | null;
+  compactReport: boolean;
 }
 
 const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
@@ -31,6 +32,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   selectedQuestion: null,
   currentActivityId: null,
   currentQuestionId: null,
+  compactReport: false,
 });
 
 export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboardState {
@@ -44,6 +46,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   selectedQuestion: Map<any, any> | null;
   currentActivityId: string | null;
   currentQuestionId: string | null;
+  compactReport: boolean;
 }
 
 export default function dashboard(state = new DashboardState({}), action: any) {
@@ -77,6 +80,8 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       } else {
         return state.set("currentQuestionId", action.value);
       }
+    case SET_COMPACT_REPORT:
+      return state.set("compactReport", action.value);
     default:
       return state;
   }

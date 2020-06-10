@@ -12,6 +12,7 @@ const getCurrentQuestionId = state => state.getIn(["dashboard", "currentQuestion
 const getStudents = state => state.getIn(["report", "students"]);
 const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
+export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
 
 // When a user selects a to display question details by
 // Clicking on the question column expand icon.

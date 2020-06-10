@@ -7,6 +7,7 @@ interface IProps {
   activities: any;
   currentActivity: any;
   expandedActivities: any;
+  isCompact: boolean;
   students: any;
   studentProgress: any;
 }
@@ -15,14 +16,15 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   private studentAnswersRef: HTMLElement | null;
 
   render() {
-    const { students, activities, currentActivity } = this.props;
+    const { students, activities, currentActivity, isCompact } = this.props;
     const activitiesList = activities.toList().filter((activity: any) => activity.get("visible"));
+    const compactClass = isCompact ? css.compact : "";
     return (
       <div className={css.studentAnswers} ref={elt => this.studentAnswersRef = elt} data-cy="student-answers" >
       {
         students.map((s: any) => {
           return (
-            <div key={s.get("id")} className={css.studentAnswersRow} data-cy="student-answers-row">
+            <div key={s.get("id")} className={`${css.studentAnswersRow} ${compactClass}`} data-cy="student-answers-row">
               {
                 activitiesList.map((a: any) => {
                   return (
