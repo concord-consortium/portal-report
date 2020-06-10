@@ -1,6 +1,6 @@
 import { getByCypressTag } from "../utils";
 
-context("Portal Dashboard Activity Buttons",()=>{
+context("Portal Dashboard Response Table",()=>{
     before(()=>{
         cy.visit("/?portal-dashboard");
     });

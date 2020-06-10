@@ -46,13 +46,16 @@ interface IProps {
 
 interface IState {
   initialLoading: boolean;
+  scrollLeft: number;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
+  private studentAnswersComponentRef: StudentAnswers | null;
   constructor(props: IProps) {
     super(props);
     this.state = {
-      initialLoading: true
+      initialLoading: true,
+      scrollLeft: 0
     };
   }
 
@@ -66,6 +69,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { isFetching } = this.props;
     if (initialLoading && !isFetching && prevProps.isFetching) {
       this.setState({ initialLoading: false });
+    }
+
+    const studentAnswersRef = this.studentAnswersComponentRef?.getStudentAnswersRef();
+    if (studentAnswersRef && this.state.scrollLeft !== studentAnswersRef.scrollLeft * -1) {
+      this.setState({ scrollLeft: studentAnswersRef.scrollLeft * -1 });
     }
   }
 
@@ -97,9 +105,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 currentQuestion={currentQuestion}
                 toggleCurrentActivity={toggleCurrentActivity}
                 toggleCurrentQuestion={toggleCurrentQuestion}
+                leftPosition={this.state.scrollLeft}
               />
             </div>
-            <div className={css.progressTable}>
+            <div className={css.progressTable} onScroll={this.handleScroll}>
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
@@ -110,6 +119,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 expandedActivities={expandedActivities}
                 students={students}
                 studentProgress={studentProgress}
+                ref={elt => this.studentAnswersComponentRef = elt}
               />
             </div>
             <QuestionOverlay
@@ -125,6 +135,13 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
         { initialLoading && <LoadingIcon /> }
       </div>
     );
+  }
+
+  private handleScroll = (e: React.UIEvent<HTMLElement>) => {
+    const element = e.target as HTMLElement;
+    if (element && element.scrollLeft) {
+      this.setState({ scrollLeft: -1 * element.scrollLeft });
+    }
   }
 }
 
