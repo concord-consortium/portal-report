@@ -2,17 +2,13 @@ import React from "react";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-header.less";
 
-interface IProps {
-    activityName: any;
-}
-
 interface IState {
     inFeedbackMode: boolean;
   }
 
-export class PopupHeader extends React.PureComponent<IProps, IState>{
-    constructor(props: IProps) {
-        super(props);
+export class PopupHeader extends React.PureComponent<IState>{
+    constructor() {
+        super();
         this.state = {
             inFeedbackMode: false
         };

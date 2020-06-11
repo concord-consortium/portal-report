@@ -9,6 +9,7 @@ interface IProps {
   sortedQuestionIds?: string[];
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
+  handleShowAllResponsesPopup: (show: boolean) => void;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
@@ -56,7 +57,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           </div>
         </div>
         <div className={css.footer}>
-          <div className={css.openPopupButton} data-cy="view-all-student-responses-button">
+          <div className={css.openPopupButton} data-cy="view-all-student-responses-button" onClick={this.handleShowAllResponsesButtonClick}>
             <svg className={css.icon}>
               <use xlinkHref="#icon-group" />
             </svg>
@@ -102,8 +103,8 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     }
     return false;
   }
-  // private handleAllResponsesButtonClick = (questionId: string) => () => {
-  //   alert('click on pop up button');
-  //   // this.props.toggleAllResponsesToCurrentQuestion(questionId);
-  // }
+
+  private handleShowAllResponsesButtonClick = () =>  {
+    this.props.handleShowAllResponsesPopup(true);
+  }
 }

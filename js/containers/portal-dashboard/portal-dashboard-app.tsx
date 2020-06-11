@@ -52,6 +52,7 @@ interface IProps {
 interface IState {
   initialLoading: boolean;
   scrollLeft: number;
+  showAllResponsesPopup: boolean;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
@@ -60,7 +61,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     super(props);
     this.state = {
       initialLoading: true,
-      scrollLeft: 0
+      scrollLeft: 0,
+      showAllResponsesPopup: false
     };
   }
 
@@ -86,7 +88,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { clazzName, compactReport, currentActivity, currentQuestion, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
-    const { initialLoading } = this.state;
+    const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -135,16 +137,19 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
+              handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
             />
-            <StudentResponsePopup
-              currentActivity={currentActivity}
-            />
+            {showAllResponsesPopup && <StudentResponsePopup />}
           </div>
         }
         {error && <DataFetchError error={error} />}
         {initialLoading && <LoadingIcon />}
       </div>
     );
+  }
+
+  private setShowAllResponsesPopup = (show: boolean)=>{
+    if(show) {this.setState({showAllResponsesPopup: show});}
   }
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {
