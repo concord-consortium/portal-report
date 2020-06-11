@@ -3,9 +3,9 @@ import { CustomSelect, SelectItem } from "./custom-select";
 import { AnonymizeStudents } from "./anonymize-students";
 import { Feedback } from "./feedback";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../actions/dashboard";
+import { NumberOfStudentsContainer } from "./num-students-container";
 
 import css from "../../../css/portal-dashboard/class-nav.less";
-import { NumberOfStudentsContainer } from "./num-students-container";
 
 interface IProps {
   clazzName: string;

@@ -102,4 +102,8 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     }
     return false;
   }
+  // private handleAllResponsesButtonClick = (questionId: string) => () => {
+  //   alert('click on pop up button');
+  //   // this.props.toggleAllResponsesToCurrentQuestion(questionId);
+  // }
 }

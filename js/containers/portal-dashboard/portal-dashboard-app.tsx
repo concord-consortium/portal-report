@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
@@ -15,6 +16,8 @@ import { IResponse } from "../../api";
 import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
+import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
+
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -27,12 +30,12 @@ interface IProps {
   error: IResponse;
   expandedActivities: Map<any, any>;
   isFetching: boolean;
+  questions?: Map<string, any>;
   report: any;
   sequenceTree: Map<any, any>;
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
-  questions?: Map<string, any>;
   sortedQuestionIds?: string[];
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
@@ -91,7 +94,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     return (
       <div className={css.portalDashboardApp}>
         <Header userName={userName} setCompact={setCompactReport} />
-        { activityTrees &&
+        {activityTrees &&
           <div>
             <div className={css.navigation}>
               <ClassNav
@@ -110,22 +113,22 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 leftPosition={this.state.scrollLeft}
               />
             </div>
-            <div className={css.progressTable} onScroll={this.handleScroll}>
-              <StudentNames
-                students={students}
-                isAnonymous={isAnonymous}
-                isCompact={compactReport}
-              />
-              <StudentAnswers
-                activities={activityTrees}
-                currentActivity={currentActivity}
-                expandedActivities={expandedActivities}
-                students={students}
-                studentProgress={studentProgress}
-                ref={elt => this.studentAnswersComponentRef = elt}
-                isCompact={compactReport}
-              />
-            </div>
+              <div className={css.progressTable} onScroll={this.handleScroll}>
+                <StudentNames
+                  students={students}
+                  isAnonymous={isAnonymous}
+                  isCompact={compactReport}
+                />
+                <StudentAnswers
+                  activities={activityTrees}
+                  currentActivity={currentActivity}
+                  expandedActivities={expandedActivities}
+                  students={students}
+                  studentProgress={studentProgress}
+                  ref={elt => this.studentAnswersComponentRef = elt}
+                  isCompact={compactReport}
+                />
+              </div>
             <QuestionOverlay
               currentQuestion={currentQuestion}
               questions={questions}
@@ -133,10 +136,13 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
             />
+            <StudentResponsePopup
+              currentActivity={currentActivity}
+            />
           </div>
         }
-        { error && <DataFetchError error={error} /> }
-        { initialLoading && <LoadingIcon /> }
+        {error && <DataFetchError error={error} />}
+        {initialLoading && <LoadingIcon />}
       </div>
     );
   }
@@ -159,8 +165,8 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   let sortedQuestionIds;
   if (questions && activities) {
     sortedQuestionIds = questions.keySeq().toArray().sort((q1Id: string, q2Id: string) => {
-      const question1 =  questions.get(q1Id);
-      const question2 =  questions.get(q2Id);
+      const question1 = questions.get(q1Id);
+      const question2 = questions.get(q2Id);
       const act1 = question1.get("activity");
       const act2 = question2.get("activity");
       if (act1 !== act2) {
@@ -194,9 +200,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
-    setCurrentActivity: (activityId: string) =>  dispatch(setCurrentActivity(activityId)),
-    toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),
-    toggleCurrentQuestion: (questionId: string) =>  dispatch(toggleCurrentQuestion(questionId)),
+    setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
+    toggleCurrentActivity: (activityId: string) => dispatch(toggleCurrentActivity(activityId)),
+    toggleCurrentQuestion: (questionId: string) => dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };
