@@ -38,7 +38,7 @@ export class PopupHeader extends React.PureComponent<IProps,IState>{
                     <svg className={`${css.assignmentIcon} ${css.icon}`}>
                         <use xlinkHref={"#icon-assignment"} />
                     </svg>
-                    <div className={css.title}>{activityName}</div>
+                    <div className={css.title} data-cy="popup-header-title">{activityName}</div>
                 </div>
                 <div className={`${css.toggleResponsesFeedback}`}>
                     <div className={responsesToggleClass} data-cy="all-students-responses-toggle" onClick={this.handleResponsesToggleClick}>
