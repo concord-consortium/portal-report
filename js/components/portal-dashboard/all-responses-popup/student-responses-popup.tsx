@@ -3,11 +3,14 @@ import { PopupHeader } from "./popup-header";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
-export class StudentResponsePopup extends React.PureComponent {
+interface IProps {
+    handleCloseAllResponsesPopup: (show: boolean) => void;
+}
+export class StudentResponsePopup extends React.PureComponent<IProps> {
     render() {
         return (
             <div className={css.popup} >
-                <PopupHeader />
+                <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup}/>
             </div>
         );
     }

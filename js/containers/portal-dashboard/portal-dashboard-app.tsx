@@ -139,7 +139,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               setCurrentActivity={setCurrentActivity}
               handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
             />
-            {showAllResponsesPopup && <StudentResponsePopup />}
+            {showAllResponsesPopup && <StudentResponsePopup handleCloseAllResponsesPopup={this.setShowAllResponsesPopup} />}
           </div>
         }
         {error && <DataFetchError error={error} />}
@@ -150,6 +150,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   private setShowAllResponsesPopup = (show: boolean)=>{
     if(show) {this.setState({showAllResponsesPopup: show});}
+    else {this.setState({showAllResponsesPopup: false});}
   }
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {

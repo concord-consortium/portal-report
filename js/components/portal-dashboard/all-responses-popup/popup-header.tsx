@@ -1,18 +1,18 @@
 import React from "react";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-header.less";
-
+interface IProps {
+    handleCloseAllResponsesPopup: (show: boolean) => void;
+}
 interface IState {
     inFeedbackMode: boolean;
   }
 
-export class PopupHeader extends React.PureComponent<IState>{
-    constructor() {
-        super();
-        this.state = {
+export class PopupHeader extends React.PureComponent<IProps,IState>{
+
+    state = {
             inFeedbackMode: false
-        };
-    }
+    };
 
     render() {
         // const activityName = this.props.activityName;  Activity name should be passed in
@@ -55,7 +55,7 @@ export class PopupHeader extends React.PureComponent<IState>{
                     </div>
                 </div>
                 <div className={css.headerRight}>
-                    <div className={closeIconClass} data-cy="close-popup-button">
+                    <div className={closeIconClass} data-cy="close-popup-button" onClick={this.handleCloseAllResponsesButtonClick}>
                         <svg className={css.closeIconSVG}>
                             <use xlinkHref={"#icon-close"} />
                         </svg>
@@ -79,4 +79,7 @@ export class PopupHeader extends React.PureComponent<IState>{
               });
         }
     }
+    private handleCloseAllResponsesButtonClick = () =>  {
+        this.props.handleCloseAllResponsesPopup(false);
+      }
 }
