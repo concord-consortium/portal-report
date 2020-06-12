@@ -32,27 +32,35 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
       <React.Fragment>
         <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
           <svg className={css.icon}>
-            <use xlinkHref="#question-popout"/>
+            <use xlinkHref="#question-popout" />
           </svg>
           <div>Question Detail View</div>
         </div>
         <div className={css.titleWrapper}>
           <div className={css.nextQuestionButtons}>
-            <div className={css.button + ( this.previousQuestion ? "" : " " + css.disabled )}
-                onClick={this.showQuestion(this.previousQuestion)} data-cy="question-overlay-previous-button">
+            <div className={css.button + (this.previousQuestion ? "" : " " + css.disabled)}
+              onClick={this.showQuestion(this.previousQuestion)} data-cy="question-overlay-previous-button">
               <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left"/>
+                <use xlinkHref="#arrow-triangle-left" />
               </svg>
             </div>
-            <div className={css.button + ( this.nextQuestion ? "" : " " + css.disabled )}
-                onClick={this.showQuestion(this.nextQuestion)} data-cy="question-overlay-next-button">
+            <div className={css.button + (this.nextQuestion ? "" : " " + css.disabled)}
+              onClick={this.showQuestion(this.nextQuestion)} data-cy="question-overlay-next-button">
               <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left"/>
+                <use xlinkHref="#arrow-triangle-left" />
               </svg>
             </div>
           </div>
           <div className={css.title}>
-            Question #{ question.get("questionNumber") }
+            Question #{question.get("questionNumber")}
+          </div>
+        </div>
+        <div className={css.footer}>
+          <div className={css.openPopupButton} data-cy="view-all-student-responses-button">
+            <svg className={css.icon}>
+              <use xlinkHref="#icon-group" />
+            </svg>
+            <span>View All Student Responses</span>
           </div>
         </div>
       </React.Fragment>

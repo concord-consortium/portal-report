@@ -1,5 +1,3 @@
-import { getByCypressTag } from "../utils";
-
 context("Portal Dashboard Question Details Panel",()=>{
     before(()=>{
         cy.visit("/?portal-dashboard");
@@ -74,6 +72,11 @@ context("Portal Dashboard Question Details Panel",()=>{
         cy.get('[data-cy=question-overlay-previous-button]').click();
         cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 1: Report Test Activity 1");
         cy.get('[data-cy=question-overlay]').should("contain", "Question #6");
+      });
+    });
+    describe('footer elements',()=>{
+      it('button should open all student responses popup',()=>{ //currently only tests for visibility. Functionality not yet implemented
+        cy.get('[data-cy=view-all-student-responses-button]').should('be.visible');
       });
     });
 });
