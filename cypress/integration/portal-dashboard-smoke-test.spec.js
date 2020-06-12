@@ -57,5 +57,8 @@ context("Portal Dashboard UI",()=>{
             cy.get('[data-cy=header-menu]').click();
             cy.get('[data-cy="menu-list"]').should('be.visible');
         });
+        it('verify assignment dropdown is present',()=>{
+            cy.get("[data-cy=choose-assignment]").should('be.visible');
+        })
     });
 });
