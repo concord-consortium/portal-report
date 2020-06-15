@@ -22,6 +22,7 @@ export default class InteractiveIframe extends PureComponent {
     this.iframePhone = new iframePhone.ParentEndpoint(this.refs.iframe, phoneAnswered);
 
     this.iframePhone.addListener("getFirebaseJWT", this.handleGetFirebaseJWT);
+    this.iframePhone.addListener("height", this.handleHeight);
   }
 
   handleGetFirebaseJWT = (options) => {
@@ -32,6 +33,10 @@ export default class InteractiveIframe extends PureComponent {
         return json;
       })
       .catch(console.error);
+  }
+
+  handleHeight = (height) => {
+    this.refs.iframe.height = height;
   }
 
   disconnect() {
