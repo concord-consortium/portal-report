@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from "react";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-header.less";
@@ -55,13 +54,13 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
     }
     return (
       <div className={`${css.toggleResponsesFeedback}`}>
-        <div className={responsesToggleClass} id="responses-toggle"data-cy="all-students-responses-toggle" onClick={()=>(this.setState({inFeedbackMode:false}))}>
+        <div className={responsesToggleClass} id="responses-toggle" data-cy="all-students-responses-toggle" onClick={() => (this.setState({ inFeedbackMode: false }))}>
           <svg className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`}>
             <use xlinkHref={"#icon-group"} />
           </svg>
           <div className={`${css.toggleTitle} ${css.responseTitle} `}>All Student Responses</div>
         </div>
-        <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick={()=>(this.setState({inFeedbackMode:true}))}>
+        <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick={() => (this.setState({ inFeedbackMode: true }))}>
           <div className={`${css.toggleTitle} ${css.feedbackTitle}`}>Feedback to Students</div>
           <svg className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}`}>
             <use xlinkHref={"#icon-feedback-button"} />

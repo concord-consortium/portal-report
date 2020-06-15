@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable prefer-const */
 import React from "react";
 
 import css from "../../../css/portal-dashboard/student-names.less";
