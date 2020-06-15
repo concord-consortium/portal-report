@@ -36,6 +36,7 @@ export default class InteractiveIframe extends PureComponent {
   }
 
   handleHeight = (height) => {
+    // eslint-disable-next-line react/no-string-refs
     this.refs.iframe.height = height;
   }
 
