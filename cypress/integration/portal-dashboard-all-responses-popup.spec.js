@@ -40,14 +40,14 @@ context("Portal Dashboard Question Details Panel", () => {
     });
   });
   context('Class nav area', () => {
-    before(()=>{
+    before(() => {
       cy.get('[data-cy=view-all-student-responses-button]').should('be.visible').click();
     });
     it('verify view list toggles are visible', () => { //TODO need to verify that list toggles correctly
       cy.get("[data-cy=list-by-student-toggle]").should('be.visible');
       cy.get("[data-cy=list-by-questions-toggle]").should('be.visible');
     });
-    it('verify spotlight opens dialog when no student selected (default)',()=>{
+    it('verify spotlight opens dialog when no student selected (default)', () => {
       cy.get('[data-cy=spotlight-toggle').should('be.visible').click();
       cy.get('[data-cy=spotlight-dialog]').should('be.visible');
       cy.get('[data-cy=spotlight-dialog-close-button]').should('be.visible').click();

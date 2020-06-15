@@ -3,111 +3,110 @@
 .popupClassNav {
   width: 240px;
 
-    .icon {
-        width: 20px;
-        height: 20px;
-        object-fit: contain;
-        fill: white;
-        margin: 0 5px 0 5px;
+  .icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    fill: white;
+    margin: 0 5px 0 5px;
+  }
+  .columnHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    color: @cc-charcoal;
+  }
+  .viewListOption {
+    background-color: @cc-teal-light5;
+    border-bottom: 1px solid @cc-teal;
+
+    .optionIcon{
+      width: 24px;
+      height: 24px;
+      margin: 0 auto 0;
     }
-    .columnHeader{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        height: 50px;
+    .toggle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 47px;
+      height: 30px;
+      background-color: @cc-teal-light5;
+      fill: @cc-teal;
+      border: 1.5px solid @cc-charcoal-light1;
+      box-sizing: border-box;
+      &:hover {
+        background-color: @cc-teal-light3;
+      }
+    }
+    .listByStudents {
+      border-radius: 15px 0 0 15px;
+      margin-right: 5px;
+      margin-left: 11px;
+
+      .optionIcon {
+        padding-left: 2.5px;
+      }
+    }
+    .listByQuestions {
+      border-radius: 0 15px 15px 0;
+
+      .optionIcon {
+        padding-right: 2.5px
+      }
+    }
+    .selected {
+      border-color: white;
+      fill: white;
+      background-color: @cc-teal;
+    }
+  }  
+  .popupClassNavControllers {
+    height: 183px;
+    padding-top: 10px;
+
+    .spotlightToggle {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      margin: 10px 0 0 20px;
+      cursor: pointer;
+    
+      .spotlightContainer {
+        width: 30px;
+        height: 30px;
+        border: 1.5px solid @cc-charcoal-light1;
+        border-radius: 5px;
+        background-color: @cc-teal-light6;
+        margin-right: 10px;
+        &:hover {
+          background-color: @cc-teal-light4;
+        }
+        &:active {
+          background-color: @cc-teal;
+          .spotlightIcon {
+              fill: white;
+          }
+        }
+        &.spotlightOn {
+          background-color: @hi-yellow-light3;
+        }
+    
+        .spotlightIcon {
+          width: 24px;
+          height: 24px;
+          fill: @cc-teal;
+          position: relative;
+          top: 2.5px;
+          left: 2.5px;
+        }
+      }
+
+      span {
         color: @cc-charcoal;
+      }
     }
-    .viewListOption {
-        background-color: @cc-teal-light5;
-        border-bottom: 1px solid @cc-teal;
-
-        .optionIcon{
-            width: 24px;
-            height: 24px;
-            margin: 0 auto 0;
-        }
-        .toggle {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 47px;
-            height: 30px;
-            background-color: @cc-teal-light5;
-            fill: @cc-teal;
-            border: 1.5px solid @cc-charcoal-light1;
-            box-sizing: border-box;
-
-            &:hover {
-                background-color: @cc-teal-light3;
-            }
-        }
-        .listByStudents {
-            border-radius: 15px 0 0 15px;
-            margin-right: 5px;
-            margin-left: 11px;
-
-            .optionIcon {
-                padding-left: 2.5px;
-            }
-        }
-        .listByQuestions {
-            border-radius: 0 15px 15px 0;
-
-            .optionIcon {
-                padding-right: 2.5px
-            }
-        }
-        .selected {
-            border-color: white;
-            fill: white;
-            background-color: @cc-teal;
-        }
-    }
-    .popupClassNavControllers {
-        height: 183px;
-        padding-top: 10px;
-        .spotlightToggle {
-            display: flex;
-            justify-content: left;
-            align-items: center;
-            margin: 10px 0 0 20px;
-            cursor: pointer;
-    
-            .spotlightContainer {
-                width: 30px;
-                height: 30px;
-                border: 1.5px solid @cc-charcoal-light1;
-                border-radius: 5px;
-                background-color: @cc-teal-light6;
-                margin-right: 10px;
-    
-                &:hover {
-                    background-color: @cc-teal-light4;
-                }
-                &:active {
-                    background-color: @cc-teal;
-                    .spotlightIcon {
-                        fill: white;
-                    }
-                }
-                &.spotlightOn {
-                    background-color: @hi-yellow-light3;
-                }
-    
-                .spotlightIcon {
-                    width: 24px;
-                    height: 24px;
-                    fill: @cc-teal;
-                    position: relative;
-                    top: 2.5px;
-                    left: 2.5px;
-                }
-            }
-            span {
-                color: @cc-charcoal;
-            }
-        }
-    }
+  }
 }
-
