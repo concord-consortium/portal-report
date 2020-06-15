@@ -17,7 +17,6 @@ import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
 
-
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
 interface IProps {
@@ -138,7 +137,12 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               setCurrentActivity={setCurrentActivity}
               handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
             />
-            {showAllResponsesPopup && <StudentResponsePopup handleCloseAllResponsesPopup={this.setShowAllResponsesPopup} />}
+            {showAllResponsesPopup && <StudentResponsePopup
+                studentCount={students.size}
+                setAnonymous={setAnonymous}
+                setStudentSort={setStudentSort}
+                trackEvent={trackEvent}
+                handleCloseAllResponsesPopup={this.setShowAllResponsesPopup} />}
           </div>
         }
         {error && <DataFetchError error={error} />}
