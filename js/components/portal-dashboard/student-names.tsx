@@ -14,7 +14,6 @@ export class StudentNames extends React.PureComponent<IProps> {
   render() {
     const { students, isAnonymous, isCompact } = this.props;
     const compactClass = isCompact ? css.compact : "";
-    let rowClass = css.studentNameRow;
 
     return (
       <div className={css.studentList} data-cy="student-list">
@@ -25,19 +24,13 @@ export class StudentNames extends React.PureComponent<IProps> {
 
           return (
             <div className={`${css.studentName} ${compactClass}`} key={`student ${i}`}>
-              <div className={rowClass} key={`student ${i}`}>
+              <div key={`student ${i}`}>
                 <div className={css.name} data-cy="student-name">{formattedName}</div>
               </div>
             </div>
           );
         })}
       </div>
-    );
-  }
-
-  private renderSelectionCheckbox = () => {
-    return (
-      <div className={css.checkbox}></div>
     );
   }
 }
