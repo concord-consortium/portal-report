@@ -121,8 +121,6 @@ export default function report(state = new ReportState({}), action?: any) {
   switch (action.type) {
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
-      // eslint-disable-next-line no-console
-      // console.log("teacher name is: ", data.offering.teacher);
 
       let type: ReportType = "student";
       let hideControls = true;

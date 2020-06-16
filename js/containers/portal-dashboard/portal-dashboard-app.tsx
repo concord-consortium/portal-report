@@ -15,6 +15,8 @@ import { IResponse } from "../../api";
 import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
+import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
+
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -27,12 +29,12 @@ interface IProps {
   error: IResponse;
   expandedActivities: Map<any, any>;
   isFetching: boolean;
+  questions?: Map<string, any>;
   report: any;
   sequenceTree: Map<any, any>;
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
-  questions?: Map<string, any>;
   sortedQuestionIds?: string[];
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
@@ -49,6 +51,7 @@ interface IProps {
 interface IState {
   initialLoading: boolean;
   scrollLeft: number;
+  showAllResponsesPopup: boolean;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
@@ -57,7 +60,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     super(props);
     this.state = {
       initialLoading: true,
-      scrollLeft: 0
+      scrollLeft: 0,
+      showAllResponsesPopup: false
     };
   }
 
@@ -83,7 +87,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { clazzName, compactReport, currentActivity, currentQuestion, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
-    const { initialLoading } = this.state;
+    const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -91,7 +95,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     return (
       <div className={css.portalDashboardApp}>
         <Header userName={userName} setCompact={setCompactReport} />
-        { activityTrees &&
+        {activityTrees &&
           <div>
             <div className={css.navigation}>
               <ClassNav
@@ -110,35 +114,42 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 leftPosition={this.state.scrollLeft}
               />
             </div>
-            <div className={css.progressTable} onScroll={this.handleScroll}>
-              <StudentNames
-                students={students}
-                isAnonymous={isAnonymous}
-                isCompact={compactReport}
-              />
-              <StudentAnswers
-                activities={activityTrees}
-                currentActivity={currentActivity}
-                expandedActivities={expandedActivities}
-                students={students}
-                studentProgress={studentProgress}
-                ref={elt => this.studentAnswersComponentRef = elt}
-                isCompact={compactReport}
-              />
-            </div>
+              <div className={css.progressTable} onScroll={this.handleScroll}>
+                <StudentNames
+                  students={students}
+                  isAnonymous={isAnonymous}
+                  isCompact={compactReport}
+                />
+                <StudentAnswers
+                  activities={activityTrees}
+                  currentActivity={currentActivity}
+                  expandedActivities={expandedActivities}
+                  students={students}
+                  studentProgress={studentProgress}
+                  ref={elt => this.studentAnswersComponentRef = elt}
+                  isCompact={compactReport}
+                />
+              </div>
             <QuestionOverlay
               currentQuestion={currentQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
+              handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
             />
+            {showAllResponsesPopup && <StudentResponsePopup handleCloseAllResponsesPopup={this.setShowAllResponsesPopup} />}
           </div>
         }
-        { error && <DataFetchError error={error} /> }
-        { initialLoading && <LoadingIcon /> }
+        {error && <DataFetchError error={error} />}
+        {initialLoading && <LoadingIcon />}
       </div>
     );
+  }
+
+  private setShowAllResponsesPopup = (show: boolean)=>{
+    if(show) {this.setState({showAllResponsesPopup: show});}
+    else {this.setState({showAllResponsesPopup: false});}
   }
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {
@@ -159,8 +170,8 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   let sortedQuestionIds;
   if (questions && activities) {
     sortedQuestionIds = questions.keySeq().toArray().sort((q1Id: string, q2Id: string) => {
-      const question1 =  questions.get(q1Id);
-      const question2 =  questions.get(q2Id);
+      const question1 = questions.get(q1Id);
+      const question2 = questions.get(q2Id);
       const act1 = question1.get("activity");
       const act2 = question2.get("activity");
       if (act1 !== act2) {
@@ -194,9 +205,9 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
-    setCurrentActivity: (activityId: string) =>  dispatch(setCurrentActivity(activityId)),
-    toggleCurrentActivity: (activityId: string) =>  dispatch(toggleCurrentActivity(activityId)),
-    toggleCurrentQuestion: (questionId: string) =>  dispatch(toggleCurrentQuestion(questionId)),
+    setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
+    toggleCurrentActivity: (activityId: string) => dispatch(toggleCurrentActivity(activityId)),
+    toggleCurrentQuestion: (questionId: string) => dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
   };
 };

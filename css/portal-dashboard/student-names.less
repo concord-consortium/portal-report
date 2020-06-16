@@ -14,17 +14,31 @@
     &.compact {
       height: 32px;
     }
-
     .name {
       margin: 0 20px 0 20px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 1.5px solid @cc-charcoal-light1;
+      background-color: white;
+      margin-left: 25px;
+    }
 
   }
   .studentName:nth-child(even) {
     background-color: @cc-teal-light6;
+  }
+  .allResponseReport {
+    border-bottom: 1px solid @cc-charcoal-light2;
+
+    .name{
+      margin: 0 20px 0 10px;
+    }
   }
 
 }

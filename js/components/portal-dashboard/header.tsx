@@ -24,7 +24,6 @@ export class Header extends React.PureComponent <IProps> {
           <AccountOwnerDiv userName={this.props.userName}/>
           <HeaderMenuContainer setCompact={this.props.setCompact} />
         </div>
-
       </div>
     );
   }
