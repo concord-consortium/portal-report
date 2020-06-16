@@ -1,5 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
+import { QuestionNavigator } from "./question-navigator";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -29,6 +30,8 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private renderQuestionDetails = (question: Map<string, any>) => {
+    const cssToUse = css;
+    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
     return (
       <React.Fragment>
         <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
@@ -37,33 +40,13 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           </svg>
           <div>Question Detail View</div>
         </div>
-        <div className={css.titleWrapper}>
-          <div className={css.nextQuestionButtons}>
-            <div className={css.button + (this.previousQuestion ? "" : " " + css.disabled)}
-              onClick={this.showQuestion(this.previousQuestion)} data-cy="question-overlay-previous-button">
-              <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left" />
-              </svg>
-            </div>
-            <div className={css.button + (this.nextQuestion ? "" : " " + css.disabled)}
-              onClick={this.showQuestion(this.nextQuestion)} data-cy="question-overlay-next-button">
-              <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left" />
-              </svg>
-            </div>
-          </div>
-          <div className={css.title}>
-            Question #{question.get("questionNumber")}
-          </div>
-        </div>
-        <div className={css.footer}>
-          <div className={css.openPopupButton} data-cy="view-all-student-responses-button" onClick={this.handleShowAllResponsesButtonClick}>
-            <svg className={css.icon}>
-              <use xlinkHref="#icon-group" />
-            </svg>
-            <span>View All Student Responses</span>
-          </div>
-        </div>
+        <QuestionNavigator cssToUse={cssToUse}
+          currentQuestion={currentQuestion}
+          questions={questions}
+          sortedQuestionIds={sortedQuestionIds}
+          toggleCurrentQuestion={toggleCurrentQuestion}
+          setCurrentActivity={setCurrentActivity} />
+        {this.renderFooter()}
       </React.Fragment>
     );
   }
@@ -74,37 +57,20 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     }
   }
 
-  private showQuestion = (questionId: string | false) => () => {
-    if (!questionId || !this.props.questions) return;
-    const currentActivityId = this.props.currentQuestion?.get("activity");
-    const nextActivityId = this.props.questions.get(questionId).get("activity");
-    this.props.toggleCurrentQuestion(questionId);
-    if (currentActivityId !== nextActivityId) {
-      this.props.setCurrentActivity(nextActivityId);
-    }
+  private renderFooter = () => {
+    return (
+      <div className={css.footer}>
+        <div className={css.openPopupButton} data-cy="view-all-student-responses-button" onClick={this.handleShowAllResponsesButtonClick}>
+          <svg className={css.icon}>
+            <use xlinkHref="#icon-group" />
+          </svg>
+          <span>View All Student Responses</span>
+        </div>
+      </div>
+    );
   }
 
-  private get previousQuestion() {
-    const { sortedQuestionIds, currentQuestion } = this.props;
-    if (!sortedQuestionIds || !currentQuestion) return false;
-    const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
-    if (idx > 0) {
-      return sortedQuestionIds[idx - 1];
-    }
-    return false;
-  }
-
-  private get nextQuestion() {
-    const { sortedQuestionIds, currentQuestion } = this.props;
-    if (!sortedQuestionIds || !currentQuestion) return false;
-    const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
-    if (idx < sortedQuestionIds.length - 1) {
-      return sortedQuestionIds[idx + 1];
-    }
-    return false;
-  }
-
-  private handleShowAllResponsesButtonClick = () =>  {
+  private handleShowAllResponsesButtonClick = () => {
     this.props.handleShowAllResponsesPopup(true);
   }
 }

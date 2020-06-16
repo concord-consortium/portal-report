@@ -1,8 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
 
-// import css from "../../../css/portal-dashboard/question-overlay.less";
-
 interface IProps {
   currentQuestion?: Map<string, any>;
   questions?: Map<string, any>;
@@ -32,7 +30,7 @@ export class QuestionNavigator extends React.PureComponent<IProps> {
                 </svg>
               </div>
             </div>
-            <div className={css.title}>
+            <div className={css.title} data-cy="question-overlay-title">
                 Question #{ currentQuestion? currentQuestion.get("questionNumber"):"" }
             </div>
           </div>

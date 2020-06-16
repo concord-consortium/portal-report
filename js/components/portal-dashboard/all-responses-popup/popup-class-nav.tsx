@@ -38,7 +38,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
 
     return (
       <React.Fragment>
-        <div className={`${css.popupClassNav}`}>
+        <div className={`${css.popupClassNav} ${css.column}`}>
           {this.renderViewListOptions()}
           < div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav" >
             <AnonymizeStudents setAnonymous={setAnonymous} />

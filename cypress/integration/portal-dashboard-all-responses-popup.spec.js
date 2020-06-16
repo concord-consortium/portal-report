@@ -54,4 +54,21 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=spotlight-dialog]').should('not.be.visible');
     });
   });
+  context('Question nav area',()=>{
+    //TODO: need to verify question # is the same as from the question overlay.
+    // So need a before to grab the question # from the overlay before opening popup
+    // Pagination between questions is tested in question-details spec.
+    it('verify title is correct',()=>{
+      cy.get("[data-cy=question-overlay-title]").should('be.visible').and('contain',"Question #");
+      cy.get("[data-cy=question-overlay-previous-button]").should('be.visible');
+      cy.get("[data-cy=question-overlay-next-button]").should('be.visible');
+    });
+    it('verify question text area is visible',()=>{
+      cy.get("[data-cy=question-title]").should('be.visible');
+      cy.get("[data-cy=question-text]").should('be.visible');
+      cy.get("[data-cy=open-activity-button]").should('be.visible');
+      cy.get("[data-cy=open-teacher-edition-button]").should('be.visible');
+    });
+    //TODO need to add tests for open activity button and open teacher edition button functionality
+  });
 });
