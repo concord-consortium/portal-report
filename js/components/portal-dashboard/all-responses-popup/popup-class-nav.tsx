@@ -109,18 +109,14 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   }
 
   private handleStudentsToggleClick = () => {
-    if (this.state.inQuestionMode) {
-      this.setState({
-        inQuestionMode: !this.state.inQuestionMode
-      });
-    }
+    this.setState({
+      inQuestionMode: false
+    });
   }
   private handleQuestionsToggleClick = () => {
-    if (!this.state.inQuestionMode) {
-      this.setState({
-        inQuestionMode: !this.state.inQuestionMode
-      });
-    }
+    this.setState({
+      inQuestionMode: true
+    });
   }
   private handleSpotlightClick = () => {
     const wasSpotlightOn = this.state.isSpotlightOn;
