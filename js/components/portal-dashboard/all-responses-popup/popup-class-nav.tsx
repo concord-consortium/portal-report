@@ -11,7 +11,7 @@ import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
 interface IProps {
   studentCount: number;
   setAnonymous: (value: boolean) => void;
-  setStudentSort: (value: string) => void;
+  setStudentFilter: (value: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
 }
 interface IState {
@@ -43,7 +43,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
           < div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav" >
             <AnonymizeStudents setAnonymous={setAnonymous} />
             <NumberOfStudentsContainer studentCount={studentCount} />
-            {this.renderStudentSort()}
+            {this.renderStudentFilter()}
             {this.renderSpotlightToggle()}
           </div >
         </div>
@@ -52,14 +52,14 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     );
   }
 
-  private renderStudentSort = () => {
+  private renderStudentFilter = () => {
     const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "All Students" }];
-    const { setStudentSort, trackEvent } = this.props;
+    const { setStudentFilter, trackEvent } = this.props;
     return (
       <div className={cssClassNav.studentSort}>
         <CustomSelect
           items={items}
-          onSelectItem={setStudentSort}
+          onSelectItem={setStudentFilter}
           trackEvent={trackEvent}
           iconId={"icon-sort"}
           dataCy={"sort-students"}

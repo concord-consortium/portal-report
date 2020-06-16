@@ -8,12 +8,12 @@ interface IProps {
   handleCloseAllResponsesPopup: (show: boolean) => void;
   studentCount: number;
   setAnonymous: (value: boolean) => void;
-  setStudentSort: (value: string) => void;
+  setStudentFilter: (value: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
 }
 export class StudentResponsePopup extends React.PureComponent<IProps> {
   render() {
-    const { studentCount, setAnonymous, setStudentSort, trackEvent } = this.props;
+    const { studentCount, setAnonymous, setStudentFilter, trackEvent } = this.props;
     return (
       <div className={css.popup} >
         <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
@@ -21,7 +21,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
           <PopupClassNav
             studentCount={studentCount}
             setAnonymous={setAnonymous}
-            setStudentSort={setStudentSort}
+            setStudentFilter={setStudentFilter}
             trackEvent={trackEvent} />
         </div>
       </div>

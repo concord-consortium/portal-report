@@ -140,7 +140,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             {showAllResponsesPopup && <StudentResponsePopup
                 studentCount={students.size}
                 setAnonymous={setAnonymous}
-                setStudentSort={setStudentSort}
+                setStudentFilter={setStudentSort}
                 trackEvent={trackEvent}
                 handleCloseAllResponsesPopup={this.setShowAllResponsesPopup} />}
           </div>
