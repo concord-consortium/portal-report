@@ -15,12 +15,8 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   };
 
   render() {
-    let popupHeaderClass: any;
-    if (!this.state.inFeedbackMode) {
-      popupHeaderClass = css.popupHeader;
-    } else {
-      popupHeaderClass = css.popupHeader + " " + css.inFeedbackMode;
-    }
+    const popupHeaderClass: string = `${css.popupHeader}` + (this.state.inFeedbackMode? ` ${css.inFeedbackMode}` : "");
+
     return (
       <div className={popupHeaderClass} data-cy="popup-header">
         {this.renderHeaderLeft()}
@@ -43,24 +39,18 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   }
 
   private renderResponseFeedbackToggle = () => {
-    let feedbackToggleClass: any,
-      responsesToggleClass: any;
-    if (!this.state.inFeedbackMode) {
-      feedbackToggleClass = css.feedbackToggle + " " + css.toggleOff;
-      responsesToggleClass = css.responseToggle;
-    } else {
-      feedbackToggleClass = css.feedbackToggle;
-      responsesToggleClass = css.responseToggle + " " + css.toggleOff;
-    }
+    const feedbackToggleClass: string = `${css.feedbackToggle}` + (!this.state.inFeedbackMode? ` ${css.toggleOff}` : "");
+    const responsesToggleClass: string = `${css.responseToggle}` + (this.state.inFeedbackMode? ` ${css.toggleOff}` : "");
+
     return (
       <div className={`${css.toggleResponsesFeedback}`}>
-        <div className={responsesToggleClass} id="responses-toggle" data-cy="all-students-responses-toggle" onClick={() => (this.setState({ inFeedbackMode: false }))}>
+        <div className={responsesToggleClass} id="responses-toggle" data-cy="all-students-responses-toggle" onClick={this.setFeedbackMode(false)}>
           <svg className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`}>
             <use xlinkHref={"#icon-group"} />
           </svg>
           <div className={`${css.toggleTitle} ${css.responseTitle} `}>All Student Responses</div>
         </div>
-        <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick={() => (this.setState({ inFeedbackMode: true }))}>
+        <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick = {this.setFeedbackMode(true)} >
           <div className={`${css.toggleTitle} ${css.feedbackTitle}`}>Feedback to Students</div>
           <svg className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}`}>
             <use xlinkHref={"#icon-feedback-button"} />
@@ -70,13 +60,15 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
     );
   }
 
+  private setFeedbackMode = (value: boolean) => () => {
+    this.setState({
+      inFeedbackMode: value
+    });
+  }
+
   private renderHeaderRight = () => {
-    let closeIconClass: any;
-    if (!this.state.inFeedbackMode) {
-      closeIconClass = css.closeIcon;
-    } else {
-      closeIconClass = css.closeIcon + " " + css.inFeedbackMode;
-    }
+    const  closeIconClass: string = `${css.closeIcon}` + (this.state.inFeedbackMode?  ` ${css.inFeedbackMode}` : "");
+
     return (
       <div className={css.headerRight}>
         <div className={closeIconClass} data-cy="close-popup-button" onClick={this.handleCloseAllResponsesButtonClick}>

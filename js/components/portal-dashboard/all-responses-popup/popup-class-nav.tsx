@@ -29,7 +29,6 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
       studentSelected: false, //set this to true to see what css looks like when students are selected
       showDialog: false
     };
-    this.handleStudentsToggleClick = this.handleStudentsToggleClick.bind(this);
   }
 
   render() {
@@ -68,23 +67,19 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     );
   }
   private renderViewListOptions() {
-    let listByStudentClasses: string = css.toggle + " " + css.listByStudents,
-      listByQuestionsClasses: string = css.toggle + " " + css.listByQuestions;
-
-    if (!this.state.inQuestionMode) {
-      listByStudentClasses += "  " + css.selected;
-    } else {
-      listByQuestionsClasses += " " + css.selected;
-    }
+    const listByStudentClasses: string =
+      `${css.toggle} ${css.listByStudents}` + (!this.state.inQuestionMode ? ` ${css.selected}` : "");
+    const listByQuestionsClasses: string =
+      `${css.toggle} ${css.listByQuestions}` + (this.state.inQuestionMode ? ` ${css.selected}` : "");
 
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
-        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.handleStudentsToggleClick}>
+        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.setQuestionMode(false)}>
           <svg className={`${css.optionIcon}  `}>
             <use xlinkHref={"#icon-student-view"} />
           </svg>
         </div>
-        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.handleQuestionsToggleClick}>
+        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(true)}>
           <svg className={`${css.optionIcon}`}>
             <use xlinkHref={"#icon-question-view"} />
           </svg>
@@ -95,7 +90,9 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
 
   private renderSpotlightToggle() {
     let spotLightContainerClasses: string = css.spotlightContainer;
-    if (this.state.isSpotlightOn && this.state.studentSelected) { spotLightContainerClasses += " " + css.spotlightOn; }
+    if (this.state.isSpotlightOn && this.state.studentSelected) {
+      spotLightContainerClasses += " " + css.spotlightOn;
+    }
     return (
       <div className={`${css.spotlightToggle}`} onClick={this.handleSpotlightClick} data-cy="spotlight-toggle">
         <div className={spotLightContainerClasses}>
@@ -108,30 +105,25 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     );
   }
 
-  private handleStudentsToggleClick = () => {
+  private setQuestionMode = (value: boolean) => () => {
     this.setState({
-      inQuestionMode: false
+      inQuestionMode: value
     });
   }
-  private handleQuestionsToggleClick = () => {
-    this.setState({
-      inQuestionMode: true
-    });
-  }
+
   private handleSpotlightClick = () => {
-    const wasSpotlightOn = this.state.isSpotlightOn;
-    this.setState({
-      isSpotlightOn: !wasSpotlightOn
-    });
-    if (!wasSpotlightOn && !this.state.studentSelected) {
+    if (!this.state.isSpotlightOn && !this.state.studentSelected) {
       this.setState({ showDialog: true });
     }
+    this.setState(prevState => ({
+      isSpotlightOn: !prevState.isSpotlightOn
+    }));
   }
 
   private closeShowDialog = (show: boolean) => {
-    this.setState({ showDialog: show });
     this.setState({
-      isSpotlightOn: !this.state.isSpotlightOn
+      isSpotlightOn: !this.state.isSpotlightOn,
+      showDialog: show
     });
   }
 }
