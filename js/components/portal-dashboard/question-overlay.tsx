@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "./question-navigator";
+import { QuestionArea } from "./question-area";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -46,6 +47,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           sortedQuestionIds={sortedQuestionIds}
           toggleCurrentQuestion={toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity} />
+          <QuestionArea currentQuestion={currentQuestion} cssToUse={cssToUse}/>
         {this.renderFooter()}
       </React.Fragment>
     );

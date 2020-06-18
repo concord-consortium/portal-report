@@ -93,6 +93,8 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      font-weight: normal;
+      text-transform: capitalize;
 
       .icon{
         height: 30px;
@@ -155,11 +157,24 @@
             margin: 0;
           }                    
         }
+
         .teacherEditionIcon {
           height: 40px;
           margin: 0;
           position: relative;
           top: 5px;
+          &:hover .teacherEditionButton, &:hover .teacherEditionBadge {
+            background-color: @te-orange-light1;
+          }
+          &:active .teacherEditionButton, &:active .teacherEditionBadge{
+            color: @te-orange;
+            background-color: @te-orange-light2;
+            border-color: @te-orange;
+
+            .icon {
+              fill: @te-orange;
+            }
+          }
           
           .teacherEditionButton {
             display: flex;
@@ -174,25 +189,13 @@
             background-color: @te-orange;
             cursor: pointer;
           
-            &:hover {
-              background-color: @cc-teal-light4;
+            .icon {
+              width: 24px;
+              height: 24px;
+              pointer-events: none;
+              fill: white;
+              margin: 0;
             }
-            &:active {
-              color: white;
-              background-color: @cc-teal-dark1;
-          
-              .icon {
-                fill: white;
-              }
-            }
-          }
-        
-          .icon {
-            width: 24px;
-            height: 24px;
-            pointer-events: none;
-            fill: white;
-            margin: 0;
           }
 
           .teacherEditionBadge {
@@ -211,14 +214,15 @@
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
+            cursor: pointer;
           }
-                
         }
       }
-    }
+    }  
     .questionText {
       color: @cc-charcoal;
       margin: 2px 20px;
-    }
+      font-weight: normal;
+    }  
   }
 }

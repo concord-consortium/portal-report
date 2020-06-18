@@ -1,0 +1,55 @@
+import React from "react";
+import { Map } from "immutable";
+
+import css from "../../../css/portal-dashboard/question-area.less";
+
+interface IProps {
+  currentQuestion?: Map<string, any>;
+  cssToUse: any;
+}
+
+export class QuestionArea extends React.PureComponent<IProps>{
+  render() {
+    const { currentQuestion } = this.props;
+    const teacherEditionButtonClasses = `${css.teacherEditionButton}`;
+    const teacherEditionBadge = `${css.teacherEditionBadge}`;
+    const prompt = currentQuestion ? currentQuestion.get("prompt") : "";
+    const type = currentQuestion ? currentQuestion.get("type") : "";
+    const typeText = type && type.replace(/_/gm, ' ');
+
+    return (
+      <React.Fragment>
+        < div className={`${css.questionTypeHeader}`}>
+          <div className={`${css.leftTitle}`} >
+            <svg className={`${css.icon} ${css.questionTypeIcon}`}>
+              <use xlinkHref="#text-question" />
+            </svg>
+            <span className={css.questionTypeTitle} data-cy="question-title">
+              {typeText}
+            </span>
+          </div>
+          <div className={`${css.rightIcons}`}>
+            <a className={`${css.externalLinkButton}`} target="_blank" data-cy="open-activity-button">
+              <svg className={`${css.icon}`}>
+                <use xlinkHref="#external-link" />
+              </svg>
+            </a>
+            <div className={css.teacherEditionIcon} >
+              <a className={teacherEditionButtonClasses} target="_blank" data-cy="open-teacher-edition-button">
+                <svg className={`${css.icon}`}>
+                  <use xlinkHref="#external-link" />
+                </svg>
+              </a>
+              <div className={teacherEditionBadge}>TE</div>
+            </div>
+          </div>
+        </div >
+        <div className={css.questionTextArea} data-cy="question-text">
+          <div className={css.questionText}>
+            {prompt ? prompt.replace(/<[^>]*>?/gm, '') : ""}
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+}

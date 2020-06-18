@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "../question-navigator";
+import { QuestionArea } from "../question-area";
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-question-nav.less";
 
 
@@ -26,38 +27,7 @@ export class PopupQuestionNav extends React.PureComponent<IProps>{
             setCurrentActivity={setCurrentActivity} />
         </div>
         <div className={`${css.popupQuestionDiv}`} >
-          {this.renderQuestionTypeHeader()}
-          <div className={css.questionText} data-cy="question-text">
-            Question text here
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private renderQuestionTypeHeader() {
-    return (
-      <div className={`${css.questionTypeHeader}`}>
-        <div className={`${css.leftTitle}`} >
-          <svg className={`${css.icon} ${css.questionTypeIcon}`}>
-            <use xlinkHref="#text-question" />
-          </svg>
-          <span className={css.questionTypeTitle} data-cy="question-title">Question Type</span>
-        </div>
-        <div className={`${css.rightIcons}`}>
-          <a className={`${css.externalLinkButton}`} target="_blank" data-cy="open-activity-button">
-            <svg className={`${css.icon}`}>
-              <use xlinkHref="#external-link" />
-            </svg>
-          </a>
-          <div className={css.teacherEditionIcon} >
-            <a className={`${css.teacherEditionButton}`} target="_blank" data-cy="open-teacher-edition-button">
-              <svg className={`${css.icon}`}>
-                <use xlinkHref="#external-link" />
-              </svg>
-            </a>
-            <div className={`${css.teacherEditionBadge}`}>TE</div>
-          </div>
+          <QuestionArea currentQuestion={currentQuestion} cssToUse={cssToUse}/>
         </div>
       </div>
     );
