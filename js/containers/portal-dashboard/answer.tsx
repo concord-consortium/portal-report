@@ -1,28 +1,9 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
+import { AnswerTypes } from "../../util/answer-utils";
 
 import css from "../../../css/portal-dashboard/answer.less";
-
-interface AnswerIcon {
-  type: string;
-  icon: string;
-}
-
-const AnswerIcons: AnswerIcon[] = [
-  {
-    type: "open_response",
-    icon: "open-response-complete",
-  },
-  {
-    type: "image_question",
-    icon: "image-open-response-complete",
-  },
-  {
-    type: "iframe_interactive",
-    icon: "interactive-complete",
-  },
-];
 
 interface IProps {
   answer: Map<any, any>;
@@ -49,21 +30,15 @@ class Answer extends React.PureComponent<IProps> {
   private renderAnswer = () => {
     const { answer, question } = this.props;
     const type = answer.get("questionType");
-    let iconId = "";
-    if (type === "multiple_choice") {
-      iconId = "multiple-choice-non-scored";
-      if (question.get("scored")) {
-        iconId = answer.get("correct") ? "multiple-choice-correct" : "multiple-choice-incorrect";
-      }
-    } else {
-      const answerIcon = AnswerIcons.find(a => a.type === answer.get("questionType"));
-      iconId = answerIcon ? answerIcon.icon : "interactive-complete";
-    }
+    const scored = question.get("scored");
+    const correct = scored ? answer.get("correct") : undefined;
+    const answerType = AnswerTypes.find(at => at.type === type && at.correct === correct);
+    const searchRegExp = / /g;
+    const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
+    const AnswerIcon = answerType?.icon;
     return (
       <div className={css.answerContent} data-cy={iconId}>
-        <svg className={css.icon}>
-          <use xlinkHref={`#${iconId}`} />
-        </svg>
+        <AnswerIcon/>
       </div>
     );
   }
