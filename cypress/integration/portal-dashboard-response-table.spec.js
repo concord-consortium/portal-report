@@ -24,37 +24,37 @@ context("Portal Dashboard Response Table",()=>{
       .eq(2)
       .get('[data-cy=student-answer]')
       .eq(0)
-      .get('[data-cy=open-response-complete]').should('be.visible');
+      .get('[data-cy=open-response-completed]').should('be.visible');
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
       .get('[data-cy=student-answer]')
       .eq(1)
-      .get('[data-cy=multiple-choice-non-scored]').should('be.visible');
+      .get('[data-cy=multiple-choice-nonscored-completed]').should('be.visible');
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
       .get('[data-cy=student-answer]')
       .eq(2)
-      .get('[data-cy=multiple-choice-incorrect]').should('be.visible');
+      .get('[data-cy=multiple-choice-scored-incorrect]').should('be.visible');
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
       .get('[data-cy=student-answer]')
       .eq(3)
-      .get('[data-cy=open-response-complete]').should('be.visible');
+      .get('[data-cy=open-response-completed]').should('be.visible');
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
       .get('[data-cy=student-answer]')
       .eq(4)
-      .get('[data-cy=image-open-response-complete]').should('be.visible');
+      .get('[data-cy=image-question-with-open-response-completed]').should('be.visible');
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
       .get('[data-cy=student-answer]')
       .eq(4)
-      .get('[data-cy=interactive-complete]').should('be.visible');
+      .get('[data-cy=interactive-completed]').should('be.visible');
 
     cy.get('[data-cy=student-answers-row]')
       .eq(5)
       .get('[data-cy=student-answer]')
       .eq(2)
-      .get('[data-cy=multiple-choice-correct]').should('be.visible');
+      .get('[data-cy=multiple-choice-scored-correct]').should('be.visible');
   });
 });
