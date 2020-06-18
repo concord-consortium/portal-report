@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { ProgressLegendContainer } from "./legend-container";
+import { QuestionTypes } from "../../util/question-utils";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
@@ -119,6 +120,8 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
   private renderQuestion = (question: Map<string, any>) => {
     let questionClass = css.question;
+    const questionType = QuestionTypes.find(qt => qt.type === question.get("type") && qt.scored === question.get("scored"));
+    const QuestionIcon = questionType?.icon;
     if (question.get("id") === this.props.currentQuestion?.get("id")) {
       questionClass += " " + css.active;
     }
@@ -129,9 +132,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
             Q{question.get("questionNumber")}
         </div>
         <div>
-          <svg className={css.icon}>
-            <use xlinkHref="#text-question"/>
-          </svg>
+          <QuestionIcon/>
         </div>
       </div>
     );
