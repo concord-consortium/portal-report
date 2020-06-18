@@ -5,12 +5,12 @@ import css from "../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
   currentQuestion?: Map<string, any>;
-  cssToUse: any;
+  style: any;
 }
 
 export class QuestionArea extends React.PureComponent<IProps>{
   render() {
-    const { currentQuestion } = this.props;
+    const { currentQuestion, style } = this.props;
     const teacherEditionButtonClasses = `${css.teacherEditionButton}`;
     const teacherEditionBadge = `${css.teacherEditionBadge}`;
     const prompt = currentQuestion ? currentQuestion.get("prompt") : "";
@@ -18,7 +18,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const typeText = type && type.replace(/_/gm, ' ');
 
     return (
-      <React.Fragment>
+      <div className={css.questionArea} style={style}>
         < div className={`${css.questionTypeHeader}`}>
           <div className={`${css.leftTitle}`} >
             <svg className={`${css.icon} ${css.questionTypeIcon}`}>
@@ -49,7 +49,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
             {prompt ? prompt.replace(/<[^>]*>?/gm, '') : ""}
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

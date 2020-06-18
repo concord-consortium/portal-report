@@ -1,9 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "../question-navigator";
-import { QuestionArea } from "../question-area";
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-question-nav.less";
-
 
 interface IProps {
   currentQuestion?: Map<string, any>;
@@ -14,21 +12,18 @@ interface IProps {
 }
 export class PopupQuestionNav extends React.PureComponent<IProps>{
   render() {
-    const cssToUse = css;
     const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
+    const style: any = {height: '195px'};
     return (
-      <div className={`${css.questionArea} ${css.column}`}>
-        <div className={`${css.popupQuestionNavigator}`} data-cy="questionNav">
-          <QuestionNavigator cssToUse={cssToUse}
+      <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
+          <QuestionNavigator
             currentQuestion={currentQuestion}
             questions={questions}
             sortedQuestionIds={sortedQuestionIds}
             toggleCurrentQuestion={toggleCurrentQuestion}
-            setCurrentActivity={setCurrentActivity} />
-        </div>
-        <div className={`${css.popupQuestionDiv}`} >
-          <QuestionArea currentQuestion={currentQuestion} cssToUse={cssToUse}/>
-        </div>
+            setCurrentActivity={setCurrentActivity}
+            height={style}
+            inOverlay={false}/>
       </div>
     );
   }

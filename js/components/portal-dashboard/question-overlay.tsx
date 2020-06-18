@@ -1,7 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "./question-navigator";
-import { QuestionArea } from "./question-area";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -31,8 +30,8 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private renderQuestionDetails = (question: Map<string, any>) => {
-    const cssToUse = css;
     const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
+    const style: any = {height: '195px'};
     return (
       <React.Fragment>
         <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
@@ -41,13 +40,14 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           </svg>
           <div>Question Detail View</div>
         </div>
-        <QuestionNavigator cssToUse={cssToUse}
+        <QuestionNavigator 
           currentQuestion={currentQuestion}
           questions={questions}
           sortedQuestionIds={sortedQuestionIds}
           toggleCurrentQuestion={toggleCurrentQuestion}
-          setCurrentActivity={setCurrentActivity} />
-          <QuestionArea currentQuestion={currentQuestion} cssToUse={cssToUse}/>
+          setCurrentActivity={setCurrentActivity}
+          height={style}
+          inOverlay={true} />
         {this.renderFooter()}
       </React.Fragment>
     );
