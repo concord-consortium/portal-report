@@ -114,13 +114,27 @@ module.exports = (env, argv) => {
         },
         {
           // Support ?123 suffix, e.g. ../fonts/m4d-icons.eot?3179539#iefix in react-responsive-carousel.less
-          test: /\.(eot|ttf|woff|woff2|svg)((\?|\#).*)?$/,
+          test: /\.(eot|ttf|woff|woff2)((\?|\#).*)?$/,
           use: [
             {
               loader: 'url-loader',
               options: {
                 limit: 8192
               }
+            }
+          ]
+        },
+        {
+          test: /\.svg$/,
+          oneOf: [
+            {
+              // Do not apply SVGR import in CSS files.
+              issuer: /\.(css|less)$/,
+              use: 'url-loader'
+            },
+            {
+              issuer: /\.tsx?$/,
+              loader: '@svgr/webpack'
             }
           ]
         }
