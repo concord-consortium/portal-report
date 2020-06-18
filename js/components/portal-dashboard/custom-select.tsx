@@ -79,6 +79,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
               key={`item ${i}`}
               className={`${css.listItem} ${currentClass}`}
               onClick={this.handleListClick(item.action)}
+              data-cy={`list-item-${item.name.toLowerCase().replace(" ", "-")}`}
             >
               { this.renderIcon(`${css.check} ${currentClass}`, "#icon-check" ) }
               <div>{item.name}</div>
