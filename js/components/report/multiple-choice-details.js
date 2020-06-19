@@ -5,7 +5,9 @@ import "../../../css/report/multiple-choice-details.less";
 function getChoicesStats(choices, answers, students) {
   const stats = {};
   const noResponseCount = students.length - answers.length;
-  const allSelectedChoicesFlat = answers.reduce((res, answer) => res.concat(answer.selectedChoices), []);
+  // `|| []` => in case answer doesn't have selectedChoices. It can happen if user replied to Open Response
+  // question (or any other question type) and then activity author updated this question type to Multiple Choice.
+  const allSelectedChoicesFlat = answers.reduce((res, answer) => res.concat(answer.selectedChoices || []), []);
   const totalAnswers = allSelectedChoicesFlat.length + noResponseCount;
   choices.forEach((choice) => {
     let count;

@@ -55,8 +55,10 @@ export const getAnswerTrees = createSelector(
       .map(answer => {
         if (answer.get("type") === "multiple_choice_answer") {
           const question = questions.get(answer.get("questionId"));
-          const choices = Map(question.get("choices").map(c => [c.get("id"), c]));
-          const selectedChoices = answer.getIn(["answer", "choiceIds"]).map(id => choices.get(id));
+          // `|| []` => in case question doesn't have choices.
+          const choices = Map((question.get("choices") || []).map(c => [c.get("id"), c]));
+          // `.filter(c => c !== undefined)` => so report doesn't crash if a choice has been deleted by author.
+          const selectedChoices = answer.getIn(["answer", "choiceIds"]).map(id => choices.get(id)).filter(c => c !== undefined);
           const selectedCorrectChoices = selectedChoices.filter(c => c.get("correct"));
           answer = answer
             .set("scored", question.get("scored"))
