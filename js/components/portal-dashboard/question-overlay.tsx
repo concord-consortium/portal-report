@@ -31,7 +31,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
 
   private renderQuestionDetails = (question: Map<string, any>) => {
     const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
-    const style: any = {height: '195px'};
     return (
       <React.Fragment>
         <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
@@ -46,7 +45,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           sortedQuestionIds={sortedQuestionIds}
           toggleCurrentQuestion={toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity}
-          height={style}
           inOverlay={true} />
         {this.renderFooter()}
       </React.Fragment>

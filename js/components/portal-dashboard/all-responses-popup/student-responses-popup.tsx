@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { PopupHeader } from "./popup-header";
 import { PopupClassNav } from "./popup-class-nav";
-import { PopupQuestionNav } from "./popup-question-nav";
+import { QuestionNavigator } from "../question-navigator";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
@@ -30,14 +30,17 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
             setAnonymous={setAnonymous}
             setStudentFilter={setStudentFilter}
             trackEvent={trackEvent} />
-            <PopupQuestionNav
+          <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
+            <QuestionNavigator
               currentQuestion={currentQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
-              setCurrentActivity={setCurrentActivity} />
+              setCurrentActivity={setCurrentActivity}
+              inOverlay={false} />
+          </div>
         </div>
-      </div>
+      </div >
     );
   }
 }

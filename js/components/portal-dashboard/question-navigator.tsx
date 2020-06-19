@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionArea } from "./question-area";
+import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
 
 import css from "../../../css/portal-dashboard/question-navigator.less";
 
@@ -11,7 +12,6 @@ interface IProps {
   sortedQuestionIds?: string[];
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
-  height: any;
   inOverlay: boolean;
 }
 interface IState {
@@ -27,14 +27,9 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
     this.handleChevronClick = this.handleChevronClick.bind(this);
   }
   render() {
-    const { currentQuestion, height, inOverlay } = this.props;
-    let chevronClass = `${css.arrow}`;
-    let questionTextAreaClass = `${css.questionTextArea}`;
+    const { currentQuestion, inOverlay } = this.props;
+    const chevronClass = this.state.hideQuestion ? `${css.arrow}  ${css.hideQuestion}` : `${css.arrow}`;
 
-    if (this.state.hideQuestion) {
-      chevronClass += ` ${css.hideQuestion}`;
-      questionTextAreaClass += ` ${css.hidden}`;
-    }
     return (
       <React.Fragment>
         <div className={css.titleWrapper}>
@@ -57,9 +52,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           </div>
           {inOverlay && this.renderChevron(chevronClass)}
         </div>
-        <div className={questionTextAreaClass}>
-          <QuestionArea currentQuestion={currentQuestion} style={height} />
-        </div>
+        <QuestionArea currentQuestion={currentQuestion} hideQuestion={this.state.hideQuestion} />
       </React.Fragment>
     );
   }
@@ -97,9 +90,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
   private renderChevron = (cssClass: string) => {
     return (
       <div onClick={this.handleChevronClick} data-cy="show-hide-question-button">
-        <svg className={cssClass}>
-          <use xlinkHref={"#icon-arrow"} />
-        </svg>
+        {<ArrowIcon className={cssClass} />}
       </div>
     );
   }

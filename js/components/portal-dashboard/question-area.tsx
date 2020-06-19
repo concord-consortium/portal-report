@@ -2,27 +2,30 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionTypes } from "../../util/question-utils";
+import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 
 import css from "../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
   currentQuestion?: Map<string, any>;
-  style: any;
+  hideQuestion: boolean;
 }
 
 export class QuestionArea extends React.PureComponent<IProps>{
   render() {
-    const { currentQuestion, style } = this.props;
+    const { currentQuestion, hideQuestion } = this.props;
     const teacherEditionButtonClasses = `${css.teacherEditionButton}`;
     const teacherEditionBadge = `${css.teacherEditionBadge}`;
-    const prompt = currentQuestion ? currentQuestion.get("prompt") : "";
-    const type = currentQuestion ? currentQuestion.get("type") : "";
-    const scored = currentQuestion ? currentQuestion.get("scored") : "";
+    const prompt = currentQuestion?.get("prompt");
+    const type = currentQuestion?.get("type");
+    const scored = currentQuestion?.get("scored");
     const typeText = type && type.replace(/_/gm, ' ');
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
+    const questionAreaClass = hideQuestion? `${css.hidden}`:"";
+
     return (
-      <div className={css.questionArea} style={style}>
+      <div className={questionAreaClass}>
         < div className={`${css.questionTypeHeader}`}>
           <div className={`${css.leftTitle}`} >
             <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
@@ -32,15 +35,11 @@ export class QuestionArea extends React.PureComponent<IProps>{
           </div>
           <div className={`${css.rightIcons}`}>
             <a className={`${css.externalLinkButton}`} target="_blank" data-cy="open-activity-button" >
-              <svg className={`${css.icon}`}>
-                <use xlinkHref="#external-link" />
-              </svg>
+              <LaunchIcon className={css.icon} />
             </a>
             <div className={css.teacherEditionIcon} >
               <a className={teacherEditionButtonClasses} target="_blank" data-cy="open-teacher-edition-button">
-                <svg className={`${css.icon}`}>
-                  <use xlinkHref="#external-link" />
-                </svg>
+                <LaunchIcon className={css.icon} />
               </a>
               <div className={teacherEditionBadge}>TE</div>
             </div>
