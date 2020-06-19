@@ -4,6 +4,8 @@ import { AnonymizeStudents } from "./anonymize-students";
 import { Feedback } from "./feedback";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../actions/dashboard";
 import { NumberOfStudentsContainer } from "./num-students-container";
+import SortIcon from "../../../img/svg-icons/sort-icon.svg";
+import ClassIcon from "../../../img/svg-icons/class-icon.svg";
 
 import css from "../../../css/portal-dashboard/class-nav.less";
 
@@ -37,7 +39,7 @@ export class ClassNav extends React.PureComponent<IProps> {
           items={[{action: "", name: clazzName}]}
           onSelectItem={(() => {})}
           trackEvent={trackEvent}
-          iconId={"icon-class"}
+          HeaderIcon={ClassIcon}
           dataCy={"choose-class"}
         />
       </div>
@@ -55,7 +57,7 @@ export class ClassNav extends React.PureComponent<IProps> {
           items={items}
           onSelectItem={setStudentSort}
           trackEvent={trackEvent}
-          iconId={"icon-sort"}
+          HeaderIcon={SortIcon}
           dataCy={"sort-students"}
         />
       </div>

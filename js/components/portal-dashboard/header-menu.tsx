@@ -1,4 +1,10 @@
 import React from "react";
+import MenuIcon from "../../../img/svg-icons/menu-icon.svg";
+import CloseIcon from "../../../img/svg-icons/close-icon.svg";
+import PrintIcon from "../../../img/svg-icons/print-icon.svg";
+import DownloadIcon from "../../../img/svg-icons/download-icon.svg";
+import HelpIcon from "../../../img/svg-icons/help-icon.svg";
+import CheckIcon from "../../../img/svg-icons/check-icon.svg";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -18,7 +24,7 @@ export interface MenuItemsWithState {
   dataCy: string;
 }
 export interface MenuItemWithIcon {
-  icon: string;
+  MenuItemIcon: any; // icon as react component
   name: string;
   action: string;
 }
@@ -26,21 +32,22 @@ export const itemsWithState: MenuItemsWithState[] = [
   {
     name: "Compact student list",
     action: "COMPACT_STUDENT_LIST",
-    dataCy: "compact-menu-item" }
-  ];
+    dataCy: "compact-menu-item"
+  }
+];
 export const items: MenuItemWithIcon[] = [
   {
-    icon: "#icon-help",
+    MenuItemIcon: HelpIcon,
     name: "Help",
     action: "OPEN_HELP"
   },
   {
-    icon: "#icon-download",
+    MenuItemIcon: DownloadIcon,
     name: "Download (.csv)",
     action: "DOWNLOAD_REPORT"
   },
   {
-    icon: "#icon-print",
+    MenuItemIcon: PrintIcon,
     name: "Print",
     action: "PRINT_REPORT"
   }
@@ -60,25 +67,12 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   render() {
     return (
       <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick}>
-        {this.renderMenuIcon()}
+        { this.state.showMenuItems
+          ? <CloseIcon className={`${css.icon} ${css.menuIcon}`} />
+          : <MenuIcon className={`${css.icon} ${css.menuIcon}`} />
+        }
         {this.renderMenuItems()}
         {/* <div className={css.hamBurger}></div> */}
-      </div>
-    );
-  }
-
-  private renderIcon = (cssClass: string, iconId: string) => {
-    return (
-      <svg className={cssClass}>
-        <use xlinkHref={iconId} />
-      </svg>
-    );
-  }
-
-  private renderMenuIcon = () => {
-    return (
-      <div>
-        {this.state.showMenuItems ? this.renderIcon(`${css.icon} ${css.menuIcon}`, "#icon-close-menu") : this.renderIcon(`${css.icon} ${css.menuIcon}`, "#icon-menu")}
       </div>
     );
   }
@@ -90,9 +84,7 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
           {itemsWithState && itemsWithState.map((item: MenuItemsWithState, i: number) => {
             return (
               <div key={`item ${i}`} className={`${css.menuItem}`} onClick={this.handleMenuCompactClick} data-cy={item.dataCy}>
-                <div>
-                {this.state.compactStudentList ? this.renderIcon(`${css.check} ${css.selected}`, "#icon-check") : this.renderIcon(`${css.check}`, "#icon-check")}
-                </div>
+                { <CheckIcon className={`${css.check} ${this.state.compactStudentList ? css.selected : ""}`} /> }
                 <div className={`${css.menuItemName}`}>{item.name}</div>
               </div>
             );
@@ -101,7 +93,7 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
         {items && items.map((item: any, i: number) => {
           return (
             <div key={`item ${i}`} className={`${css.menuItem}`}>
-              {this.renderIcon(`${css.menuItemIcon}`, item.icon)}
+              <item.MenuItemIcon className={css.menuItemIcon} />
               <div className={`${css.menuItemName}`}>{item.name}</div>
             </div>
           );

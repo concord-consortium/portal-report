@@ -1,4 +1,6 @@
 import React from "react";
+import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
+import CheckIcon from "../../../img/svg-icons/check-icon.svg";
 
 import css from "../../../css/portal-dashboard/custom-select.less";
 
@@ -6,7 +8,7 @@ interface IProps {
   items: SelectItem[];
   onSelectItem: (value: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  iconId: string;
+  HeaderIcon: any; // icon as react component
   dataCy: string;
 }
 
@@ -48,14 +50,14 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = () => {
-    const { items, iconId } = this.props;
+    const { items, HeaderIcon } = this.props;
     const currentItem = items.find(i => i.action === this.state.current);
     const showListClass = this.state.showList ? css.showList : "";
     return (
       <div className={`${css.header} ${showListClass}`} onClick={this.handleHeaderClick}>
-        { this.renderIcon(`${css.icon} ${showListClass}`, `#${iconId}` ) }
+        { <HeaderIcon className={`${css.icon} ${showListClass}`} /> }
         <div className={css.current}>{currentItem && currentItem.name}</div>
-        { this.renderIcon(`${css.arrow} ${showListClass}`, "#icon-arrow" ) }
+        { <ArrowIcon className={`${css.arrow} ${showListClass}`} /> }
       </div>
     );
   }
@@ -81,7 +83,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
               onClick={this.handleListClick(item.action)}
               data-cy={`list-item-${item.name.toLowerCase().replace(" ", "-")}`}
             >
-              { this.renderIcon(`${css.check} ${currentClass}`, "#icon-check" ) }
+              { <CheckIcon className={`${css.check} ${currentClass}`} /> }
               <div>{item.name}</div>
             </div>
           );

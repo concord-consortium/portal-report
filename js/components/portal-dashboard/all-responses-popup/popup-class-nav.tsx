@@ -4,6 +4,7 @@ import { CustomSelect, SelectItem } from "../custom-select";
 import { NumberOfStudentsContainer } from "../num-students-container";
 import { SORT_BY_NAME } from "../../../actions/dashboard";
 import { SpotlightDialog } from "./spotlight-dialog";
+import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-class-nav.less";
 import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
@@ -60,7 +61,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
           items={items}
           onSelectItem={setStudentFilter}
           trackEvent={trackEvent}
-          iconId={"icon-sort"}
+          HeaderIcon={SortIcon}
           dataCy={"sort-students"}
         />
       </div>
