@@ -108,9 +108,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 activities={activityTrees}
                 currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
+                leftPosition={this.state.scrollLeft}
+                studentProgress={studentProgress}
                 toggleCurrentActivity={toggleCurrentActivity}
                 toggleCurrentQuestion={toggleCurrentQuestion}
-                leftPosition={this.state.scrollLeft}
               />
             </div>
               <div className={css.progressTable} onScroll={this.handleScroll}>

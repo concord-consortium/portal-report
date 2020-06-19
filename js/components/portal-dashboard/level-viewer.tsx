@@ -7,6 +7,7 @@ import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
 // from level-viewer.less
+const progressWidth = 120;
 const questionWidth = 50;
 const margin = 20;
 const getTotalQuestionsWidth = (numQuestions: number) => Math.max(0, numQuestions * (questionWidth + margin) - margin);
@@ -15,9 +16,10 @@ interface IProps {
   activities: Map<any, any>;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
+  leftPosition: number;
+  studentProgress: any;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
-  leftPosition: number;
 }
 
 export class LevelViewer extends React.PureComponent<IProps> {
@@ -64,8 +66,36 @@ export class LevelViewer extends React.PureComponent<IProps> {
               </svg>
             </a>
           </div>
-          <div className={css.progressBar} />
+          { this.renderProgressBar(activity.get("id")) }
         </div>
+      </div>
+    );
+  }
+
+  private renderProgressBar = (activityId: string) => {
+    const { studentProgress } = this.props;
+    const total = studentProgress.size;
+    let complete = 0;
+    let started = 0;
+    studentProgress.forEach((student: any) => {
+      const progress = student.get(activityId);
+      if (progress === 1) {
+        complete++;
+        started++;
+      } else if (progress > 0) {
+        started++;
+      }
+    });
+    const completedWidth = {
+      width: complete / total * progressWidth,
+    };
+    const startedWidth = {
+      width: started / total * progressWidth,
+    };
+    return (
+      <div className={css.progressBar}>
+        <div className={css.started} style={startedWidth} />
+        <div className={css.completed} style={completedWidth} />
       </div>
     );
   }
