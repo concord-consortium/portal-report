@@ -11,7 +11,7 @@ import QMCNonScoredCompletedIcon from "../../img/svg-icons/q-mc-nonscored-comple
 import QMCScoredCorrectIcon from "../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import QMCScoredIncorrectIcon from "../../img/svg-icons/q-mc-scored-incorrect-icon.svg";
 import QOpenResponseCompletedIcon from "../../img/svg-icons/q-open-response-completed-icon.svg";
-import { SvgIcon } from "./misc";
+import { SvgIcon } from "./svg-icon";
 
 
 export interface AnswerType {

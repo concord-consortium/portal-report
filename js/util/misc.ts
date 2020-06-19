@@ -64,5 +64,3 @@ export function urlParam(name: string): string | null{
     return null;
   }
 }
-
-export type SvgIcon = React.FunctionComponent<React.SVGProps<SVGSVGElement>>;

@@ -5,7 +5,7 @@ import PrintIcon from "../../../img/svg-icons/print-icon.svg";
 import DownloadIcon from "../../../img/svg-icons/download-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
-import { SvgIcon } from "../../util/misc";
+import { SvgIcon } from "../../util/svg-icon";
 
 import css from "../../../css/portal-dashboard/header.less";
 

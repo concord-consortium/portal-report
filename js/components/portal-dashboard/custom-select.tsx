@@ -1,7 +1,7 @@
 import React from "react";
 import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
-import { SvgIcon } from "../../util/misc";
+import { SvgIcon } from "../../util/svg-icon";
 
 import css from "../../../css/portal-dashboard/custom-select.less";
 
