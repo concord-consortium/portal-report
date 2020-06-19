@@ -9,13 +9,12 @@ import QMAScoredIcon from "../../img/svg-icons/q-ma-scored-type-icon.svg";
 import QMCNonScoredIcon from "../../img/svg-icons/q-mc-nonscored-type-icon.svg";
 import QMCScoredIcon from "../../img/svg-icons/q-mc-scored-type-icon.svg";
 import QOpenResponseIcon from "../../img/svg-icons/q-open-response-type-icon.svg";
-import { SvgIcon } from "./svg-icon";
 
 export interface QuestionType {
   name: string;
   type: string;
   scored: boolean | undefined;
-  icon: SvgIcon;
+  icon: any;
 }
 
 export const QuestionTypes: QuestionType[] = [

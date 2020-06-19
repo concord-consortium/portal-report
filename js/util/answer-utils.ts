@@ -11,14 +11,12 @@ import QMCNonScoredCompletedIcon from "../../img/svg-icons/q-mc-nonscored-comple
 import QMCScoredCorrectIcon from "../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import QMCScoredIncorrectIcon from "../../img/svg-icons/q-mc-scored-incorrect-icon.svg";
 import QOpenResponseCompletedIcon from "../../img/svg-icons/q-open-response-completed-icon.svg";
-import { SvgIcon } from "./svg-icon";
-
 
 export interface AnswerType {
   name: string;
   type: string;
   correct: boolean | undefined;
-  icon: SvgIcon;
+  icon: any;
 }
 
 export const AnswerTypes: AnswerType[] = [
