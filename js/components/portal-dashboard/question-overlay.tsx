@@ -40,7 +40,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           </svg>
           <div>Question Detail View</div>
         </div>
-        <QuestionNavigator 
+        <QuestionNavigator
           currentQuestion={currentQuestion}
           questions={questions}
           sortedQuestionIds={sortedQuestionIds}

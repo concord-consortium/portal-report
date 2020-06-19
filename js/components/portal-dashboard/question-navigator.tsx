@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionArea } from "./question-area";
+
 import css from "../../../css/portal-dashboard/question-navigator.less";
 
 

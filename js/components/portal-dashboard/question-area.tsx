@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Map } from "immutable";
+import { QuestionTypes } from "../../util/question-utils";
 
 import css from "../../../css/portal-dashboard/question-area.less";
 
@@ -15,21 +17,21 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const teacherEditionBadge = `${css.teacherEditionBadge}`;
     const prompt = currentQuestion ? currentQuestion.get("prompt") : "";
     const type = currentQuestion ? currentQuestion.get("type") : "";
+    const scored = currentQuestion ? currentQuestion.get("scored") : "";
     const typeText = type && type.replace(/_/gm, ' ');
-
+    const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
+    const QuestionIcon = questionType?.icon;
     return (
       <div className={css.questionArea} style={style}>
         < div className={`${css.questionTypeHeader}`}>
           <div className={`${css.leftTitle}`} >
-            <svg className={`${css.icon} ${css.questionTypeIcon}`}>
-              <use xlinkHref="#text-question" />
-            </svg>
+            <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
             <span className={css.questionTypeTitle} data-cy="question-title">
               {typeText}
             </span>
           </div>
           <div className={`${css.rightIcons}`}>
-            <a className={`${css.externalLinkButton}`} target="_blank" data-cy="open-activity-button">
+            <a className={`${css.externalLinkButton}`} target="_blank" data-cy="open-activity-button" >
               <svg className={`${css.icon}`}>
                 <use xlinkHref="#external-link" />
               </svg>
