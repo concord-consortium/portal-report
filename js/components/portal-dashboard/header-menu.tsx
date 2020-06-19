@@ -72,7 +72,6 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
           : <MenuIcon className={`${css.icon} ${css.menuIcon}`} />
         }
         {this.renderMenuItems()}
-        {/* <div className={css.hamBurger}></div> */}
       </div>
     );
   }
