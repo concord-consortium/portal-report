@@ -107,9 +107,11 @@ export default class IframeAnswer extends PureComponent {
   }
 
   render() {
-    const { alwaysOpen } = this.props;
+    const { alwaysOpen, answer } = this.props;
+    const answerText = answer.get("answerText");
     return (
       <div className="iframe-answer" data-cy="iframe-answer">
+        { answerText && <div>{ answerText }</div> }
         {!alwaysOpen && this.renderLink()}
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>

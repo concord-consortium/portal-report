@@ -2,6 +2,7 @@ import React from "react";
 import nock from "nock";
 import { shallow } from "enzyme";
 import InteractiveIframe from "../../../js/components/report/interactive-iframe";
+import iframePhone from "iframe-phone";
 
 describe("<InteractiveIframe />", () => {
   const classHash = "1234";
@@ -21,6 +22,10 @@ describe("<InteractiveIframe />", () => {
       .reply(200, firebaseJWTJson);
   });
 
+  beforeEach(() => {
+    iframePhone._resetMock();
+  });
+
   it("should render", () => {
     const wrapper = shallow(<InteractiveIframe state={{foo: "bar"}} src={src} width={width} height={height} />);
     // .toContain used here as Travis appends an `allow="fullscreen"` attribute
@@ -32,6 +37,22 @@ describe("<InteractiveIframe />", () => {
     return wrapper
             .instance()
             .handleGetFirebaseJWT({firebase_app: firebaseApp})
-            .then(json => expect(json).toEqual(firebaseJWTJson));
+            .then(json => {
+              expect(json).toEqual(firebaseJWTJson);
+              // iframe-phone mock is defined in __mocks__/iframe-phone.ts
+              expect(iframePhone._parentInstances.length).toEqual(1);
+              const phone = iframePhone._parentInstances[0];
+              expect(phone.post).toHaveBeenCalledWith("firebaseJWT", json);
+            });
+  });
+
+  it("should handle Interactive API height message", () => {
+    const wrapper = shallow(<InteractiveIframe state={{foo: "bar"}} src={src} width="100px" height="100px" />);
+    expect(wrapper.find("iframe").prop("height")).toEqual("100px");
+    // iframe-phone mock is defined in __mocks__/iframe-phone.ts
+    expect(iframePhone._parentInstances.length).toEqual(1);
+    const phone = iframePhone._parentInstances[0];
+    phone._trigger("height", 321);
+    expect(wrapper.find("iframe").prop("height")).toEqual(321);
   });
 });
