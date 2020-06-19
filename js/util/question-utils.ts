@@ -10,7 +10,6 @@ import QMCNonScoredIcon from "../../img/svg-icons/q-mc-nonscored-type-icon.svg";
 import QMCScoredIcon from "../../img/svg-icons/q-mc-scored-type-icon.svg";
 import QOpenResponseIcon from "../../img/svg-icons/q-open-response-type-icon.svg";
 
-
 export interface QuestionType {
   name: string;
   type: string;

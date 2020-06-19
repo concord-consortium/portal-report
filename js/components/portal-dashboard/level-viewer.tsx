@@ -3,6 +3,7 @@ import { Map } from "immutable";
 import { ProgressLegendContainer } from "./legend-container";
 import { QuestionTypes } from "../../util/question-utils";
 import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
+import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
@@ -61,9 +62,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
           </div>
           <div className={css.externalLink}>
             <a className={css.externalLinkButton} href={activity.get("url")} target="_blank">
-              <svg className={css.icon}>
-                <use xlinkHref="#external-link" />
-              </svg>
+              <LaunchIcon className={css.icon} />
             </a>
           </div>
           { this.renderProgressBar(activity.get("id")) }
