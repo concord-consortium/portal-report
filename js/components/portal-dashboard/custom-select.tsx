@@ -62,14 +62,6 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private renderIcon = (cssClass: string, iconId: string) => {
-    return (
-      <svg className={cssClass}>
-        <use xlinkHref={iconId} />
-      </svg>
-    );
-  }
-
   private renderList = () => {
     const { items } = this.props;
     return (
