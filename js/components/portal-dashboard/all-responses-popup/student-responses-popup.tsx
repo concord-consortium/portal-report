@@ -22,7 +22,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
   render() {
     const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, studentCount, setAnonymous, setStudentFilter, trackEvent } = this.props;
     return (
-      <div className={css.popup} >
+      <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
         <div className={css.tableHeader}>
           <PopupClassNav

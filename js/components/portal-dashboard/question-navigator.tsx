@@ -95,7 +95,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
 
   private renderChevron = (cssClass: string) => {
     return (
-      <div onClick={this.handleChevronClick}>
+      <div onClick={this.handleChevronClick} data-cy="show-hide-question-button">
         <svg className={cssClass}>
           <use xlinkHref={"#icon-arrow"} />
         </svg>
