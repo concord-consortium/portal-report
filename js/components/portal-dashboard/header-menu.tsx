@@ -5,6 +5,7 @@ import PrintIcon from "../../../img/svg-icons/print-icon.svg";
 import DownloadIcon from "../../../img/svg-icons/download-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
+import { SvgIcon } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -24,7 +25,7 @@ export interface MenuItemsWithState {
   dataCy: string;
 }
 export interface MenuItemWithIcon {
-  MenuItemIcon: any; // icon as react component
+  MenuItemIcon: SvgIcon;
   name: string;
   action: string;
 }
@@ -89,7 +90,7 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
             );
           })}
         </div>
-        {items && items.map((item: any, i: number) => {
+        {items && items.map((item, i) => {
           return (
             <div key={`item ${i}`} className={`${css.menuItem}`}>
               <item.MenuItemIcon className={css.menuItemIcon} />
