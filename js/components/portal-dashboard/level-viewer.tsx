@@ -2,6 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { ProgressLegendContainer } from "./legend-container";
 import { QuestionTypes } from "../../util/question-utils";
+import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
@@ -149,9 +150,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
                 Score
             </div>
             <div className={css.pagesContainer}>
-              <svg className={css.icon}>
-                <use xlinkHref="#multiple-choice-correct"/>
-              </svg>
+              <CorrectIcon/>
             </div>
           </div>
         </div>
