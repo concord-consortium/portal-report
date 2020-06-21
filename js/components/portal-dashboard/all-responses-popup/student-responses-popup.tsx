@@ -40,7 +40,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
               inOverlay={false} />
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }

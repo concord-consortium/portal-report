@@ -24,7 +24,6 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
     this.state = {
       hideQuestion: false
     };
-    this.handleChevronClick = this.handleChevronClick.bind(this);
   }
   render() {
     const { currentQuestion, inOverlay } = this.props;
@@ -90,12 +89,12 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
   private renderChevron = (cssClass: string) => {
     return (
       <div onClick={this.handleChevronClick} data-cy="show-hide-question-button">
-        {<ArrowIcon className={cssClass} />}
+        <ArrowIcon className={cssClass} />
       </div>
     );
   }
 
-  private handleChevronClick() {
+  private handleChevronClick = () => {
     this.setState({
       hideQuestion: !this.state.hideQuestion
     });

@@ -23,13 +23,13 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     return (
       <div className={wrapperClass} data-cy="question-overlay">
         {
-          currentQuestion && this.renderQuestionDetails(currentQuestion)
+          currentQuestion && this.renderQuestionDetails()
         }
       </div>
     );
   }
 
-  private renderQuestionDetails = (question: Map<string, any>) => {
+  private renderQuestionDetails = () => {
     const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
     return (
       <React.Fragment>
