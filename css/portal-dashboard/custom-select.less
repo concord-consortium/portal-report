@@ -59,7 +59,6 @@
         transform: rotate(180deg);
       }
     }
-
   }
 
   .list {
@@ -73,6 +72,14 @@
     transition-duration: .25s;
     pointer-events: none;
 
+    &.classNav {
+      width: 200px;
+    }
+
+    &.assignmentList {
+      width: 300px;
+    }
+
     &.show {
       opacity: 1;
       pointer-events: auto;
@@ -85,7 +92,6 @@
       align-items: center;
       box-sizing: border-box;
       height: 40px;
-      width: 200px;
       padding: 0 5px 0 5px;
       background-color: white;
       font-size: 16px;

@@ -8,6 +8,9 @@ context("Portal Dashboard UI",()=>{
         it('verify header loads',()=>{
             cy.get('[data-cy=dashboard-header]').should('be.visible');
         });
+        it('verify assignment dropdown is visible',()=>{
+          cy.get('[data-cy=choose-assignment]').should('be.visible');
+        });
     });
     describe('level viewer',()=>{
         it('verify level viewer loads',()=>{
