@@ -11,6 +11,7 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
   HeaderIcon: SvgIcon;
   dataCy: string;
+  isWide: boolean;
 }
 
 interface IState {
@@ -65,8 +66,9 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
 
   private renderList = () => {
     const { items } = this.props;
+    const showWide = this.props.isWide ? css.assignmentList : css.classNav;
     return (
-      <div className={`${css.list} ${(this.state.showList ? css.show : "")}`}>
+      <div className={`${css.list} ${(this.state.showList ? css.show : "")} ${showWide}`}>
         { items && items.map((item: SelectItem, i: number) => {
           const currentClass = this.state.current === item.action ? css.selected : "";
           return (
@@ -84,7 +86,6 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
       </div>
     );
   }
-
 
   private handleClick = (e: MouseEvent) => {
     if (this.divRef.current && e.target && !this.divRef.current.contains(e.target as Node)) {
@@ -108,5 +109,4 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
       showList: false
     });
   }
-
 }

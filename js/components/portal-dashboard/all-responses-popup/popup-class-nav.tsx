@@ -66,6 +66,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
           trackEvent={trackEvent}
           HeaderIcon={SortIcon}
           dataCy={"sort-students"}
+          isWide={false}
         />
       </div>
     );
