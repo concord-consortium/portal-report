@@ -47,13 +47,17 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
 
     return (
       <div className={`${css.toggleResponsesFeedback}`}>
-        <div className={responsesToggleClass} id="responses-toggle" data-cy="all-students-responses-toggle" onClick={this.setFeedbackMode(false)}>
-          <GroupIcon className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`} />
-          <div className={`${css.toggleTitle} ${css.responseTitle} `}>All Student Responses</div>
+        <div className={css.toggleHolder}>
+          <div className={responsesToggleClass} id="responses-toggle" data-cy="all-students-responses-toggle" onClick={this.setFeedbackMode(false)}>
+            <GroupIcon className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`} />
+            <div className={`${css.toggleTitle} ${css.responseTitle} `}>All Student Responses</div>
+          </div>
         </div>
-        <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick = {this.setFeedbackMode(true)} >
-          <div className={`${css.toggleTitle} ${css.feedbackTitle}`}>Feedback to Students</div>
-          <FeedbackIcon className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}`} />
+        <div className={css.toggleHolder}>
+          <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick = {this.setFeedbackMode(true)} >
+            <div className={`${css.toggleTitle} ${css.feedbackTitle}`}>Feedback to Students</div>
+            <FeedbackIcon className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}`} />
+          </div>
         </div>
       </div>
     );
