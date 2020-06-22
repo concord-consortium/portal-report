@@ -4,6 +4,7 @@ _site
 .env
 .idea
 .DS_Store
+.nyc_output
 coverage
 coverage-cypress
 coverage-jest
