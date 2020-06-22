@@ -21,6 +21,7 @@ context("Portal Dashboard Question Details Panel", () => {
         cy.get('[data-cy=feedback-toggle]').should('be.visible').then(($el) => {
           expect($el).to.have.css("width", "35px");
           cy.wrap($el).click();
+          cy.wait(500);
         });
         cy.get('[data-cy=feedback-toggle]').should('be.visible').then(($el) => {
           expect($el).to.have.css("width", "204px");
@@ -28,6 +29,7 @@ context("Portal Dashboard Question Details Panel", () => {
         cy.get('[data-cy=all-students-responses-toggle]').should('be.visible').then(($el) => {
           expect($el).to.have.css("width", "35px");
           cy.wrap($el).click();
+          cy.wait(500);
         });
         cy.get('[data-cy=all-students-responses-toggle]').should('be.visible').then(($el) => {
           expect($el).to.have.css("width", "204px");
