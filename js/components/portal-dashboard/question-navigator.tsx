@@ -2,6 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { QuestionArea } from "./question-area";
 import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
+import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
 
 import css from "../../../css/portal-dashboard/question-navigator.less";
 
@@ -35,15 +36,11 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           <div className={css.nextQuestionButtons}>
             <div className={css.button + (this.previousQuestion ? "" : " " + css.disabled)}
               onClick={this.showQuestion(this.previousQuestion)} data-cy="question-overlay-previous-button">
-              <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left" />
-              </svg>
+              <ArrowLeftIcon className={css.icon} />
             </div>
             <div className={css.button + (this.nextQuestion ? "" : " " + css.disabled)}
               onClick={this.showQuestion(this.nextQuestion)} data-cy="question-overlay-next-button">
-              <svg className={css.icon}>
-                <use xlinkHref="#arrow-triangle-left" />
-              </svg>
+              <ArrowLeftIcon className={css.icon} />
             </div>
           </div>
           <div className={css.title} data-cy="question-overlay-title">
@@ -88,7 +85,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
 
   private renderChevron = (cssClass: string) => {
     return (
-      <div onClick={this.handleChevronClick} data-cy="show-hide-question-button">
+      <div className={css.showHideButton} onClick={this.handleChevronClick} data-cy="show-hide-question-button">
         <ArrowIcon className={cssClass} />
       </div>
     );
