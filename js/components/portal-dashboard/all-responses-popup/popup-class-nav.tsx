@@ -5,6 +5,9 @@ import { NumberOfStudentsContainer } from "../num-students-container";
 import { SORT_BY_NAME } from "../../../actions/dashboard";
 import { SpotlightDialog } from "./spotlight-dialog";
 import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
+import StudentViewIcon from "../../../../img/svg-icons/student-view-icon.svg";
+import QuestionViewIcon from "../../../../img/svg-icons/question-view-icon.svg";
+import SpotlightIcon from "../../../../img/svg-icons/question-view-icon.svg";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-class-nav.less";
 import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
@@ -76,14 +79,10 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
         <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.setQuestionMode(false)}>
-          <svg className={`${css.optionIcon}  `}>
-            <use xlinkHref={"#icon-student-view"} />
-          </svg>
+          <StudentViewIcon className={`${css.optionIcon}`} />
         </div>
         <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(true)}>
-          <svg className={`${css.optionIcon}`}>
-            <use xlinkHref={"#icon-question-view"} />
-          </svg>
+          <QuestionViewIcon className={`${css.optionIcon}`} />
         </div>
       </div>
     );
@@ -97,9 +96,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     return (
       <div className={`${css.spotlightToggle}`} onClick={this.handleSpotlightClick} data-cy="spotlight-toggle">
         <div className={spotLightContainerClasses}>
-          <svg className={`${css.spotlightIcon}`}>
-            <use xlinkHref={"#icon-spotlight"} />
-          </svg>
+          <SpotlightIcon className={`${css.spotlightIcon}`} />
         </div>
         <span>Spotlight selected</span>
       </div>

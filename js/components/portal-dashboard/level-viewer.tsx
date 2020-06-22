@@ -162,7 +162,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
             Q{question.get("questionNumber")}
         </div>
         <div>
-          <QuestionIcon/>
+          <QuestionIcon className={css.icon} />
         </div>
       </div>
     );
@@ -179,7 +179,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
                 Score
             </div>
             <div className={css.pagesContainer}>
-              <CorrectIcon/>
+              <CorrectIcon className={css.icon} />
             </div>
           </div>
         </div>
