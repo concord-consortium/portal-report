@@ -38,7 +38,7 @@ class Answer extends React.PureComponent<IProps> {
     const AnswerIcon = answerType?.icon;
     return (
       <div className={css.answerContent} data-cy={iconId}>
-        <AnswerIcon/>
+        <AnswerIcon className={css.icon} />
       </div>
     );
   }

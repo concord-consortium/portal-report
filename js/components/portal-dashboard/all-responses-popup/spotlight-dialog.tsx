@@ -1,4 +1,5 @@
 import React from "react";
+import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-dialog.less";
 
@@ -12,9 +13,7 @@ export class SpotlightDialog extends React.PureComponent<IProps>{
         <div className={css.dialogWrapper}>
           <div className={css.dialogTitleWrapper}>
             <div>
-              <svg className={`${css.spotlightIcon}`}>
-                <use xlinkHref={"#icon-spotlight"} />
-              </svg>
+              <SpotlightIcon className={`${css.spotlightIcon}`} />
             </div>
             <div className={css.dialogTitle}>Spotlight selected student work</div>
           </div>

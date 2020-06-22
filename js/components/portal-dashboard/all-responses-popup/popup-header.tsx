@@ -1,6 +1,11 @@
 import React from "react";
+import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
+import FeedbackIcon from "../../../../img/svg-icons/feedback-icon.svg";
+import GroupIcon from "../../../../img/svg-icons/group-icon.svg";
+import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-header.less";
+
 interface IProps {
   handleCloseAllResponsesPopup: (show: boolean) => void;
 }
@@ -30,9 +35,7 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
     const activityName = "Hurricane Module V2 Activity 1: Hurricane Risk";
     return (
       <div className={css.headerLeft}>
-        <svg className={`${css.assignmentIcon} ${css.icon}`}>
-          <use xlinkHref={"#icon-assignment"} />
-        </svg>
+        <AssignmentIcon className={`${css.assignmentIcon} ${css.icon}`} />
         <div className={css.title} data-cy="popup-header-title">{activityName}</div>
       </div>
     );
@@ -45,16 +48,12 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
     return (
       <div className={`${css.toggleResponsesFeedback}`}>
         <div className={responsesToggleClass} id="responses-toggle" data-cy="all-students-responses-toggle" onClick={this.setFeedbackMode(false)}>
-          <svg className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`}>
-            <use xlinkHref={"#icon-group"} />
-          </svg>
+          <GroupIcon className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`} />
           <div className={`${css.toggleTitle} ${css.responseTitle} `}>All Student Responses</div>
         </div>
         <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick = {this.setFeedbackMode(true)} >
           <div className={`${css.toggleTitle} ${css.feedbackTitle}`}>Feedback to Students</div>
-          <svg className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}`}>
-            <use xlinkHref={"#icon-feedback-button"} />
-          </svg>
+          <FeedbackIcon className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}`} />
         </div>
       </div>
     );
@@ -72,9 +71,7 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
     return (
       <div className={css.headerRight}>
         <div className={closeIconClass} data-cy="close-popup-button" onClick={this.handleCloseAllResponsesButtonClick}>
-          <svg className={css.closeIconSVG}>
-            <use xlinkHref={"#icon-close"} />
-          </svg>
+          <SmallCloseIcon className={css.closeIconSVG} />
         </div>
       </div>
     );

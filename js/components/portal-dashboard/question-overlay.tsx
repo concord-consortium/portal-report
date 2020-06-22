@@ -1,6 +1,8 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "./question-navigator";
+import GroupIcon from "../../../img/svg-icons/group-icon.svg";
+import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -34,9 +36,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     return (
       <React.Fragment>
         <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
-          <svg className={css.icon}>
-            <use xlinkHref="#question-popout" />
-          </svg>
+          <QuestionPopoutIcon className={css.icon} />
           <div>Question Detail View</div>
         </div>
         <QuestionNavigator
@@ -61,9 +61,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     return (
       <div className={css.footer}>
         <div className={css.openPopupButton} data-cy="view-all-student-responses-button" onClick={this.handleShowAllResponsesButtonClick}>
-          <svg className={css.icon}>
-            <use xlinkHref="#icon-group" />
-          </svg>
+          <GroupIcon className={css.icon} />
           <span>View All Student Responses</span>
         </div>
       </div>
