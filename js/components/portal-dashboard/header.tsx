@@ -4,6 +4,7 @@ import ccLogoSrc from "../../../img/cc-logo.png";
 import { HeaderMenuContainer } from "./header-menu";
 import { AccountOwnerDiv } from "./account-owner";
 import { CustomSelect } from "./custom-select";
+import AssignmentIcon from "../../../img/svg-icons/class-icon.svg";
 import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
@@ -45,7 +46,7 @@ export class Header extends React.PureComponent<IProps> {
           items={[{ action: "", name: sequenceName }]}
           onSelectItem={(() => { })}
           trackEvent={trackEvent}
-          iconId={"icon-assignment"}
+          HeaderIcon={AssignmentIcon}
           dataCy={"choose-assignment"}
         />
       </div>
