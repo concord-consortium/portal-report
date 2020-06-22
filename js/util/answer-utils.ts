@@ -12,7 +12,6 @@ import QMCScoredCorrectIcon from "../../img/svg-icons/q-mc-scored-correct-icon.s
 import QMCScoredIncorrectIcon from "../../img/svg-icons/q-mc-scored-incorrect-icon.svg";
 import QOpenResponseCompletedIcon from "../../img/svg-icons/q-open-response-completed-icon.svg";
 
-
 export interface AnswerType {
   name: string;
   type: string;

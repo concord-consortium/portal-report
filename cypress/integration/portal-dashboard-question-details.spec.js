@@ -75,8 +75,27 @@ context("Portal Dashboard Question Details Panel",()=>{
       });
     });
     describe('footer elements',()=>{
-      it('button should open all student responses popup',()=>{ //currently only tests for visibility. Functionality not yet implemented
+      it('button should open all student responses popup',()=>{ //functionality is tested in the all-responses-popup.spec
         cy.get('[data-cy=view-all-student-responses-button]').should('be.visible');
+      });
+    });
+    describe('Question area',()=>{
+      before(()=>{
+        cy.get('[data-cy=question-overlay-previous-button]').click().click();
+      });
+      it('verify question area is visible',()=>{
+        cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
+        cy.get('[data-cy=question-overlay] [data-cy=question-text]').should('be.visible');
+        cy.get("[data-cy=question-overlay] [data-cy=open-activity-button]").should('be.visible');
+        cy.get("[data-cy=question-overlay] [data-cy=open-teacher-edition-button]").should('be.visible');
+      });
+      it('verify show/hide button behaves correctly',()=>{
+        cy.get('[data-cy=question-overlay] [data-cy=show-hide-question-button]').should('be.visible').click();
+        cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('not.be.visible');
+        cy.get('[data-cy=question-overlay] [data-cy=question-text]').should('not.be.visible');
+        cy.get('[data-cy=question-overlay] [data-cy=show-hide-question-button]').should('be.visible').click();
+        cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
+        cy.get('[data-cy=question-overlay] [data-cy=question-text]').should('be.visible');
       });
     });
 });
