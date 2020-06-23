@@ -9,6 +9,7 @@
     align-items: center;
     width: 200px;
     height: 30px;
+    box-sizing: border-box;
     border-radius: 4px;
     border: solid 1.5px @cc-charcoal-light1;
     background-color: @cc-teal-light6;
@@ -18,6 +19,17 @@
 
     &:hover {
       background-color: @cc-teal-light4;
+    }
+
+    &.topHeader {
+      width: 300px;
+      background-color: @cc-teal-light4;
+      &:hover {
+        background-color:@cc-teal-light2;
+      }
+      &.showList, &:active {
+        background-color: @cc-teal;
+      }  
     }
 
     &.showList, &:active {
@@ -61,12 +73,12 @@
         transform: rotate(180deg);
       }
     }
-
   }
 
   .list {
     position: absolute;
     margin-top: 1px;
+    width: 200px;
     border-radius: 0 0 4px 4px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
     opacity: 0;
@@ -74,6 +86,10 @@
     transition-property: opacity;
     transition-duration: .25s;
     pointer-events: none;
+
+    &.topHeader {
+      width: 300px;
+    }
 
     &.show {
       opacity: 1;
@@ -87,7 +103,6 @@
       align-items: center;
       box-sizing: border-box;
       height: 40px;
-      width: 200px;
       padding: 0 5px 0 5px;
       background-color: white;
       font-size: 16px;
@@ -117,11 +132,9 @@
           fill: @cc-teal;
         }
       }
-
     }
     .listItem:last-child {
       border-radius: 0 0 4px 4px;
     }
-
   }
 }

@@ -91,9 +91,17 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
+
     return (
       <div className={css.portalDashboardApp}>
-        <Header userName={userName} setCompact={setCompactReport} />
+        {sequenceTree &&
+          <Header
+            userName={userName}
+            setCompact={setCompactReport}
+            sequenceName={sequenceTree.get("name")}
+            trackEvent={trackEvent}
+          />
+        }
         {activityTrees &&
           <div>
             <div className={css.navigation}>
@@ -114,22 +122,22 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 toggleCurrentQuestion={toggleCurrentQuestion}
               />
             </div>
-              <div className={css.progressTable} onScroll={this.handleScroll}>
-                <StudentNames
-                  students={students}
-                  isAnonymous={isAnonymous}
-                  isCompact={compactReport}
-                />
-                <StudentAnswers
-                  activities={activityTrees}
-                  currentActivity={currentActivity}
-                  expandedActivities={expandedActivities}
-                  students={students}
-                  studentProgress={studentProgress}
-                  ref={elt => this.studentAnswersComponentRef = elt}
-                  isCompact={compactReport}
-                />
-              </div>
+            <div className={css.progressTable} onScroll={this.handleScroll}>
+              <StudentNames
+                students={students}
+                isAnonymous={isAnonymous}
+                isCompact={compactReport}
+              />
+              <StudentAnswers
+                activities={activityTrees}
+                currentActivity={currentActivity}
+                expandedActivities={expandedActivities}
+                students={students}
+                studentProgress={studentProgress}
+                ref={elt => this.studentAnswersComponentRef = elt}
+                isCompact={compactReport}
+              />
+            </div>
             <QuestionOverlay
               currentQuestion={currentQuestion}
               questions={questions}
@@ -138,7 +146,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               setCurrentActivity={setCurrentActivity}
               handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
             />
-            {showAllResponsesPopup && <StudentResponsePopup
+            {showAllResponsesPopup &&
+              <StudentResponsePopup
                 studentCount={students.size}
                 setAnonymous={setAnonymous}
                 setStudentFilter={setStudentSort}
@@ -148,7 +157,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 toggleCurrentQuestion={toggleCurrentQuestion}
                 setCurrentActivity={setCurrentActivity}
                 trackEvent={trackEvent}
-                handleCloseAllResponsesPopup={this.setShowAllResponsesPopup} />}
+                handleCloseAllResponsesPopup={this.setShowAllResponsesPopup}
+              />
+            }
           </div>
         }
         {error && <DataFetchError error={error} />}
@@ -157,9 +168,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private setShowAllResponsesPopup = (show: boolean)=>{
-    if(show) {this.setState({showAllResponsesPopup: show});}
-    else {this.setState({showAllResponsesPopup: false});}
+  private setShowAllResponsesPopup = (show: boolean) => {
+    if (show) { this.setState({ showAllResponsesPopup: show }); }
+    else { this.setState({ showAllResponsesPopup: false }); }
   }
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {

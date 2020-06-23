@@ -11,6 +11,7 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
   HeaderIcon: SvgIcon;
   dataCy: string;
+  isHeader?: boolean;
 }
 
 interface IState {
@@ -54,8 +55,9 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     const { items, HeaderIcon } = this.props;
     const currentItem = items.find(i => i.action === this.state.current);
     const showListClass = this.state.showList ? css.showList : "";
+    const useHeader = this.props.isHeader ? css.topHeader : "";
     return (
-      <div className={`${css.header} ${showListClass}`} onClick={this.handleHeaderClick}>
+      <div className={`${css.header} ${useHeader} ${showListClass}`} onClick={this.handleHeaderClick}>
         { <HeaderIcon className={`${css.icon} ${showListClass}`} /> }
         <div className={css.current}>{currentItem && currentItem.name}</div>
         { <ArrowIcon className={`${css.arrow} ${showListClass}`} /> }
@@ -65,8 +67,9 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
 
   private renderList = () => {
     const { items } = this.props;
+    const useHeader = this.props.isHeader ? css.topHeader : "";
     return (
-      <div className={`${css.list} ${(this.state.showList ? css.show : "")}`}>
+      <div className={`${css.list} ${useHeader} ${(this.state.showList ? css.show : "")}`}>
         { items && items.map((item: SelectItem, i: number) => {
           const currentClass = this.state.current === item.action ? css.selected : "";
           return (
@@ -74,7 +77,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
               key={`item ${i}`}
               className={`${css.listItem} ${currentClass}`}
               onClick={this.handleListClick(item.action)}
-              data-cy={`list-item-${item.name.toLowerCase().replace(" ", "-")}`}
+              data-cy={`list-item-${item.name.toLowerCase().replace(/\ /g, "-")}`}
             >
               { <CheckIcon className={`${css.check} ${currentClass}`} /> }
               <div>{item.name}</div>
@@ -84,7 +87,6 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
       </div>
     );
   }
-
 
   private handleClick = (e: MouseEvent) => {
     if (this.divRef.current && e.target && !this.divRef.current.contains(e.target as Node)) {
@@ -108,5 +110,4 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
       showList: false
     });
   }
-
 }
