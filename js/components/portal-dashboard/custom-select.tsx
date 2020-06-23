@@ -11,7 +11,7 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
   HeaderIcon: SvgIcon;
   dataCy: string;
-  isWide: boolean;
+  isHeader?: boolean;
 }
 
 interface IState {
@@ -55,8 +55,9 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     const { items, HeaderIcon } = this.props;
     const currentItem = items.find(i => i.action === this.state.current);
     const showListClass = this.state.showList ? css.showList : "";
+    const useHeader = this.props.isHeader ? css.topHeader : "";
     return (
-      <div className={`${css.header} ${showListClass}`} onClick={this.handleHeaderClick}>
+      <div className={`${css.header} ${useHeader} ${showListClass}`} onClick={this.handleHeaderClick}>
         { <HeaderIcon className={`${css.icon} ${showListClass}`} /> }
         <div className={css.current}>{currentItem && currentItem.name}</div>
         { <ArrowIcon className={`${css.arrow} ${showListClass}`} /> }
@@ -66,9 +67,9 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
 
   private renderList = () => {
     const { items } = this.props;
-    const showWide = this.props.isWide ? css.assignmentList : css.classNav;
+    const useHeader = this.props.isHeader ? css.topHeader : "";
     return (
-      <div className={`${css.list} ${(this.state.showList ? css.show : "")} ${showWide}`}>
+      <div className={`${css.list} ${useHeader} ${(this.state.showList ? css.show : "")}`}>
         { items && items.map((item: SelectItem, i: number) => {
           const currentClass = this.state.current === item.action ? css.selected : "";
           return (
