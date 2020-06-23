@@ -80,4 +80,15 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     //TODO need to add tests for open activity button and open teacher edition button functionality
   });
+  context('Student list and responses area', () => {
+    it('verify student names are listed',()=>{
+      cy.get('[data-cy=student-name]').eq(0).should("contain", "Armstrong, Jenna");
+      cy.get('[data-cy=student-name]').eq(1).should("contain", "Crosby, Kate");
+      cy.get('[data-cy=student-name]').eq(2).should("contain", "Galloway, Amy");
+      cy.get('[data-cy=student-name]').eq(3).should("contain", "Jenkins, John");
+      cy.get('[data-cy=student-name]').eq(4).should("contain", "Ross, John");
+      cy.get('[data-cy=student-name]').eq(5).should("contain", "Wu, Jerome");
+    });
+    //TODO add tests for filtering when implemented
+  });
 });
