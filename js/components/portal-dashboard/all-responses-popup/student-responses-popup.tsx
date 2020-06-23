@@ -3,24 +3,28 @@ import { Map } from "immutable";
 import { PopupHeader } from "./popup-header";
 import { PopupClassNav } from "./popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
+import { PopupStudentResponseList } from "./popup-student-response-list";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
 interface IProps {
+  students: any;
+  isAnonymous: boolean;
   studentCount: number;
   setAnonymous: (value: boolean) => void;
   setStudentFilter: (value: string) => void;
+  trackEvent: (category: string, action: string, label: string) => void;
   currentQuestion?: Map<string, any>;
   questions?: Map<string, any>;
   sortedQuestionIds?: string[];
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
-  trackEvent: (category: string, action: string, label: string) => void;
   handleCloseAllResponsesPopup: (show: boolean) => void;
 }
 export class StudentResponsePopup extends React.PureComponent<IProps> {
   render() {
-    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, studentCount, setAnonymous, setStudentFilter, trackEvent } = this.props;
+    const { students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent,
+      currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
@@ -37,9 +41,13 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
-              inOverlay={false} />
+            />
           </div>
         </div>
+        <PopupStudentResponseList
+          students={students}
+          isAnonymous={isAnonymous}
+        />
       </div>
     );
   }

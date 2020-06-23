@@ -1,0 +1,55 @@
+@import "../variables";
+
+.responseTable {
+  margin-top: 3px;
+  height: calc(100vh - 250px - @header-height );
+  overflow-y: scroll;
+  font-weight: normal;
+
+  .studentRow {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-stretch;
+    background-color: white;
+    min-height: 55px;
+
+    .studentWrapper{
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      width: 240px;
+      border-bottom: 1px solid @cc-charcoal-light2;
+      margin-top: 15px;
+      padding-bottom: 15px;
+
+      .spotlightSelectionCheckbox {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        border: 1.5px solid @cc-charcoal-light1;
+        background-color: white;
+        margin-left: 25px;
+      }
+      
+      .studentName {
+        margin: 2.5px 20px 0 10px;
+      }
+    }
+
+    .studentResponse {
+      width: calc(100vw - 237px);
+      margin-left: 3px;
+      border-bottom: 1px solid @cc-charcoal-light2;
+      background-color: white;
+
+      .studentResponseText {
+        margin: 15px 20px 20px 20px;
+      }
+    }
+  }
+
+  .studentRow:nth-child(even) {
+    background-color: @cc-teal-light6;
+  }
+
+}

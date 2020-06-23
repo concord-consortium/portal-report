@@ -13,7 +13,7 @@ interface IProps {
   sortedQuestionIds?: string[];
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
-  inOverlay: boolean;
+  inOverlay?: boolean;
 }
 interface IState {
   hideQuestion: boolean;
