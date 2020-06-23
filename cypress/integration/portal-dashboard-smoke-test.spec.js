@@ -8,9 +8,6 @@ context("Portal Dashboard UI",()=>{
         it('verify header loads',()=>{
             cy.get('[data-cy=dashboard-header]').should('be.visible');
         });
-        it('verify assignment dropdown is visible',()=>{
-          cy.get('[data-cy=choose-assignment]').should('be.visible');
-        });
     });
     describe('level viewer',()=>{
         it('verify level viewer loads',()=>{
@@ -61,7 +58,9 @@ context("Portal Dashboard UI",()=>{
             cy.get('[data-cy="menu-list"]').should('be.visible');
         });
         it('verify assignment dropdown is present',()=>{
-            cy.get("[data-cy=choose-assignment]").should('be.visible');
-        })
+          const assignment="report-test-sequence";
+            cy.get("[data-cy=choose-assignment]").should('be.visible').click();
+            cy.get("[data-cy=list-item-"+assignment+"]").should('be.visible');
+        });
     });
 });
