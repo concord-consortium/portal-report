@@ -26,10 +26,9 @@ export class Header extends React.PureComponent<IProps> {
         <div className={css.headerCenter}>
           <div className={css.assignmentTitle}>
             Assignment:
-        </div>
+          </div>
           {this.renderAssignmentSelect()}
         </div>
-
         <div className={css.headerRight}>
           <AccountOwnerDiv userName={this.props.userName} />
           <HeaderMenuContainer setCompact={this.props.setCompact} />
@@ -41,16 +40,14 @@ export class Header extends React.PureComponent<IProps> {
   private renderAssignmentSelect = () => {
     const { sequenceName, trackEvent } = this.props;
     return (
-      <div className={`${css.chooseAssignment}`}>
         <CustomSelect
           items={[{ action: "", name: sequenceName }]}
           onSelectItem={(() => { })}
           trackEvent={trackEvent}
           HeaderIcon={AssignmentIcon}
           dataCy={"choose-assignment"}
-          isWide={true}
+          isHeader={true}
         />
-      </div>
     );
   }
 }

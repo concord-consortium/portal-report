@@ -41,7 +41,6 @@ export class ClassNav extends React.PureComponent<IProps> {
           trackEvent={trackEvent}
           HeaderIcon={ClassIcon}
           dataCy={"choose-class"}
-          isWide={false}
         />
       </div>
     );
@@ -60,7 +59,6 @@ export class ClassNav extends React.PureComponent<IProps> {
           trackEvent={trackEvent}
           HeaderIcon={SortIcon}
           dataCy={"sort-students"}
-          isWide={false}
         />
       </div>
     );
