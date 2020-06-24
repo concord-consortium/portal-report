@@ -29,7 +29,14 @@
       }
       &.showList, &:active {
         background-color: @cc-teal;
-      }  
+      } 
+      .current {
+        max-width: 236px;
+      } 
+    }
+
+    &.disabled {
+      pointer-events: none;
     }
 
     &.showList, &:active {
@@ -58,6 +65,10 @@
 
     .current {
       flex-grow: 1;
+      max-width: 136px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .arrow {
@@ -71,6 +82,9 @@
       &.showList {
         fill: white;
         transform: rotate(180deg);
+      }
+      &.disabled {
+        display: none;
       }
     }
   }
