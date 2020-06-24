@@ -85,17 +85,17 @@ context("Portal Dashboard Question Details Panel",()=>{
       });
       it('verify question area is visible',()=>{
         cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
-        cy.get('[data-cy=question-overlay] [data-cy=question-text]').should('be.visible');
+        cy.get('[data-cy=question-overlay] [data-cy=question-content]').should('be.visible');
         cy.get("[data-cy=question-overlay] [data-cy=open-activity-button]").should('be.visible');
         cy.get("[data-cy=question-overlay] [data-cy=open-teacher-edition-button]").should('be.visible');
       });
       it('verify show/hide button behaves correctly',()=>{
         cy.get('[data-cy=question-overlay] [data-cy=show-hide-question-button]').should('be.visible').click();
         cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('not.be.visible');
-        cy.get('[data-cy=question-overlay] [data-cy=question-text]').should('not.be.visible');
+        cy.get('[data-cy=question-overlay] [data-cy=question-content]').should('not.be.visible');
         cy.get('[data-cy=question-overlay] [data-cy=show-hide-question-button]').should('be.visible').click();
         cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
-        cy.get('[data-cy=question-overlay] [data-cy=question-text]').should('be.visible');
+        cy.get('[data-cy=question-overlay] [data-cy=question-content]').should('be.visible');
       });
     });
 });

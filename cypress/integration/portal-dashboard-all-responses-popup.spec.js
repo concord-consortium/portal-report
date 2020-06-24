@@ -64,7 +64,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=activity-question-button]').eq(3).click();
       cy.get('[data-cy=question-overlay] [data-cy=question-overlay-title]').invoke('text').as('questionOverlayTitle');
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').invoke('text').as('questionTitle');
-      cy.get('[data-cy=question-overlay] [data-cy=question-text]').invoke('text').as('questionPrompt');
+      cy.get('[data-cy=question-overlay] [data-cy=question-content]').invoke('text').as('questionPrompt');
       cy.get('[data-cy=view-all-student-responses-button]').should('be.visible').click();
     });
     it('verify title is correct', function() {
@@ -74,7 +74,7 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     it('verify question text area is visible',function() {
       cy.get("[data-cy=all-responses-popup-view] [data-cy=question-title]").should('be.visible').invoke('text').should('contain',this.questionTitle);
-      cy.get("[data-cy=all-responses-popup-view] [data-cy=question-text]").should('be.visible').invoke('text').should('contain',this.questionPrompt);
+      cy.get("[data-cy=all-responses-popup-view] [data-cy=question-content]").should('be.visible').invoke('text').should('contain',this.questionPrompt);
       cy.get("[data-cy=all-responses-popup-view] [data-cy=open-activity-button]").should('be.visible');
       cy.get("[data-cy=all-responses-popup-view] [data-cy=open-teacher-edition-button]").should('be.visible');
     });
