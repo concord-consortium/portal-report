@@ -87,6 +87,13 @@
                   "show_in_featured_question_report": true,
                   "type": "open_response",
                   "required": true
+                },
+                {
+                  "id": "multiple_choice_without_choices",
+                  "prompt": "<p>Multiple choice prompt (all choices deleted by author)</p>",
+                  "question_number": 5,
+                  "show_in_featured_question_report": true,
+                  "type": "multiple_choice"
                 }
               ]
             },
@@ -100,7 +107,7 @@
                   "drawing_prompt": "",
                   "id": "image_question_2",
                   "prompt": "<p>Image question prompt</p>",
-                  "question_number": 5,
+                  "question_number": 6,
                   "show_in_featured_question_report": true,
                   "type": "image_question"
                 },
@@ -109,7 +116,7 @@
                   "height": 500,
                   "id": "labbook_1",
                   "name": "Labbook album",
-                  "question_number": 6,
+                  "question_number": 7,
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "width": 600
