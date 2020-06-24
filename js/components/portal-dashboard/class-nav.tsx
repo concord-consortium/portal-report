@@ -41,6 +41,7 @@ export class ClassNav extends React.PureComponent<IProps> {
           trackEvent={trackEvent}
           HeaderIcon={ClassIcon}
           dataCy={"choose-class"}
+          disableDropdown={true}
         />
       </div>
     );
