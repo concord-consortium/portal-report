@@ -1,4 +1,5 @@
 import React from "react";
+import { getFormattedStudentName } from "../../util/student-utils";
 
 import css from "../../../css/portal-dashboard/student-names.less";
 
@@ -16,9 +17,7 @@ export class StudentNames extends React.PureComponent<IProps> {
     return (
       <div className={css.studentList} data-cy="student-list">
         {students && students.map((student: any, i: number) => {
-          const formattedName = isAnonymous
-            ? student.get("name")
-            : `${student.get("lastName")}, ${student.get("firstName")}`;
+          const formattedName = getFormattedStudentName(isAnonymous, student);
 
           return (
             <div className={`${css.studentName} ${compactClass}`} key={`student ${i}`}>
