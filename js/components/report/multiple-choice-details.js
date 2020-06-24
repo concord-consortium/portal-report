@@ -28,10 +28,11 @@ function getChoicesStats(choices, answers, students) {
 
 export default class MultipleChoiceDetails extends PureComponent {
   get choices() {
-    const choices = this.props.question.get("choices").toJS();
+    const choices = this.props.question.get("choices");
+    const choicesArray = choices ? choices.toJS() : [];
     // Add fake, no-answer choice.
-    choices.push({id: -1, content: "No response", noResponseChoice: true});
-    return choices;
+    choicesArray.push({id: -1, content: "No response", noResponseChoice: true});
+    return choicesArray;
   }
 
   render() {

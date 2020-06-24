@@ -57,8 +57,8 @@ export const getAnswerTrees = createSelector(
           const question = questions.get(answer.get("questionId"));
           // `|| []` => in case question doesn't have choices.
           const choices = Map((question.get("choices") || []).map(c => [c.get("id"), c]));
-          // `.filter(c => c !== undefined)` => so report doesn't crash if a choice has been deleted by author.
-          const selectedChoices = answer.getIn(["answer", "choiceIds"]).map(id => choices.get(id)).filter(c => c !== undefined);
+          const selectedChoices = answer.getIn(["answer", "choiceIds"])
+            .map(id => choices.get(id) || Map({content: "[the selected choice has been deleted by question author]", correct: false, id: -1}));
           const selectedCorrectChoices = selectedChoices.filter(c => c.get("correct"));
           answer = answer
             .set("scored", question.get("scored"))
