@@ -17,7 +17,7 @@ context("Portal Dashboard Activity Buttons",() =>{
         cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 1: Report Test Activity 1");
         cy.get('[data-cy=collapsed-activity-button]').should('have.length', 1);
         cy.get('[data-cy=activity-question-button]').should('be.visible');
-        cy.get('[data-cy=activity-question-button]').should('have.length', 7);
+        cy.get('[data-cy=activity-question-button]').should('have.length', 8);
         cy.get('[data-cy=activity-question-button]').first().should("contain", "Q1");
       });
 
