@@ -1,8 +1,6 @@
 import { firestoreInitialized } from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
-// import fakeActivityStructure from "../data/activity-structure.json";
 import fakeAnswers from "../data/answers.json";
-// import fakeAnswers from "../data/average-class-activity-answers.json";
 import {AnyAction, Dispatch} from "redux";
 import {
   IPortalRawData,
