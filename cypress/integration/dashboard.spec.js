@@ -96,8 +96,8 @@ describe("Dashboard", function() {
             const widthPercent = $progressBar[0].style.width;
             const widthString = widthPercent.match(/([\d.]+)%/)[1];
             const width = parseFloat(widthString);
-            expect(width).to.be.greaterThan(83);
-            expect(width).to.be.lessThan(84);
+            expect(width).to.be.greaterThan(71);
+            expect(width).to.be.lessThan(72);
           });
     });
   });
