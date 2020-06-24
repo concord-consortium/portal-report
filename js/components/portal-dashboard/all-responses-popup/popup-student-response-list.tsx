@@ -1,4 +1,5 @@
 import React from "react";
+import { getFormattedStudentName } from "../../../util/student-utils";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-student-response-list.less";
 
@@ -13,9 +14,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
         {students && students.map((student: any, i: number) => {
-          const formattedName = isAnonymous
-            ? student.get("name")
-            : `${student.get("lastName")}, ${student.get("firstName")}`;
+          const formattedName = getFormattedStudentName(isAnonymous, student);
 
           return (
             <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
