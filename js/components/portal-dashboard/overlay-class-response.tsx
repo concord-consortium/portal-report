@@ -24,12 +24,12 @@ export class ClassResponse extends React.PureComponent<IProps, IState> {
     return (
       <div data-cy="overlay-class-response-area">
         <div className={css.responseHeader}>
-          <div className={css.title}>Class Response</div>
+          <div className={css.title} data-cy="class-response-title">Class Response</div>
           <div className={css.showHideButton} onClick={this.handleChevronClick} data-cy="show-hide-class-response-button">
             <ArrowIcon className={chevronClass} />
           </div>
         </div>
-        <div className={responseAreaClass}>
+        <div className={responseAreaClass} data-cy="class-response-content">
           This is where aggregate info of class responses will go
         </div>
       </div>

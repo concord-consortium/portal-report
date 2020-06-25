@@ -14,7 +14,7 @@ export class StudentResponse extends React.PureComponent<IProps> {
   render() {
     const { students, isAnonymous } = this.props;
     return (
-      <div data-cy="overlay-class-response-area">
+      <div data-cy="overlay-student-response-area">
             <div className={css.responseHeader}>
               <div className={css.title}>Student Name</div>
               <div className={css.nextStudentButtons}>
