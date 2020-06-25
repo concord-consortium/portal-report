@@ -4,6 +4,11 @@ import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 import { AnswerTypes } from "../../util/answer-utils";
 import { QuestionTypes } from "../../util/question-utils";
+import  MultipleChoiceAnswer  from "../../components/portal-dashboard/multiple-choice-answer";
+import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
+import ImageAnswer from "../../components/report/image-answer";
+import ExternalLinkAnswer from "../../components/portal-dashboard/external-link-answer";
+import IframeAnswer from "../../components/report/iframe-answer";
 
 import css from "../../../css/portal-dashboard/answer.less";
 
@@ -11,7 +16,7 @@ interface IProps {
   answer: Map<any, any>;
   question: Map<any, any>;
   student: Map<any, any>;
-  inPopup?: boolean;
+  inDetail?: boolean;
 }
 
 class Answer extends React.PureComponent<IProps> {
@@ -42,57 +47,59 @@ class Answer extends React.PureComponent<IProps> {
   }
 
   private renderAnswer = (answerType: string, iconId: string, type: string) => {
-    const { answer, inPopup } = this.props;
+    const { inDetail } = this.props;
     const AnswerIcon = answerType;
-    const answerDetail = answer && answer.get('answer');
 
-    if (inPopup) {
+    if (!inDetail) {
       return (
-        <div className={css.answerDetail}>
-          { this.renderAnswerDetail(answerDetail, type) }
+        <div className={css.answerContent} data-cy={iconId}>
+          <AnswerIcon />
         </div>
       );
     } else {
       return (
-        <div className={css.answerContent} data-cy={iconId}>
-          <AnswerIcon />
+        <div className={css.answerDetail}>
+          {this.renderAnswerDetail(type)}
         </div>
       );
     }
   }
 
   renderNoAnswer = (questionType: string, iconId: string) => {
-    const { inPopup } = this.props;
+    const { inDetail } = this.props;
     const QuestionIcon = questionType;
-    if (inPopup) {
+    if (!inDetail) {
+      return (
+        <div className={`${css.answerContent} ${css.noAnswer}`} data-cy={"no-answer"} />
+      );
+    } else {
       return (
         <div className={`${css.answerDetail} ${css.noAnswer}`} data-cy={iconId}>
           <QuestionIcon />
           No response
         </div>
       );
-    } else {
-      return (
-        <div className={`${css.answerContent} ${css.noAnswer}`} data-cy={"no-answer"} />
-      );
     }
   }
 
-  renderAnswerDetail = (answer: any, type: string) => {
-    console.log("in renderAnswerDetail",answer, "type: ", type);
-    switch (type) {
-      case "image_question_answer":
-        return (
-          <div><img src={answer.get("imageUrl")} />{answer.get("text")}</div>
-        );
-      case "external_link":
-        return (
-          <div><a href={answer} target="_blank">View work</a></div>
-        );
-      default:
-        return(<div>{answer}</div>);
+  renderAnswerDetail = (type: string) => {
+    const { answer, question } = this.props;
+    console.log("answer in renderAnswerDetail", answer, "type: ", type);
+    console.log("question in renderAnswerDetail", question);
+    const AnswerComponent: any = {
+      "multiple_choice_answer": MultipleChoiceAnswer,
+      "open_response_answer": OpenResponseAnswer,
+      "image_question_answer": ImageAnswer,
+      "external_link": ExternalLinkAnswer,
+      "interactive_state": IframeAnswer,
+    };
+    let AComponent;
+    if (answer && (!question.get("required") || answer.get("submitted"))) {
+      AComponent = AnswerComponent[type];
     }
-
+    return (
+      <AComponent answer={answer} question={question} showFullAnswer={true} />
+    );
   }
 }
 
