@@ -31,9 +31,25 @@
     &:active {
       background-color: @cc-orange;
     }
-
   }
 
+  .answerDetail {
+    width: calc(100vw - 237px);
+    font-weight: normal;
+    margin: 15px 20px 20px 20px;
+
+    &.noAnswer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      // justify-content: start;
+    }
+    
+    img {
+      height: 182px;
+      width: 250px;
+    }
+  }
 }
 
 
