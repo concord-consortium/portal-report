@@ -47,6 +47,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
         <PopupStudentResponseList
           students={students}
           isAnonymous={isAnonymous}
+          currentQuestion={currentQuestion}
         />
       </div>
     );
