@@ -33,6 +33,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
         }
         <ClassResponse currentQuestion={currentQuestion}/>
         <StudentResponse students={students} isAnonymous={isAnonymous}/>
+        {this.renderFooter()}
       </div>
     );
   }
@@ -52,7 +53,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           toggleCurrentQuestion={toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity}
           inOverlay={true} />
-        {this.renderFooter()}
       </React.Fragment>
     );
   }
