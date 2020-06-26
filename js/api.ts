@@ -2,7 +2,7 @@ import * as firebase from "firebase";
 import fetch from "isomorphic-fetch";
 import * as jwt from "jsonwebtoken";
 import fakeOfferingData from "./data/offering-data.json";
-import fakeClassData from "./data/small-class-data.json";
+import fakeClassData from "./data/average-class-data.json";
 import { parseUrl, validFsId, urlParam } from "./util/misc";
 import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
 import { FIREBASE_APP, signInWithToken } from "./db";
