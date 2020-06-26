@@ -9,7 +9,7 @@ import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
   userName: string;
-  sequenceName: string;
+  assignmentName: string;
   setCompact: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
 }
@@ -38,15 +38,16 @@ export class Header extends React.PureComponent<IProps> {
   }
 
   private renderAssignmentSelect = () => {
-    const { sequenceName, trackEvent } = this.props;
+    const { assignmentName, trackEvent } = this.props;
     return (
         <CustomSelect
-          items={[{ action: "", name: sequenceName }]}
+          items={[{ action: "", name: assignmentName }]}
           onSelectItem={(() => { })}
           trackEvent={trackEvent}
           HeaderIcon={AssignmentIcon}
           dataCy={"choose-assignment"}
           isHeader={true}
+          disableDropdown={true}
         />
     );
   }

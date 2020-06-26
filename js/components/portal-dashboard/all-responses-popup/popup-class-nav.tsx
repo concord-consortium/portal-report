@@ -66,10 +66,12 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
           trackEvent={trackEvent}
           HeaderIcon={SortIcon}
           dataCy={"sort-students"}
+          disableDropdown={true}
         />
       </div>
     );
   }
+
   private renderViewListOptions() {
     const listByStudentClasses: string =
       `${css.toggle} ${css.listByStudents}` + (!this.state.inQuestionMode ? ` ${css.selected}` : "");

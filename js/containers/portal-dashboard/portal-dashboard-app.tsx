@@ -91,6 +91,13 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
+    let assignmentName: string;
+    if (sequenceTree && sequenceTree.get("name") !== "") {
+      assignmentName = sequenceTree.get("name");
+    }
+    else {
+      assignmentName = activityTrees && activityTrees.first().get("name");
+    }
 
     return (
       <div className={css.portalDashboardApp}>
@@ -98,7 +105,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           <Header
             userName={userName}
             setCompact={setCompactReport}
-            sequenceName={sequenceTree.get("name")}
+            assignmentName={assignmentName}
             trackEvent={trackEvent}
           />
         }

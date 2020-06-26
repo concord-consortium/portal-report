@@ -12,6 +12,7 @@ interface IProps {
   HeaderIcon: SvgIcon;
   dataCy: string;
   isHeader?: boolean;
+  disableDropdown?: boolean;
 }
 
 interface IState {
@@ -56,11 +57,12 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     const currentItem = items.find(i => i.action === this.state.current);
     const showListClass = this.state.showList ? css.showList : "";
     const useHeader = this.props.isHeader ? css.topHeader : "";
+    const disabled = this.props.disableDropdown ? css.disabled : "";
     return (
-      <div className={`${css.header} ${useHeader} ${showListClass}`} onClick={this.handleHeaderClick}>
+      <div className={`${css.header} ${useHeader} ${showListClass} ${disabled}`} onClick={this.handleHeaderClick}>
         { <HeaderIcon className={`${css.icon} ${showListClass}`} /> }
         <div className={css.current}>{currentItem && currentItem.name}</div>
-        { <ArrowIcon className={`${css.arrow} ${showListClass}`} /> }
+        { <ArrowIcon className={`${css.arrow} ${showListClass} ${disabled}`} /> }
       </div>
     );
   }
