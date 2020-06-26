@@ -32,7 +32,7 @@ class Answer extends React.PureComponent<IProps> {
     const qtype = question && question.get("type");
     const correct = scored ? answer && answer.get("correct") : undefined;
     const answerType = AnswerTypes.find(at => at.type === type && at.correct === correct);
-    const questionType = QuestionTypes.find(qt => qt.type === qtype);
+    const questionType = QuestionTypes.find(qt => qt.type === qtype && qt.scored === scored);
     const searchRegExp = / /g;
     const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
 
