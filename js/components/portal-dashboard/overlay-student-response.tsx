@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React from "react";
+import { Map } from "immutable";
 import { getFormattedStudentName } from "../../util/student-utils";
 import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
 
@@ -8,6 +9,7 @@ import css from "../../../css/portal-dashboard/overlay-student-response.less";
 interface IProps {
   students: any;
   isAnonymous: boolean;
+  answers: Map<any,any>;
 }
 interface IState {
   currentStudent: any;
@@ -37,7 +39,7 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
           </div>
         </div>
         <div className={css.responseArea}>
-          This is where student's response will go
+          {this.renderStudentAnswer}
         </div>
       </div>
     );
@@ -72,5 +74,9 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
       return studentArr[idx + 1];
     }
     return false;
+  }
+
+  private renderStudentAnswer() {
+
   }
 }
