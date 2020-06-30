@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 
@@ -7,7 +8,7 @@ import css from "../../../../css/portal-dashboard/all-responses-popup/popup-stud
 interface IProps {
   students: any; // TODO: add type
   isAnonymous: boolean;
-  currentQuestion:  Map<string, any>;
+  currentQuestion?: Map<string, any>;
 }
 
 export class PopupStudentResponseList extends React.PureComponent<IProps> {

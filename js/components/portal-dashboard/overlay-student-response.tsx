@@ -10,7 +10,7 @@ import css from "../../../css/portal-dashboard/overlay-student-response.less";
 interface IProps {
   students: any;
   isAnonymous: boolean;
-  currentQuestion: Map<string, any>;
+  currentQuestion?: Map<string, any>;
 }
 interface IState {
   currentStudent: any;
