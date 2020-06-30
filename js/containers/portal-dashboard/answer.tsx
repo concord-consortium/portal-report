@@ -84,8 +84,6 @@ class Answer extends React.PureComponent<IProps> {
 
   renderAnswerDetail = (type: string) => {
     const { answer, question } = this.props;
-    console.log("answer in renderAnswerDetail", answer, "type: ", type);
-    console.log("question in renderAnswerDetail", question);
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,
       "open_response_answer": OpenResponseAnswer,
