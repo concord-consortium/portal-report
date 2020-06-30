@@ -40,7 +40,7 @@ export default class MultipleChoiceAnswer extends PureComponent<IProps> {
         {
           choices.map((choice: any) =>
             <Choice key={choice.get("id")} choice={choice} correctAnswerDefined={question.get("scored")}
-              selected={studentChoices.some(studentChoice => studentChoice.get("id") === choice.get("id"))}
+              selected={studentChoices.some((studentChoice: any) => studentChoice.get("id") === choice.get("id"))}
             />
           )
         }

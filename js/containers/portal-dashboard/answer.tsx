@@ -13,7 +13,7 @@ import css from "../../../css/portal-dashboard/answer.less";
 
 interface IProps {
   answer: Map<any, any>;
-  question: Map<any, any>;
+  question: Map<string, any>;
   student: Map<any, any>;
   inDetail?: boolean;
 }
