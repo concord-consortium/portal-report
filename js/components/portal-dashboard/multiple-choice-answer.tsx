@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { PureComponent } from "react";
 import { Map } from "immutable";
 import Choice from "./choice";
@@ -8,7 +7,6 @@ import css from "../../../css/portal-dashboard/multiple-choice-answer.less";
 const CORRECT_ICON = "icomoon-checkmark " + css.correct;
 const INCORRECT_ICON = "icomoon-cross " + css.incorrect;
 const SELECTED_ICON = "icomoon-checkmark2";
-const NOT_SELECTED_ICON = "icomoon-radio-unchecked";
 
 interface IProps {
   answer: Map<any, any>;
@@ -37,7 +35,6 @@ export default class MultipleChoiceAnswer extends PureComponent<IProps> {
     const { question, answer } = this.props;
     const choices = question.get("choices");
     const studentChoices = answer.get("selectedChoices");
-    console.log("choices: ", choices);
     return (
       <div data-cy="multiple-choice-answers">
         {

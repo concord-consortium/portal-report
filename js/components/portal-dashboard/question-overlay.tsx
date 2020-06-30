@@ -31,8 +31,8 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
         {
           currentQuestion && this.renderQuestionDetails()
         }
-        <ClassResponse currentQuestion={currentQuestion}/>
-        <StudentResponse students={students} isAnonymous={isAnonymous}/>
+        { currentQuestion && <ClassResponse currentQuestion={currentQuestion}/> }
+        { currentQuestion && <StudentResponse students={students} isAnonymous={isAnonymous} currentQuestion={currentQuestion} /> }
         {this.renderFooter()}
       </div>
     );

@@ -2,6 +2,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { getFormattedStudentName } from "../../util/student-utils";
+import Answer from "../../containers/portal-dashboard/answer";
 import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
 
 import css from "../../../css/portal-dashboard/overlay-student-response.less";
@@ -9,20 +10,21 @@ import css from "../../../css/portal-dashboard/overlay-student-response.less";
 interface IProps {
   students: any;
   isAnonymous: boolean;
-  answers: Map<any,any>;
+  currentQuestion: Map<string, any>;
 }
 interface IState {
   currentStudent: any;
 }
 
 export class StudentResponse extends React.PureComponent<IProps, IState> {
-  constructor(props: any) {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       currentStudent: this.props.students.first()
     };
   }
   render() {
+    const { currentQuestion } = this.props;
     return (
       <div data-cy="overlay-student-response-area">
         <div className={css.responseHeader}>
@@ -39,7 +41,7 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
           </div>
         </div>
         <div className={css.responseArea}>
-          {this.renderStudentAnswer}
+          <Answer question={currentQuestion} student={this.state.currentStudent} inDetail={true}/>
         </div>
       </div>
     );
@@ -49,7 +51,6 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
     if (student) {
       this.setState({ currentStudent: student });
     }
-    console.log("toggleStudent was clicked: ", student);
   }
 
   private get previousStudent() {
@@ -74,9 +75,5 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
       return studentArr[idx + 1];
     }
     return false;
-  }
-
-  private renderStudentAnswer() {
-
   }
 }

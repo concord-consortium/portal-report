@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
@@ -35,7 +34,6 @@ class Answer extends React.PureComponent<IProps> {
     const questionType = QuestionTypes.find(qt => qt.type === qtype && qt.scored === scored);
     const searchRegExp = / /g;
     const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
-
     return (
       <div className={css.answer} data-cy="student-answer">
         {answer && (!question.get("required") || answer.get("submitted"))
@@ -84,8 +82,6 @@ class Answer extends React.PureComponent<IProps> {
 
   renderAnswerDetail = (type: string) => {
     const { answer, question } = this.props;
-    console.log("answer in renderAnswerDetail", answer, "type: ", type);
-    console.log("question in renderAnswerDetail", question);
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,
       "open_response_answer": OpenResponseAnswer,
