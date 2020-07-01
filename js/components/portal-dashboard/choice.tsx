@@ -25,27 +25,13 @@ export default class Choice extends PureComponent <IProps>{
     ;
   }
 
-  get contentStyling() {
-    const { choice, selected, correctAnswerDefined } = this.props;
-    const isCorrect = choice.get("correct");
-    // if (correctAnswerDefined && isCorrect) {
-    //   return css.correct;
-    // } else if (correctAnswerDefined && selected && !isCorrect) {
-    //   return css.incorrect;
-    // } else if (selected) {
-    //   return css.selected;
-    // }
-    // No special styling otherwise.
-    return "";
-  }
-
   render() {
     const { choice } = this.props;
     return (
       <div className={css.choice}>
         {this.icon}
-        <div className={css.choiceContent + " " + this.contentStyling}>
-          <div className={css.choiceText}>
+        <div className={css.choiceContent}>
+          <div className={css.choiceText} data-cy="multiple-choice-choice-text">
             { choice.get("content") }
           </div>
         </div>

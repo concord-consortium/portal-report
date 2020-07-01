@@ -69,8 +69,8 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     it('verify title is correct', function() {
       cy.get('[data-cy=all-responses-popup-view] [data-cy=question-overlay-title]').should('be.visible').invoke('text').should('contain',this.questionOverlayTitle);
-      cy.get("[data-cy=question-overlay-previous-button]").should('be.visible');
-      cy.get("[data-cy=question-overlay-next-button]").should('be.visible');
+      cy.get("[data-cy=question-navigator-previous-button]").should('be.visible');
+      cy.get("[data-cy=question-navigator-next-button]").should('be.visible');
     });
     it('verify question text area is visible',function() {
       cy.get("[data-cy=all-responses-popup-view] [data-cy=question-title]").should('be.visible').invoke('text').should('contain',this.questionTitle);
@@ -88,6 +88,10 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=student-name]').eq(3).should("contain", "Jenkins, John");
       cy.get('[data-cy=student-name]').eq(4).should("contain", "Ross, John");
       cy.get('[data-cy=student-name]').eq(5).should("contain", "Wu, Jerome");
+    });
+    it('verify responses',()=>{
+      cy.get('[data-cy="all-responses-popup-view"] [data-cy=question-navigator-next-button]').click().click();
+      cy.get('[data-cy=student-response] [data-cy=student-answer] > div > div > a').should('have.attr','href');
     });
     //TODO add tests for filtering when implemented
   });

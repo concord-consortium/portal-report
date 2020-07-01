@@ -29,22 +29,22 @@ context("Portal Dashboard Question Details Panel", () => {
     it('verify the the previous button is disabled on first question', () => {
       // cy.get('[data-cy=collapsed-activity-button]').first().click();
       cy.get('[data-cy=activity-question-button]').first().click();
-      cy.get('[data-cy=question-overlay-previous-button]').should('be.visible');
-      cy.get('[data-cy=question-overlay-next-button]').should('be.visible');
+      cy.get('[data-cy=question-navigator-previous-button]').should('be.visible');
+      cy.get('[data-cy=question-navigator-next-button]').should('be.visible');
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
-      cy.get('[data-cy=question-overlay-previous-button]').click();
+      cy.get('[data-cy=question-navigator-previous-button]').click();
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
     });
 
     it('verify we can page to the second question', () => {
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
-      cy.get('[data-cy=question-overlay-next-button]').click();
+      cy.get('[data-cy=question-navigator-next-button]').click();
       cy.get('[data-cy=question-overlay]').should("contain", "Question #2");
     });
 
     it('verify we can page back to the first question', () => {
       cy.get('[data-cy=question-overlay]').should("contain", "Question #2");
-      cy.get('[data-cy=question-overlay-previous-button]').click();
+      cy.get('[data-cy=question-navigator-previous-button]').click();
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
     });
 
@@ -52,7 +52,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 1: Report Test Activity 1");
       cy.get('[data-cy=activity-question-button]').eq(5).click({ force: true });
       cy.get('[data-cy=question-overlay]').should("contain", "Question #6");
-      cy.get('[data-cy=question-overlay-next-button]').click();
+      cy.get('[data-cy=question-navigator-next-button]').click();
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 2: Report Test Activity 2");
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
     });
@@ -61,7 +61,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=activity-question-button]').eq(1).click({ force: true });
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 2: Report Test Activity 2");
       cy.get('[data-cy=question-overlay]').should("contain", "Question #2");
-      cy.get('[data-cy=question-overlay-next-button]').click();
+      cy.get('[data-cy=question-navigator-next-button]').click();
       cy.get('[data-cy=question-overlay]').should("contain", "Question #2");
     });
 
@@ -69,7 +69,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=activity-question-button]').eq(0).click({ force: true });
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 2: Report Test Activity 2");
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
-      cy.get('[data-cy=question-overlay-previous-button]').click();
+      cy.get('[data-cy=question-navigator-previous-button]').click();
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 1: Report Test Activity 1");
       cy.get('[data-cy=question-overlay]').should("contain", "Question #6");
     });
@@ -81,7 +81,7 @@ context("Portal Dashboard Question Details Panel", () => {
   });
   describe('Question area', () => {
     before(() => {
-      cy.get('[data-cy=question-overlay-previous-button]').click().click();
+      cy.get('[data-cy=question-navigator-previous-button]').click().click();
     });
     it('verify question area is visible', () => {
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
@@ -138,6 +138,10 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=overlay-student-name]').should('contain','Student 6');
       cy.get('[data-cy="anonymize-students"] [data-cy=toggle-control]').click();
       cy.get('[data-cy=overlay-student-name]').should('contain','Wu, Jerome');
+    });
+    it('verify multiple choice choice texts are visible',()=>{
+      cy.get('[data-cy="activity-question-button"]').eq(2).click();
+      cy.get('[data-cy=multiple-choice-choice-text]').eq(0).should('contain','a');
     });
   });
 });
