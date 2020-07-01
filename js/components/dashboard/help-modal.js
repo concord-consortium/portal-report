@@ -10,7 +10,7 @@ export default class HelpModal extends PureComponent {
   render() {
     const { toggleHelpModal, helpViewVisible } = this.props;
     return (
-      <Modal show={helpViewVisible} onHide={toggleHelpModal}>
+      <Modal show={helpViewVisible} onHide={toggleHelpModal} animation={false}>
         <Modal.Body>
           <div className={css.helpContent} data-cy="helpPanel">
             <h2>Help</h2>

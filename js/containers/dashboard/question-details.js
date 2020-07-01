@@ -29,6 +29,7 @@ export default class QuestionDetails extends PureComponent {
       <Modal
         show={selectedQuestion !== null}
         onHide={onClose}
+        animation={false}
       >
         <Modal.Body>
           {
