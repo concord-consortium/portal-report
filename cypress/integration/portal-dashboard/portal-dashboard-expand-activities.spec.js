@@ -1,4 +1,4 @@
-import { getByCypressTag } from "../utils";
+import { getByCypressTag } from "../../utils";
 
 context("Portal Dashboard Activity Buttons",() =>{
     before(()=>{

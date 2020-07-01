@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from "react";
 import { Map } from "immutable";
 import { getFormattedStudentName } from "../../util/student-utils";
@@ -13,67 +12,43 @@ interface IProps {
   currentQuestion?: Map<string, any>;
 }
 interface IState {
-  currentStudent: any;
+  currentStudentIndex: number;
 }
 
 export class StudentResponse extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      currentStudent: this.props.students.first()
+      currentStudentIndex: 0
     };
   }
   render() {
-    const { currentQuestion } = this.props;
+    const { currentQuestion, students, isAnonymous } = this.props;
+    const { currentStudentIndex } = this.state;
     return (
       <div data-cy="overlay-student-response-area">
         <div className={css.responseHeader}>
-          <div className={css.title}>{getFormattedStudentName(this.props.isAnonymous, this.state.currentStudent)}</div>
+          <div className={css.title} data-cy='overlay-student-name'>{getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))}</div>
           <div className={css.nextStudentButtons}>
-            <div className={css.button + (this.previousStudent ? "" : " " + css.disabled) }
-              data-cy="previous-student-button" onClick={this.toggleStudent(this.previousStudent)}>
+            <div className={css.button + (currentStudentIndex > 0 ? "" : " " + css.disabled) }
+              data-cy="previous-student-button" onClick={this.changeCurrentStudent(currentStudentIndex - 1)}>
               <ArrowLeftIcon className={css.icon} />
             </div>
-            <div className={css.button + (this.nextStudent ? "" : " " + css.disabled )}
-              data-cy="next-student-button" onClick={this.toggleStudent(this.nextStudent)}>
+            <div className={css.button + (currentStudentIndex < students.size - 1 ? "" : " " + css.disabled )}
+              data-cy="next-student-button" onClick={this.changeCurrentStudent(currentStudentIndex + 1)}>
               <ArrowLeftIcon className={css.icon} />
             </div>
           </div>
         </div>
         <div className={css.responseArea}>
-          <Answer question={currentQuestion} student={this.state.currentStudent} inDetail={true}/>
+          <Answer question={currentQuestion} student={students.get(currentStudentIndex)} inDetail={true}/>
         </div>
       </div>
     );
   }
 
-  private toggleStudent = (student: any) => () => {
-    if (student) {
-      this.setState({ currentStudent: student });
-    }
-  }
-
-  private get previousStudent() {
-    const { students } = this.props;
-    const studentArr = students.toArray();
-    const student = this.state.currentStudent;
-    if (!students) return false;
-    const idx = studentArr.indexOf(student);
-    if (idx > 0) {
-      return studentArr[idx - 1];
-    }
-    return false;
-  }
-
-  private get nextStudent() {
-    const { students } = this.props;
-    const studentArr = students.toArray();
-    const student = this.state.currentStudent;
-    if (!students) return false;
-    const idx = studentArr.indexOf(student);
-    if (idx < studentArr.length - 1) {
-      return studentArr[idx + 1];
-    }
-    return false;
+  private changeCurrentStudent = (index: number) => () => {
+    const newIndex = Math.min(Math.max(0, index), this.props.students.size - 1);
+      this.setState({ currentStudentIndex: newIndex });
   }
 }
