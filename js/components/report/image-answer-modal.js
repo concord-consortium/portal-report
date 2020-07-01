@@ -22,7 +22,7 @@ export default class ImageAnswerModal extends PureComponent {
     const { answer, show, onHide } = this.props;
     if (!answer) { return null; }
     return (
-      <Modal show={show} onHide={onHide}>
+      <Modal show={show} onHide={onHide} animation={false}>
         <Modal.Header closeButton closeLabel="" />
         <Modal.Body>
           <img src={answer.getIn(["answer", "imageUrl"])} style={{display: "block", margin: "0 auto"}} data-cy="image-answer-modal"/>
