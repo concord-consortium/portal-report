@@ -52,7 +52,7 @@ class ReportApp extends PureComponent {
       question = report.getIn(["questions", questionId]);
     }
     return (
-      <Modal show={showCompare} bsStyle="compare-view" onHide={hideCompareView}>
+      <Modal show={showCompare} bsStyle="compare-view" onHide={hideCompareView} animation={false}>
         <Modal.Body>
           {compareViewAnswers && <CompareView answers={compareViewAnswers} question={question} />}
         </Modal.Body>
