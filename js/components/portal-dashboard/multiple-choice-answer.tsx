@@ -17,13 +17,10 @@ interface IProps {
 export default class MultipleChoiceAnswer extends PureComponent<IProps> {
   renderIcon() {
     const { answer, question } = this.props;
-    let icon;
-    if (!question.get("scored")) {
-      // Undefined as there's no correct or incorrect choice defined.
-      icon = SELECTED_ICON;
-    } else {
-      icon = answer.get("correct") ? CORRECT_ICON : INCORRECT_ICON;
-    }
+    const icon = !question.get("scored") // Undefined as there's no correct or incorrect choice defined.
+                  ? SELECTED_ICON
+                  : answer.get("correct") ? CORRECT_ICON : INCORRECT_ICON;
+
     return (
       <div className={css.icon} data-cy="multipleChoiceIcon">
         <i className={icon} />
