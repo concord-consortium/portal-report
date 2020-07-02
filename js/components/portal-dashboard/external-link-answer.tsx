@@ -9,7 +9,7 @@ export default class ExternalLinkAnswer extends React.PureComponent <IProps>{
     const { answer } = this.props;
     const linkAnswer = answer && answer.get('answer');
     return (
-      <div><a href={linkAnswer} target="_blank">View work</a></div>
+      <div><a href={linkAnswer} target="_blank" rel="noopener">View work</a></div>
     );
   }
 }

@@ -65,7 +65,8 @@ export class QuestionArea extends React.PureComponent<IProps>{
     }
     else {
       multipleChoiceContentClass =  `${css.mcContent}`;
-      multipleChoiceContent = choices.get("content"); }
+      multipleChoiceContent = choices.get("content");
+    }
     return (
       <div className={css.choiceWrapper} key={`choices ${i}`} >
         <div className={`${css.choiceIcon}`}>

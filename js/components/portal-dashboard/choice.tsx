@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import { Map } from "immutable";
 import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import IncorrectIcon from "../../../img/svg-icons/q-mc-scored-incorrect-icon.svg";
 import CompleteIcon from "../../../img/svg-icons/q-mc-nonscored-completed-icon.svg";
@@ -6,9 +7,9 @@ import CompleteIcon from "../../../img/svg-icons/q-mc-nonscored-completed-icon.s
 import css from "../../../css/portal-dashboard/multiple-choice-answer.less";
 
 interface IProps {
-  choice: any;
-  correctAnswerDefined: any;
-  selected: any;
+  choice: Map<any, any>;
+  correctAnswerDefined: boolean;
+  selected: boolean;
 }
 export default class Choice extends PureComponent <IProps>{
   get icon() {

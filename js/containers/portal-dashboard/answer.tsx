@@ -3,7 +3,7 @@ import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 import { AnswerTypes } from "../../util/answer-utils";
 import { QuestionTypes } from "../../util/question-utils";
-import  MultipleChoiceAnswer  from "../../components/portal-dashboard/multiple-choice-answer";
+import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
 import ImageAnswer from "../../components/report/image-answer";
 import ExternalLinkAnswer from "../../components/portal-dashboard/external-link-answer";
@@ -89,13 +89,17 @@ class Answer extends React.PureComponent<IProps> {
       "external_link": ExternalLinkAnswer,
       "interactive_state": IframeAnswer,
     };
-    let AComponent;
-    if (answer && (!question.get("required") || answer.get("submitted"))) {
-      AComponent = AnswerComponent[type];
+    const AComponent = (answer && (!question.get("required") || answer.get("submitted"))) ? AnswerComponent[type] : undefined;
+    if (!AComponent) {
+      return (
+        <div>Answer type not supported.</div>
+      );
     }
-    return (
-      <AComponent answer={answer} question={question} showFullAnswer={true} />
-    );
+    else {
+      return (
+        <AComponent answer={answer} question={question} showFullAnswer={true} />
+      );
+    }
   }
 }
 

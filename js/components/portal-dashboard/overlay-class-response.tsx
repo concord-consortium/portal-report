@@ -19,13 +19,8 @@ export class ClassResponse extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    let chevronClass = `${css.arrow}`;
-    let responseAreaClass = `${css.responseArea}`;
-
-    if(this.state.hideResponseArea) {
-      chevronClass += ` ${css.hideResponseArea}`;
-      responseAreaClass += ` ${css.hidden}`;
-    }
+    const chevronClass = this.state.hideResponseArea ? `${css.arrow} ${css.hideResponseArea}`:`${css.arrow}`;
+    const responseAreaClass = this.state.hideResponseArea ? `${css.responseArea}  ${css.hidden}` : `${css.responseArea}`;
 
     return (
       <div data-cy="overlay-class-response-area">
