@@ -1,12 +1,16 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "./question-navigator";
+import { ClassResponse } from "./overlay-class-response";
+import { StudentResponse } from "./overlay-student-response";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
 interface IProps {
+  students: any;
+  isAnonymous: boolean;
   currentQuestion?: Map<string, any>;
   questions?: Map<string, any>;
   sortedQuestionIds?: string[];
@@ -17,7 +21,7 @@ interface IProps {
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
-    const { currentQuestion } = this.props;
+    const { students, currentQuestion, isAnonymous } = this.props;
     let wrapperClass = css.questionOverlay;
     if (currentQuestion) {
       wrapperClass += " " + css.visible;
@@ -27,6 +31,9 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
         {
           currentQuestion && this.renderQuestionDetails()
         }
+        { currentQuestion && <ClassResponse currentQuestion={currentQuestion}/> }
+        { currentQuestion && <StudentResponse students={students} isAnonymous={isAnonymous} currentQuestion={currentQuestion} /> }
+        {this.renderFooter()}
       </div>
     );
   }
@@ -46,7 +53,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           toggleCurrentQuestion={toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity}
           inOverlay={true} />
-        {this.renderFooter()}
       </React.Fragment>
     );
   }

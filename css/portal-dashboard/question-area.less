@@ -136,8 +136,31 @@
   font-weight: normal;
   background-color: @cc-teal-light6;
   width: 100%;
-  height: 121px;
   padding-top: 2px;
+  padding-bottom: 20px;
+  min-height: 102px;
+
+  .choiceWrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    margin-top: 12px;
+
+    .choiceIcon {
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      border: 1.5px solid @cc-charcoal-light1;
+      background-color: white;
+      margin-left: 19px;
+      margin-right: 8px;
+    }
+    .correct {
+      font-weight: bold;
+    }
+  }
 }
 
 .questionText {
@@ -147,3 +170,5 @@
 .hidden {
   display: none;
 }
+
+

@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
 import React from "react";
 import { Map } from "immutable";
 import { QuestionTypes } from "../../util/question-utils";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
+import striptags from "striptags";
 
 import css from "../../../css/portal-dashboard/question-area.less";
 
@@ -23,6 +23,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const questionAreaClass = hideQuestion? `${css.hidden}`:"";
+    const mcChoices: Map<any,any> = currentQuestion?.get("choices");
 
     return (
       <div className={questionAreaClass}>
@@ -45,11 +46,32 @@ export class QuestionArea extends React.PureComponent<IProps>{
             </div>
           </div>
         </div >
-        <div className={css.questionTextArea} data-cy="question-text">
+        <div className={css.questionTextArea} data-cy="question-content">
           <div className={css.questionText}>
-            {prompt ? prompt.replace(/<[^>]*>?/gm, '') : ""}
+            {prompt ? striptags(prompt.replace(/&nbsp;/g,' ')) : ""}
+          </div>
+          <div>
+          { type === "multiple_choice" ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)):""}
           </div>
         </div>
+      </div>
+    );
+  }
+  private renderMultipleChoiceChoices = (numChoices: number) => (choices: Map<string, any>, i: number) => {
+    let multipleChoiceContent, multipleChoiceContentClass;
+    if (choices.get("correct")) {
+      multipleChoiceContentClass = `${css.mcContent} ${css.correct}`;
+      multipleChoiceContent = choices.get("content") + " (correct)";
+    }
+    else {
+      multipleChoiceContentClass =  `${css.mcContent}`;
+      multipleChoiceContent = choices.get("content");
+    }
+    return (
+      <div className={css.choiceWrapper} key={`choices ${i}`} >
+        <div className={`${css.choiceIcon}`}>
+        </div>
+        <div className={`${multipleChoiceContentClass}`}>{multipleChoiceContent}</div>
       </div>
     );
   }

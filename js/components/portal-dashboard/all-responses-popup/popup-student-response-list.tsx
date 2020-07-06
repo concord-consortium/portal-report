@@ -1,4 +1,6 @@
 import React from "react";
+import { Map } from "immutable";
+import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-student-response-list.less";
@@ -6,11 +8,12 @@ import css from "../../../../css/portal-dashboard/all-responses-popup/popup-stud
 interface IProps {
   students: any; // TODO: add type
   isAnonymous: boolean;
+  currentQuestion?: Map<string, any>;
 }
 
 export class PopupStudentResponseList extends React.PureComponent<IProps> {
   render() {
-    const { students, isAnonymous } = this.props;
+    const { students, isAnonymous, currentQuestion } = this.props;
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
         {students && students.map((student: any, i: number) => {
@@ -19,8 +22,8 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
           return (
             <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
               {this.renderStudentNameWrapper(formattedName)}
-              <div className={`${css.studentResponse}`}data-cy="student-response">
-                <div className={`${css.studentResponseText} `}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+              <div className={`${css.studentResponse}`} data-cy="student-response">
+                <Answer question={currentQuestion} student={student} inDetail={true} />
               </div>
             </div>
           );

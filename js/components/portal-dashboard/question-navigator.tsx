@@ -35,11 +35,11 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
         <div className={css.titleWrapper}>
           <div className={css.nextQuestionButtons}>
             <div className={css.button + (this.previousQuestion ? "" : " " + css.disabled)}
-              onClick={this.showQuestion(this.previousQuestion)} data-cy="question-overlay-previous-button">
+              onClick={this.showQuestion(this.previousQuestion)} data-cy="question-navigator-previous-button">
               <ArrowLeftIcon className={css.icon} />
             </div>
             <div className={css.button + (this.nextQuestion ? "" : " " + css.disabled)}
-              onClick={this.showQuestion(this.nextQuestion)} data-cy="question-overlay-next-button">
+              onClick={this.showQuestion(this.nextQuestion)} data-cy="question-navigator-next-button">
               <ArrowLeftIcon className={css.icon} />
             </div>
           </div>

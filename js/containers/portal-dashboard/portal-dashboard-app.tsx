@@ -146,6 +146,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
             </div>
             <QuestionOverlay
+              students={students}
+              isAnonymous={isAnonymous}
               currentQuestion={currentQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}

@@ -1,5 +1,9 @@
 {
   "baseUrl": "http://localhost:8080",
   "fixturesFolder": "js/data",
-  "projectId": "er5qci"
+  "projectId": "er5qci",
+  "video": false,
+  "defaultCommandTimeout": 30000,
+  "viewportWidth": 1400,
+  "viewportHeight": 1000
 }
