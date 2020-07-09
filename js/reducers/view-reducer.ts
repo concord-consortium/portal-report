@@ -5,8 +5,9 @@ export const FULL_REPORT = "fullReport";
 export const DASHBOARD = "dashboard";
 export const PORTAL_DASHBOARD = "portalDashboard";
 export const IFRAME_STANDALONE = "iframeStandalone";
+export const EXPORT = "exportPage";
 
-type ViewType = typeof FULL_REPORT | typeof DASHBOARD | typeof PORTAL_DASHBOARD | typeof IFRAME_STANDALONE;
+type ViewType = typeof FULL_REPORT | typeof DASHBOARD | typeof PORTAL_DASHBOARD | typeof IFRAME_STANDALONE | typeof EXPORT;
 
 export interface IViewState {
   type: string;
@@ -15,7 +16,8 @@ export interface IViewState {
 const initialType =
   config("iframeQuestionId") ? IFRAME_STANDALONE :
   configBool("portal-dashboard") ? PORTAL_DASHBOARD :
-  configBool("dashboard") ? DASHBOARD : FULL_REPORT;
+  configBool("export") ? EXPORT :
+  configBool("dashboard") ? DASHBOARD : FULL_REPORT ;
 
 const INITIAL_VIEW_STATE = RecordFactory<IViewState>({
   type: initialType
@@ -40,5 +42,5 @@ export default function view(state = new ViewState({}), action: any) {
 }
 
 export function isDashboardView(viewType: string) {
-  return (viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD);
+  return (viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD) || (viewType === EXPORT);
 }
