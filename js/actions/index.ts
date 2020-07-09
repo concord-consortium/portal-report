@@ -302,6 +302,7 @@ export function correctKey(keyName: string, receiveMsg: string) {
     case RECEIVE_QUESTION_FEEDBACKS:
     case RECEIVE_ACTIVITY_FEEDBACKS:
       return feedbackKeys[keyName];
+    case RECEIVE_ANSWERS:
     case RECEIVE_ANSWERS_EXPORT:
     default:
       return keyName;
