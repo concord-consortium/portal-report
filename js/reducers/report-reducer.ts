@@ -18,7 +18,8 @@ import {
   SET_ANSWER_SELECTED_FOR_COMPARE,
   SHOW_COMPARE_VIEW,
   HIDE_COMPARE_VIEW,
-  RECEIVE_ANSWERS
+  RECEIVE_ANSWERS,
+  RECEIVE_ANSWERS_EXPORT
 } from "../actions";
 
 export type ReportType = "class" | "student";
@@ -172,7 +173,13 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("questions", Immutable.fromJS(data.entities.questions));
       return state;
     case RECEIVE_ANSWERS:
+          // eslint-disable-next-line no-console
+    console.log("action.response: ", action.response);
       return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
+      case RECEIVE_ANSWERS_EXPORT:
+        // eslint-disable-next-line no-console
+  console.log("action.response: ", action.response);
+    return state.set("answers", (action.response));
     case SET_NOW_SHOWING:
       return state
         .set("nowShowing", action.nowShowingValue)

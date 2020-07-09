@@ -33,6 +33,7 @@ export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
+export const RECEIVE_ANSWERS_EXPORT = "RECEIVE_ANSWERS_EXPORT";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
 export const RECEIVE_QUESTION_FEEDBACKS = "RECEIVE_QUESTION_FEEDBACKS";
@@ -301,7 +302,7 @@ export function correctKey(keyName: string, receiveMsg: string) {
     case RECEIVE_QUESTION_FEEDBACKS:
     case RECEIVE_ACTIVITY_FEEDBACKS:
       return feedbackKeys[keyName];
-    case RECEIVE_ANSWERS:
+    case RECEIVE_ANSWERS_EXPORT:
     default:
       return keyName;
   }
