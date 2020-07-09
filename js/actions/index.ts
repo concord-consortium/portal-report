@@ -93,10 +93,10 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     //   type: RECEIVE_RESOURCE_STRUCTURE,
     //   response: fakeActivityStructure,
     // });
-    // dispatch({
-    //   type: RECEIVE_ANSWERS,
-    //   response: fakeAnswers,
-    // });
+    dispatch({
+      type: RECEIVE_ANSWERS,
+      response: fakeAnswers,
+    });
     dispatch({
       type: RECEIVE_ANSWERS_EXPORT,
       response: fakeAnswers,
@@ -105,8 +105,8 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     watchResourceStructure(db, source, resourceUrl, dispatch);
 
     // Watch the Answers
-    // watchCollection(db, `sources/${source}/answers`, RECEIVE_ANSWERS,
-    //   rawPortalData, dispatch);
+    watchCollection(db, `sources/${source}/answers`, RECEIVE_ANSWERS,
+      rawPortalData, dispatch);
     watchCollection(db, `sources/${source}/answers`, RECEIVE_ANSWERS_EXPORT,
     rawPortalData, dispatch);
   }
@@ -226,6 +226,7 @@ export function correctKey(keyName: string, receiveMsg: string) {
     case RECEIVE_QUESTION_FEEDBACKS:
     case RECEIVE_ACTIVITY_FEEDBACKS:
       return feedbackKeys[keyName];
+    case RECEIVE_ANSWERS:
     case RECEIVE_ANSWERS_EXPORT:
     default:
       return keyName;
