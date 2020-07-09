@@ -177,7 +177,9 @@ export default function report(state = new ReportState({}), action?: any) {
     case RECEIVE_ANSWERS_EXPORT:
         // eslint-disable-next-line no-console
       console.log("action.response: ", action.response);
-      return state.set("answers", (action.response));
+      // return state.set("answers", (action.response));
+      return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
+
     case SET_NOW_SHOWING:
       return state
         .set("nowShowing", action.nowShowingValue)
