@@ -54,6 +54,8 @@ export interface IReportState {
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
+  iframeQuestionId: string;
+  export_answers: Array<any>;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -83,6 +85,8 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
   hasTeacherEdition: false,
+  iframeQuestionId: config("iframeQuestionId") as string || "",
+  export_answers: [],
 });
 
 export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
@@ -115,6 +119,8 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   compareViewAnswers: Set<string> | null;
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
+  iframeQuestionId: string;
+  export_answers: Array<any>;
 }
 
 export default function report(state = new ReportState({}), action?: any) {
@@ -177,8 +183,8 @@ export default function report(state = new ReportState({}), action?: any) {
     case RECEIVE_ANSWERS_EXPORT:
         // eslint-disable-next-line no-console
       console.log("action.response: ", action.response);
-      // return state.set("answers", (action.response));
-      return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
+      return state.set("export_answers", (action.response));
+      // return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
 
     case SET_NOW_SHOWING:
       return state
