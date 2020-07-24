@@ -90,7 +90,8 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=student-name]').eq(5).should("contain", "Wu, Jerome");
     });
     it('verify responses',()=>{
-      cy.get('[data-cy="all-responses-popup-view"] [data-cy=question-navigator-next-button]').click().click();
+      cy.get('[data-cy="all-responses-popup-view"] [data-cy=question-navigator-next-button]').click().click().click();
+
       cy.get('[data-cy=student-response] [data-cy=student-answer] > div > div > a').should('have.attr','href');
     });
     //TODO add tests for filtering when implemented

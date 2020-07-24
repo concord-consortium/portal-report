@@ -60,6 +60,12 @@ context("Portal Report Smoke Test", () => {
             cy.get(".feedback-panel").should("exist").and("be.visible");
             cy.get(".footer").find("a").click({ force: true });
         });
+
+        it('handles MC questions without choices', () => {
+            body.openAnswersForQuestion('question-multiple_choice_without_choices');
+            cy.get('.answers-table').should('be.visible');
+            cy.get('.answers-table').should('contain', '[the selected choice has been deleted by question author]');
+        });
     });
 
     context("Portal Report Settings", () => {

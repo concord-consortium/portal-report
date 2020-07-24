@@ -23,7 +23,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const questionAreaClass = hideQuestion? `${css.hidden}`:"";
-    const mcChoices: Map<any,any> = currentQuestion?.get("choices");
+    const mcChoices: Map<any,any> = currentQuestion?.get("choices") || [];
 
     return (
       <div className={questionAreaClass}>
@@ -51,7 +51,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
             {prompt ? striptags(prompt.replace(/&nbsp;/g,' ')) : ""}
           </div>
           <div>
-          { type === "multiple_choice" ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)):""}
+          { type === "multiple_choice" && mcChoices.size > 0 ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)):""}
           </div>
         </div>
       </div>

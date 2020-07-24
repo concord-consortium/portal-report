@@ -30,16 +30,16 @@ export default class MultipleChoiceAnswer extends PureComponent<IProps> {
 
   renderFullAnswer() {
     const { question, answer } = this.props;
-    const choices = question.get("choices");
+    const choices = question.get("choices") || [];
     const studentChoices = answer.get("selectedChoices");
     return (
       <div data-cy="multiple-choice-answers">
         {
-          choices.map((choice: any) =>
+          choices.size > 0 ? choices.map((choice: any) =>
             <Choice key={choice.get("id")} choice={choice} correctAnswerDefined={question.get("scored")}
               selected={studentChoices.some((studentChoice: any) => studentChoice.get("id") === choice.get("id"))}
             />
-          )
+          )  : "Question doesn't have any choices"
         }
       </div>
     );

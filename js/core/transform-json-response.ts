@@ -138,9 +138,9 @@ export function preprocessResourceJSON(resourceJson: IResource) {
           question.page = page.id;
           // Nothing is selected by default.
           question.selected = false;
-          if (question.type === "multiple_choice" && question.choices) {
+          if (question.type === "multiple_choice") {
             // Multiple choice question is scored if at least one choice is marked as correct.
-            question.scored = question.choices.some(c => c.correct);
+            question.scored = question.choices ? question.choices.some(c => c.correct) : false;
           }
         });
       });

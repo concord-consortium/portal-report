@@ -50,8 +50,8 @@ context("Portal Dashboard Question Details Panel", () => {
 
     it('verify we can page first from last question of an activity', () => {
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 1: Report Test Activity 1");
-      cy.get('[data-cy=activity-question-button]').eq(5).click({ force: true });
-      cy.get('[data-cy=question-overlay]').should("contain", "Question #6");
+      cy.get('[data-cy=activity-question-button]').eq(6).click({ force: true });
+      cy.get('[data-cy=question-overlay]').should("contain", "Question #7");
       cy.get('[data-cy=question-navigator-next-button]').click();
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 2: Report Test Activity 2");
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
@@ -71,7 +71,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
       cy.get('[data-cy=question-navigator-previous-button]').click();
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 1: Report Test Activity 1");
-      cy.get('[data-cy=question-overlay]').should("contain", "Question #6");
+      cy.get('[data-cy=question-overlay]').should("contain", "Question #7");
     });
   });
   describe('footer elements', () => {
@@ -81,7 +81,7 @@ context("Portal Dashboard Question Details Panel", () => {
   });
   describe('Question area', () => {
     before(() => {
-      cy.get('[data-cy=question-navigator-previous-button]').click().click();
+      cy.get('[data-cy=question-navigator-previous-button]').click().click().click();
     });
     it('verify question area is visible', () => {
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
