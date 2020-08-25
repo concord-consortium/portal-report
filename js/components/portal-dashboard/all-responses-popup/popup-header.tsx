@@ -1,6 +1,6 @@
 import React from "react";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
-import FeedbackIcon from "../../../../img/svg-icons/feedback-icon.svg";
+// Removed for MVP: import FeedbackIcon from "../../../../img/svg-icons/feedback-icon.svg";
 import GroupIcon from "../../../../img/svg-icons/group-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
 
@@ -42,7 +42,7 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   }
 
   private renderResponseFeedbackToggle = () => {
-    const feedbackToggleClass: string = `${css.feedbackToggle}` + (!this.state.inFeedbackMode? ` ${css.toggleOff}` : "");
+    // Removed for MVP: const feedbackToggleClass: string = `${css.feedbackToggle}` + (!this.state.inFeedbackMode? ` ${css.toggleOff}` : "");
     const responsesToggleClass: string = `${css.responseToggle}` + (this.state.inFeedbackMode? ` ${css.toggleOff}` : "");
 
     return (
@@ -53,12 +53,14 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
             <div className={`${css.toggleTitle} ${css.responseTitle} `}>All Student Responses</div>
           </div>
         </div>
+        {/* Removed for MVP:
         <div className={css.toggleHolder}>
           <div className={feedbackToggleClass} id="feedback-toggle" data-cy="feedback-toggle" onClick = {this.setFeedbackMode(true)} >
             <div className={`${css.toggleTitle} ${css.feedbackTitle}`}>Feedback to Students</div>
             <FeedbackIcon className={`${css.icon} ${css.toggleIcon} ${css.feedbackIcon}`} />
           </div>
         </div>
+        */ }
       </div>
     );
   }

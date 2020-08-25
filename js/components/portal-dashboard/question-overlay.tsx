@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "./question-navigator";
-import { ClassResponse } from "./overlay-class-response";
+// Removed for MVP: import { ClassResponse } from "./overlay-class-response";
 import { StudentResponse } from "./overlay-student-response";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg";
@@ -28,10 +28,8 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     }
     return (
       <div className={wrapperClass} data-cy="question-overlay">
-        {
-          currentQuestion && this.renderQuestionDetails()
-        }
-        { currentQuestion && <ClassResponse currentQuestion={currentQuestion}/> }
+        { currentQuestion && this.renderQuestionDetails() }
+        {/* Removed for MVP: { currentQuestion && <ClassResponse currentQuestion={currentQuestion}/> } */}
         { currentQuestion && <StudentResponse students={students} isAnonymous={isAnonymous} currentQuestion={currentQuestion} /> }
         {this.renderFooter()}
       </div>
