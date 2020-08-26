@@ -15,7 +15,8 @@ context("Portal Dashboard Question Details Panel", () => {
       //TODO Verify title should match the sequence/activity name from dashboard
     });
     //TODO Feedback toggle opens feedback view and vice versa
-    it('verify all responses/feedback toggle is visible', () => {
+    // Removed for MVP:
+    it.skip('verify all responses/feedback toggle is visible', () => {
       cy.get('[data-cy=all-students-responses-toggle]').should('be.visible').then(($el) => {
         expect($el).to.have.css("width", "204px");
         cy.get('[data-cy=feedback-toggle]').should('be.visible').then(($el) => {

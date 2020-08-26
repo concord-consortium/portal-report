@@ -20,10 +20,11 @@ context("Portal Dashboard UI",()=>{
             cy.get('[data-cy=choose-class]').should('be.visible');
             cy.get('[data-cy=sort-students]').should('be.visible');
             cy.get('[data-cy=anonymize-students]').should('be.visible');
-            cy.get('[data-cy=students-feedback]').should('be.visible');
-            cy.get('[data-cy=students-feedback]').within(() => {
-                cy.get('[data-cy=toggle-control]').click();
-            });
+            // Removed for MVP:
+            // cy.get('[data-cy=students-feedback]').should('be.visible');
+            // cy.get('[data-cy=students-feedback]').within(() => {
+            //     cy.get('[data-cy=toggle-control]').click();
+            // });
         });
     });
     describe('student list',()=>{

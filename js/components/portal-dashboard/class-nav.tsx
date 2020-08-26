@@ -1,7 +1,7 @@
 import React from "react";
 import { CustomSelect, SelectItem } from "./custom-select";
 import { AnonymizeStudents } from "./anonymize-students";
-import { Feedback } from "./feedback";
+// Removed for MVP: import { Feedback } from "./feedback";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../actions/dashboard";
 import { NumberOfStudentsContainer } from "./num-students-container";
 import SortIcon from "../../../img/svg-icons/sort-icon.svg";
@@ -24,7 +24,7 @@ export class ClassNav extends React.PureComponent<IProps> {
       <div className={css.classNav} data-cy="class-nav">
         { this.renderClassSelect() }
         <AnonymizeStudents setAnonymous={setAnonymous} />
-        <Feedback />
+        {/* Removed for MVP: <Feedback /> */}
         <NumberOfStudentsContainer studentCount={this.props.studentCount} />
         { this.renderStudentSort() }
       </div>

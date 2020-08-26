@@ -98,7 +98,8 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=question-overlay] [data-cy=question-content]').should('be.visible');
     });
   });
-  describe('Class Response Area', () => {
+  // Removed for MVP:
+  describe.skip('Class Response Area', () => {
     it('verify class response area is visible', () => {
       cy.get('[data-cy=overlay-class-response-area]').should('be.visible');
     });
