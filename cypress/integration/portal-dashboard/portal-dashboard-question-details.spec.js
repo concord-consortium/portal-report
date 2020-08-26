@@ -98,18 +98,19 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=question-overlay] [data-cy=question-content]').should('be.visible');
     });
   });
-  // describe('Class Response Area', () => {
-  //   it('verify class response area is visible', () => {
-  //     cy.get('[data-cy=overlay-class-response-area]').should('be.visible');
-  //   });
-  //   it('verify show/hide button behaves correctly', () => {
-  //     cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
-  //     cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('not.be.visible');
-  //     cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
-  //     cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-title]').should('be.visible');
-  //     cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('be.visible');
-  //   });
-  // });
+  // Removed for MVP:
+  describe.skip('Class Response Area', () => {
+    it('verify class response area is visible', () => {
+      cy.get('[data-cy=overlay-class-response-area]').should('be.visible');
+    });
+    it('verify show/hide button behaves correctly', () => {
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('not.be.visible');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-title]').should('be.visible');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('be.visible');
+    });
+  });
   describe('Student Response area', () => {
     it('verify student response area is visible', () => {
       cy.get('[data-cy=overlay-student-response-area]').should('be.visible');
