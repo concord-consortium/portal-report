@@ -48,7 +48,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           </div>
           {inOverlay && this.renderChevron(chevronClass)}
         </div>
-        <QuestionArea currentQuestion={currentQuestion} hideQuestion={this.state.hideQuestion} />
+        <QuestionArea currentQuestion={currentQuestion} hideQuestion={this.state.hideQuestion} inOverlay={inOverlay} />
       </React.Fragment>
     );
   }

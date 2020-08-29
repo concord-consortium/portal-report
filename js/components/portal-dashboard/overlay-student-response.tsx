@@ -42,7 +42,7 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
         </div>
         <div className={css.responseArea}>
           {/* TODO: add new answer component which determines types and centering */}
-          <Answer question={currentQuestion} student={students.get(currentStudentIndex)} inDetail={true}/>
+          <Answer question={currentQuestion} student={students.get(currentStudentIndex)} />
         </div>
       </div>
     );

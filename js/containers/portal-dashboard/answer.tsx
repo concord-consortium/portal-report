@@ -15,7 +15,6 @@ interface IProps {
   answer: Map<any, any>;
   question: Map<string, any>;
   student: Map<any, any>;
-  inDetail?: boolean;
 }
 
 class Answer extends React.PureComponent<IProps> {
@@ -37,50 +36,24 @@ class Answer extends React.PureComponent<IProps> {
     return (
       <div className={css.answer} data-cy="student-answer">
         {answer && (!question.get("required") || answer.get("submitted"))
-          ? this.renderAnswer(answerType?.icon, iconId, atype)
+          ? this.renderAnswer(atype)
           : this.renderNoAnswer(questionType?.icon, iconId)
         }
       </div>
     );
   }
 
-  private renderAnswer = (answerType: string, iconId: string, type: string) => {
-    const { inDetail } = this.props;
-    const AnswerIcon = answerType;
-
-    if (!inDetail) {
-      return (
-        <div className={css.answerContent} data-cy={iconId}>
-          <AnswerIcon />
-        </div>
-      );
-    } else {
-      return (
-        <div className={css.answerDetail}>
-          {this.renderAnswerDetail(type)}
-        </div>
-      );
-    }
-  }
-
   renderNoAnswer = (questionType: string, iconId: string) => {
-    const { inDetail } = this.props;
     const QuestionIcon = questionType;
-    if (!inDetail) {
-      return (
-        <div className={`${css.answerContent} ${css.noAnswer}`} data-cy={"no-answer"} />
-      );
-    } else {
-      return (
-        <div className={`${css.answerDetail} ${css.noAnswer}`} data-cy={iconId}>
-          <QuestionIcon />
-          No response
-        </div>
-      );
-    }
+    return (
+      <div className={css.noAnswer} data-cy={iconId}>
+        <QuestionIcon />
+        No response
+      </div>
+    );
   }
 
-  renderAnswerDetail = (type: string) => {
+  renderAnswer = (type: string) => {
     const { answer, question } = this.props;
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,

@@ -9,11 +9,12 @@ import css from "../../../css/portal-dashboard/question-area.less";
 interface IProps {
   currentQuestion?: Map<string, any>;
   hideQuestion: boolean;
+  inOverlay?: boolean;
 }
 
 export class QuestionArea extends React.PureComponent<IProps>{
   render() {
-    const { currentQuestion, hideQuestion } = this.props;
+    const { currentQuestion, hideQuestion, inOverlay } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
     const prompt = currentQuestion?.get("prompt");
@@ -45,7 +46,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
             </div>
           </div>
         </div>
-        <div className={css.questionTextArea} data-cy="question-content">
+        <div className={`${css.questionTextArea} ${!inOverlay ? css.minHeight : ""}`} data-cy="question-content">
           <div className={css.questionText}>
             {prompt ? striptags(prompt.replace(/&nbsp;/g,' ')) : ""}
           </div>
