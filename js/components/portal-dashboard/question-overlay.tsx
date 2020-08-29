@@ -46,7 +46,8 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           sortedQuestionIds={sortedQuestionIds}
           toggleCurrentQuestion={toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity}
-          inOverlay={true} />
+          inOverlay={true}
+        />
       </React.Fragment>
     );
   }
