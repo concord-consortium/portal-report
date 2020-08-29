@@ -22,12 +22,8 @@ interface IProps {
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
     const { students, currentQuestion, isAnonymous } = this.props;
-    let wrapperClass = css.questionOverlay;
-    if (currentQuestion) {
-      wrapperClass += " " + css.visible;
-    }
     return (
-      <div className={wrapperClass} data-cy="question-overlay">
+      <div className={`${css.questionOverlay} ${(currentQuestion ? css.visible : "")}`} data-cy="question-overlay">
         { currentQuestion && this.renderQuestionDetails() }
         {/* Removed for MVP: { currentQuestion && <ClassResponse currentQuestion={currentQuestion}/> } */}
         { currentQuestion && <StudentResponse students={students} isAnonymous={isAnonymous} currentQuestion={currentQuestion} /> }
