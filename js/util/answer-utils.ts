@@ -100,3 +100,17 @@ export const AnswerTypes: AnswerType[] = [
   },
 
 ];
+
+export const getAnswerType = (answer: any, question: any) => {
+  const type = answer && answer.get("questionType");
+  const scored = question && question.get("scored");
+  const correct = scored ? answer && answer.get("correct") : undefined;
+  const answerType = AnswerTypes.find(at => at.type === type && at.correct === correct);
+  return answerType;
+};
+
+export const getAnswerIconId = (answerType: any) => {
+  const searchRegExp = / /g;
+  const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
+  return iconId;
+};

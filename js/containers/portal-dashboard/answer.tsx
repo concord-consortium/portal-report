@@ -1,7 +1,7 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { AnswerTypes } from "../../util/answer-utils";
+import { getAnswerType, getAnswerIconId } from "../../util/answer-utils";
 import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
@@ -24,15 +24,13 @@ class Answer extends React.PureComponent<IProps> {
 
   render() {
     const { answer, question } = this.props;
-    const type = answer && answer.get("questionType");
-    const scored = question && question.get("scored");
     const atype = answer && answer.get("type");
     const qtype = question && question.get("type");
-    const correct = scored ? answer && answer.get("correct") : undefined;
-    const answerType = AnswerTypes.find(at => at.type === type && at.correct === correct);
+    const scored = question && question.get("scored");
     const questionType = QuestionTypes.find(qt => qt.type === qtype && qt.scored === scored);
-    const searchRegExp = / /g;
-    const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
+    const answerType = getAnswerType(answer, question);
+    const iconId = getAnswerIconId(answerType);
+
     return (
       <div className={css.answer} data-cy="student-answer">
         {answer && (!question.get("required") || answer.get("submitted"))
@@ -43,8 +41,8 @@ class Answer extends React.PureComponent<IProps> {
     );
   }
 
-  renderNoAnswer = (questionType: string, iconId: string) => {
-    const QuestionIcon = questionType;
+  renderNoAnswer = (icon: any, iconId: string) => {
+    const QuestionIcon = icon;
     return (
       <div className={css.noAnswer} data-cy={iconId}>
         <QuestionIcon />

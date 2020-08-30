@@ -1,7 +1,7 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { AnswerTypes } from "../../util/answer-utils";
+import { getAnswerType, getAnswerIconId } from "../../util/answer-utils";
 
 import css from "../../../css/portal-dashboard/answer-compact.less";
 
@@ -18,12 +18,8 @@ class AnswerCompact extends React.PureComponent<IProps> {
 
   render() {
     const { answer, question } = this.props;
-    const type = answer && answer.get("questionType");
-    const scored = question && question.get("scored");
-    const correct = scored ? answer && answer.get("correct") : undefined;
-    const answerType = AnswerTypes.find(at => at.type === type && at.correct === correct);
-    const searchRegExp = / /g;
-    const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
+    const answerType = getAnswerType(answer, question);
+    const iconId = getAnswerIconId(answerType);
     return (
       <div className={css.answerCompact} data-cy="student-answer">
         { answer && (!question.get("required") || answer.get("submitted"))
@@ -34,8 +30,8 @@ class AnswerCompact extends React.PureComponent<IProps> {
     );
   }
 
-  private renderAnswer = (answerType: string, iconId: string) => {
-    const AnswerIcon = answerType;
+  private renderAnswer = (icon: any, iconId: string) => {
+    const AnswerIcon = icon;
     return (
       <div className={css.answerContent} data-cy={iconId}>
         <AnswerIcon />
