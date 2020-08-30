@@ -1,7 +1,7 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { getAnswerType, getAnswerIconId } from "../../util/answer-utils";
+import { getAnswerType, getAnswerIconId, AnswerProps } from "../../util/answer-utils";
 import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
@@ -11,14 +11,8 @@ import IframeAnswer from "../../components/report/iframe-answer";
 
 import css from "../../../css/portal-dashboard/answer.less";
 
-interface IProps {
-  answer: Map<any, any>;
-  question: Map<string, any>;
-  student: Map<any, any>;
-}
-
-class Answer extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
+class Answer extends React.PureComponent<AnswerProps> {
+  constructor(props: AnswerProps) {
     super(props);
   }
 
@@ -74,14 +68,14 @@ class Answer extends React.PureComponent<IProps> {
   }
 }
 
-function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
+function mapStateToProps(state: any, ownProps: any): Partial<AnswerProps> {
   return {
     answer: getAnswersByQuestion(state)
       .getIn([ownProps.question.get("id"), ownProps.student.get("id")])
   };
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
+const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<AnswerProps> => {
   return {};
 };
 

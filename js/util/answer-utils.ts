@@ -19,6 +19,12 @@ export interface AnswerType {
   icon: any;
 }
 
+export interface AnswerProps {
+  answer: Map<any, any>;
+  question: Map<string, any>;
+  student: Map<any, any>;
+}
+
 export const AnswerTypes: AnswerType[] = [
   {
     name: "Fill in the Blank Completed",
@@ -114,3 +120,4 @@ export const getAnswerIconId = (answerType: any) => {
   const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
   return iconId;
 };
+
