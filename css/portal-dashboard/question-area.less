@@ -1,5 +1,9 @@
 @import "./variables";
 
+.questionArea {
+  flex-basis: auto;
+}
+
 .questionTypeHeader {
   display: flex;
   flex-direction: row;
@@ -7,7 +11,7 @@
   font-weight: normal;
   text-transform: capitalize;
   background-color: @cc-teal-light6;
-  
+
   .icon{
     height: 30px;
     width: 30px;
@@ -19,7 +23,7 @@
     flex: 1;
     justify-content: flex-start;
     margin: 10px 0 10px 0;
-     .questionTypeIcon {
+    .questionTypeIcon {
       fill: @cc-teal;
       margin: 10px 0 10px 20px;
     }
@@ -66,7 +70,7 @@
         pointer-events: none;
         fill: @cc-teal;
         margin: 0;
-      }                    
+      }
     }
 
     .teacherEditionIcon {
@@ -86,7 +90,7 @@
           fill: @te-orange;
         }
       }
-  
+
       .teacherEditionButton {
         display: flex;
         justify-content: center;
@@ -99,7 +103,7 @@
         border: solid 1.5px white;
         background-color: @te-orange;
         cursor: pointer;
-      
+
         .icon {
           width: 24px;
           height: 24px;
@@ -138,7 +142,10 @@
   width: 100%;
   padding-top: 2px;
   padding-bottom: 20px;
-  min-height: 102px;
+
+  &.minHeight {
+    min-height: 101px;
+  }
 
   .choiceWrapper{
     display: flex;
@@ -166,9 +173,7 @@
 .questionText {
   margin: 0px 20px;
 }
- 
+
 .hidden {
   display: none;
 }
-
-

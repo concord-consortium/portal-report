@@ -26,7 +26,7 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
     const { currentQuestion, students, isAnonymous } = this.props;
     const { currentStudentIndex } = this.state;
     return (
-      <div data-cy="overlay-student-response-area">
+      <div className={css.studentResponse} data-cy="overlay-student-response-area">
         <div className={css.responseHeader}>
           <div className={css.title} data-cy='overlay-student-name'>{getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))}</div>
           <div className={css.nextStudentButtons}>
@@ -41,7 +41,7 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
           </div>
         </div>
         <div className={css.responseArea}>
-          <Answer question={currentQuestion} student={students.get(currentStudentIndex)} inDetail={true}/>
+          <Answer question={currentQuestion} student={students.get(currentStudentIndex)} />
         </div>
       </div>
     );

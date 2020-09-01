@@ -1,5 +1,5 @@
 import React from "react";
-import Answer from "../../containers/portal-dashboard/answer";
+import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
 
@@ -66,7 +66,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
       <div className={css.activityPage} key={page.get("id")}>
         { page.get("children").map((question: any) => {
             return (
-              <Answer key={question.get("id")} question={question} student={student} />
+              <AnswerCompact key={question.get("id")} question={question} student={student} />
             );
           })
         }

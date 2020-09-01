@@ -23,7 +23,7 @@ export class ClassResponse extends React.PureComponent<IProps, IState> {
     const responseAreaClass = this.state.hideResponseArea ? `${css.responseArea}  ${css.hidden}` : `${css.responseArea}`;
 
     return (
-      <div data-cy="overlay-class-response-area">
+      <div className={css.classResponse} data-cy="overlay-class-response-area">
         <div className={css.responseHeader}>
           <div className={css.title} data-cy="class-response-title">Class Response</div>
           <div className={css.showHideButton} onClick={this.handleChevronClick} data-cy="show-hide-class-response-button">

@@ -1,7 +1,7 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { AnswerTypes } from "../../util/answer-utils";
+import { getAnswerType, getAnswerIconId, AnswerProps } from "../../util/answer-utils";
 import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
@@ -11,76 +11,41 @@ import IframeAnswer from "../../components/report/iframe-answer";
 
 import css from "../../../css/portal-dashboard/answer.less";
 
-interface IProps {
-  answer: Map<any, any>;
-  question: Map<string, any>;
-  student: Map<any, any>;
-  inDetail?: boolean;
-}
-
-class Answer extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
+class Answer extends React.PureComponent<AnswerProps> {
+  constructor(props: AnswerProps) {
     super(props);
   }
 
   render() {
     const { answer, question } = this.props;
-    const type = answer && answer.get("questionType");
-    const scored = question && question.get("scored");
     const atype = answer && answer.get("type");
     const qtype = question && question.get("type");
-    const correct = scored ? answer && answer.get("correct") : undefined;
-    const answerType = AnswerTypes.find(at => at.type === type && at.correct === correct);
+    const scored = question && question.get("scored");
     const questionType = QuestionTypes.find(qt => qt.type === qtype && qt.scored === scored);
-    const searchRegExp = / /g;
-    const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
+    const answerType = getAnswerType(answer, question);
+    const iconId = getAnswerIconId(answerType);
+
     return (
       <div className={css.answer} data-cy="student-answer">
         {answer && (!question.get("required") || answer.get("submitted"))
-          ? this.renderAnswer(answerType?.icon, iconId, atype)
+          ? this.renderAnswer(atype)
           : this.renderNoAnswer(questionType?.icon, iconId)
         }
       </div>
     );
   }
 
-  private renderAnswer = (answerType: string, iconId: string, type: string) => {
-    const { inDetail } = this.props;
-    const AnswerIcon = answerType;
-
-    if (!inDetail) {
-      return (
-        <div className={css.answerContent} data-cy={iconId}>
-          <AnswerIcon />
-        </div>
-      );
-    } else {
-      return (
-        <div className={css.answerDetail}>
-          {this.renderAnswerDetail(type)}
-        </div>
-      );
-    }
+  renderNoAnswer = (icon: any, iconId: string) => {
+    const QuestionIcon = icon;
+    return (
+      <div className={css.noAnswer} data-cy={iconId}>
+        <QuestionIcon />
+        No response
+      </div>
+    );
   }
 
-  renderNoAnswer = (questionType: string, iconId: string) => {
-    const { inDetail } = this.props;
-    const QuestionIcon = questionType;
-    if (!inDetail) {
-      return (
-        <div className={`${css.answerContent} ${css.noAnswer}`} data-cy={"no-answer"} />
-      );
-    } else {
-      return (
-        <div className={`${css.answerDetail} ${css.noAnswer}`} data-cy={iconId}>
-          <QuestionIcon />
-          No response
-        </div>
-      );
-    }
-  }
-
-  renderAnswerDetail = (type: string) => {
+  renderAnswer = (type: string) => {
     const { answer, question } = this.props;
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,
@@ -103,14 +68,14 @@ class Answer extends React.PureComponent<IProps> {
   }
 }
 
-function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
+function mapStateToProps(state: any, ownProps: any): Partial<AnswerProps> {
   return {
     answer: getAnswersByQuestion(state)
       .getIn([ownProps.question.get("id"), ownProps.student.get("id")])
   };
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
+const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<AnswerProps> => {
   return {};
 };
 

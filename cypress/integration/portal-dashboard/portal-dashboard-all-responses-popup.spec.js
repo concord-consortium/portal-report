@@ -93,7 +93,7 @@ context("Portal Dashboard Question Details Panel", () => {
     it('verify responses',()=>{
       cy.get('[data-cy="all-responses-popup-view"] [data-cy=question-navigator-next-button]').click().click().click();
 
-      cy.get('[data-cy=student-response] [data-cy=student-answer] > div > div > a').should('have.attr','href');
+      cy.get('[data-cy=student-response] [data-cy=student-answer] > div > a').should('have.attr','href');
     });
     //TODO add tests for filtering when implemented
   });

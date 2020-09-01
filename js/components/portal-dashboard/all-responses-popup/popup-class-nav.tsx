@@ -43,12 +43,12 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
       <React.Fragment>
         <div className={`${css.popupClassNav} ${css.column}`}>
           {this.renderViewListOptions()}
-          < div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav" >
+          < div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
             <AnonymizeStudents setAnonymous={setAnonymous} />
             <NumberOfStudentsContainer studentCount={studentCount} />
             {this.renderStudentFilter()}
             {this.renderSpotlightToggle()}
-          </div >
+          </div>
         </div>
         {showDialog && < SpotlightDialog handleCloseDialog={this.closeShowDialog} />}
       </React.Fragment>
