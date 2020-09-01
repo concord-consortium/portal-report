@@ -1,0 +1,44 @@
+@import "../variables";
+
+.magnifyIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px 0 0 0;
+  border: solid 1.5px @cc-charcoal-light1;
+  background-color: @cc-orange-light6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  &.question {
+    background-color: @cc-teal-light6;
+
+    .icon {
+      fill: @cc-teal;
+    }
+
+    &:hover {
+      background-color: @cc-teal-light3;
+    }
+    &:active {
+      background-color: @cc-teal;
+    }
+  }
+
+  &:hover {
+    background-color: @cc-orange-light3;
+  }
+  &:active {
+    background-color: @cc-orange;
+  }
+
+  .icon {
+    fill: @cc-orange;
+  }
+  &:active .icon {
+    fill: white;
+  }
+}

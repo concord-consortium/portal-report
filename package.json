@@ -113,6 +113,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@react-hook/resize-observer": "^1.1.0",
     "aws-sdk": "^2.451.0",
     "bootstrap": "^3.3.6",
     "chroma-js": "^2.1.0",

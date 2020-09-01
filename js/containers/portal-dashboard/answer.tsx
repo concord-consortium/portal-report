@@ -5,7 +5,7 @@ import { getAnswerType, getAnswerIconId, AnswerProps } from "../../util/answer-u
 import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
-import ImageAnswer from "../../components/report/image-answer";
+import { ImageAnswer } from "../../components/portal-dashboard/answers/image-answer";
 import ExternalLinkAnswer from "../../components/portal-dashboard/external-link-answer";
 import IframeAnswer from "../../components/report/iframe-answer";
 
@@ -46,7 +46,7 @@ class Answer extends React.PureComponent<AnswerProps> {
   }
 
   renderAnswer = (type: string) => {
-    const { answer, question } = this.props;
+    const { answer, question, staticSize } = this.props;
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,
       "open_response_answer": OpenResponseAnswer,
@@ -62,7 +62,7 @@ class Answer extends React.PureComponent<AnswerProps> {
     }
     else {
       return (
-        <AComponent answer={answer} question={question} showFullAnswer={true} />
+        <AComponent answer={answer} question={question} showFullAnswer={true} staticSize={staticSize} />
       );
     }
   }
