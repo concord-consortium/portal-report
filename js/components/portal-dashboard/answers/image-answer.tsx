@@ -47,8 +47,8 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
   const divSize: any = useSize(divTarget);
 
   // get the container size - can be static or dynamic
-  const containerHeight: number = staticSize ? kStaticHeight: divSize && divSize.height;
-  const containerWidth: number = staticSize ? kStaticWidth : divSize && divSize.width;
+  const containerHeight: number = staticSize ? kStaticHeight: divSize?.height;
+  const containerWidth: number = staticSize ? kStaticWidth : divSize?.width;
 
   // compute final image size from the container size and image aspect ratio
   const constrainX = naturalWidth / containerWidth >= naturalHeight / containerHeight;
