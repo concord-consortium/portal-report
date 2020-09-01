@@ -15,56 +15,45 @@ const kStaticHeight = 250;
 const kStaticWidth = 250;
 
 export const ImageAnswer: React.FC<IProps> = (props) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const { answer, staticSize } = props;
+  const imgAnswer = answer.get("answer");
 
+  const [modalOpen, setModalOpen] = useState(false);
   const handleShowModal = (show: boolean) => () => {
     setModalOpen(show);
   };
 
-  const { answer, staticSize } = props;
-  const imgAnswer = answer.get("answer");
+  // get the native dimensions and aspect ratio of the image
+  const [naturalWidth, setNaturalWidth] = useState(0);
+  const [naturalHeight, setNaturalHeight] = useState(0);
+  const [aspectRatio, setAspectRatio] = useState(0);
+  const onImgLoad = ({ target: img }: any) => {
+    setAspectRatio(img.naturalWidth / img.naturalHeight);
+    setNaturalHeight(img.naturalHeight);
+    setNaturalWidth(img.naturalWidth);
+  };
 
   // cf. https://www.npmjs.com/package/@react-hook/resize-observer
   const useSize = (target: any) => {
     const [size, setSize] = React.useState();
-
     React.useLayoutEffect(() => {
       setSize(target.current.getBoundingClientRect());
     }, [target]);
-
     useResizeObserver(target, (entry: any) => setSize(entry.contentRect));
     return size;
   };
 
   const divTarget = React.useRef(null);
   const divSize: any = useSize(divTarget);
+
+  // get the container size - can be static or dynamic
   const containerHeight: number = staticSize ? kStaticHeight: divSize && divSize.height;
   const containerWidth: number = staticSize ? kStaticWidth : divSize && divSize.width;
 
-  const [naturalWidth, setNaturalWidth] = useState(0);
-  const [naturalHeight, setNaturalHeight] = useState(0);
-  const [aspectRatio, setAspectRatio] = useState(0);
-
-
-  let imgWidth = 0;
-  let imgHeight = 0;
-  if (aspectRatio > 0) {
-    if (naturalWidth / containerWidth >= naturalHeight / containerHeight) {
-      // constrain along width
-      imgWidth = containerWidth;
-      imgHeight = containerWidth / aspectRatio;
-    } else {
-      // constrain along height
-      imgHeight = containerHeight;
-      imgWidth = containerHeight / aspectRatio;
-    }
-  }
-
-  const onImgLoad = ({ target: img }: any) => {
-    setAspectRatio(img.naturalWidth / img.naturalHeight);
-    setNaturalHeight(img.naturalHeight);
-    setNaturalWidth(img.naturalWidth);
-  };
+  // compute final image size from the container size and image aspect ratio
+  const constrainX = naturalWidth / containerWidth >= naturalHeight / containerHeight;
+  const imgWidth = aspectRatio > 0 ? (constrainX ? containerWidth : containerHeight / aspectRatio) : 0;
+  const imgHeight = aspectRatio > 0 ? (constrainX ? containerWidth / aspectRatio : containerHeight) : 0;
 
   return (
     <React.Fragment>
