@@ -35,7 +35,7 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
 
   // cf. https://www.npmjs.com/package/@react-hook/resize-observer
   const useSize = (target: any) => {
-    const [size, setSize] = React.useState();
+    const [size, setSize] = React.useState(new DOMRect(0, 0, 0, 0));
     React.useLayoutEffect(() => {
       setSize(target.current.getBoundingClientRect());
     }, [target]);
@@ -44,7 +44,7 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
   };
 
   const divTarget = React.useRef(null);
-  const divSize: any = useSize(divTarget);
+  const divSize: DOMRect | DOMRectReadOnly = useSize(divTarget);
 
   // get the container size - can be static or dynamic
   const containerHeight: number = staticSize ? kStaticHeight: divSize?.height;
