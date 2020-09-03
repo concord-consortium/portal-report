@@ -1,6 +1,6 @@
 import React, { useState }  from "react";
 // TODO: replace with new model
-import ImageAnswerModal from "../../report/image-answer-modal";
+import { AnswerModal } from "./answer-modal";
 import { MagnifyIcon } from "./magnify-icon";
 import useResizeObserver from "@react-hook/resize-observer";
 
@@ -9,13 +9,15 @@ import css from "../../../../css/portal-dashboard/answers/image-answer.less";
 interface IProps {
   answer: Map<any, any>;
   staticSize?: boolean;
+  question?: Map<any, any>;
+  studentName: string;
 }
 
 const kStaticHeight = 250;
 const kStaticWidth = 250;
 
 export const ImageAnswer: React.FC<IProps> = (props) => {
-  const { answer, staticSize } = props;
+  const { answer, staticSize, question, studentName } = props;
   const imgAnswer = answer.get("answer");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -66,7 +68,7 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
         </div>
         <div className={css.imageAnswerNote}>{imgAnswer.get("text")}</div>
       </div>
-      <ImageAnswerModal answer={answer} show={modalOpen} onHide={handleShowModal(false)} />
+      <AnswerModal answer={answer} show={modalOpen} onHide={handleShowModal(false)} question={question} studentName={studentName}/>
     </React.Fragment>
   );
 };

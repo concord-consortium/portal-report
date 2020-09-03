@@ -24,6 +24,7 @@ export interface AnswerProps {
   question: Map<string, any>;
   student: Map<any, any>;
   staticSize?: boolean;
+  studentName?: string;
 }
 
 export const AnswerTypes: AnswerType[] = [
