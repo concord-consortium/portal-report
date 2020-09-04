@@ -153,11 +153,10 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy="answer-lightbox"]').should('be.visible');
       cy.get('[data-cy="modal-header"]').should('contain', "Wu, Jerome");
       cy.get('[data-cy="answer-lightbox"] [data-cy="answer-image"]').should('be.visible');
-    })
+    });
     it('verify close lightbox',()=>{
       cy.get('[data-cy="modal-header"] [data-cy="close-button"]').should('be.visible').click();
       cy.get('[data-cy="answer-lightbox"]').should('not.exist');
-
-    })
+    });
   });
 });
