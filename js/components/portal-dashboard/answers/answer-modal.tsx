@@ -26,10 +26,9 @@ export class AnswerModal extends PureComponent<IProps> {
     const contentAnswer = answer.get("answer");
     const answerText = contentAnswer.get("text") || "";
 
-    console.log(`answer: `,answer);
     if (!answer) { return null; }
     return (
-      <Modal show={show} onHide={onHide} animation={false} dialogClassName={css.lightbox} centered>
+      <Modal show={show} onHide={onHide} animation={false} dialogClassName={css.lightbox} centered data-cy="answer-lightbox">
           <Modal.Header className={lightboxHeaderClass} data-cy="modal-header">
             <div className={css.studentName} data-cy="student-name">
               {studentName}

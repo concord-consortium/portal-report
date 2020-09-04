@@ -11,7 +11,7 @@ interface IProps {
 export const MagnifyIcon: React.FC<IProps> = (props) => {
   const { isQuestion, onClick } = props;
   return (
-    <div className={`${css.magnifyIcon} ${isQuestion ? css.question : ""}`} onClick={onClick}>
+    <div className={`${css.magnifyIcon} ${isQuestion ? css.question : ""}`} onClick={onClick} data-cy="magnify-answer">
       <EnlargeIcon className={css.icon} />
     </div>
   );
