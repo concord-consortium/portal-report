@@ -5,6 +5,7 @@ import { QuestionTypes } from "../../../util/question-utils";
 import { renderHTML } from "../../../util/render-html";
 
 import css from "../../../../css/portal-dashboard/answers/answer-modal.less";
+import "../../../../css/portal-dashboard/answers/answer-modal.css";
 
 interface IProps {
   answer: Map<any, any>;
