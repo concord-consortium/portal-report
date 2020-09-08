@@ -1,15 +1,13 @@
 @import "../variables";
 
-.modal-dialog .modal-content {
-  border-radius: 8px !important;
-}
-
 .lightbox {
   width: 640px;
   border-radius: 8px !important;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
   background-color: white;
   top: 35px;
+  display: flex;
+  flex-direction: column;
 
   .lightboxHeader {
     display: flex;
@@ -90,43 +88,45 @@
     }
   }
 
-  .questionPrompt {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 50px;
-    background-color: @cc-teal-light6;
-    .icon {
-      fill: @cc-teal;
-      margin-left: 15px;
-    }
-    .questionPromptText {
-      margin-left: 3px;
-      text-overflow: ellipsis;
-    }
-  }
-
-  .studentResponse {
-    padding: 20px;
-
-    .contentArea {
-      max-width: 600px;
-      max-height: 400px;
-      background-color: white;
-      display: flex;
-      justify-content: center;
-
-      img {
-        max-width: 600px;
-        max-height:400px;
-        align-content: center;
-      }
-    }
-    .responseText {
-      margin: 15px 0 0 0;
-    }
-  }
   .lightboxBody {
     padding: 0;
+
+    .questionPrompt {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 50px;
+      background-color: @cc-teal-light6;
+
+      .icon {
+        fill: @cc-teal;
+        margin-left: 15px;
+      }
+      .questionPromptText {
+        margin-left: 3px;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .contentArea {
+      padding: 20px;
+
+      .studentResponse {
+        background-color: white;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+
+        img {
+          max-width: 600px;
+          max-height: 400px;
+          margin: 0 auto;
+        }
+      }
+
+      .responseText {
+        margin: 15px 0 0 0;
+      }
+    }
   }
 }
