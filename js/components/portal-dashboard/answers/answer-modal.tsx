@@ -5,6 +5,7 @@ import { QuestionTypes } from "../../../util/question-utils";
 import { renderHTML } from "../../../util/render-html";
 
 import css from "../../../../css/portal-dashboard/answers/answer-modal.less";
+// needed to specify modal styles that can only be access through the react-bootstrap modal-content class.
 import "../../../../css/portal-dashboard/answers/answer-modal.css";
 
 interface IProps {

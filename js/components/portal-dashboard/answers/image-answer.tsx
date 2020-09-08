@@ -1,5 +1,4 @@
 import React, { useState }  from "react";
-// TODO: replace with new model
 import { AnswerModal } from "./answer-modal";
 import { MagnifyIcon } from "./magnify-icon";
 import useResizeObserver from "@react-hook/resize-observer";
