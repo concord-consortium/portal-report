@@ -17,14 +17,14 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const { currentQuestion, hideQuestion, useMinHeight } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
-    const prompt = currentQuestion?.get("prompt") || undefined;
+    const prompt = currentQuestion?.get("prompt");
     const type = currentQuestion?.get("type");
     const scored = currentQuestion?.get("scored");
     const typeText = type && type.replace(/_/gm, ' ');
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const mcChoices: Map<any,any> = currentQuestion?.get("choices") || [];
-    const drawingPrompt = currentQuestion?.get("drawingPrompt") || undefined;
+    const drawingPrompt = currentQuestion?.get("drawingPrompt");
     const showDivider = drawingPrompt && prompt;
 
     return (
@@ -50,9 +50,11 @@ export class QuestionArea extends React.PureComponent<IProps>{
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">
           <div className={`${css.questionText} ${showDivider? css.showDivider : ""}`}>
-            {drawingPrompt ? renderHTML(drawingPrompt) : ""}
+            {drawingPrompt && renderHTML(drawingPrompt)}
           </div>
-          {prompt && this.renderImageQuestionPrompt(prompt)}
+          <div className={css.imageQuestionPrompt}>
+            {prompt && renderHTML(prompt)}
+          </div>
           <div>
             {type === "multiple_choice" && mcChoices.size > 0 ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)) : ""}
           </div>
@@ -77,14 +79,6 @@ export class QuestionArea extends React.PureComponent<IProps>{
         <div className={`${multipleChoiceContentClass}`}>
           {multipleChoiceContent}
         </div>
-      </div>
-    );
-  }
-
-  private renderImageQuestionPrompt = (prompt: string) => {
-    return (
-      <div className={css.imageQuestionPrompt}>
-        {renderHTML(prompt)}
       </div>
     );
   }
