@@ -104,9 +104,9 @@
               "url": "http://app.lara.docker/pages/28",
               "children": [
                 {
-                  "drawing_prompt": "<p>Circle where hurricanes are starting</p>",
+                  "drawing_prompt": "<p>This is the drawing prompt. Circle where hurricanes are starting</p>",
                   "id": "image_question_2",
-                  "prompt": "<p>What causes hurricanes</p>",
+                  "prompt": "<p>This is the question prompt. What causes hurricanes?</p>",
                   "question_number": 6,
                   "show_in_featured_question_report": true,
                   "type": "image_question"

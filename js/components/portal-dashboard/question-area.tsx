@@ -49,12 +49,11 @@ export class QuestionArea extends React.PureComponent<IProps>{
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">
           <div className={css.questionText}>
-          {prompt ? renderHTML(prompt) : ""}
-            {/* {prompt ? striptags(prompt.replace(/&nbsp;/g,' ')) : ""} */}
+            {drawingPrompt ? renderHTML(drawingPrompt) : ""}
           </div>
-          { drawingPrompt && this.renderImageQuestionPrompt(drawingPrompt)}
+          {prompt && this.renderImageQuestionPrompt(prompt)}
           <div>
-            {type === "multiple_choice" && mcChoices.size > 0 ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)):""}
+            {type === "multiple_choice" && mcChoices.size > 0 ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)) : ""}
           </div>
         </div>
       </div>
@@ -68,12 +67,12 @@ export class QuestionArea extends React.PureComponent<IProps>{
       multipleChoiceContent = choices.get("content") + " (correct)";
     }
     else {
-      multipleChoiceContentClass =  `${css.mcContent}`;
+      multipleChoiceContentClass = `${css.mcContent}`;
       multipleChoiceContent = choices.get("content");
     }
     return (
       <div className={css.choiceWrapper} key={`choices ${i}`}>
-        <div className={`${css.choiceIcon}`}/>
+        <div className={`${css.choiceIcon}`} />
         <div className={`${multipleChoiceContentClass}`}>
           {multipleChoiceContent}
         </div>
@@ -81,10 +80,10 @@ export class QuestionArea extends React.PureComponent<IProps>{
     );
   }
 
-  private renderImageQuestionPrompt = (drawingPrompt: string) => {
+  private renderImageQuestionPrompt = (prompt: string) => {
     return (
       <div className={css.imageQuestionPrompt}>
-        {renderHTML(drawingPrompt)}
+        {renderHTML(prompt)}
       </div>
     );
   }
