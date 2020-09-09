@@ -17,7 +17,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const { currentQuestion, hideQuestion, useMinHeight } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
-    const prompt = currentQuestion?.get("prompt");
+    const prompt = currentQuestion?.get("prompt") || undefined;
     const type = currentQuestion?.get("type");
     const scored = currentQuestion?.get("scored");
     const typeText = type && type.replace(/_/gm, ' ');
@@ -25,6 +25,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const QuestionIcon = questionType?.icon;
     const mcChoices: Map<any,any> = currentQuestion?.get("choices") || [];
     const drawingPrompt = currentQuestion?.get("drawingPrompt") || undefined;
+    const showDivider = drawingPrompt && prompt;
 
     return (
       <div className={`${css.questionArea} ${hideQuestion ? css.hidden : ""}`}>
@@ -48,7 +49,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
           </div>
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">
-          <div className={css.questionText}>
+          <div className={`${css.questionText} ${showDivider? css.showDivider : ""}`}>
             {drawingPrompt ? renderHTML(drawingPrompt) : ""}
           </div>
           {prompt && this.renderImageQuestionPrompt(prompt)}
