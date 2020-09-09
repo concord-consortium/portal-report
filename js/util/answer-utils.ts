@@ -23,7 +23,7 @@ export interface AnswerProps {
   answer: Map<any, any>;
   question: Map<string, any>;
   student: Map<any, any>;
-  staticSize?: boolean;
+  responsive?: boolean;
   studentName?: string;
 }
 

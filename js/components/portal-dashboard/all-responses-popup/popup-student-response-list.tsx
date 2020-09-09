@@ -23,7 +23,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
             <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
               {this.renderStudentNameWrapper(formattedName)}
               <div className={`${css.studentResponse}`} data-cy="student-response">
-                <Answer question={currentQuestion} student={student} staticSize={true} />
+                <Answer question={currentQuestion} student={student} responsive={false} />
               </div>
             </div>
           );

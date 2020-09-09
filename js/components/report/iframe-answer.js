@@ -74,7 +74,7 @@ export default class IframeAnswer extends PureComponent {
   }
 
   renderIframe() {
-    const { answer, question } = this.props;
+    const { answer, question, responsive } = this.props;
     let url;
     let state;
     // There are two supported answer types handled by iframe question: simple link or interactive state.
@@ -89,7 +89,7 @@ export default class IframeAnswer extends PureComponent {
       state = answer.get("answer");
     }
     return (
-      <div>
+      <div className={`iframe-answer-content ${responsive ? "responsive" : ""}`}>
         <InteractiveIframe src={url} state={state} width={question.get("width")} height={question.get("height")} />
       </div>
     );
@@ -107,12 +107,14 @@ export default class IframeAnswer extends PureComponent {
   }
 
   render() {
-    const { alwaysOpen, answer } = this.props;
+    const { alwaysOpen, answer, responsive } = this.props;
     const answerText = answer.get("answerText");
     return (
-      <div className="iframe-answer" data-cy="iframe-answer">
-        { answerText && <div>{ answerText }</div> }
-        {!alwaysOpen && this.renderLink()}
+      <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
+        <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
+          { answerText && <div>{ answerText }</div> }
+          { !alwaysOpen && this.renderLink() }
+        </div>
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>
     );

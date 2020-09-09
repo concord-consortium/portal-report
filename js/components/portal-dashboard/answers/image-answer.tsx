@@ -7,7 +7,7 @@ import css from "../../../../css/portal-dashboard/answers/image-answer.less";
 
 interface IProps {
   answer: Map<any, any>;
-  staticSize?: boolean;
+  responsive?: boolean;
   question?: Map<any, any>;
   studentName: string;
 }
@@ -16,7 +16,7 @@ const kStaticHeight = 250;
 const kStaticWidth = 250;
 
 export const ImageAnswer: React.FC<IProps> = (props) => {
-  const { answer, staticSize, question, studentName } = props;
+  const { answer, responsive, question, studentName } = props;
   const imgAnswer = answer.get("answer");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -48,8 +48,8 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
   const divSize: DOMRect | DOMRectReadOnly = useSize(divTarget);
 
   // get the container size - can be static or dynamic
-  const containerHeight: number = staticSize ? kStaticHeight: divSize?.height;
-  const containerWidth: number = staticSize ? kStaticWidth : divSize?.width;
+  const containerHeight: number = responsive ? divSize?.height : kStaticHeight;
+  const containerWidth: number = responsive ? divSize?.width : kStaticWidth;
 
   // compute final image size from the container size and image aspect ratio
   const constrainX = naturalWidth / containerWidth >= naturalHeight / containerHeight;
@@ -59,7 +59,7 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
   return (
     <React.Fragment>
       <div className={css.imageAnswer}>
-        <div className={`${css.contentContainer} ${!staticSize ? css.center : ""}`} ref={divTarget}>
+        <div className={`${css.contentContainer} ${responsive ? css.center : ""}`} ref={divTarget}>
           <div className={css.imageContainer} style={{height: imgHeight, width: imgWidth}}>
             <img src={imgAnswer.get("imageUrl")} data-cy="answer-image" onLoad={onImgLoad} />
             <MagnifyIcon onClick={handleShowModal(true)} />

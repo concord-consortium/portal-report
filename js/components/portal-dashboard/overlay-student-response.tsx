@@ -42,7 +42,7 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
           </div>
         </div>
         <div className={css.responseArea}>
-          <Answer question={currentQuestion} student={students.get(currentStudentIndex)} studentName={studentName}/>
+          <Answer question={currentQuestion} student={students.get(currentStudentIndex)} responsive={true} studentName={studentName}/>
         </div>
       </div>
     );
