@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { Modal } from "react-bootstrap";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
 import { QuestionTypes } from "../../../util/question-utils";
-import { renderHTML } from "../../../util/render-html";
+import striptags from "striptags";
 
 import css from "../../../../css/portal-dashboard/answers/answer-modal.less";
 // needed to specify modal styles that can only be access through the react-bootstrap modal-content class.
@@ -24,7 +24,7 @@ export class AnswerModal extends PureComponent<IProps> {
     const type = answer?.get("questionType");
     const questionType = QuestionTypes.find(qt => qt.type === type);
     const QuestionIcon = questionType?.icon;
-    const prompt = question && renderHTML(question.get("prompt"));
+    const prompt = question && striptags((question.get("drawingPrompt")).replace(/&nbsp;/g,' ')) + striptags((question.get("prompt")).replace(/&nbsp;/g,' '));
 
     if (!answer) { return null; }
     return (
@@ -34,7 +34,7 @@ export class AnswerModal extends PureComponent<IProps> {
           <div className={css.questionPrompt} data-cy="question-prompt">
             <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
             <span className={css.questionPromptText} data-cy="question-prompt-text">
-              {prompt}
+              {prompt && prompt}
             </span>
           </div>
           <div className={css.contentArea} data-cy="lightbox-content-area">
