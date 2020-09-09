@@ -1,0 +1,132 @@
+@import "../variables";
+
+.lightbox {
+  width: 640px;
+  border-radius: 8px !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
+  background-color: white;
+  top: 35px;
+  display: flex;
+  flex-direction: column;
+
+  .lightboxHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    padding: 0;
+    border-radius: 8px 8px 0 0;
+
+    .studentName{
+      font-weight: bold;
+      height: 19px;
+      margin-left: 20px;
+    }
+
+    &.question {
+      background-color: @cc-teal-light4;
+      fill: @cc-teal;
+      
+      .closeButton {
+        background-color: @cc-teal-light6;
+        
+        &:hover {
+          background-color: @cc-teal-light3;
+        }
+
+        &:active {
+          box-sizing: border-box;
+          border: 1.5px solid white;
+          background-color: @cc-teal;
+        }
+      }
+    }
+    &.answer {
+      background-color: @cc-orange-light2;
+
+      .closeButton {
+        background-color: @cc-orange-light4;
+        
+        &:hover {
+          background-color: @cc-orange-light2;
+        }
+
+        &:active {
+          box-sizing: border-box;
+          border: 1.5px solid white;
+          background-color: @cc-orange;
+        }
+        .closeIconSVG {
+          fill: @cc-orange;
+          &:active {
+            fill: white;
+          }
+        }
+      }
+    }  
+
+    .closeButton {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      position: absolute;
+      right: 20px;
+
+      .closeIconSVG {
+        align-items: center;
+        width: 32px;
+        height: 32px;
+
+        &:active {
+          position: relative;
+          top: -2px;
+          left: -2px;
+          fill: white;
+        }
+      }
+    }
+  }
+
+  .lightboxBody {
+    padding: 0;
+
+    .questionPrompt {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 50px;
+      background-color: @cc-teal-light6;
+
+      .icon {
+        fill: @cc-teal;
+        margin-left: 15px;
+      }
+      .questionPromptText {
+        margin-left: 3px;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .contentArea {
+      padding: 20px;
+
+      .studentResponse {
+        background-color: white;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+
+        img {
+          max-width: 600px;
+          max-height: 400px;
+          margin: 0 auto;
+        }
+      }
+
+      .responseText {
+        margin: 15px 0 0 0;
+      }
+    }
+  }
+}
