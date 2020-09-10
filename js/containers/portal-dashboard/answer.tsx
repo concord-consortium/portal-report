@@ -6,7 +6,6 @@ import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
 import { ImageAnswer } from "../../components/portal-dashboard/answers/image-answer";
-import ExternalLinkAnswer from "../../components/portal-dashboard/external-link-answer";
 import IframeAnswer from "../../components/report/iframe-answer";
 
 import css from "../../../css/portal-dashboard/answer.less";
@@ -46,12 +45,12 @@ class Answer extends React.PureComponent<AnswerProps> {
   }
 
   renderAnswer = (type: string) => {
-    const { answer, question, staticSize, studentName } = this.props;
+    const { answer, question, responsive, studentName } = this.props;
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,
       "open_response_answer": OpenResponseAnswer,
       "image_question_answer": ImageAnswer,
-      "external_link": ExternalLinkAnswer,
+      "external_link": IframeAnswer,
       "interactive_state": IframeAnswer,
     };
     const AComponent = (answer && (!question.get("required") || answer.get("submitted"))) ? AnswerComponent[type] : undefined;
@@ -62,7 +61,7 @@ class Answer extends React.PureComponent<AnswerProps> {
     }
     else {
       return (
-        <AComponent answer={answer} question={question} showFullAnswer={true} staticSize={staticSize} studentName={studentName}/>
+        <AComponent answer={answer} question={question} showFullAnswer={true} responsive={responsive} studentName={studentName}/>
       );
     }
   }
