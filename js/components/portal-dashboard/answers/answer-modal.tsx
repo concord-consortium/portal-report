@@ -34,7 +34,7 @@ export class AnswerModal extends PureComponent<IProps> {
           <div className={css.questionPrompt} data-cy="question-prompt">
             <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
             <span className={css.questionPromptText} data-cy="question-prompt-text">
-              {prompt && prompt}
+              {prompt}
             </span>
           </div>
           <div className={css.contentArea} data-cy="lightbox-content-area">
