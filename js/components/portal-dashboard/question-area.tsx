@@ -1,8 +1,8 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionTypes } from "../../util/question-utils";
+import { renderHTML } from "../../util/render-html";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
-import striptags from "striptags";
 
 import css from "../../../css/portal-dashboard/question-area.less";
 
@@ -24,6 +24,8 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const mcChoices: Map<any,any> = currentQuestion?.get("choices") || [];
+    const drawingPrompt = currentQuestion?.get("drawingPrompt");
+    const showDivider = drawingPrompt && prompt;
 
     return (
       <div className={`${css.questionArea} ${hideQuestion ? css.hidden : ""}`}>
@@ -47,11 +49,14 @@ export class QuestionArea extends React.PureComponent<IProps>{
           </div>
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">
-          <div className={css.questionText}>
-            {prompt ? striptags(prompt.replace(/&nbsp;/g,' ')) : ""}
+          <div className={`${css.questionText} ${showDivider? css.showDivider : ""}`}>
+            {drawingPrompt && renderHTML(drawingPrompt)}
+          </div>
+          <div className={css.imageQuestionPrompt}>
+            {prompt && renderHTML(prompt)}
           </div>
           <div>
-            {type === "multiple_choice" && mcChoices.size > 0 ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)):""}
+            {type === "multiple_choice" && mcChoices.size > 0 ? mcChoices.toArray().map(this.renderMultipleChoiceChoices(mcChoices.toArray().length)) : ""}
           </div>
         </div>
       </div>
@@ -65,12 +70,12 @@ export class QuestionArea extends React.PureComponent<IProps>{
       multipleChoiceContent = choices.get("content") + " (correct)";
     }
     else {
-      multipleChoiceContentClass =  `${css.mcContent}`;
+      multipleChoiceContentClass = `${css.mcContent}`;
       multipleChoiceContent = choices.get("content");
     }
     return (
       <div className={css.choiceWrapper} key={`choices ${i}`}>
-        <div className={`${css.choiceIcon}`}/>
+        <div className={`${css.choiceIcon}`} />
         <div className={`${multipleChoiceContentClass}`}>
           {multipleChoiceContent}
         </div>
