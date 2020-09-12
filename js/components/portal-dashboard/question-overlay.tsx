@@ -17,16 +17,26 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
   handleShowAllResponsesPopup: (show: boolean) => void;
+  setCurrentStudent: (studentIndex: number) => void;
+  currentStudentIndex: number;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
-    const { students, currentQuestion, isAnonymous } = this.props;
+    const { students, currentQuestion, isAnonymous, setCurrentStudent, currentStudentIndex } = this.props;
     return (
       <div className={`${css.questionOverlay} ${(currentQuestion ? css.visible : "")}`} data-cy="question-overlay">
         { currentQuestion && this.renderQuestionDetails() }
         {/* Removed for MVP: { currentQuestion && <ClassResponse currentQuestion={currentQuestion}/> } */}
-        { currentQuestion && <StudentResponse students={students} isAnonymous={isAnonymous} currentQuestion={currentQuestion} /> }
+        { currentQuestion &&
+          <StudentResponse
+            students={students}
+            isAnonymous={isAnonymous}
+            currentQuestion={currentQuestion}
+            setCurrentStudent={setCurrentStudent}
+            currentStudentIndex={currentStudentIndex}
+          />
+        }
         {this.renderFooter()}
       </div>
     );

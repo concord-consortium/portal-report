@@ -12,6 +12,7 @@ interface IProps {
   studentProgress: any;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
+  setCurrentStudent: (studentIndex: number) => void;
 }
 
 export class StudentAnswers extends React.PureComponent<IProps> {
@@ -24,14 +25,14 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     return (
       <div className={css.studentAnswers} ref={elt => this.studentAnswersRef = elt} data-cy="student-answers" >
       {
-        students.map((s: any) => {
+        students.map((s: any, index: number) => {
           return (
             <div key={s.get("id")} className={`${css.studentAnswersRow} ${compactClass}`} data-cy="student-answers-row">
               {
                 activitiesList.map((a: any) => {
                   return (
                     (currentActivity && a.get("id") === currentActivity.get("id"))
-                    ? this.renderExpandedActivity(a, s)
+                    ? this.renderExpandedActivity(a, s, index)
                     : this.renderProgress(a, s)
                   );
                 })
@@ -48,7 +49,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     return this.studentAnswersRef;
   }
 
-  private renderExpandedActivity = (activity: any, student: any) => {
+  private renderExpandedActivity = (activity: any, student: any, studentIndex: number) => {
     const pages: Map<any, any>[] = [];
     activity.get("children").forEach((section: Map<any, any>) => {
       section.get("children").forEach((page: Map<any, any>) => pages.push(page));
@@ -57,13 +58,13 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     // const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
     return (
       <div className={css.activityAnswers} key={activity.get("id")}>
-        { pages.map((page: any) => this.renderActivityPage(page, student)) }
+        { pages.map((page: any) => this.renderActivityPage(page, student, studentIndex)) }
         { this.renderScore(activity, student) }
       </div>
     );
   }
 
-  private renderActivityPage = (page: any, student: any) => {
+  private renderActivityPage = (page: any, student: any, studentIndex: number) => {
     const activityId = this.props.currentActivity.get("id");
     return (
       <div className={css.activityPage} key={page.get("id")}>
@@ -74,7 +75,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
                 key={questionId}
                 question={question}
                 student={student}
-                onAnswerSelect={this.handleAnswerSelect(activityId, questionId)}
+                onAnswerSelect={this.handleAnswerSelect(activityId, questionId, studentIndex)}
                />
             );
           })
@@ -83,9 +84,10 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     );
   }
 
-  private handleAnswerSelect = (activityId: string, questionId: string) => () => {
+  private handleAnswerSelect = (activityId: string, questionId: string, studentIndex: number) => () => {
     this.props.setCurrentActivity(activityId);
     this.props.setCurrentQuestion(questionId);
+    this.props.setCurrentStudent(studentIndex);
   }
 
   private renderScore = (activity: any, student: any) => {

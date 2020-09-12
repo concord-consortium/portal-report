@@ -10,21 +10,13 @@ interface IProps {
   students: any;
   isAnonymous: boolean;
   currentQuestion?: Map<string, any>;
-}
-interface IState {
+  setCurrentStudent: (studentIndex: number) => void;
   currentStudentIndex: number;
 }
 
-export class StudentResponse extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      currentStudentIndex: 0
-    };
-  }
+export class StudentResponse extends React.PureComponent<IProps> {
   render() {
-    const { currentQuestion, students, isAnonymous } = this.props;
-    const { currentStudentIndex } = this.state;
+    const { currentQuestion, currentStudentIndex, students, isAnonymous } = this.props;
     const studentName = getFormattedStudentName(isAnonymous, students.get(currentStudentIndex));
     return (
       <div className={css.studentResponse} data-cy="overlay-student-response-area">
@@ -50,6 +42,6 @@ export class StudentResponse extends React.PureComponent<IProps, IState> {
 
   private changeCurrentStudent = (index: number) => () => {
     const newIndex = Math.min(Math.max(0, index), this.props.students.size - 1);
-      this.setState({ currentStudentIndex: newIndex });
+    this.props.setCurrentStudent(newIndex);
   }
 }
