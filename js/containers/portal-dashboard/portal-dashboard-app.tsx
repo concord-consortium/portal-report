@@ -12,7 +12,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
+import { setStudentSort, setCurrentActivity, setCurrentQuestion, toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
@@ -41,6 +41,7 @@ interface IProps {
   setCompactReport: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   setCurrentActivity: (activityId: string) => void;
+  setCurrentQuestion: (questionId: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
@@ -85,7 +86,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   render() {
     const { clazzName, compactReport, currentActivity, currentQuestion, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
-      expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
+      expandedActivities, setCurrentActivity, setCurrentQuestion, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -143,6 +144,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 studentProgress={studentProgress}
                 ref={elt => this.studentAnswersComponentRef = elt}
                 isCompact={compactReport}
+                setCurrentActivity={setCurrentActivity}
+                setCurrentQuestion={setCurrentQuestion}
               />
             </div>
             <QuestionOverlay
@@ -238,6 +241,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
+    setCurrentQuestion: (questionId: string) => dispatch(setCurrentQuestion(questionId)),
     toggleCurrentActivity: (activityId: string) => dispatch(toggleCurrentActivity(activityId)),
     toggleCurrentQuestion: (questionId: string) => dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),

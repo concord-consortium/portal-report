@@ -10,6 +10,8 @@ interface IProps {
   isCompact: boolean;
   students: any;
   studentProgress: any;
+  setCurrentActivity: (activityId: string) => void;
+  setCurrentQuestion: (questionId: string) => void;
 }
 
 export class StudentAnswers extends React.PureComponent<IProps> {
@@ -62,16 +64,28 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderActivityPage = (page: any, student: any) => {
+    const activityId = this.props.currentActivity.get("id");
     return (
       <div className={css.activityPage} key={page.get("id")}>
         { page.get("children").map((question: any) => {
+            const questionId = question.get("id");
             return (
-              <AnswerCompact key={question.get("id")} question={question} student={student} />
+              <AnswerCompact
+                key={questionId}
+                question={question}
+                student={student}
+                onAnswerSelect={this.handleAnswerSelect(activityId, questionId)}
+               />
             );
           })
         }
       </div>
     );
+  }
+
+  private handleAnswerSelect = (activityId: string, questionId: string) => () => {
+    this.props.setCurrentActivity(activityId);
+    this.props.setCurrentQuestion(questionId);
   }
 
   private renderScore = (activity: any, student: any) => {
@@ -113,4 +127,5 @@ export class StudentAnswers extends React.PureComponent<IProps> {
       <div className={`${css.progressIcon} ${cssClass}`}/>
     );
   }
+
 }

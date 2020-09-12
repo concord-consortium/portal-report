@@ -25,9 +25,10 @@ class AnswerCompact extends React.PureComponent<AnswerProps> {
   }
 
   private renderAnswer = (icon: any, iconId: string) => {
+    const { onAnswerSelect } = this.props;
     const AnswerIcon = icon;
     return (
-      <div className={css.answerContent} data-cy={iconId}>
+      <div className={css.answerContent} data-cy={iconId} onClick={onAnswerSelect}>
         <AnswerIcon />
       </div>
     );
