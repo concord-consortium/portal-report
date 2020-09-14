@@ -19,7 +19,7 @@ export class Header extends React.PureComponent<IProps> {
     return (
       <div className={css.dashboardHeader} data-cy="dashboard-header">
         <div className={css.appInfo}>
-          <img src={ccLogoSrc} className={css.logo} />
+          <img src={ccLogoSrc} className={css.logo} data-cy="header-logo"/>
           <div className={css.pin} />
           <div className={css.title}>Dashboard</div>
         </div>
