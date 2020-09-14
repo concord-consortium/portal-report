@@ -175,7 +175,7 @@
                   "question_number": 3,
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
-                  "url": "https://geocode-app.concord.org/branch/master/index.html",
+                  "url": "https://geocode-app.concord.org/",
                   "width": 576
                 },
                 {
@@ -197,7 +197,7 @@
                   "question_number": 5,
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
-                  "url": "https://concord-consortium.github.io/table-interactive/",
+                  "url": "https://models-resources.concord.org/table-interactive/index.html",
                   "width": 576
                 },
                 {
@@ -219,7 +219,7 @@
                   "question_number": 7,
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
-                  "url": "https://models-resources.concord.org/question-interactives/branch/master/fill-in-the-blank/",
+                  "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/fill-in-the-blank/",
                   "width": 576
                 },
                 {
@@ -230,7 +230,7 @@
                   "question_number": 8,
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
-                  "url": "https://models-resources.concord.org/question-interactives/branch/master/scaffolded-question/",
+                  "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/scaffolded-question/",
                   "width": 576
                 }
               ]
