@@ -28,6 +28,7 @@ export interface MenuItemsWithState {
 export interface MenuItemWithIcon {
   MenuItemIcon: SvgIcon;
   name: string;
+  dataCy: string;
   onSelect: () => void;
 }
 export const itemsWithState: MenuItemsWithState[] = [
@@ -41,6 +42,7 @@ export const items: MenuItemWithIcon[] = [
   {
     MenuItemIcon: HelpIcon,
     name: "Help",
+    dataCy: "help-menu-item",
     onSelect: () => {window.open("https://docs.google.com/document/d/1C_6hiZzdSF_p6edhJeY_q_SvulFEPlawo7OKSaF7E88/edit?usp=sharing");}
   },
   // Removed for MVP:
@@ -48,11 +50,13 @@ export const items: MenuItemWithIcon[] = [
   {
     MenuItemIcon: DownloadIcon,
     name: "Download (.csv)",
+    dataCy: "download-menu-item",
     action: "DOWNLOAD_REPORT"
   },
   {
     MenuItemIcon: PrintIcon,
     name: "Print",
+    dataCy: "print-menu-item",
     action: "PRINT_REPORT"
   }
   */
@@ -96,9 +100,9 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
         </div>
         {items && items.map((item, i) => {
           return (
-            <div key={`item ${i}`} className={`${css.menuItem}`} onClick={item.onSelect}>
+            <div key={`item ${i}`} className={`${css.menuItem}`} onClick={item.onSelect}  >
               <item.MenuItemIcon className={css.menuItemIcon} />
-              <div className={`${css.menuItemName}`}>{item.name}</div>
+              <div className={`${css.menuItemName}`} data-cy={item.dataCy}>{item.name}</div>
             </div>
           );
         })}
