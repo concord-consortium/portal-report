@@ -101,6 +101,6 @@ context("Portal Dashboard Question Details Panel", () => {
     it('verify close popup when assignment name is clicked', ()=>{
       cy.get('[data-cy=popup-header-title]').click();
       cy.get('[data-cy=popup-header-title]').should('not.be.visible');
-    })
-  })
+    });
+  });
 });
