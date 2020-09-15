@@ -113,6 +113,8 @@ context("Portal Dashboard Question Details Panel", () => {
   });
   describe('Student Response area', () => {
     it('verify student response area is visible', () => {
+      cy.get('[data-cy=open-response-completed]').eq(0).click();
+      cy.get('[data-cy=previous-student-button]').click().click();
       cy.get('[data-cy=overlay-student-response-area]').should('be.visible');
       cy.get('[data-cy=overlay-student-response-area] [data-cy=student-answer]').should('be.visible').and('contain', "No response");
     });
