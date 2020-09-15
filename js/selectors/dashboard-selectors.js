@@ -6,6 +6,7 @@ import { fromJS } from "immutable";
 
 // Inputs
 const getActivities = state => state.getIn(["report", "activities"]);
+export const getAnonymous = state => state.getIn(["report", "anonymous"]);
 const getCurrentActivityId = state => state.getIn(["dashboard", "currentActivityId"]);
 const getQuestions = state => state.getIn(["report", "questions"]);
 const getCurrentQuestionId = state => state.getIn(["dashboard", "currentQuestionId"]);

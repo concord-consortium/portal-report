@@ -13,9 +13,10 @@ import css from "../../../../css/portal-dashboard/all-responses-popup/popup-clas
 import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
-  studentCount: number;
+  anonymous: boolean;
   setAnonymous: (value: boolean) => void;
   setStudentFilter: (value: string) => void;
+  studentCount: number;
   trackEvent: (category: string, action: string, label: string) => void;
 }
 interface IState {
@@ -36,7 +37,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   }
 
   render() {
-    const { studentCount, setAnonymous } = this.props;
+    const { anonymous, studentCount, setAnonymous } = this.props;
     const { showDialog } = this.state;
 
     return (
@@ -44,7 +45,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
         <div className={`${css.popupClassNav} ${css.column}`}>
           {this.renderViewListOptions()}
           < div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
-            <AnonymizeStudents setAnonymous={setAnonymous} />
+            <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
             <NumberOfStudentsContainer studentCount={studentCount} />
             {this.renderStudentFilter()}
             {this.renderSpotlightToggle()}

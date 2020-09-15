@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
-        getStudentProgress, getCompactReport } from "../../selectors/dashboard-selectors";
+        getStudentProgress, getCompactReport, getAnonymous } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -23,6 +23,7 @@ import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
 interface IProps {
   // from mapStateToProps
+  anonymous: boolean;
   clazzName: string;
   compactReport: boolean;
   currentActivity?: Map<string, any>;
@@ -88,7 +89,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
+    const { anonymous, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
@@ -118,6 +119,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           <div>
             <div className={css.navigation}>
               <ClassNav
+                anonymous={anonymous}
                 clazzName={clazzName}
                 setStudentSort={setStudentSort}
                 trackEvent={trackEvent}
@@ -169,6 +171,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             />
             {showAllResponsesPopup &&
               <StudentResponsePopup
+                anonymous={anonymous}
                 students={students}
                 isAnonymous={isAnonymous}
                 setAnonymous={setAnonymous}
@@ -226,6 +229,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     });
   }
   return {
+    anonymous: getAnonymous(state),
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     compactReport: getCompactReport(state),
     currentActivity: getCurrentActivity(state),
