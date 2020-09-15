@@ -34,7 +34,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   selectedQuestion: null,
   currentActivityId: null,
   currentQuestionId: null,
-  currentStudentIndex: 0,
+  currentStudentIndex: -1,
   compactReport: false,
 });
 

@@ -6,6 +6,8 @@ import css from "../../../css/portal-dashboard/student-answers.less";
 interface IProps {
   activities: any;
   currentActivity: any;
+  currentQuestion: any;
+  currentStudentIndex: number;
   expandedActivities: any;
   isCompact: boolean;
   students: any;
@@ -13,6 +15,7 @@ interface IProps {
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentIndex: number) => void;
+
 }
 
 export class StudentAnswers extends React.PureComponent<IProps> {
@@ -58,24 +61,30 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     // const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
     return (
       <div className={css.activityAnswers} key={activity.get("id")}>
-        { pages.map((page: any) => this.renderActivityPage(page, student, studentIndex)) }
+        { pages.map((page: any) => this.renderActivityPage(activity, page, student, studentIndex)) }
         { this.renderScore(activity, student) }
       </div>
     );
   }
 
-  private renderActivityPage = (page: any, student: any, studentIndex: number) => {
-    const activityId = this.props.currentActivity.get("id");
+  private renderActivityPage = (activity: any, page: any, student: any, studentIndex: number) => {
+    const currentActivityId = this.props.currentActivity.get("id");
+    const currentQuestionId = this.props.currentQuestion?.get("id");
+    const currentStudentIndex = this.props.currentStudentIndex;
     return (
       <div className={css.activityPage} key={page.get("id")}>
         { page.get("children").map((question: any) => {
             const questionId = question.get("id");
+            const selected = (currentActivityId === activity.get("id") &&
+                              currentQuestionId === questionId &&
+                              currentStudentIndex === studentIndex);
             return (
               <AnswerCompact
                 key={questionId}
                 question={question}
                 student={student}
-                onAnswerSelect={this.handleAnswerSelect(activityId, questionId, studentIndex)}
+                onAnswerSelect={this.handleAnswerSelect(currentActivityId, questionId, studentIndex)}
+                selected={selected}
                />
             );
           })
@@ -85,9 +94,13 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private handleAnswerSelect = (activityId: string, questionId: string, studentIndex: number) => () => {
+    const currentActivityId = this.props.currentActivity.get("id");
+    const currentQuestionId = this.props.currentQuestion?.get("id");
+    const currentStudentIndex = this.props.currentStudentIndex;
+    const unselectStudent = currentActivityId === activityId && currentQuestionId === questionId && currentStudentIndex === studentIndex;
     this.props.setCurrentActivity(activityId);
     this.props.setCurrentQuestion(questionId);
-    this.props.setCurrentStudent(studentIndex);
+    this.props.setCurrentStudent(unselectStudent? -1 : studentIndex);
   }
 
   private renderScore = (activity: any, student: any) => {

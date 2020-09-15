@@ -26,6 +26,7 @@ export interface AnswerProps {
   responsive?: boolean;
   studentName?: string;
   onAnswerSelect?: () => void;
+  selected?: boolean;
 }
 
 export const AnswerTypes: AnswerType[] = [

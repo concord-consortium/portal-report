@@ -143,6 +143,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               <StudentAnswers
                 activities={activityTrees}
                 currentActivity={currentActivity}
+                currentQuestion={currentQuestion}
+                currentStudentIndex={currentStudentIndex}
                 expandedActivities={expandedActivities}
                 students={students}
                 studentProgress={studentProgress}
