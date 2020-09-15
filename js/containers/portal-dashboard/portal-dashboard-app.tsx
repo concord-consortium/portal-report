@@ -2,7 +2,8 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getStudentProgress, getCompactReport } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
+        getStudentProgress, getCompactReport } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -12,7 +13,8 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
+import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent,
+         toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
@@ -25,6 +27,7 @@ interface IProps {
   compactReport: boolean;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
+  currentStudentId: string | null;
   error: IResponse;
   expandedActivities: Map<any, any>;
   isFetching: boolean;
@@ -41,6 +44,8 @@ interface IProps {
   setCompactReport: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   setCurrentActivity: (activityId: string) => void;
+  setCurrentQuestion: (questionId: string) => void;
+  setCurrentStudent: (studentId: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
@@ -83,9 +88,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, compactReport, currentActivity, currentQuestion, error, report,
+    const { clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
-      expandedActivities, setCurrentActivity, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
+      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -138,22 +143,29 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               <StudentAnswers
                 activities={activityTrees}
                 currentActivity={currentActivity}
+                currentQuestion={currentQuestion}
+                currentStudentId={currentStudentId}
                 expandedActivities={expandedActivities}
                 students={students}
                 studentProgress={studentProgress}
                 ref={elt => this.studentAnswersComponentRef = elt}
                 isCompact={compactReport}
+                setCurrentActivity={setCurrentActivity}
+                setCurrentQuestion={setCurrentQuestion}
+                setCurrentStudent={setCurrentStudent}
               />
             </div>
             <QuestionOverlay
-              students={students}
-              isAnonymous={isAnonymous}
               currentQuestion={currentQuestion}
-              questions={questions}
-              sortedQuestionIds={sortedQuestionIds}
-              toggleCurrentQuestion={toggleCurrentQuestion}
-              setCurrentActivity={setCurrentActivity}
+              currentStudentId={currentStudentId}
               handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
+              isAnonymous={isAnonymous}
+              questions={questions}
+              setCurrentActivity={setCurrentActivity}
+              setCurrentStudent={setCurrentStudent}
+              sortedQuestionIds={sortedQuestionIds}
+              students={students}
+              toggleCurrentQuestion={toggleCurrentQuestion}
             />
             {showAllResponsesPopup &&
               <StudentResponsePopup
@@ -218,6 +230,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     compactReport: getCompactReport(state),
     currentActivity: getCurrentActivity(state),
     currentQuestion: getCurrentQuestion(state),
+    currentStudentId: getCurrentStudentId(state),
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     isFetching: data.get("isFetching"),
@@ -238,6 +251,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
+    setCurrentStudent: (studentId: string) => dispatch(setCurrentStudent(studentId)),
+    setCurrentQuestion: (questionId: string) => dispatch(setCurrentQuestion(questionId)),
     toggleCurrentActivity: (activityId: string) => dispatch(toggleCurrentActivity(activityId)),
     toggleCurrentQuestion: (questionId: string) => dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),

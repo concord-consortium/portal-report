@@ -66,6 +66,7 @@
         &.disabled {
           cursor: auto;
           opacity: 0.35;
+          pointer-events: none;
         }
       }
     }
@@ -75,5 +76,10 @@
     height: calc(100% - 80px);
     padding: 15px 20px 15px 20px;
     overflow-y: auto;
+
+    .selectMessage {
+      font-style: italic;
+      text-align: center;
+    }
   }
 }

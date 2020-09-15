@@ -113,12 +113,14 @@ context("Portal Dashboard Question Details Panel", () => {
   });
   describe('Student Response area', () => {
     it('verify student response area is visible', () => {
+      cy.get('[data-cy=open-response-completed]').eq(0).click();
+      cy.get('[data-cy=previous-student-button]').click().click();
       cy.get('[data-cy=overlay-student-response-area]').should('be.visible');
       cy.get('[data-cy=overlay-student-response-area] [data-cy=student-answer]').should('be.visible').and('contain', "No response");
     });
     it('verify previous student button is disabled if first student',()=>{
       cy.get('[data-cy=overlay-student-name]').should('contain','Armstrong, Jenna');
-      cy.get('[data-cy=previous-student-button]').click(); //Can't verify if button is disabled
+      cy.get('[data-cy=previous-student-button]').click({force: true}); //Can't verify if button is disabled
       cy.get('[data-cy=overlay-student-name]').should('contain','Armstrong, Jenna');
     });
     it('verify changing students', () => {
@@ -126,12 +128,12 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=overlay-student-name').should('contain','Crosby, Kate');
       cy.get('[data-cy=next-student-button]').click().click();
       cy.get('[data-cy=overlay-student-name]').should('contain','Jenkins, John');
-      cy.get('[data-cy=overlay-student-response-area] [data-cy=student-answer]').should('be.visible').and('contain', "test required answer 2");
+      cy.get('[data-cy=overlay-student-response-area] [data-cy=student-answer]').should('be.visible').and('contain', "test answer 1");
     });
     it('verify next button is disabled when end of list is reached',()=>{
       cy.get('[data-cy=next-student-button]').click().click();
       cy.get('[data-cy=overlay-student-name]').should('contain','Wu, Jerome');
-      cy.get('[data-cy=next-student-button]').click();//Can't verify if button is disabled
+      cy.get('[data-cy=next-student-button]').click({force: true});//Can't verify if button is disabled
       cy.get('[data-cy=overlay-student-name]').should('contain','Wu, Jerome');
     });
     it('verify student name is anonymize when toggle is on and vice versa',()=>{

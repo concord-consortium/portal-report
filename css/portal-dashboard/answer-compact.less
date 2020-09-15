@@ -21,14 +21,12 @@
 
     &.noAnswer {
       background-color: white;
-      pointer-events: none;
-      cursor: auto;
     }
 
     &:hover {
       background-color: @cc-orange-light3;
     }
-    &:active {
+    &.selected, &:active {
       background-color: @cc-orange;
     }
   }

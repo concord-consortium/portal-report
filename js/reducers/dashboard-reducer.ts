@@ -1,7 +1,8 @@
 import { RecordFactory } from "../util/record-factory";
 import { Map } from "immutable";
 import {
-  SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION,
+  SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, SET_CURRENT_QUESTION, SET_CURRENT_STUDENT,
+  TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION,
   SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT, SET_COMPACT_REPORT,
   SORT_BY_NAME, SET_QUESTION_EXPANDED,
   SELECT_QUESTION,
@@ -21,6 +22,7 @@ export interface IDashboardState {
   sortBy: SortType;
   currentActivityId: string | null;
   currentQuestionId: string | null;
+  currentStudentId: string | null;
   compactReport: boolean;
 }
 
@@ -32,6 +34,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   selectedQuestion: null,
   currentActivityId: null,
   currentQuestionId: null,
+  currentStudentId: null,
   compactReport: false,
 });
 
@@ -46,6 +49,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   selectedQuestion: Map<any, any> | null;
   currentActivityId: string | null;
   currentQuestionId: string | null;
+  currentStudentId: string | null;
   compactReport: boolean;
 }
 
@@ -68,6 +72,10 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       return state.set("selectedQuestion", action.value);
     case SET_CURRENT_ACTIVITY:
       return state.set("currentActivityId", action.value);
+    case SET_CURRENT_QUESTION:
+      return state.set("currentQuestionId", action.value);
+    case SET_CURRENT_STUDENT:
+      return state.set("currentStudentId", action.value);
     case TOGGLE_CURRENT_ACTIVITY:
       if (state.get("currentActivityId") === action.value) {
         return state.set("currentActivityId", null);

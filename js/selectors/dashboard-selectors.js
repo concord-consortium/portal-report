@@ -9,6 +9,7 @@ const getActivities = state => state.getIn(["report", "activities"]);
 const getCurrentActivityId = state => state.getIn(["dashboard", "currentActivityId"]);
 const getQuestions = state => state.getIn(["report", "questions"]);
 const getCurrentQuestionId = state => state.getIn(["dashboard", "currentQuestionId"]);
+export const getCurrentStudentId = state => state.getIn(["dashboard", "currentStudentId"]);
 const getStudents = state => state.getIn(["report", "students"]);
 const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);

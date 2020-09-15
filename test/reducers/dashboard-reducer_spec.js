@@ -11,6 +11,7 @@ describe("dashboard reducer", () => {
       selectedQuestion: null,
       currentActivityId: null,
       currentQuestionId: null,
+      currentStudentId: null,
       compactReport: false,
     });
   });
