@@ -16,16 +16,16 @@ class Answer extends React.PureComponent<AnswerProps> {
   }
 
   render() {
-    const { answer, question } = this.props;
+    const { answer, question, student } = this.props;
     const atype = answer && answer.get("type");
     const qtype = question && question.get("type");
     const scored = question && question.get("scored");
     const questionType = QuestionTypes.find(qt => qt.type === qtype && qt.scored === scored);
     const answerType = getAnswerType(answer, question);
     const iconId = getAnswerIconId(answerType);
-
+    const key = `student-${student ? student.get("id") : "NA"}-question-${question ? question.get("id") : "NA"}`;
     return (
-      <div className={css.answer} data-cy="student-answer">
+      <div className={css.answer} data-cy="student-answer" key={key}>
         {answer && (!question.get("required") || answer.get("submitted"))
           ? this.renderAnswer(atype)
           : this.renderNoAnswer(questionType?.icon, iconId)
