@@ -174,12 +174,12 @@ export class LevelViewer extends React.PureComponent<IProps> {
         <div className={css.page + " " + css.noBorder}>
         </div>
         <div className={css.questionsContainer}>
-          <div className={css.question} data-cy="activity-question-button">
+          <div className={`${css.question} ${css.score}`} data-cy="activity-score">
             <div>
                 Score
             </div>
             <div className={css.pagesContainer}>
-              <CorrectIcon className={css.icon} />
+              <CorrectIcon className={`${css.icon} ${css.score}`} />
             </div>
           </div>
         </div>
