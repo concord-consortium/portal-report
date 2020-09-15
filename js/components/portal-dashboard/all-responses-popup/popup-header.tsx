@@ -34,7 +34,7 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   private renderHeaderLeft = () => {
     const activityName = "Hurricane Module V2 Activity 1: Hurricane Risk";
     return (
-      <div className={css.headerLeft}>
+      <div className={css.headerLeft} onClick={this.handleCloseAllResponses}>
         <AssignmentIcon className={`${css.assignmentIcon} ${css.icon}`} />
         <div className={css.title} data-cy="popup-header-title">{activityName}</div>
       </div>
@@ -76,14 +76,14 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
 
     return (
       <div className={css.headerRight}>
-        <div className={closeIconClass} data-cy="close-popup-button" onClick={this.handleCloseAllResponsesButtonClick}>
+        <div className={closeIconClass} data-cy="close-popup-button" onClick={this.handleCloseAllResponses}>
           <SmallCloseIcon className={css.closeIconSVG} />
         </div>
       </div>
     );
   }
 
-  private handleCloseAllResponsesButtonClick = () => {
+  private handleCloseAllResponses = () => {
     this.props.handleCloseAllResponsesPopup(false);
   }
 }
