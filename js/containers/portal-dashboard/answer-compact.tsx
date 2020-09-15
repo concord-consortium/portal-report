@@ -35,8 +35,9 @@ class AnswerCompact extends React.PureComponent<AnswerProps> {
   }
 
   renderNoAnswer = () => {
+    const { onAnswerSelect, selected } = this.props;
     return (
-      <div className={`${css.answerContent} ${css.noAnswer}`} data-cy="no-answer" />
+      <div className={`${css.answerContent} ${css.noAnswer} ${selected ? css.selected : ""}`} data-cy="no-answer" onClick={onAnswerSelect}/>
     );
   }
 
