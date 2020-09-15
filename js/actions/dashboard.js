@@ -5,7 +5,7 @@ export const SET_STUDENT_SORT = "SET_STUDENT_SORT";
 
 export const SET_CURRENT_ACTIVITY = "SET_CURRENT_ACTIVITY";
 export const SET_CURRENT_QUESTION = "SET_CURRENT_QUESTION";
-export const SET_CURRENT_STUDENT_INDEX = "SET_CURRENT_STUDENT_INDEX";
+export const SET_CURRENT_STUDENT = "SET_CURRENT_STUDENT";
 export const TOGGLE_CURRENT_ACTIVITY = "TOGGLE_CURRENT_ACTIVITY";
 export const TOGGLE_CURRENT_QUESTION = "TOGGLE_CURRENT_QUESTION";
 export const TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION = "TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION";
@@ -114,10 +114,10 @@ export function setCurrentQuestion(questionId) {
   };
 }
 
-export function setCurrentStudentIndex(studentIndex) {
+export function setCurrentStudent(studentId) {
   return {
-    type: SET_CURRENT_STUDENT_INDEX,
-    value: studentIndex,
+    type: SET_CURRENT_STUDENT,
+    value: studentId,
   };
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentIndex,
+import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
         getStudentProgress, getCompactReport } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
@@ -13,7 +13,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudentIndex,
+import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent,
          toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
@@ -27,7 +27,7 @@ interface IProps {
   compactReport: boolean;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
-  currentStudentIndex: number;
+  currentStudentId: string | null;
   error: IResponse;
   expandedActivities: Map<any, any>;
   isFetching: boolean;
@@ -45,7 +45,7 @@ interface IProps {
   setStudentSort: (value: string) => void;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
-  setCurrentStudentIndex: (studentIndex: number) => void;
+  setCurrentStudent: (studentId: string) => void;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
@@ -88,9 +88,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { clazzName, compactReport, currentActivity, currentQuestion, currentStudentIndex, error, report,
+    const { clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
-      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudentIndex, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
+      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -144,7 +144,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 activities={activityTrees}
                 currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
-                currentStudentIndex={currentStudentIndex}
+                currentStudentId={currentStudentId}
                 expandedActivities={expandedActivities}
                 students={students}
                 studentProgress={studentProgress}
@@ -152,20 +152,20 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 isCompact={compactReport}
                 setCurrentActivity={setCurrentActivity}
                 setCurrentQuestion={setCurrentQuestion}
-                setCurrentStudent={setCurrentStudentIndex}
+                setCurrentStudent={setCurrentStudent}
               />
             </div>
             <QuestionOverlay
-              students={students}
-              isAnonymous={isAnonymous}
               currentQuestion={currentQuestion}
-              questions={questions}
-              sortedQuestionIds={sortedQuestionIds}
-              toggleCurrentQuestion={toggleCurrentQuestion}
-              setCurrentActivity={setCurrentActivity}
+              currentStudentId={currentStudentId}
               handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
-              setCurrentStudent={setCurrentStudentIndex}
-              currentStudentIndex={currentStudentIndex}
+              isAnonymous={isAnonymous}
+              questions={questions}
+              setCurrentActivity={setCurrentActivity}
+              setCurrentStudent={setCurrentStudent}
+              sortedQuestionIds={sortedQuestionIds}
+              students={students}
+              toggleCurrentQuestion={toggleCurrentQuestion}
             />
             {showAllResponsesPopup &&
               <StudentResponsePopup
@@ -230,7 +230,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     compactReport: getCompactReport(state),
     currentActivity: getCurrentActivity(state),
     currentQuestion: getCurrentQuestion(state),
-    currentStudentIndex: getCurrentStudentIndex(state),
+    currentStudentId: getCurrentStudentId(state),
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     isFetching: data.get("isFetching"),
@@ -251,7 +251,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
-    setCurrentStudentIndex: (studentIndex: number) => dispatch(setCurrentStudentIndex(studentIndex)),
+    setCurrentStudent: (studentId: string) => dispatch(setCurrentStudent(studentId)),
     setCurrentQuestion: (questionId: string) => dispatch(setCurrentQuestion(questionId)),
     toggleCurrentActivity: (activityId: string) => dispatch(toggleCurrentActivity(activityId)),
     toggleCurrentQuestion: (questionId: string) => dispatch(toggleCurrentQuestion(questionId)),

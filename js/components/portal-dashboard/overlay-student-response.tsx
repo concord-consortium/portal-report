@@ -10,13 +10,14 @@ interface IProps {
   students: any;
   isAnonymous: boolean;
   currentQuestion?: Map<string, any>;
-  setCurrentStudent: (studentIndex: number) => void;
-  currentStudentIndex: number;
+  setCurrentStudent: (studentId: string | null) => void;
+  currentStudentId: string | null;
 }
 
 export class StudentResponse extends React.PureComponent<IProps> {
   render() {
-    const { currentQuestion, currentStudentIndex, students, isAnonymous } = this.props;
+    const { currentQuestion, students, isAnonymous, currentStudentId } = this.props;
+    const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId );
     const studentSelected = currentStudentIndex >= 0;
     const studentName = studentSelected
                         ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
@@ -47,9 +48,12 @@ export class StudentResponse extends React.PureComponent<IProps> {
   }
 
   private changeCurrentStudent = (index: number) => () => {
+    const { currentStudentId, students } = this.props;
     const newIndex = Math.min(Math.max(0, index), this.props.students.size - 1);
-    if (this.props.currentStudentIndex !== newIndex) {
-      this.props.setCurrentStudent(newIndex);
+    const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId );
+    if (currentStudentIndex !== newIndex) {
+      const newId = students.get(newIndex).get("id");
+      this.props.setCurrentStudent(newId);
     }
   }
 }

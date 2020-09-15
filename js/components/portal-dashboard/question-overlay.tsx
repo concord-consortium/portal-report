@@ -9,21 +9,21 @@ import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg"
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
 interface IProps {
-  students: any;
-  isAnonymous: boolean;
   currentQuestion?: Map<string, any>;
-  questions?: Map<string, any>;
-  sortedQuestionIds?: string[];
-  toggleCurrentQuestion: (questionId: string) => void;
-  setCurrentActivity: (activityId: string) => void;
+  currentStudentId: string | null;
   handleShowAllResponsesPopup: (show: boolean) => void;
-  setCurrentStudent: (studentIndex: number) => void;
-  currentStudentIndex: number;
+  isAnonymous: boolean;
+  questions?: Map<string, any>;
+  setCurrentActivity: (activityId: string) => void;
+  setCurrentStudent: (studentId: string | null) => void;
+  sortedQuestionIds?: string[];
+  students: any;
+  toggleCurrentQuestion: (questionId: string) => void;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
-    const { students, currentQuestion, isAnonymous, setCurrentStudent, currentStudentIndex } = this.props;
+    const { students, currentQuestion, isAnonymous, setCurrentStudent, currentStudentId } = this.props;
     return (
       <div className={`${css.questionOverlay} ${(currentQuestion ? css.visible : "")}`} data-cy="question-overlay">
         { currentQuestion && this.renderQuestionDetails() }
@@ -34,7 +34,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
             isAnonymous={isAnonymous}
             currentQuestion={currentQuestion}
             setCurrentStudent={setCurrentStudent}
-            currentStudentIndex={currentStudentIndex}
+            currentStudentId={currentStudentId}
           />
         }
         {this.renderFooter()}
