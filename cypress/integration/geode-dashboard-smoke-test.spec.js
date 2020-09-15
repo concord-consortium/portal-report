@@ -49,10 +49,10 @@ context("Geode Dashboard Smoke Test", () => {
                 .select("Least Progress")
                 .should("be.visible");
             dashboard.getStudentNames().eq(0)
-                .should("contain", "Armstrong, Jenna" );
+                .should("contain", "Crosby, Kate" );
             dashboard.getStudentAnswersRow().eq(0)
                 .within(() => {
-                    dashboard.getProgressBar()
+                    dashboard.getProgressBar().eq(0)
                         .should("not.be.visible");
                 });
         });
