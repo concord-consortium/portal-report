@@ -7,6 +7,7 @@ import { Question } from "../../containers/portal-dashboard/question";
 import css from "../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
+  currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   hideQuestion: boolean;
   useMinHeight?: boolean;
@@ -14,7 +15,7 @@ interface IProps {
 
 export class QuestionArea extends React.PureComponent<IProps>{
   render() {
-    const { currentQuestion, hideQuestion, useMinHeight } = this.props;
+    const { currentActivity, currentQuestion, hideQuestion, useMinHeight } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
     const type = currentQuestion?.get("type");
@@ -34,7 +35,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
             </span>
           </div>
           <div className={css.rightIcons}>
-            <a className={css.externalLinkButton} target="_blank" data-cy="open-activity-button">
+            <a className={css.externalLinkButton} href={currentActivity?.get("url")} target="_blank" data-cy="open-activity-button">
               <LaunchIcon className={css.icon} />
             </a>
             <div className={css.teacherEditionIcon}>

@@ -154,6 +154,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
             </div>
             <QuestionOverlay
+              currentActivity={currentActivity}
               currentQuestion={currentQuestion}
               currentStudentId={currentStudentId}
               handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
@@ -173,6 +174,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 setAnonymous={setAnonymous}
                 studentCount={students.size}
                 setStudentFilter={setStudentSort}
+                currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
                 questions={questions}
                 sortedQuestionIds={sortedQuestionIds}

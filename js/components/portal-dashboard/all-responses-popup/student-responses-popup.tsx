@@ -14,6 +14,7 @@ interface IProps {
   isAnonymous: boolean;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
+  currentActivity: Map<string, any>;
   setCurrentActivity: (activityId: string) => void;
   setStudentFilter: (value: string) => void;
   sortedQuestionIds?: string[];
@@ -24,7 +25,7 @@ interface IProps {
 }
 export class StudentResponsePopup extends React.PureComponent<IProps> {
   render() {
-    const { anonymous, students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent,
+    const { anonymous, students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent, currentActivity,
       currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
@@ -38,6 +39,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
             trackEvent={trackEvent} />
           <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
             <QuestionNavigator
+              currentActivity={currentActivity}
               currentQuestion={currentQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}
