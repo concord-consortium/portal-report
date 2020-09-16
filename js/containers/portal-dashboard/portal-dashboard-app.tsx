@@ -72,6 +72,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   componentDidMount() {
     const { fetchAndObserveData } = this.props;
     fetchAndObserveData();
+    document.title = "Class Dashboard";
   }
 
   componentDidUpdate(prevProps: IProps) {
