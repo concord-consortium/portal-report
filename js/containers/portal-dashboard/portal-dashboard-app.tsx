@@ -11,7 +11,7 @@ import { StudentNames } from "../../components/portal-dashboard/student-names";
 import { StudentAnswers } from "../../components/portal-dashboard/student-answers";
 import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
-import { getSequenceTree } from "../../selectors/report-tree";
+import { getSequenceTree, getAnswersByQuestion } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
 import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent,
          toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
@@ -24,6 +24,7 @@ import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 interface IProps {
   // from mapStateToProps
   anonymous: boolean;
+  answers: Map<any, any>;
   clazzName: string;
   compactReport: boolean;
   currentActivity?: Map<string, any>;
@@ -90,7 +91,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { anonymous, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
+    const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
@@ -145,6 +146,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
               <StudentAnswers
                 activities={activityTrees}
+                answers={answers}
                 currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
                 currentStudentId={currentStudentId}
@@ -209,6 +211,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 }
 
 function mapStateToProps(state: RootState): Partial<IProps> {
+  const answers = getAnswersByQuestion(state);
   const data = state.get("data");
   const error = data.get("error");
   const reportState = state.get("report");
@@ -231,6 +234,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   }
   return {
     anonymous: getAnonymous(state),
+    answers,
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     compactReport: getCompactReport(state),
     currentActivity: getCurrentActivity(state),

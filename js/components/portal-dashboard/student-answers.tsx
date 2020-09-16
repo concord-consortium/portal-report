@@ -1,17 +1,19 @@
 import React from "react";
+import { Map } from "immutable";
 import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
 
 interface IProps {
-  activities: any;
-  currentActivity: any;
-  currentQuestion: any;
+  activities: Map<any, any>;
+  answers: Map<any, any>;
+  currentActivity: Map<any, any> | undefined;
+  currentQuestion: Map<any, any> | undefined;
   currentStudentId: string | null;
-  expandedActivities: any;
+  expandedActivities: Map<any, any>;
   isCompact: boolean;
-  students: any;
-  studentProgress: any;
+  students: Map<any, any>;
+  studentProgress: Map<any, any>;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
@@ -67,7 +69,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderActivityPage = (activity: any, page: any, student: any) => {
-    const currentActivityId = this.props.currentActivity.get("id");
+    const currentActivityId = this.props.currentActivity?.get("id");
     const currentQuestionId = this.props.currentQuestion?.get("id");
     const currentStudentId = this.props.currentStudentId;
     return (
@@ -93,7 +95,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private handleAnswerSelect = (activityId: string, questionId: string, studentId: string) => () => {
-    const currentActivityId = this.props.currentActivity.get("id");
+    const currentActivityId = this.props.currentActivity?.get("id");
     const currentQuestionId = this.props.currentQuestion?.get("id");
     const currentStudentId = this.props.currentStudentId;
     const unselectStudent = currentActivityId === activityId && currentQuestionId === questionId && currentStudentId === studentId;
@@ -103,15 +105,17 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderScore = (activity: any, student: any) => {
-    const { studentProgress } = this.props;
-    const numQuestions = activity.get("questions").size;
-    const progress = studentProgress.getIn([student.get("id"), activity.get("id")]);
-    const numAnswered = Math.round(progress * numQuestions);
-    const scoreClass = progress === 1 ? css.complete : "";
+    const { answers } = this.props;
+    const scoredQuestions = activity.get("questions").filter((q: any) =>
+      q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
+    );
+    const questionsWithCorrectAnswer = scoredQuestions.filter(
+      (question: any) => answers.getIn([question.get("id"), student.get("id"), "correct"])
+    );
     return (
       <div className={css.scoreHolder}>
-        <div className={`${css.score} ${scoreClass}`}>
-          { `${numAnswered}/${numQuestions}` }
+        <div className={css.score}>
+          { `${questionsWithCorrectAnswer.count()}/${scoredQuestions.count()}` }
         </div>
       </div>
     );
