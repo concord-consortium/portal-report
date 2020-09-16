@@ -7,7 +7,7 @@ import OpenResponseQuestion from "../../components/portal-dashboard/questions/op
 import  ImageQuestion from "../../components/portal-dashboard/questions/image-question";
 import IframeQuestion from "../../components/portal-dashboard/questions/iframe-question";
 
-import css from "../../../css/portal-dashboard/question.less";
+import css from "../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
   question?: Map<string,any>;
@@ -17,8 +17,6 @@ export class Question extends React.PureComponent <IProps>{
   render() {
     const { question } = this.props;
     const qtype = question && question.get("type");
-    // const scored = question && question.get("scored");
-    // const questionType = QuestionTypes.find(qt => qt.type === qtype && qt.scored === scored);
 
     return (
       <div className={css.questionText} data-cy="current-question">
@@ -26,7 +24,6 @@ export class Question extends React.PureComponent <IProps>{
       </div>
     );
   }
-
 
   renderQuestion = (type: string) => {
     const { question } = this.props;
