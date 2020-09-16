@@ -1,7 +1,5 @@
 import React from "react";
 import { Map } from "immutable";
-// import { connect } from "react-redux";
-// import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceQuestion from "../../components/portal-dashboard/questions/multiple-choice-question";
 import OpenResponseQuestion from "../../components/portal-dashboard/questions/open-response-question";
 import  ImageQuestion from "../../components/portal-dashboard/questions/image-question";

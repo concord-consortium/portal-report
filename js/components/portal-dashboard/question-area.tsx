@@ -1,7 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionTypes } from "../../util/question-utils";
-// import { renderHTML } from "../../util/render-html";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import { Question } from "../../containers/portal-dashboard/question";
 
@@ -52,5 +51,4 @@ export class QuestionArea extends React.PureComponent<IProps>{
       </div>
     );
   }
-
 }
