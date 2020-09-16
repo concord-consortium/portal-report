@@ -10,20 +10,21 @@ import ClassIcon from "../../../img/svg-icons/class-icon.svg";
 import css from "../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
+  anonymous: boolean;
   clazzName: string;
-  setStudentSort: (value: string) => void;
-  trackEvent: (category: string, action: string, label: string) => void;
-  studentCount: number;
   setAnonymous: (value: boolean) => void;
+  setStudentSort: (value: string) => void;
+  studentCount: number;
+  trackEvent: (category: string, action: string, label: string) => void;
 }
 
 export class ClassNav extends React.PureComponent<IProps> {
   render() {
-    const { setAnonymous } = this.props;
+    const { anonymous, setAnonymous } = this.props;
     return (
       <div className={css.classNav} data-cy="class-nav">
         { this.renderClassSelect() }
-        <AnonymizeStudents setAnonymous={setAnonymous} />
+        <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
         {/* Removed for MVP: <Feedback /> */}
         <NumberOfStudentsContainer studentCount={this.props.studentCount} />
         { this.renderStudentSort() }
