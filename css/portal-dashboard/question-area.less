@@ -20,9 +20,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    flex: 1;
+    flex-grow: 2;
     justify-content: flex-start;
     margin: 10px 0 10px 0;
+
     .questionTypeIcon {
       fill: @cc-teal;
       margin: 10px 0 10px 20px;
@@ -146,41 +147,6 @@
   &.minHeight {
     min-height: 101px;
   }
-
-  .choiceWrapper{
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: center;
-    margin-top: 12px;
-
-    .choiceIcon {
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-      border: 1.5px solid @cc-charcoal-light1;
-      background-color: white;
-      margin-left: 19px;
-      margin-right: 8px;
-    }
-    .correct {
-      font-weight: bold;
-    }
-  }
-}
-
-.imageQuestionPrompt {
-  margin: 0px 20px;
-}
-
-.questionText {
-  margin: 0px 20px 10px 20px;
-}
-
-.showDivider {
-  padding-bottom: 10px;
-  border-bottom: 1px solid @cc-charcoal-light2;
 }
 
 .hidden {
