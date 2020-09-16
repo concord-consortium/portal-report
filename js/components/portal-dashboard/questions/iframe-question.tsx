@@ -12,12 +12,12 @@ export default class IframeQuestion extends PureComponent<IProps> {
   render() {
     const { question } = this.props;
     const prompt = question?.get("prompt");
-    const name = question?.get("name");
-    console.log(question?.get("url"));
-    console.log(question);
+    const blankRegEx = /\[([^)]+)\]/g;
+    const promptText = prompt?.replace(blankRegEx,'__________');
+
     return (
       <div className={css.questionText}>
-        {prompt && renderHTML(prompt)}
+        {prompt && renderHTML(promptText)}
       </div>
     );
   }

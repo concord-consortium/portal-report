@@ -18,15 +18,12 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const { currentQuestion, hideQuestion, useMinHeight } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
-    // const prompt = currentQuestion?.get("prompt");
     const type = currentQuestion?.get("type");
     const scored = currentQuestion?.get("scored");
     const typeText = type && type.replace(/_/gm, ' ');
     const interactiveName = currentQuestion?.get("name");
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
-    // const drawingPrompt = currentQuestion?.get("drawingPrompt");
-    // const showDivider = drawingPrompt && prompt;
 
     return (
       <div className={`${css.questionArea} ${hideQuestion ? css.hidden : ""}`}>
@@ -34,7 +31,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
           <div className={css.leftTitle}>
             <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
             <span className={css.questionTypeTitle} data-cy="question-title">
-              {type==="iframe_interactive"? interactiveName : typeText}
+              {type === "iframe_interactive"? (interactiveName? interactiveName : typeText) : typeText}
             </span>
           </div>
           <div className={css.rightIcons}>
