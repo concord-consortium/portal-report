@@ -1,7 +1,7 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { getAnswerType, AnswerProps } from "../../util/answer-utils";
+import { AnswerProps } from "../../util/answer-utils";
 import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";

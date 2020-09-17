@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { Map } from "immutable";
 import { renderHTML } from "../../../util/render-html";
 

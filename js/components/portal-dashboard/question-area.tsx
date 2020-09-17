@@ -20,7 +20,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const type = currentQuestion?.get("type");
     const scored = currentQuestion?.get("scored");
     const typeText = type && type.replace(/_/gm, ' ');
-    const interactiveName = currentQuestion?.get("name");
+    const interactiveName = type === "iframe_interactive" && currentQuestion?.get("name");
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
 
@@ -30,7 +30,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
           <div className={css.leftTitle}>
             <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
             <span className={css.questionTypeTitle} data-cy="question-title">
-              {type === "iframe_interactive"? (interactiveName? interactiveName : typeText) : typeText}
+              {interactiveName || typeText}
             </span>
           </div>
           <div className={css.rightIcons}>
