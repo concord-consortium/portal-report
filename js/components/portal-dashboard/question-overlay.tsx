@@ -20,6 +20,7 @@ interface IProps {
   sortedQuestionIds?: string[];
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
+  hasTeacherEdition: boolean;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
@@ -44,7 +45,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private renderQuestionDetails = () => {
-    const { currentActivity, currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
+    const { currentActivity, currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition } = this.props;
     return (
       <React.Fragment>
         <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
@@ -59,6 +60,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           toggleCurrentQuestion={toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity}
           inOverlay={true}
+          hasTeacherEdition={hasTeacherEdition}
         />
       </React.Fragment>
     );

@@ -15,6 +15,7 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   setCurrentActivity: (activityId: string) => void;
   inOverlay?: boolean;
+  hasTeacherEdition: boolean;
 }
 interface IState {
   hideQuestion: boolean;
@@ -51,7 +52,8 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           currentActivity={currentActivity}
           currentQuestion={currentQuestion}
           hideQuestion={this.state.hideQuestion}
-          useMinHeight={inOverlay} />
+          useMinHeight={inOverlay}
+          hasTeacherEdition={hasTeacherEdition} />
       </React.Fragment>
     );
   }

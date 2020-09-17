@@ -11,11 +11,12 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   hideQuestion: boolean;
   useMinHeight?: boolean;
+  hasTeacherEdition: boolean;
 }
 
 export class QuestionArea extends React.PureComponent<IProps>{
   render() {
-    const { currentActivity, currentQuestion, hideQuestion, useMinHeight } = this.props;
+    const { currentActivity, currentQuestion, hideQuestion, useMinHeight, hasTeacherEdition } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
     const type = currentQuestion?.get("type");
@@ -39,12 +40,13 @@ export class QuestionArea extends React.PureComponent<IProps>{
             <a className={css.externalLinkButton} href={activityURL} target="_blank" data-cy="open-activity-button">
               <LaunchIcon className={css.icon} />
             </a>
-            <div className={css.teacherEditionIcon}>
-              <a className={teacherEditionButtonClasses} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
-                <LaunchIcon className={css.icon} />
-              </a>
-              <div className={teacherEditionBadge}>TE</div>
-            </div>
+            {hasTeacherEdition &&
+              <div className={css.teacherEditionIcon}>
+                <a className={teacherEditionButtonClasses} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
+                  <LaunchIcon className={css.icon} />
+                </a>
+               <div className={teacherEditionBadge}>TE</div>
+              </div>}
           </div>
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">

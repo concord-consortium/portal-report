@@ -20,13 +20,14 @@ interface IProps {
   sortedQuestionIds?: string[];
   studentCount: number;
   students: any;
+  hasTeacherEdition: boolean;
   trackEvent: (category: string, action: string, label: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
 }
 export class StudentResponsePopup extends React.PureComponent<IProps> {
   render() {
     const { anonymous, students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent, currentActivity,
-      currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
+      currentQuestion, questions, sortedQuestionIds, hasTeacherEdition, toggleCurrentQuestion, setCurrentActivity } = this.props;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
@@ -45,6 +46,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
+              hasTeacherEdition={hasTeacherEdition}
             />
           </div>
         </div>
