@@ -28,8 +28,6 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
   }
   render() {
     const { currentQuestion, inOverlay } = this.props;
-    const chevronClass = this.state.hideQuestion ? `${css.arrow}  ${css.hideQuestion}` : `${css.arrow}`;
-
     return (
       <React.Fragment>
         <div className={css.titleWrapper}>
@@ -46,7 +44,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           <div className={css.title} data-cy="question-overlay-title">
             Question #{currentQuestion ? currentQuestion.get("questionNumber") : ""}
           </div>
-          {inOverlay && this.renderChevron(chevronClass)}
+          {inOverlay && this.renderChevron()}
         </div>
         <QuestionArea currentQuestion={currentQuestion} hideQuestion={this.state.hideQuestion} useMinHeight={inOverlay} />
       </React.Fragment>
@@ -67,26 +65,20 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
     const { sortedQuestionIds, currentQuestion } = this.props;
     if (!sortedQuestionIds || !currentQuestion) return false;
     const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
-    if (idx > 0) {
-      return sortedQuestionIds[idx - 1];
-    }
-    return false;
+    return idx > 0 ? sortedQuestionIds[idx - 1] : false;
   }
 
   private get nextQuestion() {
     const { sortedQuestionIds, currentQuestion } = this.props;
     if (!sortedQuestionIds || !currentQuestion) return false;
     const idx = sortedQuestionIds.indexOf(currentQuestion.get("id"));
-    if (idx < sortedQuestionIds.length - 1) {
-      return sortedQuestionIds[idx + 1];
-    }
-    return false;
+    return idx < sortedQuestionIds.length - 1 ? sortedQuestionIds[idx + 1] : false;
   }
 
-  private renderChevron = (cssClass: string) => {
+  private renderChevron = () => {
     return (
       <div className={css.showHideButton} onClick={this.handleChevronClick} data-cy="show-hide-question-button">
-        <ArrowIcon className={cssClass} />
+        <ArrowIcon className={`${css.arrow} ${this.state.hideQuestion ? css.hideQuestion : ""}`} />
       </div>
     );
   }

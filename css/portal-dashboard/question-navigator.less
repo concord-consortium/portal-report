@@ -64,21 +64,36 @@
     color: @cc-charcoal;
   }
 
-  .arrow {
-    height: 24px;
-    width: 24px;
-    margin: 0 20px 0 5px;
-    fill: @cc-teal;
-    transition-property: transform;
-    transition-duration: .25s;
-
-    &.hideQuestion {
-      fill: white;
-      transform: rotate(180deg);
-    }
-  }
-
   .showHideButton {
+    height: 32px;
+    width: 32px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px 0 0;
     cursor: pointer;
+    &:hover {
+      background-color: @cc-teal-light3;
+    }
+    &:active {
+      background-color: @cc-teal;
+      .arrow {
+        fill: white;
+      }
+    }
+    .arrow {
+      height: 24px;
+      width: 24px;
+      fill: @cc-teal;
+      transform: rotate(180deg);
+      transition-property: transform;
+      transition-duration: .25s;
+
+      &.hideQuestion {
+        transform: rotate(0deg);
+      }
+    }
+
   }
 }
