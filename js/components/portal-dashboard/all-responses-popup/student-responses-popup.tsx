@@ -14,7 +14,7 @@ interface IProps {
   isAnonymous: boolean;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
-  currentActivity: Map<string, any>;
+  currentActivity?: Map<string, any>;
   setCurrentActivity: (activityId: string) => void;
   setStudentFilter: (value: string) => void;
   sortedQuestionIds?: string[];

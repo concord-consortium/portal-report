@@ -102,7 +102,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     else {
       assignmentName = activityTrees && activityTrees.first().get("name");
     }
-    
     return (
       <div className={css.portalDashboardApp}>
         {sequenceTree &&
