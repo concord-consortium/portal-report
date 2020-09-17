@@ -8,7 +8,7 @@ import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
 // from level-viewer.less
-const progressWidth = 116;
+const progressWidth = 117;
 const questionWidth = 50;
 const margin = 20;
 const getTotalQuestionsWidth = (numQuestions: number) => Math.max(0, numQuestions * (questionWidth + margin) - margin);
