@@ -20,14 +20,12 @@ interface IProps {
 }
 
 export class StudentAnswers extends React.PureComponent<IProps> {
-  private studentAnswersRef: HTMLElement | null;
-
   render() {
     const { students, activities, currentActivity, isCompact } = this.props;
     const activitiesList = activities.toList().filter((activity: any) => activity.get("visible"));
     const compactClass = isCompact ? css.compact : "";
     return (
-      <div className={css.studentAnswers} ref={elt => this.studentAnswersRef = elt} data-cy="student-answers" >
+      <div className={css.studentAnswers} data-cy="student-answers" >
       {
         students.map((s: any) => {
           return (
@@ -47,10 +45,6 @@ export class StudentAnswers extends React.PureComponent<IProps> {
       }
       </div>
     );
-  }
-
-  public getStudentAnswersRef = () => {
-    return this.studentAnswersRef;
   }
 
   private renderExpandedActivity = (activity: any, student: any) => {

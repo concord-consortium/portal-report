@@ -1,15 +1,10 @@
 @import "./variables";
 
 .studentAnswers {
-  display: inline-block;
-  width: 100%;
   background-color: white;
   width: calc(100% - @left-panel-width);
   white-space: nowrap;
-  overflow-x: auto;
-  overflow-y: auto;
   height: fit-content;
-  z-index: 1;
 
   .studentAnswersRow {
     display: flex;
@@ -22,6 +17,7 @@
     border-style: solid;
     border-width: 0 0 1px 0;
     border-color: @cc-charcoal-light2;
+    background-color: white;
     padding: 0 0 0 10px;
 
     &.compact {

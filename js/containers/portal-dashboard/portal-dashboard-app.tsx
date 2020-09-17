@@ -61,7 +61,7 @@ interface IState {
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
-  private studentAnswersComponentRef: StudentAnswers | null;
+  private responseTableRef: HTMLElement | null;
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -84,9 +84,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       this.setState({ initialLoading: false });
     }
 
-    const studentAnswersRef = this.studentAnswersComponentRef?.getStudentAnswersRef();
-    if (studentAnswersRef && this.state.scrollLeft !== studentAnswersRef.scrollLeft * -1) {
-      this.setState({ scrollLeft: studentAnswersRef.scrollLeft * -1 });
+    if (this.responseTableRef && this.responseTableRef.scrollLeft * -1 !== this.state.scrollLeft) {
+      this.setState({ scrollLeft: this.responseTableRef.scrollLeft * -1 });
     }
   }
 
@@ -138,7 +137,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 toggleCurrentQuestion={toggleCurrentQuestion}
               />
             </div>
-            <div className={css.progressTable} onScroll={this.handleScroll}>
+            <div className={css.progressTable} onScroll={this.handleScroll} ref={elt => this.responseTableRef = elt}>
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
@@ -153,7 +152,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 expandedActivities={expandedActivities}
                 students={students}
                 studentProgress={studentProgress}
-                ref={elt => this.studentAnswersComponentRef = elt}
                 isCompact={compactReport}
                 setCurrentActivity={setCurrentActivity}
                 setCurrentQuestion={setCurrentQuestion}
@@ -204,7 +202,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {
     const element = e.target as HTMLElement;
-    if (element && element.scrollLeft) {
+    if (element && element.scrollLeft !== null) {
       this.setState({ scrollLeft: -1 * element.scrollLeft });
     }
   }
