@@ -24,6 +24,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const interactiveName = type === "iframe_interactive" && currentQuestion?.get("name");
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
+    const activityURL = currentActivity?.get("url");
 
     return (
       <div className={`${css.questionArea} ${hideQuestion ? css.hidden : ""}`}>
@@ -35,11 +36,11 @@ export class QuestionArea extends React.PureComponent<IProps>{
             </span>
           </div>
           <div className={css.rightIcons}>
-            <a className={css.externalLinkButton} href={currentActivity?.get("url")} target="_blank" data-cy="open-activity-button">
+            <a className={css.externalLinkButton} href={activityURL} target="_blank" data-cy="open-activity-button">
               <LaunchIcon className={css.icon} />
             </a>
             <div className={css.teacherEditionIcon}>
-              <a className={teacherEditionButtonClasses} target="_blank" data-cy="open-teacher-edition-button">
+              <a className={teacherEditionButtonClasses} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
                 <LaunchIcon className={css.icon} />
               </a>
               <div className={teacherEditionBadge}>TE</div>

@@ -1,9 +1,9 @@
 context("Portal Dashboard Question Details Panel", () => {
   before( function() {
     cy.visit("/?portal-dashboard");
-    cy.window().then( function(win) {
-      cy.stub(window, "open", "http://app.lara.docker/activities/9");
-    }).as('activityLink');
+    // cy.window().then( function(win) {
+    //   cy.stub(window, "open", "http://app.lara.docker/activities/9");
+    // }).as('activityLink');
   });
   context('All Responses Popup Header', () => {
     it('verify popup opens from question overlay', () => {
@@ -83,10 +83,13 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get("[data-cy=all-responses-popup-view] [data-cy=open-teacher-edition-button]").should('be.visible');
     });
     it('verify activity button opens activity page', function() {
-      cy.get("[data-cy=all-responses-popup-view] [data-cy=open-activity-button]").click();
-      cy.get(this.activityLink).should("be.called");
-    })
-    //TODO need to add test open teacher edition button functionality
+      cy.get("[data-cy=all-responses-popup-view] [data-cy=open-activity-button]").should('have.attr', 'href')
+      .and('include', "http://app.lara.docker/activities/9");
+    });
+    it('verify activity button opens teacher edition page', function() {
+      cy.get("[data-cy=all-responses-popup-view] [data-cy=open-teacher-edition-button]").should('have.attr', 'href')
+      .and('include', '?mode=teacher-edition');
+    });
   });
   context('Student list and responses area', () => {
     it('verify student names are listed',()=>{
