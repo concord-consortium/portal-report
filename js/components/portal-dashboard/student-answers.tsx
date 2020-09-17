@@ -112,10 +112,13 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const questionsWithCorrectAnswer = scoredQuestions.filter(
       (question: any) => answers.getIn([question.get("id"), student.get("id"), "correct"])
     );
+    const correctQuestionCount = questionsWithCorrectAnswer.count();
+    const scoredQuestionCount = scoredQuestions.count();
+    const scoreClass = correctQuestionCount === scoredQuestionCount && scoredQuestionCount > 0 ? css.perfect : "";
     return (
       <div className={css.scoreHolder}>
-        <div className={css.score}>
-          { `${questionsWithCorrectAnswer.count()}/${scoredQuestions.count()}` }
+        <div className={`${css.score} ${scoreClass}`}>
+          { `${correctQuestionCount}/${scoredQuestionCount}` }
         </div>
       </div>
     );
