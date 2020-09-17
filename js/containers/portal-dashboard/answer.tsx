@@ -21,7 +21,6 @@ class Answer extends React.PureComponent<AnswerProps> {
     const qtype = question && question.get("type");
     const scored = question && question.get("scored");
     const questionType = QuestionTypes.find(qt => qt.type === qtype && qt.scored === scored);
-    const answerType = getAnswerType(answer, question);
     const key = `student-${student ? student.get("id") : "NA"}-question-${question ? question.get("id") : "NA"}`;
     return (
       <div className={css.answer} data-cy="student-answer" key={key}>

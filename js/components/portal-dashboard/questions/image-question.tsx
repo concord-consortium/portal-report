@@ -8,22 +8,19 @@ interface IProps {
   question?: Map<string, any>;
 }
 
-export default class IframeQuestion extends PureComponent<IProps> {
-  render() {
-    const { question } = this.props;
-    const prompt = question?.get("prompt");
-    const drawingPrompt = question?.get("drawingPrompt");
-    const showDivider = drawingPrompt && prompt;
-
-    return (
-      <React.Fragment>
-        <div className={`${css.questionText} ${showDivider? css.showDivider : ""}`}>
-          {drawingPrompt && renderHTML(drawingPrompt)}
-        </div>
-        <div className={css.imageQuestionPrompt}>
-          {prompt && renderHTML(prompt)}
-        </div>
-      </React.Fragment>
-    );
-  }
-}
+export const ImageQuestion: React.FC<IProps> = (props) => {
+  const { question } = props;
+  const prompt = question?.get("prompt");
+  const drawingPrompt = question?.get("drawingPrompt");
+  const showDivider = drawingPrompt && prompt;
+  return (
+    <React.Fragment>
+      <div className={`${css.questionText} ${showDivider? css.showDivider : ""}`}>
+        {drawingPrompt && renderHTML(drawingPrompt)}
+      </div>
+      <div className={css.imageQuestionPrompt}>
+        {prompt && renderHTML(prompt)}
+      </div>
+    </React.Fragment>
+  );
+};

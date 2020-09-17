@@ -8,17 +8,15 @@ interface IProps {
   question?: Map<string, any>;
 }
 
-export default class IframeQuestion extends PureComponent<IProps> {
-  render() {
-    const { question } = this.props;
-    const prompt = question?.get("prompt");
-    const blankRegEx = /\[([^)]+)\]/g;
-    const promptText = prompt?.replace(blankRegEx,'__________');
+export const IframeQuestion: React.FC<IProps> = (props) => {
+  const { question } = props;
+  const prompt = question?.get("prompt");
+  const blankRegEx = /\[([^)]+)\]/g;
+  const promptText = prompt?.replace(blankRegEx,'__________');
 
     return (
-      <div className={css.questionText}>
-        {prompt && renderHTML(promptText)}
-      </div>
-    );
-  }
-}
+    <div className={css.questionText}>
+      {prompt && renderHTML(promptText)}
+    </div>
+  );
+};

@@ -8,37 +8,43 @@ interface IProps {
   question?: Map<string, any>;
 }
 
-export default class MultipleChoiceQuestion extends PureComponent<IProps> {
-  render() {
-    const { question } = this.props;
+export const MultipleChoiceQuestion: React.FC<IProps> = (props) => {
+    const { question } = props;
     const prompt = question?.get("prompt");
     const choices: Map<string,any> = question?.get("choices") || [];
+    const renderMultipleChoiceChoices = (choices: Map<string, any>, i: number) => {
+      const multipleChoiceContent = `${choices.get("content")} ${choices.get("correct") ? "(correct)" : ""}`;
+      const multipleChoiceContentClass = `${css.mcContent} ${choices.get("correct") ? css.correct : ""}`;
+
+      return (
+        <div className={css.choiceWrapper} key={`choices ${i}`}>
+          <div className={css.choiceIcon} />
+          <div className={multipleChoiceContentClass}>
+            {multipleChoiceContent}
+          </div>
+        </div>
+      );
+    };
 
     return (
       <div className={css.questionText}>
-      {prompt && renderHTML(prompt)}
-      { choices.size > 0 ? choices.toArray().map(this.renderMultipleChoiceChoices(choices.toArray().length)) : "" }
+        {prompt && renderHTML(prompt)}
+        { choices.toArray?.().map(renderMultipleChoiceChoices) }
       </div>
     );
-  }
 
-  private renderMultipleChoiceChoices = (numChoices: number) => (choices: Map<string, any>, i: number) => {
-    let multipleChoiceContent, multipleChoiceContentClass;
-    if (choices.get("correct")) {
-      multipleChoiceContentClass = `${css.mcContent} ${css.correct}`;
-      multipleChoiceContent = choices.get("content") + " (correct)";
-    }
-    else {
-      multipleChoiceContentClass = `${css.mcContent}`;
-      multipleChoiceContent = choices.get("content");
-    }
-    return (
-      <div className={css.choiceWrapper} key={`choices ${i}`}>
-        <div className={`${css.choiceIcon}`} />
-        <div className={`${multipleChoiceContentClass}`}>
-          {multipleChoiceContent}
-        </div>
-      </div>
-    );
-  }
-}
+
+  // private renderMultipleChoiceChoices = (choices: Map<string, any>, i: number) => {
+  //   const multipleChoiceContent = `${choices.get("content")} ${choices.get("correct") ? "(correct)" : ""}`;
+  //   const multipleChoiceContentClass = `${css.mcContent} ${choices.get("correct") ? css.correct : ""}`;
+
+  //   return (
+  //     <div className={css.choiceWrapper} key={`choices ${i}`}>
+  //       <div className={css.choiceIcon} />
+  //       <div className={multipleChoiceContentClass}>
+  //         {multipleChoiceContent}
+  //       </div>
+  //     </div>
+  //   );
+  // }
+};

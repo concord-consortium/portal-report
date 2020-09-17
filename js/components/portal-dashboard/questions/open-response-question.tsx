@@ -8,15 +8,13 @@ interface IProps {
   question?: Map<string, any>;
 }
 
-export default class OpenResponseQuestion extends PureComponent<IProps> {
-  render() {
-    const { question } = this.props;
-    const prompt = question?.get("prompt");
+export const OpenResponseQuestion: React.FC<IProps> = (props) => {
+  const { question } = props;
+  const prompt = question?.get("prompt");
 
-    return (
-      <div className={css.questionText}>
-        {prompt && renderHTML(prompt)}
-      </div>
-    );
-  }
-}
+  return (
+    <div className={css.questionText}>
+      {prompt && renderHTML(prompt)}
+    </div>
+  );
+};
