@@ -25,7 +25,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const activitiesList = activities.toList().filter((activity: any) => activity.get("visible"));
     const compactClass = isCompact ? css.compact : "";
     return (
-      <div className={css.studentAnswers} data-cy="student-answers" >
+      <div className={css.studentAnswers} data-cy="student-answers">
       {
         students.map((s: any) => {
           return (

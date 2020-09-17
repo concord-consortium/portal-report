@@ -137,7 +137,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 toggleCurrentQuestion={toggleCurrentQuestion}
               />
             </div>
-            <div className={css.progressTable} onScroll={this.handleScroll} ref={elt => this.responseTableRef = elt}>
+            <div className={css.progressTable} onScroll={this.handleScroll} ref={elt => this.responseTableRef = elt} data-cy="progress-table">
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
