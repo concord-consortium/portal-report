@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
-        getStudentProgress, getCompactReport, getAnonymous } from "../../selectors/dashboard-selectors";
+         getStudentProgress, getCompactReport, getAnonymous } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -61,7 +61,6 @@ interface IState {
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
-  private responseTableRef: HTMLElement | null;
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -82,10 +81,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { isFetching } = this.props;
     if (initialLoading && !isFetching && prevProps.isFetching) {
       this.setState({ initialLoading: false });
-    }
-
-    if (this.responseTableRef && this.responseTableRef.scrollLeft * -1 !== this.state.scrollLeft) {
-      this.setState({ scrollLeft: this.responseTableRef.scrollLeft * -1 });
     }
   }
 
@@ -137,7 +132,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 toggleCurrentQuestion={toggleCurrentQuestion}
               />
             </div>
-            <div className={css.progressTable} onScroll={this.handleScroll} ref={elt => this.responseTableRef = elt} data-cy="progress-table">
+            <div className={css.progressTable} onScroll={this.handleScroll} data-cy="progress-table">
               <StudentNames
                 students={students}
                 isAnonymous={isAnonymous}
