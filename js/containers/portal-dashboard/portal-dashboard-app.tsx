@@ -249,7 +249,6 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     questions,
     sortedQuestionIds,
     hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
-
   };
 }
 

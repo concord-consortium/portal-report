@@ -1,9 +1,6 @@
 context("Portal Dashboard Question Details Panel", () => {
-  before( function() {
+  before(() => {
     cy.visit("/?portal-dashboard");
-    // cy.window().then( function(win) {
-    //   cy.stub(window, "open", "http://app.lara.docker/activities/9");
-    // }).as('activityLink');
   });
   context('All Responses Popup Header', () => {
     it('verify popup opens from question overlay', () => {

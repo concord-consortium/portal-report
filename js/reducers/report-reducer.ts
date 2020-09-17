@@ -124,6 +124,7 @@ export default function report(state = new ReportState({}), action?: any) {
   switch (action.type) {
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
+      
       let type: ReportType = "student";
       let hideControls = true;
       if (!studentId && data.userType === "teacher") {
