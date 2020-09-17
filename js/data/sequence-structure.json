@@ -220,7 +220,8 @@
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/fill-in-the-blank/",
-                  "width": 576
+                  "width": 576,
+                  "prompt": "<p>The day I saw the Monkey King [blank-verb] (verb) was one of the mostinteresting days of the year.</p><p> After he did that, the king played chess on his brother&#x27;s [blank-noun] (noun) and then combed his [blank-adjective] (adjective) hair with a comb made out of old fish bones. Later that same day, I saw the Monkey King dance [blank-adverb] (adverb) in front of an audience of kangaroos and wombats.</p>"
                 },
                 {
                   "display_in_iframe": true,
@@ -231,7 +232,8 @@
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/scaffolded-question/",
-                  "width": 576
+                  "width": 576,
+                  "prompt": "<p>Clues to do what?</p>"
                 }
               ]
             }
