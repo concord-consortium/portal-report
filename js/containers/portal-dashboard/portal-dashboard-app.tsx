@@ -204,7 +204,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {
     const element = e.target as HTMLElement;
-    if (element && element.scrollLeft) {
+    if (element && element.scrollLeft !== undefined) {
       this.setState({ scrollLeft: -1 * element.scrollLeft });
     }
   }
