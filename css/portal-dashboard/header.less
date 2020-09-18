@@ -7,6 +7,7 @@
   box-sizing: border-box;
   height: @header-height;
   margin-bottom: 3px;
+  padding: 0 20px;
   background-color: @cc-teal-light4;
 
   .appInfo {
@@ -16,7 +17,7 @@
     align-items: center;
     justify-content: flex-start;
     height: @header-height;
-    margin: 0 10px 0 20px;
+    margin: 0 10px 0 0;
   }
 
   .logo {
@@ -38,13 +39,11 @@
 
   .headerCenter {
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: row;
     flex: 1;
-    justify-content: center;
     margin: 15px 0px 15px 0px;
-    align-items: center;
-    width: 400px;
-    height: 100%;
     font-size: 16px;
 
     .assignmentTitle{
@@ -58,19 +57,18 @@
     align-items: center;
     flex: 1;
     justify-content: flex-end;
-    margin: 0 10px 0 10px;
   }
 
   .icon {
     width: 32px;
     height: 32px;
     object-fit: contain;
+    flex-shrink: 0;
   }
 
   .headerMenu {
     height: 32px;
     width: 32px;
-    padding: 12px;
   }
 
   .menuIcon {
