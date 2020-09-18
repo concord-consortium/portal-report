@@ -165,23 +165,22 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               students={students}
               toggleCurrentQuestion={toggleCurrentQuestion}
             />
-            {showAllResponsesPopup &&
-              <StudentResponsePopup
-                anonymous={anonymous}
-                students={students}
-                isAnonymous={isAnonymous}
-                setAnonymous={setAnonymous}
-                studentCount={students.size}
-                setStudentFilter={setStudentSort}
-                currentQuestion={currentQuestion}
-                questions={questions}
-                sortedQuestionIds={sortedQuestionIds}
-                toggleCurrentQuestion={toggleCurrentQuestion}
-                setCurrentActivity={setCurrentActivity}
-                trackEvent={trackEvent}
-                handleCloseAllResponsesPopup={this.setShowAllResponsesPopup}
-              />
-            }
+            <StudentResponsePopup
+              anonymous={anonymous}
+              currentQuestion={currentQuestion}
+              handleCloseAllResponsesPopup={this.setShowAllResponsesPopup}
+              isAnonymous={isAnonymous}
+              isHidden={!showAllResponsesPopup}
+              questions={questions}
+              setAnonymous={setAnonymous}
+              setCurrentActivity={setCurrentActivity}
+              setStudentFilter={setStudentSort}
+              sortedQuestionIds={sortedQuestionIds}
+              studentCount={students.size}
+              students={students}
+              toggleCurrentQuestion={toggleCurrentQuestion}
+              trackEvent={trackEvent}
+            />
           </div>
         }
         {error && <DataFetchError error={error} />}

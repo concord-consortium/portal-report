@@ -12,6 +12,7 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   handleCloseAllResponsesPopup: (show: boolean) => void;
   isAnonymous: boolean;
+  isHidden?: boolean;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
@@ -24,19 +25,20 @@ interface IProps {
 }
 export class StudentResponsePopup extends React.PureComponent<IProps> {
   render() {
-    const { anonymous, students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent,
-      currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
+    const { anonymous, currentQuestion, isAnonymous, isHidden, questions, setCurrentActivity, setAnonymous,
+            setStudentFilter, sortedQuestionIds, studentCount, students, toggleCurrentQuestion, trackEvent } = this.props;
     return (
-      <div className={css.popup} data-cy="all-responses-popup-view">
+      <div className={`${css.popup} ${isHidden ? css.hidden : ""}`} data-cy="all-responses-popup-view">
         <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
         <div className={css.tableHeader}>
-          <PopupClassNav
-            anonymous={anonymous}
-            studentCount={studentCount}
-            setAnonymous={setAnonymous}
-            setStudentFilter={setStudentFilter}
-            trackEvent={trackEvent} />
-          <div className={css.questionArea} data-cy="questionArea">
+        <PopupClassNav
+          anonymous={anonymous}
+          studentCount={studentCount}
+          setAnonymous={setAnonymous}
+          setStudentFilter={setStudentFilter}
+          trackEvent={trackEvent} />
+        <div className={css.questionArea} data-cy="questionArea">
+          { currentQuestion &&
             <QuestionNavigator
               currentQuestion={currentQuestion}
               questions={questions}
@@ -44,13 +46,16 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
             />
-          </div>
+          }
         </div>
-        <PopupStudentResponseList
-          students={students}
-          isAnonymous={isAnonymous}
-          currentQuestion={currentQuestion}
-        />
+        </div>
+        { currentQuestion &&
+          <PopupStudentResponseList
+            students={students}
+            isAnonymous={isAnonymous}
+            currentQuestion={currentQuestion}
+          />
+        }
       </div>
     );
   }
