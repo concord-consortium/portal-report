@@ -36,7 +36,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
             setAnonymous={setAnonymous}
             setStudentFilter={setStudentFilter}
             trackEvent={trackEvent} />
-          <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
+          <div className={css.questionArea} data-cy="questionArea">
             <QuestionNavigator
               currentQuestion={currentQuestion}
               questions={questions}
