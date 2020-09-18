@@ -13,7 +13,7 @@ context("Portal Dashboard Anonymous Mode",() =>{
     });
 
     it('verify we enter anonymous mode',()=>{
-      cy.get('[data-cy=anonymize-students]').within(() => {
+      cy.get('[data-cy=anonymize-students]').eq(0).within(() => {
         cy.get('[data-cy=toggle-control]').click();
       });
       cy.get('[data-cy=student-name]')
@@ -23,7 +23,7 @@ context("Portal Dashboard Anonymous Mode",() =>{
     });
 
     it('verify we return to normal mode',()=>{
-      cy.get('[data-cy=anonymize-students]').within(() => {
+      cy.get('[data-cy=anonymize-students]').eq(0).within(() => {
         cy.get('[data-cy=toggle-control]').click();
       });
       cy.get('[data-cy=student-name]').eq(0).should("contain", "Armstrong, Jenna");

@@ -13,7 +13,7 @@ context("Portal Dashboard Student Sort",() =>{
     });
 
     it('verify we sort by most progress',()=>{
-      cy.get('[data-cy=sort-students]').click();
+      cy.get('[data-cy=sort-students]').eq(0).click();
       cy.get('[data-cy="list-item-most-progress"]').should('be.visible').click();
       cy.get('[data-cy=student-name]').eq(0).should("contain", "Jenkins, John");
       cy.get('[data-cy=student-name]').eq(1).should("contain", "Wu, Jerome");
@@ -24,7 +24,7 @@ context("Portal Dashboard Student Sort",() =>{
     });
 
     it('verify we sort by least progress',()=>{
-      cy.get('[data-cy=sort-students]').click();
+      cy.get('[data-cy=sort-students]').eq(0).click();
       cy.get('[data-cy="list-item-least-progress"]').should('be.visible').click();
       cy.get('[data-cy=student-name]').eq(0).should("contain", "Crosby, Kate");
       cy.get('[data-cy=student-name]').eq(1).should("contain", "Galloway, Amy");
