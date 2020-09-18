@@ -7,6 +7,8 @@ import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
+const kMaxActivityColors = 5;
+const activityColorClasses: string[] = [css.firstColor, css.secondColor, css.thirdColor, css.fourthColor, css.fifthColor];
 // from level-viewer.less
 const progressWidth = 117;
 const questionWidth = 50;
@@ -58,7 +60,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
             <div className={css.activityTitle}>
               {idx + 1} {activity.get("name")}
             </div>
-            <div className={css.activityImage} />
+            <div className={`${css.activityImage} ${this.activityColorClass(idx)}`} />
           </div>
           <div className={css.externalLink}>
             <a className={css.externalLinkButton} href={activity.get("url")} target="_blank">
@@ -110,13 +112,12 @@ export class LevelViewer extends React.PureComponent<IProps> {
     pages.forEach(p => totalWidth += getTotalQuestionsWidth((p.get("children") as any).size) + margin);
     // add width for the score box
     totalWidth += questionWidth + margin;
-
     return (
       <div key={activity.get("id")} className={css.animateLevelButton} style={{width: totalWidth}}
           data-cy="expanded-activity-button">
         <div className={`${css.activityButton} ${css.expanded}`}
             onClick={this.handleActivityButtonClick(activity.get("id"))}>
-          <div className={css.activityImage} />
+          <div className={`${css.activityImage} ${this.activityColorClass(idx)}`} />
           <div className={css.activityTitle}>
             Activity {idx + 1}: {activity.get("name")}
           </div>
@@ -193,5 +194,10 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
   private handleQuestionButtonClick = (questionId: string) => () => {
     this.props.toggleCurrentQuestion(questionId);
+  }
+
+  private activityColorClass = (activityNumber: number) => {
+    const colorNum = activityNumber % kMaxActivityColors;
+    return colorNum < activityColorClasses.length ? activityColorClasses[colorNum] : "";
   }
 }
