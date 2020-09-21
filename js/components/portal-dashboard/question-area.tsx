@@ -41,12 +41,13 @@ export class QuestionArea extends React.PureComponent<IProps>{
               <LaunchIcon className={css.icon} />
             </a>
             {hasTeacherEdition &&
-              <div className={css.teacherEditionIcon}>
-                <a className={teacherEditionButtonClasses} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
+              <a className={css.teacherEditionIcon} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
+                <div className={teacherEditionButtonClasses}>
                   <LaunchIcon className={css.icon} />
-                </a>
-               <div className={teacherEditionBadge}>TE</div>
-              </div>}
+                </div>
+                <div className={teacherEditionBadge}>TE</div>
+              </a>
+          }
           </div>
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">
