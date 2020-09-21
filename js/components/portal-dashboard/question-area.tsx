@@ -7,14 +7,16 @@ import { Question } from "../../containers/portal-dashboard/question";
 import css from "../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
+  currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   hideQuestion: boolean;
   useMinHeight?: boolean;
+  hasTeacherEdition: boolean;
 }
 
 export class QuestionArea extends React.PureComponent<IProps>{
   render() {
-    const { currentQuestion, hideQuestion, useMinHeight } = this.props;
+    const { currentActivity, currentQuestion, hideQuestion, useMinHeight, hasTeacherEdition } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
     const type = currentQuestion?.get("type");
@@ -23,6 +25,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const interactiveName = type === "iframe_interactive" && currentQuestion?.get("name");
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
+    const activityURL = currentActivity?.get("url");
 
     return (
       <div className={`${css.questionArea} ${hideQuestion ? css.hidden : ""}`}>
@@ -34,15 +37,17 @@ export class QuestionArea extends React.PureComponent<IProps>{
             </span>
           </div>
           <div className={css.rightIcons}>
-            <a className={css.externalLinkButton} target="_blank" data-cy="open-activity-button">
+            <a className={css.externalLinkButton} href={activityURL} target="_blank" data-cy="open-activity-button">
               <LaunchIcon className={css.icon} />
             </a>
-            <div className={css.teacherEditionIcon}>
-              <a className={teacherEditionButtonClasses} target="_blank" data-cy="open-teacher-edition-button">
-                <LaunchIcon className={css.icon} />
+            {hasTeacherEdition &&
+              <a className={css.teacherEditionIcon} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
+                <div className={teacherEditionButtonClasses}>
+                  <LaunchIcon className={css.icon} />
+                </div>
+                <div className={teacherEditionBadge}>TE</div>
               </a>
-              <div className={teacherEditionBadge}>TE</div>
-            </div>
+          }
           </div>
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">

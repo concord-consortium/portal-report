@@ -50,6 +50,7 @@ export interface IReportState {
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: boolean;
   iframeQuestionId: string;
+  hasTeacherEdition: boolean;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -77,6 +78,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
   iframeQuestionId: config("iframeQuestionId") as string || "",
+  hasTeacherEdition: false,
 });
 
 export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
@@ -107,6 +109,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   compareViewAnswers: Set<string> | null;
   showFeaturedQuestionsOnly: boolean;
   iframeQuestionId: string;
+  hasTeacherEdition: boolean;
 }
 
 export default function report(state = new ReportState({}), action?: any) {
@@ -143,7 +146,8 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("contextId", data.contextId)
         .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId)
-        .set("sourceKey", data.sourceKey);
+        .set("sourceKey", data.sourceKey)
+        .set("hasTeacherEdition", data.offering.hasTeacherEdition);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);

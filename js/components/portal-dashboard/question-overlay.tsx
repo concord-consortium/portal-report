@@ -9,6 +9,7 @@ import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg"
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
 interface IProps {
+  currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   currentStudentId: string | null;
   handleShowAllResponsesPopup: (show: boolean) => void;
@@ -19,6 +20,7 @@ interface IProps {
   sortedQuestionIds?: string[];
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
+  hasTeacherEdition: boolean;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
@@ -43,7 +45,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private renderQuestionDetails = () => {
-    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
+    const { currentActivity, currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition } = this.props;
     return (
       <React.Fragment>
         <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
@@ -51,12 +53,14 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           <div>Question Detail View</div>
         </div>
         <QuestionNavigator
+          currentActivity={currentActivity}
           currentQuestion={currentQuestion}
           questions={questions}
           sortedQuestionIds={sortedQuestionIds}
           toggleCurrentQuestion={toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity}
           inOverlay={true}
+          hasTeacherEdition={hasTeacherEdition}
         />
       </React.Fragment>
     );

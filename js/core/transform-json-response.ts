@@ -44,6 +44,7 @@ export interface IPortalData {
     activityUrl: string;
     id: number;
     teacher: string;
+    hasTeacherEdition: boolean;
   };
   classInfo: {
     id: number;

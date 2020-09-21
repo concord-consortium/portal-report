@@ -14,18 +14,20 @@ interface IProps {
   isAnonymous: boolean;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
+  currentActivity?: Map<string, any>;
   setCurrentActivity: (activityId: string) => void;
   setStudentFilter: (value: string) => void;
   sortedQuestionIds?: string[];
   studentCount: number;
   students: any;
+  hasTeacherEdition: boolean;
   trackEvent: (category: string, action: string, label: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
 }
 export class StudentResponsePopup extends React.PureComponent<IProps> {
   render() {
-    const { anonymous, students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent,
-      currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity } = this.props;
+    const { anonymous, students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent, currentActivity,
+      currentQuestion, questions, sortedQuestionIds, hasTeacherEdition, toggleCurrentQuestion, setCurrentActivity } = this.props;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
@@ -38,11 +40,13 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
             trackEvent={trackEvent} />
           <div className={css.questionArea} data-cy="questionArea">
             <QuestionNavigator
+              currentActivity={currentActivity}
               currentQuestion={currentQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={toggleCurrentQuestion}
               setCurrentActivity={setCurrentActivity}
+              hasTeacherEdition={hasTeacherEdition}
             />
           </div>
         </div>

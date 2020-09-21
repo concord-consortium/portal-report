@@ -40,6 +40,7 @@ interface IProps {
   studentProgress: Map<any, any>;
   students: any;
   sortedQuestionIds?: string[];
+  hasTeacherEdition: boolean;
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
@@ -87,7 +88,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   render() {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
-      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, toggleCurrentActivity, toggleCurrentQuestion, trackEvent, userName } = this.props;
+      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, toggleCurrentActivity, toggleCurrentQuestion,
+      trackEvent, userName, hasTeacherEdition } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -100,7 +102,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     else {
       assignmentName = activityTrees && activityTrees.first().get("name");
     }
-
     return (
       <div className={css.portalDashboardApp}>
         {sequenceTree &&
@@ -154,6 +155,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
             </div>
             <QuestionOverlay
+              currentActivity={currentActivity}
               currentQuestion={currentQuestion}
               currentStudentId={currentStudentId}
               handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
@@ -164,6 +166,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               sortedQuestionIds={sortedQuestionIds}
               students={students}
               toggleCurrentQuestion={toggleCurrentQuestion}
+              hasTeacherEdition={hasTeacherEdition}
             />
             {showAllResponsesPopup &&
               <StudentResponsePopup
@@ -173,12 +176,14 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 setAnonymous={setAnonymous}
                 studentCount={students.size}
                 setStudentFilter={setStudentSort}
+                currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
                 questions={questions}
                 sortedQuestionIds={sortedQuestionIds}
                 toggleCurrentQuestion={toggleCurrentQuestion}
                 setCurrentActivity={setCurrentActivity}
                 trackEvent={trackEvent}
+                hasTeacherEdition={hasTeacherEdition}
                 handleCloseAllResponsesPopup={this.setShowAllResponsesPopup}
               />
             }
@@ -243,6 +248,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
     questions,
     sortedQuestionIds,
+    hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
   };
 }
 

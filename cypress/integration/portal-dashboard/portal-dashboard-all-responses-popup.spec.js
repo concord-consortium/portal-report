@@ -79,7 +79,14 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get("[data-cy=all-responses-popup-view] [data-cy=open-activity-button]").should('be.visible');
       cy.get("[data-cy=all-responses-popup-view] [data-cy=open-teacher-edition-button]").should('be.visible');
     });
-    //TODO need to add tests for open activity button and open teacher edition button functionality
+    it('verify activity button opens activity page', function() {
+      cy.get("[data-cy=all-responses-popup-view] [data-cy=open-activity-button]").should('have.attr', 'href')
+      .and('include', "http://app.lara.docker/activities/9");
+    });
+    it('verify activity button opens teacher edition page', function() {
+      cy.get("[data-cy=all-responses-popup-view] [data-cy=open-teacher-edition-button]").should('have.attr', 'href')
+      .and('include', '?mode=teacher-edition');
+    });
   });
   context('Student list and responses area', () => {
     it('verify student names are listed',()=>{
@@ -92,7 +99,6 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     it('verify responses',()=>{
       cy.get('[data-cy="all-responses-popup-view"] [data-cy=question-navigator-next-button]').click().click().click().click().click();
-
       cy.get('[data-cy=student-response] [data-cy=student-answer] > div > div > a').should('have.attr','href');
     });
     //TODO add tests for filtering when implemented
