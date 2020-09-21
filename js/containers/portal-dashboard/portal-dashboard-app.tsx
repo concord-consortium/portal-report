@@ -18,6 +18,7 @@ import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStude
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -168,25 +169,29 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               toggleCurrentQuestion={toggleCurrentQuestion}
               hasTeacherEdition={hasTeacherEdition}
             />
-            {showAllResponsesPopup &&
-              <StudentResponsePopup
-                anonymous={anonymous}
-                students={students}
-                isAnonymous={isAnonymous}
-                setAnonymous={setAnonymous}
-                studentCount={students.size}
-                setStudentFilter={setStudentSort}
-                currentActivity={currentActivity}
-                currentQuestion={currentQuestion}
-                questions={questions}
-                sortedQuestionIds={sortedQuestionIds}
-                toggleCurrentQuestion={toggleCurrentQuestion}
-                setCurrentActivity={setCurrentActivity}
-                trackEvent={trackEvent}
-                hasTeacherEdition={hasTeacherEdition}
-                handleCloseAllResponsesPopup={this.setShowAllResponsesPopup}
-              />
-            }
+            <TransitionGroup component={null}>
+              {showAllResponsesPopup &&
+                <CSSTransition classNames={"popup"} timeout={500}>
+                  <StudentResponsePopup
+                    anonymous={anonymous}
+                    students={students}
+                    isAnonymous={isAnonymous}
+                    setAnonymous={setAnonymous}
+                    studentCount={students.size}
+                    setStudentFilter={setStudentSort}
+                    currentActivity={currentActivity}
+                    currentQuestion={currentQuestion}
+                    questions={questions}
+                    sortedQuestionIds={sortedQuestionIds}
+                    toggleCurrentQuestion={toggleCurrentQuestion}
+                    setCurrentActivity={setCurrentActivity}
+                    trackEvent={trackEvent}
+                    hasTeacherEdition={hasTeacherEdition}
+                    handleCloseAllResponsesPopup={this.setShowAllResponsesPopup}
+                  />
+                </CSSTransition>
+              }
+            </TransitionGroup>
           </div>
         }
         {error && <DataFetchError error={error} />}
