@@ -31,23 +31,23 @@ export class StudentResponsePopup extends React.PureComponent<IProps> {
       <div className={`${css.popup} ${isHidden ? css.hidden : ""}`} data-cy="all-responses-popup-view">
         <PopupHeader handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
         <div className={css.tableHeader}>
-        <PopupClassNav
-          anonymous={anonymous}
-          studentCount={studentCount}
-          setAnonymous={setAnonymous}
-          setStudentFilter={setStudentFilter}
-          trackEvent={trackEvent} />
-        <div className={css.questionArea} data-cy="questionArea">
-          { currentQuestion &&
-            <QuestionNavigator
-              currentQuestion={currentQuestion}
-              questions={questions}
-              sortedQuestionIds={sortedQuestionIds}
-              toggleCurrentQuestion={toggleCurrentQuestion}
-              setCurrentActivity={setCurrentActivity}
-            />
-          }
-        </div>
+          <PopupClassNav
+            anonymous={anonymous}
+            studentCount={studentCount}
+            setAnonymous={setAnonymous}
+            setStudentFilter={setStudentFilter}
+            trackEvent={trackEvent} />
+          <div className={css.questionArea} data-cy="questionArea">
+            { currentQuestion &&
+              <QuestionNavigator
+                currentQuestion={currentQuestion}
+                questions={questions}
+                sortedQuestionIds={sortedQuestionIds}
+                toggleCurrentQuestion={toggleCurrentQuestion}
+                setCurrentActivity={setCurrentActivity}
+              />
+            }
+          </div>
         </div>
         { currentQuestion &&
           <PopupStudentResponseList
