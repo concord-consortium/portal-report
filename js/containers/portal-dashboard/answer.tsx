@@ -6,7 +6,7 @@ import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
 import { ImageAnswer } from "../../components/portal-dashboard/answers/image-answer";
-import IframeAnswer from "../../components/report/iframe-answer";
+import IframeAnswer from "../../components/portal-dashboard/answers/iframe-answer";
 
 import css from "../../../css/portal-dashboard/answer.less";
 
@@ -51,6 +51,7 @@ class Answer extends React.PureComponent<AnswerProps> {
       "external_link": IframeAnswer,
       "interactive_state": IframeAnswer,
     };
+    const showFullAnswer = (type==="interactive_state" && (answer.get("answer").includes("subinteractives")) || answer.get("answer").includes("blanks"));
     const AComponent = (answer && (!question.get("required") || answer.get("submitted"))) ? AnswerComponent[type] : undefined;
     if (!AComponent) {
       return (
@@ -59,7 +60,7 @@ class Answer extends React.PureComponent<AnswerProps> {
     }
     else {
       return (
-        <AComponent answer={answer} question={question} showFullAnswer={true} responsive={responsive} studentName={studentName}/>
+        <AComponent answer={answer} question={question} showFullAnswer={showFullAnswer} responsive={responsive} studentName={studentName}/>
       );
     }
   }
