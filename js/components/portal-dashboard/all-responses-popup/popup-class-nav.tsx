@@ -76,15 +76,18 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   private renderViewListOptions() {
     const listByStudentClasses: string =
       `${css.toggle} ${css.listByStudents}` + (!this.state.inQuestionMode ? ` ${css.selected}` : "");
-    const listByQuestionsClasses: string =
-      `${css.toggle} ${css.listByQuestions}` + (this.state.inQuestionMode ? ` ${css.selected}` : "");
+    const listByQuestionsClasses =
+      `${css.toggle} ${css.listByQuestions} ${css.disabled}`;
+      // For MVP: Added string above to disable button. Uncomment string below when this feature is re-implemented
+      // `${css.toggle} ${css.listByQuestions}` + (this.state.inQuestionMode ? ` ${css.selected}` : "");
 
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
         <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.setQuestionMode(false)}>
           <StudentViewIcon className={`${css.optionIcon}`} />
         </div>
-        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(true)}>
+        {/* For MVP: hard-coded question mode to false so it is never selected. Set to true when selection is implemented */}
+        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(false)}>
           <QuestionViewIcon className={`${css.optionIcon}`} />
         </div>
       </div>
