@@ -51,7 +51,7 @@ class Answer extends React.PureComponent<AnswerProps> {
       "external_link": IframeAnswer,
       "interactive_state": IframeAnswer,
     };
-    const showFullAnswer = (type==="interactive_state" && (answer.get("answer").includes("subinteractives")) || answer.get("answer").includes("blanks"));
+    const showFullAnswer = type==="interactive_state" && answer.get("answerText") != null;
     const AComponent = (answer && (!question.get("required") || answer.get("submitted"))) ? AnswerComponent[type] : undefined;
     if (!AComponent) {
       return (

@@ -111,8 +111,8 @@ export default class IframeAnswer extends PureComponent<IProps, IState>{
     const { question, showFullAnswer } = this.props;
     const { iframeVisible } = this.state;
 
-    if (question?.get("displayInIframe")) {
-      return iframeVisible || showFullAnswer;
+    if (question?.get("displayInIframe") && !showFullAnswer) {
+      return iframeVisible;
     } else {
       return false;
     }
@@ -124,8 +124,7 @@ export default class IframeAnswer extends PureComponent<IProps, IState>{
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
         <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
-          { answerText && <div>{ answerText }</div> }
-          { !showFullAnswer && this.renderLink() }
+          { showFullAnswer? <div>{ answerText }</div> : this.renderLink() }
         </div>
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>

@@ -29,7 +29,6 @@
   },
   {
     "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Read-only value\\\",\\\"readOnly\\\":true,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Test value\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 1 (m)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 2 (s)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240,\\\"rowLines\\\":1,\\\"chartAvgs\\\":false}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\"],[\\\"b\\\",\\\"4\\\",\\\"5\\\",\\\"6\\\"],[\\\"c\\\",\\\"7\\\",\\\"8\\\",\\\"9\\\"]]}\"}",
-    "answerText": "Table interactive",
     "created": "2019-06-06 14:53:26 UTC",
     "id": "interactive_run_state_16",
     "question_id": "mw_interactive_19",
@@ -41,7 +40,6 @@
   },
   {
     "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Read-only value\\\",\\\"readOnly\\\":true,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Test value\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 1 (m)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 2 (s)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240,\\\"rowLines\\\":1,\\\"chartAvgs\\\":false}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\"],[\\\"b\\\",\\\"4\\\",\\\"5\\\",\\\"6\\\"],[\\\"c\\\",\\\"7\\\",\\\"8\\\",\\\"9\\\"]]}\"}",
-    "answerText": "Table interactive",
     "created": "2019-06-06 14:53:26 UTC",
     "id": "interactive_run_state_18",
     "question_id": "mw_interactive_19",
@@ -53,7 +51,6 @@
   },
   {
     "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
-    "answerText": "CODAP interactive",
     "created": "2019-06-06 14:53:26 UTC",
     "id": "interactive_run_state_17",
     "question_id": "mw_interactive_22",
@@ -65,7 +62,6 @@
   },
   {
     "answer": "https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19",
-    "answerText": "CODAP interactive",
     "created": "2019-06-06 14:53:26 UTC",
     "id": "interactive_run_state_19",
     "question_id": "mw_interactive_22",
@@ -394,6 +390,7 @@
     "type": "interactive_state",
     "platform_user_id": "2",
     "version": "1",
+    "answerText": "The day I saw the Monkey King [ singing ](verb) was one of the most interesting days of the year.  After he did that, the king played chess on his brother [ head ](noun) and then combed his [ curly ] (adjective) hair with a comb made out of old fish bones. Later that same day, I saw the Monkey King dance [ slowly ] (adverb) in front of an audience of kangaroos and wombats.",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-verb]\\\",\\\"size\\\":20}],\\\"prompt\\\":\\\"\\u003Cp\\u003EThe day I saw the Monkey King [blank-verb](verb) was one of the most\\u003C/p\\u003E\\\\n\\u003Cp\\u003Einteresting days of the year.\\u003C/p\\u003E\\\\n\\u003Cp\\u003E After he did that, the king played chess on his brother\\u0026#x27;s\\u003C/p\\u003E\\\\n\\u003Cp\\u003E[blank-noun](noun) and then combed his [blank-adjective] (adjective) hair with a\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ecomb made out of old fish bones. Later that same day, I saw the\\u003C/p\\u003E\\\\n\\u003Cp\\u003EMonkey King dance [blank-adverb] (adverb)\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ein front of an audience of kangaroos and wombats.\\u003C/p\\u003E\\\"}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-verb]\\\",\\\"response\\\":\\\"singing\\\"},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"response\\\":\\\"head\\\"},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"response\\\":\\\"curly\\\"},{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"response\\\":\\\"slowly\\\"}],\\\"answerText\\\":\\\"The day I saw the Monkey King [ singing ](verb) was one of the most\\\\ninteresting days of the year.\\\\n After he did that, the king played chess on his brother\\u0026#x27;s\\\\n[ head ](noun) and then combed his [ curly ] (adjective) hair with a\\\\ncomb made out of old fish bones. Later that same day, I saw the\\\\nMonkey King dance [ slowly ] (adverb)\\\\nin front of an audience of kangaroos and wombats.\\\"}\"}"
   },
   {
@@ -416,6 +413,7 @@
     "type": "interactive_state",
     "platform_user_id": "2",
     "version": "1",
+    "answerText": "[Level: 1] Move a house down the alley",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\",\\\"subinteractives\\\":[{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"hint\\\":\\\"\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EWhat do you think?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\"},{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}]}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"subinteractiveStates\\\":{\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"I don't like thinking\\\"},\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"Move a house down the alley\\\"}},\\\"answerText\\\":\\\"[Level: 1] Move a house down the alley\\\",\\\"currentSubinteractiveId\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}\"}"
   },
   {
@@ -438,6 +436,7 @@
     "type": "interactive_state",
     "platform_user_id": "5",
     "version": "1",
+    "answerText": "The day I saw the Monkey King [ running ](verb) was one of the most interesting days of the year.  After he did that, the king played chess on his brother [ foot ](noun) and then combed his [ stiff ] (adjective) hair with a comb made out of old fish bones. Later that same day, I saw the Monkey King dance [ fast ] (adverb) in front of an audience of kangaroos and wombats.",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-verb]\\\",\\\"size\\\":20}],\\\"prompt\\\":\\\"\\u003Cp\\u003EThe day I saw the Monkey King [blank-verb](verb) was one of the most\\u003C/p\\u003E\\\\n\\u003Cp\\u003Einteresting days of the year.\\u003C/p\\u003E\\\\n\\u003Cp\\u003E After he did that, the king played chess on his brother\\u0026#x27;s\\u003C/p\\u003E\\\\n\\u003Cp\\u003E[blank-noun](noun) and then combed his [blank-adjective] (adjective) hair with a\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ecomb made out of old fish bones. Later that same day, I saw the\\u003C/p\\u003E\\\\n\\u003Cp\\u003EMonkey King dance [blank-adverb] (adverb)\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ein front of an audience of kangaroos and wombats.\\u003C/p\\u003E\\\"}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-verb]\\\",\\\"response\\\":\\\"running\\\"},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"response\\\":\\\"foot\\\"},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"response\\\":\\\"stiff\\\"},{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"response\\\":\\\"fast\\\"}],\\\"answerText\\\":\\\"The day I saw the Monkey King [ running ](verb) was one of the most\\\\ninteresting days of the year.\\\\n After he did that, the king played chess on his brother\\u0026#x27;s\\\\n[ foot ](noun) and then combed his [ stiff ] (adjective) hair with a\\\\ncomb made out of old fish bones. Later that same day, I saw the\\\\nMonkey King dance [ fast ] (adverb)\\\\nin front of an audience of kangaroos and wombats.\\\"}\"}"
   },
   {
@@ -449,6 +448,7 @@
     "type": "interactive_state",
     "platform_user_id": "1",
     "version": "1",
+    "answerText": "The day I saw the Monkey King [ yelling ](verb) was one of the most interesting days of the year.  After he did that, the king played chess on his brother [ head ](noun) and then combed his [ curly ] (adjective) hair with a comb made out of old fish bones. Later that same day, I saw the Monkey King dance [ rapidly ] (adverb) in front of an audience of kangaroos and wombats.",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-verb]\\\",\\\"size\\\":20}],\\\"prompt\\\":\\\"\\u003Cp\\u003EThe day I saw the Monkey King [blank-verb](verb) was one of the most\\u003C/p\\u003E\\\\n\\u003Cp\\u003Einteresting days of the year.\\u003C/p\\u003E\\\\n\\u003Cp\\u003E After he did that, the king played chess on his brother\\u0026#x27;s\\u003C/p\\u003E\\\\n\\u003Cp\\u003E[blank-noun](noun) and then combed his [blank-adjective] (adjective) hair with a\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ecomb made out of old fish bones. Later that same day, I saw the\\u003C/p\\u003E\\\\n\\u003Cp\\u003EMonkey King dance [blank-adverb] (adverb)\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ein front of an audience of kangaroos and wombats.\\u003C/p\\u003E\\\"}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-verb]\\\",\\\"response\\\":\\\"yelling\\\"},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"response\\\":\\\"head\\\"},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"response\\\":\\\"curly\\\"},{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"response\\\":\\\"rapidly\\\"}],\\\"answerText\\\":\\\"The day I saw the Monkey King [ yelling ](verb) was one of the most\\\\ninteresting days of the year.\\\\n After he did that, the king played chess on his brother\\u0026#x27;s\\\\n[ head ](noun) and then combed his [ curly ] (adjective) hair with a\\\\ncomb made out of old fish bones. Later that same day, I saw the\\\\nMonkey King dance [ rapidly ] (adverb)\\\\nin front of an audience of kangaroos and wombats.\\\"}\"}"
   },
   {
@@ -460,6 +460,7 @@
     "type": "interactive_state",
     "platform_user_id": "4",
     "version": "1",
+    "answerText": "The day I saw the Monkey King [ sleeping ](verb) was one of the mos ininteresting days of the year. After he did that, the king played chess on his brother [ hand ](noun) and then combed his [ curly ] (adjective) hair with a comb made out of old fish bones. Later that same day, I saw the Monkey King dance [ slowly ] (adverb) in front of an audience of kangaroos and wombats.",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"size\\\":20},{\\\"id\\\":\\\"[blank-verb]\\\",\\\"size\\\":20}],\\\"prompt\\\":\\\"\\u003Cp\\u003EThe day I saw the Monkey King [blank-verb](verb) was one of the most\\u003C/p\\u003E\\\\n\\u003Cp\\u003Einteresting days of the year.\\u003C/p\\u003E\\\\n\\u003Cp\\u003E After he did that, the king played chess on his brother\\u0026#x27;s\\u003C/p\\u003E\\\\n\\u003Cp\\u003E[blank-noun](noun) and then combed his [blank-adjective] (adjective) hair with a\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ecomb made out of old fish bones. Later that same day, I saw the\\u003C/p\\u003E\\\\n\\u003Cp\\u003EMonkey King dance [blank-adverb] (adverb)\\u003C/p\\u003E\\\\n\\u003Cp\\u003Ein front of an audience of kangaroos and wombats.\\u003C/p\\u003E\\\"}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"blanks\\\":[{\\\"id\\\":\\\"[blank-verb]\\\",\\\"response\\\":\\\"sleeping\\\"},{\\\"id\\\":\\\"[blank-noun]\\\",\\\"response\\\":\\\"hand\\\"},{\\\"id\\\":\\\"[blank-adjective]\\\",\\\"response\\\":\\\"curly\\\"},{\\\"id\\\":\\\"[blank-adverb]\\\",\\\"response\\\":\\\"slowly\\\"}],\\\"answerText\\\":\\\"The day I saw the Monkey King [ sleeping ](verb) was one of the most\\\\ninteresting days of the year.\\\\n After he did that, the king played chess on his brother\\u0026#x27;s\\\\n[ hand ](noun) and then combed his [ curly ] (adjective) hair with a\\\\ncomb made out of old fish bones. Later that same day, I saw the\\\\nMonkey King dance [ slowly ] (adverb)\\\\nin front of an audience of kangaroos and wombats.\\\"}\"}"
   },
   {
@@ -471,6 +472,7 @@
     "type": "interactive_state",
     "platform_user_id": "3",
     "version": "1",
+    "answerText": "[Level: 1] Move a house down the alley",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\",\\\"subinteractives\\\":[{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"hint\\\":\\\"\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EWhat do you think?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\"},{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}]}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"subinteractiveStates\\\":{\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"I don't like thinking\\\"},\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"Move a house down the alley\\\"}},\\\"answerText\\\":\\\"[Level: 1] Move a house down the alley\\\",\\\"currentSubinteractiveId\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}\"}"
   },
   {
@@ -482,6 +484,7 @@
     "type": "interactive_state",
     "platform_user_id": "4",
     "version": "1",
+    "answerText": "[Level: 1] Move a house down the alley",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\",\\\"subinteractives\\\":[{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"hint\\\":\\\"\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EWhat do you think?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\"},{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}]}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"subinteractiveStates\\\":{\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"I don't like thinking\\\"},\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"Move a house down the alley\\\"}},\\\"answerText\\\":\\\"[Level: 1] Move a house down the alley\\\",\\\"currentSubinteractiveId\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}\"}"
   },
   {
@@ -493,6 +496,7 @@
     "type": "interactive_state",
     "platform_user_id": "5",
     "version": "1",
+    "answerText": "[Level: 1] Move a house down the alley",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\",\\\"subinteractives\\\":[{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"hint\\\":\\\"\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EWhat do you think?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\"},{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}]}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"subinteractiveStates\\\":{\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"I don't like thinking\\\"},\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"Move a house down the alley\\\"}},\\\"answerText\\\":\\\"[Level: 1] Move a house down the alley\\\",\\\"currentSubinteractiveId\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}\"}"
   },
   {
@@ -504,6 +508,7 @@
     "type": "interactive_state",
     "platform_user_id": "6",
     "version": "1",
+    "answerText": "[Level: 1] Move a house down the alley",
     "answer":"{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"version\\\":1,\\\"questionType\\\":\\\"iframe_interactive\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\",\\\"subinteractives\\\":[{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"hint\\\":\\\"\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EWhat do you think?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\"},{\\\"url\\\":\\\"https://models-resources.concord.org/question-interactives/branch/master/open-response\\\",\\\"authoredState\\\":{\\\"version\\\":1,\\\"questionType\\\":\\\"open_response\\\",\\\"prompt\\\":\\\"\\u003Cp\\u003EClues to do what?\\u003C/p\\u003E\\\"},\\\"id\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}]}\",\"interactiveState\":\"{\\\"answerType\\\":\\\"interactive_state\\\",\\\"subinteractiveStates\\\":{\\\"28a1ada3-154c-40ce-a369-d521bbac60fb\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"I don't like thinking\\\"},\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\":{\\\"answerType\\\":\\\"open_response_answer\\\",\\\"answerText\\\":\\\"Move a house down the alley\\\"}},\\\"answerText\\\":\\\"[Level: 1] Move a house down the alley\\\",\\\"currentSubinteractiveId\\\":\\\"345612f1-e4d9-4cd4-8276-d694b693d96f\\\"}\"}"
   },
   {
