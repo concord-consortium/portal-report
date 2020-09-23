@@ -11,20 +11,20 @@ import css from "../../../../css/portal-dashboard/all-responses-popup/student-re
 
 interface IProps {
   anonymous: boolean;
-  currentQuestion?: Map<string, any>;
   currentActivity?: Map<string, any>;
-  handleCloseAllResponsesPopup: (show: boolean) => void;
+  currentQuestion?: Map<string, any>;
+  hasTeacherEdition: boolean;
   isAnonymous: boolean;
   questions?: Map<string, any>;
+  onClose: (show: boolean) => void;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
   setStudentFilter: (value: string) => void;
   sortedQuestionIds?: string[];
   studentCount: number;
   students: any;
-  hasTeacherEdition: boolean;
-  trackEvent: (category: string, action: string, label: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
+  trackEvent: (category: string, action: string, label: string) => void;
 }
 interface IState {
   selectedStudents: any[];
@@ -39,12 +39,13 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { anonymous, students, isAnonymous, studentCount, setAnonymous, setStudentFilter, trackEvent, currentActivity,
-      currentQuestion, questions, sortedQuestionIds, hasTeacherEdition, toggleCurrentQuestion, setCurrentActivity } = this.props;
+    const { anonymous, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
+            setAnonymous, setCurrentActivity, setStudentFilter, sortedQuestionIds, studentCount, students,
+            toggleCurrentQuestion, trackEvent } = this.props;
     const { selectedStudents, showSpotlightDialog } = this.state;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
-        <PopupHeader currentActivity={currentActivity} handleCloseAllResponsesPopup={this.props.handleCloseAllResponsesPopup} />
+        <PopupHeader currentActivity={currentActivity} onCloseSelect={onClose} />
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}
@@ -53,7 +54,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             setAnonymous={setAnonymous}
             setStudentFilter={setStudentFilter}
             trackEvent={trackEvent}
-            handleShowSpotlightDialog={this.setShowSpotlightDialog}
+            onShowDialog={this.showSpotlightDialog(true)}
           />
           <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
             <QuestionNavigator
@@ -80,17 +81,17 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
               currentActivity={currentActivity}
               currentQuestion={currentQuestion}
               setAnonymous={setAnonymous}
-              handleCloseSpotlightStudentListDialog={this.setShowSpotlightDialog}
+              onCloseDialog={this.showSpotlightDialog(false)}
             />
           : <NoStudentSelectedSpotlightDialog
-              handleCloseNoStudentSelectedDialog={this.setShowSpotlightDialog}
+              onCloseDialog={this.showSpotlightDialog(false)}
             />)
         }
       </div>
     );
   }
 
-  private setShowSpotlightDialog = (show: boolean) => {
+  private showSpotlightDialog = (show: boolean) => () => {
     this.setState({ showSpotlightDialog: show });
   }
 }

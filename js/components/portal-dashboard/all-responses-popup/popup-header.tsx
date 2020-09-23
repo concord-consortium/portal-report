@@ -9,7 +9,7 @@ import css from "../../../../css/portal-dashboard/all-responses-popup/popup-head
 
 interface IProps {
   currentActivity?: Map<string, any>;
-  handleCloseAllResponsesPopup: (show: boolean) => void;
+  onCloseSelect: (show: boolean) => void;
 }
 interface IState {
   inFeedbackMode: boolean;
@@ -23,7 +23,6 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
 
   render() {
     const popupHeaderClass: string = `${css.popupHeader}` + (this.state.inFeedbackMode? ` ${css.inFeedbackMode}` : "");
-
     return (
       <div className={popupHeaderClass} data-cy="popup-header">
         {this.renderHeaderLeft()}
@@ -47,10 +46,9 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
 
   private renderResponseFeedbackToggle = () => {
     // Removed for MVP: const feedbackToggleClass: string = `${css.feedbackToggle}` + (!this.state.inFeedbackMode? ` ${css.toggleOff}` : "");
-    const responsesToggleClass: string = `${css.responseToggle}` + (this.state.inFeedbackMode? ` ${css.toggleOff}` : "");
-
+    const responsesToggleClass = `${css.responseToggle} ${this.state.inFeedbackMode ? css.toggleOff : ""}`;
     return (
-      <div className={`${css.toggleResponsesFeedback}`}>
+      <div className={css.toggleResponsesFeedback}>
         <div className={css.toggleHolder}>
           <div className={responsesToggleClass} id="responses-toggle" data-cy="all-students-responses-toggle" onClick={this.setFeedbackMode(false)}>
             <GroupIcon className={`${css.icon} ${css.toggleIcon} ${css.responseIcon}`} />
@@ -76,8 +74,7 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   }
 
   private renderHeaderRight = () => {
-    const  closeIconClass: string = `${css.closeIcon}` + (this.state.inFeedbackMode?  ` ${css.inFeedbackMode}` : "");
-
+    const closeIconClass = `${css.closeIcon} ${this.state.inFeedbackMode ? css.inFeedbackMode : ""}`;
     return (
       <div className={css.headerRight}>
         <div className={closeIconClass} data-cy="close-popup-button" onClick={this.handleCloseAllResponses}>
@@ -88,6 +85,6 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   }
 
   private handleCloseAllResponses = () => {
-    this.props.handleCloseAllResponsesPopup(false);
+    this.props.onCloseSelect(false);
   }
 }

@@ -5,7 +5,6 @@ import { QuestionTypes } from "../../../util/question-utils";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import striptags from "striptags";
-
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
@@ -13,13 +12,13 @@ import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
 import css from "../../../../css/portal-dashboard/all-responses-popup/selected-student-list.less";
 
 interface IProps {
+  anonymous: boolean;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
-  students?: any;
-  anonymous: boolean;
   isAnonymous: boolean;
-  handleCloseSpotlightStudentListDialog: (show: boolean) => void;
+  onCloseDialog: () => void;
   setAnonymous: (value: boolean) => void;
+  students?: any;
 }
 export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   render() {
@@ -33,7 +32,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   }
 
   private renderSpotlightListHeader = () => {
-    const { currentActivity } = this.props;
+    const { currentActivity, onCloseDialog } = this.props;
     const activityName = currentActivity?.get("name");
     return (
       <div className={css.spotlightListHeader}>
@@ -47,7 +46,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
           </div>
         </div>
         <div className={css.headerRight}>
-          <div className={css.closeIcon} data-cy="close-popup-button" onClick={this.handleCloseDialogClick}>
+          <div className={css.closeIcon} data-cy="close-popup-button" onClick={onCloseDialog}>
             <SmallCloseIcon className={css.closeIconSVG} />
           </div>
         </div>
@@ -61,11 +60,10 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     const questionType = QuestionTypes.find(qt => qt.type === type);
     const QuestionIcon = questionType?.icon;
     const prompt = currentQuestion ? striptags((currentQuestion.get("prompt")).replace(/&nbsp;/g, ' ')) : "";
-    // const prompt = currentQuestion? striptags((currentQuestion.get("drawingPrompt")).replace(/&nbsp;/g,' ')) + striptags((currentQuestion.get("prompt")).replace(/&nbsp;/g,' ')) : "";
 
     return (
       <div className={css.spotlightColumnHeaders} data-cy="select-student-header">
-        <div className={css.anonymizeContainter}>
+        <div className={css.anonymizeContainer}>
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
         </div>
         <div className={css.questionPrompt} data-cy="question-prompt">
@@ -81,25 +79,25 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   private renderStudentAnswers = () => {
     const { students, isAnonymous, currentQuestion } = this.props;
     return (
-      <div className={css.selecteStudentResponseTable} data-cy="popup-response-table">
-        {students && students.map((student: any, i: number) => {
+      <div className={css.selectedStudentResponseTable} data-cy="popup-response-table">
+        { students?.map((student: any, i: number) => {
           const formattedName = getFormattedStudentName(isAnonymous, student);
           return (
             <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
               {this.renderStudentNameWrapper(formattedName)}
-              <div className={`${css.studentResponse}`} data-cy="student-response">
+              <div className={css.studentResponse} data-cy="student-response">
                 <Answer question={currentQuestion} student={student} responsive={false} />
               </div>
             </div>
           );
-        })}
+        }) }
       </div>
     );
   }
 
   private renderStudentNameWrapper(formattedName: string) {
     return (
-      <div className={`${css.studentWrapper}`}>
+      <div className={css.studentWrapper}>
         <div className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox"></div>
         <div className={css.spotlightBadge}>
           <SpotlightIcon className={css.listSpotlightIcon} />
@@ -109,7 +107,4 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     );
   }
 
-  private handleCloseDialogClick = () => {
-    this.props.handleCloseSpotlightStudentListDialog(false);
-  }
 }

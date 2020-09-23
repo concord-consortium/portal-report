@@ -16,7 +16,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
     const { students, isAnonymous, currentQuestion } = this.props;
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
-        {students && students.map((student: any, i: number) => {
+        { students?.map((student: any, i: number) => {
           const formattedName = getFormattedStudentName(isAnonymous, student);
           return (
             <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
@@ -26,7 +26,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
               </div>
             </div>
           );
-        })}
+        }) }
       </div>
     );
   }
