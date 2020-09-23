@@ -16,7 +16,7 @@ interface IProps {
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   isAnonymous: boolean;
-  onCloseDialog: () => void;
+  onCloseDialog: (show: boolean) => void;
   onStudentSelect: (student: Map<any, any>) => void;
   selectedStudents: Map<any, any>[];
   setAnonymous: (value: boolean) => void;
@@ -47,7 +47,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
           </div>
         </div>
         <div className={css.headerRight}>
-          <div className={css.closeIcon} data-cy="close-popup-button" onClick={onCloseDialog}>
+          <div className={css.closeIcon} data-cy="close-popup-button" onClick={() => onCloseDialog(false)}>
             <SmallCloseIcon className={css.closeIconSVG} />
           </div>
         </div>

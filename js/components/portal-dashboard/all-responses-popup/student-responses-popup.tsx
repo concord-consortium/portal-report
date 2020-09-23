@@ -56,7 +56,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             setAnonymous={setAnonymous}
             setStudentFilter={setStudentFilter}
             trackEvent={trackEvent}
-            onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog(true) : this.setShowSpotlightDialog(true)}
+            onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
           />
           <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
             <QuestionNavigator
@@ -83,7 +83,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             currentActivity={currentActivity}
             currentQuestion={currentQuestion}
             isAnonymous={isAnonymous}
-            onCloseDialog={this.setShowSpotlightListDialog(false)}
+            onCloseDialog={this.setShowSpotlightListDialog}
             onStudentSelect={this.toggleSelectedStudent}
             selectedStudents={selectedStudents}
             setAnonymous={setAnonymous}
@@ -91,17 +91,17 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
         }
         { showSpotlightDialog &&
           <SpotlightMessageDialog
-            onCloseDialog={this.setShowSpotlightDialog(false)}
+            onCloseDialog={this.setShowSpotlightDialog}
           />
         }
       </div>
     );
   }
 
-  private setShowSpotlightListDialog = (show: boolean) => () => {
+  private setShowSpotlightListDialog = (show: boolean) => {
     this.setState({ showSpotlightListDialog: show });
   }
-  private setShowSpotlightDialog = (show: boolean) => () => {
+  private setShowSpotlightDialog = (show: boolean) => {
     this.setState({ showSpotlightDialog: show });
   }
 

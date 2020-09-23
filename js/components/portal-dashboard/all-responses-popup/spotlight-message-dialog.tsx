@@ -4,7 +4,7 @@ import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-message-dialog.less";
 
 interface IProps {
-  onCloseDialog: () => void;
+  onCloseDialog: (show: boolean) => void;
 }
 export class SpotlightMessageDialog extends React.PureComponent<IProps>{
   render() {
@@ -25,7 +25,7 @@ export class SpotlightMessageDialog extends React.PureComponent<IProps>{
           <div className={css.dialogText}>
             Use this feature to highlight and share student work in your classroom.
           </div>
-          <div className={css.dismissDialogButton} onClick={this.props.onCloseDialog} data-cy="spotlight-dialog-close-button">
+          <div className={css.dismissDialogButton} onClick={() => this.props.onCloseDialog(false)} data-cy="spotlight-dialog-close-button">
             Got it
           </div>
         </div>
