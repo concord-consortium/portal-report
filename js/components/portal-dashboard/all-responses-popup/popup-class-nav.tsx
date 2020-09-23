@@ -14,7 +14,7 @@ import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
 interface IProps {
   anonymous: boolean;
   isSpotlightOn: boolean;
-  onShowDialog: () => void;
+  onShowDialog: (show: boolean) => void;
   setAnonymous: (value: boolean) => void;
   setStudentFilter: (value: string) => void;
   studentCount: number;
@@ -86,7 +86,7 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   private renderSpotlightToggle() {
     const spotLightContainerClasses = `${css.spotlightContainer} ${this.props.isSpotlightOn ? css.spotlightOn : ""}`;
     return (
-      <div className={css.spotlightToggle} onClick={this.props.onShowDialog} data-cy="spotlight-toggle">
+      <div className={css.spotlightToggle} onClick={() => this.props.onShowDialog(true)} data-cy="spotlight-toggle">
         <div className={spotLightContainerClasses}>
           <SpotlightIcon className={css.spotlightIcon} />
         </div>
