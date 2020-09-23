@@ -97,8 +97,14 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
   }
 
   private toggleSelectedStudent = (student: Map<any, any> ) => {
-    // TODO: remove from array if exists
-    const updatedSelectedStudents = [...this.state.selectedStudents, student];
+    const { selectedStudents } = this.state;
+    const studentIndex = selectedStudents.findIndex((s: Map<any, any>) => s.get("id") === student.get("id"));
+    const updatedSelectedStudents = [...selectedStudents];
+    if (studentIndex >= 0) {
+      updatedSelectedStudents.splice(studentIndex, 1);
+    } else {
+      updatedSelectedStudents.push(student);
+    }
     this.setState({ selectedStudents: updatedSelectedStudents });
   }
 }
