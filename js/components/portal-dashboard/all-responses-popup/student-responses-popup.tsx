@@ -4,8 +4,8 @@ import { PopupHeader } from "./popup-header";
 import { PopupClassNav } from "./popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
 import { PopupStudentResponseList } from "./popup-student-response-list";
-import { NoStudentSelectedSpotlightDialog } from "./spotlight-dialog";
-import { SpotlightStudentListDialog } from "./selected-student-list";
+import { SpotlightMessageDialog } from "./spotlight-message-dialog";
+import { SpotlightStudentListDialog } from "./spotlight-student-list-dialog";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
@@ -84,7 +84,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
               setAnonymous={setAnonymous}
               onCloseDialog={this.showSpotlightDialog(false)}
             />
-          : <NoStudentSelectedSpotlightDialog
+          : <SpotlightMessageDialog
               onCloseDialog={this.showSpotlightDialog(false)}
             />)
         }

@@ -1,12 +1,12 @@
 import React from "react";
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 
-import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-dialog.less";
+import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-message-dialog.less";
 
 interface IProps {
   onCloseDialog: () => void;
 }
-export class NoStudentSelectedSpotlightDialog extends React.PureComponent<IProps>{
+export class SpotlightMessageDialog extends React.PureComponent<IProps>{
   render() {
     return (
       <div className={css.dialog} data-cy="spotlight-dialog">
