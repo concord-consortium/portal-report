@@ -5,8 +5,6 @@ import { QuestionTypes } from "../../../util/question-utils";
 import striptags from "striptags";
 
 import css from "../../../../css/portal-dashboard/answers/answer-modal.less";
-// needed to specify modal styles that can only be access through the react-bootstrap modal-content class.
-import "../../../../css/portal-dashboard/answers/answer-modal.css";
 
 interface IProps {
   answer: Map<any, any>;
