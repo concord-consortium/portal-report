@@ -37,10 +37,25 @@
         box-sizing: border-box;
         cursor: pointer;
 
-        .selected {
+        .check {
           width: 12px;
           height: 12px;
-          background-color: @cc-teal;
+          background-color: white;
+          &:hover {
+            background-color: @cc-teal-light3;
+          }
+          &:active {
+            background-color: @cc-teal;
+          }
+          &.selected {
+            background-color: @cc-teal;
+            &:hover {
+              background-color: @cc-teal-light3;
+            }
+            &:active {
+              background-color: white;
+            }
+          }
         }
       }
 

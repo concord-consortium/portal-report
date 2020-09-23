@@ -17,8 +17,9 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   isAnonymous: boolean;
   onCloseDialog: () => void;
+  onStudentSelect: (student: Map<any, any>) => void;
+  selectedStudents: Map<any, any>[];
   setAnonymous: (value: boolean) => void;
-  students?: any;
 }
 export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   render() {
@@ -77,14 +78,14 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   }
 
   private renderStudentAnswers = () => {
-    const { students, isAnonymous, currentQuestion } = this.props;
+    const { selectedStudents, isAnonymous, currentQuestion } = this.props;
     return (
       <div className={css.selectedStudentResponseTable} data-cy="popup-response-table">
-        { students?.map((student: any, i: number) => {
+        { selectedStudents?.map((student: Map<any, any>, i: number) => {
           const formattedName = getFormattedStudentName(isAnonymous, student);
           return (
             <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
-              {this.renderStudentNameWrapper(formattedName)}
+              {this.renderStudentNameWrapper(student, formattedName)}
               <div className={css.studentResponse} data-cy="student-response">
                 <Answer question={currentQuestion} student={student} responsive={false} />
               </div>
@@ -95,11 +96,11 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     );
   }
 
-  private renderStudentNameWrapper(formattedName: string) {
+  private renderStudentNameWrapper(student: Map<any, any>, formattedName: string) {
     return (
       <div className={css.studentWrapper}>
-        <div className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
-          <div className={css.selected} />
+        <div onClick={this.handleSelect(student)} className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
+          <div className={css.check} />
         </div>
         <div className={css.spotlightBadge}>
           <SpotlightIcon className={css.listSpotlightIcon} />
@@ -107,6 +108,10 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
         <div className={css.studentName} data-cy="student-name">{formattedName}</div>
       </div>
     );
+  }
+
+  private handleSelect = (student: Map<any, any>) => () => {
+    this.props.onStudentSelect(student);
   }
 
 }

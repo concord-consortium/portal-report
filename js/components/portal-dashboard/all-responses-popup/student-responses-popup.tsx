@@ -77,13 +77,14 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
         />
         { showSpotlightDialog && (selectedStudents.length > 0
           ? <SpotlightStudentListDialog
-              students={selectedStudents}
               anonymous={anonymous}
-              isAnonymous={isAnonymous}
               currentActivity={currentActivity}
               currentQuestion={currentQuestion}
-              setAnonymous={setAnonymous}
+              isAnonymous={isAnonymous}
               onCloseDialog={this.showSpotlightDialog(false)}
+              onStudentSelect={this.toggleSelectedStudent}
+              selectedStudents={selectedStudents}
+              setAnonymous={setAnonymous}
             />
           : <SpotlightMessageDialog
               onCloseDialog={this.showSpotlightDialog(false)}

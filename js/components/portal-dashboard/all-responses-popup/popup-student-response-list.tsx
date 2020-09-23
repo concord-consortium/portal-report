@@ -38,7 +38,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
     return (
       <div className={css.studentWrapper}>
         <div onClick={this.handleSelect(student)} className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
-          {selected && <div className={css.selected} />}
+          <div className={`${css.check} ${selected ? css.selected : ""}`} />
         </div>
         <div className={css.studentName} data-cy="student-name">{formattedName}</div>
       </div>
