@@ -2,7 +2,7 @@ import React from "react";
 import { AnonymizeStudents } from "../anonymize-students";
 import { CustomSelect, SelectItem } from "../custom-select";
 import { NumberOfStudentsContainer } from "../num-students-container";
-import { SORT_BY_NAME } from "../../../actions/dashboard";
+import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../../actions/dashboard";
 import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
 import StudentViewIcon from "../../../../img/svg-icons/student-view-icon.svg";
 import QuestionViewIcon from "../../../../img/svg-icons/question-view-icon.svg";
@@ -16,7 +16,7 @@ interface IProps {
   isSpotlightOn: boolean;
   onShowDialog: (show: boolean) => void;
   setAnonymous: (value: boolean) => void;
-  setStudentFilter: (value: string) => void;
+  setStudentSort: (value: string) => void;
   studentCount: number;
   trackEvent: (category: string, action: string, label: string) => void;
 }
@@ -48,17 +48,18 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   }
 
   private renderStudentFilter = () => {
-    const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "All Students" }];
-    const { setStudentFilter, trackEvent } = this.props;
+    const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "Student Name" },
+                                 { action: SORT_BY_MOST_PROGRESS, name: "Most Progress" } ,
+                                 { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
+    const { setStudentSort, trackEvent } = this.props;
     return (
       <div className={cssClassNav.studentSort}>
         <CustomSelect
           items={items}
-          onSelectItem={setStudentFilter}
+          onSelectItem={setStudentSort}
           trackEvent={trackEvent}
           HeaderIcon={SortIcon}
           dataCy={"sort-students"}
-          disableDropdown={true}
         />
       </div>
     );

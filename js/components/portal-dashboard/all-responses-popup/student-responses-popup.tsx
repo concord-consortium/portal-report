@@ -54,7 +54,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             isSpotlightOn={selectedStudentIds.length > 0}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
-            setStudentFilter={setStudentFilter}
+            setStudentSort={setStudentFilter}
             trackEvent={trackEvent}
             onShowDialog={selectedStudentIds.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
           />
