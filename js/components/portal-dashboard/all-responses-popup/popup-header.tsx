@@ -35,7 +35,6 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   private renderHeaderLeft = () => {
     const { currentActivity } = this.props;
     const activityName = currentActivity?.get("name");
-    // const activityName = "Hurricane Module V2 Activity 1: Hurricane Risk";
     return (
       <div className={css.headerLeft} onClick={this.handleCloseAllResponses}>
         <AssignmentIcon className={`${css.assignmentIcon} ${css.icon}`} />
