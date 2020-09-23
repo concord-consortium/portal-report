@@ -29,32 +29,34 @@ interface IProps {
 interface IState {
   selectedStudents: Map<any, any>[];
   showSpotlightDialog: boolean;
+  showSpotlightListDialog: boolean;
 }
 export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
       selectedStudents: [],
-      showSpotlightDialog: false
+      showSpotlightDialog: false,
+      showSpotlightListDialog: false
     };
   }
   render() {
     const { anonymous, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
             setAnonymous, setCurrentActivity, setStudentFilter, sortedQuestionIds, studentCount, students,
             toggleCurrentQuestion, trackEvent } = this.props;
-    const { selectedStudents, showSpotlightDialog } = this.state;
+    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader currentActivity={currentActivity} onCloseSelect={onClose} />
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}
-            isSpotlightOn={showSpotlightDialog && selectedStudents.length > 0}
+            isSpotlightOn={selectedStudents.length > 0}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
             setStudentFilter={setStudentFilter}
             trackEvent={trackEvent}
-            onShowDialog={this.showSpotlightDialog(true)}
+            onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog(true) : this.setShowSpotlightDialog(true)}
           />
           <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
             <QuestionNavigator
@@ -75,26 +77,31 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           selectedStudents={selectedStudents}
           students={students}
         />
-        { showSpotlightDialog && (selectedStudents.length > 0
-          ? <SpotlightStudentListDialog
-              anonymous={anonymous}
-              currentActivity={currentActivity}
-              currentQuestion={currentQuestion}
-              isAnonymous={isAnonymous}
-              onCloseDialog={this.showSpotlightDialog(false)}
-              onStudentSelect={this.toggleSelectedStudent}
-              selectedStudents={selectedStudents}
-              setAnonymous={setAnonymous}
-            />
-          : <SpotlightMessageDialog
-              onCloseDialog={this.showSpotlightDialog(false)}
-            />)
+        { showSpotlightListDialog &&
+          <SpotlightStudentListDialog
+            anonymous={anonymous}
+            currentActivity={currentActivity}
+            currentQuestion={currentQuestion}
+            isAnonymous={isAnonymous}
+            onCloseDialog={this.setShowSpotlightListDialog(false)}
+            onStudentSelect={this.toggleSelectedStudent}
+            selectedStudents={selectedStudents}
+            setAnonymous={setAnonymous}
+          />
+        }
+        { showSpotlightDialog &&
+          <SpotlightMessageDialog
+            onCloseDialog={this.setShowSpotlightDialog(false)}
+          />
         }
       </div>
     );
   }
 
-  private showSpotlightDialog = (show: boolean) => () => {
+  private setShowSpotlightListDialog = (show: boolean) => () => {
+    this.setState({ showSpotlightListDialog: show });
+  }
+  private setShowSpotlightDialog = (show: boolean) => () => {
     this.setState({ showSpotlightDialog: show });
   }
 
