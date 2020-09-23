@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 // Removed for MVP: import FeedbackIcon from "../../../../img/svg-icons/feedback-icon.svg";
 import GroupIcon from "../../../../img/svg-icons/group-icon.svg";
@@ -7,6 +8,7 @@ import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-header.less";
 
 interface IProps {
+  currentActivity?: Map<string, any>;
   handleCloseAllResponsesPopup: (show: boolean) => void;
 }
 interface IState {
@@ -32,7 +34,9 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
   }
 
   private renderHeaderLeft = () => {
-    const activityName = "Hurricane Module V2 Activity 1: Hurricane Risk";
+    const { currentActivity } = this.props;
+    const activityName = currentActivity?.get("name");
+    // const activityName = "Hurricane Module V2 Activity 1: Hurricane Risk";
     return (
       <div className={css.headerLeft} onClick={this.handleCloseAllResponses}>
         <AssignmentIcon className={`${css.assignmentIcon} ${css.icon}`} />

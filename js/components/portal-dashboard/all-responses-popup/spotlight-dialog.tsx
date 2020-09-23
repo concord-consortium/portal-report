@@ -4,9 +4,9 @@ import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-dialog.less";
 
 interface IProps {
-  handleCloseDialog: (show: boolean) => void;
+  handleCloseNoStudentSelectedDialog: (show: boolean) => void;
 }
-export class SpotlightDialog extends React.PureComponent<IProps>{
+export class NoStudentSelectedSpotlightDialog extends React.PureComponent<IProps>{
   render() {
     return (
       <div className={css.dialog} data-cy="spotlight-dialog">
@@ -26,6 +26,6 @@ export class SpotlightDialog extends React.PureComponent<IProps>{
   }
 
   private handleCloseDialogClick = () => {
-    this.props.handleCloseDialog(false);
+    this.props.handleCloseNoStudentSelectedDialog(false);
   }
 }
