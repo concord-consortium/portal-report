@@ -1,3 +1,5 @@
+import { Map } from "immutable";
+
 export const getFormattedStudentName = (isAnonymous: boolean, student: Map<any, any>) => {
   return (
     isAnonymous

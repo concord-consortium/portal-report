@@ -69,13 +69,14 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           </div>
         </div>
         <PopupStudentResponseList
-          students={students}
-          isAnonymous={isAnonymous}
           currentQuestion={currentQuestion}
+          isAnonymous={isAnonymous}
+          onStudentSelect={this.toggleSelectedStudent}
+          students={students}
         />
         { showSpotlightDialog && (selectedStudents.length > 0
           ? <SpotlightStudentListDialog
-              students={students}
+              students={selectedStudents}
               anonymous={anonymous}
               isAnonymous={isAnonymous}
               currentActivity={currentActivity}
@@ -93,5 +94,11 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
 
   private showSpotlightDialog = (show: boolean) => () => {
     this.setState({ showSpotlightDialog: show });
+  }
+
+  private toggleSelectedStudent = (student: Map<any, any> ) => {
+    // TODO: remove from array if exists
+    const updatedSelectedStudents = [...this.state.selectedStudents, student];
+    this.setState({ selectedStudents: updatedSelectedStudents });
   }
 }
