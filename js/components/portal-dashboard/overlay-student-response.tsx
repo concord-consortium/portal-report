@@ -17,7 +17,7 @@ interface IProps {
 export class StudentResponse extends React.PureComponent<IProps> {
   render() {
     const { students, isAnonymous, currentStudentId } = this.props;
-    const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId );
+    const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
     const studentSelected = currentStudentIndex >= 0;
     const studentName = studentSelected
                         ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
@@ -66,7 +66,7 @@ export class StudentResponse extends React.PureComponent<IProps> {
   private changeCurrentStudent = (index: number) => () => {
     const { currentStudentId, students } = this.props;
     const newIndex = Math.min(Math.max(0, index), this.props.students.size - 1);
-    const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId );
+    const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
     if (currentStudentIndex !== newIndex) {
       const newId = students.get(newIndex).get("id");
       this.props.setCurrentStudent(newId);

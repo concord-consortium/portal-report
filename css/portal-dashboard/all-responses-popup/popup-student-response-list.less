@@ -2,7 +2,7 @@
 
 .responseTable {
   margin-top: 3px;
-  height: calc(100vh - 250px - @header-height );
+  height: calc(100vh - 250px - @header-height);
   overflow-y: auto;
   font-weight: normal;
 
@@ -17,7 +17,7 @@
       flex-shrink: 0;
       display: flex;
       flex-direction: row;
-      align-items: flex-start;
+      align-items: center;
       width: 240px;
       border-bottom: 1px solid @cc-charcoal-light2;
       margin-top: 15px;
@@ -31,6 +31,32 @@
         border: 1.5px solid @cc-charcoal-light1;
         background-color: white;
         margin-left: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        .check {
+          width: 12px;
+          height: 12px;
+          background-color: white;
+          &:hover {
+            background-color: @cc-teal-light3;
+          }
+          &:active {
+            background-color: @cc-teal;
+          }
+          &.selected {
+            background-color: @cc-teal;
+            &:hover {
+              background-color: @cc-teal-light3;
+            }
+            &:active {
+              background-color: white;
+            }
+          }
+        }
       }
 
       .studentName {

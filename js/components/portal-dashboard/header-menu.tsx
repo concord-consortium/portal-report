@@ -88,21 +88,21 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   private renderMenuItems = () => {
     return (
       <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list">
-        <div className={`${css.topMenu}`}>
+        <div className={css.topMenu}>
           {itemsWithState && itemsWithState.map((item: MenuItemsWithState, i: number) => {
             return (
-              <div key={`item ${i}`} className={`${css.menuItem}`} onClick={this.handleMenuCompactClick} data-cy={item.dataCy}>
+              <div key={`item ${i}`} className={css.menuItem} onClick={this.handleMenuCompactClick} data-cy={item.dataCy}>
                 <CheckIcon className={`${css.check} ${this.state.compactStudentList ? css.selected : ""}`} />
-                <div className={`${css.menuItemName}`}>{item.name}</div>
+                <div className={css.menuItemName}>{item.name}</div>
               </div>
             );
           })}
         </div>
         {items && items.map((item, i) => {
           return (
-            <div key={`item ${i}`} className={`${css.menuItem}`} onClick={item.onSelect}  >
+            <div key={`item ${i}`} className={css.menuItem} onClick={item.onSelect}  >
               <item.MenuItemIcon className={css.menuItemIcon} />
-              <div className={`${css.menuItemName}`} data-cy={item.dataCy}>{item.name}</div>
+              <div className={css.menuItemName} data-cy={item.dataCy}>{item.name}</div>
             </div>
           );
         })}

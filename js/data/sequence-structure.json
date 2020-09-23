@@ -9,7 +9,7 @@
   "children": [
     {
       "id": "activity-9",
-      "name": "Report Test Activity 1",
+      "name": "Report Test Activity 1 - Disasterville Models in SageModeler",
       "type": "activity",
       "url": "http://app.lara.docker/activities/9",
       "children": [

@@ -187,7 +187,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                     setCurrentActivity={setCurrentActivity}
                     trackEvent={trackEvent}
                     hasTeacherEdition={hasTeacherEdition}
-                    handleCloseAllResponsesPopup={this.setShowAllResponsesPopup}
+                    onClose={this.setShowAllResponsesPopup}
                   />
                 </CSSTransition>
               }

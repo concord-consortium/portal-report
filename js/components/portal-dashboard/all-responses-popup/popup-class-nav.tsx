@@ -3,7 +3,6 @@ import { AnonymizeStudents } from "../anonymize-students";
 import { CustomSelect, SelectItem } from "../custom-select";
 import { NumberOfStudentsContainer } from "../num-students-container";
 import { SORT_BY_NAME } from "../../../actions/dashboard";
-import { SpotlightDialog } from "./spotlight-dialog";
 import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
 import StudentViewIcon from "../../../../img/svg-icons/student-view-icon.svg";
 import QuestionViewIcon from "../../../../img/svg-icons/question-view-icon.svg";
@@ -14,6 +13,8 @@ import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
   anonymous: boolean;
+  isSpotlightOn: boolean;
+  onShowDialog: () => void;
   setAnonymous: (value: boolean) => void;
   setStudentFilter: (value: string) => void;
   studentCount: number;
@@ -21,38 +22,28 @@ interface IProps {
 }
 interface IState {
   inQuestionMode: boolean;
-  isSpotlightOn: boolean;
-  studentSelected: boolean; //temporary state until we can have student selection available
-  showDialog: boolean;
 }
 export class PopupClassNav extends React.PureComponent<IProps, IState>{
   constructor(props: IProps) {
     super(props);
     this.state = {
-      inQuestionMode: false,
-      isSpotlightOn: false,
-      studentSelected: false, //set this to true to see what css looks like when students are selected
-      showDialog: false
+      inQuestionMode: false
     };
   }
 
   render() {
     const { anonymous, studentCount, setAnonymous } = this.props;
-    const { showDialog } = this.state;
 
     return (
-      <React.Fragment>
-        <div className={`${css.popupClassNav} ${css.column}`}>
-          {this.renderViewListOptions()}
-          < div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
-            <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
-            <NumberOfStudentsContainer studentCount={studentCount} />
-            {this.renderStudentFilter()}
-            {this.renderSpotlightToggle()}
-          </div>
+      <div className={`${css.popupClassNav} ${css.column}`}>
+        {this.renderViewListOptions()}
+        <div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
+          <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
+          <NumberOfStudentsContainer studentCount={studentCount} />
+          {this.renderStudentFilter()}
+          {this.renderSpotlightToggle()}
         </div>
-        {showDialog && < SpotlightDialog handleCloseDialog={this.closeShowDialog} />}
-      </React.Fragment>
+      </div>
     );
   }
 
@@ -74,35 +65,30 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   }
 
   private renderViewListOptions() {
-    const listByStudentClasses: string =
-      `${css.toggle} ${css.listByStudents}` + (!this.state.inQuestionMode ? ` ${css.selected}` : "");
-    const listByQuestionsClasses =
-      `${css.toggle} ${css.listByQuestions} ${css.disabled}`;
-      // For MVP: Added string above to disable button. Uncomment string below when this feature is re-implemented
-      // `${css.toggle} ${css.listByQuestions}` + (this.state.inQuestionMode ? ` ${css.selected}` : "");
-
+    const { inQuestionMode } = this.state;
+    const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${!inQuestionMode ? css.selected : ""}`;
+    const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${css.disabled}`;
+    // For MVP: Added string above to disable button. Uncomment string below when this feature is re-implemented
+    // const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${!inQuestionMode ? css.selected : ""}`;
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
         <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.setQuestionMode(false)}>
-          <StudentViewIcon className={`${css.optionIcon}`} />
+          <StudentViewIcon className={css.optionIcon} />
         </div>
         {/* For MVP: hard-coded question mode to false so it is never selected. Set to true when selection is implemented */}
         <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(false)}>
-          <QuestionViewIcon className={`${css.optionIcon}`} />
+          <QuestionViewIcon className={css.optionIcon} />
         </div>
       </div>
     );
   }
 
   private renderSpotlightToggle() {
-    let spotLightContainerClasses: string = css.spotlightContainer;
-    if (this.state.isSpotlightOn && this.state.studentSelected) {
-      spotLightContainerClasses += " " + css.spotlightOn;
-    }
+    const spotLightContainerClasses = `${css.spotlightContainer} ${this.props.isSpotlightOn ? css.spotlightOn : ""}`;
     return (
-      <div className={`${css.spotlightToggle}`} onClick={this.handleSpotlightClick} data-cy="spotlight-toggle">
+      <div className={css.spotlightToggle} onClick={this.props.onShowDialog} data-cy="spotlight-toggle">
         <div className={spotLightContainerClasses}>
-          <SpotlightIcon className={`${css.spotlightIcon}`} />
+          <SpotlightIcon className={css.spotlightIcon} />
         </div>
         <span>Spotlight selected</span>
       </div>
@@ -115,19 +101,4 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     });
   }
 
-  private handleSpotlightClick = () => {
-    if (!this.state.isSpotlightOn && !this.state.studentSelected) {
-      this.setState({ showDialog: true });
-    }
-    this.setState(prevState => ({
-      isSpotlightOn: !prevState.isSpotlightOn
-    }));
-  }
-
-  private closeShowDialog = (show: boolean) => {
-    this.setState({
-      isSpotlightOn: !this.state.isSpotlightOn,
-      showDialog: show
-    });
-  }
 }

@@ -16,9 +16,8 @@ export class StudentNames extends React.PureComponent<IProps> {
 
     return (
       <div className={css.studentList} data-cy="student-list">
-        {students && students.map((student: any, i: number) => {
+        { students?.map((student: any, i: number) => {
           const formattedName = getFormattedStudentName(isAnonymous, student);
-
           return (
             <div className={`${css.studentName} ${compactClass}`} key={`student ${i}`}>
               <div key={`student ${i}`}>
@@ -26,7 +25,7 @@ export class StudentNames extends React.PureComponent<IProps> {
               </div>
             </div>
           );
-        })}
+        }) }
       </div>
     );
   }
