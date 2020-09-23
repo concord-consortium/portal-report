@@ -98,7 +98,9 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   private renderStudentNameWrapper(formattedName: string) {
     return (
       <div className={css.studentWrapper}>
-        <div className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox"></div>
+        <div className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
+          <div className={css.selected} />
+        </div>
         <div className={css.spotlightBadge}>
           <SpotlightIcon className={css.listSpotlightIcon} />
         </div>

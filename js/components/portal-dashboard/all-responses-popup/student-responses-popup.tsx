@@ -27,7 +27,7 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
 }
 interface IState {
-  selectedStudents: any[];
+  selectedStudents: Map<any, any>[];
   showSpotlightDialog: boolean;
 }
 export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
@@ -72,6 +72,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           currentQuestion={currentQuestion}
           isAnonymous={isAnonymous}
           onStudentSelect={this.toggleSelectedStudent}
+          selectedStudents={selectedStudents}
           students={students}
         />
         { showSpotlightDialog && (selectedStudents.length > 0
