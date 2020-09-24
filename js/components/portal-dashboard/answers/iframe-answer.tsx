@@ -29,7 +29,7 @@ export default class IframeAnswer extends PureComponent<IProps, IState>{
     this.setState({iframeVisible: !this.state.iframeVisible});
   }
 
-  getLinkURL(answer) {
+  getLinkURL(answer: string) {
     /*
     If the author initially sets the interactive to not have a report_url in LARA, then some student works on the interactive,
     then the author sets the interactive to have a report_url in LARA, the portal will send down the full interactive state to the report.
@@ -108,10 +108,10 @@ export default class IframeAnswer extends PureComponent<IProps, IState>{
   }
 
   shouldRenderIframe() {
-    const { question, showFullAnswer } = this.props;
+    const { question } = this.props;
     const { iframeVisible } = this.state;
 
-    if (question?.get("displayInIframe") && !showFullAnswer) {
+    if (question?.get("displayInIframe")) {
       return iframeVisible;
     } else {
       return false;
@@ -121,10 +121,13 @@ export default class IframeAnswer extends PureComponent<IProps, IState>{
   render() {
     const { showFullAnswer, answer, responsive } = this.props;
     const answerText = answer.get("answerText");
+
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
         <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
-          { showFullAnswer? <div>{ answerText }</div> : this.renderLink() }
+          { answerText && <div>{ answerText }</div> }
+          {/* This assumes only scaffolded questions and fill in the blank questions have answerTexts */}
+          { (showFullAnswer && !answerText)? this.renderLink() : ""}
         </div>
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>

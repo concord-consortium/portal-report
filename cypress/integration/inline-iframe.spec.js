@@ -22,8 +22,8 @@ context("Iframe questions test", () => {
   });
 
   it("shows answerText metadata when provided", () => {
-    body.openAnswersForQuestion("question-mw_interactive_19");
-    cy.get(".iframe-answer").contains("Table interactive");
+    body.openAnswersForQuestion("question-mw_interactive_30");
+    cy.get(".iframe-answer").contains("The day I saw the Monkey King");
   });
 
   it("can toggle the iframe visibility", () => {
