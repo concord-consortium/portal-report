@@ -61,7 +61,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     const type = currentQuestion?.get("type");
     const questionType = QuestionTypes.find(qt => qt.type === type);
     const QuestionIcon = questionType?.icon;
-    const typeText = type && type.replace(/_/gm, ' ');
+    const typeText = type?.replace(/_/gm, ' ');
     const interactiveName = type === "iframe_interactive" ? currentQuestion?.get("name") : typeText;
     const prompt = currentQuestion?.get("prompt");
     const prompText = prompt ? striptags(prompt.replace(/&nbsp;/g, ' ')) : interactiveName;
