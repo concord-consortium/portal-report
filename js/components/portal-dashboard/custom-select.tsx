@@ -63,7 +63,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     return (
       <div className={`${css.header} ${useHeader} ${showListClass} ${disabled}`} onClick={this.handleHeaderClick}>
         { <HeaderIcon className={`${css.icon} ${showListClass}`} /> }
-        <div className={css.current}>{currentItem && currentItem.label}</div>
+        <div className={css.current}>{currentItem?.label}</div>
         { <ArrowIcon className={`${css.arrow} ${showListClass} ${disabled}`} /> }
       </div>
     );
