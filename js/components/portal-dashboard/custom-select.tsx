@@ -11,19 +11,19 @@ interface IProps {
   HeaderIcon: SvgIcon;
   isHeader?: boolean;
   items: SelectItem[];
-  onSelectItem: (value: string) => void;
-  selectState?: string;
+  onChange: (value: string) => void;
+  value?: string;
   trackEvent: (category: string, action: string, label: string) => void;
 }
 
 interface IState {
-  selected: string;
+  value: string;
   showList: boolean;
 }
 
 export interface SelectItem {
-  action: string;
-  name: string;
+  value: string;
+  label: string;
 }
 
 export class CustomSelect extends React.PureComponent<IProps, IState> {
@@ -31,7 +31,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      selected: props.items[0].action,
+      value: props.value || props.items[0].value,
       showList: false
     };
   }
@@ -54,38 +54,38 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = () => {
-    const { items, HeaderIcon, selectState } = this.props;
-    const selectedItem = selectState ? selectState : this.state.selected;
-    const currentItem = items.find(i => i.action === selectedItem);
+    const { items, HeaderIcon, value } = this.props;
+    const currentValue = value || this.state.value;
+    const currentItem = items.find(i => i.value === currentValue);
     const showListClass = this.state.showList ? css.showList : "";
     const useHeader = this.props.isHeader ? css.topHeader : "";
     const disabled = this.props.disableDropdown ? css.disabled : "";
     return (
       <div className={`${css.header} ${useHeader} ${showListClass} ${disabled}`} onClick={this.handleHeaderClick}>
         { <HeaderIcon className={`${css.icon} ${showListClass}`} /> }
-        <div className={css.current}>{currentItem && currentItem.name}</div>
+        <div className={css.current}>{currentItem && currentItem.label}</div>
         { <ArrowIcon className={`${css.arrow} ${showListClass} ${disabled}`} /> }
       </div>
     );
   }
 
   private renderList = () => {
-    const { items, selectState } = this.props;
-    const selectedItem = selectState ? selectState : this.state.selected;
+    const { items, value } = this.props;
+    const currentValue = value || this.state.value;
     const useHeader = this.props.isHeader ? css.topHeader : "";
     return (
       <div className={`${css.list} ${useHeader} ${(this.state.showList ? css.show : "")}`}>
         { items && items.map((item: SelectItem, i: number) => {
-          const currentClass = selectedItem === item.action ? css.selected : "";
+          const currentClass = currentValue === item.value ? css.selected : "";
           return (
             <div
               key={`item ${i}`}
               className={`${css.listItem} ${currentClass}`}
-              onClick={this.handleListClick(item.action)}
-              data-cy={`list-item-${item.name.toLowerCase().replace(/\ /g, "-")}`}
+              onClick={this.handleChange(item.value)}
+              data-cy={`list-item-${item.label.toLowerCase().replace(/\ /g, "-")}`}
             >
               <CheckIcon className={`${css.check} ${currentClass}`} />
-              <div>{item.name}</div>
+              <div>{item.label}</div>
             </div>
           );
         }) }
@@ -107,11 +107,11 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     });
   }
 
-  private handleListClick = (selected: string) => () => {
-    this.props.onSelectItem(selected);
-    this.props.trackEvent("Portal-Dashboard", "Dropdown", selected);
+  private handleChange = (value: string) => () => {
+    this.props.onChange(value);
+    this.props.trackEvent("Portal-Dashboard", "Dropdown", value);
     this.setState({
-      selected,
+      value,
       showList: false
     });
   }
