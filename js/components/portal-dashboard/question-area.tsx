@@ -21,12 +21,11 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const teacherEditionBadge = css.teacherEditionBadge;
     const type = currentQuestion?.get("type");
     const scored = currentQuestion?.get("scored");
-    const typeText = type && type.replace(/_/gm, ' ');
+    const typeText = type?.replace(/_/gm, ' ');
     const interactiveName = type === "iframe_interactive" && currentQuestion?.get("name");
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const activityURL = currentActivity?.get("url");
-
     return (
       <div className={`${css.questionArea} ${hideQuestion ? css.hidden : ""}`}>
         <div className={css.questionTypeHeader}>
