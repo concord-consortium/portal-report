@@ -18,8 +18,7 @@ export const MultipleChoiceQuestion: React.FC<IProps> = (props) => {
       { prompt && renderHTML(prompt) }
       { choices.toArray?.().map( (choices: Map<string, any>, i: number) => {
         const multipleChoiceContent = `${choices.get("content")} ${choices.get("correct") ? "(correct)" : ""}`;
-        const multipleChoiceContentClass = `${css.mcContent} ${choices.get("correct") ? css.correct : ""}`;
-
+        const multipleChoiceContentClass = choices.get("correct") ? css.correct : "";
         return (
           <div className={css.choiceWrapper} key={`choices ${i}`}>
             <div className={css.choiceIcon} />
