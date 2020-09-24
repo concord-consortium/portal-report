@@ -61,7 +61,10 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     const type = currentQuestion?.get("type");
     const questionType = QuestionTypes.find(qt => qt.type === type);
     const QuestionIcon = questionType?.icon;
-    const prompt = currentQuestion ? striptags((currentQuestion.get("prompt")).replace(/&nbsp;/g, ' ')) : "";
+    const typeText = type && type.replace(/_/gm, ' ');
+    const interactiveName = type === "iframe_interactive" ? currentQuestion?.get("name") : typeText;
+    const prompt = currentQuestion?.get("prompt");
+    const prompText = prompt ? striptags(prompt.replace(/&nbsp;/g, ' ')) : interactiveName;
 
     return (
       <div className={css.spotlightColumnHeaders} data-cy="select-student-header">
@@ -71,7 +74,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
         <div className={css.questionPrompt} data-cy="question-prompt">
           <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
           <span className={css.questionPromptText} data-cy="question-prompt-text">
-            {prompt}
+            {prompText}
           </span>
         </div>
       </div>
