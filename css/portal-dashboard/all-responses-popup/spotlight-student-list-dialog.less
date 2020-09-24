@@ -1,5 +1,8 @@
 @import "../variables";
 
+@anonymize-container-width: 270px;
+@anonymize-container-margin: 3px;
+
 .spotlightListDialog {
   border-radius: 8px;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
@@ -103,7 +106,7 @@
 
     .anonymizeContainer {
       width: 270px;
-      margin-right: 3px;
+      margin-right: @anonymize-container-margin;
       background-color: @cc-teal-light6;
       height: 100%;
       display: flex;
@@ -115,13 +118,14 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      width: 100%;
+      width: calc(100% - @anonymize-container-margin - @anonymize-container-width);
       background-color: @cc-teal-light6;
       height: 100%;
 
       .icon {
         fill: @cc-teal;
         margin-left: 15px;
+        flex-shrink: 0;
       }
       .questionPromptText {
         margin-left: 3px;
