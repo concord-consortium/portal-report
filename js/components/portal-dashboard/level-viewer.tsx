@@ -189,6 +189,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
   }
 
   private handleActivityButtonClick = (activityId: string) => () => {
+    this.props.toggleCurrentQuestion(this.props.currentQuestion?.get("id"));
     this.props.toggleCurrentActivity(activityId);
   }
 
