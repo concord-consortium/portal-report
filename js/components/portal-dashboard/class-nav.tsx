@@ -14,6 +14,7 @@ interface IProps {
   clazzName: string;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
+  sortByMethod: string;
   studentCount: number;
   trackEvent: (category: string, action: string, label: string) => void;
 }
@@ -37,30 +38,31 @@ export class ClassNav extends React.PureComponent<IProps> {
     return (
       <div className={css.chooseClass}>
         <CustomSelect
-          items={[{action: "", name: clazzName}]}
-          onSelectItem={(() => {})}
-          trackEvent={trackEvent}
-          HeaderIcon={ClassIcon}
           dataCy={"choose-class"}
           disableDropdown={true}
+          HeaderIcon={ClassIcon}
+          items={[{value: "", label: clazzName}]}
+          onChange={(() => {})}
+          trackEvent={trackEvent}
         />
       </div>
     );
   }
 
   private renderStudentSort = () => {
-    const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "Student Name" },
-                                 { action: SORT_BY_MOST_PROGRESS, name: "Most Progress" } ,
-                                 { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
-    const { setStudentSort, trackEvent } = this.props;
+    const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name" },
+                                 { value: SORT_BY_MOST_PROGRESS, label: "Most Progress" } ,
+                                 { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress" }];
+    const { setStudentSort, sortByMethod, trackEvent } = this.props;
     return (
       <div className={css.studentSort}>
         <CustomSelect
-          items={items}
-          onSelectItem={setStudentSort}
-          trackEvent={trackEvent}
-          HeaderIcon={SortIcon}
           dataCy={"sort-students"}
+          HeaderIcon={SortIcon}
+          items={items}
+          onChange={setStudentSort}
+          trackEvent={trackEvent}
+          value={sortByMethod}
         />
       </div>
     );

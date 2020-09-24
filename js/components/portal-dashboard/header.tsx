@@ -41,8 +41,8 @@ export class Header extends React.PureComponent<IProps> {
     const { assignmentName, trackEvent } = this.props;
     return (
         <CustomSelect
-          items={[{ action: "", name: assignmentName }]}
-          onSelectItem={(() => { })}
+          items={[{ value: "", label: assignmentName }]}
+          onChange={(() => { })}
           trackEvent={trackEvent}
           HeaderIcon={AssignmentIcon}
           dataCy={"choose-assignment"}

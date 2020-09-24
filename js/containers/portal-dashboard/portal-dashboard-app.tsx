@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
-         getStudentProgress, getCompactReport, getAnonymous } from "../../selectors/dashboard-selectors";
+         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -33,15 +33,16 @@ interface IProps {
   currentStudentId: string | null;
   error: IResponse;
   expandedActivities: Map<any, any>;
+  hasTeacherEdition: boolean;
   isFetching: boolean;
   questions?: Map<string, any>;
   report: any;
   sequenceTree: Map<any, any>;
+  sortByMethod: string;
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
   sortedQuestionIds?: string[];
-  hasTeacherEdition: boolean;
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
@@ -89,8 +90,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   render() {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
-      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, toggleCurrentActivity, toggleCurrentQuestion,
-      trackEvent, userName, hasTeacherEdition } = this.props;
+      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
+      toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -119,10 +120,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               <ClassNav
                 anonymous={anonymous}
                 clazzName={clazzName}
-                setStudentSort={setStudentSort}
-                trackEvent={trackEvent}
-                studentCount={students.size}
                 setAnonymous={setAnonymous}
+                setStudentSort={setStudentSort}
+                sortByMethod={sortByMethod}
+                studentCount={students.size}
+                trackEvent={trackEvent}
               />
               <LevelViewer
                 activities={activityTrees}
@@ -174,20 +176,21 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 <CSSTransition classNames={"popup"} timeout={500}>
                   <StudentResponsePopup
                     anonymous={anonymous}
-                    students={students}
-                    isAnonymous={isAnonymous}
-                    setAnonymous={setAnonymous}
-                    studentCount={students.size}
-                    setStudentFilter={setStudentSort}
                     currentActivity={currentActivity}
                     currentQuestion={currentQuestion}
-                    questions={questions}
-                    sortedQuestionIds={sortedQuestionIds}
-                    toggleCurrentQuestion={toggleCurrentQuestion}
-                    setCurrentActivity={setCurrentActivity}
-                    trackEvent={trackEvent}
                     hasTeacherEdition={hasTeacherEdition}
+                    isAnonymous={isAnonymous}
+                    questions={questions}
                     onClose={this.setShowAllResponsesPopup}
+                    setAnonymous={setAnonymous}
+                    setCurrentActivity={setCurrentActivity}
+                    setStudentFilter={setStudentSort}
+                    sortByMethod={sortByMethod}
+                    sortedQuestionIds={sortedQuestionIds}
+                    studentCount={students.size}
+                    students={students}
+                    toggleCurrentQuestion={toggleCurrentQuestion}
+                    trackEvent={trackEvent}
                   />
                 </CSSTransition>
               }
@@ -245,15 +248,16 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     currentStudentId: getCurrentStudentId(state),
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
+    hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
     isFetching: data.get("isFetching"),
+    questions,
     report: dataDownloaded && reportState,
     sequenceTree: dataDownloaded && getSequenceTree(state),
+    sortByMethod: getDashboardSortBy(state),
+    sortedQuestionIds,
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
-    questions,
-    sortedQuestionIds,
-    hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
   };
 }
 
