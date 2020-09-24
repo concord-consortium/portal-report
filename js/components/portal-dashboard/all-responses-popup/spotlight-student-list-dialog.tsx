@@ -17,9 +17,10 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   isAnonymous: boolean;
   onCloseDialog: (show: boolean) => void;
-  onStudentSelect: (student: Map<any, any>) => void;
-  selectedStudents: Map<any, any>[];
+  onStudentSelect: (studentId: string) => void;
+  selectedStudentIds: string[];
   setAnonymous: (value: boolean) => void;
+  students: Map<any, any>;
 }
 export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   render() {
@@ -78,28 +79,30 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   }
 
   private renderStudentAnswers = () => {
-    const { selectedStudents, isAnonymous, currentQuestion } = this.props;
+    const { currentQuestion, isAnonymous, selectedStudentIds, students } = this.props;
     return (
       <div className={css.selectedStudentResponseTable} data-cy="popup-response-table">
-        { selectedStudents?.map((student: Map<any, any>, i: number) => {
-          const formattedName = getFormattedStudentName(isAnonymous, student);
-          return (
-            <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
-              {this.renderStudentNameWrapper(student, formattedName)}
-              <div className={css.studentResponse} data-cy="student-response">
-                <Answer question={currentQuestion} student={student} responsive={false} />
+        { students?.filter((student: Map<any, any>) => selectedStudentIds.findIndex((id: string) => id === student.get("id")) >= 0)
+                   .map((student: Map<any, any>, i: number) => {
+            const formattedName = getFormattedStudentName(isAnonymous, student);
+            return (
+              <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
+                {this.renderStudentNameWrapper(student.get("id"), formattedName)}
+                <div className={css.studentResponse} data-cy="student-response">
+                  <Answer question={currentQuestion} student={student} responsive={false} />
+                </div>
               </div>
-            </div>
-          );
-        }) }
+            );
+          })
+        }
       </div>
     );
   }
 
-  private renderStudentNameWrapper(student: Map<any, any>, formattedName: string) {
+  private renderStudentNameWrapper(studentId: string, formattedName: string) {
     return (
       <div className={css.studentWrapper}>
-        <div onClick={this.handleSelect(student)} className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
+        <div onClick={this.handleSelect(studentId)} className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
           <div className={css.check} />
         </div>
         <div className={css.spotlightBadge}>
@@ -110,8 +113,8 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     );
   }
 
-  private handleSelect = (student: Map<any, any>) => () => {
-    this.props.onStudentSelect(student);
+  private handleSelect = (studentId: string) => () => {
+    this.props.onStudentSelect(studentId);
   }
 
 }

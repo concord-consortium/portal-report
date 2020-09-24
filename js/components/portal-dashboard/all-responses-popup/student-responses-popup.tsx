@@ -27,7 +27,7 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
 }
 interface IState {
-  selectedStudents: Map<any, any>[];
+  selectedStudentIds: string[];
   showSpotlightDialog: boolean;
   showSpotlightListDialog: boolean;
 }
@@ -35,7 +35,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      selectedStudents: [],
+      selectedStudentIds: [],
       showSpotlightDialog: false,
       showSpotlightListDialog: false
     };
@@ -44,19 +44,19 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     const { anonymous, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
             setAnonymous, setCurrentActivity, setStudentFilter, sortedQuestionIds, studentCount, students,
             toggleCurrentQuestion, trackEvent } = this.props;
-    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
+    const { selectedStudentIds, showSpotlightDialog, showSpotlightListDialog } = this.state;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader currentActivity={currentActivity} onCloseSelect={onClose} />
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}
-            isSpotlightOn={selectedStudents.length > 0}
+            isSpotlightOn={selectedStudentIds.length > 0}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
             setStudentFilter={setStudentFilter}
             trackEvent={trackEvent}
-            onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
+            onShowDialog={selectedStudentIds.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
           />
           <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
             <QuestionNavigator
@@ -74,7 +74,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           currentQuestion={currentQuestion}
           isAnonymous={isAnonymous}
           onStudentSelect={this.toggleSelectedStudent}
-          selectedStudents={selectedStudents}
+          selectedStudentIds={selectedStudentIds}
           students={students}
         />
         { showSpotlightListDialog &&
@@ -85,8 +85,9 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             isAnonymous={isAnonymous}
             onCloseDialog={this.setShowSpotlightListDialog}
             onStudentSelect={this.toggleSelectedStudent}
-            selectedStudents={selectedStudents}
+            selectedStudentIds={selectedStudentIds}
             setAnonymous={setAnonymous}
+            students={students}
           />
         }
         { showSpotlightDialog &&
@@ -105,15 +106,15 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     this.setState({ showSpotlightDialog: show });
   }
 
-  private toggleSelectedStudent = (student: Map<any, any> ) => {
-    const { selectedStudents } = this.state;
-    const studentIndex = selectedStudents.findIndex((s: Map<any, any>) => s.get("id") === student.get("id"));
-    const updatedSelectedStudents = [...selectedStudents];
-    if (studentIndex >= 0) {
-      updatedSelectedStudents.splice(studentIndex, 1);
+  private toggleSelectedStudent = (studentId: string ) => {
+    const { selectedStudentIds } = this.state;
+    const index = selectedStudentIds.findIndex((s: string) => s === studentId);
+    const updatedSelectedStudentIds = [...selectedStudentIds];
+    if (index >= 0) {
+      updatedSelectedStudentIds.splice(index, 1);
     } else {
-      updatedSelectedStudents.push(student);
+      updatedSelectedStudentIds.push(studentId);
     }
-    this.setState({ selectedStudents: updatedSelectedStudents });
+    this.setState({ selectedStudentIds: updatedSelectedStudentIds });
   }
 }
