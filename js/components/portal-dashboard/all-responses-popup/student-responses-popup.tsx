@@ -20,6 +20,7 @@ interface IProps {
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
   setStudentFilter: (value: string) => void;
+  sortByMethod: string;
   sortedQuestionIds?: string[];
   studentCount: number;
   students: any;
@@ -42,7 +43,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
   }
   render() {
     const { anonymous, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
-            setAnonymous, setCurrentActivity, setStudentFilter, sortedQuestionIds, studentCount, students,
+            setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
             toggleCurrentQuestion, trackEvent } = this.props;
     const { selectedStudentIds, showSpotlightDialog, showSpotlightListDialog } = this.state;
     return (
@@ -55,6 +56,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             studentCount={studentCount}
             setAnonymous={setAnonymous}
             setStudentSort={setStudentFilter}
+            sortByMethod={sortByMethod}
             trackEvent={trackEvent}
             onShowDialog={selectedStudentIds.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
           />

@@ -17,6 +17,7 @@ interface IProps {
   onShowDialog: (show: boolean) => void;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
+  sortByMethod: string;
   studentCount: number;
   trackEvent: (category: string, action: string, label: string) => void;
 }
@@ -51,15 +52,16 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     const items: SelectItem[] = [{ action: SORT_BY_NAME, name: "Student Name" },
                                  { action: SORT_BY_MOST_PROGRESS, name: "Most Progress" } ,
                                  { action: SORT_BY_LEAST_PROGRESS, name: "Least Progress" }];
-    const { setStudentSort, trackEvent } = this.props;
+    const { setStudentSort, sortByMethod, trackEvent } = this.props;
     return (
       <div className={cssClassNav.studentSort}>
         <CustomSelect
+          dataCy={"sort-students"}
+          HeaderIcon={SortIcon}
           items={items}
           onSelectItem={setStudentSort}
+          selectState={sortByMethod}
           trackEvent={trackEvent}
-          HeaderIcon={SortIcon}
-          dataCy={"sort-students"}
         />
       </div>
     );

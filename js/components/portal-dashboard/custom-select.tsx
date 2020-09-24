@@ -6,17 +6,18 @@ import { SvgIcon } from "../../util/svg-icon";
 import css from "../../../css/portal-dashboard/custom-select.less";
 
 interface IProps {
+  dataCy: string;
+  disableDropdown?: boolean;
+  HeaderIcon: SvgIcon;
+  isHeader?: boolean;
   items: SelectItem[];
   onSelectItem: (value: string) => void;
+  selectState?: string;
   trackEvent: (category: string, action: string, label: string) => void;
-  HeaderIcon: SvgIcon;
-  dataCy: string;
-  isHeader?: boolean;
-  disableDropdown?: boolean;
 }
 
 interface IState {
-  current: string;
+  selected: string;
   showList: boolean;
 }
 
@@ -30,7 +31,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      current: props.items[0].action,
+      selected: props.items[0].action,
       showList: false
     };
   }
@@ -53,8 +54,9 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = () => {
-    const { items, HeaderIcon } = this.props;
-    const currentItem = items.find(i => i.action === this.state.current);
+    const { items, HeaderIcon, selectState } = this.props;
+    const selectedItem = selectState ? selectState : this.state.selected;
+    const currentItem = items.find(i => i.action === selectedItem);
     const showListClass = this.state.showList ? css.showList : "";
     const useHeader = this.props.isHeader ? css.topHeader : "";
     const disabled = this.props.disableDropdown ? css.disabled : "";
@@ -68,12 +70,13 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderList = () => {
-    const { items } = this.props;
+    const { items, selectState } = this.props;
+    const selectedItem = selectState ? selectState : this.state.selected;
     const useHeader = this.props.isHeader ? css.topHeader : "";
     return (
       <div className={`${css.list} ${useHeader} ${(this.state.showList ? css.show : "")}`}>
         { items && items.map((item: SelectItem, i: number) => {
-          const currentClass = this.state.current === item.action ? css.selected : "";
+          const currentClass = selectedItem === item.action ? css.selected : "";
           return (
             <div
               key={`item ${i}`}
@@ -104,11 +107,11 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
     });
   }
 
-  private handleListClick = (current: string) => () => {
-    this.props.onSelectItem(current);
-    this.props.trackEvent("Portal-Dashboard", "Dropdown", current);
+  private handleListClick = (selected: string) => () => {
+    this.props.onSelectItem(selected);
+    this.props.trackEvent("Portal-Dashboard", "Dropdown", selected);
     this.setState({
-      current,
+      selected,
       showList: false
     });
   }
