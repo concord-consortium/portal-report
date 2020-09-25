@@ -6,7 +6,7 @@ import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
 import { ImageAnswer } from "../../components/portal-dashboard/answers/image-answer";
-import IframeAnswer from "../../components/portal-dashboard/answers/iframe-answer";
+import IframeAnswer from "../../components/report/iframe-answer";
 
 import css from "../../../css/portal-dashboard/answer.less";
 
