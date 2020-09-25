@@ -2,6 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
+import { SelectedStudent } from "./student-responses-popup";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-student-response-list.less";
 
@@ -10,18 +11,18 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   isAnonymous: boolean;
   onStudentSelect: (studentId: string) => void;
-  selectedStudentIds: string[];
+  selectedStudents: SelectedStudent[];
   students: Map<any, any>;
 }
 
 export class PopupStudentResponseList extends React.PureComponent<IProps> {
   render() {
-    const { answers, students, isAnonymous, currentQuestion, selectedStudentIds } = this.props;
+    const { answers, students, isAnonymous, currentQuestion, selectedStudents } = this.props;
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
         { students?.map((student: Map<any, any>, i: number) => {
           const formattedName = getFormattedStudentName(isAnonymous, student);
-          const isSelected = selectedStudentIds.findIndex((sId) => sId === student.get("id")) >= 0;
+          const isSelected = selectedStudents.findIndex((s) => s.id === student.get("id")) >= 0;
           const answer = currentQuestion && answers.getIn([currentQuestion.get("id"), student.get("id")]);
           const spotlightAllowed = answer != null;
           return (
@@ -51,4 +52,5 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
   private handleSelect = (studentId: string) => () => {
     this.props.onStudentSelect(studentId);
   }
+
 }
