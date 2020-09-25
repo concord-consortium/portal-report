@@ -176,6 +176,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 <CSSTransition classNames={"popup"} timeout={500}>
                   <StudentResponsePopup
                     anonymous={anonymous}
+                    answers={answers}
                     currentActivity={currentActivity}
                     currentQuestion={currentQuestion}
                     hasTeacherEdition={hasTeacherEdition}

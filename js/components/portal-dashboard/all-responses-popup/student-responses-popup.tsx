@@ -11,6 +11,7 @@ import css from "../../../../css/portal-dashboard/all-responses-popup/student-re
 
 interface IProps {
   anonymous: boolean;
+  answers: Map<any, any>;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   hasTeacherEdition: boolean;
@@ -42,9 +43,9 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { anonymous, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
-            setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount,
-            students, trackEvent } = this.props;
+    const { anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
+      setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
+      trackEvent } = this.props;
     const { selectedStudentIds, showSpotlightDialog, showSpotlightListDialog } = this.state;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
@@ -73,6 +74,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           </div>
         </div>
         <PopupStudentResponseList
+          answers={answers}
           currentQuestion={currentQuestion}
           isAnonymous={isAnonymous}
           onStudentSelect={this.toggleSelectedStudent}
