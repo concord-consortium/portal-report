@@ -4,6 +4,7 @@ import { ProgressLegendContainer } from "./legend-container";
 import { QuestionTypes } from "../../util/question-utils";
 import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
+import LinesEllipsis from "react-lines-ellipsis";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
@@ -58,7 +59,12 @@ export class LevelViewer extends React.PureComponent<IProps> {
         <div className={css.activityButton}>
           <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
             <div className={css.activityTitle}>
-              {idx + 1} {activity.get("name")}
+              <LinesEllipsis
+                text={`${idx + 1} ${activity.get("name")}`}
+                maxLine="3"
+                ellipsis="..."
+                basedOn="letters"
+              />
             </div>
             <div className={`${css.activityImage} ${this.activityColorClass(idx)}`} />
           </div>

@@ -4,6 +4,7 @@ import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 // Removed for MVP: import FeedbackIcon from "../../../../img/svg-icons/feedback-icon.svg";
 import GroupIcon from "../../../../img/svg-icons/group-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
+import LinesEllipsis from "react-lines-ellipsis";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/popup-header.less";
 
@@ -38,7 +39,14 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
     return (
       <div className={css.headerLeft} onClick={this.handleCloseAllResponses}>
         <AssignmentIcon className={`${css.assignmentIcon} ${css.icon}`} />
-        <div className={css.title} data-cy="popup-header-title">{activityName}</div>
+        <div className={css.title} data-cy="popup-header-title">
+          <LinesEllipsis
+            text={activityName}
+            maxLine="2"
+            ellipsis="..."
+            basedOn="letters"
+          />
+        </div>
       </div>
     );
   }
