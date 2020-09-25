@@ -123,12 +123,12 @@ context("Portal Dashboard Question Details Panel", () => {
       it('verify deselect student',()=>{
         cy.get('[data-cy=selected-students-response-table] [data-cy=spotlight-selection-checkbox]').eq(0).click();
         cy.get('[data-cy=selected-students-response-table] [data-cy=student-row]').should('have.length', 1);
-      })
+      });
       it('verify close spotlight',()=>{
         cy.get('[data-cy=close-spotlight-dialog-button]').should('be.visible').click();
         cy.get('[data-cy=spotlight-students-list-dialog]').should('not.be.visible');
-      })
-    })
+      });
+    });
     //TODO add tests for filtering when implemented
   });
   context('Assignment name close', ()=>{
