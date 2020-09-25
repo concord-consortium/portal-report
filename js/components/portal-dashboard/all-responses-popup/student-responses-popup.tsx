@@ -43,8 +43,8 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
   }
   render() {
     const { anonymous, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
-            setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
-            toggleCurrentQuestion, trackEvent } = this.props;
+            setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount,
+            students, trackEvent } = this.props;
     const { selectedStudentIds, showSpotlightDialog, showSpotlightListDialog } = this.state;
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
@@ -66,7 +66,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
               currentQuestion={currentQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}
-              toggleCurrentQuestion={toggleCurrentQuestion}
+              toggleCurrentQuestion={this.handleChangeQuestion}
               setCurrentActivity={setCurrentActivity}
               hasTeacherEdition={hasTeacherEdition}
             />
@@ -99,6 +99,11 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
         }
       </div>
     );
+  }
+
+  private handleChangeQuestion = (questionId: string) => {
+    this.props.toggleCurrentQuestion(questionId);
+    this.setState({ selectedStudentIds: [] });
   }
 
   private setShowSpotlightListDialog = (show: boolean) => {
