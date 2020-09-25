@@ -39,7 +39,7 @@ export class PopupHeader extends React.PureComponent<IProps, IState>{
     return (
       <div className={css.headerLeft} onClick={this.handleCloseAllResponses}>
         <AssignmentIcon className={`${css.assignmentIcon} ${css.icon}`} />
-        <div className={css.title} data-cy="popup-header-title">
+        <div className={css.title} data-cy="popup-header-title" title={activityName}>
           <LinesEllipsis
             text={activityName}
             maxLine="2"

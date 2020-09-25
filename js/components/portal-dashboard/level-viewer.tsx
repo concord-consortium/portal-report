@@ -58,7 +58,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
       <div key={activity.get("id")} className={css.animateLevelButton} data-cy="collapsed-activity-button">
         <div className={css.activityButton}>
           <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
-            <div className={css.activityTitle}>
+            <div className={css.activityTitle} title={`${idx + 1} ${activity.get("name")}`}>
               <LinesEllipsis
                 text={`${idx + 1} ${activity.get("name")}`}
                 maxLine="3"
@@ -144,8 +144,13 @@ export class LevelViewer extends React.PureComponent<IProps> {
     if (totalWidth === 0) return;
     return (
       <div className={css.pageWrapper} key={page.get("id")} style={{width: totalWidth}}>
-        <div className={css.page}>
-            P{idx + 1}: {page.get("name")}
+        <div className={css.page} title={`P${idx + 1}: ${page.get("name")}`}>
+          <LinesEllipsis
+            text={`P${idx + 1}: ${page.get("name")}`}
+            maxLine="2"
+            ellipsis="..."
+            basedOn="letters"
+          />
         </div>
         <div className={css.questionsContainer}>
           { questions.map(this.renderQuestion) }
