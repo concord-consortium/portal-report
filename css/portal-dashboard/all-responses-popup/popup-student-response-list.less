@@ -20,8 +20,12 @@
       align-items: center;
       width: 240px;
       border-bottom: 1px solid @cc-charcoal-light2;
-      margin-top: 15px;
+      padding-top: 15px;
       padding-bottom: 15px;
+
+      &.selected {
+        background-color: @hi-yellow-light3;
+      }
 
       .spotlightSelectionCheckbox {
         flex-shrink: 0;
@@ -69,6 +73,10 @@
       width: calc(100vw - 237px);
       border-bottom: 1px solid @cc-charcoal-light2;
       background-color: white;
+
+      &.selected {
+        background-color: @hi-yellow-light3;
+      }
     }
   }
 
