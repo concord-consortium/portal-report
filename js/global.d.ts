@@ -7,3 +7,4 @@ declare module "*.svg" {
   const _: FunctionComponent<SVGProps<SVGSVGElement>>;
   export = _;
 }
+declare module "react-lines-ellipsis";
