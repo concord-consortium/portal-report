@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import queryString from "query-string";
+import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
 
 import "../../../css/report/iframe-answer.less";
@@ -112,8 +113,10 @@ export default class IframeAnswer extends PureComponent {
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
         <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
-          { answerText && <div>{ answerText }</div> }
-          { !alwaysOpen && this.renderLink() }
+          { answerText
+              ? <div>{ renderHTML(answerText) }</div>
+              : !alwaysOpen && this.renderLink() /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
+          }
         </div>
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>

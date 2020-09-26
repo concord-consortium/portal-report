@@ -17,19 +17,19 @@ context("Portal Dashboard Student Sort",() =>{
       cy.get('[data-cy="list-item-most-progress"]').should('be.visible').click();
       cy.get('[data-cy=student-name]').eq(0).should("contain", "Jenkins, John");
       cy.get('[data-cy=student-name]').eq(1).should("contain", "Wu, Jerome");
-      cy.get('[data-cy=student-name]').eq(2).should("contain", "Armstrong, Jenna");
-      cy.get('[data-cy=student-name]').eq(3).should("contain", "Ross, John");
-      cy.get('[data-cy=student-name]').eq(4).should("contain", "Galloway, Amy");
-      cy.get('[data-cy=student-name]').eq(5).should("contain", "Crosby, Kate");
+      cy.get('[data-cy=student-name]').eq(2).should("contain", "Ross, John");
+      cy.get('[data-cy=student-name]').eq(3).should("contain", "Armstrong, Jenna");
+      cy.get('[data-cy=student-name]').eq(4).should("contain", "Crosby, Kate");
+      cy.get('[data-cy=student-name]').eq(5).should("contain", "Galloway, Amy");
     });
 
     it('verify we sort by least progress',()=>{
       cy.get('[data-cy=sort-students]').click();
       cy.get('[data-cy="list-item-least-progress"]').should('be.visible').click();
-      cy.get('[data-cy=student-name]').eq(0).should("contain", "Crosby, Kate");
-      cy.get('[data-cy=student-name]').eq(1).should("contain", "Galloway, Amy");
-      cy.get('[data-cy=student-name]').eq(2).should("contain", "Ross, John");
-      cy.get('[data-cy=student-name]').eq(3).should("contain", "Armstrong, Jenna");
+      cy.get('[data-cy=student-name]').eq(0).should("contain", "Galloway, Amy");
+      cy.get('[data-cy=student-name]').eq(1).should("contain", "Crosby, Kate");
+      cy.get('[data-cy=student-name]').eq(2).should("contain", "Armstrong, Jenna");
+      cy.get('[data-cy=student-name]').eq(3).should("contain", "Ross, John");
       cy.get('[data-cy=student-name]').eq(4).should("contain", "Wu, Jerome");
       cy.get('[data-cy=student-name]').eq(5).should("contain", "Jenkins, John");
     });
