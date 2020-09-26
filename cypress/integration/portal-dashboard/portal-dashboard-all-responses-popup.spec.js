@@ -50,7 +50,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get("[data-cy=list-by-student-toggle]").should('be.visible');
       cy.get("[data-cy=list-by-questions-toggle]").should('be.visible');
     });
-    it('verify spotlight opens dialog when no student selected (default)', () => {
+    it('verify spotlight opens dialog when no student selected (default)', () => { //spotlight students is tested below
       cy.get('[data-cy=spotlight-toggle').should('be.visible').click();
       cy.get('[data-cy=spotlight-dialog]').should('be.visible');
       cy.get('[data-cy=spotlight-dialog-close-button]').should('be.visible').click();
@@ -100,6 +100,34 @@ context("Portal Dashboard Question Details Panel", () => {
     it('verify responses',()=>{
       cy.get('[data-cy="all-responses-popup-view"] [data-cy=question-navigator-next-button]').click().click().click().click().click();
       cy.get('[data-cy=student-response] [data-cy=student-answer] > div > div > a').should('have.attr','href');
+    });
+    describe("spotlight students",()=>{
+      it("verify students with no answer cannot be selected",()=>{
+        cy.get('[data-cy=spotlight-selection-checkbox]').eq(0).attribute("class").should("contain","disabled");
+      });
+      it("verify spotlight students dialog is opened when students are selected and spotlight is clicked",()=>{
+        cy.get('[data-cy=spotlight-selection-checkbox]').should('have.length', 6);
+        cy.get('[data-cy=spotlight-selection-checkbox]').eq(3).click();
+        cy.get('[data-cy=spotlight-selection-checkbox]').eq(5).click();
+        cy.get('[data-cy=spotlight-toggle]').click();
+        cy.get('[data-cy=spotlight-students-list-dialog]').should('be.visible');
+      });
+      it('verify spotlight dialog elements',()=>{
+        cy.get('[data-cy=spotlight-dialog-header-title]').should('be.visible');  //TODO Verify title should match the sequence/activity name from dashboard
+        cy.get('[data-cy=select-students-header] [data-cy=anonymize-students]').should('be.visible');
+        cy.get('[data-cy=select-students-header] [data-cy=question-prompt]').should('be.visible');
+        cy.get('[data-cy=select-students-header] [data-cy=question-prompt]').should('be.visible');
+        cy.get('[data-cy=selected-students-response-table]').should('be.visible');
+        cy.get('[data-cy=selected-students-response-table] [data-cy=student-row]').should('have.length', 2);
+      });
+      it('verify deselect student',()=>{
+        cy.get('[data-cy=selected-students-response-table] [data-cy=spotlight-selection-checkbox]').eq(0).click();
+        cy.get('[data-cy=selected-students-response-table] [data-cy=student-row]').should('have.length', 1);
+      });
+      it('verify close spotlight',()=>{
+        cy.get('[data-cy=close-spotlight-dialog-button]').should('be.visible').click();
+        cy.get('[data-cy=spotlight-students-list-dialog]').should('not.be.visible');
+      });
     });
     //TODO add tests for filtering when implemented
   });

@@ -25,7 +25,7 @@ interface IProps {
 export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   render() {
     return (
-      <div className={css.spotlightListDialog} data-cy="spotlight-student-list-dialog">
+      <div className={css.spotlightListDialog} data-cy="spotlight-students-list-dialog">
         {this.renderSpotlightListHeader()}
         {this.renderColumnHeaders()}
         {this.renderStudentAnswers()}
@@ -44,11 +44,11 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
         <div className={css.headerCenter}>
           <div className={css.assignmentContainer}>
             <AssignmentIcon className={`${css.assignmentIcon} ${css.icon}`} />
-            <div className={css.title} data-cy="popup-header-title">{activityName}</div>
+            <div className={css.title} data-cy="spotlight-dialog-header-title">{activityName}</div>
           </div>
         </div>
         <div className={css.headerRight}>
-          <div className={css.closeIcon} data-cy="close-popup-button" onClick={() => onCloseDialog(false)}>
+          <div className={css.closeIcon} data-cy="close-spotlight-dialog-button" onClick={() => onCloseDialog(false)}>
             <SmallCloseIcon className={css.closeIconSVG} />
           </div>
         </div>
@@ -67,7 +67,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     const prompText = prompt ? striptags(prompt.replace(/&nbsp;/g, ' ')) : interactiveName;
 
     return (
-      <div className={css.spotlightColumnHeaders} data-cy="select-student-header">
+      <div className={css.spotlightColumnHeaders} data-cy="select-students-header">
         <div className={css.anonymizeContainer}>
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
         </div>
@@ -84,7 +84,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   private renderStudentAnswers = () => {
     const { currentQuestion, isAnonymous, selectedStudentIds, students } = this.props;
     return (
-      <div className={css.selectedStudentResponseTable} data-cy="popup-response-table">
+      <div className={css.selectedStudentResponseTable} data-cy="selected-students-response-table">
         { students?.filter((student: Map<any, any>) => selectedStudentIds.findIndex((id: string) => id === student.get("id")) >= 0)
                    .map((student: Map<any, any>, i: number) => {
             const formattedName = getFormattedStudentName(isAnonymous, student);

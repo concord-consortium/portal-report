@@ -21,5 +21,9 @@
   },
   "include": [
     "./js/**/*"
+  ],
+  "types": [
+    "cypress-commands",
+    "cypress"
   ]
 }
