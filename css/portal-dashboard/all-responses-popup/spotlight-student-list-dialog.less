@@ -193,10 +193,21 @@
           background-color: white;
           margin-left: 10px;
           box-sizing: content-box;
+          cursor: pointer;
+
+          &:hover {
+            background-color: @cc-teal-light3;
+          }
+          &:active {
+            background-color: @cc-teal;
+          }
 
           .listSpotlightIcon {
             object-fit: contain;
-            fill: @cc-teal;
+          }
+
+          &:active .listSpotlightIcon {
+            fill: white;
           }
         }
 
@@ -209,12 +220,33 @@
         padding: 15px 20px;
         width: calc(100vw - 237px);
         border-top: solid 1px @cc-charcoal-light2;
-        background-color: white;
       }
     }
 
-    .studentRow:nth-child(even) {
-      background-color: @cc-teal-light6;
-    }
   }
+}
+
+.firstSpotlightColor {
+  background-color: white;
+}
+.secondSpotlightColor {
+  background-color: @hi-yellow-light3;
+}
+.thirdSpotlightColor {
+  background-color: @hi-green-light3;
+}
+.fourthSpotlightColor {
+  background-color: @hi-purple-light3;
+}
+.firstSpotlightFillColor {
+  fill: @hi-yellow-dark;
+}
+.secondSpotlightFillColor {
+  fill: @hi-green-dark;
+}
+.thirdSpotlightFillColor {
+  fill: @hi-purple-dark;
+}
+.fourthSpotlightFillColor {
+  fill: @cc-teal;
 }

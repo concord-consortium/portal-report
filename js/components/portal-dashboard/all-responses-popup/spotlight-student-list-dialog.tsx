@@ -8,8 +8,19 @@ import striptags from "striptags";
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
+import { SelectedStudent } from "./student-responses-popup";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-student-list-dialog.less";
+
+interface ColorClasses {
+  background: string;
+  fill: string;
+}
+export const spotlightColors: ColorClasses[] = [
+  { background: css.firstSpotlightColor, fill: css.firstSpotlightFillColor },
+  { background: css.secondSpotlightColor, fill: css.secondSpotlightFillColor },
+  { background: css.thirdSpotlightColor, fill: css.thirdSpotlightFillColor },
+  { background: css.fourthSpotlightColor, fill: css.fourthSpotlightFillColor }];
 
 interface IProps {
   anonymous: boolean;
@@ -18,7 +29,8 @@ interface IProps {
   isAnonymous: boolean;
   onCloseDialog: (show: boolean) => void;
   onStudentSelect: (studentId: string) => void;
-  selectedStudentIds: string[];
+  onSpotlightColorSelect: (studentId: string) => void;
+  selectedStudents: SelectedStudent[];
   setAnonymous: (value: boolean) => void;
   students: Map<any, any>;
 }
@@ -82,16 +94,19 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   }
 
   private renderStudentAnswers = () => {
-    const { currentQuestion, isAnonymous, selectedStudentIds, students } = this.props;
+    const { currentQuestion, isAnonymous, selectedStudents, students } = this.props;
     return (
       <div className={css.selectedStudentResponseTable} data-cy="selected-students-response-table">
-        { students?.filter((student: Map<any, any>) => selectedStudentIds.findIndex((id: string) => id === student.get("id")) >= 0)
+        { students?.filter((student: Map<any, any>) => selectedStudents.findIndex((s: SelectedStudent) => s.id === student.get("id")) >= 0)
                    .map((student: Map<any, any>, i: number) => {
             const formattedName = getFormattedStudentName(isAnonymous, student);
+            const colorGroup = selectedStudents.find((s: SelectedStudent) => s.id === student.get("id"))?.colorGroup;
+            const backgroundColorClass = colorGroup != null ? spotlightColors[colorGroup].background: "";
+            const fillColorClass = colorGroup != null ? spotlightColors[colorGroup].fill: "";
             return (
               <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
-                {this.renderStudentNameWrapper(student.get("id"), formattedName)}
-                <div className={css.studentResponse} data-cy="student-response">
+                {this.renderStudentNameWrapper(student.get("id"), formattedName, backgroundColorClass, fillColorClass)}
+                <div className={`${css.studentResponse} ${backgroundColorClass}`} data-cy="student-response">
                   <Answer question={currentQuestion} student={student} responsive={false} />
                 </div>
               </div>
@@ -102,18 +117,22 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     );
   }
 
-  private renderStudentNameWrapper(studentId: string, formattedName: string) {
+  private renderStudentNameWrapper(studentId: string, formattedName: string, backgroundColorClass: string, fillColorClass: string) {
     return (
-      <div className={css.studentWrapper}>
+      <div className={`${css.studentWrapper} ${backgroundColorClass}`}>
         <div onClick={this.handleSelect(studentId)} className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
           <div className={css.check} />
         </div>
-        <div className={css.spotlightBadge}>
-          <SpotlightIcon className={css.listSpotlightIcon} />
+        <div className={css.spotlightBadge} onClick={this.handleSpotlightColorSelect(studentId)}>
+          <SpotlightIcon className={`${css.listSpotlightIcon} ${fillColorClass}`} />
         </div>
         <div className={css.studentName} data-cy="student-name">{formattedName}</div>
       </div>
     );
+  }
+
+  private handleSpotlightColorSelect = (studentId: string) => () => {
+    this.props.onSpotlightColorSelect(studentId);
   }
 
   private handleSelect = (studentId: string) => () => {
