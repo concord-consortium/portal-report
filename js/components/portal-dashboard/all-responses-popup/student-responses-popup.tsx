@@ -89,7 +89,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
         />
         <TransitionGroup component={null}>
           {showSpotlightListDialog &&
-            <CSSTransition classNames={"spotlightListDialog"} timeout={500}>
+            <CSSTransition in={showSpotlightListDialog} classNames={"spotlightListDialog"} timeout={500}>
               <SpotlightStudentListDialog
                 anonymous={anonymous}
                 currentActivity={currentActivity}
