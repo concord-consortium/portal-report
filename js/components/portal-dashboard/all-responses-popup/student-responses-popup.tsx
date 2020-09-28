@@ -6,6 +6,7 @@ import { QuestionNavigator } from "../question-navigator";
 import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
@@ -86,20 +87,24 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           selectedStudents={selectedStudents}
           students={students}
         />
-        { showSpotlightListDialog &&
-          <SpotlightStudentListDialog
-            anonymous={anonymous}
-            currentActivity={currentActivity}
-            currentQuestion={currentQuestion}
-            isAnonymous={isAnonymous}
-            onCloseDialog={this.setShowSpotlightListDialog}
-            onSpotlightColorSelect={this.handleChangeColorGroup}
-            onStudentSelect={this.toggleSelectedStudent}
-            selectedStudents={selectedStudents}
-            setAnonymous={setAnonymous}
-            students={students}
-          />
-        }
+        <TransitionGroup component={null}>
+          {showSpotlightListDialog &&
+            <CSSTransition classNames={"spotlightListDialog"} timeout={500}>
+              <SpotlightStudentListDialog
+                anonymous={anonymous}
+                currentActivity={currentActivity}
+                currentQuestion={currentQuestion}
+                isAnonymous={isAnonymous}
+                onCloseDialog={this.setShowSpotlightListDialog}
+                onSpotlightColorSelect={this.handleChangeColorGroup}
+                onStudentSelect={this.toggleSelectedStudent}
+                selectedStudents={selectedStudents}
+                setAnonymous={setAnonymous}
+                students={students}
+              />
+            </CSSTransition>
+          }
+        </TransitionGroup>
         { showSpotlightDialog &&
           <SpotlightMessageDialog
             onCloseDialog={this.setShowSpotlightDialog}
