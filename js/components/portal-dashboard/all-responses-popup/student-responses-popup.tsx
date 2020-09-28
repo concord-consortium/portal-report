@@ -115,10 +115,9 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     if (index >= 0) {
       const currentColor = selectedStudents[index].colorGroup;
       const newColor = currentColor >= spotlightColors.length - 1 ? 0 : currentColor + 1;
-      const updatedStudent: SelectedStudent = { id: studentId, colorGroup: newColor };
-      const updatedSelectedStudents = [...selectedStudents];
-      updatedSelectedStudents.splice(index, 1);
-      updatedSelectedStudents.push(updatedStudent);
+      const updatedSelectedStudents = selectedStudents.map(s => {
+        return (s.id === studentId) ? { id: studentId, colorGroup: newColor } : s;
+      });
       this.setState({ selectedStudents: updatedSelectedStudents });
     }
   }
