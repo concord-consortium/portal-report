@@ -4,13 +4,13 @@
 
 [Portal](https://github.com/concord-consortium/rigse) report for teachers.
 
-Demo: http://portal-report.concord.org/version/v1.7.0/
+Demo: http://portal-report.concord.org/version/v3.0.0/
 
 Check recent git tags to open the most recent version.
 
 It expects two URL params: `reportUrl` and `token`. If they are not provided, it will use fake data, so it's easy to work on some features without connecting to the real Portal instance.
 
-At this time the portal report data can be presented in report view or in dashboard view. By default the report view is shown; add the URL parameter `dashboard=true` (or any value other than "false") to show the tabular dashboard view.
+At this time the portal report data can be presented in report view or in dashboard view. By default the report view is shown. Add the URL parameter `dashboard=true` (or any value other than "false") to show the tabular dashboard view. Add the URL parameter `portal-dashboard=true` (or any value other than "false") to show the updated and redesigned portal dashboard view.
 
 ## Library
 
@@ -20,7 +20,7 @@ to add more components.
 
 There are two ways to use this library:
 - NPM module: `@concord-consortium/portal-report`
-- Using script tag referencing `http://portal-report.concord.org/version/v1.7.0/library/portal-report.js` (in this case,
+- Using script tag referencing `http://portal-report.concord.org/version/v3.0.0/library/portal-report.js` (in this case,
   library will be available under global `PortalReport` name)
 
 ## Development
