@@ -13,8 +13,6 @@
   right: 25px;
   bottom: 25px;
   z-index: 1000;
-  // opacity: 1;
-  // transition: all 1s ease;
   box-shadow: 0 0 0 8000px rgba(0,0,0,0.35);
   display: flex;
   flex-direction: column;
@@ -144,87 +142,86 @@
     overflow-y: auto;
     font-weight: normal;
 
-    .studentRow {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-stretch;
-      background-color: white;
-      min-height: 55px;
-
-      .studentWrapper{
-        flex-shrink: 0;
+      .studentRow {
         display: flex;
         flex-direction: row;
-        align-items: center;
-        width: 270px;
-        border-top: solid 1px @cc-charcoal-light2;
-        padding: 15px 0;
+        align-items: flex-stretch;
+        background-color: white;
+        min-height: 55px;
 
-        .spotlightSelectionCheckbox {
+        .studentWrapper{
           flex-shrink: 0;
-          width: 20px;
-          height: 20px;
-          border-radius: 5px;
-          border: 1.5px solid @cc-charcoal-light1;
-          background-color: white;
-          margin-left: 25px;
           display: flex;
+          flex-direction: row;
           align-items: center;
-          justify-content: center;
-          box-sizing: border-box;
-          cursor: pointer;
+          width: 270px;
+          border-top: solid 1px @cc-charcoal-light2;
+          padding: 15px 0;
 
-          .check {
-            width: 12px;
-            height: 12px;
-            background-color: @cc-teal;
+          .spotlightSelectionCheckbox {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            border: 1.5px solid @cc-charcoal-light1;
+            background-color: white;
+            margin-left: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            cursor: pointer;
+
+            .check {
+              width: 12px;
+              height: 12px;
+              background-color: @cc-teal;
+              &:hover {
+                background-color: @cc-teal-light3;
+              }
+              &:active {
+                background-color: white;
+              }
+            }
+          }
+
+          .spotlightBadge {
+            width: 20px;
+            height: 20px;
+            border-radius: 15px;
+            border: solid 1.5px @cc-charcoal-light1;
+            background-color: white;
+            margin-left: 10px;
+            box-sizing: content-box;
+            cursor: pointer;
+
             &:hover {
               background-color: @cc-teal-light3;
             }
             &:active {
-              background-color: white;
+              background-color: @cc-teal;
+            }
+
+            .listSpotlightIcon {
+              object-fit: contain;
+            }
+
+            &:active .listSpotlightIcon {
+              fill: white;
             }
           }
-        }
 
-        .spotlightBadge {
-          width: 20px;
-          height: 20px;
-          border-radius: 15px;
-          border: solid 1.5px @cc-charcoal-light1;
-          background-color: white;
-          margin-left: 10px;
-          box-sizing: content-box;
-          cursor: pointer;
-
-          &:hover {
-            background-color: @cc-teal-light3;
-          }
-          &:active {
-            background-color: @cc-teal;
-          }
-
-          .listSpotlightIcon {
-            object-fit: contain;
-          }
-
-          &:active .listSpotlightIcon {
-            fill: white;
+          .studentName {
+            margin: 2.5px 20px 0 10px;
           }
         }
 
-        .studentName {
-          margin: 2.5px 20px 0 10px;
+        .studentResponse {
+          padding: 15px 20px;
+          width: calc(100vw - 237px);
+          border-top: solid 1px @cc-charcoal-light2;
         }
       }
-
-      .studentResponse {
-        padding: 15px 20px;
-        width: calc(100vw - 237px);
-        border-top: solid 1px @cc-charcoal-light2;
-      }
-    }
-
   }
 }
 
@@ -253,17 +250,17 @@
   fill: @cc-teal;
 }
 
-.spotlightListDialog-enter {
+:global .spotlightListDialog-enter {
   opacity: 0;
 }
-.spotlightListDialog-enter-active {
+:global .spotlightListDialog-enter-active {
   opacity: 1;
-  transition: opacity 250ms;
+  transition: opacity 500ms;
 }
-.spotlightListDialog-exit {
+:global .spotlightListDialog-exit {
   opacity: 1;
 }
-.spotlightListDialog-exit-active {
+:global .spotlightListDialog-exit-active {
   opacity: 0;
-  transition: opacity 250ms;
+  transition: opacity 500ms;
 }

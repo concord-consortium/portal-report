@@ -87,7 +87,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           selectedStudents={selectedStudents}
           students={students}
         />
-        <TransitionGroup component={null}>
+        <TransitionGroup>
           {showSpotlightListDialog &&
             <CSSTransition in={showSpotlightListDialog} classNames={"spotlightListDialog"} timeout={500}>
               <SpotlightStudentListDialog
