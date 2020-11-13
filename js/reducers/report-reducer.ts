@@ -8,6 +8,7 @@ import {
   preprocessAnswersJSON
 } from "../core/transform-json-response";
 import {
+  SET_ANONYMOUS_VIEW,
   RECEIVE_RESOURCE_STRUCTURE,
   RECEIVE_USER_SETTINGS,
   SET_NOW_SHOWING,
@@ -122,6 +123,14 @@ export default function report(state = new ReportState({}), action?: any) {
   const { studentId } = queryString.parse(window.location.search);
   const urlBasedStudentSelection = studentId ? Immutable.fromJS([ studentId ]) : null;
   switch (action.type) {
+    case SET_ANONYMOUS_VIEW:
+      state = state
+      .set("type", "student")
+      .set("nowShowing", "student")
+      .set("selectedStudentIds", Immutable.fromJS([action.runKey]))
+      .set("students", Immutable.fromJS({[action.runKey]: {name: "Anonymous", id: action.runKey}}))
+      .set("platformUserId", action.runKey);
+      return state;
     case RECEIVE_PORTAL_DATA:
       data = preprocessPortalDataJSON(action.response);
 

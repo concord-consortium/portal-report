@@ -250,3 +250,18 @@
 .fourthSpotlightFillColor {
   fill: @cc-teal;
 }
+
+:global .spotlightListDialog-enter {
+  opacity: 0;
+}
+:global .spotlightListDialog-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+:global .spotlightListDialog-exit {
+  opacity: 1;
+}
+:global .spotlightListDialog-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+}
