@@ -104,7 +104,7 @@ export function fetchOfferingData() {
   if (offeringUrl) {
     return fetch(offeringUrl, {headers: {Authorization: getAuthHeader()}})
       .then(checkStatus)
-      .then((response: Body)  => response.json());
+      .then((response: Body) => response.json());
   } else {
     return new Promise(resolve => setTimeout(() => resolve(fakeOfferingData), 250));
   }
@@ -189,7 +189,6 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           })
         );
       } else {
-
         // We're using fake data, including fake JWT.
         return {
           offering: offeringData,

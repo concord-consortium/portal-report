@@ -17,14 +17,16 @@ import {
   API_UPDATE_ACTIVITY_FEEDBACK,
   API_UPDATE_REPORT_SETTINGS,
   API_UPDATE_FEEDBACK_SETTINGS,
-  API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE
+  API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE,
 } from "../api-middleware";
 import {requestRubric} from "./rubric";
 // Get the Firestore type, I'd think there'd be a better way than this
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
+import { queryValue } from "../util/url-query";
 
+export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
@@ -51,15 +53,34 @@ export const API_CALL = "API_CALL";
 // REQUEST_PORTAL_DATA action will be processed by the reducer immediately.
 // See: api-middleware.js
 export function fetchAndObserveData() {
-  return {
-    type: REQUEST_PORTAL_DATA,
-    // Start with fetching portal data. It will cause other actions to be chained later.
-    callAPI: {
-      type: API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE,
-      successAction: receivePortalData,
-      errorAction: fetchError,
-    },
-  };
+  const runKeyValue = queryValue("runKey");
+  if (runKeyValue) {
+    const activity= queryValue("activity") || "";
+    const source = activity? ((activity.split('/activities'))[0]).replace("https://","") : "";
+    const resourceUrl = queryValue("activity") || "";
+    const answerSource = queryValue("answerSource") || "";
+    return (dispatch: Dispatch, getState: any) => {
+      dispatch( {
+        type: SET_ANONYMOUS_VIEW,
+        runKey: runKeyValue
+      });
+      getState().get("report");
+      firestoreInitialized.then(db => {
+        watchResourceStructure(db, source, resourceUrl, dispatch);
+        watchAnonymousAnswers(db, answerSource, runKeyValue, dispatch);
+      });
+    };
+  } else {
+    return {
+      type: REQUEST_PORTAL_DATA,
+      // Start with fetching portal data. It will cause other actions to be chained later.
+      callAPI: {
+        type: API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE,
+        successAction: receivePortalData,
+        errorAction: fetchError,
+      },
+    };
+  }
 }
 
 function receivePortalData(rawPortalData: IPortalRawData) {
@@ -74,7 +95,12 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     type: RECEIVE_PORTAL_DATA,
     response: rawPortalData
   });
-  let resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
+  let resourceUrl;
+  if ((rawPortalData.offering.activity_url).includes("activity=")) {
+    resourceUrl = decodeURIComponent(((rawPortalData.offering.activity_url?.split(".json")[0]).split("activity="))[1].replace("%2Fapi%2Fv1",""));
+  } else {
+    resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
+  }
   if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
     // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
     // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
@@ -124,7 +150,7 @@ function getResourceLink(rawPortalData: IPortalRawData) {
 
 function fireStoreError(dispatchType: string, dispatch: Dispatch) {
   return (err: Error) => {
-    console.error(err);
+    console.error(dispatchType, err);
     dispatch(fetchError({
       status: 500,
       statusText: `Firestore ${dispatchType} fetch error: ${err.message}`
@@ -152,7 +178,6 @@ function watchResourceStructure(db: firebase.firestore.Firestore,
   // Setup Firebase observer. It will fire each time the resource structure is updated.
   const query = db.collection(`sources/${source}/resources`)
     .where("url", "==", resourceUrl);
-
   addSnapshotDispatchListener(query, RECEIVE_RESOURCE_STRUCTURE, dispatch,
     snapshot => snapshot.docs[0].data());
 }
@@ -240,6 +265,16 @@ function watchCollection(db: firebase.firestore.Firestore, path: string, receive
   }
 
   addSnapshotDispatchListener(query, receiveMsg, dispatch,
+    snapshot => snapshot.docs.map(doc => doc.data()));
+}
+
+function watchAnonymousAnswers(db: firebase.firestore.Firestore, source: string, runKey: string, dispatch: Dispatch) {
+// Setup Firebase observer. It will fire each time the resource structure is updated.
+  const path = `sources/${source}/answers`;
+  const query = db.collection(path)
+    .where("run_key", "==", runKey);
+
+  addSnapshotDispatchListener(query, RECEIVE_ANSWERS, dispatch,
     snapshot => snapshot.docs.map(doc => doc.data()));
 }
 
