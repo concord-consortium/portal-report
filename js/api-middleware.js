@@ -20,6 +20,7 @@ export default store => next => action => {
     callApi(type, data, state)
       .then(response => successAction && next(successAction(response)))
       .catch(error => {
+        console.error(error);
         if (error instanceof APIError && errorAction) {
           return next(errorAction(error.response));
         }
