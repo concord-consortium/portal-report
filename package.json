@@ -118,6 +118,7 @@
     "aws-sdk": "^2.451.0",
     "bootstrap": "^3.3.6",
     "chroma-js": "^2.1.0",
+    "client-oauth2": "^4.3.3",
     "dompurify": "^2.0.14",
     "firebase": "^7.14.3",
     "formik": "^2.1.4",

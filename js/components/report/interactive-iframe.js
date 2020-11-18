@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
-import { fetchClassData, fetchFirestoreJWT } from "../../api";
+import { fetchOfferingData, fetchClassData, fetchFirestoreJWT } from "../../api";
 
 export default class InteractiveIframe extends PureComponent {
   constructor (props) {
@@ -34,8 +34,8 @@ export default class InteractiveIframe extends PureComponent {
   }
 
   handleGetFirebaseJWT = (options) => {
-    return fetchClassData()
-      .then(classData => fetchFirestoreJWT(classData.class_hash, options.firebase_app))
+    return Promise.all([fetchOfferingData(), fetchClassData()])
+      .then(([offeringData, classData]) => fetchFirestoreJWT(classData.class_hash, offeringData.id.toString(), options.firebase_app))
       .then(json => {
         this.iframePhone.post("firebaseJWT", json);
         return json;
