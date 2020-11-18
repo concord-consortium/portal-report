@@ -61,7 +61,6 @@ interface IState {
   initialLoading: boolean;
   scrollLeft: number;
   showAllResponsesPopup: boolean;
-  authError: string;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
@@ -71,11 +70,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       initialLoading: true,
       scrollLeft: 0,
       showAllResponsesPopup: false,
-      authError: ""
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { fetchAndObserveData } = this.props;
     fetchAndObserveData();
     document.title = "Class Dashboard";

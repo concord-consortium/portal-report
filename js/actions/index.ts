@@ -24,7 +24,7 @@ import {requestRubric} from "./rubric";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
-import { queryValue } from "../util/url-query";
+import { urlParam } from "../util/misc";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -53,20 +53,18 @@ export const API_CALL = "API_CALL";
 // REQUEST_PORTAL_DATA action will be processed by the reducer immediately.
 // See: api-middleware.js
 export function fetchAndObserveData() {
-  const runKeyValue = queryValue("runKey");
+  const runKeyValue = urlParam("runKey");
   if (runKeyValue) {
-    const activity= queryValue("activity") || "";
+    const activity= urlParam("activity") || "";
     const source = activity? ((activity.split('/activities'))[0]).replace("https://","") : "";
-    const resourceUrl = queryValue("activity") || "";
-    const answerSource = queryValue("answerSource") || "";
+    const answerSource = urlParam("answerSource") || "";
     return (dispatch: Dispatch, getState: any) => {
       dispatch( {
         type: SET_ANONYMOUS_VIEW,
         runKey: runKeyValue
       });
-      getState().get("report");
       firestoreInitialized.then(db => {
-        watchResourceStructure(db, source, resourceUrl, dispatch);
+        watchResourceStructure(db, source, activity, dispatch);
         watchAnonymousAnswers(db, answerSource, runKeyValue, dispatch);
       });
     };
