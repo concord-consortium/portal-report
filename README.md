@@ -129,18 +129,18 @@ when you view the class details, you will see a "Local Tracked Q" button next to
                     token when making requests to the portal
 * `class={url}`:    URL to get info about the class from the portal
 * `offering={url}`: URL to get info about the offering from the portal
-* `firebase-app={name}`: identifier for a portal Firebase App. This name is send to the portal to get a FirebaseJWT.
+* `firebase-app={name}`: identifier for a portal Firebase App. This name is sent to the portal to get a FirebaseJWT.
                     It defaults to "report-service".
 * `tool-id={uri}`:  URI identifying the tool that stored the answers in Firestore. The tool-id is converted to a
                     source key, which is used to query the answers in firestore. The conversion from tool-id to
                     source key matches the make_source_key method in LARA's report_service.rb
 * `portal-dashboard`: boolean parameter which tells the report to render in a new dashboard style
 * `dashboard`:      boolean parameter which tells the report to render in old dashboard style
-* `activityIndex={index}`: when the activity is a sequence, only show this activities questions
+* `activityIndex={index}`: when the activity is a sequence, only show this activity's questions
 * `studentId={id}`: This shows the report for a single student, and removes some UI affordances. The filtering of the
                     student data happens client-side.
 * `iframeQuestionId={id}`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing
-                    the model referenced by iframeQuestionId, and the answer saved by studentId (either as state or as
+                    the model referenced by `iframeQuestionId`, and the answer saved by `studentId` (either as state or as
                     a url).
 
 Parameters for showing data stored anonymously in the report service
@@ -154,7 +154,7 @@ Parameters for showing data stored anonymously in the report service
 * `answerSource={string}`: identifier used to construct the path to the answers in the report service. In the case of
                     the activity player the answerSource is activity-player.concord.org.
 
-Parameters for 3rd party launching (still in a un-merged branch)
+Parameters for 3rd party launching (still in an un-merged branch)
 
 * `auth-domain={url}`: root URL for the portal which can authenticate the current user. This parameter can be
                     used instead of the `token` param. The portal report will do an OAuth2 request to the auth-domain
@@ -165,7 +165,7 @@ Parameters to help with running local tests
 * `enableFirestorePersistence=true`: Uses a local firestore DB for data persistance across sessions and tabs. Clear the
                     DB by going to `dev tools > Application > IndexedDB > firebaseLocalStorageDb > Delete database`
 * `clearFirestorePersistence=true`: Clears local firestore DB. If this and `enableFirestorePersistence=true` are set
-                    then the DB will cleared first before the local persistence is enabled.
+                    then the DB will be cleared first before the local persistence is enabled.
 
 ## License
 
