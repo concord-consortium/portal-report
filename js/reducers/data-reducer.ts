@@ -12,7 +12,6 @@ export interface IDataState {
 
 const INITIAL_DATA_STATE = RecordFactory<IDataState>({
   isFetching: true,
-  error: null
 });
 
 export class DataState extends INITIAL_DATA_STATE implements IDataState {

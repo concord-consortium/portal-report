@@ -24,7 +24,7 @@ import {requestRubric} from "./rubric";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
-import { urlParam } from "../util/misc";
+import { urlParam, urlStringParam } from "../util/misc";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -93,8 +93,11 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     type: RECEIVE_PORTAL_DATA,
     response: rawPortalData
   });
+  // This is to support reporting on activity player based external activities.
+  // In those cases the offering.activity_url will look something like:
+  // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
   let resourceUrl;
-  if ((rawPortalData.offering.activity_url).includes("activity=")) {
+  if (urlStringParam(rawPortalData.offering.activity_url, "activity")) {
     resourceUrl = decodeURIComponent(((rawPortalData.offering.activity_url?.split(".json")[0]).split("activity="))[1].replace("%2Fapi%2Fv1",""));
   } else {
     resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
@@ -267,7 +270,7 @@ function watchCollection(db: firebase.firestore.Firestore, path: string, receive
 }
 
 function watchAnonymousAnswers(db: firebase.firestore.Firestore, source: string, runKey: string, dispatch: Dispatch) {
-// Setup Firebase observer. It will fire each time the resource structure is updated.
+// Setup Firebase observer. It will fire each time the answer is updated.
   const path = `sources/${source}/answers`;
   const query = db.collection(path)
     .where("run_key", "==", runKey);

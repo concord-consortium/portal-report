@@ -57,7 +57,6 @@ async function initializeDB(name: string) {
 
   if (urlParam("enableFirestorePersistence")) {
     await firebase.firestore().enablePersistence({ synchronizeTabs: true });
-    await firebase.firestore().disableNetwork();
   }
 
   // The disableNetwork call happens in the api.ts fetchPortalDataAndAuthFirestore
