@@ -192,7 +192,7 @@ function fakeUserType(): "teacher" | "learner" {
   return "teacher";
 }
 
-export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
+export function fetchPortalDataAndAuthFirestore(): any {
 
   if (!getPortalBaseUrl()) {
     // disable the network when we don't have a portal url. This way the demo report will not update
