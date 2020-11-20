@@ -134,7 +134,8 @@ when you view the class details, you will see a "Local Tracked Q" button next to
 * `tool-id={uri}`:  URI identifying the tool that stored the activity structure and answers in Firestore. The `tool-id`
                     is converted to a source key, which is used to query the activity structure and answers in firestore.
                     The conversion from `tool-id` to source key matches the `make_source_key` method in LARA's
-                    report_service.rb
+                    report_service.rb. If the `tool-id` is not set then the source key is the hostname of the
+                    activity_url of the offering data retrieved from the portal.
 * `portal-dashboard`: boolean parameter which tells the report to render in a new dashboard style
 * `dashboard`:      boolean parameter which tells the report to render in old dashboard style
 * `activityIndex={index}`: when the activity is a sequence, only show this activity's questions
