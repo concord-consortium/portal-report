@@ -1,8 +1,7 @@
 # TODO
 # - setup codelclimate test report, or replace with the other coverage
 #   system
-# - setup cypress recording with the key from the env variable
-# - to enable cypress coverage we need to run the command with that set to true
+# - to enable cypress coverage we need to run the start command with the right ENV
 # - if we are spliting cypress job then we'll need to upload multiple reports to
 #   to the coverage system
 # - all of this coverage stuff, sould be added to the starter projects
