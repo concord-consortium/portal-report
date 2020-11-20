@@ -20,6 +20,8 @@ jobs:
         run: npm run test:coverage -- --runInBand
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
+        with:
+          flags: jest
   cypress:
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +41,8 @@ jobs:
           CODE_COVERAGE: true
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
+        with:
+          flags: cypress
   s3-deploy:
     name: S3 Deploy
     needs:
