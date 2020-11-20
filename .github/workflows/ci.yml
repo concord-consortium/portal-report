@@ -17,8 +17,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Run Tests
-        # CHECKME: I'm not sure if the nyc is necessary here, but it was used before
-        run: npx nyc --reporter=lcov npm run test:coverage -- --runInBand
+        run: npm run test:coverage -- --runInBand
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
   cypress:
@@ -28,7 +27,7 @@ jobs:
         uses: actions/checkout@v1
       - uses: cypress-io/github-action@v2
         with:
-          start: CODE_COVERAGE=true npm start
+          start: npm start
           wait-on: 'http://localhost:8080'
           record: true
         env:
@@ -36,6 +35,8 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # turn on code coverage for our npm start
+          CODE_COVERAGE: true
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
   s3-deploy:
