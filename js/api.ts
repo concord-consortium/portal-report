@@ -192,7 +192,7 @@ function fakeUserType(): "teacher" | "learner" {
   return "teacher";
 }
 
-export function fetchPortalDataAndAuthFirestore(): any {
+export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
 
   if (!getPortalBaseUrl()) {
     // disable the network when we don't have a portal url. This way the demo report will not update
@@ -204,7 +204,7 @@ export function fetchPortalDataAndAuthFirestore(): any {
 
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
-  return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]) => {
+  return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
     const resourceLinkId = offeringData.id.toString();
     const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, resourceLinkId);
     return firestoreJWTPromise.then((result: any) => {
@@ -220,14 +220,14 @@ export function fetchPortalDataAndAuthFirestore(): any {
         }
         const verifiedFirebaseJWT = decodedFirebaseJWT as IFirebaseJWT;
         return authFirestore(rawFirestoreJWT).then(() => ({
-            offering: offeringData,
-            resourceLinkId,
-            classInfo: classData,
-            userType: verifiedFirebaseJWT.claims.user_type,
-            platformId: verifiedFirebaseJWT.claims.platform_id,
-            platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
-            contextId: classData.class_hash,
-            sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          offering: offeringData,
+          resourceLinkId,
+          classInfo: classData,
+          userType: verifiedFirebaseJWT.claims.user_type,
+          platformId: verifiedFirebaseJWT.claims.platform_id,
+          platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
+          contextId: classData.class_hash,
+          sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
           })
         );
       } else {
