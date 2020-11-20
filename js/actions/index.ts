@@ -24,7 +24,7 @@ import {requestRubric} from "./rubric";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
-import { urlParam } from "../util/misc";
+import { parseUrl, urlParam } from "../util/misc";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -93,9 +93,14 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     type: RECEIVE_PORTAL_DATA,
     response: rawPortalData
   });
+
+  // FIXME: I think all of this logic should be moved to api.ts it is already
+  // computing the rawPortalData.sourceKey
   let resourceUrl;
+  let resourceSourceKey = source;
   if ((rawPortalData.offering.activity_url).includes("activity=")) {
     resourceUrl = decodeURIComponent(((rawPortalData.offering.activity_url?.split(".json")[0]).split("activity="))[1].replace("%2Fapi%2Fv1",""));
+    resourceSourceKey = parseUrl(resourceUrl.toLowerCase()).hostname;
   } else {
     resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
   }
@@ -121,7 +126,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
       response: fakeAnswers,
     });
   } else {
-    watchResourceStructure(db, source, resourceUrl, dispatch);
+    watchResourceStructure(db, resourceSourceKey, resourceUrl, dispatch);
 
     // Watch the Answers
     watchCollection(db, `sources/${source}/answers`, RECEIVE_ANSWERS,
