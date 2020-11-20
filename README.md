@@ -137,17 +137,17 @@ Besides the parameters needed for loading data, the report also supports
 
 ## FireStore Paths
 
-The portal-report loads and saves documents in report-service Firestore database.
+The portal-report loads and saves documents in the report-service Firestore database.
 LARA also writes data into the report-service.
 The Activity Player reads and writes data into the report-service.
 The new researcher report system reads data from the report-service.
 
-The following collections make up the report-service
+The following collections make up the report-service:
 
 `sources/${source}/resources`
 Each document represents an activity or sequence that can be reported on.
 Each document lists the reportable questions or items and what pages they are on.
-It also include information about what the correct answer is.
+It also includes information about what the correct answer is.
 
 `sources/${source}/answers`
 Each document represents a single answer to a question or item
@@ -161,7 +161,7 @@ learn.concord.org
 `sources/${source}/feedback_settings`
 Each document has info about the feedback setting for a particular assignment (resourceLink).
 There can be a cached version of the rubric.
-And for each question there can be, scoreEnabled, feedbakcEnabled,
+And for each question there can be `scoreEnabled`, `feedbackEnabled`
 
 `sources/${source}/question_feedbacks`
 Each document is feedback on a specific answer by a student.
