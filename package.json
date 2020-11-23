@@ -60,7 +60,7 @@
     "report-dir": "coverage-cypress"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^2.0.5",
+    "@cypress/code-coverage": "^3.8.4",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@svgr/webpack": "^5.4.0",
     "@testing-library/react": "^10.0.4",
