@@ -152,7 +152,8 @@ Parameters for showing data stored anonymously in the report service
                     when the user clicks the report button in the activity player.
 * `activity={uri}`: portal-report uses this uri to find the activity structure in the report service firestore database
                     this uri is also parsed to make the source key for the activity structure similar to the `tool-id`
-                    above. It is important to note that the `tool-id` is ignored in this case.
+                    above. It is important to note that the `tool-id` is ignored in this case. If the activity is not specified, 
+                    fake activity structure will be used.
 * `answerSource={string}`: identifier used to construct the path to the answers in the report service. In the case of
                     the activity player the answerSource is activity-player.concord.org.
 
