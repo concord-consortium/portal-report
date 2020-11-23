@@ -1,6 +1,3 @@
-# TODO
-# - all of this coverage stuff, sould be added to the starter projects
-
 name: Continuous Integration
 
 on: push
