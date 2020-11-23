@@ -69,7 +69,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     this.state = {
       initialLoading: true,
       scrollLeft: 0,
-      showAllResponsesPopup: false
+      showAllResponsesPopup: false,
     };
   }
 

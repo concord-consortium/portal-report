@@ -123,17 +123,52 @@ replace the url host and path with `localhost:8080`. Alternatively, if you are a
 offering, you can add the "Developers Tracked Questions (Local)" report to the External Reports of the offering, and
 when you view the class details, you will see a "Local Tracked Q" button next to "Report" which will link to localhost.
 
-### Additional URL Parameters
+### URL Parameters
 
-Besides the parameters needed for loading data, the report also supports
-
-* `studentId={id}`:   This shows the report for a single student, and removes some UI affordances. The filtering of the
-                      student data happens client-side.
+* `token={string}`: access token provided by the portal when it launches the report. It is used as a Bearer
+                    token when making requests to the portal
+* `class={url}`:    URL to get info about the class from the portal
+* `offering={url}`: URL to get info about the offering from the portal
+* `firebase-app={name}`: identifier for a portal Firebase App. This name is sent to the portal to get a FirebaseJWT.
+                    It defaults to "report-service".
+* `tool-id={uri}`:  URI identifying the tool that stored the activity structure and answers in Firestore. The `tool-id`
+                    is converted to a source key, which is used to query the activity structure and answers in firestore.
+                    The conversion from `tool-id` to source key matches the `make_source_key` method in LARA's
+                    report_service.rb. If the `tool-id` is not set then the source key is the hostname of the
+                    activity_url of the offering data retrieved from the portal.
+* `portal-dashboard`: boolean parameter which tells the report to render in a new dashboard style
+* `dashboard`:      boolean parameter which tells the report to render in old dashboard style
+* `activityIndex={index}`: when the activity is a sequence, only show this activity's questions
+* `studentId={id}`: This shows the report for a single student, and removes some UI affordances. The filtering of the
+                    student data happens client-side.
 * `iframeQuestionId={id}`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing
-                      the model referenced by iframeQuestionId, and the answer saved by studentId (either as state or as
-                      a url).
+                    the model referenced by `iframeQuestionId`, and the answer saved by `studentId` (either as state or as
+                    a url).
+
+Parameters for showing data stored anonymously in the report service
+
+* `runKey={string}`: identifier for anonymous answers stored in the report service. The activity player generates a
+                    a runkey when launched anonymously. The activity player then sends this runKey to the portal report
+                    when the user clicks the report button in the activity player.
+* `activity={uri}`: portal-report uses this uri to find the activity structure in the report service firestore database
+                    this uri is also parsed to make the source key for the activity structure similar to the `tool-id`
+                    above. It is important to note that the `tool-id` is ignored in this case. If the activity is not specified, 
+                    fake activity structure will be used.
+* `answerSource={string}`: identifier used to construct the path to the answers in the report service. In the case of
+                    the activity player the answerSource is activity-player.concord.org.
+
+Parameters for 3rd party launching (still in an un-merged branch)
+
+* `auth-domain={url}`: root URL for the portal which can authenticate the current user. This parameter can be
+                    used instead of the `token` param. The portal report will do an OAuth2 request to the auth-domain
+                    in order to get an access-token.
+
+Parameters to help with running local tests
+
 * `enableFirestorePersistence=true`: Uses a local firestore DB for data persistance across sessions and tabs. Clear the
-                      DB by going to `dev tools > Application > IndexedDB > firebaseLocalStorageDb > Delete database`
+                    DB by going to `dev tools > Application > IndexedDB > firebaseLocalStorageDb > Delete database`
+* `clearFirestorePersistence=true`: Clears local firestore DB. If this and `enableFirestorePersistence=true` are set
+                    then the DB will be cleared first before the local persistence is enabled.
 
 ## FireStore Paths
 
