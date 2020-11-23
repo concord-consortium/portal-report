@@ -9,7 +9,7 @@ DISTRIBUTION_ID='E19KBL7INSABNU'
 DISTRIBUTION_DOMAIN='portal-report.concord.org'
 # name of branch to deploy to root of site
 ROOT_BRANCH='production'
-# Bucket to deploy to, typically this is 'model-resourcs', but some projects
+# Bucket to deploy to, typically this is 'model-resources', but some projects
 # have their own buckets
 S3_BUCKET='portal-report.concord.org'
 # location of built files
