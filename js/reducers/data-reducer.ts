@@ -7,11 +7,12 @@ import {
 
 export interface IDataState {
   isFetching: boolean;
-  error?: any;
+  error: any;
 }
 
 const INITIAL_DATA_STATE = RecordFactory<IDataState>({
   isFetching: true,
+  error: null
 });
 
 export class DataState extends INITIAL_DATA_STATE implements IDataState {
@@ -19,7 +20,7 @@ export class DataState extends INITIAL_DATA_STATE implements IDataState {
     super(config);
   }
   isFetching: boolean;
-  error?: any;
+  error: any;
 }
 
 export default function data(state = new DataState({}), action: any) {

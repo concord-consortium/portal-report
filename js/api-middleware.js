@@ -20,6 +20,8 @@ export default store => next => action => {
     callApi(type, data, state)
       .then(response => successAction && next(successAction(response)))
       .catch(error => {
+        // Log this error to the console in addtion to dispatching the errorAction
+        console.error(`error calling API: ${type} error object:\n`, error);
         if (error instanceof APIError && errorAction) {
           return next(errorAction(error.response));
         }
