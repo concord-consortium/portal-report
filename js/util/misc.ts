@@ -72,14 +72,3 @@ export function urlStringParam(url: string, name: string): string | null{
     return null;
   }
 }
-
-export function urlHashParam(name: string): string | null{
-  const result = queryString.parse(window.location.hash)[name];
-  if (typeof result === "string") {
-    return result;
-  } else if (result && result.length) {
-    return result[0];
-  } else {
-    return null;
-  }
-}

@@ -17,7 +17,7 @@ describe("api helper", () => {
 
     describe("when offering URL param is present", () => {
       beforeEach(() => {
-        window.history.replaceState({}, "Test", "/?offering=https://portal.com/offerings/123");
+        window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123");
       });
       it("should use it to download report data", async () => {
         const resp = await fetchOfferingData();
@@ -53,7 +53,7 @@ describe("api helper", () => {
 
     describe("when offering URL param is present", () => {
       beforeEach(() => {
-        window.history.replaceState({}, "Test", "/?offering=https://portal.com/offerings/123");
+        window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123");
       });
       it("should fetch the firestore jwt", async () => {
         const resp = await fetchFirestoreJWT(classHash, firebaseApp);
