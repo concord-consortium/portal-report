@@ -59,8 +59,21 @@ async function initializeDB(name: string) {
     await firebase.firestore().enablePersistence({ synchronizeTabs: true });
   }
 
-  // The disableNetwork call happens in the api.ts fetchPortalDataAndAuthFirestore
-  // it is currently disabled whenever fake data is being used
+  if(!(urlParam("class") || urlParam("offering") || urlParam("activity"))){
+    // The report was not provided any params to load in the activity structure
+    // In this case we are going to be using fake activity or sequence structure
+    // This might be because we are running an automated test, or because the report is being
+    // manually demo'd
+    // In either case we don't want to make network connections to server.
+    await firebase.firestore().disableNetwork();
+
+    // Note: We could load the database with the fake data at this point, so then
+    // the code in actions/index.ts would be more simple.
+    // We would be loading in the fake sequence and activity structure under the
+    // fake.authoring.system source.
+    // And load in the fake answers which match with it.
+    // Which fake structure and fake answers to load could be specified in URL params
+  }
 
   return firebase.firestore();
 }

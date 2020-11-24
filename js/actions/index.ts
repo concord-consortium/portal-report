@@ -63,27 +63,21 @@ export function fetchAndObserveData() {
         type: SET_ANONYMOUS_VIEW,
         runKey: runKeyValue
       });
-      // Need to disable network when there is no activity because we are using fake data.
-      // This is normally disabled by fetchPortalDataAndAuthFirestore, but we are bypassing this when there is a runkey
-      if(!activity) {
-        firebase.firestore().disableNetwork();
-      }
+
       firestoreInitialized.then(db => {
         if (activity) {
           watchResourceStructure(db, source, activity, dispatch);
-          watchAnonymousAnswers(db, answerSource, runKeyValue, dispatch);
         }
         else {
+          // Th network will be disabled in this case, see db.ts
+
           // Use fake data.
           dispatch({
             type: RECEIVE_RESOURCE_STRUCTURE,
             response: fakeSequenceStructure,
           });
-          dispatch({
-            type: RECEIVE_ANSWERS,
-            response: fakeAnswers,
-          });
         }
+        watchAnonymousAnswers(db, answerSource, runKeyValue, dispatch);
       });
     };
   } else {
