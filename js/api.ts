@@ -193,15 +193,6 @@ function fakeUserType(): "teacher" | "learner" {
 }
 
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
-
-  if (!getPortalBaseUrl()) {
-    // disable the network when we don't have a portal url. This way the demo report will not update
-    // data in firestore, and any tests running against it will be repeatable.
-    // Even if this doesn't work and data does go to firestore, the data will be stored
-    // in a seperate 'fake.portal' location
-    firebase.firestore().disableNetwork();
-  }
-
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {

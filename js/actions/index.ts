@@ -3,7 +3,7 @@ import fakeSequenceStructure from "../data/sequence-structure.json";
 // import fakeActivityStructure from "../data/activity-structure.json";
 import fakeAnswers from "../data/answers.json";
 // import fakeAnswers from "../data/average-class-activity-answers.json";
-import {AnyAction, Dispatch} from "redux";
+import { AnyAction, Dispatch } from "redux";
 import {
   IPortalRawData,
   IResponse,
@@ -19,12 +19,12 @@ import {
   API_UPDATE_FEEDBACK_SETTINGS,
   API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE,
 } from "../api-middleware";
-import {requestRubric} from "./rubric";
+import { requestRubric } from "./rubric";
 // Get the Firestore type, I'd think there'd be a better way than this
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
-import { urlParam } from "../util/misc";
+import { urlParam, urlStringParam } from "../util/misc";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -55,16 +55,28 @@ export const API_CALL = "API_CALL";
 export function fetchAndObserveData() {
   const runKeyValue = urlParam("runKey");
   if (runKeyValue) {
-    const activity= urlParam("activity") || "";
-    const source = activity? ((activity.split('/activities'))[0]).replace("https://","") : "";
+    const activity = urlParam("activity") || "";
+    const source = activity ? ((activity.split('/activities'))[0]).replace("https://", "") : "";
     const answerSource = urlParam("answerSource") || "";
     return (dispatch: Dispatch, getState: any) => {
-      dispatch( {
+      dispatch({
         type: SET_ANONYMOUS_VIEW,
         runKey: runKeyValue
       });
+
       firestoreInitialized.then(db => {
-        watchResourceStructure(db, source, activity, dispatch);
+        if (activity) {
+          watchResourceStructure(db, source, activity, dispatch);
+        }
+        else {
+          // Th network will be disabled in this case, see db.ts
+
+          // Use fake data.
+          dispatch({
+            type: RECEIVE_RESOURCE_STRUCTURE,
+            response: fakeSequenceStructure,
+          });
+        }
         watchAnonymousAnswers(db, answerSource, runKeyValue, dispatch);
       });
     };
@@ -88,14 +100,17 @@ function receivePortalData(rawPortalData: IPortalRawData) {
 }
 
 function _receivePortalData(db: firebase.firestore.Firestore,
-                            rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  rawPortalData: IPortalRawData, dispatch: Dispatch) {
   dispatch({
     type: RECEIVE_PORTAL_DATA,
     response: rawPortalData
   });
+  // This is to support reporting on activity player based external activities.
+  // In those cases the offering.activity_url will look something like:
+  // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
   let resourceUrl;
-  if ((rawPortalData.offering.activity_url).includes("activity=")) {
-    resourceUrl = decodeURIComponent(((rawPortalData.offering.activity_url?.split(".json")[0]).split("activity="))[1].replace("%2Fapi%2Fv1",""));
+  if (urlStringParam(rawPortalData.offering.activity_url, "activity")) {
+    resourceUrl = decodeURIComponent(((rawPortalData.offering.activity_url?.split(".json")[0]).split("activity="))[1].replace("%2Fapi%2Fv1", ""));
   } else {
     resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
   }
@@ -159,8 +174,8 @@ function fireStoreError(dispatchType: string, dispatch: Dispatch) {
 type SnapshotHandler = (snapshot: firebase.firestore.QuerySnapshot) => any;
 
 function addSnapshotDispatchListener(query: firebase.firestore.Query, receiveMsg: string,
-                                     dispatch: Dispatch,
-                                     handler: SnapshotHandler) {
+  dispatch: Dispatch,
+  handler: SnapshotHandler) {
   query.onSnapshot(snapshot => {
     if (!snapshot.empty) {
       dispatch({
@@ -172,7 +187,7 @@ function addSnapshotDispatchListener(query: firebase.firestore.Query, receiveMsg
 }
 
 function watchResourceStructure(db: firebase.firestore.Firestore,
-                                source: string, resourceUrl: string, dispatch: Dispatch) {
+  source: string, resourceUrl: string, dispatch: Dispatch) {
   // Setup Firebase observer. It will fire each time the resource structure is updated.
   const query = db.collection(`sources/${source}/resources`)
     .where("url", "==", resourceUrl);
@@ -184,7 +199,8 @@ function watchFireStoreReportSettings(db: firebase.firestore.Firestore, rawPorta
   // Create Firestore document observer for settings:
   const resourceLinkId = getResourceLink(rawPortalData);
   const settingsFileStorePath = reportSettingsFireStorePath(
-    { resourceLinkId,
+    {
+      resourceLinkId,
       contextId: rawPortalData.contextId,
       platformId: rawPortalData.platformId,
       platformUserId: rawPortalData.platformUserId
@@ -192,13 +208,13 @@ function watchFireStoreReportSettings(db: firebase.firestore.Firestore, rawPorta
   );
   db.doc(settingsFileStorePath)
     .onSnapshot(
-    (snapshot: any) => {
-      dispatch({
-        type: RECEIVE_USER_SETTINGS,
-        response: snapshot.data()
-      });
-    },
-    fireStoreError(RECEIVE_USER_SETTINGS, dispatch)
+      (snapshot: any) => {
+        dispatch({
+          type: RECEIVE_USER_SETTINGS,
+          response: snapshot.data()
+        });
+      },
+      fireStoreError(RECEIVE_USER_SETTINGS, dispatch)
     );
 }
 
@@ -238,7 +254,7 @@ export function correctKey(keyName: string, receiveMsg: string) {
     context_id: "contextId"
   };
 
-  switch (receiveMsg){
+  switch (receiveMsg) {
     case RECEIVE_QUESTION_FEEDBACKS:
     case RECEIVE_ACTIVITY_FEEDBACKS:
       return feedbackKeys[keyName];
@@ -249,17 +265,17 @@ export function correctKey(keyName: string, receiveMsg: string) {
 }
 
 function watchCollection(db: firebase.firestore.Firestore, path: string, receiveMsg: string,
-                         rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  rawPortalData: IPortalRawData, dispatch: Dispatch) {
   let query = db.collection(path)
-   .where(correctKey("platform_id", receiveMsg), "==", rawPortalData.platformId)
-   .where(correctKey("resource_link_id", receiveMsg), "==", rawPortalData.resourceLinkId);
+    .where(correctKey("platform_id", receiveMsg), "==", rawPortalData.platformId)
+    .where(correctKey("resource_link_id", receiveMsg), "==", rawPortalData.resourceLinkId);
   if (rawPortalData.userType === "learner") {
-     query = query.where(correctKey("platform_user_id", receiveMsg), "==",
-       rawPortalData.platformUserId.toString());
+    query = query.where(correctKey("platform_user_id", receiveMsg), "==",
+      rawPortalData.platformUserId.toString());
   } else {
-     // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
-     // but that lets us use context_id value in the Firestore security rules.
-     query = query.where(correctKey("context_id", receiveMsg), "==", rawPortalData.contextId);
+    // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
+    // but that lets us use context_id value in the Firestore security rules.
+    query = query.where(correctKey("context_id", receiveMsg), "==", rawPortalData.contextId);
   }
 
   addSnapshotDispatchListener(query, receiveMsg, dispatch,
@@ -267,7 +283,7 @@ function watchCollection(db: firebase.firestore.Firestore, path: string, receive
 }
 
 function watchAnonymousAnswers(db: firebase.firestore.Firestore, source: string, runKey: string, dispatch: Dispatch) {
-// Setup Firebase observer. It will fire each time the resource structure is updated.
+  // Setup Firebase observer. It will fire each time the answer is updated.
   const path = `sources/${source}/answers`;
   const query = db.collection(path)
     .where("run_key", "==", runKey);
@@ -380,19 +396,19 @@ export function setAnonymous(value: boolean) {
 }
 
 export function setAnswerSelectedForCompare(id: string, value: boolean) {
-  return {type: SET_ANSWER_SELECTED_FOR_COMPARE, id, value};
+  return { type: SET_ANSWER_SELECTED_FOR_COMPARE, id, value };
 }
 
 export function showCompareView(questionId: string) {
-  return {type: SHOW_COMPARE_VIEW, questionId};
+  return { type: SHOW_COMPARE_VIEW, questionId };
 }
 
 export function hideCompareView() {
-  return {type: HIDE_COMPARE_VIEW};
+  return { type: HIDE_COMPARE_VIEW };
 }
 
 export function showFeedbackView(embeddableKey: string) {
-  return {type: SHOW_FEEDBACK, embeddableKey};
+  return { type: SHOW_FEEDBACK, embeddableKey };
 }
 
 export function updateQuestionFeedback(answerId: string, feedback: any) {
@@ -489,6 +505,6 @@ export function trackEvent(category: string, action: string, label: string) {
     const clazzId = getState().getIn(["report", "clazzId"]);
     let labelText = "Class ID: " + clazzId + " - " + label;
     labelText = labelText.replace(/ - $/, "");
-    (window as any).gtag("event", action, {event_category: category, event_label: labelText});
+    (window as any).gtag("event", action, { event_category: category, event_label: labelText });
   };
 }
