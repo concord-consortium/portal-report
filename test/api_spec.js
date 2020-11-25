@@ -31,11 +31,23 @@ describe("api helper", () => {
       beforeEach(() => {
         window.history.replaceState({}, "Test", "/?offering=https://portal.com/offerings/123");
       });
-      it("should return the portal firebase jwt url", async () => {
-        const classHash = "1234";
-        const firebaseApp = "test_app";
-        const url = getPortalFirebaseJWTUrl(classHash, firebaseApp);
-        expect(url).toEqual(`https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`);
+      describe("when no resourceLinkId is passed", () => {
+        it("should return the portal firebase jwt url without a resource_link_id", () => {
+          const classHash = "1234";
+          const firebaseApp = "test_app";
+          const resourceLinkId = null;
+          const url = getPortalFirebaseJWTUrl(classHash, resourceLinkId, firebaseApp);
+          expect(url).toEqual(`https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`);
+        });
+      });
+      describe("when a resourceLinkId is passed", () => {
+        it("should return the portal firebase jwt url with a resource_link_id", () => {
+          const classHash = "1234";
+          const firebaseApp = "test_app";
+          const resourceLinkId = "abcde";
+          const url = getPortalFirebaseJWTUrl(classHash, resourceLinkId, firebaseApp);
+          expect(url).toEqual(`https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=${resourceLinkId}`);
+        });
       });
     });
   });
@@ -56,7 +68,8 @@ describe("api helper", () => {
         window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123");
       });
       it("should fetch the firestore jwt", async () => {
-        const resp = await fetchFirestoreJWT(classHash, firebaseApp);
+        const resourceLinkId = null;
+        const resp = await fetchFirestoreJWT(classHash, resourceLinkId, firebaseApp);
         expect(resp).toEqual(okResponse);
       });
     });

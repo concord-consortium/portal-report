@@ -112,12 +112,13 @@ const getPortalBaseUrl = () => {
   return `${protocol}//${hostname}`;
 };
 
-export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string, firebaseApp: string = FIREBASE_APP ) => {
+export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, firebaseApp: string = FIREBASE_APP ) => {
   const baseUrl = getPortalBaseUrl();
   if (!baseUrl) {
     return null;
   }
-  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=${resourceLinkId}`;
+  const resourceLinkParam = resourceLinkId ? `&resource_link_id=${resourceLinkId}` : "";
+  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}${resourceLinkParam}`;
 };
 
 const gePortalReportAPIUrl = () => {
@@ -162,7 +163,7 @@ export function fetchClassData() {
   }
 }
 
-export function fetchFirestoreJWT(classHash: string, resourceLinkId: string, firebaseApp?: string) {
+export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, firebaseApp?: string) {
   const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, resourceLinkId, firebaseApp );
   if (firestoreJWTUrl) {
     return fetch(firestoreJWTUrl, {headers: {Authorization: getAuthHeader()}})
@@ -197,7 +198,10 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
     const resourceLinkId = offeringData.id.toString();
-    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, resourceLinkId);
+    // only pass resourceLinkId if there is a studentId
+    // FIXME: if this is a teacher viewing the report of a student there will be a studentId
+    // but the token will be for a teacher, so then the resourceLinkId should be null
+    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null);
     return firestoreJWTPromise.then((result: any) => {
       const rawFirestoreJWT = result.token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {
