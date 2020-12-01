@@ -15,7 +15,7 @@ import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree, getAnswersByQuestion } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
 import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent,
-         toggleCurrentActivity, toggleCurrentQuestion, setCompactReport } from "../../actions/dashboard";
+         toggleCurrentActivity, toggleCurrentQuestion, setCompactReport, setShowFeedbackBadges } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
@@ -50,6 +50,7 @@ interface IProps {
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
   setCompactReport: (value: boolean) => void;
+  setShowFeedbackBadges: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
@@ -96,8 +97,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   render() {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
-      sequenceTree, setAnonymous, setCompactReport, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
-      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
+      sequenceTree, setAnonymous, setCompactReport, setShowFeedbackBadges, setStudentSort, studentProgress, students, sortedQuestionIds,
+      questions, expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition, questionFeedbacks, questionFeedbackSettings,
       updateActivityFeedback, updateActivityFeedbackSettings, updateQuestionFeedback, updateQuestionFeedbackSettings  } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
@@ -118,6 +119,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           <Header
             userName={userName}
             setCompact={setCompactReport}
+            setShowFeedbackBadges={setShowFeedbackBadges}
             assignmentName={assignmentName}
             trackEvent={trackEvent}
           />
@@ -284,6 +286,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
+    setShowFeedbackBadges: (value: boolean) => dispatch(setShowFeedbackBadges(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
     setCurrentStudent: (studentId: string) => dispatch(setCurrentStudent(studentId)),

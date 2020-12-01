@@ -18,6 +18,7 @@ export const SET_QUESTION_EXPANDED = "SET_QUESTION_EXPANDED";
 export const SELECT_QUESTION = "SELECT_QUESTION";
 
 export const SET_COMPACT_REPORT = "SET_COMPACT_REPORT";
+export const SET_SHOW_FEEDBACK_BADGES = "SET_SHOW_FEEDBACK_BADGES";
 
 export const TRACK_EVENT = "TRACK_EVENT";
 
@@ -142,3 +143,9 @@ export function setCompactReport(isCompact) {
   };
 }
 
+export function setShowFeedbackBadges(showFeedbackBadges) {
+  return {
+    type: SET_SHOW_FEEDBACK_BADGES,
+    value: showFeedbackBadges,
+  };
+}

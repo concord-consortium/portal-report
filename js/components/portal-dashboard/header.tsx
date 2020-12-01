@@ -11,6 +11,7 @@ interface IProps {
   userName: string;
   assignmentName: string;
   setCompact: (value: boolean) => void;
+  setShowFeedbackBadges: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
 }
 
@@ -31,7 +32,7 @@ export class Header extends React.PureComponent<IProps> {
         </div>
         <div className={css.headerRight}>
           <AccountOwnerDiv userName={this.props.userName} />
-          <HeaderMenuContainer setCompact={this.props.setCompact} />
+          <HeaderMenuContainer setCompact={this.props.setCompact} setShowFeedbackBadges={this.props.setShowFeedbackBadges} />
         </div>
       </div>
     );

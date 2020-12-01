@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import {
   SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, SET_CURRENT_QUESTION, SET_CURRENT_STUDENT,
   TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION,
-  SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT, SET_COMPACT_REPORT,
+  SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT, SET_COMPACT_REPORT, SET_SHOW_FEEDBACK_BADGES,
   SORT_BY_NAME, SET_QUESTION_EXPANDED,
   SELECT_QUESTION,
   SORT_BY_MOST_PROGRESS,
@@ -24,6 +24,7 @@ export interface IDashboardState {
   currentQuestionId: string | null;
   currentStudentId: string | null;
   compactReport: boolean;
+  showFeedbackBadges: boolean;
 }
 
 const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
@@ -36,6 +37,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   currentQuestionId: null,
   currentStudentId: null,
   compactReport: false,
+  showFeedbackBadges: false,
 });
 
 export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboardState {
@@ -51,6 +53,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   currentQuestionId: string | null;
   currentStudentId: string | null;
   compactReport: boolean;
+  showFeedbackBadges: boolean;
 }
 
 export default function dashboard(state = new DashboardState({}), action: any) {
@@ -90,6 +93,8 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       }
     case SET_COMPACT_REPORT:
       return state.set("compactReport", action.value);
+    case SET_SHOW_FEEDBACK_BADGES:
+      return state.set("showFeedbackBadges", action.value);
     default:
       return state;
   }
