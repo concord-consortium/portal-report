@@ -12,6 +12,7 @@ interface IProps {
   currentStudentId: string | null;
   expandedActivities: Map<any, any>;
   isCompact: boolean;
+  questionFeedbacks?: Map<any, any>;
   students: Map<any, any>;
   studentProgress: Map<any, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -70,9 +71,15 @@ export class StudentAnswers extends React.PureComponent<IProps> {
       <div className={css.activityPage} key={page.get("id")}>
         { page.get("children").map((question: any) => {
             const questionId = question.get("id");
+            const studentId = student.get("id");
             const selected = (currentActivityId === activity.get("id") &&
                               currentQuestionId === questionId &&
-                              currentStudentId === student.get("id"));
+                              currentStudentId === studentId);
+            // TODO: FEEDBACK
+            // get questionFeedbacks from props
+            // search questionFeedbacks for entry that has student id and question id
+            // that match studentId and questionId
+            // optionally display feedback icon component if we found matching feedback
             return (
               <AnswerCompact
                 key={questionId}
