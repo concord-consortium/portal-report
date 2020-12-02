@@ -4,6 +4,7 @@ import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../ac
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
 
 interface IProps {
+  activity: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
   feedbacks: Map<any, any>;

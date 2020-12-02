@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../actions/index";
 
 interface IProps {
+  question: Map<any, any>;
   questionFeedbacks: Map<any, any>;
   settings: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;

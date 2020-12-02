@@ -18,7 +18,7 @@ export class Question extends React.PureComponent <IProps> {
 
     return (
       <div className={css.questionText} data-cy="current-question">
-          {this.renderQuestion(qtype)}
+        {this.renderQuestion(qtype)}
       </div>
     );
   }
