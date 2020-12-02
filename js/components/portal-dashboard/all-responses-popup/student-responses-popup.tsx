@@ -33,12 +33,6 @@ interface IProps {
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  questionFeedbacks?: Map<any, any>;
-  questionFeedbackSettings?: Map<any, any>;
-  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
-  updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
-  updateQuestionFeedback: (answerId: string, feedback: any) => void;
-  updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -60,8 +54,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
       trackEvent } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     // TODO: FEEDBACK
-    // get feedback values and functions from props and pass them to a new
-    // component which renders the feedback content within this view
+    // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader currentActivity={currentActivity} onCloseSelect={onClose} />

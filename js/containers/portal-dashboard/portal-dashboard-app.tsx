@@ -1,8 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
-import { fetchAndObserveData, trackEvent, setAnonymous, updateQuestionFeedback, updateQuestionFeedbackSettings,
-         updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
+import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
          getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getShowFeedbackBadges
         } from "../../selectors/dashboard-selectors";
@@ -39,7 +38,6 @@ interface IProps {
   isFetching: boolean;
   questions?: Map<string, any>;
   questionFeedbacks: Map<any, any>;
-  questionFeedbackSettings: Map<any, any>;
   report: any;
   sequenceTree: Map<any, any>;
   showFeedbackBadges: boolean;
@@ -61,10 +59,6 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   userName: string;
-  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
-  updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
-  updateQuestionFeedback: (answerId: string, feedback: any) => void;
-  updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
 }
 
 interface IState {
@@ -101,8 +95,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setShowFeedbackBadges, setStudentSort, studentProgress, students, sortedQuestionIds,
       questions, expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
-      toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition, questionFeedbacks, questionFeedbackSettings, showFeedbackBadges,
-      updateActivityFeedback, updateActivityFeedbackSettings, updateQuestionFeedback, updateQuestionFeedbackSettings  } = this.props;
+      toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition, questionFeedbacks, showFeedbackBadges } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -206,12 +199,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                     students={students}
                     toggleCurrentQuestion={toggleCurrentQuestion}
                     trackEvent={trackEvent}
-                    questionFeedbacks={questionFeedbacks}
-                    questionFeedbackSettings={questionFeedbackSettings}
-                    updateQuestionFeedback={updateQuestionFeedback}
-                    updateQuestionFeedbackSettings={updateQuestionFeedbackSettings}
-                    updateActivityFeedback={updateActivityFeedback}
-                    updateActivityFeedbackSettings={updateActivityFeedbackSettings}
                   />
                 </CSSTransition>
               }
@@ -271,6 +258,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
     isFetching: data.get("isFetching"),
+    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
     questions,
     report: dataDownloaded && reportState,
     sequenceTree: dataDownloaded && getSequenceTree(state),
@@ -280,8 +268,6 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
-    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
-    questionFeedbackSettings: state.getIn(["feedback", "settings"]),
   };
 }
 
@@ -298,10 +284,6 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     toggleCurrentActivity: (activityId: string) => dispatch(toggleCurrentActivity(activityId)),
     toggleCurrentQuestion: (questionId: string) => dispatch(toggleCurrentQuestion(questionId)),
     trackEvent: (category: string, action: string, label: string) => dispatch(trackEvent(category, action, label)),
-    updateActivityFeedback: (activityId, activityIndex, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, activityIndex, platformStudentId, feedback)),
-    updateActivityFeedbackSettings: (activityId, activityIndex, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, activityIndex, feedbackFlags)),
-    updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
-    updateQuestionFeedbackSettings: (embeddableKey, feedbackFlags) => dispatch(updateQuestionFeedbackSettings(embeddableKey, feedbackFlags)),
   };
 };
 
