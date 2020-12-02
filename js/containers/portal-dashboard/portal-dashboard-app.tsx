@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous, updateQuestionFeedback, updateQuestionFeedbackSettings,
          updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
-         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy } from "../../selectors/dashboard-selectors";
+         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getShowFeedbackBadges
+        } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -41,6 +42,7 @@ interface IProps {
   questionFeedbackSettings: Map<any, any>;
   report: any;
   sequenceTree: Map<any, any>;
+  showFeedbackBadges: boolean;
   sortByMethod: string;
   studentCount: number;
   studentProgress: Map<any, any>;
@@ -99,7 +101,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setCompactReport, setShowFeedbackBadges, setStudentSort, studentProgress, students, sortedQuestionIds,
       questions, expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
-      toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition, questionFeedbacks, questionFeedbackSettings,
+      toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition, questionFeedbacks, questionFeedbackSettings, showFeedbackBadges,
       updateActivityFeedback, updateActivityFeedbackSettings, updateQuestionFeedback, updateQuestionFeedbackSettings  } = this.props;
     const { initialLoading, showAllResponsesPopup } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
@@ -160,6 +162,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 currentStudentId={currentStudentId}
                 expandedActivities={expandedActivities}
                 isCompact={compactReport}
+                showFeedbackBadges={showFeedbackBadges}
                 questionFeedbacks={questionFeedbacks}
                 setCurrentActivity={setCurrentActivity}
                 setCurrentQuestion={setCurrentQuestion}
@@ -271,6 +274,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     questions,
     report: dataDownloaded && reportState,
     sequenceTree: dataDownloaded && getSequenceTree(state),
+    showFeedbackBadges: getShowFeedbackBadges(state),
     sortByMethod: getDashboardSortBy(state),
     sortedQuestionIds,
     students: dataDownloaded && getSortedStudents(state),

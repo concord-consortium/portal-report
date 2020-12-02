@@ -13,6 +13,7 @@ interface IProps {
   expandedActivities: Map<any, any>;
   isCompact: boolean;
   questionFeedbacks?: Map<any, any>;
+  showFeedbackBadges: boolean;
   students: Map<any, any>;
   studentProgress: Map<any, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -76,9 +77,10 @@ export class StudentAnswers extends React.PureComponent<IProps> {
                               currentQuestionId === questionId &&
                               currentStudentId === studentId);
             // TODO: FEEDBACK
-            // get questionFeedbacks from props
+            // get questionFeedbacks and showFeedbackBadges from props
+            // if showFeedbackBadges is true,
             // search questionFeedbacks for entry that has student id and question id
-            // that match studentId and questionId
+            // that match studentId and questionId and then
             // optionally display feedback icon component if we found matching feedback
             return (
               <AnswerCompact
