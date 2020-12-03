@@ -39,7 +39,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
             currentStudentId={currentStudentId}
           />
         }
-        {this.renderFooter()}
       </div>
     );
   }
@@ -48,9 +47,12 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     const { currentActivity, currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition } = this.props;
     return (
       <React.Fragment>
-        <div className={css.header} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header">
-          <QuestionPopoutIcon className={css.icon} />
-          <div>Question Detail View</div>
+        <div className={css.header} data-cy="question-overlay-header">
+          <div className={css.questionDetailButton} onClick={this.dismissCurrentQuestion}>
+            <QuestionPopoutIcon className={css.icon} />
+            <div>Question Details</div>
+          </div>
+          {this.renderAllResponsesButton()}
         </div>
         <QuestionNavigator
           currentActivity={currentActivity}
@@ -70,6 +72,15 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     if (this.props.currentQuestion) {
       this.props.toggleCurrentQuestion(this.props.currentQuestion.get("id"));
     }
+  }
+
+  private renderAllResponsesButton = () => {
+    return (
+      <div className={css.openPopupButton} data-cy="view-all-student-responses-button" onClick={this.handleShowAllResponsesButtonClick}>
+        <GroupIcon className={css.icon} />
+        <span>View All Responses</span>
+      </div>
+    );
   }
 
   private renderFooter = () => {
