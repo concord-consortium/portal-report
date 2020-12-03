@@ -5,8 +5,8 @@ import CloseIcon from "../../../img/svg-icons/close-icon.svg";
 // import PrintIcon from "../../../img/svg-icons/print-icon.svg";
 // import DownloadIcon from "../../../img/svg-icons/download-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
-import CheckIcon from "../../../img/svg-icons/check-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
+import { HeaderMenuItem } from "./header-menu-item";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -17,28 +17,23 @@ interface IState {
 
 interface IProps {
   setCompact: (value: boolean) => void;
+  setShowFeedbackBadges: (value: boolean) => void;
 }
 
-// actions are placeholder for future work on what should happen when that menu item is clicked
-export interface MenuItemsWithState {
+export interface MenuItemWithState {
   name: string;
-  action: string;
+  onSelect: (selected: boolean) => void;
   dataCy: string;
 }
-export interface MenuItemWithIcon {
+
+interface MenuItemWithIcon {
   MenuItemIcon: SvgIcon;
   name: string;
-  dataCy: string;
   onSelect: () => void;
+  dataCy: string;
 }
-export const itemsWithState: MenuItemsWithState[] = [
-  {
-    name: "Compact student list",
-    action: "COMPACT_STUDENT_LIST",
-    dataCy: "compact-menu-item"
-  }
-];
-export const items: MenuItemWithIcon[] = [
+
+const items: MenuItemWithIcon[] = [
   {
     MenuItemIcon: HelpIcon,
     name: "Help",
@@ -70,7 +65,6 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
       compactStudentList: false
     };
     this.handleMenuClick = this.handleMenuClick.bind(this);
-    this.handleMenuCompactClick = this.handleMenuCompactClick.bind(this);
   }
 
   render() {
@@ -86,15 +80,27 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   }
 
   private renderMenuItems = () => {
+    const itemsWithState: MenuItemWithState[] = [
+      {
+        name: "Compact student list",
+        onSelect: this.props.setCompact,
+        dataCy: "compact-menu-item"
+      },
+      // TODO: FEEDBACK
+      /*
+      {
+        name: "Show feedback badges",
+        onSelect: this.props.setShowFeedbackBadges,
+        dataCy: "feedback-menu-item"
+      },
+      */
+    ];
     return (
       <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list">
         <div className={css.topMenu}>
-          {itemsWithState && itemsWithState.map((item: MenuItemsWithState, i: number) => {
+          {itemsWithState && itemsWithState.map((item: MenuItemWithState, i: number) => {
             return (
-              <div key={`item ${i}`} className={css.menuItem} onClick={this.handleMenuCompactClick} data-cy={item.dataCy}>
-                <CheckIcon className={`${css.check} ${this.state.compactStudentList ? css.selected : ""}`} />
-                <div className={css.menuItemName}>{item.name}</div>
-              </div>
+              <HeaderMenuItem key={`item ${i}`} menuItem={item} />
             );
           })}
         </div>
@@ -112,11 +118,6 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
 
   private handleMenuClick() {
     this.setState({ showMenuItems: !this.state.showMenuItems });
-  }
-
-  private handleMenuCompactClick() {
-    this.props.setCompact(!this.state.compactStudentList);
-    this.setState({ compactStudentList: !this.state.compactStudentList });
   }
 
 }

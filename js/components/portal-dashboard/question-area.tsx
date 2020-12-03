@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { QuestionTypes } from "../../util/question-utils";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
-import { Question } from "../../containers/portal-dashboard/question";
+import { Question } from "./questions/question";
 
 import css from "../../../css/portal-dashboard/question-area.less";
 

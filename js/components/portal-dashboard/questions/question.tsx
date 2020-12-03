@@ -1,16 +1,16 @@
 import React from "react";
 import { Map } from "immutable";
-import { MultipleChoiceQuestion } from "../../components/portal-dashboard/questions/multiple-choice-question";
-import { OpenResponseQuestion } from "../../components/portal-dashboard/questions/open-response-question";
-import { ImageQuestion } from "../../components/portal-dashboard/questions/image-question";
-import { IframeQuestion } from "../../components/portal-dashboard/questions/iframe-question";
+import { MultipleChoiceQuestion } from "./multiple-choice-question";
+import { OpenResponseQuestion } from "./open-response-question";
+import { ImageQuestion } from "./image-question";
+import { IframeQuestion } from "./iframe-question";
 
-import css from "../../../css/portal-dashboard/question-area.less";
+import css from "../../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
   question?: Map<string,any>;
 }
-export class Question extends React.PureComponent <IProps>{
+export class Question extends React.PureComponent <IProps> {
 
   render() {
     const { question } = this.props;
@@ -18,7 +18,7 @@ export class Question extends React.PureComponent <IProps>{
 
     return (
       <div className={css.questionText} data-cy="current-question">
-          {this.renderQuestion(qtype)}
+        {this.renderQuestion(qtype)}
       </div>
     );
   }

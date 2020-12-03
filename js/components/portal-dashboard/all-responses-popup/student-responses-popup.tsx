@@ -22,8 +22,8 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
-  questions?: Map<string, any>;
   onClose: (show: boolean) => void;
+  questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
   setStudentFilter: (value: string) => void;
@@ -53,6 +53,8 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
       setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
       trackEvent } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
+    // TODO: FEEDBACK
+    // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader currentActivity={currentActivity} onCloseSelect={onClose} />
