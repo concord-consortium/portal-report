@@ -20,7 +20,7 @@ context("Portal Dashboard Question Details Panel", () => {
     });
 
     it('verify we can click to close the question details panel', () => {
-      cy.get('[data-cy=question-overlay-header]').first().click();
+      cy.get('[data-cy=question-overlay-header-button]').first().click();
       cy.get('[data-cy=question-overlay-header]').should('not.be.visible');
     });
   });

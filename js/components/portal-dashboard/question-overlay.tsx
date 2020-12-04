@@ -48,7 +48,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     return (
       <React.Fragment>
         <div className={css.header} data-cy="question-overlay-header">
-          <div className={css.questionDetailButton} onClick={this.dismissCurrentQuestion}>
+          <div className={css.questionDetailButton} onClick={this.dismissCurrentQuestion} data-cy="question-overlay-header-button">
             <QuestionPopoutIcon className={css.icon} />
             <div>Question Details</div>
           </div>
