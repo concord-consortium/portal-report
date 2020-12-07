@@ -117,6 +117,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             setShowFeedbackBadges={setShowFeedbackBadges}
             assignmentName={assignmentName}
             trackEvent={trackEvent}
+            handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
           />
         }
         {activityTrees &&
@@ -182,6 +183,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               {showAllResponsesPopup &&
                 <CSSTransition classNames={"popup"} timeout={500}>
                   <StudentResponsePopup
+                    activities={activityTrees}
                     anonymous={anonymous}
                     answers={answers}
                     currentActivity={currentActivity}
@@ -212,8 +214,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   private setShowAllResponsesPopup = (show: boolean) => {
-    if (show) { this.setState({ showAllResponsesPopup: show }); }
-    else { this.setState({ showAllResponsesPopup: false }); }
+    this.setState({ showAllResponsesPopup: show });
   }
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {

@@ -48,18 +48,22 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     );
   }
 
+  private handleStudentSortSelect = (value: string) => () => {
+    const { setStudentSort } = this.props;
+    setStudentSort(value);
+  }
+
   private renderStudentFilter = () => {
-    const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name" },
-                                 { value: SORT_BY_MOST_PROGRESS, label: "Most Progress" } ,
-                                 { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress" }];
-    const { setStudentSort, sortByMethod, trackEvent } = this.props;
+    const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name", onSelect: this.handleStudentSortSelect(SORT_BY_NAME) },
+                                 { value: SORT_BY_MOST_PROGRESS, label: "Most Progress", onSelect: this.handleStudentSortSelect(SORT_BY_MOST_PROGRESS) },
+                                 { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress", onSelect: this.handleStudentSortSelect(SORT_BY_LEAST_PROGRESS) }];
+    const { sortByMethod, trackEvent } = this.props;
     return (
       <div className={cssClassNav.studentSort}>
         <CustomSelect
           dataCy={"sort-students"}
           HeaderIcon={SortIcon}
           items={items}
-          onChange={setStudentSort}
           trackEvent={trackEvent}
           value={sortByMethod}
         />

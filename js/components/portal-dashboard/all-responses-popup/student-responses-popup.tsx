@@ -16,6 +16,7 @@ export interface SelectedStudent {
 }
 
 interface IProps {
+  activities: Map<any, any>;
   anonymous: boolean;
   answers: Map<any, any>;
   currentActivity?: Map<string, any>;
@@ -49,12 +50,14 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
+    const { activities, anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
       setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
       trackEvent } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     // TODO: FEEDBACK
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
+    const firstActivity = activities.first();
+    const firstQuestion = questions?.first();
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
         <PopupHeader currentActivity={currentActivity} onCloseSelect={onClose} />
@@ -71,8 +74,8 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           />
           <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
             <QuestionNavigator
-              currentActivity={currentActivity}
-              currentQuestion={currentQuestion}
+              currentActivity={currentActivity || firstActivity}
+              currentQuestion={currentQuestion || firstQuestion}
               questions={questions}
               sortedQuestionIds={sortedQuestionIds}
               toggleCurrentQuestion={this.handleChangeQuestion}
@@ -83,7 +86,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
         </div>
         <PopupStudentResponseList
           answers={answers}
-          currentQuestion={currentQuestion}
+          currentQuestion={currentQuestion || firstQuestion}
           isAnonymous={isAnonymous}
           onStudentSelect={this.toggleSelectedStudent}
           selectedStudents={selectedStudents}
@@ -94,8 +97,8 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             <CSSTransition in={showSpotlightListDialog} classNames={"spotlightListDialog"} timeout={500}>
               <SpotlightStudentListDialog
                 anonymous={anonymous}
-                currentActivity={currentActivity}
-                currentQuestion={currentQuestion}
+                currentActivity={currentActivity || firstActivity}
+                currentQuestion={currentQuestion || firstQuestion}
                 isAnonymous={isAnonymous}
                 onCloseDialog={this.setShowSpotlightListDialog}
                 onSpotlightColorSelect={this.handleChangeColorGroup}
