@@ -138,7 +138,7 @@ const getAuthHeader = () => {
   if (accessToken) {
     return `Bearer ${accessToken}`;
   }
-  throw new Error("No token available");
+  throw new APIError("No token available", { status: 0, statusText: "No token available" });
 };
 
 export function fetchOfferingData() {
