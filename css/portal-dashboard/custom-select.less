@@ -61,7 +61,6 @@
         fill: white;
       }
     }
-
     .current {
       flex-grow: 1;
       white-space: nowrap;
@@ -115,7 +114,6 @@
       align-items: center;
       box-sizing: border-box;
       height: 40px;
-      padding: 0 5px 0 5px;
       background-color: white;
       font-size: 16px;
 
@@ -143,10 +141,18 @@
         &.selected {
           fill: @cc-teal;
         }
+
+        &.rightJustify {
+          margin-left: auto;
+        }
       }
     }
     .listItem:last-child {
       border-radius: 0 0 4px 4px;
+    }
+
+    .icon {
+      margin: 0 5px 0 5px;
     }
   }
 }

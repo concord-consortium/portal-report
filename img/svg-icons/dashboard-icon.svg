@@ -1,3 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-    <path fill-rule="nonzero" d="M2.5 10.833h6.667V2.5H2.5v8.333zm0 6.667h6.667v-5H2.5v5zm8.333 0H17.5V9.167h-6.667V17.5zm0-15v5H17.5v-5h-6.667z" transform="translate(-143 -150) translate(138 145) translate(5 5)"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="#0592AF" >
+    <path d="M2.5 10.833h6.667V2.5H2.5v8.333zm0 6.667h6.667v-5H2.5v5zm8.333 0H17.5V9.167h-6.667V17.5zm0-15v5H17.5v-5h-6.667z" transform="translate(-143 -607) translate(138 565) translate(0 30) translate(5 12)"/>
 </svg>

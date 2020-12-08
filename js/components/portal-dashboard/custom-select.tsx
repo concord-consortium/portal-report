@@ -88,8 +88,12 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
               onClick={this.handleChange(item.value)}
               data-cy={`list-item-${item.label.toLowerCase().replace(/\ /g, "-")}`}
             >
-              <CheckIcon className={`${css.check} ${currentClass}`} />
+              { item.icon
+                ? <item.icon className={css.icon} />
+                : <CheckIcon className={`${css.check} ${currentClass}`} />
+              }
               <div>{item.label}</div>
+              { item.icon && <CheckIcon className={`${css.check} ${currentClass} ${css.rightJustify}`} /> }
             </div>
           );
         }) }
