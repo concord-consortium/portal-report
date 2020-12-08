@@ -72,3 +72,33 @@ export function urlStringParam(url: string, name: string): string | null{
     return null;
   }
 }
+
+export enum HeaderColorThemes {
+  Progress = 0,
+  Response = 1,
+  Feedback = 2,
+}
+
+export enum CustomSelectColorThemes {
+  ProgressNavigation = 0,
+  ResponseNavigation = 1,
+  FeedbackNavigation = 2,
+  ProgressAssignment = 3,
+  ResponseAssignment = 4,
+  FeedbackAssignment = 5,
+}
+
+export const getThemeClass = (css: any, colorTheme: HeaderColorThemes | undefined) => {
+  if (colorTheme === HeaderColorThemes.Progress) {
+    return css.progress;
+  }
+  if (colorTheme === HeaderColorThemes.Response) {
+    return css.response;
+  }
+  if (colorTheme === HeaderColorThemes.Feedback) {
+    return css.feedback;
+  }
+  else {
+    return "";
+  }
+};

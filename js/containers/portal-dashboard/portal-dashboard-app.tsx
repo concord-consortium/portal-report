@@ -20,6 +20,7 @@ import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { HeaderColorThemes } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -118,6 +119,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             assignmentName={assignmentName}
             trackEvent={trackEvent}
             handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
+            colorTheme={HeaderColorThemes.Progress}
           />
         }
         {activityTrees &&
@@ -190,7 +192,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                     currentQuestion={currentQuestion}
                     hasTeacherEdition={hasTeacherEdition}
                     isAnonymous={isAnonymous}
-                    onClose={this.setShowAllResponsesPopup}
                     questions={questions}
                     setAnonymous={setAnonymous}
                     setCurrentActivity={setCurrentActivity}
@@ -201,6 +202,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                     students={students}
                     toggleCurrentQuestion={toggleCurrentQuestion}
                     trackEvent={trackEvent}
+                    userName={userName}
+                    setCompact={setCompactReport}
+                    setShowFeedbackBadges={setShowFeedbackBadges}
+                    assignmentName={assignmentName}
+                    handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
                   />
                 </CSSTransition>
               }

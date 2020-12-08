@@ -8,6 +8,7 @@ import AssignmentIcon from "../../../img/svg-icons/assignment-icon.svg";
 import DashboardIcon from "../../../img/svg-icons/dashboard-icon.svg";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
+import { HeaderColorThemes, getThemeClass } from "../../util/misc";
 import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
@@ -17,12 +18,13 @@ interface IProps {
   setShowFeedbackBadges: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   handleShowAllResponsesPopup: (show: boolean) => void;
+  colorTheme?: HeaderColorThemes;
 }
 
 export class Header extends React.PureComponent<IProps> {
   render() {
     return (
-      <div className={css.dashboardHeader} data-cy="dashboard-header">
+      <div className={`${css.dashboardHeader} ${getThemeClass(css, this.props.colorTheme)}`} data-cy="dashboard-header">
         <div className={css.appInfo}>
           <img src={ccLogoSrc} className={css.logo} data-cy="header-logo"/>
           {this.renderNavigationSelect()}
@@ -34,8 +36,12 @@ export class Header extends React.PureComponent<IProps> {
           {this.renderAssignmentSelect()}
         </div>
         <div className={css.headerRight}>
-          <AccountOwnerDiv userName={this.props.userName} />
-          <HeaderMenuContainer setCompact={this.props.setCompact} setShowFeedbackBadges={this.props.setShowFeedbackBadges} />
+          <AccountOwnerDiv userName={this.props.userName} colorTheme={this.props.colorTheme} />
+          <HeaderMenuContainer
+            setCompact={this.props.setCompact}
+            setShowFeedbackBadges={this.props.setShowFeedbackBadges}
+            colorTheme={this.props.colorTheme}
+          />
         </div>
       </div>
     );

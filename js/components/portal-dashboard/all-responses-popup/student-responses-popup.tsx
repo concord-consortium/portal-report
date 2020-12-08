@@ -1,12 +1,13 @@
 import React from "react";
 import { Map } from "immutable";
-import { PopupHeader } from "./popup-header";
+import { Header } from "../../portal-dashboard/header";
 import { PopupClassNav } from "./popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
 import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { HeaderColorThemes } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
@@ -23,7 +24,6 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
-  onClose: (show: boolean) => void;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
@@ -34,6 +34,11 @@ interface IProps {
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
+  userName: string;
+  assignmentName: string;
+  setCompact: (value: boolean) => void;
+  setShowFeedbackBadges: (value: boolean) => void;
+  handleShowAllResponsesPopup: (show: boolean) => void;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -50,9 +55,9 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { activities, anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, onClose, questions,
+    const { activities, anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, questions,
       setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
-      trackEvent } = this.props;
+      trackEvent, userName, setCompact, setShowFeedbackBadges, assignmentName, handleShowAllResponsesPopup } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     // TODO: FEEDBACK
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
@@ -60,7 +65,15 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
     const firstQuestion = questions?.first();
     return (
       <div className={css.popup} data-cy="all-responses-popup-view">
-        <PopupHeader currentActivity={currentActivity} onCloseSelect={onClose} />
+        <Header
+          userName={userName}
+          setCompact={setCompact}
+          setShowFeedbackBadges={setShowFeedbackBadges}
+          assignmentName={assignmentName}
+          trackEvent={trackEvent}
+          handleShowAllResponsesPopup={handleShowAllResponsesPopup}
+          colorTheme={HeaderColorThemes.Response}
+        />
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}

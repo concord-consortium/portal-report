@@ -7,6 +7,7 @@ import CloseIcon from "../../../img/svg-icons/close-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
 import { HeaderMenuItem } from "./header-menu-item";
+import { HeaderColorThemes, getThemeClass } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -18,6 +19,7 @@ interface IState {
 interface IProps {
   setCompact: (value: boolean) => void;
   setShowFeedbackBadges: (value: boolean) => void;
+  colorTheme?: HeaderColorThemes;
 }
 
 export interface MenuItemWithState {
@@ -71,8 +73,8 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
     return (
       <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick}>
         { this.state.showMenuItems
-          ? <CloseIcon className={`${css.icon} ${css.menuIcon}`} />
-          : <MenuIcon className={`${css.icon} ${css.menuIcon}`} />
+          ? <CloseIcon className={`${css.icon} ${css.menuIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
+          : <MenuIcon className={`${css.icon} ${css.menuIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
         }
         {this.renderMenuItems()}
       </div>
@@ -100,14 +102,14 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
         <div className={css.topMenu}>
           {itemsWithState && itemsWithState.map((item: MenuItemWithState, i: number) => {
             return (
-              <HeaderMenuItem key={`item ${i}`} menuItem={item} />
+              <HeaderMenuItem key={`item ${i}`} menuItem={item} colorTheme={this.props.colorTheme} />
             );
           })}
         </div>
         {items && items.map((item, i) => {
           return (
-            <div key={`item ${i}`} className={css.menuItem} onClick={item.onSelect}  >
-              <item.MenuItemIcon className={css.menuItemIcon} />
+            <div key={`item ${i}`} className={`${css.menuItem} ${getThemeClass(css, this.props.colorTheme)}`} onClick={item.onSelect}>
+              <item.MenuItemIcon className={`${css.menuItemIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
               <div className={css.menuItemName} data-cy={item.dataCy}>{item.name}</div>
             </div>
           );
