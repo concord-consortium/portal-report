@@ -132,11 +132,15 @@ const gePortalReportAPIUrl = () => {
 };
 
 const getAuthHeader = () => {
+  const fakeServer = "http://portal.test"; //used for testing
   if (urlParam("token")) {
     return `Bearer ${urlParam("token")}`;
   }
   if (accessToken) {
     return `Bearer ${accessToken}`;
+  }
+  if (urlParam("reportUrl")===fakeServer) { //used for testing
+    return `Bearer 12345`;
   }
   throw new APIError("No token available", { status: 0, statusText: "No token available" });
 };

@@ -72,7 +72,7 @@ describe("Provide Feedback", function() {
     cy.get("#feedbackEnabled").check();
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "0");
     cy.get(".feedback-row").first().within(() => {
-      cy.get("[data-cy=feedbackBox]").clear().type(" Your answer was great!").blur();
+      cy.get("[data-cy=feedbackBox]").clear().type("Your answer was great!").blur();
       cy.get(".feedback-complete input").check();
     });
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
@@ -324,7 +324,7 @@ describe("Provide Feedback", function() {
     // We need to make sure the api call which saves the feedback actually is called
     // before the page changes. Ideally there'd be something on the page we could watch
     // Since I can't find anything a wait is necessary
-    cy.wait(1000);
+    cy.wait(3000);
 
     // Open the student page
     cy.visit("/?studentId=1&enableFirestorePersistence=true");
@@ -347,7 +347,7 @@ describe("Provide Feedback", function() {
     });
 
     cy.get(".question [data-cy=feedbackButton]").first().click();
-    cy.get("[data-cy=feedbackBox]").first().clear().type(" Your answer was great!").blur();
+    cy.get("[data-cy=feedbackBox]").first().clear().type("Your answer was great!").blur();
     cy.contains("Connection to server failed");
   });
 });
