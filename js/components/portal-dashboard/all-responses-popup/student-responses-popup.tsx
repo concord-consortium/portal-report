@@ -7,7 +7,7 @@ import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { HeaderColorThemes } from "../../../util/misc";
+import { HeaderColorThemes, DashboardViewMode } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
@@ -38,7 +38,8 @@ interface IProps {
   assignmentName: string;
   setCompact: (value: boolean) => void;
   setShowFeedbackBadges: (value: boolean) => void;
-  handleShowAllResponsesPopup: (show: boolean) => void;
+  handleShowAllResponsesPopup: (mode: DashboardViewMode) => void;
+  viewMode: DashboardViewMode;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -57,7 +58,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
   render() {
     const { activities, anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, questions,
       setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
-      trackEvent, userName, setCompact, setShowFeedbackBadges, assignmentName, handleShowAllResponsesPopup } = this.props;
+      trackEvent, userName, setCompact, setShowFeedbackBadges, assignmentName, handleShowAllResponsesPopup, viewMode } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     // TODO: FEEDBACK
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
@@ -71,7 +72,8 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           setShowFeedbackBadges={setShowFeedbackBadges}
           assignmentName={assignmentName}
           trackEvent={trackEvent}
-          handleShowAllResponsesPopup={handleShowAllResponsesPopup}
+          handleChangeViewMode={handleShowAllResponsesPopup}
+          viewMode={viewMode}
           colorTheme={HeaderColorThemes.Response}
         />
         <div className={css.tableHeader}>

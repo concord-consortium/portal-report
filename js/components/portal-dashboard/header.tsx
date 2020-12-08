@@ -8,7 +8,7 @@ import AssignmentIcon from "../../../img/svg-icons/assignment-icon.svg";
 import DashboardIcon from "../../../img/svg-icons/dashboard-icon.svg";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
-import { HeaderColorThemes, getThemeClass } from "../../util/misc";
+import { HeaderColorThemes, getThemeClass, DashboardViewMode } from "../../util/misc";
 import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
@@ -17,7 +17,8 @@ interface IProps {
   setCompact: (value: boolean) => void;
   setShowFeedbackBadges: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  handleShowAllResponsesPopup: (show: boolean) => void;
+  handleChangeViewMode: (mode: DashboardViewMode) => void;
+  viewMode: DashboardViewMode;
   colorTheme?: HeaderColorThemes;
 }
 
@@ -47,22 +48,23 @@ export class Header extends React.PureComponent<IProps> {
     );
   }
 
-  private showAllResponses = (show: boolean) => () => {
-    const { handleShowAllResponsesPopup } = this.props;
-    handleShowAllResponsesPopup(show);
+  private changeViewMode = (mode: DashboardViewMode) => () => {
+    const { handleChangeViewMode } = this.props;
+    handleChangeViewMode(mode);
   }
 
   private renderNavigationSelect = () => {
-    const { trackEvent } = this.props;
-    const items: SelectItem[] = [{ value: "Progress_Dash", label: "Progress Dashboard", icon: DashboardIcon, onSelect: this.showAllResponses(false) },
-                                 { value: "Response_Details", label: "Response Details", icon: GroupIcon, onSelect: this.showAllResponses(true) } ,
-                                 { value: "Feedback_Report", label: "Feedback Report", icon: FeedbackIcon, onSelect: this.showAllResponses(true) }];
+    const { trackEvent, viewMode } = this.props;
+    const items: SelectItem[] = [{ value: "ProgressDashboard", label: "Progress Dashboard", icon: DashboardIcon, onSelect: this.changeViewMode("ProgressDashboard") },
+                                 { value: "ResponseDetails", label: "Response Details", icon: GroupIcon, onSelect: this.changeViewMode("ResponseDetails") } ,
+                                 { value: "FeedbackReport", label: "Feedback Report", icon: FeedbackIcon, onSelect: this.changeViewMode("FeedbackReport") }];
     return (
       <CustomSelect
         items={items}
         trackEvent={trackEvent}
         dataCy={"navigation-select"}
         width={212}
+        value={viewMode}
       />
     );
   }

@@ -102,3 +102,5 @@ export const getThemeClass = (css: any, colorTheme: HeaderColorThemes | undefine
     return "";
   }
 };
+
+export type DashboardViewMode = "ProgressDashboard" | "ResponseDetails" | "FeedbackReport";
