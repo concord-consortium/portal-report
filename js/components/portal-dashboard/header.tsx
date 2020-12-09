@@ -8,7 +8,7 @@ import AssignmentIcon from "../../../img/svg-icons/assignment-icon.svg";
 import DashboardIcon from "../../../img/svg-icons/dashboard-icon.svg";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
-import { HeaderColorThemes, getThemeClass, DashboardViewMode } from "../../util/misc";
+import { ColorThemes, getThemeClass, DashboardViewMode } from "../../util/misc";
 import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
@@ -19,7 +19,7 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
   handleChangeViewMode: (mode: DashboardViewMode) => void;
   viewMode: DashboardViewMode;
-  colorTheme?: HeaderColorThemes;
+  colorTheme?: ColorThemes;
 }
 
 export class Header extends React.PureComponent<IProps> {
@@ -54,10 +54,14 @@ export class Header extends React.PureComponent<IProps> {
   }
 
   private renderNavigationSelect = () => {
-    const { trackEvent, viewMode } = this.props;
+    const { trackEvent, viewMode, colorTheme } = this.props;
     const items: SelectItem[] = [{ value: "ProgressDashboard", label: "Progress Dashboard", icon: DashboardIcon, onSelect: this.changeViewMode("ProgressDashboard") },
                                  { value: "ResponseDetails", label: "Response Details", icon: GroupIcon, onSelect: this.changeViewMode("ResponseDetails") } ,
                                  { value: "FeedbackReport", label: "Feedback Report", icon: FeedbackIcon, onSelect: this.changeViewMode("FeedbackReport") }];
+
+    const customSelectColorTheme = colorTheme === ColorThemes.Progress
+      ? ColorThemes.ProgressNavigation
+      : colorTheme === ColorThemes.Response ? ColorThemes.ResponseNavigation : ColorThemes.FeedbackNavigation;
     return (
       <CustomSelect
         items={items}
@@ -65,21 +69,25 @@ export class Header extends React.PureComponent<IProps> {
         dataCy={"navigation-select"}
         width={212}
         value={viewMode}
+        colorTheme={customSelectColorTheme}
       />
     );
   }
 
   private renderAssignmentSelect = () => {
-    const { assignmentName, trackEvent } = this.props;
+    const { assignmentName, trackEvent, colorTheme } = this.props;
+    const customSelectColorTheme = colorTheme === ColorThemes.Progress
+      ? ColorThemes.ProgressAssignment
+      : colorTheme === ColorThemes.Response ? ColorThemes.ResponseAssignment : ColorThemes.FeedbackAssignment;
     return (
       <CustomSelect
         items={[{ value: "", label: assignmentName }]}
         trackEvent={trackEvent}
         HeaderIcon={AssignmentIcon}
         dataCy={"choose-assignment"}
-        isHeader={true}
         disableDropdown={true}
         width={280}
+        colorTheme={customSelectColorTheme}
       />
     );
   }

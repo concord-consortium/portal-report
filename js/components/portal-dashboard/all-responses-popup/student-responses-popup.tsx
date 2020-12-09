@@ -7,7 +7,7 @@ import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { HeaderColorThemes, DashboardViewMode } from "../../../util/misc";
+import { ColorThemes, DashboardViewMode } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
 
@@ -74,7 +74,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           trackEvent={trackEvent}
           handleChangeViewMode={handleShowAllResponsesPopup}
           viewMode={viewMode}
-          colorTheme={HeaderColorThemes.Response}
+          colorTheme={ColorThemes.Response}
         />
         <div className={css.tableHeader}>
           <PopupClassNav

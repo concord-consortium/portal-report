@@ -2,6 +2,7 @@ import React from "react";
 import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
+import { ColorThemes, getThemeClass } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/custom-select.less";
 
@@ -9,12 +10,12 @@ interface IProps {
   dataCy: string;
   disableDropdown?: boolean;
   HeaderIcon?: SvgIcon;
-  isHeader?: boolean;
   items: SelectItem[];
   onChange?: () => void;
   value?: string;
   trackEvent: (category: string, action: string, label: string) => void;
   width?: number;
+  colorTheme?: ColorThemes;
 }
 
 interface IState {
@@ -57,15 +58,14 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = () => {
-    const { items, HeaderIcon, value, width } = this.props;
+    const { items, HeaderIcon, value, width, colorTheme } = this.props;
     const currentValue = value || this.state.value;
     const currentItem = items.find(i => i.value === currentValue);
     const showListClass = this.state.showList ? css.showList : "";
-    const useHeader = this.props.isHeader ? css.topHeader : "";
     const disabled = this.props.disableDropdown ? css.disabled : "";
     const CurrentHeaderIcon = currentItem?.icon || HeaderIcon;
     return (
-      <div className={`${css.header} ${useHeader} ${showListClass} ${disabled}`} onClick={this.handleHeaderClick} style={{width}}>
+      <div className={`${css.header} ${showListClass} ${disabled} ${getThemeClass(css, colorTheme)}`} onClick={this.handleHeaderClick} style={{width}}>
         { CurrentHeaderIcon && <CurrentHeaderIcon className={`${css.icon} ${showListClass}`} /> }
         <div className={css.current}>{currentItem?.label}</div>
         { <ArrowIcon className={`${css.arrow} ${showListClass} ${disabled}`} /> }
@@ -74,17 +74,16 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderList = () => {
-    const { items, value, width } = this.props;
+    const { items, value, width, colorTheme } = this.props;
     const currentValue = value || this.state.value;
-    const useHeader = this.props.isHeader ? css.topHeader : "";
     return (
-      <div className={`${css.list} ${useHeader} ${(this.state.showList ? css.show : "")}`} style={{width}}>
+      <div className={`${css.list} ${(this.state.showList ? css.show : "")}`} style={{width}}>
         { items && items.map((item: SelectItem, i: number) => {
           const currentClass = currentValue === item.value ? css.selected : "";
           return (
             <div
               key={`item ${i}`}
-              className={`${css.listItem} ${currentClass}`}
+              className={`${css.listItem} ${currentClass} ${getThemeClass(css, colorTheme)}`}
               onClick={this.handleChange(item.value)}
               data-cy={`list-item-${item.label.toLowerCase().replace(/\ /g, "-")}`}
             >

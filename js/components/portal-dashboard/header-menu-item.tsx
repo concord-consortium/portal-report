@@ -1,7 +1,7 @@
 import React from "react";
 import { MenuItemWithState } from "./header-menu";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
-import { HeaderColorThemes, getThemeClass } from "../../util/misc";
+import { ColorThemes, getThemeClass } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -11,7 +11,7 @@ interface IState {
 
 interface IProps {
   menuItem: MenuItemWithState;
-  colorTheme?: HeaderColorThemes;
+  colorTheme?: ColorThemes;
 }
 
 export class HeaderMenuItem extends React.PureComponent<IProps, IState> {

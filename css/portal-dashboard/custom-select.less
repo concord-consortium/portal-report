@@ -20,28 +20,97 @@
     &:hover {
       background-color: @cc-teal-light4;
     }
-
-    &.topHeader {
-      background-color: @cc-teal-light4;
-      &:hover {
-        background-color:@cc-teal-light2;
-      }
-      &.showList, &:active {
-        background-color: @cc-teal;
-      }
-      .current {
-        max-width: 236px;
-      }
-    }
-
-    &.disabled {
-      pointer-events: none;
-    }
-
     &.showList, &:active {
       background-color: @cc-teal;
       color: white;
       border-color: white;
+    }
+    &.disabled {
+      pointer-events: none;
+    }
+
+    .icon {
+      height: 20px;
+      width: 20px;
+      margin: 0 5px 0 5px;
+      fill: @cc-teal;
+    }
+
+    &.progressNavigation {
+      background-color: @cc-teal-light6;
+      &:hover {
+        background-color: @cc-teal-light4;
+      }
+      &.showList, &:active {
+        background-color: @cc-teal;
+      }
+      .icon, .arrow {
+        fill: @cc-teal;
+      }
+    }
+    &.responseNavigation {
+      background-color: @cc-orange-light4B;
+      &:hover {
+        background-color: @cc-orange-light3;
+      }
+      &.showList, &:active {
+        background-color: @cc-orange;
+      }
+      .icon, .arrow {
+        fill: @cc-orange;
+      }
+    }
+    &.feedbackNavigation {
+      background-color: @feedback-green-light4B;
+      &:hover {
+        background-color: @feedback-green-light3B;
+      }
+      &.showList, &:active {
+        background-color: @feedback-green;
+      }
+      .icon, .arrow {
+        fill: @feedback-green;
+      }
+    }
+    &.progressAssignment {
+      background-color: @cc-teal-light4;
+      &:hover {
+        background-color: @cc-teal-light2;
+      }
+      &.showList, &:active {
+        background-color: @cc-teal;
+      }
+      .icon, .arrow {
+        fill: @cc-teal;
+      }
+    }
+    &.responseAssignment {
+      background-color: @cc-orange-light3;
+      &:hover {
+        background-color: @cc-orange-light1;
+      }
+      &.showList, &:active {
+        background-color: @cc-orange;
+      }
+      .icon, .arrow {
+        fill: @cc-orange;
+      }
+    }
+    &.feedbackAssignment {
+      background-color: @feedback-green-light3B;
+      &:hover {
+        background-color: @feedback-green-light1B
+      }
+      &.showList, &:active {
+        background-color:@feedback-green;
+      }
+      .icon, .arrow {
+        fill: @feedback-green;
+      }
+    }
+
+    .icon.showList {
+      fill: white;
     }
 
     &:active .icon {
@@ -51,16 +120,6 @@
       fill: white;
     }
 
-    .icon {
-      height: 20px;
-      width: 20px;
-      margin: 0 5px 0 5px;
-      fill: @cc-teal;
-
-      &.showList {
-        fill: white;
-      }
-    }
     .current {
       flex-grow: 1;
       white-space: nowrap;
@@ -97,10 +156,6 @@
     transition-property: opacity;
     transition-duration: .25s;
     pointer-events: none;
-
-    &.topHeader {
-      width: 300px;
-    }
 
     &.show {
       opacity: 1;
@@ -146,6 +201,41 @@
           margin-left: auto;
         }
       }
+
+      &.progressNavigation, &.progressAssignment {
+        &:hover {
+          background-color: @cc-teal-light6;
+        }
+        &:active {
+          background-color: @cc-teal-light4;
+        }
+        .check.selected {
+          fill: @cc-teal;
+        }
+      }
+      &.responseNavigation, &.responseAssignment {
+        &:hover {
+          background-color: @cc-orange-light4B;
+        }
+        &:active {
+          background-color: @cc-orange-light3;
+        }
+        .check.selected {
+          fill: @cc-orange;
+        }
+      }
+      &.feedbackNavigation, &.feedbackAssignment {
+        &:hover {
+          background-color: @feedback-green-light4B;
+        }
+        &:active {
+          background-color: @feedback-green-light3B;
+        }
+        .check.selected {
+          fill: @feedback-green;
+        }
+      }
+
     }
     .listItem:last-child {
       border-radius: 0 0 4px 4px;

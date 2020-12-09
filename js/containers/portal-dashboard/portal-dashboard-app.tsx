@@ -20,7 +20,7 @@ import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { HeaderColorThemes, DashboardViewMode } from "../../util/misc";
+import { ColorThemes, DashboardViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -120,7 +120,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             trackEvent={trackEvent}
             handleChangeViewMode={this.setDashboardViewMode}
             viewMode={viewMode}
-            colorTheme={HeaderColorThemes.Progress}
+            colorTheme={ColorThemes.Progress}
           />
         }
         {activityTrees &&

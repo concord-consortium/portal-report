@@ -7,7 +7,7 @@ import CloseIcon from "../../../img/svg-icons/close-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
 import { HeaderMenuItem } from "./header-menu-item";
-import { HeaderColorThemes, getThemeClass } from "../../util/misc";
+import { ColorThemes, getThemeClass } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -19,7 +19,7 @@ interface IState {
 interface IProps {
   setCompact: (value: boolean) => void;
   setShowFeedbackBadges: (value: boolean) => void;
-  colorTheme?: HeaderColorThemes;
+  colorTheme?: ColorThemes;
 }
 
 export interface MenuItemWithState {
