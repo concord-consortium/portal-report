@@ -74,7 +74,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
           trackEvent={trackEvent}
           setDashboardViewMode={setDashboardViewMode}
           viewMode={viewMode}
-          colorTheme={"response"}
+          colorTheme={viewMode === "ResponseDetails" ? "response" : "feedback"}
         />
         <div className={css.tableHeader}>
           <PopupClassNav
