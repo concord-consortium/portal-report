@@ -20,6 +20,7 @@ import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { DashboardViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -64,7 +65,7 @@ interface IProps {
 interface IState {
   initialLoading: boolean;
   scrollLeft: number;
-  showAllResponsesPopup: boolean;
+  viewMode: DashboardViewMode;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
@@ -73,7 +74,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     this.state = {
       initialLoading: true,
       scrollLeft: 0,
-      showAllResponsesPopup: false,
+      viewMode: "ProgressDashboard",
     };
   }
 
@@ -96,7 +97,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       sequenceTree, setAnonymous, setCompactReport, setShowFeedbackBadges, setStudentSort, studentProgress, students, sortedQuestionIds,
       questions, expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition, questionFeedbacks, showFeedbackBadges } = this.props;
-    const { initialLoading, showAllResponsesPopup } = this.state;
+    const { initialLoading, viewMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -117,6 +118,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             setShowFeedbackBadges={setShowFeedbackBadges}
             assignmentName={assignmentName}
             trackEvent={trackEvent}
+            setDashboardViewMode={this.setDashboardViewMode}
+            viewMode={viewMode}
+            colorTheme={"progress"}
           />
         }
         {activityTrees &&
@@ -168,7 +172,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               currentActivity={currentActivity}
               currentQuestion={currentQuestion}
               currentStudentId={currentStudentId}
-              handleShowAllResponsesPopup={this.setShowAllResponsesPopup}
+              setDashboardViewMode={this.setDashboardViewMode}
               isAnonymous={isAnonymous}
               questions={questions}
               setCurrentActivity={setCurrentActivity}
@@ -179,16 +183,16 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               hasTeacherEdition={hasTeacherEdition}
             />
             <TransitionGroup component={null}>
-              {showAllResponsesPopup &&
+              {viewMode !== "ProgressDashboard" &&
                 <CSSTransition classNames={"popup"} timeout={500}>
                   <StudentResponsePopup
+                    activities={activityTrees}
                     anonymous={anonymous}
                     answers={answers}
                     currentActivity={currentActivity}
                     currentQuestion={currentQuestion}
                     hasTeacherEdition={hasTeacherEdition}
                     isAnonymous={isAnonymous}
-                    onClose={this.setShowAllResponsesPopup}
                     questions={questions}
                     setAnonymous={setAnonymous}
                     setCurrentActivity={setCurrentActivity}
@@ -199,6 +203,12 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                     students={students}
                     toggleCurrentQuestion={toggleCurrentQuestion}
                     trackEvent={trackEvent}
+                    userName={userName}
+                    setCompact={setCompactReport}
+                    setShowFeedbackBadges={setShowFeedbackBadges}
+                    assignmentName={assignmentName}
+                    setDashboardViewMode={this.setDashboardViewMode}
+                    viewMode={viewMode}
                   />
                 </CSSTransition>
               }
@@ -211,9 +221,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private setShowAllResponsesPopup = (show: boolean) => {
-    if (show) { this.setState({ showAllResponsesPopup: show }); }
-    else { this.setState({ showAllResponsesPopup: false }); }
+  private setDashboardViewMode = (mode: DashboardViewMode) => {
+    this.setState({ viewMode: mode });
   }
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {

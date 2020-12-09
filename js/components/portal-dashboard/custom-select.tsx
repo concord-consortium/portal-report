@@ -2,18 +2,19 @@ import React from "react";
 import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
+import { ColorTheme } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/custom-select.less";
 
 interface IProps {
   dataCy: string;
   disableDropdown?: boolean;
-  HeaderIcon: SvgIcon;
-  isHeader?: boolean;
+  HeaderIcon?: SvgIcon;
   items: SelectItem[];
-  onChange: (value: string) => void;
   value?: string;
   trackEvent: (category: string, action: string, label: string) => void;
+  width?: number;
+  colorTheme?: ColorTheme;
 }
 
 interface IState {
@@ -24,6 +25,8 @@ interface IState {
 export interface SelectItem {
   value: string;
   label: string;
+  icon?: SvgIcon;
+  onSelect?: (value?: any) => void;
 }
 
 export class CustomSelect extends React.PureComponent<IProps, IState> {
@@ -54,15 +57,16 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = () => {
-    const { items, HeaderIcon, value } = this.props;
+    const { items, HeaderIcon, value, width, colorTheme } = this.props;
     const currentValue = value || this.state.value;
     const currentItem = items.find(i => i.value === currentValue);
     const showListClass = this.state.showList ? css.showList : "";
-    const useHeader = this.props.isHeader ? css.topHeader : "";
     const disabled = this.props.disableDropdown ? css.disabled : "";
+    const CurrentHeaderIcon = currentItem?.icon || HeaderIcon;
+    const colorClass = colorTheme ? css[colorTheme] : "";
     return (
-      <div className={`${css.header} ${useHeader} ${showListClass} ${disabled}`} onClick={this.handleHeaderClick}>
-        { <HeaderIcon className={`${css.icon} ${showListClass}`} /> }
+      <div className={`${css.header} ${showListClass} ${disabled} ${colorClass}`} onClick={this.handleHeaderClick} style={{width}}>
+        { CurrentHeaderIcon && <CurrentHeaderIcon className={`${css.icon} ${showListClass}`} /> }
         <div className={css.current}>{currentItem?.label}</div>
         { <ArrowIcon className={`${css.arrow} ${showListClass} ${disabled}`} /> }
       </div>
@@ -70,22 +74,26 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private renderList = () => {
-    const { items, value } = this.props;
+    const { items, value, width, colorTheme } = this.props;
     const currentValue = value || this.state.value;
-    const useHeader = this.props.isHeader ? css.topHeader : "";
+    const colorClass = colorTheme ? css[colorTheme] : "";
     return (
-      <div className={`${css.list} ${useHeader} ${(this.state.showList ? css.show : "")}`}>
+      <div className={`${css.list} ${(this.state.showList ? css.show : "")}`} style={{width}}>
         { items && items.map((item: SelectItem, i: number) => {
           const currentClass = currentValue === item.value ? css.selected : "";
           return (
             <div
               key={`item ${i}`}
-              className={`${css.listItem} ${currentClass}`}
+              className={`${css.listItem} ${currentClass} ${colorClass}`}
               onClick={this.handleChange(item.value)}
               data-cy={`list-item-${item.label.toLowerCase().replace(/\ /g, "-")}`}
             >
-              <CheckIcon className={`${css.check} ${currentClass}`} />
+              { item.icon
+                ? <item.icon className={css.icon} />
+                : <CheckIcon className={`${css.check} ${currentClass}`} />
+              }
               <div>{item.label}</div>
+              { item.icon && <CheckIcon className={`${css.check} ${currentClass} ${css.rightJustify}`} /> }
             </div>
           );
         }) }
@@ -108,7 +116,8 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   }
 
   private handleChange = (value: string) => () => {
-    this.props.onChange(value);
+    const item = this.props.items.find((si: SelectItem) => si.value === value);
+    item?.onSelect?.();
     this.props.trackEvent("Portal-Dashboard", "Dropdown", value);
     this.setState({
       value,

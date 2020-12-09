@@ -5,6 +5,7 @@ import { QuestionNavigator } from "./question-navigator";
 import { StudentResponse } from "./overlay-student-response";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg";
+import { DashboardViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -12,7 +13,7 @@ interface IProps {
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   currentStudentId: string | null;
-  handleShowAllResponsesPopup: (show: boolean) => void;
+  setDashboardViewMode: (mode: DashboardViewMode) => void;
   isAnonymous: boolean;
   questions?: Map<string, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -83,18 +84,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     );
   }
 
-  private renderFooter = () => {
-    return (
-      <div className={css.footer}>
-        <div className={css.openPopupButton} data-cy="view-all-student-responses-button" onClick={this.handleShowAllResponsesButtonClick}>
-          <GroupIcon className={css.icon} />
-          <span>View All Student Responses</span>
-        </div>
-      </div>
-    );
-  }
-
   private handleShowAllResponsesButtonClick = () => {
-    this.props.handleShowAllResponsesPopup(true);
+    this.props.setDashboardViewMode("ResponseDetails");
   }
 }

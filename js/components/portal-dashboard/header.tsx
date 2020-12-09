@@ -3,8 +3,12 @@ import React from "react";
 import ccLogoSrc from "../../../img/cc-logo.png";
 import { HeaderMenuContainer } from "./header-menu";
 import { AccountOwnerDiv } from "./account-owner";
-import { CustomSelect } from "./custom-select";
+import { CustomSelect, SelectItem } from "./custom-select";
 import AssignmentIcon from "../../../img/svg-icons/assignment-icon.svg";
+import DashboardIcon from "../../../img/svg-icons/dashboard-icon.svg";
+import GroupIcon from "../../../img/svg-icons/group-icon.svg";
+import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
+import { ColorTheme, DashboardViewMode } from "../../util/misc";
 import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
@@ -13,16 +17,20 @@ interface IProps {
   setCompact: (value: boolean) => void;
   setShowFeedbackBadges: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
+  setDashboardViewMode: (mode: DashboardViewMode) => void;
+  viewMode: DashboardViewMode;
+  colorTheme?: ColorTheme;
 }
 
 export class Header extends React.PureComponent<IProps> {
   render() {
+    const { colorTheme, userName, setCompact, setShowFeedbackBadges } = this.props;
+    const colorClass = colorTheme ? css[colorTheme] : "";
     return (
-      <div className={css.dashboardHeader} data-cy="dashboard-header">
+      <div className={`${css.dashboardHeader} ${colorClass}`} data-cy="dashboard-header">
         <div className={css.appInfo}>
           <img src={ccLogoSrc} className={css.logo} data-cy="header-logo"/>
-          <div className={css.pin} />
-          <div className={css.title}>Dashboard</div>
+          {this.renderNavigationSelect()}
         </div>
         <div className={css.headerCenter}>
           <div className={css.assignmentTitle}>
@@ -31,25 +39,60 @@ export class Header extends React.PureComponent<IProps> {
           {this.renderAssignmentSelect()}
         </div>
         <div className={css.headerRight}>
-          <AccountOwnerDiv userName={this.props.userName} />
-          <HeaderMenuContainer setCompact={this.props.setCompact} setShowFeedbackBadges={this.props.setShowFeedbackBadges} />
+          <AccountOwnerDiv userName={userName} colorTheme={colorTheme} />
+          <HeaderMenuContainer
+            setCompact={setCompact}
+            setShowFeedbackBadges={setShowFeedbackBadges}
+            colorTheme={colorTheme}
+          />
         </div>
       </div>
     );
   }
 
-  private renderAssignmentSelect = () => {
-    const { assignmentName, trackEvent } = this.props;
+  private changeViewMode = (mode: DashboardViewMode) => () => {
+    this.props.setDashboardViewMode(mode);
+  }
+
+  private renderNavigationSelect = () => {
+    const { trackEvent, viewMode, colorTheme } = this.props;
+    const items: SelectItem[] = [{ value: "ProgressDashboard", label: "Progress Dashboard",
+                                   icon: DashboardIcon, onSelect: this.changeViewMode("ProgressDashboard") },
+                                 { value: "ResponseDetails", label: "Response Details",
+                                   icon: GroupIcon, onSelect: this.changeViewMode("ResponseDetails") } ,
+                                 { value: "FeedbackReport", label: "Feedback Report", icon: FeedbackIcon,
+                                   onSelect: this.changeViewMode("FeedbackReport") }];
+
+    const customSelectColorTheme = colorTheme === "progress"
+      ? "progressNavigation"
+      : colorTheme === "response" ? "responseNavigation" : "feedbackNavigation";
     return (
-        <CustomSelect
-          items={[{ value: "", label: assignmentName }]}
-          onChange={(() => { })}
-          trackEvent={trackEvent}
-          HeaderIcon={AssignmentIcon}
-          dataCy={"choose-assignment"}
-          isHeader={true}
-          disableDropdown={true}
-        />
+      <CustomSelect
+        items={items}
+        trackEvent={trackEvent}
+        dataCy={"navigation-select"}
+        width={212}
+        value={viewMode}
+        colorTheme={customSelectColorTheme}
+      />
+    );
+  }
+
+  private renderAssignmentSelect = () => {
+    const { assignmentName, trackEvent, colorTheme } = this.props;
+    const customSelectColorTheme = colorTheme === "progress"
+      ? "progressAssignment"
+      : colorTheme === "response" ? "responseAssignment" : "feedbackAssignment";
+    return (
+      <CustomSelect
+        items={[{ value: "", label: assignmentName }]}
+        trackEvent={trackEvent}
+        HeaderIcon={AssignmentIcon}
+        dataCy={"choose-assignment"}
+        disableDropdown={true}
+        width={280}
+        colorTheme={customSelectColorTheme}
+      />
     );
   }
 }

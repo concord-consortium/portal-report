@@ -7,6 +7,7 @@ import CloseIcon from "../../../img/svg-icons/close-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
 import { HeaderMenuItem } from "./header-menu-item";
+import { ColorTheme } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -18,6 +19,7 @@ interface IState {
 interface IProps {
   setCompact: (value: boolean) => void;
   setShowFeedbackBadges: (value: boolean) => void;
+  colorTheme?: ColorTheme;
 }
 
 export interface MenuItemWithState {
@@ -58,6 +60,7 @@ const items: MenuItemWithIcon[] = [
 ];
 
 export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
+  private divRef = React.createRef<HTMLDivElement>();
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -67,12 +70,22 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
     this.handleMenuClick = this.handleMenuClick.bind(this);
   }
 
+  public componentDidMount() {
+    document.addEventListener("mousedown", this.handleClick, false);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClick, false);
+  }
+
   render() {
+    const { colorTheme } = this.props;
+    const colorClass = colorTheme ? css[colorTheme] : "";
     return (
-      <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick}>
+      <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick} ref={this.divRef}>
         { this.state.showMenuItems
-          ? <CloseIcon className={`${css.icon} ${css.menuIcon}`} />
-          : <MenuIcon className={`${css.icon} ${css.menuIcon}`} />
+          ? <CloseIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} />
+          : <MenuIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} />
         }
         {this.renderMenuItems()}
       </div>
@@ -80,6 +93,8 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   }
 
   private renderMenuItems = () => {
+    const { colorTheme } = this.props;
+    const colorClass = colorTheme ? css[colorTheme] : "";
     const itemsWithState: MenuItemWithState[] = [
       {
         name: "Compact student list",
@@ -100,14 +115,14 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
         <div className={css.topMenu}>
           {itemsWithState && itemsWithState.map((item: MenuItemWithState, i: number) => {
             return (
-              <HeaderMenuItem key={`item ${i}`} menuItem={item} />
+              <HeaderMenuItem key={`item ${i}`} menuItem={item} colorTheme={colorTheme} />
             );
           })}
         </div>
         {items && items.map((item, i) => {
           return (
-            <div key={`item ${i}`} className={css.menuItem} onClick={item.onSelect}  >
-              <item.MenuItemIcon className={css.menuItemIcon} />
+            <div key={`item ${i}`} className={`${css.menuItem} ${colorClass}`} onClick={item.onSelect}>
+              <item.MenuItemIcon className={`${css.menuItemIcon} ${colorClass}`} />
               <div className={css.menuItemName} data-cy={item.dataCy}>{item.name}</div>
             </div>
           );
@@ -118,6 +133,12 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
 
   private handleMenuClick() {
     this.setState({ showMenuItems: !this.state.showMenuItems });
+  }
+
+  private handleClick = (e: MouseEvent) => {
+    if (this.divRef.current && e.target && !this.divRef.current.contains(e.target as Node)) {
+      this.setState({ showMenuItems: false });
+    }
   }
 
 }

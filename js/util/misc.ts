@@ -72,3 +72,9 @@ export function urlStringParam(url: string, name: string): string | null{
     return null;
   }
 }
+
+export type ColorTheme = "progress" | "response" | "feedback" |
+                         "progressNavigation" | "responseNavigation" | "feedbackNavigation" |
+                         "progressAssignment" | "responseAssignment" | "feedbackAssignment";
+
+export type DashboardViewMode = "ProgressDashboard" | "ResponseDetails" | "FeedbackReport";

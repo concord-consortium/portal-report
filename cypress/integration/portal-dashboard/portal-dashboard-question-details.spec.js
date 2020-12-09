@@ -74,7 +74,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=question-overlay]').should("contain", "Question #7");
     });
   });
-  describe('footer elements', () => {
+  describe('header elements', () => {
     it('button should open all student responses popup', () => { //functionality is tested in the all-responses-popup.spec
       cy.get('[data-cy=view-all-student-responses-button]').should('be.visible');
     });
