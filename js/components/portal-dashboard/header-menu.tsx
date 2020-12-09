@@ -7,7 +7,7 @@ import CloseIcon from "../../../img/svg-icons/close-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
 import { HeaderMenuItem } from "./header-menu-item";
-import { ColorThemes, getThemeClass } from "../../util/misc";
+import { ColorTheme } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -19,7 +19,7 @@ interface IState {
 interface IProps {
   setCompact: (value: boolean) => void;
   setShowFeedbackBadges: (value: boolean) => void;
-  colorTheme?: ColorThemes;
+  colorTheme?: ColorTheme;
 }
 
 export interface MenuItemWithState {
@@ -79,11 +79,13 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   }
 
   render() {
+    const { colorTheme } = this.props;
+    const colorClass = colorTheme ? css[colorTheme] : "";
     return (
       <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick} ref={this.divRef}>
         { this.state.showMenuItems
-          ? <CloseIcon className={`${css.icon} ${css.menuIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
-          : <MenuIcon className={`${css.icon} ${css.menuIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
+          ? <CloseIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} />
+          : <MenuIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} />
         }
         {this.renderMenuItems()}
       </div>
@@ -91,6 +93,8 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   }
 
   private renderMenuItems = () => {
+    const { colorTheme } = this.props;
+    const colorClass = colorTheme ? css[colorTheme] : "";
     const itemsWithState: MenuItemWithState[] = [
       {
         name: "Compact student list",
@@ -111,14 +115,14 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
         <div className={css.topMenu}>
           {itemsWithState && itemsWithState.map((item: MenuItemWithState, i: number) => {
             return (
-              <HeaderMenuItem key={`item ${i}`} menuItem={item} colorTheme={this.props.colorTheme} />
+              <HeaderMenuItem key={`item ${i}`} menuItem={item} colorTheme={colorTheme} />
             );
           })}
         </div>
         {items && items.map((item, i) => {
           return (
-            <div key={`item ${i}`} className={`${css.menuItem} ${getThemeClass(css, this.props.colorTheme)}`} onClick={item.onSelect}>
-              <item.MenuItemIcon className={`${css.menuItemIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
+            <div key={`item ${i}`} className={`${css.menuItem} ${colorClass}`} onClick={item.onSelect}>
+              <item.MenuItemIcon className={`${css.menuItemIcon} ${colorClass}`} />
               <div className={css.menuItemName} data-cy={item.dataCy}>{item.name}</div>
             </div>
           );

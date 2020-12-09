@@ -1,7 +1,7 @@
 import React from "react";
 import { MenuItemWithState } from "./header-menu";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
-import { ColorThemes, getThemeClass } from "../../util/misc";
+import { ColorTheme } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -11,7 +11,7 @@ interface IState {
 
 interface IProps {
   menuItem: MenuItemWithState;
-  colorTheme?: ColorThemes;
+  colorTheme?: ColorTheme;
 }
 
 export class HeaderMenuItem extends React.PureComponent<IProps, IState> {
@@ -24,10 +24,12 @@ export class HeaderMenuItem extends React.PureComponent<IProps, IState> {
   }
 
   render() {
+    const { menuItem, colorTheme } = this.props;
+    const colorClass = colorTheme ? css[colorTheme] : "";
     return (
-      <div className={`${css.menuItem} ${getThemeClass(css, this.props.colorTheme)}`} onClick={this.handleSelect} data-cy={this.props.menuItem.dataCy}>
-        <CheckIcon className={`${css.check} ${getThemeClass(css, this.props.colorTheme)} ${this.state.selected ? css.selected : ""}`} />
-        <div className={css.menuItemName}>{this.props.menuItem.name}</div>
+      <div className={`${css.menuItem} ${colorClass}`} onClick={this.handleSelect} data-cy={menuItem.dataCy}>
+        <CheckIcon className={`${css.check} ${colorClass} ${this.state.selected ? css.selected : ""}`} />
+        <div className={css.menuItemName}>{menuItem.name}</div>
       </div>
     );
   }

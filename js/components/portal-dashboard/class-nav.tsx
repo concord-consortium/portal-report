@@ -53,9 +53,12 @@ export class ClassNav extends React.PureComponent<IProps> {
 
   private renderStudentSort = () => {
     const { sortByMethod, trackEvent } = this.props;
-    const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name", onSelect: this.handleStudentSortSelect(SORT_BY_NAME) },
-                                 { value: SORT_BY_MOST_PROGRESS, label: "Most Progress", onSelect: this.handleStudentSortSelect(SORT_BY_MOST_PROGRESS) },
-                                 { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress", onSelect: this.handleStudentSortSelect(SORT_BY_LEAST_PROGRESS) }];
+    const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name",
+                                   onSelect: this.handleStudentSortSelect(SORT_BY_NAME) },
+                                 { value: SORT_BY_MOST_PROGRESS, label: "Most Progress",
+                                   onSelect: this.handleStudentSortSelect(SORT_BY_MOST_PROGRESS) },
+                                 { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress",
+                                   onSelect: this.handleStudentSortSelect(SORT_BY_LEAST_PROGRESS) }];
     return (
       <div className={css.studentSort}>
         <CustomSelect

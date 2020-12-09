@@ -73,49 +73,8 @@ export function urlStringParam(url: string, name: string): string | null{
   }
 }
 
-export enum ColorThemes {
-  Progress = 0,
-  Response = 1,
-  Feedback = 2,
-  ProgressNavigation = 3,
-  ResponseNavigation = 4,
-  FeedbackNavigation = 5,
-  ProgressAssignment = 6,
-  ResponseAssignment = 7,
-  FeedbackAssignment = 8,
-}
-
-export const getThemeClass = (css: any, colorTheme: ColorThemes | undefined) => {
-  if (colorTheme === ColorThemes.Progress) {
-    return css.progress;
-  }
-  else if (colorTheme === ColorThemes.Response) {
-    return css.response;
-  }
-  else if (colorTheme === ColorThemes.Feedback) {
-    return css.feedback;
-  }
-  else if (colorTheme === ColorThemes.ProgressNavigation) {
-    return css.progressNavigation;
-  }
-  else if (colorTheme === ColorThemes.ResponseNavigation) {
-    return css.responseNavigation;
-  }
-  else if (colorTheme === ColorThemes.FeedbackNavigation) {
-    return css.feedbackNavigation;
-  }
-  else if (colorTheme === ColorThemes.ProgressAssignment) {
-    return css.progressAssignment;
-  }
-  else if (colorTheme === ColorThemes.ResponseAssignment) {
-    return css.responseAssignment;
-  }
-  else if (colorTheme === ColorThemes.FeedbackAssignment) {
-    return css.feedbackAssignment;
-  }
-  else {
-    return "";
-  }
-};
+export type ColorTheme = "progress" | "response" | "feedback" |
+                         "progressNavigation" | "responseNavigation" | "feedbackNavigation" |
+                         "progressAssignment" | "responseAssignment" | "feedbackAssignment";
 
 export type DashboardViewMode = "ProgressDashboard" | "ResponseDetails" | "FeedbackReport";

@@ -20,7 +20,7 @@ import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { ColorThemes, DashboardViewMode } from "../../util/misc";
+import { DashboardViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -118,9 +118,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             setShowFeedbackBadges={setShowFeedbackBadges}
             assignmentName={assignmentName}
             trackEvent={trackEvent}
-            handleChangeViewMode={this.setDashboardViewMode}
+            setDashboardViewMode={this.setDashboardViewMode}
             viewMode={viewMode}
-            colorTheme={ColorThemes.Progress}
+            colorTheme={"progress"}
           />
         }
         {activityTrees &&
@@ -172,7 +172,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               currentActivity={currentActivity}
               currentQuestion={currentQuestion}
               currentStudentId={currentStudentId}
-              handleShowAllResponsesPopup={this.setDashboardViewMode}
+              setDashboardViewMode={this.setDashboardViewMode}
               isAnonymous={isAnonymous}
               questions={questions}
               setCurrentActivity={setCurrentActivity}
@@ -207,7 +207,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                     setCompact={setCompactReport}
                     setShowFeedbackBadges={setShowFeedbackBadges}
                     assignmentName={assignmentName}
-                    handleShowAllResponsesPopup={this.setDashboardViewMode}
+                    setDashboardViewMode={this.setDashboardViewMode}
                     viewMode={viewMode}
                   />
                 </CSSTransition>

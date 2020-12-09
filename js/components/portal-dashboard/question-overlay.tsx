@@ -13,7 +13,7 @@ interface IProps {
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   currentStudentId: string | null;
-  handleShowAllResponsesPopup: (mode: DashboardViewMode) => void;
+  setDashboardViewMode: (mode: DashboardViewMode) => void;
   isAnonymous: boolean;
   questions?: Map<string, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -85,6 +85,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private handleShowAllResponsesButtonClick = () => {
-    this.props.handleShowAllResponsesPopup("ResponseDetails");
+    this.props.setDashboardViewMode("ResponseDetails");
   }
 }
