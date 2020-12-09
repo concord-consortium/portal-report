@@ -1,7 +1,7 @@
 import React from "react";
 import { AnonymizeStudents } from "../anonymize-students";
 import { CustomSelect, SelectItem } from "../custom-select";
-import { NumberOfStudentsContainer } from "../num-students-container";
+import { CountContainer } from "../count-container";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../../actions/dashboard";
 import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
 import StudentViewIcon from "../../../../img/svg-icons/student-view-icon.svg";
@@ -41,10 +41,11 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
         {this.renderViewListOptions()}
         <div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
-          {inQuestionMode
-            ? <div>Question: {questionCount}</div>
-            : <NumberOfStudentsContainer studentCount={studentCount} />
-          }
+          <CountContainer
+            numItems={inQuestionMode ? questionCount : studentCount}
+            containerLabel={inQuestionMode ? "Questions: " : "Class: "}
+            containerLabelType={!inQuestionMode ? "students" : undefined}
+          />
           {inQuestionMode ? this.renderQuestionFilter() : this.renderStudentFilter()}
           {!inQuestionMode && this.renderSpotlightToggle()}
         </div>
@@ -58,9 +59,18 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   }
 
   private renderQuestionFilter = () => {
-    // TODO: use a custom select here
+    const { trackEvent } = this.props;
     return (
-      <div>Question Sort Dropdown</div>
+      <div className={cssClassNav.itemSort}>
+        <CustomSelect
+          items={[{ value: "", label: "All Questions" }]}
+          trackEvent={trackEvent}
+          HeaderIcon={SortIcon}
+          dataCy={"sort-questions"}
+          disableDropdown={true}
+          key={"question-sort"}
+        />
+      </div>
     );
   }
 
@@ -73,13 +83,14 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
                                    onSelect: this.handleStudentSortSelect(SORT_BY_LEAST_PROGRESS) }];
     const { sortByMethod, trackEvent } = this.props;
     return (
-      <div className={cssClassNav.studentSort}>
+      <div className={cssClassNav.itemSort}>
         <CustomSelect
           dataCy={"sort-students"}
           HeaderIcon={SortIcon}
           items={items}
           trackEvent={trackEvent}
           value={sortByMethod}
+          key={"student-sort"}
         />
       </div>
     );
@@ -88,15 +99,12 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   private renderViewListOptions() {
     const { inQuestionMode } = this.state;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${!inQuestionMode ? css.selected : ""}`;
-    // const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${css.disabled}`;
-    // For MVP: Added string above to disable button. Uncomment string below when this feature is re-implemented
     const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${inQuestionMode ? css.selected : ""}`;
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
         <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.setQuestionMode(false)}>
           <StudentViewIcon className={css.optionIcon} />
         </div>
-        {/* For MVP: hard-coded question mode to false so it is never selected. Set to true when selection is implemented */}
         <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(true)}>
           <QuestionViewIcon className={css.optionIcon} />
         </div>

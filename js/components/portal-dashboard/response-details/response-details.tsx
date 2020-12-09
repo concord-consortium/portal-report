@@ -63,7 +63,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           <PopupClassNav
             anonymous={anonymous}
             isSpotlightOn={selectedStudents.length > 0}
-            questionCount={questions ? questions.count() : 0}
+            questionCount={questions ? questions.count() : 0} /*  TODO: get question count for activity, not ALL questions */
             studentCount={studentCount}
             setAnonymous={setAnonymous}
             setStudentSort={setStudentFilter}
