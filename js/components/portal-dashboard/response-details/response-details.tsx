@@ -56,12 +56,14 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
     const firstActivity = activities.first();
     const firstQuestion = questions?.first();
+
     return (
       <>
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}
             isSpotlightOn={selectedStudents.length > 0}
+            questionCount={questions ? questions.count() : 0} /*  TODO: get question count for activity, not ALL questions */
             studentCount={studentCount}
             setAnonymous={setAnonymous}
             setStudentSort={setStudentFilter}
