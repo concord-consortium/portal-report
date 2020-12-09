@@ -57,13 +57,22 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const firstActivity = activities.first();
     const firstQuestion = questions?.first();
 
+    const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
+    let qCount = 0;
+    activities.toArray().forEach((activity: Map<any, any>) => {
+      if (activityId === activity.get("id")) {
+        const questions = activity.get("questions");
+        qCount = questions.count();
+      }
+    });
+
     return (
       <>
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}
             isSpotlightOn={selectedStudents.length > 0}
-            questionCount={questions ? questions.count() : 0} /*  TODO: get question count for activity, not ALL questions */
+            questionCount={qCount}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
             setStudentSort={setStudentFilter}
