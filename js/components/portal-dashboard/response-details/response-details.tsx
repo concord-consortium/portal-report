@@ -1,15 +1,13 @@
 import React from "react";
 import { Map } from "immutable";
-import { Header } from "../../portal-dashboard/header";
 import { PopupClassNav } from "./popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
 import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { DashboardViewMode } from "../../../util/misc";
 
-import css from "../../../../css/portal-dashboard/all-responses-popup/student-responses-popup.less";
+import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
 export interface SelectedStudent {
   id: string;
@@ -34,19 +32,13 @@ interface IProps {
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  userName: string;
-  assignmentName: string;
-  setCompact: (value: boolean) => void;
-  setShowFeedbackBadges: (value: boolean) => void;
-  setDashboardViewMode: (mode: DashboardViewMode) => void;
-  viewMode: DashboardViewMode;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
   showSpotlightDialog: boolean;
   showSpotlightListDialog: boolean;
 }
-export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
+export class ResponseDetails extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -58,24 +50,14 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
   render() {
     const { activities, anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, questions,
       setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
-      trackEvent, userName, setCompact, setShowFeedbackBadges, assignmentName, setDashboardViewMode, viewMode } = this.props;
+      trackEvent } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     // TODO: FEEDBACK
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
     const firstActivity = activities.first();
     const firstQuestion = questions?.first();
     return (
-      <div className={css.popup} data-cy="all-responses-popup-view">
-        <Header
-          userName={userName}
-          setCompact={setCompact}
-          setShowFeedbackBadges={setShowFeedbackBadges}
-          assignmentName={assignmentName}
-          trackEvent={trackEvent}
-          setDashboardViewMode={setDashboardViewMode}
-          viewMode={viewMode}
-          colorTheme={viewMode === "ResponseDetails" ? "response" : "feedback"}
-        />
+      <>
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}
@@ -130,7 +112,7 @@ export class StudentResponsePopup extends React.PureComponent<IProps, IState> {
             onCloseDialog={this.setShowSpotlightDialog}
           />
         }
-      </div>
+      </>
     );
   }
 

@@ -18,9 +18,9 @@ import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStude
          toggleCurrentActivity, toggleCurrentQuestion, setCompactReport, setShowFeedbackBadges } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
-import { StudentResponsePopup } from "../../components/portal-dashboard/all-responses-popup/student-responses-popup";
+import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { DashboardViewMode } from "../../util/misc";
+import { ColorTheme, DashboardViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -94,9 +94,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   render() {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
-      sequenceTree, setAnonymous, setCompactReport, setShowFeedbackBadges, setStudentSort, studentProgress, students, sortedQuestionIds,
-      questions, expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
-      toggleCurrentQuestion, trackEvent, userName, hasTeacherEdition, questionFeedbacks, showFeedbackBadges } = this.props;
+      sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
+      setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
+      trackEvent, hasTeacherEdition, questionFeedbacks, showFeedbackBadges } = this.props;
     const { initialLoading, viewMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -111,18 +111,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     }
     return (
       <div className={css.portalDashboardApp}>
-        {sequenceTree &&
-          <Header
-            userName={userName}
-            setCompact={setCompactReport}
-            setShowFeedbackBadges={setShowFeedbackBadges}
-            assignmentName={assignmentName}
-            trackEvent={trackEvent}
-            setDashboardViewMode={this.setDashboardViewMode}
-            viewMode={viewMode}
-            colorTheme={"progress"}
-          />
-        }
+        {sequenceTree && this.renderHeader(assignmentName, "progress")}
         {activityTrees &&
           <div>
             <div className={css.navigation}>
@@ -184,32 +173,29 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
             />
             <TransitionGroup component={null}>
               {viewMode !== "ProgressDashboard" &&
-                <CSSTransition classNames={"popup"} timeout={500}>
-                  <StudentResponsePopup
-                    activities={activityTrees}
-                    anonymous={anonymous}
-                    answers={answers}
-                    currentActivity={currentActivity}
-                    currentQuestion={currentQuestion}
-                    hasTeacherEdition={hasTeacherEdition}
-                    isAnonymous={isAnonymous}
-                    questions={questions}
-                    setAnonymous={setAnonymous}
-                    setCurrentActivity={setCurrentActivity}
-                    setStudentFilter={setStudentSort}
-                    sortByMethod={sortByMethod}
-                    sortedQuestionIds={sortedQuestionIds}
-                    studentCount={students.size}
-                    students={students}
-                    toggleCurrentQuestion={toggleCurrentQuestion}
-                    trackEvent={trackEvent}
-                    userName={userName}
-                    setCompact={setCompactReport}
-                    setShowFeedbackBadges={setShowFeedbackBadges}
-                    assignmentName={assignmentName}
-                    setDashboardViewMode={this.setDashboardViewMode}
-                    viewMode={viewMode}
-                  />
+                <CSSTransition classNames={"responseDetails"} timeout={500}>
+                  <div className={css.responseDetails} data-cy="response-details-container">
+                    {this.renderHeader(assignmentName, viewMode === "ResponseDetails" ? "response" : "feedback")}
+                    <ResponseDetails
+                      activities={activityTrees}
+                      anonymous={anonymous}
+                      answers={answers}
+                      currentActivity={currentActivity}
+                      currentQuestion={currentQuestion}
+                      hasTeacherEdition={hasTeacherEdition}
+                      isAnonymous={isAnonymous}
+                      questions={questions}
+                      setAnonymous={setAnonymous}
+                      setCurrentActivity={setCurrentActivity}
+                      setStudentFilter={setStudentSort}
+                      sortByMethod={sortByMethod}
+                      sortedQuestionIds={sortedQuestionIds}
+                      studentCount={students.size}
+                      students={students}
+                      toggleCurrentQuestion={toggleCurrentQuestion}
+                      trackEvent={trackEvent}
+                    />
+                  </div>
                 </CSSTransition>
               }
             </TransitionGroup>
@@ -218,6 +204,23 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
         {error && <DataFetchError error={error} />}
         {initialLoading && <LoadingIcon />}
       </div>
+    );
+  }
+
+  private renderHeader = (assignmentName: any, color: ColorTheme) => {
+    const { userName, setCompactReport, setShowFeedbackBadges, trackEvent } = this.props;
+    const { viewMode} = this.state;
+    return (
+      <Header
+        userName={userName}
+        setCompact={setCompactReport}
+        setShowFeedbackBadges={setShowFeedbackBadges}
+        assignmentName={assignmentName}
+        trackEvent={trackEvent}
+        setDashboardViewMode={this.setDashboardViewMode}
+        viewMode={viewMode}
+        colorTheme={color}
+      />
     );
   }
 
