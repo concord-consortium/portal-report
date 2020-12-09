@@ -15,6 +15,7 @@ interface IProps {
   anonymous: boolean;
   isSpotlightOn: boolean;
   onShowDialog: (show: boolean) => void;
+  questionCount: number;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   sortByMethod: string;
@@ -33,16 +34,19 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   }
 
   render() {
-    const { anonymous, studentCount, setAnonymous } = this.props;
-
+    const { anonymous, questionCount, studentCount, setAnonymous } = this.props;
+    const { inQuestionMode } = this.state;
     return (
       <div className={`${css.popupClassNav} ${css.column}`}>
         {this.renderViewListOptions()}
         <div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
-          <NumberOfStudentsContainer studentCount={studentCount} />
-          {this.renderStudentFilter()}
-          {this.renderSpotlightToggle()}
+          {inQuestionMode
+            ? <div>Question: {questionCount}</div>
+            : <NumberOfStudentsContainer studentCount={studentCount} />
+          }
+          {inQuestionMode ? this.renderQuestionFilter() : this.renderStudentFilter()}
+          {!inQuestionMode && this.renderSpotlightToggle()}
         </div>
       </div>
     );
@@ -51,6 +55,13 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   private handleStudentSortSelect = (value: string) => () => {
     const { setStudentSort } = this.props;
     setStudentSort(value);
+  }
+
+  private renderQuestionFilter = () => {
+    // TODO: use a custom select here
+    return (
+      <div>Question Sort Dropdown</div>
+    );
   }
 
   private renderStudentFilter = () => {
@@ -77,16 +88,16 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   private renderViewListOptions() {
     const { inQuestionMode } = this.state;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${!inQuestionMode ? css.selected : ""}`;
-    const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${css.disabled}`;
+    // const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${css.disabled}`;
     // For MVP: Added string above to disable button. Uncomment string below when this feature is re-implemented
-    // const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${!inQuestionMode ? css.selected : ""}`;
+    const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${inQuestionMode ? css.selected : ""}`;
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
         <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.setQuestionMode(false)}>
           <StudentViewIcon className={css.optionIcon} />
         </div>
         {/* For MVP: hard-coded question mode to false so it is never selected. Set to true when selection is implemented */}
-        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(false)}>
+        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(true)}>
           <QuestionViewIcon className={css.optionIcon} />
         </div>
       </div>
