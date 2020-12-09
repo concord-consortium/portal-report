@@ -84,17 +84,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     );
   }
 
-  private renderFooter = () => {
-    return (
-      <div className={css.footer}>
-        <div className={css.openPopupButton} data-cy="view-all-student-responses-button" onClick={this.handleShowAllResponsesButtonClick}>
-          <GroupIcon className={css.icon} />
-          <span>View All Student Responses</span>
-        </div>
-      </div>
-    );
-  }
-
   private handleShowAllResponsesButtonClick = () => {
     this.props.handleShowAllResponsesPopup("ResponseDetails");
   }
