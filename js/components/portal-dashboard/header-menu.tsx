@@ -60,6 +60,7 @@ const items: MenuItemWithIcon[] = [
 ];
 
 export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
+  private divRef = React.createRef<HTMLDivElement>();
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -69,9 +70,17 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
     this.handleMenuClick = this.handleMenuClick.bind(this);
   }
 
+  public componentDidMount() {
+    document.addEventListener("mousedown", this.handleClick, false);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClick, false);
+  }
+
   render() {
     return (
-      <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick}>
+      <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick} ref={this.divRef}>
         { this.state.showMenuItems
           ? <CloseIcon className={`${css.icon} ${css.menuIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
           : <MenuIcon className={`${css.icon} ${css.menuIcon} ${getThemeClass(css, this.props.colorTheme)}`} />
@@ -120,6 +129,12 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
 
   private handleMenuClick() {
     this.setState({ showMenuItems: !this.state.showMenuItems });
+  }
+
+  private handleClick = (e: MouseEvent) => {
+    if (this.divRef.current && e.target && !this.divRef.current.contains(e.target as Node)) {
+      this.setState({ showMenuItems: false });
+    }
   }
 
 }
