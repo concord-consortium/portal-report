@@ -8,9 +8,9 @@ import striptags from "striptags";
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
-import { SelectedStudent } from "./student-responses-popup";
+import { SelectedStudent } from "./response-details";
 
-import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-student-list-dialog.less";
+import css from "../../../../css/portal-dashboard/response-details/spotlight-student-list-dialog.less";
 
 interface ColorClasses {
   background: string;

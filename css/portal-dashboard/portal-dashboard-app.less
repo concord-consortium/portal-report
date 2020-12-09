@@ -22,4 +22,41 @@
     overflow-y: auto;
     background-color: white;
   }
+
+
+  .responseDetails {
+    position: fixed;
+    bottom: 0;
+    padding: 0;
+    box-sizing: border-box;
+    box-shadow: -1px 1px 4px 0px rgba(0, 0, 0, 0.35);
+    background-color: #ffffff;
+    transition: all 0.5s ease;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global .responseDetails-enter {
+    top: 100%;
+  }
+
+  :global .responseDetails-enter-active {
+    top: 0;
+    transition: all 500ms;
+  }
+
+  :global .responseDetails-exit {
+    top: 0;
+    transform: scale(1);
+  }
+
+  :global .responseDetails-exit-active {
+    top: 100%;
+    transition: all 500ms;
+  }
+
 }

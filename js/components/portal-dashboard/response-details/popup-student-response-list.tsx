@@ -2,9 +2,9 @@ import React from "react";
 import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
-import { SelectedStudent } from "./student-responses-popup";
+import { SelectedStudent } from "./response-details";
 
-import css from "../../../../css/portal-dashboard/all-responses-popup/popup-student-response-list.less";
+import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
 
 interface IProps {
   answers: Map<any, any>;

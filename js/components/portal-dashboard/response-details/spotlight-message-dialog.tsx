@@ -1,7 +1,7 @@
 import React from "react";
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 
-import css from "../../../../css/portal-dashboard/all-responses-popup/spotlight-message-dialog.less";
+import css from "../../../../css/portal-dashboard/response-details/spotlight-message-dialog.less";
 
 interface IProps {
   onCloseDialog: (show: boolean) => void;
