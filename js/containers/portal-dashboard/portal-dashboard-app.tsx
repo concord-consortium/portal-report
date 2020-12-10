@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
-         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getShowFeedbackBadges
+         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges
         } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
@@ -15,7 +15,7 @@ import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree, getAnswersByQuestion } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
 import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent,
-         toggleCurrentActivity, toggleCurrentQuestion, setCompactReport, setShowFeedbackBadges } from "../../actions/dashboard";
+         toggleCurrentActivity, toggleCurrentQuestion, setCompactReport, setHideFeedbackBadges } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
@@ -41,7 +41,7 @@ interface IProps {
   questionFeedbacks: Map<any, any>;
   report: any;
   sequenceTree: Map<any, any>;
-  showFeedbackBadges: boolean;
+  hideFeedbackBadges: boolean;
   sortByMethod: string;
   studentCount: number;
   studentProgress: Map<any, any>;
@@ -51,7 +51,7 @@ interface IProps {
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
   setCompactReport: (value: boolean) => void;
-  setShowFeedbackBadges: (value: boolean) => void;
+  setHideFeedbackBadges: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
@@ -96,7 +96,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
       setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
-      trackEvent, hasTeacherEdition, questionFeedbacks, showFeedbackBadges } = this.props;
+      trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges } = this.props;
     const { initialLoading, viewMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -111,7 +111,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     }
     return (
       <div className={css.portalDashboardApp}>
-        {sequenceTree && this.renderHeader(assignmentName, "progress")}
+        {sequenceTree && this.renderHeader(assignmentName, "ProgressDashboard" )}
         {activityTrees &&
           <div>
             <div className={css.navigation}>
@@ -148,7 +148,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 currentStudentId={currentStudentId}
                 expandedActivities={expandedActivities}
                 isCompact={compactReport}
-                showFeedbackBadges={showFeedbackBadges}
+                hideFeedbackBadges={hideFeedbackBadges}
                 questionFeedbacks={questionFeedbacks}
                 setCurrentActivity={setCurrentActivity}
                 setCurrentQuestion={setCurrentQuestion}
@@ -175,7 +175,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               {viewMode !== "ProgressDashboard" &&
                 <CSSTransition classNames={"responseDetails"} timeout={500}>
                   <div className={css.responseDetails} data-cy="response-details-container">
-                    {this.renderHeader(assignmentName, viewMode === "ResponseDetails" ? "response" : "feedback")}
+                    {this.renderHeader(assignmentName, viewMode)}
                     <ResponseDetails
                       activities={activityTrees}
                       anonymous={anonymous}
@@ -207,14 +207,17 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private renderHeader = (assignmentName: any, color: ColorTheme) => {
-    const { userName, setCompactReport, setShowFeedbackBadges, trackEvent } = this.props;
+  private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode) => {
+    const { userName, setCompactReport, setHideFeedbackBadges, trackEvent } = this.props;
     const { viewMode} = this.state;
+    const color: ColorTheme = headerViewMode === "ProgressDashboard"
+      ? "progress"
+      : headerViewMode === "ResponseDetails" ? "response" : "feedback";
     return (
       <Header
         userName={userName}
-        setCompact={setCompactReport}
-        setShowFeedbackBadges={setShowFeedbackBadges}
+        setCompact={headerViewMode === "ProgressDashboard" ? setCompactReport : undefined}
+        setHideFeedbackBadges={headerViewMode === "ProgressDashboard" ? setHideFeedbackBadges : undefined}
         assignmentName={assignmentName}
         trackEvent={trackEvent}
         setDashboardViewMode={this.setDashboardViewMode}
@@ -274,7 +277,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     questions,
     report: dataDownloaded && reportState,
     sequenceTree: dataDownloaded && getSequenceTree(state),
-    showFeedbackBadges: getShowFeedbackBadges(state),
+    hideFeedbackBadges: getHideFeedbackBadges(state),
     sortByMethod: getDashboardSortBy(state),
     sortedQuestionIds,
     students: dataDownloaded && getSortedStudents(state),
@@ -288,7 +291,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
-    setShowFeedbackBadges: (value: boolean) => dispatch(setShowFeedbackBadges(value)),
+    setHideFeedbackBadges: (value: boolean) => dispatch(setHideFeedbackBadges(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
     setCurrentStudent: (studentId: string) => dispatch(setCurrentStudent(studentId)),

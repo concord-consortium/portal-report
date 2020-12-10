@@ -15,7 +15,7 @@ const getStudents = state => state.getIn(["report", "students"]);
 export const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
 export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
-export const getShowFeedbackBadges = state => state.getIn(["dashboard", "showFeedbackBadges"]);
+export const getHideFeedbackBadges = state => state.getIn(["dashboard", "hideFeedbackBadges"]);
 
 // When a user selects a to display question details by
 // Clicking on the question column expand icon.

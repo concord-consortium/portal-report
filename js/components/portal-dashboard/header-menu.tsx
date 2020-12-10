@@ -17,8 +17,8 @@ interface IState {
 }
 
 interface IProps {
-  setCompact: (value: boolean) => void;
-  setShowFeedbackBadges: (value: boolean) => void;
+  setCompact?: (value: boolean) => void;
+  setHideFeedbackBadges?: (value: boolean) => void;
   colorTheme?: ColorTheme;
 }
 
@@ -95,29 +95,17 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   private renderMenuItems = () => {
     const { colorTheme } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
-    const itemsWithState: MenuItemWithState[] = [
-      {
-        name: "Compact student list",
-        onSelect: this.props.setCompact,
-        dataCy: "compact-menu-item"
-      },
-      // TODO: FEEDBACK
-      /*
-      {
-        name: "Show feedback badges",
-        onSelect: this.props.setShowFeedbackBadges,
-        dataCy: "feedback-menu-item"
-      },
-      */
-    ];
+    const itemsWithState: MenuItemWithState[] = [];
+    this.props.setCompact && itemsWithState.push(
+      { name: "Compact student list", onSelect: this.props.setCompact, dataCy: "compact-menu-item" });
+    this.props.setHideFeedbackBadges && itemsWithState.push(
+      { name: "Hide feedback badges", onSelect: this.props.setHideFeedbackBadges, dataCy: "feedback-menu-item" });
     return (
       <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list">
         <div className={css.topMenu}>
-          {itemsWithState && itemsWithState.map((item: MenuItemWithState, i: number) => {
-            return (
-              <HeaderMenuItem key={`item ${i}`} menuItem={item} colorTheme={colorTheme} />
-            );
-          })}
+          {itemsWithState && itemsWithState.map((item: MenuItemWithState, i: number) =>
+            <HeaderMenuItem key={`item ${i}`} menuItem={item} colorTheme={colorTheme} />
+          )}
         </div>
         {items && items.map((item, i) => {
           return (
