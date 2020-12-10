@@ -13,7 +13,7 @@ describe("dashboard reducer", () => {
       currentQuestionId: null,
       currentStudentId: null,
       compactReport: false,
-      showFeedbackBadges: false,
+      hideFeedbackBadges: false,
     });
   });
 

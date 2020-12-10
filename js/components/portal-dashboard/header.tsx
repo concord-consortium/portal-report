@@ -14,8 +14,8 @@ import css from "../../../css/portal-dashboard/header.less";
 interface IProps {
   userName: string;
   assignmentName: string;
-  setCompact: (value: boolean) => void;
-  setShowFeedbackBadges: (value: boolean) => void;
+  setCompact?: (value: boolean) => void;
+  setHideFeedbackBadges?: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   setDashboardViewMode: (mode: DashboardViewMode) => void;
   viewMode: DashboardViewMode;
@@ -24,7 +24,7 @@ interface IProps {
 
 export class Header extends React.PureComponent<IProps> {
   render() {
-    const { colorTheme, userName, setCompact, setShowFeedbackBadges } = this.props;
+    const { colorTheme, userName, setCompact, setHideFeedbackBadges } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
     return (
       <div className={`${css.dashboardHeader} ${colorClass}`} data-cy="dashboard-header">
@@ -42,7 +42,7 @@ export class Header extends React.PureComponent<IProps> {
           <AccountOwnerDiv userName={userName} colorTheme={colorTheme} />
           <HeaderMenuContainer
             setCompact={setCompact}
-            setShowFeedbackBadges={setShowFeedbackBadges}
+            setHideFeedbackBadges={setHideFeedbackBadges}
             colorTheme={colorTheme}
           />
         </div>
