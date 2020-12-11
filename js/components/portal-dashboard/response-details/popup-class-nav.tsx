@@ -14,28 +14,20 @@ import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
 interface IProps {
   anonymous: boolean;
   isSpotlightOn: boolean;
+  inQuestionMode: boolean;
   onShowDialog: (show: boolean) => void;
   questionCount: number;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   sortByMethod: string;
   studentCount: number;
+  setListViewMode: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
 }
-interface IState {
-  inQuestionMode: boolean;
-}
-export class PopupClassNav extends React.PureComponent<IProps, IState>{
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      inQuestionMode: false
-    };
-  }
 
+export class PopupClassNav extends React.PureComponent<IProps>{
   render() {
-    const { anonymous, questionCount, studentCount, setAnonymous } = this.props;
-    const { inQuestionMode } = this.state;
+    const { anonymous, inQuestionMode, questionCount, studentCount, setAnonymous } = this.props;
     return (
       <div className={`${css.popupClassNav} ${css.column}`}>
         {this.renderViewListOptions()}
@@ -97,15 +89,15 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
   }
 
   private renderViewListOptions() {
-    const { inQuestionMode } = this.state;
+    const { inQuestionMode, setListViewMode } = this.props;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${!inQuestionMode ? css.selected : ""}`;
     const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${inQuestionMode ? css.selected : ""}`;
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
-        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={this.setQuestionMode(false)}>
+        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={setListViewMode(false)}>
           <StudentViewIcon className={css.optionIcon} />
         </div>
-        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={this.setQuestionMode(true)}>
+        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={setListViewMode(true)}>
           <QuestionViewIcon className={css.optionIcon} />
         </div>
       </div>
@@ -124,10 +116,10 @@ export class PopupClassNav extends React.PureComponent<IProps, IState>{
     );
   }
 
-  private setQuestionMode = (value: boolean) => () => {
-    this.setState({
-      inQuestionMode: value
-    });
-  }
+  // private setListViewMode = (value: boolean) => () => {
+  //   this.setState({
+  //     inQuestionMode: value
+  //   });
+  // }
 
 }
