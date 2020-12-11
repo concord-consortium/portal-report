@@ -13,8 +13,8 @@ export class AccountOwnerDiv extends React.PureComponent <IProps> {
     const { colorTheme, userName } = this.props;
     return (
       <div className={css.accountOwner} data-cy="account-owner">
-        <div className={css.accountOwnerName}>{userName}</div>
         <AccountOwnerIcon className={`${css.icon} ${colorTheme ? css[colorTheme] : ""}`} />
+        <div className={css.accountOwnerName}>{userName}</div>
       </div>
     );
   }
