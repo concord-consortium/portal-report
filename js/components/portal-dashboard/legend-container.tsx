@@ -17,8 +17,8 @@ export const progress: ProgressType[] =
       class: css.inProgress
     },
     {
-      name: "Not yet started",
-      class: css.notYetStarted
+      name: "Not started",
+      class: css.notStarted
     }
   ];
 
