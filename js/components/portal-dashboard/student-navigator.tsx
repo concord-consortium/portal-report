@@ -31,7 +31,11 @@ export const StudentNavigator: React.FC<IProps> = (props) => {
   const studentName = studentSelected? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex)) : "Student Response";
 
   const StudentName: React.FC = () => {
-    return ( <div className={css.title} data-cy='overlay-student-name'>Student: {studentName}</div> );
+    return (
+      <div className={`${css.title} ${inResponseDetail ? "" : css.overlay}`} data-cy='overlay-student-name'>
+        {inResponseDetail && <span className={css.studentLabel}>Student: </span>}{studentName}
+      </div>
+    );
   };
 
   const PrevNextButtons: React.FC = () => {
@@ -56,7 +60,7 @@ export const StudentNavigator: React.FC<IProps> = (props) => {
       <div className={css.responseHeader}>
         {orderedComponents.map(component => component)}
       </div>
-      {inResponseDetail && <div className={css.studentAreaFiller}>Filler</div>}
+      {inResponseDetail && <div className={css.studentAreaFiller}></div>}
     </div>
   );
 };
