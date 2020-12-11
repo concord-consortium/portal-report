@@ -4,6 +4,7 @@ import Answer from "../../containers/portal-dashboard/answer";
 import { StudentNavigator } from "./student-navigator";
 
 import css from "../../../css/portal-dashboard/overlay-student-response.less";
+import { getFormattedStudentName } from "../../util/student-utils";
 
 interface IProps {
   students: any;
@@ -32,12 +33,14 @@ export class StudentResponse extends React.PureComponent<IProps> {
   }
 
   private renderResponseArea = (currentStudentIndex: number) => {
-    const { currentQuestion, students } = this.props;
+    const { currentQuestion, students, isAnonymous } = this.props;
     const studentSelected = currentStudentIndex >= 0;
+    const studentName = studentSelected ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
+                                        : "Student Response";
     return (
       <div className={css.responseArea}>
         { studentSelected
-          ? <Answer question={currentQuestion} student={students.get(currentStudentIndex)} responsive={true}/>
+          ? <Answer question={currentQuestion} student={students.get(currentStudentIndex)} responsive={true} studentName={studentName} />
           : <div className={css.selectMessage}>Select a student’s answer in the dashboard to view their response.</div>
         }
       </div>

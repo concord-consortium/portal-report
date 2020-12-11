@@ -1,99 +1,104 @@
 @import "./variables";
 
-.titleWrapper {
-  flex: 0 0 50px;
-  display: flex;
-  align-items: center;
+.questionArea {
+  background-color: @cc-teal-light6;
   width: 100%;
-  height: 50px;
-  background-color: @cc-teal-light5;
-  user-select: none;
-  text-align: center;
-  border-bottom: 1px solid @cc-teal;
 
-  .nextQuestionButtons {
+  .titleWrapper {
+    flex: 0 0 50px;
     display: flex;
     align-items: center;
-    margin-left: 20px;
+    width: 100%;
+    height: 50px;
+    background-color: @cc-teal-light5;
+    user-select: none;
+    text-align: center;
+    border-bottom: 1px solid @cc-teal;
 
-    .button {
-      width: 32px;
-      height: 32px;
-      border-radius: 3px;
-      box-sizing: border-box;
-      border: solid 1.5px @cc-charcoal-light1;
-      background-color: @cc-teal-light5;
-      cursor: pointer;
+    .nextQuestionButtons {
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
 
-      &:nth-of-type(2) {
-        margin-left: 13px;
-        transform: rotate(180deg);
-      }
-
-      .icon {
+      .button {
         width: 32px;
         height: 32px;
-        margin-top: -2px;
-        margin-left: -2px;
-        fill: @cc-teal;
-      }
+        border-radius: 3px;
+        box-sizing: border-box;
+        border: solid 1.5px @cc-charcoal-light1;
+        background-color: @cc-teal-light5;
+        cursor: pointer;
 
-      &:not(.disabled) {
-        &:hover {
-          background-color: @cc-teal-light3;
+        &:nth-of-type(2) {
+          margin-left: 13px;
+          transform: rotate(180deg);
         }
-        &:active {
-          background-color: @cc-teal;
-          border-color: white;
 
-          .icon {
-            fill: white;
+        .icon {
+          width: 32px;
+          height: 32px;
+          margin-top: -2px;
+          margin-left: -2px;
+          fill: @cc-teal;
+        }
+
+        &:not(.disabled) {
+          &:hover {
+            background-color: @cc-teal-light3;
+          }
+          &:active {
+            background-color: @cc-teal;
+            border-color: white;
+
+            .icon {
+              fill: white;
+            }
           }
         }
-      }
-      &.disabled {
-        cursor: auto;
-        opacity: 0.35;
+        &.disabled {
+          cursor: auto;
+          opacity: 0.35;
+        }
       }
     }
-  }
 
-  .title {
-    width: 78%;
-    font-weight: bold;
-    color: @cc-charcoal;
-  }
-
-  .showHideButton {
-    height: 32px;
-    width: 32px;
-    border-radius: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 20px 0 0;
-    cursor: pointer;
-    &:hover {
-      background-color: @cc-teal-light3;
+    .title {
+      width: 78%;
+      font-weight: bold;
+      color: @cc-charcoal;
     }
-    &:active {
-      background-color: @cc-teal;
+
+    .showHideButton {
+      height: 32px;
+      width: 32px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 20px 0 0;
+      cursor: pointer;
+      &:hover {
+        background-color: @cc-teal-light3;
+      }
+      &:active {
+        background-color: @cc-teal;
+        .arrow {
+          fill: white;
+        }
+      }
       .arrow {
-        fill: white;
-      }
-    }
-    .arrow {
-      height: 24px;
-      width: 24px;
-      fill: @cc-teal;
-      transform: rotate(180deg);
-      transition-property: transform;
-      transition-duration: .25s;
+        height: 24px;
+        width: 24px;
+        fill: @cc-teal;
+        transform: rotate(180deg);
+        transition-property: transform;
+        transition-duration: .25s;
 
-      &.hideQuestion {
-        transform: rotate(0deg);
+        &.hideQuestion {
+          transform: rotate(0deg);
+        }
       }
-    }
 
+    }
   }
 }

@@ -94,10 +94,10 @@ export class PopupClassNav extends React.PureComponent<IProps>{
     const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${inQuestionMode ? css.selected : ""}`;
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
-        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={setListViewMode(false)}>
+        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={() => setListViewMode(false)}>
           <StudentViewIcon className={css.optionIcon} />
         </div>
-        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={setListViewMode(true)}>
+        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={() => setListViewMode(true)}>
           <QuestionViewIcon className={css.optionIcon} />
         </div>
       </div>
@@ -115,11 +115,5 @@ export class PopupClassNav extends React.PureComponent<IProps>{
       </div>
     );
   }
-
-  // private setListViewMode = (value: boolean) => () => {
-  //   this.setState({
-  //     inQuestionMode: value
-  //   });
-  // }
 
 }

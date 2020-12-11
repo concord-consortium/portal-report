@@ -50,7 +50,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       inQuestionMode: false,
       selectedStudents: [],
       showSpotlightDialog: false,
-      showSpotlightListDialog: false,
+      showSpotlightListDialog: false
     };
   }
   render() {
@@ -89,7 +89,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
             setListViewMode={this.setListViewMode}
           />
-          <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
+          <div className={`${css.responsePanel} ${css.column}`} data-cy="response-panel">
             { inQuestionMode ?
               <StudentNavigator students={students}
                                 isAnonymous={isAnonymous}
@@ -183,10 +183,8 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     this.setState({ selectedStudents: updatedSelectedStudents });
   }
 
-  private setListViewMode = (value: boolean) => () => {
-    this.setState({
-      inQuestionMode: value
-    });
+  private setListViewMode = (value: boolean) => {
+    this.setState({ inQuestionMode: value });
   }
 
 }

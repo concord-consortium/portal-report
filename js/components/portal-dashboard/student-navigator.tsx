@@ -15,6 +15,9 @@ interface IProps {
 }
 
 export const StudentNavigator: React.FC<IProps> = (props) => {
+  const { students, isAnonymous, currentStudentIndex, inResponseDetail } = props;
+  const studentSelected = currentStudentIndex >= 0;
+  const studentName = studentSelected? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex)) : "Student Response";
 
   const changeCurrentStudent = (index: number) => () => {
     const { currentStudentId, students } = props;
@@ -25,10 +28,6 @@ export const StudentNavigator: React.FC<IProps> = (props) => {
       props.setCurrentStudent(newId);
     }
   };
-
-  const { students, isAnonymous, currentStudentIndex, inResponseDetail } = props;
-  const studentSelected = currentStudentIndex >= 0;
-  const studentName = studentSelected? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex)) : "Student Response";
 
   const StudentName: React.FC = () => {
     return (
@@ -53,12 +52,13 @@ export const StudentNavigator: React.FC<IProps> = (props) => {
     );
   };
 
-  const orderedComponents = inResponseDetail ? [<PrevNextButtons key={1}/>, <StudentName key={studentName}/>] : [<StudentName key={studentName}/>, <PrevNextButtons key={2}/>];
+  const componentOrder = inResponseDetail ? [<PrevNextButtons key={1}/>, <StudentName key={studentName}/>]
+                                             : [<StudentName key={studentName}/>, <PrevNextButtons key={2}/>];
 
   return (
     <div className={css.studentArea}>
       <div className={css.responseHeader}>
-        {orderedComponents.map(component => component)}
+        {componentOrder.map(component => component)}
       </div>
       {inResponseDetail && <div className={css.studentAreaFiller}></div>}
     </div>
