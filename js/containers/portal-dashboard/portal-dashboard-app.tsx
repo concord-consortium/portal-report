@@ -188,6 +188,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                       questions={questions}
                       setAnonymous={setAnonymous}
                       setCurrentActivity={setCurrentActivity}
+                      setCurrentQuestion={setCurrentQuestion}
                       setCurrentStudent={setCurrentStudent}
                       setStudentFilter={setStudentSort}
                       sortByMethod={sortByMethod}
