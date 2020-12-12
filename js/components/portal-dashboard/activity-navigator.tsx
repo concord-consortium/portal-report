@@ -18,14 +18,14 @@ export class ActivityNavigator extends React.PureComponent<IProps> {
     const currentActivityId = currentActivity? currentActivity.get("id") : activities.first().get("id");
     const currentActivityIndex = activities.toArray().findIndex((a: any) => a.get("id") === currentActivityId);
     return (
-      <div className={css.activityNav}>
+      <div className={css.activityNav} data-cy="activity-navigator">
           <div className={css.navButtons}>
             <div className={`${css.button} ${currentActivityIndex === 0 ? css.disabled : ""}`}
               onClick={this.handleNavigation(currentActivityIndex - 1)} data-cy="activity-navigator-previous-button">
               <ArrowLeftIcon className={css.icon} />
             </div>
             <div className={`${css.button} ${currentActivityIndex === activities.size-1 ? css.disabled : ""}`}
-              onClick={this.handleNavigation(currentActivityIndex + 1)} data-cy="question-navigator-next-button">
+              onClick={this.handleNavigation(currentActivityIndex + 1)} data-cy="activity-navigator-next-button">
               <ArrowLeftIcon className={css.icon} />
             </div>
           </div>
