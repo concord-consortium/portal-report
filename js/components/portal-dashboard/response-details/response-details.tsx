@@ -7,6 +7,7 @@ import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { StudentNavigator } from "../student-navigator";
+import { ActivityNavigator } from "../activity-navigator";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -27,6 +28,7 @@ interface IProps {
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
+  setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
   setStudentFilter: (value: string) => void;
   sortByMethod: string;
@@ -55,7 +57,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
   }
   render() {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous, questions,
-      setAnonymous, setCurrentActivity, setCurrentStudent, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
+      setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
       trackEvent } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, inQuestionMode } = this.state;
     // TODO: FEEDBACK
@@ -66,13 +68,13 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
     let qCount = 0;
+
     activities.toArray().forEach((activity: Map<any, any>) => {
       if (activityId === activity.get("id")) {
         const questions = activity.get("questions");
         qCount = questions.count();
       }
     });
-
     return (
       <>
         <div className={css.tableHeader}>
