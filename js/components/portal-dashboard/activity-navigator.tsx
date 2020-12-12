@@ -41,7 +41,6 @@ export class ActivityNavigator extends React.PureComponent<IProps> {
     const { activities, setCurrentActivity, setCurrentQuestion} = this.props;
     const newActivityId = activities.toArray()[activityIndex].get("id");
     const newQuestionId = (activities.toArray()[activityIndex]).get("questions").first().get("id");
-    console.log(activityIndex, (activities.toArray()[activityIndex]).get("questions").first().get("id"), "in handleNavigation");
     setCurrentActivity(newActivityId);
     setCurrentQuestion(newQuestionId);
   }
