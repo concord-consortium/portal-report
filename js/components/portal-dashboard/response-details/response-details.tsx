@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { PopupClassNav } from "./popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
-import { PopupStudentResponseList } from "./popup-student-response-list";
+import { PopupStudentResponseList } from "./popup-all-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -10,6 +10,7 @@ import { StudentNavigator } from "../student-navigator";
 import { ActivityNavigator } from "../activity-navigator";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
+import { PopupQuestionAnswerList } from "./popup-question-answer-list";
 
 export interface SelectedStudent {
   id: string;
@@ -124,14 +125,17 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             </div>
           </div>
         </div>
-        <PopupStudentResponseList
-          answers={answers}
-          currentQuestion={currentQuestion || firstQuestion}
-          isAnonymous={isAnonymous}
-          onStudentSelect={this.toggleSelectedStudent}
-          selectedStudents={selectedStudents}
-          students={students}
-        />
+        {inQuestionMode ?
+          <PopupQuestionAnswerList questions={questions} currentStudentId={currentStudentId} students={students}/>
+        : <PopupStudentResponseList
+            answers={answers}
+            currentQuestion={currentQuestion || firstQuestion}
+            isAnonymous={isAnonymous}
+            onStudentSelect={this.toggleSelectedStudent}
+            selectedStudents={selectedStudents}
+            students={students}
+          />
+        }
         <TransitionGroup>
           {showSpotlightListDialog &&
             <CSSTransition in={showSpotlightListDialog} classNames={"spotlightListDialog"} timeout={500}>

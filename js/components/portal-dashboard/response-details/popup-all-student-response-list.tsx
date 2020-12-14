@@ -4,7 +4,7 @@ import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import { SelectedStudent } from "./response-details";
 
-import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
+import css from "../../../../css/portal-dashboard/response-details/popup-all-student-response-list.less";
 
 interface IProps {
   answers: Map<any, any>;
