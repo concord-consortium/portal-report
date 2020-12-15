@@ -39,10 +39,13 @@ export class ActivityNavigator extends React.PureComponent<IProps> {
 
   private handleNavigation  = (activityIndex: number) => () =>{
     const { activities, setCurrentActivity, setCurrentQuestion} = this.props;
-    const newActivityId = activities.toArray()[activityIndex].get("id");
-    const newQuestionId = (activities.toArray()[activityIndex]).get("questions").first().get("id");
-    setCurrentActivity(newActivityId);
-    setCurrentQuestion(newQuestionId);
+    const activitiesArray = activities.toArray();
+    if ( activityIndex >= 0 && activityIndex < activitiesArray.length ) {
+      const newActivityId = activitiesArray[activityIndex].get("id");
+      const newQuestionId = activitiesArray[activityIndex].get("questions").first().get("id");
+      setCurrentActivity(newActivityId);
+      setCurrentQuestion(newQuestionId);
+    }
   }
 
 }

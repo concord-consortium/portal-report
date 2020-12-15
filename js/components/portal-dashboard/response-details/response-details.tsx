@@ -94,7 +94,8 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             {sequence &&
-              <ActivityNavigator activities={activities}
+              <ActivityNavigator
+                activities={activities}
                 currentActivity={currentActivity}
                 setCurrentActivity={setCurrentActivity}
                 setCurrentQuestion={setCurrentQuestion}
