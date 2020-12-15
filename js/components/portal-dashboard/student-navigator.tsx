@@ -36,7 +36,7 @@ const StudentName: React.FC<IProps> = (props) => {
                       : "Student Response";
 
   return (
-    <div className={`${css.title} ${nameFirst ? css.leftMrgin : ""}`} data-cy='student-name'>
+    <div className={`${css.title} ${nameFirst ? css.leftMargin : ""}`} data-cy='student-name'>
       {!nameFirst && <span className={css.studentLabel}>Student: </span>}{studentName}
     </div>
   );

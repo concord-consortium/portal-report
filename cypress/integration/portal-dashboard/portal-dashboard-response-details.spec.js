@@ -19,7 +19,7 @@ context("Portal Dashboard Question Details Panel", () => {
     describe('verify by list by toggles switches views', () => {
       it('list by question', () => {
         cy.get('[data-cy=list-by-questions-toggle]').should('be.visible').click();
-        cy.get('[data-cy=response-panel] [data-cy=overlay-student-name]').should('be.visible').and('contain','Student:');
+        cy.get('[data-cy=response-panel] [data-cy=student-name]').should('be.visible').and('contain','Student:');
       });
       it("list by students", () => {
         cy.get('[data-cy=list-by-student-toggle]').should('be.visible').click();
