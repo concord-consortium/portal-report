@@ -6,6 +6,7 @@ import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import FeedbackSettings from "../../../containers/portal-dashboard/feedback-settings";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -32,6 +33,7 @@ interface IProps {
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
+  viewMode: viewMode;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -50,7 +52,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
   render() {
     const { activities, anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, questions,
       setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
-      trackEvent } = this.props;
+      trackEvent, viewMode } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     // TODO: FEEDBACK
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
@@ -91,6 +93,13 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
               hasTeacherEdition={hasTeacherEdition}
             />
           </div>
+          {viewMode === "FeedbackReport" && 
+            <div className={css.feedbackSettings} data-cy="feedbackSettings">
+              <FeedbackSettings
+                activity={currentActivity || firstActivity}
+              />
+            </div>
+          }
         </div>
         <PopupStudentResponseList
           answers={answers}

@@ -60,6 +60,7 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   userName: string;
+  viewMode: DashboardViewMode;
 }
 
 interface IState {
@@ -194,6 +195,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                       students={students}
                       toggleCurrentQuestion={toggleCurrentQuestion}
                       trackEvent={trackEvent}
+                      viewMode={viewMode}
                     />
                   </div>
                 </CSSTransition>
