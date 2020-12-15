@@ -94,7 +94,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 <StudentNavigator
                   students={students}
                   isAnonymous={isAnonymous}
-                  currentStudentIndex={currentStudentIndex>=0? currentStudentIndex : 0}
+                  currentStudentIndex={currentStudentIndex>=0 ? currentStudentIndex : 0}
                   setCurrentStudent={setCurrentStudent}
                   currentStudentId={currentStudentId}
                   nameFirst={false}

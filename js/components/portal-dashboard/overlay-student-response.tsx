@@ -28,7 +28,6 @@ export class StudentResponse extends React.PureComponent<IProps> {
           setCurrentStudent={setCurrentStudent}
           currentStudentId={currentStudentId}
           nameFirst={true}
-          filler={false}
         />
         {this.renderResponseArea(currentStudentIndex)}
       </div>

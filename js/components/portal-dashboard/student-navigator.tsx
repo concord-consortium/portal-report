@@ -12,16 +12,15 @@ interface IProps {
   setCurrentStudent: (studentId: string | null) => void;
   currentStudentId: string | null;
   nameFirst: boolean;
-  filler?: boolean;
 }
 
 export const StudentNavigator: React.FC<IProps> = (props) => {
-  const { nameFirst, filler } = props;
+  const { nameFirst } = props;
   const componentOrder = nameFirst
                         ? [<StudentName key={"student-name"} {...props}/>, <PrevNextButtons key={"prev-next-button"} {...props}/>]
                         : [<PrevNextButtons key={"prev-next-button"} {...props}/>, <StudentName key={"student-name"} {...props}/>];
   return (
-    <div className={`${css.studentNavigator} ${filler? css.filler : ""}`}>
+    <div className={css.studentNavigator}>
       <div className={css.header}>
         {componentOrder.map(component => component)}
       </div>
