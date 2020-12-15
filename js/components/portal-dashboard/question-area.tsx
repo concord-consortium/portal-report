@@ -27,7 +27,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const QuestionIcon = questionType?.icon;
     const activityURL = currentActivity?.get("url");
     return (
-      <div className={`${css.questionArea} ${hideQuestion ? css.hidden : ""}`}>
+      <div className={`${css.questionContentArea} ${hideQuestion ? css.hidden : ""}`}>
         <div className={css.questionTypeHeader}>
           <div className={css.leftTitle}>
             <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />
