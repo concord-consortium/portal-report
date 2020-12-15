@@ -25,7 +25,6 @@ export const StudentNavigator: React.FC<IProps> = (props) => {
       <div className={css.header}>
         {componentOrder.map(component => component)}
       </div>
-      {/* {inResponseDetail && <div className={css.studentAreaFiller}></div>} */}
     </div>
   );
 };

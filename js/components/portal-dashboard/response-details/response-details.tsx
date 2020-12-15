@@ -91,15 +91,14 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             { inQuestionMode ?
-              <StudentNavigator
-                students={students}
-                isAnonymous={isAnonymous}
-                currentStudentIndex={currentStudentIndex>=0? currentStudentIndex : 0}
-                setCurrentStudent={setCurrentStudent}
-                currentStudentId={currentStudentId}
-                nameFirst={false}
-                filler={true}
-              />
+                <StudentNavigator
+                  students={students}
+                  isAnonymous={isAnonymous}
+                  currentStudentIndex={currentStudentIndex>=0? currentStudentIndex : 0}
+                  setCurrentStudent={setCurrentStudent}
+                  currentStudentId={currentStudentId}
+                  nameFirst={false}
+                />
             : <QuestionNavigator
                 currentActivity={currentActivity || firstActivity}
                 currentQuestion={currentQuestion || firstQuestion}
@@ -109,7 +108,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 setCurrentActivity={setCurrentActivity}
                 hasTeacherEdition={hasTeacherEdition}
               />
-  }
+            }
           </div>
         </div>
         <PopupStudentResponseList
