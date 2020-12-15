@@ -21,11 +21,14 @@ export class StudentResponse extends React.PureComponent<IProps> {
 
     return (
       <div className={css.studentResponse} data-cy="overlay-student-response-area">
-        <StudentNavigator students={students}
-                          isAnonymous={isAnonymous}
-                          currentStudentIndex={currentStudentIndex}
-                          setCurrentStudent={setCurrentStudent}
-                          currentStudentId={currentStudentId}
+        <StudentNavigator
+          students={students}
+          isAnonymous={isAnonymous}
+          currentStudentIndex={currentStudentIndex}
+          setCurrentStudent={setCurrentStudent}
+          currentStudentId={currentStudentId}
+          nameFirst={true}
+          filler={false}
         />
         {this.renderResponseArea(currentStudentIndex)}
       </div>
@@ -35,12 +38,17 @@ export class StudentResponse extends React.PureComponent<IProps> {
   private renderResponseArea = (currentStudentIndex: number) => {
     const { currentQuestion, students, isAnonymous } = this.props;
     const studentSelected = currentStudentIndex >= 0;
-    const studentName = studentSelected ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
-                                        : "Student Response";
+    const studentName = studentSelected
+                        ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
+                        : "Student Response";
     return (
       <div className={css.responseArea}>
         { studentSelected
-          ? <Answer question={currentQuestion} student={students.get(currentStudentIndex)} responsive={true} studentName={studentName} />
+          ? <Answer
+              question={currentQuestion}
+              student={students.get(currentStudentIndex)}
+              responsive={true}
+              studentName={studentName} />
           : <div className={css.selectMessage}>Select a student’s answer in the dashboard to view their response.</div>
         }
       </div>

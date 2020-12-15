@@ -89,14 +89,16 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
             setListViewMode={this.setListViewMode}
           />
-          <div className={`${css.responsePanel} ${css.column}`} data-cy="response-panel">
+          <div className={`${css.responsePanel}`} data-cy="response-panel">
             { inQuestionMode ?
-              <StudentNavigator students={students}
-                                isAnonymous={isAnonymous}
-                                currentStudentIndex={currentStudentIndex>=0? currentStudentIndex : 0}
-                                setCurrentStudent={setCurrentStudent}
-                                currentStudentId={currentStudentId}
-                                inResponseDetail={true}
+              <StudentNavigator
+                students={students}
+                isAnonymous={isAnonymous}
+                currentStudentIndex={currentStudentIndex>=0? currentStudentIndex : 0}
+                setCurrentStudent={setCurrentStudent}
+                currentStudentId={currentStudentId}
+                nameFirst={false}
+                filler={true}
               />
             : <QuestionNavigator
                 currentActivity={currentActivity || firstActivity}

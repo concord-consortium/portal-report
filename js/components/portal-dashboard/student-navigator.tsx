@@ -8,35 +8,38 @@ import { getFormattedStudentName } from "../../util/student-utils";
 interface IProps {
   students: any;
   isAnonymous: boolean;
-  currentStudentIndex: any;
+  currentStudentIndex: number;
   setCurrentStudent: (studentId: string | null) => void;
   currentStudentId: string | null;
-  inResponseDetail?: boolean;
-  key?: any;
+  nameFirst: boolean;
+  filler?: boolean;
 }
 
 export const StudentNavigator: React.FC<IProps> = (props) => {
-  const { inResponseDetail } = props;
-  const componentOrder = inResponseDetail ? [<PrevNextButtons key={"prev-next-button"} {...props}/>, <StudentName key={"student-name"} {...props}/>]
-                                          : [<StudentName key={"student-name"} {...props}/>, <PrevNextButtons key={"prev-next-button"} {...props}/>];
+  const { nameFirst, filler } = props;
+  const componentOrder = nameFirst
+                        ? [<StudentName key={"student-name"} {...props}/>, <PrevNextButtons key={"prev-next-button"} {...props}/>]
+                        : [<PrevNextButtons key={"prev-next-button"} {...props}/>, <StudentName key={"student-name"} {...props}/>];
   return (
-    <div className={css.studentArea}>
-      <div className={css.responseHeader}>
+    <div className={`${css.studentNavigator} ${filler? css.filler : ""}`}>
+      <div className={css.header}>
         {componentOrder.map(component => component)}
       </div>
-      {inResponseDetail && <div className={css.studentAreaFiller}></div>}
+      {/* {inResponseDetail && <div className={css.studentAreaFiller}></div>} */}
     </div>
   );
 };
 
 const StudentName: React.FC<IProps> = (props) => {
-  const { students, isAnonymous, currentStudentIndex, inResponseDetail } = props;
+  const { students, isAnonymous, currentStudentIndex, nameFirst } = props;
   const studentSelected = currentStudentIndex >= 0;
-  const studentName = studentSelected? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex)) : "Student Response";
+  const studentName = studentSelected
+                      ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
+                      : "Student Response";
 
   return (
-    <div className={`${css.title} ${inResponseDetail ? "" : css.overlay}`} data-cy='overlay-student-name'>
-      {inResponseDetail && <span className={css.studentLabel}>Student: </span>}{studentName}
+    <div className={`${css.title} ${nameFirst ? css.leftMrgin : ""}`} data-cy='student-name'>
+      {!nameFirst && <span className={css.studentLabel}>Student: </span>}{studentName}
     </div>
   );
 };
