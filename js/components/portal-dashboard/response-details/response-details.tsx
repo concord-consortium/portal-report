@@ -70,7 +70,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
     let qCount = 0;
-    console.log(currentActivity?.get("questions"));
 
     activities.toArray().forEach((activity: Map<any, any>) => {
       if (activityId === activity.get("id")) {
@@ -128,8 +127,8 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
         </div>
         {inQuestionMode ?
           <PopupQuestionAnswerList
+            activities={activities}
             currentActivity={currentActivity || firstActivity}
-            // questions={questions}
             currentStudentId={currentStudentId}
             students={students}/>
         : <PopupStudentResponseList

@@ -16,10 +16,12 @@ context("Portal Dashboard Question Details Panel", () => {
       it('list by question', () => {
         cy.get('[data-cy=list-by-questions-toggle]').should('be.visible').click();
         cy.get('[data-cy=response-panel] [data-cy=student-name]').should('be.visible').and('contain','Student:');
+        cy.get('[data-cy=popup-response-table] [data-cy=question-wrapper').first().should("contain","Q1");
       });
       it("list by students", () => {
         cy.get('[data-cy=list-by-student-toggle]').should('be.visible').click();
         cy.get('[data-cy=response-panel] [data-cy=question-overlay-title]').should('be.visible').and('contain','Question #');
+        cy.get('[data-cy=popup-response-table] [data-cy=student-name').first().should("contain","Armstrong, Jenna");
       });
     });
   });
