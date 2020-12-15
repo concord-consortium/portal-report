@@ -65,6 +65,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const firstActivity = activities.first();
     const firstQuestion = questions?.first();
     const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
+    const sequence = activities.size > 1;
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
     let qCount = 0;
@@ -92,6 +93,14 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             setListViewMode={this.setListViewMode}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
+            {sequence &&
+              <ActivityNavigator activities={activities}
+                currentActivity={currentActivity}
+                setCurrentActivity={setCurrentActivity}
+                setCurrentQuestion={setCurrentQuestion}
+              />
+            }
+            <div className={`${css.contentNavigatorArea} ${sequence? css.short : ""}`}>
             { inQuestionMode ?
                 <StudentNavigator
                   students={students}
@@ -111,6 +120,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 hasTeacherEdition={hasTeacherEdition}
               />
             }
+            </div>
           </div>
         </div>
         <PopupStudentResponseList
