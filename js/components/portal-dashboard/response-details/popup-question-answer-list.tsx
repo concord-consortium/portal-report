@@ -16,20 +16,16 @@ export class PopupQuestionAnswerList extends React.PureComponent<IProps> {
   render() {
     const { activities, currentStudentId, students, currentActivity } = this.props;
     const currentActivityId = currentActivity?.get("id");
-    const student = currentStudentId
-      ? students.toArray().find((s: any) => s.get("id") === currentStudentId)
-      : students.toArray()[0];
-    const activity = currentActivityId
-      ? activities.toArray().find((a: any) => a.get("id") === currentActivityId)
-      : activities.toArray()[0];
-    const questions = activity.get("questions");
+    const student = currentStudentId ? students.toArray().find((s: any) => s.get("id") === currentStudentId)
+                                     : students.toArray()[0];
+    const activity = currentActivityId ? activities.toArray().find((a: any) => a.get("id") === currentActivityId)
+                                       : activities.toArray()[0];
 
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
-          {questions.map((question: Map<any, any>, i: number) => {
-            const prompt = question?.get("prompt");
+          {activity.get("questions").map((question: Map<any, any>, i: number) => {
             const blankRegEx = /\[([^)]+)\]/g;
-            const promptText = prompt?.replace(blankRegEx, '__________');
+            const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
             return (
               <div className={css.questionRow} key={`question ${i}`} data-cy="question-row">
                 <div className={css.questionWrapper} data-cy="question-wrapper">
