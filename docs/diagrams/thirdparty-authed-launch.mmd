@@ -1,0 +1,15 @@
+sequenceDiagram
+  participant AP as ActivityPlayer
+  participant Report as Portal Report
+  participant PortalW as Portal Web Pages
+  participant PortalS as Portal Server
+
+  AP->>Report: click report button
+  Report->>Report: save url params to sessionStorage<br/>with random key
+  Report->>PortalW: redirect to auth with params:<br/>state: random key
+  PortalW->>PortalW: redirect to login
+  PortalW->>Report: redirect with params:<br/>access_token, state
+  Report->>Report: load url params from sessionStorage<br/>using state as key<br/>update the browser url
+  Report->>PortalS: Request offering info with:<br/>access_token
+  Report->>PortalS: Request class info with:<br/>access_token
+  Report->>PortalS: Request FirebaseJWT with:<br/>access_token
