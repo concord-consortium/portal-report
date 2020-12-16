@@ -1,0 +1,87 @@
+@import "../variables";
+
+.feedbackInfo {
+  background: @feedback-green-light5;
+
+  .titleWrapper {
+    align-items: center;
+    background: @feedback-green-light4;
+    border-bottom: solid 1px @feedback-green;
+    display: flex;
+    flex: 0 0 50px;
+    height: 50px;
+    text-align: center;
+    user-select: none;
+    width: 100%;
+  
+    .title {
+      margin: 15px 10px 16px 24px;
+    }
+  
+    .viewToggle {
+  
+      button {
+        background-color: @feedback-green-light4;
+        border: solid 1px @feedback-green;
+        cursor: pointer;
+        font-size: 100%;
+
+        &:hover {
+          background-color: @feedback-green-light3;
+        }
+        &:before {
+          background-color: @feedback-green
+        }
+        &.active {
+          background-color: @feedback-green;
+          color: #fff;
+
+          &:hover {
+            background-color: @feedback-green;
+          }
+          &:before {
+            background-color: #fff;
+          }
+        }
+  
+        &.viewToggle__button__activity {
+          border: solid 1px @feedback-green;
+          border-radius: 15px 0 0 15px;
+          margin-right: 5px;
+          padding: 6px 10px 6px 34px;
+          position: relative;
+  
+          &:before {
+            content: "";
+            display: block;
+            height: 24px;
+            left: 10px;
+            -webkit-mask-image: url("../../../img/svg-icons/activity-view-icon-2.svg");
+            mask-image: url("../../../img/svg-icons/activity-view-icon-2.svg");
+            position: absolute;
+            top: 2px;
+            width: 24px;
+          }
+        }
+        &.viewToggle__button__question {
+          border: solid 1px #fff;
+          border-radius: 0 15px 15px 0;
+          padding: 6px 34px 6px 10px;
+          position: relative;
+  
+          &:before {
+            content: "";
+            display: block;
+            height: 24px;
+            -webkit-mask-image: url("../../../img/svg-icons/question-view-icon.svg");
+            mask-image: url("../../../img/svg-icons/question-view-icon.svg");
+            position: absolute;
+            right: 10px;
+            top: 2px;
+            width: 24px;
+          }
+        }
+      }
+    }
+  }
+}

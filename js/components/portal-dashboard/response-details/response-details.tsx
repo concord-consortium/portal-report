@@ -6,7 +6,7 @@ import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import FeedbackSettings from "../../../containers/portal-dashboard/feedback-settings";
+import FeedbackInfo from "../../../containers/portal-dashboard/feedback-info";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -94,9 +94,10 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             />
           </div>
           {viewMode === "FeedbackReport" && 
-            <div className={css.feedbackSettings} data-cy="feedbackSettings">
-              <FeedbackSettings
-                activity={currentActivity || firstActivity}
+            <div className={css.feedbackInfo} data-cy="feedbackInfo">
+              <FeedbackInfo
+                activity={currentActivity || firstActivity} 
+                feedbackLevel={"Question"}
               />
             </div>
           }

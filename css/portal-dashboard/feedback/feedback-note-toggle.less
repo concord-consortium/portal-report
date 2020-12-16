@@ -1,0 +1,37 @@
+@import "../variables";
+
+.feedbackNoteToggle {
+  align-items: center;
+  display: flex;
+  flex-flow: row;
+  font-weight: normal;
+  margin: 10px 20px;
+
+  .feedbackNoteToggle__button {
+    border: solid 1px #979797;
+    border-radius: 3px;
+    cursor: pointer;
+    height: 24px;
+    margin: 0 8px 0 0;
+    padding: 14px;
+    position: relative;
+    width: 24px;
+
+    &:hover {
+      background-color: @feedback-green-light3;
+    }
+
+    &:before {
+      background-color: @feedback-green;
+      content: "";
+      display: block;
+      height: 24px;
+      left: 2px;
+      -webkit-mask-image: url("../../../img/svg-icons/sticky-note-icon.svg");
+      mask-image: url("../../../img/svg-icons/sticky-note-icon.svg");
+      position: absolute;
+      top: 2px;
+      width: 24px;
+    }
+  }
+}

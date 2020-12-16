@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
-import { FeedbackControls } from "../../components/portal-dashboard/feedback-controls";
+import { FeedbackInfo } from "../../components/portal-dashboard/feedback-info";
 import { FeedbackRows } from "../../components/portal-dashboard/feedback-rows";
 
 interface IProps {
