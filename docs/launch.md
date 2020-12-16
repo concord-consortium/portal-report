@@ -24,6 +24,20 @@ The portal report can run in multiple different modes depending on which URL par
 
 ![Thirdparty authed launch](diagrams/thirdparty-authed-launch.mmd.svg)
 
+In this diagram the Activity Player could be substituted for another third party site. For example we plan to use this kind of launch from spreadsheets generated for researchers.
+
+1. Params passed by third party to the portal-report
+    - **class** URL to portal class api to get info about the class
+    - **classOfferings** URL to portal offering api using a class_id filter **TODO** why do we have this???
+    - **firebase-app** firebase app name in the portal. It defaults to "report-service". You might set this to work ith the development firestore database with "report-service-dev"
+    - **offering** URL used to request info from the portal about this assignment in the portal
+    - **activityUrl** URL to the authored activity typically this would be something like
+    `https://authoring.concord.org/activities/1234`
+    - **reportType** always set to `offering`
+    - **studentId** user id of the student this report is being opened for
+    - **tool-id** URI for tool that stored the resource structure in the report service. For the activity player this will often be `https://authoring.concord.org`
+    - **auth-domain** URL for the authentication domain, usually the portal so it would usually be `https://learn.concord.org`
+
 ### Using data
 
 Data is fetched using `api.js`.
@@ -77,7 +91,7 @@ Parameters for showing data stored anonymously in the report service
 * `answerSource={string}`: identifier used to construct the path to the answers in the report service. In the case of
                     the activity player the answerSource is activity-player.concord.org.
 
-Parameters for 3rd party launching (still in an un-merged branch)
+Parameters for 3rd party launching
 
 * `auth-domain={url}`: root URL for the portal which can authenticate the current user. This parameter can be
                     used instead of the `token` param. The portal report will do an OAuth2 request to the auth-domain
