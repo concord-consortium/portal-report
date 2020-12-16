@@ -26,6 +26,8 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const activityURL = currentActivity?.get("url");
+    const page = (currentQuestion?.get("page").split("_"))[1];
+
     return (
       <div className={`${css.questionContentArea} ${hideQuestion ? css.hidden : ""}`}>
         <div className={css.questionTypeHeader}>
@@ -36,11 +38,11 @@ export class QuestionArea extends React.PureComponent<IProps>{
             </span>
           </div>
           <div className={css.rightIcons}>
-            <a className={css.externalLinkButton} href={activityURL} target="_blank" data-cy="open-activity-button">
+            <a className={css.externalLinkButton} href={activityURL+"/pages/"+page+"/"} target="_blank" data-cy="open-activity-button">
               <LaunchIcon className={css.icon} />
             </a>
             {hasTeacherEdition &&
-              <a className={css.teacherEditionIcon} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
+              <a className={css.teacherEditionIcon} href={activityURL+"/pages/"+page+"/?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
                 <div className={teacherEditionButtonClasses}>
                   <LaunchIcon className={css.icon} />
                 </div>
