@@ -20,9 +20,8 @@ context("Portal Report Smoke Test", () => {
     // run, so this doesn't seem necessary.
 
     beforeEach(() => {
-      let fakeServer = "http://portal.test";
 
-        cy.visit(`/?reportUrl=${encodeURIComponent(fakeServer)}`);
+        cy.visit(`/?token=12345`);
         cy.fixture("sequence-structure.json").as("sequenceData");
         cy.fixture("small-class-data.json").as("classData");
         cy.fixture("answers.json").as("answerData");

@@ -42,9 +42,7 @@ describe("Provide Feedback", function() {
       response: {}
     }).as("putReportSettings");
 
-    let fakeServer = "http://portal.test";
-    cy.visit(`/?reportUrl=${encodeURIComponent(fakeServer)}` +
-      "&enableFirestorePersistence=true&clearFirestorePersistence=true");
+    cy.visit("/?tokem&12345&enableFirestorePersistence=true&clearFirestorePersistence=true");
   });
 
   it("Is visible", function() {
