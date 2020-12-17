@@ -28,7 +28,7 @@ export interface IQuestion extends IResource {
   activity: string;
   section: string;
   page: string;
-  url: string;
+  questionUrl: string;
   prompt: string;
   selected: boolean;
   scored?: boolean; // multiple choice only
@@ -139,7 +139,7 @@ export function preprocessResourceJSON(resourceJson: IResource) {
           question.activity = activity.id;
           question.section = section.id;
           question.page = page.id;
-          question.url = page.url;
+          question.questionUrl = page.url;
           // Nothing is selected by default.
           question.selected = false;
           if (question.type === "multiple_choice") {
