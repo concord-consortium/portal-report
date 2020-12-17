@@ -49,7 +49,6 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           {inOverlay && this.renderChevron()}
         </div>
         <QuestionArea
-          currentActivity={currentActivity}
           currentQuestion={currentQuestion}
           hideQuestion={this.state.hideQuestion}
           useMinHeight={inOverlay}
