@@ -17,11 +17,13 @@ context("Portal Dashboard Question Details Panel", () => {
         cy.get('[data-cy=list-by-questions-toggle]').should('be.visible').click();
         cy.get('[data-cy=response-panel] [data-cy=student-name]').should('be.visible').and('contain','Student:');
         cy.get('[data-cy=popup-response-table] [data-cy=question-wrapper').first().should("contain","Q1");
+        cy.get('[data-cy=response-details-container] [data-cy=num-Questions]').should('be.visible').and('contain', 'Questions: 7');
       });
       it("list by students", () => {
         cy.get('[data-cy=list-by-student-toggle]').should('be.visible').click();
         cy.get('[data-cy=response-panel] [data-cy=question-overlay-title]').should('be.visible').and('contain','Question #');
         cy.get('[data-cy=popup-response-table] [data-cy=student-name').first().should("contain","Armstrong, Jenna");
+        cy.get('[data-cy=response-details-container] [data-cy=num-students]').should('be.visible').and('contain', '6 students');
       });
     });
   });
@@ -55,8 +57,29 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=activity-title]').should('contain', "Activity #2");
       cy.get('[data-cy=response-panel] [data-cy=question-overlay-title]').should('contain', "Question #1");
     });
+    context("Student nav area", ()=>{
+      before (()=>{
+        cy.get('[data-cy=list-by-questions-toggle]').click();
+        cy.get('[data-cy=activity-navigator-previous-button]').click();
+      });
+      it("verify student navigation", ()=>{
+        cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('be.visible').and('contain', "Armstrong, Jenna");
+        cy.get('[data-cy=response-details-container] [data-cy=next-student-button]').should('be.visible').click();
+        cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('contain', 'Crosby, Kate');
+        cy.get('[data-cy=response-details-container] [data-cy=next-student-button]').click();
+        cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('contain', 'Galloway, Amy');
+        cy.get('[data-cy=response-details-container] [data-cy=previous-student-button]').click();
+        cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('contain', 'Crosby, Kate');
+      })
+      it('verify response section updates when student is navigated', ()=>{
+        cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('be.visible').and('contain', "No response");
+        cy.get('[data-cy=response-details-container] [data-cy=next-student-button]').click();
+        cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('contain', "test answer 2");
+        cy.get('[data-cy=response-details-container] [data-cy=previous-student-button]').click();
+        cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('contain', "No response");
+      })
+    });
     after(()=>{
-      cy.get('[data-cy=activity-navigator-previous-button]').click();
       cy.get('[data-cy=navigation-select]').eq(1).should('be.visible').click();
       cy.get('[data-cy=list-item-progress-dashboard]').eq(1).click();
     });
