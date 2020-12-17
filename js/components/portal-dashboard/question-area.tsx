@@ -40,7 +40,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
               <LaunchIcon className={css.icon} />
             </a>
             {hasTeacherEdition &&
-              <a className={css.teacherEditionIcon} href={activityURL+"/?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
+              <a className={css.teacherEditionIcon} href={`${activityURL}/?mode=teacher-edition`} target="_blank" data-cy="open-teacher-edition-button">
                 <div className={teacherEditionButtonClasses}>
                   <LaunchIcon className={css.icon} />
                 </div>
