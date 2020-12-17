@@ -65,7 +65,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const firstActivity = activities.first();
     const firstQuestion = questions?.first();
     const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
-    const sequence = activities.size > 1;
+    const isSequence = activities.size > 1;
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
     let qCount = 0;
@@ -93,7 +93,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             setListViewMode={this.setListViewMode}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
-            {sequence &&
+            {isSequence &&
               <ActivityNavigator
                 activities={activities}
                 currentActivity={currentActivity}
@@ -101,7 +101,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 setCurrentQuestion={setCurrentQuestion}
               />
             }
-            <div className={`${css.contentNavigatorArea} ${sequence? css.short : ""}`}>
+            <div className={`${css.contentNavigatorArea} ${isSequence ? css.short : ""}`}>
             { inQuestionMode ?
                 <StudentNavigator
                   students={students}

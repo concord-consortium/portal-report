@@ -30,14 +30,15 @@ export class ActivityNavigator extends React.PureComponent<IProps> {
             </div>
           </div>
           <div className={css.title} data-cy="activity-title">
-            Activity #{currentActivityIndex+1}: {currentActivity ? currentActivity.get("name")
-                                                                 : activities.toArray()[currentActivityIndex].get("name")}
+            Activity #{currentActivityIndex+1}: {currentActivity
+                                                 ? currentActivity.get("name")
+                                                 : activities.toArray()[currentActivityIndex].get("name")}
           </div>
       </div>
     );
   }
 
-  private handleNavigation  = (activityIndex: number) => () =>{
+  private handleNavigation  = (activityIndex: number) => () => {
     const { activities, setCurrentActivity, setCurrentQuestion} = this.props;
     const activitiesArray = activities.toArray();
     if ( activityIndex >= 0 && activityIndex < activitiesArray.length ) {
