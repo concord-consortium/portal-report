@@ -2,8 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
-import { FeedbackInfo } from "../../components/portal-dashboard/feedback-info";
 import { FeedbackRows } from "../../components/portal-dashboard/feedback-rows";
+import activity from "../report/activity";
 
 interface IProps {
   activity: Map<any, any>;
@@ -19,6 +19,10 @@ interface IProps {
   settings: any;
   rubric: any;
   activityIndex: number;
+  answers: any;
+  currentQuestion: any;
+  isAnonymous: boolean;
+  feedbackLevel: "Activity" | "Question";
 }
 
 class ActivityFeedbackPanel extends React.PureComponent<IProps> {
@@ -27,13 +31,17 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    // TODO: FEEDBACK
-    // display the activity feedback
+    const { activity, answers, currentQuestion, feedbacks, feedbacksNeedingReview, isAnonymous, feedbackLevel } = this.props;
     return (
       <div>
-        Activity Feedback Panel
-        <FeedbackControls />
-        <FeedbackRows />
+        <FeedbackRows
+          answers={answers}
+          currentQuestion={currentQuestion}
+          feedbacks={feedbacks}
+          feedbacksNeedingReview={feedbacksNeedingReview}
+          isAnonymous={isAnonymous}
+          feedbackLevel={feedbackLevel}
+        />
       </div>
     );
   }
