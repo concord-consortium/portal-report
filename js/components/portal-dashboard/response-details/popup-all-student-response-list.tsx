@@ -4,7 +4,7 @@ import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import { SelectedStudent } from "./response-details";
 
-import css from "../../../../css/portal-dashboard/response-details/popup-all-student-response-list.less";
+import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
 
 interface IProps {
   answers: Map<any, any>;
@@ -26,7 +26,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
           const answer = currentQuestion && answers.getIn([currentQuestion.get("id"), student.get("id")]);
           const spotlightAllowed = answer != null;
           return (
-            <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
+            <div className={css.listRow} key={`student ${i}`} data-cy="student-row">
               {this.renderStudentNameWrapper(student.get("id"), formattedName, isSelected, spotlightAllowed)}
               <div className={`${css.studentResponse} ${isSelected ? css.selected : ""}`} data-cy="student-response">
                 <Answer question={currentQuestion} student={student} responsive={false} studentName={formattedName} />
@@ -40,7 +40,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
 
   private renderStudentNameWrapper(studentId: string, formattedName: string, selected: boolean, spotlightAllowed: boolean) {
     return (
-      <div className={`${css.studentWrapper} ${selected ? css.selected : ""}`}>
+      <div className={`${css.itemWrapper} ${selected ? css.selected : ""}`}>
         <div onClick={this.handleSelect(studentId)} className={`${css.spotlightSelectionCheckbox} ${!spotlightAllowed ? css.disabled : ""}`} data-cy="spotlight-selection-checkbox">
           <div className={`${css.check} ${selected ? css.selected : ""}`} />
         </div>
