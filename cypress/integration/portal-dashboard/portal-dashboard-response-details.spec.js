@@ -10,24 +10,53 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=view-all-student-responses-button]').should('be.visible').click();
       cy.get('[data-cy=dashboard-header]').should('be.visible');
     });
-    after(()=>{
-      cy.get('[data-cy=navigation-select]').last().click();
-      cy.get('[data-cy="list-item-progress-dashboard"]').last().should('be.visible').click();
+  });
+  context('View List By', () => {
+    describe('verify by list by toggles switches views', () => {
+      it('list by question', () => {
+        cy.get('[data-cy=list-by-questions-toggle]').should('be.visible').click();
+        cy.get('[data-cy=response-panel] [data-cy=student-name]').should('be.visible').and('contain','Student:');
+      });
+      it("list by students", () => {
+        cy.get('[data-cy=list-by-student-toggle]').should('be.visible').click();
+        cy.get('[data-cy=response-panel] [data-cy=question-overlay-title]').should('be.visible').and('contain','Question #');
+      });
     });
   });
   context('Class nav area', () => {
-    before(() => {
-      cy.get('[data-cy=view-all-student-responses-button]').should('be.visible').click();
-    });
     it('verify spotlight opens dialog when no student selected (default)', () => { //spotlight students is tested below
       cy.get('[data-cy=spotlight-toggle').should('be.visible').click();
       cy.get('[data-cy=spotlight-dialog]').should('be.visible');
       cy.get('[data-cy=spotlight-dialog-close-button]').should('be.visible').click();
       cy.get('[data-cy=spotlight-dialog]').should('not.be.visible');
     });
+  });
+  context('Activity nav area', ()=>{
+    it('verify activity navigation is visible', ()=>{
+      cy.get('[data-cy=activity-navigator]').should('be.visible');
+      cy.get('[data-cy=activity-navigator-previous-button]').should('be.visible');
+      cy.get('[data-cy=activity-navigator-next-button]').should('be.visible');
+      cy.get('[data-cy=activity-title]').should('be.visible');
+    });
+    it('verify activity nav buttons toggle activities', ()=>{
+      cy.get('[data-cy=activity-title]').should('contain', "Activity #1");
+      cy.get('[data-cy=activity-navigator-next-button]').click();
+      cy.get('[data-cy=activity-title]').should('contain', "Activity #2");
+      cy.get('[data-cy=activity-navigator-previous-button]').click();
+      cy.get('[data-cy=activity-title]').should('contain', "Activity #1");
+    });
+    it('verify toggling activity goes to the first question of the activity', ()=>{
+      cy.get('[data-cy=response-panel] [data-cy=question-overlay-title]').should('contain', "Question #1");
+      cy.get('[data-cy=response-panel] [data-cy=question-navigator-next-button]').click();
+      cy.get('[data-cy=response-panel] [data-cy=question-overlay-title]').should('contain', "Question #2");
+      cy.get('[data-cy=activity-navigator-next-button]').click();
+      cy.get('[data-cy=activity-title]').should('contain', "Activity #2");
+      cy.get('[data-cy=response-panel] [data-cy=question-overlay-title]').should('contain', "Question #1");
+    });
     after(()=>{
-      cy.get('[data-cy=navigation-select]').last().click();
-      cy.get('[data-cy="list-item-progress-dashboard"]').last().should('be.visible').click();
+      cy.get('[data-cy=activity-navigator-previous-button]').click();
+      cy.get('[data-cy=navigation-select]').eq(1).should('be.visible').click();
+      cy.get('[data-cy=list-item-progress-dashboard]').eq(1).click();
     });
   });
   context('Question nav area',()=>{

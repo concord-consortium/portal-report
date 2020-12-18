@@ -3,6 +3,19 @@
 .tableHeader {
   display: flex;
 
+  .responsePanel {
+    flex: 1;
+    width: 100%;
+    background-color: @cc-orange-light6;
+
+    .contentNavigatorArea {
+      min-height: 250px;
+
+      &.short {
+        min-height: 200px;
+      }
+    }
+  }
   .questionArea {
     background-color: @cc-teal-light6;
     flex: 1;

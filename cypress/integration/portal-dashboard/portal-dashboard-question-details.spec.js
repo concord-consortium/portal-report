@@ -114,33 +114,36 @@ context("Portal Dashboard Question Details Panel", () => {
   describe('Student Response area', () => {
     it('verify student response area is visible', () => {
       cy.get('[data-cy=open-response-completed]').eq(0).click();
-      cy.get('[data-cy=previous-student-button]').click().click();
+      cy.get('[data-cy=previous-student-button]').click();
+      cy.get('[data-cy=previous-student-button]').click();
       cy.get('[data-cy=overlay-student-response-area]').should('be.visible');
       cy.get('[data-cy=overlay-student-response-area] [data-cy=student-answer]').should('be.visible').and('contain', "No response");
     });
     it('verify previous student button is disabled if first student',()=>{
-      cy.get('[data-cy=overlay-student-name]').should('contain','Armstrong, Jenna');
+      cy.get('[data-cy=student-name]').should('contain','Armstrong, Jenna');
       cy.get('[data-cy=previous-student-button]').click({force: true}); //Can't verify if button is disabled
-      cy.get('[data-cy=overlay-student-name]').should('contain','Armstrong, Jenna');
+      cy.get('[data-cy=student-name]').should('contain','Armstrong, Jenna');
     });
     it('verify changing students', () => {
       cy.get('[data-cy=next-student-button]').click();
-      cy.get('[data-cy=overlay-student-name').should('contain','Crosby, Kate');
-      cy.get('[data-cy=next-student-button]').click().click();
-      cy.get('[data-cy=overlay-student-name]').should('contain','Jenkins, John');
+      cy.get('[data-cy=student-name').should('contain','Crosby, Kate');
+      cy.get('[data-cy=next-student-button]').click();
+      cy.get('[data-cy=next-student-button]').click();
+      cy.get('[data-cy=student-name]').should('contain','Jenkins, John');
       cy.get('[data-cy=overlay-student-response-area] [data-cy=student-answer]').should('be.visible').and('contain', "test answer 1");
     });
     it('verify next button is disabled when end of list is reached',()=>{
-      cy.get('[data-cy=next-student-button]').click().click();
-      cy.get('[data-cy=overlay-student-name]').should('contain','Wu, Jerome');
+      cy.get('[data-cy=next-student-button]').click();
+      cy.get('[data-cy=next-student-button]').click();
+      cy.get('[data-cy=student-name]').should('contain','Wu, Jerome');
       cy.get('[data-cy=next-student-button]').click({force: true});//Can't verify if button is disabled
-      cy.get('[data-cy=overlay-student-name]').should('contain','Wu, Jerome');
+      cy.get('[data-cy=student-name]').should('contain','Wu, Jerome');
     });
     it('verify student name is anonymize when toggle is on and vice versa',()=>{
       cy.get('[data-cy="anonymize-students"] [data-cy=toggle-control]').click();
-      cy.get('[data-cy=overlay-student-name]').should('contain','Student 6');
+      cy.get('[data-cy=student-name]').should('contain','Student 6');
       cy.get('[data-cy="anonymize-students"] [data-cy=toggle-control]').click();
-      cy.get('[data-cy=overlay-student-name]').should('contain','Wu, Jerome');
+      cy.get('[data-cy=student-name]').should('contain','Wu, Jerome');
     });
     it('verify multiple choice choice texts are visible',()=>{
       cy.get('[data-cy="activity-question-button"]').eq(2).click();

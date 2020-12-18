@@ -34,7 +34,7 @@ context("Portal Dashboard UI",()=>{
     });
     describe('progress',()=>{
         it('verify progress legend loads',()=>{
-            const progress=["Completed","In-progress", "Not-yet-started"];
+            const progress=["Completed","In-progress", "Not-started"];
             cy.get('[data-cy=progress-legend]').should('be.visible');
             progress.forEach((prog)=>{
                 cy.get('[data-cy="'+prog+'-legend"]').should('be.visible');

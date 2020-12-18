@@ -19,7 +19,6 @@ import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStude
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { ColorTheme, DashboardViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
@@ -172,35 +171,34 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               toggleCurrentQuestion={toggleCurrentQuestion}
               hasTeacherEdition={hasTeacherEdition}
             />
-            <TransitionGroup component={null}>
-              {viewMode !== "ProgressDashboard" &&
-                <CSSTransition classNames={"responseDetails"} timeout={500}>
-                  <div className={css.responseDetails} data-cy="response-details-container">
-                    {this.renderHeader(assignmentName, viewMode)}
-                    <ResponseDetails
-                      activities={activityTrees}
-                      anonymous={anonymous}
-                      answers={answers}
-                      currentActivity={currentActivity}
-                      currentQuestion={currentQuestion}
-                      hasTeacherEdition={hasTeacherEdition}
-                      isAnonymous={isAnonymous}
-                      questions={questions}
-                      setAnonymous={setAnonymous}
-                      setCurrentActivity={setCurrentActivity}
-                      setStudentFilter={setStudentSort}
-                      sortByMethod={sortByMethod}
-                      sortedQuestionIds={sortedQuestionIds}
-                      studentCount={students.size}
-                      students={students}
-                      toggleCurrentQuestion={toggleCurrentQuestion}
-                      trackEvent={trackEvent}
-                      viewMode={viewMode}
-                    />
-                  </div>
-                </CSSTransition>
-              }
-            </TransitionGroup>
+            { viewMode !== "ProgressDashboard" &&
+              <div className={css.responseDetails} data-cy="response-details-container">
+                {this.renderHeader(assignmentName, viewMode)}
+                <ResponseDetails
+                  activities={activityTrees}
+                  anonymous={anonymous}
+                  answers={answers}
+                  currentActivity={currentActivity}
+                  currentQuestion={currentQuestion}
+                  currentStudentId={currentStudentId}
+                  hasTeacherEdition={hasTeacherEdition}
+                  isAnonymous={isAnonymous}
+                  questions={questions}
+                  setAnonymous={setAnonymous}
+                  setCurrentActivity={setCurrentActivity}
+                  setCurrentQuestion={setCurrentQuestion}
+                  setCurrentStudent={setCurrentStudent}
+                  setStudentFilter={setStudentSort}
+                  sortByMethod={sortByMethod}
+                  sortedQuestionIds={sortedQuestionIds}
+                  studentCount={students.size}
+                  students={students}
+                  toggleCurrentQuestion={toggleCurrentQuestion}
+                  trackEvent={trackEvent}
+                  viewMode={viewMode}
+                />
+              </div>
+            }
           </div>
         }
         {error && <DataFetchError error={error} />}

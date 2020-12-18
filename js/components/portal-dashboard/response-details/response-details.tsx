@@ -6,8 +6,10 @@ import { PopupStudentResponseList } from "./popup-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
 import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student-list-dialog";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import FeedbackInfo from "../../../containers/portal-dashboard/feedback-info";
+import { FeedbackInfo } from "../../../containers/portal-dashboard/feedback-info";
 import ActivityFeedbackPanel from "../../../containers/portal-dashboard/activity-feedback-panel";
+import { StudentNavigator } from "../student-navigator";
+import { ActivityNavigator } from "../activity-navigator";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -22,11 +24,14 @@ interface IProps {
   answers: Map<any, any>;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
+  currentStudentId: string | null;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
+  setCurrentQuestion: (questionId: string) => void;
+  setCurrentStudent: (studentId: string | null) => void;
   setStudentFilter: (value: string) => void;
   sortByMethod: string;
   sortedQuestionIds?: string[];
@@ -38,46 +43,56 @@ interface IProps {
   feedbackLevel: "Activity" | "Question";
 }
 interface IState {
+  inQuestionMode: boolean;
   selectedStudents: SelectedStudent[];
   showSpotlightDialog: boolean;
   showSpotlightListDialog: boolean;
   feedbackLevel: "Activity" | "Question";
 }
+
 export class ResponseDetails extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
+      inQuestionMode: false,
       selectedStudents: [],
       showSpotlightDialog: false,
       showSpotlightListDialog: false,
       feedbackLevel: "Question",
     };
   }
+
   render() {
-    const { activities, anonymous, answers, currentActivity, currentQuestion, hasTeacherEdition, isAnonymous, questions,
-      setAnonymous, setCurrentActivity, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
+
+    const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous, questions,
+      setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
       trackEvent, viewMode } = this.props;
-    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, feedbackLevel } = this.state;
+
+    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, inQuestionMode, feedbackLevel } = this.state;
+
     // TODO: FEEDBACK
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
     const firstActivity = activities.first();
     const firstQuestion = questions?.first();
+    const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
+    const isSequence = activities.size > 1;
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
     let qCount = 0;
+
     activities.toArray().forEach((activity: Map<any, any>) => {
       if (activityId === activity.get("id")) {
         const questions = activity.get("questions");
         qCount = questions.count();
       }
     });
-
     return (
       <>
         <div className={css.tableHeader}>
           <PopupClassNav
             anonymous={anonymous}
             isSpotlightOn={selectedStudents.length > 0}
+            inQuestionMode={inQuestionMode}
             questionCount={qCount}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
@@ -85,24 +100,41 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             sortByMethod={sortByMethod}
             trackEvent={trackEvent}
             onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
-            viewMode={viewMode}
-            feedbackLevel={feedbackLevel}
+            setListViewMode={this.setListViewMode}
           />
-          <div className={`${css.questionArea} ${css.column}`} data-cy="questionArea">
-            <QuestionNavigator
-              currentActivity={currentActivity || firstActivity}
-              currentQuestion={currentQuestion || firstQuestion}
-              questions={questions}
-              sortedQuestionIds={sortedQuestionIds}
-              toggleCurrentQuestion={this.handleChangeQuestion}
-              setCurrentActivity={setCurrentActivity}
-              hasTeacherEdition={hasTeacherEdition}
-              viewMode={viewMode}
-              feedbackLevel={feedbackLevel}
-            />
+          <div className={`${css.responsePanel}`} data-cy="response-panel">
+            {isSequence &&
+              <ActivityNavigator
+                activities={activities}
+                currentActivity={currentActivity}
+                setCurrentActivity={setCurrentActivity}
+                setCurrentQuestion={setCurrentQuestion}
+              />
+            }
+            <div className={`${css.contentNavigatorArea} ${isSequence ? css.short : ""}`}>
+            { inQuestionMode ?
+                <StudentNavigator
+                  students={students}
+                  isAnonymous={isAnonymous}
+                  currentStudentIndex={currentStudentIndex>=0 ? currentStudentIndex : 0}
+                  setCurrentStudent={setCurrentStudent}
+                  currentStudentId={currentStudentId}
+                  nameFirst={false}
+                />
+            : <QuestionNavigator
+                currentActivity={currentActivity || firstActivity}
+                currentQuestion={currentQuestion || firstQuestion}
+                questions={questions}
+                sortedQuestionIds={sortedQuestionIds}
+                toggleCurrentQuestion={this.handleChangeQuestion}
+                setCurrentActivity={setCurrentActivity}
+                hasTeacherEdition={hasTeacherEdition}
+              />
+            }
+            </div>
           </div>
           {viewMode === "FeedbackReport" && 
-            <div className={css.feedbackInfo} data-cy="feedbackInfo">
+            <div className={css.feedbackInfo} data-cy="feedback-info">
               <FeedbackInfo
                 activity={currentActivity || firstActivity} 
                 feedbackLevel={feedbackLevel}
@@ -122,7 +154,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           />
         }
         {viewMode === "FeedbackReport" && 
-          <div className={css.feedbackRowsContainer} data-cy="feedbackInfo">
+          <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
             <ActivityFeedbackPanel
               activity={currentActivity || firstActivity}
               answers={answers}
@@ -200,4 +232,8 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
   private setFeedbackLevel = (feedbackLevel: string) => {
     this.setState({ feedbackLevel: feedbackLevel });
   }
+  private setListViewMode = (value: boolean) => {
+    this.setState({ inQuestionMode: value });
+  }
+
 }

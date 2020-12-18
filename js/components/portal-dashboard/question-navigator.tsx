@@ -31,7 +31,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
   render() {
     const { currentActivity, currentQuestion, inOverlay, hasTeacherEdition } = this.props;
     return (
-      <React.Fragment>
+      <div className={css.questionArea}>
         <div className={css.titleWrapper}>
           <div className={css.nextQuestionButtons}>
             <div className={css.button + (this.previousQuestion ? "" : " " + css.disabled)}
@@ -54,7 +54,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           hideQuestion={this.state.hideQuestion}
           useMinHeight={inOverlay}
           hasTeacherEdition={hasTeacherEdition} />
-      </React.Fragment>
+      </div>
     );
   }
 
