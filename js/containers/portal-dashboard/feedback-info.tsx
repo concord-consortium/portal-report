@@ -10,11 +10,11 @@ interface IProps {
   activity: Map<any, any>;
   rubric: any;
   feedbackLevel: "Activity" | "Question";
+  setFeedbackLevel: (value: string) => void;
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-
-  const [feedbackLevel, setFeedbackLevel] = useState(props.feedbackLevel);
+  const {feedbackLevel, setFeedbackLevel} = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
