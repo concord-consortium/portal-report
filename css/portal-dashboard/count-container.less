@@ -1,27 +1,33 @@
 @import "./variables";
 
 .countContainer {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin: 20px 0 16px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 20px 0 16px 0;
 
-    .numItems {
-        width: 168px;
-        height: 30px;
-        border-radius: 15px 0px 0px 15px;
-        background-color: @cc-teal-light7;
-        color: @cc-charcoal;
+  .numItems {
+    width: 140px;
+    height: 30px;
+    border-radius: 15px 0px 0px 15px;
+    background-color: @cc-teal-light7;
+    color: @cc-charcoal;
+
+    &.long {
+      width: 168px;
     }
-    .containerLabel {
-        font-weight: bold;
-        padding-left: 20px;
-    }
-    .numItems span {
-        position: relative;
-        line-height: 30px;
-    }
+  }
+
+  .containerLabel {
+    font-weight: bold;
+    padding-left: 20px;
+  }
+
+  .numItems span {
+    position: relative;
+    line-height: 30px;
+  }
 
 }
 

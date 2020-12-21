@@ -35,7 +35,7 @@ export class PopupClassNav extends React.PureComponent<IProps>{
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
           <CountContainer
             numItems={inQuestionMode ? questionCount : studentCount}
-            containerLabel={inQuestionMode ? "Questions: " : "Class: "}
+            containerLabel={inQuestionMode ? "Questions" : "Class"}
             containerLabelType={!inQuestionMode ? "students" : undefined}
           />
           {inQuestionMode ? this.renderQuestionFilter() : this.renderStudentFilter()}

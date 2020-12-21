@@ -5,14 +5,14 @@
   overflow-y: auto;
   font-weight: normal;
 
-  .studentRow {
+  .listRow {
     display: flex;
     flex-direction: row;
     align-items: flex-stretch;
     background-color: white;
     min-height: 55px;
 
-    .studentWrapper{
+    .itemWrapper{
       flex-shrink: 0;
       display: flex;
       flex-direction: row;
@@ -24,6 +24,10 @@
 
       &.selected {
         background-color: @hi-yellow-light3;
+      }
+
+      span {
+        padding: 0 20px 5px 20px;
       }
 
       .spotlightSelectionCheckbox {
@@ -84,7 +88,7 @@
     }
   }
 
-  .studentRow:nth-child(even) {
+  .listRow:nth-child(even) {
     background-color: @cc-teal-light6;
   }
 
