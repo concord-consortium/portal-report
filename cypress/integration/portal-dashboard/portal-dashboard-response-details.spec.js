@@ -80,7 +80,7 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     it('verify activity button opens activity page', function() {
       cy.get("[data-cy=response-details-container] [data-cy=open-activity-button]").should('have.attr', 'href')
-      .and('include', "http://app.lara.docker/activities/9");
+      .and('include', "http://app.lara.docker/pages/25");
     });
     it('verify activity button opens teacher edition page', function() {
       cy.get("[data-cy=response-details-container] [data-cy=open-teacher-edition-button]").should('have.attr', 'href')
