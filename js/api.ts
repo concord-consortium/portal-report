@@ -139,9 +139,6 @@ export function getAuthHeader() {
   if (accessToken) {
     return `Bearer ${accessToken}`;
   }
-  if (urlParam("reportUrl")===fakeServer) { //used for testing
-    return `Bearer 12345`;
-  }
   throw new APIError("No token available", { status: 0, statusText: "No token available" });
 }
 
