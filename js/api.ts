@@ -81,7 +81,7 @@ export const authorizeInPortal = (portalUrl: string, oauthClientName: string, st
     state
   });
   // Redirect
-  window.location.href = portalAuth.token.getUri();
+  window.location.assign(portalAuth.token.getUri());
 };
 
 export const initializeAuthorization = () => {
@@ -131,7 +131,7 @@ const gePortalReportAPIUrl = () => {
   return null;
 };
 
-const getAuthHeader = () => {
+export function getAuthHeader() {
   const fakeServer = "http://portal.test"; //used for testing
   if (urlParam("token")) {
     return `Bearer ${urlParam("token")}`;
