@@ -132,7 +132,6 @@ const gePortalReportAPIUrl = () => {
 };
 
 export function getAuthHeader() {
-  const fakeServer = "http://portal.test"; //used for testing
   if (urlParam("token")) {
     return `Bearer ${urlParam("token")}`;
   }
