@@ -143,7 +143,7 @@ export function getAuthHeader() {
     return `Bearer 12345`;
   }
   throw new APIError("No token available", { status: 0, statusText: "No token available" });
-};
+}
 
 export function fetchOfferingData() {
   const offeringUrl = urlParam("offering");
