@@ -42,7 +42,7 @@ describe("Provide Feedback", function() {
       response: {}
     }).as("putReportSettings");
 
-    cy.visit("/?tokem&12345&enableFirestorePersistence=true&clearFirestorePersistence=true");
+    cy.visit("/?token=12345&enableFirestorePersistence=true&clearFirestorePersistence=true");
   });
 
   it("Is visible", function() {
