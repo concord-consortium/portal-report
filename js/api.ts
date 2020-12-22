@@ -1,14 +1,15 @@
 import * as firebase from "firebase";
 import fetch from "isomorphic-fetch";
 import * as jwt from "jsonwebtoken";
+import  ClientOAuth2  from "client-oauth2";
 import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/small-class-data.json";
-import { parseUrl, validFsId, urlParam } from "./util/misc";
+import { parseUrl, validFsId, urlParam, urlHashParam } from "./util/misc";
 import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
 import { FIREBASE_APP, signInWithToken } from "./db";
 
-const TOOL_ID = urlParam("tool-id");
-const SOURCE_KEY = TOOL_ID ? makeSourceKey(TOOL_ID) : null;
+const PORTAL_AUTH_PATH = "/auth/oauth_authorize";
+let accessToken: string | null = null;
 
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
@@ -66,9 +67,41 @@ export interface IFirebaseJWT {
 }
 
 // This matches the make_source_key method in LARA's report_service.rb
-function makeSourceKey(toolId: string): string | null{
-  return toolId.replace(/https?:\/\/([^\/]+)/, "$1");
+function getSourceKey(): string | null {
+  const toolId = urlParam("tool-id");
+
+  return toolId ? toolId.replace(/https?:\/\/([^\/]+)/, "$1") : null;
 }
+
+export const authorizeInPortal = (portalUrl: string, oauthClientName: string, state: string) => {
+  const portalAuth = new ClientOAuth2({
+    clientId: oauthClientName,
+    redirectUri: window.location.origin + window.location.pathname,
+    authorizationUri: `${portalUrl}${PORTAL_AUTH_PATH}`,
+    state
+  });
+  // Redirect
+  window.location.assign(portalAuth.token.getUri());
+};
+
+export const initializeAuthorization = () => {
+  const state = urlHashParam("state");
+  accessToken = urlHashParam("access_token");
+
+  if (accessToken && state) {
+    const savedParamString = sessionStorage.getItem(state);
+    window.history.pushState(null, "Portal Report", savedParamString);
+  }
+  else {
+    const authDomain = urlParam("auth-domain");
+    const oauthClientName = "token-service-example-app";
+    if (authDomain) {
+      const key = Math.random().toString(36).substring(2,15);
+      sessionStorage.setItem(key, window.location.search);
+      authorizeInPortal(authDomain, oauthClientName, key);
+    }
+  }
+};
 
 const getPortalBaseUrl = () => {
   const portalUrl = urlParam("class") || urlParam("offering");
@@ -79,12 +112,13 @@ const getPortalBaseUrl = () => {
   return `${protocol}//${hostname}`;
 };
 
-export const getPortalFirebaseJWTUrl = (classHash: string, firebaseApp: string = FIREBASE_APP) => {
+export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, firebaseApp: string = FIREBASE_APP ) => {
   const baseUrl = getPortalBaseUrl();
   if (!baseUrl) {
     return null;
   }
-  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`;
+  const resourceLinkParam = resourceLinkId ? `&resource_link_id=${resourceLinkId}` : "";
+  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}${resourceLinkParam}`;
 };
 
 const gePortalReportAPIUrl = () => {
@@ -97,7 +131,15 @@ const gePortalReportAPIUrl = () => {
   return null;
 };
 
-const getAuthHeader = () => `Bearer ${urlParam("token")}`;
+export function getAuthHeader() {
+  if (urlParam("token")) {
+    return `Bearer ${urlParam("token")}`;
+  }
+  if (accessToken) {
+    return `Bearer ${accessToken}`;
+  }
+  throw new APIError("No token available", { status: 0, statusText: "No token available" });
+}
 
 export function fetchOfferingData() {
   const offeringUrl = urlParam("offering");
@@ -121,8 +163,8 @@ export function fetchClassData() {
   }
 }
 
-export function fetchFirestoreJWT(classHash: string, firebaseApp?: string) {
-  const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, firebaseApp);
+export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, firebaseApp?: string) {
+  const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, resourceLinkId, firebaseApp );
   if (firestoreJWTUrl) {
     return fetch(firestoreJWTUrl, {headers: {Authorization: getAuthHeader()}})
       .then(checkStatus)
@@ -154,11 +196,14 @@ function fakeUserType(): "teacher" | "learner" {
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
-  return classPromise.then((classData: any) => {
-    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash);
-    return Promise.all([offeringPromise, firestoreJWTPromise]).then((result: any) => {
-      const offeringData = result[0];
-      const rawFirestoreJWT = result[1].token;
+  return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
+    const resourceLinkId = offeringData.id.toString();
+    // only pass resourceLinkId if there is a studentId
+    // FIXME: if this is a teacher viewing the report of a student there will be a studentId
+    // but the token will be for a teacher, so then the resourceLinkId should be null
+    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null);
+    return firestoreJWTPromise.then((result: any) => {
+      const rawFirestoreJWT = result.token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {
         // We're not using fake data.
         const decodedFirebaseJWT = jwt.decode(rawFirestoreJWT);
@@ -170,14 +215,14 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
         }
         const verifiedFirebaseJWT = decodedFirebaseJWT as IFirebaseJWT;
         return authFirestore(rawFirestoreJWT).then(() => ({
-            offering: offeringData,
-            resourceLinkId: offeringData.id.toString(),
-            classInfo: classData,
-            userType: verifiedFirebaseJWT.claims.user_type,
-            platformId: verifiedFirebaseJWT.claims.platform_id,
-            platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
-            contextId: classData.class_hash,
-            sourceKey: SOURCE_KEY || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          offering: offeringData,
+          resourceLinkId,
+          classInfo: classData,
+          userType: verifiedFirebaseJWT.claims.user_type,
+          platformId: verifiedFirebaseJWT.claims.platform_id,
+          platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
+          contextId: classData.class_hash,
+          sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
           })
         );
       } else {
@@ -193,7 +238,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           // In most cases when using fake data the SOURCE_KEY will be null
           // so the sourceKey will be based on the fake offeringData
           // and this offering data has a hostname of 'fake.authoring.system'
-          sourceKey: SOURCE_KEY || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
         };
       }
     });

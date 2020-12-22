@@ -4,7 +4,7 @@ context("Test api error", () => {
       cy.visit("/?offering=http://example.com");
     });
     it('shows an error message to user', () => {
-      cy.contains("network error");
+      cy.contains("Connection to server failed");
     });
   });
 });

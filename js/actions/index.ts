@@ -57,7 +57,7 @@ export function fetchAndObserveData() {
   if (runKeyValue) {
     const activity = urlParam("activity") || "";
     const source = activity ? ((activity.split('/activities'))[0]).replace("https://", "") : "";
-    const answerSource = urlParam("answerSource") || "";
+    const answerSource = urlParam("answerSource") || window.location.host;
     return (dispatch: Dispatch, getState: any) => {
       dispatch({
         type: SET_ANONYMOUS_VIEW,
