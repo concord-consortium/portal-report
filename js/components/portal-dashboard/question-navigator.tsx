@@ -29,7 +29,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { currentActivity, currentQuestion, inOverlay, hasTeacherEdition } = this.props;
+    const { currentQuestion, inOverlay, hasTeacherEdition } = this.props;
     return (
       <div className={css.questionArea}>
         <div className={css.titleWrapper}>

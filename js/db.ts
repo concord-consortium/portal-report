@@ -37,11 +37,11 @@ const configurations: IConfigs = {
 
 export const DEFAULT_FIREBASE_APP = "report-service-dev";
 
-export function getFirebaseAppName() {
+export function getFirebaseAppName(): string {
   return urlParam("firebase-app") || DEFAULT_FIREBASE_APP;
 }
 
-let firestoreDBPromise = null;
+let firestoreDBPromise: Promise<firebase.firestore.Firestore> | null = null;
 
 export function initializeDB() {
   firestoreDBPromise = createDB();
@@ -105,7 +105,7 @@ async function createDB() {
 // The code using this promise could ignore the result here and just call firebase.firestore()
 // inside of the then, but using getFirestore() makes it easier to to say all direct calls to
 // firebase.firestore() should be here in db.ts
-export const getFirestore = () => {
+export const getFirestore = (): Promise<firebase.firestore.Firestore> => {
   // eslint-disable-next-line no-console
   console.log("getFirestore");
   if(firestoreDBPromise == null) {
@@ -121,21 +121,17 @@ export const signInWithToken = (rawFirestoreJWT: string) => {
   // eslint-disable-next-line no-console
   console.log("signInWithToken: " + rawFirestoreJWT);
   // It's actually useful to sign out first, as firebase seems to stay signed in between page reloads otherwise.
-  // FIXME: trying to debug an issue with signOut
-  // const signOutPromise = firebase.auth().signOut();
+  const signOutPromise = firebase.auth().signOut();
   // eslint-disable-next-line no-console
-  // console.log("signInWithToken: started signOut");
+  console.log("signInWithToken: started signOut");
   if (!SKIP_SIGN_IN) {
-    // FIXME: trying to debug an issue with signOut
-    // return signOutPromise.then(() => {
-    //   // eslint-disable-next-line no-console
-    //   console.log("signInWithToken: signedOut");
-    //
-    //   firebase.auth().signInWithCustomToken(rawFirestoreJWT);
-    // });
-    return firebase.auth().signInWithCustomToken(rawFirestoreJWT);
+    return signOutPromise.then(() => {
+      // eslint-disable-next-line no-console
+      console.log("signInWithToken: signedOut");
+
+      return firebase.auth().signInWithCustomToken(rawFirestoreJWT);
+    });
   } else {
-    // return signOutPromise;
-    return null;
+    return signOutPromise;
   }
 };

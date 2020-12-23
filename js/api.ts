@@ -68,10 +68,10 @@ export interface IFirebaseJWT {
 
 // This matches the make_source_key method in LARA's report_service.rb
 export const makeSourceKey = (url: string | null) => {
-  return url ? url.replace(/https?:\/\/([^\/]+)/, "$1") : null;
+  return url ? url.replace(/https?:\/\/([^\/]+)/, "$1") : "";
 };
 
-function getSourceKey(): string | null {
+function getSourceKey(): string {
   const toolId = urlParam("tool-id");
   return makeSourceKey(toolId);
 }
