@@ -1,4 +1,4 @@
-import { firestoreInitialized } from "../db";
+import { getFirestore } from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
 // import fakeActivityStructure from "../data/activity-structure.json";
 import fakeAnswers from "../data/answers.json";
@@ -25,7 +25,7 @@ import { requestRubric } from "./rubric";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
-import { urlParam, urlStringParam } from "../util/misc";
+import { urlParam } from "../util/misc";
 import queryString from "query-string";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
@@ -67,7 +67,7 @@ export function fetchAndObserveData() {
         runKey: runKeyValue
       });
 
-      firestoreInitialized.then(db => {
+      getFirestore().then(db => {
         if (activity) {
           watchResourceStructure(db, source, activity, dispatch);
         }
@@ -98,7 +98,7 @@ export function fetchAndObserveData() {
 
 function receivePortalData(rawPortalData: IPortalRawData) {
   return (dispatch: Dispatch) => {
-    firestoreInitialized.then(db => _receivePortalData(db, rawPortalData, dispatch));
+    getFirestore().then(db => _receivePortalData(db, rawPortalData, dispatch));
   };
 }
 

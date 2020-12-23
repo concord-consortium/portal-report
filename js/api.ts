@@ -6,7 +6,7 @@ import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/small-class-data.json";
 import { parseUrl, validFsId, urlParam, urlHashParam } from "./util/misc";
 import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
-import { FIREBASE_APP, signInWithToken } from "./db";
+import { getFirebaseAppName, signInWithToken } from "./db";
 
 const PORTAL_AUTH_PATH = "/auth/oauth_authorize";
 let accessToken: string | null = null;
@@ -77,6 +77,9 @@ function getSourceKey(): string | null {
 }
 
 export const authorizeInPortal = (portalUrl: string, oauthClientName: string, state: string) => {
+  // eslint-disable-next-line no-console
+  console.log("authorizeInPortal");
+
   const portalAuth = new ClientOAuth2({
     clientId: oauthClientName,
     redirectUri: window.location.origin + window.location.pathname,
@@ -87,11 +90,16 @@ export const authorizeInPortal = (portalUrl: string, oauthClientName: string, st
   window.location.assign(portalAuth.token.getUri());
 };
 
+// Returns true if it is redirecting
 export const initializeAuthorization = () => {
+  // eslint-disable-next-line no-console
+  console.log("initializeAuthorization");
   const state = urlHashParam("state");
   accessToken = urlHashParam("access_token");
 
   if (accessToken && state) {
+    // eslint-disable-next-line no-console
+    console.log("initializeAuthorization: updating Params");
     const savedParamString = sessionStorage.getItem(state);
     window.history.pushState(null, "Portal Report", savedParamString);
   }
@@ -102,8 +110,11 @@ export const initializeAuthorization = () => {
       const key = Math.random().toString(36).substring(2,15);
       sessionStorage.setItem(key, window.location.search);
       authorizeInPortal(authDomain, oauthClientName, key);
+      return true;
     }
   }
+
+  return false;
 };
 
 const getPortalBaseUrl = () => {
@@ -115,7 +126,10 @@ const getPortalBaseUrl = () => {
   return `${protocol}//${hostname}`;
 };
 
-export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, firebaseApp: string = FIREBASE_APP ) => {
+export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, firebaseApp: string | undefined ) => {
+  if(!firebaseApp){
+    firebaseApp = getFirebaseAppName();
+  }
   const baseUrl = getPortalBaseUrl();
   if (!baseUrl) {
     return null;
@@ -178,6 +192,8 @@ export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | nu
 }
 
 export function authFirestore(rawFirestoreJWT: string) {
+  // eslint-disable-next-line no-console
+  console.log("authFirestore");
   const authResult = signInWithToken(rawFirestoreJWT) as Promise<firebase.auth.UserCredential | void>;
   return authResult.catch(err => {
     console.error("Firebase auth failed", err);
@@ -197,6 +213,9 @@ function fakeUserType(): "teacher" | "learner" {
 }
 
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
+  // eslint-disable-next-line no-console
+  console.log("fetchPortalDataAndAuthFirestore");
+
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
@@ -217,17 +236,21 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           });
         }
         const verifiedFirebaseJWT = decodedFirebaseJWT as IFirebaseJWT;
-        return authFirestore(rawFirestoreJWT).then(() => ({
-          offering: offeringData,
-          resourceLinkId,
-          classInfo: classData,
-          userType: verifiedFirebaseJWT.claims.user_type,
-          platformId: verifiedFirebaseJWT.claims.platform_id,
-          platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
-          contextId: classData.class_hash,
-          sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
-          })
-        );
+        return authFirestore(rawFirestoreJWT).then(() => {
+          // eslint-disable-next-line no-console
+          console.log("authFirestore complete");
+
+          return {
+            offering: offeringData,
+            resourceLinkId,
+            classInfo: classData,
+            userType: verifiedFirebaseJWT.claims.user_type,
+            platformId: verifiedFirebaseJWT.claims.platform_id,
+            platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
+            contextId: classData.class_hash,
+            sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          };
+        });
       } else {
         // We're using fake data, including fake JWT.
         return {
