@@ -102,32 +102,6 @@ function receivePortalData(rawPortalData: IPortalRawData) {
   };
 }
 
-function _getResourceUrl(rawPortalData: IPortalRawData) {
-  let resourceUrl;
-
-  // This is to support reporting on activity player based external activities.
-  // In those cases the offering.activity_url will look something like:
-  // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
-  const activityUrlParts = queryString.parseUrl(rawPortalData.offering.activity_url);
-  const activityUrlActivityParam = activityUrlParts.query.activity;
-  if (activityUrlActivityParam && typeof activityUrlActivityParam === "string" ) {
-    // The activity param of an activity-player url points to a /api/v1/activities/123.json
-    // However the activity structure is stored in the portal using its canonical url of /activites/123
-    resourceUrl = activityUrlActivityParam.replace("/api/v1", "").replace(".json", "");
-  } else {
-    resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
-  }
-
-  if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
-    // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
-    // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
-    // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
-    resourceUrl = resourceUrl.replace("http", "https");
-  }
-
-  return resourceUrl;
-}
-
 function _receivePortalData(db: firebase.firestore.Firestore,
   rawPortalData: IPortalRawData, dispatch: Dispatch) {
   dispatch({
@@ -172,6 +146,32 @@ function _receivePortalData(db: firebase.firestore.Firestore,
   const activityFeedbacksPath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceKey);
   watchCollection(db, activityFeedbacksPath, RECEIVE_ACTIVITY_FEEDBACKS,
     rawPortalData, dispatch);
+}
+
+function _getResourceUrl(rawPortalData: IPortalRawData) {
+  let resourceUrl;
+
+  // This is to support reporting on activity player based external activities.
+  // In those cases the offering.activity_url will look something like:
+  // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
+  const activityUrlParts = queryString.parseUrl(rawPortalData.offering.activity_url);
+  const activityUrlActivityParam = activityUrlParts.query.activity;
+  if (activityUrlActivityParam && typeof activityUrlActivityParam === "string" ) {
+    // The activity param of an activity-player url points to a /api/v1/activities/123.json
+    // However the activity structure is stored in the portal using its canonical url of /activites/123
+    resourceUrl = activityUrlActivityParam.replace("/api/v1", "").replace(".json", "");
+  } else {
+    resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
+  }
+
+  if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
+    // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
+    // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
+    // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
+    resourceUrl = resourceUrl.replace("http", "https");
+  }
+
+  return resourceUrl;
 }
 
 function getResourceLink(rawPortalData: IPortalRawData) {
