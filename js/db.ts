@@ -53,9 +53,6 @@ async function createDB() {
   // eslint-disable-next-line no-console
   console.log("initializeDB: " + name);
 
-  // Enable console logging of firestore
-  firebase.firestore.setLogLevel("debug");
-
   const config = configurations[name];
   firebase.initializeApp(config);
 
