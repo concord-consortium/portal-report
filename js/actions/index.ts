@@ -11,6 +11,7 @@ import {
   reportQuestionFeedbacksFireStorePath,
   reportActivityFeedbacksFireStorePath,
   feedbackSettingsFirestorePath,
+  makeSourceKey
 } from "../api";
 import {
   API_UPDATE_QUESTION_FEEDBACK,
@@ -25,6 +26,7 @@ import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
 import { urlParam, urlStringParam } from "../util/misc";
+import queryString from "query-string";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -56,7 +58,8 @@ export function fetchAndObserveData() {
   const runKeyValue = urlParam("runKey");
   if (runKeyValue) {
     const activity = urlParam("activity") || "";
-    const source = activity ? ((activity.split('/activities'))[0]).replace("https://", "") : "";
+    const source = activity ? makeSourceKey(activity) : "";
+    // FIXME: this really looks broken, the answerSource should never by the host of the portal-report
     const answerSource = urlParam("answerSource") || window.location.host;
     return (dispatch: Dispatch, getState: any) => {
       dispatch({
@@ -99,27 +102,38 @@ function receivePortalData(rawPortalData: IPortalRawData) {
   };
 }
 
-function _receivePortalData(db: firebase.firestore.Firestore,
-  rawPortalData: IPortalRawData, dispatch: Dispatch) {
-  dispatch({
-    type: RECEIVE_PORTAL_DATA,
-    response: rawPortalData
-  });
+function _getResourceUrl(rawPortalData: IPortalRawData) {
+  let resourceUrl;
+
   // This is to support reporting on activity player based external activities.
   // In those cases the offering.activity_url will look something like:
   // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
-  let resourceUrl;
-  if (urlStringParam(rawPortalData.offering.activity_url.split("?")[1], "activity")) {
-    resourceUrl = decodeURIComponent(((rawPortalData.offering.activity_url?.split(".json")[0]).split("activity="))[1].replace("%2Fapi%2Fv1", ""));
+  const activityUrlParts = queryString.parseUrl(rawPortalData.offering.activity_url);
+  if (activityUrlParts.query.activity) {
+    // The activity param of an activity-player url points to a /api/v1/activities/123.json
+    // However the activity structure is stored in the portal using its canonical url of /activites/123
+    resourceUrl = activityUrlParts.query.activity.replace("/api/v1", "").replace(".json", "");
   } else {
     resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
   }
+
   if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
     // Ensure that CC LARA URLs always start with HTTPS. Teacher could have assigned HTTP version to a class long
     // time ago, but all the resources stored in Firestore assume that they're available under HTTPS now.
     // We can't replace all the HTTP protocols to HTTPS not to break dev environments.
     resourceUrl = resourceUrl.replace("http", "https");
   }
+
+  return resourceUrl;
+}
+
+function _receivePortalData(db: firebase.firestore.Firestore,
+  rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  dispatch({
+    type: RECEIVE_PORTAL_DATA,
+    response: rawPortalData
+  });
+  const resourceUrl = _getResourceUrl(rawPortalData);
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data.
