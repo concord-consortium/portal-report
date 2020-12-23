@@ -108,7 +108,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     type: RECEIVE_PORTAL_DATA,
     response: rawPortalData
   });
-  const resourceUrl = _getResourceUrl(rawPortalData);
+  const resourceUrl = _getResourceUrl(rawPortalData.offering.activity_url);
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data.
@@ -148,20 +148,20 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     rawPortalData, dispatch);
 }
 
-function _getResourceUrl(rawPortalData: IPortalRawData) {
+function _getResourceUrl(activityUrl: string) {
   let resourceUrl;
 
   // This is to support reporting on activity player based external activities.
   // In those cases the offering.activity_url will look something like:
   // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
-  const activityUrlParts = queryString.parseUrl(rawPortalData.offering.activity_url);
+  const activityUrlParts = queryString.parseUrl(activityUrl);
   const activityUrlActivityParam = activityUrlParts.query.activity;
   if (activityUrlActivityParam && typeof activityUrlActivityParam === "string" ) {
     // The activity param of an activity-player url points to a /api/v1/activities/123.json
     // However the activity structure is stored in the portal using its canonical url of /activites/123
     resourceUrl = activityUrlActivityParam.replace("/api/v1", "").replace(".json", "");
   } else {
-    resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
+    resourceUrl = activityUrl.toLowerCase();
   }
 
   if (resourceUrl.match(/http:\/\/.*\.concord\.org/)) {
