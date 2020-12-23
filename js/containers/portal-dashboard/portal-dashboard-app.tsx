@@ -65,6 +65,7 @@ interface IState {
   initialLoading: boolean;
   scrollLeft: number;
   viewMode: DashboardViewMode;
+  inQuestionMode: boolean;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
@@ -74,6 +75,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       initialLoading: true,
       scrollLeft: 0,
       viewMode: "ProgressDashboard",
+      inQuestionMode: false,
     };
   }
 
@@ -96,7 +98,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
       setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
       trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges } = this.props;
-    const { initialLoading, viewMode } = this.state;
+    const { initialLoading, viewMode, inQuestionMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -138,6 +140,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 students={students}
                 isAnonymous={isAnonymous}
                 isCompact={compactReport}
+                setCurrentStudent={setCurrentStudent}
+                setDashboardViewMode={this.setDashboardViewMode}
+                setListViewMode={this.setListViewMode}
               />
               <StudentAnswers
                 activities={activityTrees}
@@ -165,6 +170,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               questions={questions}
               setCurrentActivity={setCurrentActivity}
               setCurrentStudent={setCurrentStudent}
+              setListViewMode={this.setListViewMode}
               sortedQuestionIds={sortedQuestionIds}
               students={students}
               toggleCurrentQuestion={toggleCurrentQuestion}
@@ -181,12 +187,14 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   currentQuestion={currentQuestion}
                   currentStudentId={currentStudentId}
                   hasTeacherEdition={hasTeacherEdition}
+                  inQuestionMode={inQuestionMode}
                   isAnonymous={isAnonymous}
                   questions={questions}
                   setAnonymous={setAnonymous}
                   setCurrentActivity={setCurrentActivity}
                   setCurrentQuestion={setCurrentQuestion}
                   setCurrentStudent={setCurrentStudent}
+                  setListViewMode={this.setListViewMode}
                   setStudentFilter={setStudentSort}
                   sortByMethod={sortByMethod}
                   sortedQuestionIds={sortedQuestionIds}
@@ -227,6 +235,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   private setDashboardViewMode = (mode: DashboardViewMode) => {
     this.setState({ viewMode: mode });
+  }
+
+  private setListViewMode = (value: boolean) => {
+    this.setState({ inQuestionMode: value });
   }
 
   private handleScroll = (e: React.UIEvent<HTMLElement>) => {

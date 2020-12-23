@@ -12,9 +12,16 @@
     height: 44px;
     width: 240px;
     background-color: white;
+    cursor: pointer;
 
     &.compact {
       height: 32px;
+    }
+    &:hover {
+      background-color: @cc-teal-light4;
+    }
+    &:active {
+      background-color: @cc-teal;
     }
     .name {
       margin: 0 20px 0 20px;
@@ -22,9 +29,22 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      &:hover {
+        text-decoration: underline;
+      }
+      &:active {
+        color: white;
+      }
     }
   }
   .studentName:nth-child(even) {
     background-color: @cc-teal-light6;
+    &:hover {
+      background-color: @cc-teal-light4;
+    }
+    &:active {
+      background-color: @cc-teal;
+    }
   }
 }
