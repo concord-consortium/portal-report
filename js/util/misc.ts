@@ -62,8 +62,8 @@ export function urlHashParam(name: string): string | null{
   return urlStringParam(window.location.hash, name);
 }
 
-export function urlStringParam(url: string, name: string): string | null{
-  const result = queryString.parse(url)[name];
+export function urlStringParam(stringToParse: string, name: string): string | null{
+  const result = queryString.parse(stringToParse)[name];
   if (typeof result === "string") {
     return result;
   } else if (result && result.length) {

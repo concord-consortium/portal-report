@@ -109,7 +109,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
   // In those cases the offering.activity_url will look something like:
   // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
   let resourceUrl;
-  if (urlStringParam(rawPortalData.offering.activity_url, "activity")) {
+  if (urlStringParam(rawPortalData.offering.activity_url.split("?")[1], "activity")) {
     resourceUrl = decodeURIComponent(((rawPortalData.offering.activity_url?.split(".json")[0]).split("activity="))[1].replace("%2Fapi%2Fv1", ""));
   } else {
     resourceUrl = rawPortalData.offering.activity_url.toLowerCase();
@@ -136,10 +136,12 @@ function _receivePortalData(db: firebase.firestore.Firestore,
       response: fakeAnswers,
     });
   } else {
-    watchResourceStructure(db, source, resourceUrl, dispatch);
+    const resourceSource = urlParam("resourceSource") || source;
+    watchResourceStructure(db, resourceSource, resourceUrl, dispatch);
 
     // Watch the Answers
-    watchCollection(db, `sources/${source}/answers`, RECEIVE_ANSWERS,
+    const answerSource = urlParam("answerSource") || source;
+    watchCollection(db, `sources/${answerSource}/answers`, RECEIVE_ANSWERS,
       rawPortalData, dispatch);
   }
 
