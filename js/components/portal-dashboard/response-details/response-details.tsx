@@ -113,7 +113,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   nameFirst={false}
                 />
               : <QuestionNavigator
-                  currentActivity={currentActivity || firstActivity}
                   currentQuestion={currentQuestion || firstQuestion}
                   questions={questions}
                   sortedQuestionIds={sortedQuestionIds}
