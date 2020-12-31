@@ -8,6 +8,7 @@ import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { StudentNavigator } from "../student-navigator";
 import { ActivityNavigator } from "../activity-navigator";
+import { ListViewMode } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
@@ -25,14 +26,14 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   currentStudentId: string | null;
   hasTeacherEdition: boolean;
-  inQuestionMode: boolean;
   isAnonymous: boolean;
+  listViewMode: ListViewMode;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
-  setListViewMode: (mode: boolean) => void;
+  setListViewMode: (mode: ListViewMode) => void;
   setStudentFilter: (value: string) => void;
   sortByMethod: string;
   sortedQuestionIds?: string[];
@@ -57,7 +58,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous, inQuestionMode, questions,
+    const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous, listViewMode, questions,
       setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setListViewMode, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
       trackEvent } = this.props;
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
@@ -83,7 +84,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           <PopupClassNav
             anonymous={anonymous}
             isSpotlightOn={selectedStudents.length > 0}
-            inQuestionMode={inQuestionMode}
+            listViewMode={listViewMode}
             questionCount={qCount}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
@@ -103,7 +104,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
               />
             }
             <div className={`${css.contentNavigatorArea} ${isSequence ? css.short : ""}`}>
-            { inQuestionMode
+            { listViewMode==="Question"
               ? <StudentNavigator
                   students={students}
                   isAnonymous={isAnonymous}
@@ -124,7 +125,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             </div>
           </div>
         </div>
-        { inQuestionMode
+        { listViewMode==="Question"
           ? <PopupQuestionAnswerList
               activities={activities}
               currentActivity={currentActivity || firstActivity}
