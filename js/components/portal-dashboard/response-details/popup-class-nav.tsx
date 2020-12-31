@@ -1,6 +1,7 @@
 import React from "react";
 import { AnonymizeStudents } from "../anonymize-students";
 import { CustomSelect, SelectItem } from "../custom-select";
+import { ListViewMode } from "../../../util/misc";
 import { CountContainer } from "../count-container";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../../actions/dashboard";
 import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
@@ -14,32 +15,32 @@ import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
 interface IProps {
   anonymous: boolean;
   isSpotlightOn: boolean;
-  inQuestionMode: boolean;
+  listViewMode: ListViewMode;
   onShowDialog: (show: boolean) => void;
   questionCount: number;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   sortByMethod: string;
   studentCount: number;
-  setListViewMode: (value: boolean) => void;
+  setListViewMode: (value: ListViewMode) => void;
   trackEvent: (category: string, action: string, label: string) => void;
 }
 
 export class PopupClassNav extends React.PureComponent<IProps>{
   render() {
-    const { anonymous, inQuestionMode, questionCount, studentCount, setAnonymous } = this.props;
+    const { anonymous, listViewMode, questionCount, studentCount, setAnonymous } = this.props;
     return (
       <div className={`${css.popupClassNav} ${css.column}`}>
         {this.renderViewListOptions()}
         <div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
           <CountContainer
-            numItems={inQuestionMode ? questionCount : studentCount}
-            containerLabel={inQuestionMode ? "Questions" : "Class"}
-            containerLabelType={!inQuestionMode ? "students" : undefined}
+            numItems={listViewMode==="Question" ? questionCount : studentCount}
+            containerLabel={listViewMode==="Question" ? "Questions" : "Class"}
+            containerLabelType={listViewMode==="Student" ? "students" : undefined}
           />
-          {inQuestionMode ? this.renderQuestionFilter() : this.renderStudentFilter()}
-          {!inQuestionMode && this.renderSpotlightToggle()}
+          {listViewMode==="Question" ? this.renderQuestionFilter() : this.renderStudentFilter()}
+          {listViewMode==="Student" && this.renderSpotlightToggle()}
         </div>
       </div>
     );
@@ -89,15 +90,15 @@ export class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private renderViewListOptions() {
-    const { inQuestionMode, setListViewMode } = this.props;
-    const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${!inQuestionMode ? css.selected : ""}`;
-    const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${inQuestionMode ? css.selected : ""}`;
+    const { listViewMode, setListViewMode } = this.props;
+    const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${listViewMode==="Student" ? css.selected : ""}`;
+    const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${listViewMode==="Question" ? css.selected : ""}`;
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
-        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={() => setListViewMode(false)}>
+        <div className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={() => setListViewMode("Student")}>
           <StudentViewIcon className={css.optionIcon} />
         </div>
-        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={() => setListViewMode(true)}>
+        <div className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={() => setListViewMode("Question")}>
           <QuestionViewIcon className={css.optionIcon} />
         </div>
       </div>

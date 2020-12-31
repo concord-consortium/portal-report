@@ -63,5 +63,12 @@ context("Portal Dashboard Response Table",()=>{
     cy.get('[data-cy=multiple-choice-nonscored-completed]').eq(2).click();
     cy.get('[data-cy=multiple-choice-answers]').should('be.visible');
     cy.get('[data-cy=student-name').should('contain', 'Wu, Jerome');
+    cy.get('[data-cy=question-overlay-header-button]').click();
   });
+  it('verify click on student name opens response view with student answers', ()=>{
+    cy.get('[data-cy=student-name]').contains('Galloway, Amy').click();
+    cy.get('[data-cy=student-navigator] [data-cy=student-name]').should('contain','Galloway, Amy');
+    cy.get('[data-cy=question-wrapper]').eq(0).should('contain', 'Q1');
+    cy.get('[data-cy=student-response]').eq(0).should('contain', 'test answer 2');
+  })
 });

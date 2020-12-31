@@ -8,6 +8,7 @@ import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { StudentNavigator } from "../student-navigator";
 import { ActivityNavigator } from "../activity-navigator";
+import { ListViewMode } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
@@ -26,11 +27,13 @@ interface IProps {
   currentStudentId: string | null;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
+  listViewMode: ListViewMode;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
+  setListViewMode: (mode: ListViewMode) => void;
   setStudentFilter: (value: string) => void;
   sortByMethod: string;
   sortedQuestionIds?: string[];
@@ -40,7 +43,6 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
 }
 interface IState {
-  inQuestionMode: boolean;
   selectedStudents: SelectedStudent[];
   showSpotlightDialog: boolean;
   showSpotlightListDialog: boolean;
@@ -50,17 +52,16 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      inQuestionMode: false,
       selectedStudents: [],
       showSpotlightDialog: false,
       showSpotlightListDialog: false
     };
   }
   render() {
-    const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous, questions,
-      setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
+    const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous, listViewMode, questions,
+      setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setListViewMode, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
       trackEvent } = this.props;
-    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, inQuestionMode } = this.state;
+    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
     // TODO: FEEDBACK
     // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
     const firstActivity = activities.first();
@@ -83,7 +84,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           <PopupClassNav
             anonymous={anonymous}
             isSpotlightOn={selectedStudents.length > 0}
-            inQuestionMode={inQuestionMode}
+            listViewMode={listViewMode}
             questionCount={qCount}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
@@ -91,7 +92,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             sortByMethod={sortByMethod}
             trackEvent={trackEvent}
             onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
-            setListViewMode={this.setListViewMode}
+            setListViewMode={setListViewMode}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             {isSequence &&
@@ -103,7 +104,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
               />
             }
             <div className={`${css.contentNavigatorArea} ${isSequence ? css.short : ""}`}>
-            { inQuestionMode
+            { listViewMode==="Question"
               ? <StudentNavigator
                   students={students}
                   isAnonymous={isAnonymous}
@@ -113,7 +114,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   nameFirst={false}
                 />
               : <QuestionNavigator
-                  currentActivity={currentActivity || firstActivity}
                   currentQuestion={currentQuestion || firstQuestion}
                   questions={questions}
                   sortedQuestionIds={sortedQuestionIds}
@@ -125,7 +125,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             </div>
           </div>
         </div>
-        { inQuestionMode
+        { listViewMode==="Question"
           ? <PopupQuestionAnswerList
               activities={activities}
               currentActivity={currentActivity || firstActivity}
@@ -204,10 +204,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       updatedSelectedStudents.push(newStudent);
     }
     this.setState({ selectedStudents: updatedSelectedStudents });
-  }
-
-  private setListViewMode = (value: boolean) => {
-    this.setState({ inQuestionMode: value });
   }
 
 }

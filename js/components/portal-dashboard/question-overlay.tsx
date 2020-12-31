@@ -5,7 +5,7 @@ import { QuestionNavigator } from "./question-navigator";
 import { StudentResponse } from "./overlay-student-response";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg";
-import { DashboardViewMode } from "../../util/misc";
+import { DashboardViewMode, ListViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -14,6 +14,7 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   currentStudentId: string | null;
   setDashboardViewMode: (mode: DashboardViewMode) => void;
+  setListViewMode: (mode: ListViewMode) => void;
   isAnonymous: boolean;
   questions?: Map<string, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -45,7 +46,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private renderQuestionDetails = () => {
-    const { currentActivity, currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition } = this.props;
+    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition } = this.props;
     return (
       <React.Fragment>
         <div className={css.header} data-cy="question-overlay-header">
@@ -56,7 +57,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           {this.renderAllResponsesButton()}
         </div>
         <QuestionNavigator
-          currentActivity={currentActivity}
           currentQuestion={currentQuestion}
           questions={questions}
           sortedQuestionIds={sortedQuestionIds}
@@ -86,5 +86,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
 
   private handleShowAllResponsesButtonClick = () => {
     this.props.setDashboardViewMode("ResponseDetails");
+    this.props.setListViewMode("Student");
   }
 }
