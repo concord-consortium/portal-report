@@ -59,8 +59,7 @@ export function fetchAndObserveData() {
   if (runKeyValue) {
     const activity = urlParam("activity") || "";
     const source = activity ? makeSourceKey(activity) : "";
-    // FIXME: this really looks broken, the answerSource should never by the host of the portal-report
-    const answerSource = urlParam("answerSource") || window.location.host;
+    const answersSourceKey = urlParam("answersSourceKey") || source;
     return (dispatch: Dispatch, getState: any) => {
       dispatch({
         type: SET_ANONYMOUS_VIEW,
@@ -80,7 +79,7 @@ export function fetchAndObserveData() {
             response: fakeSequenceStructure,
           });
         }
-        watchAnonymousAnswers(db, answerSource, runKeyValue, dispatch);
+        watchAnonymousAnswers(db, answersSourceKey, runKeyValue, dispatch);
       });
     };
   } else {
@@ -125,12 +124,11 @@ function _receivePortalData(db: firebase.firestore.Firestore,
       response: fakeAnswers,
     });
   } else {
-    const resourceSource = urlParam("resourceSource") || source;
-    watchResourceStructure(db, resourceSource, resourceUrl, dispatch);
+    watchResourceStructure(db, source, resourceUrl, dispatch);
 
     // Watch the Answers
-    const answerSource = urlParam("answerSource") || source;
-    watchCollection(db, `sources/${answerSource}/answers`, RECEIVE_ANSWERS,
+    const answersSourceKey = urlParam("answersSourceKey") || source;
+    watchCollection(db, `sources/${answersSourceKey}/answers`, RECEIVE_ANSWERS,
       rawPortalData, dispatch);
   }
 
@@ -158,7 +156,7 @@ function _getResourceUrl(activityUrl: string) {
   const activityUrlActivityParam = activityUrlParts.query.activity;
   if (activityUrlActivityParam && typeof activityUrlActivityParam === "string" ) {
     // The activity param of an activity-player url points to a /api/v1/activities/123.json
-    // However the activity structure is stored in the portal using its canonical url of /activites/123
+    // However the activity structure is stored in the report service using its canonical url of /activites/123
     resourceUrl = activityUrlActivityParam.replace("/api/v1", "").replace(".json", "");
   } else {
     resourceUrl = activityUrl.toLowerCase();

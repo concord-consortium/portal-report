@@ -66,16 +66,30 @@ export interface IFirebaseJWT {
   };
 }
 
-// This matches the make_source_key method in LARA's report_service.rb
+// extract the hostname from the url
 export const makeSourceKey = (url: string | null) => {
-  return url ? url.replace(/https?:\/\/([^\/]+)/, "$1") : "";
+  return url ? parseUrl(url.toLowerCase()).hostname : "";
 };
 
-function getSourceKey(): string {
-  const toolId = urlParam("tool-id");
-  return makeSourceKey(toolId);
+// TODO: move this into the doc and reference it here
+// It is tempting to extract the right source key when the activity_url is
+// an activity player url. Then the sourceKey param would not be needed for
+// activity player report launches.
+// We do this kind of extraction here; _getResourceUrl
+// however this level of automagic will be hard to track down. It is likely
+// that some activity player activities in the portal will use custom urls to
+// their activities instead of ones authored in LARA. So these setups would
+// need to override the automatic sourceKey so their answers would be found
+// In these cases it is also likely the activity player activity launch
+// itself would use a report-source to configure the sorucekey where the
+// activity player stores its answers.
+function getSourceKeyFromOffering(offering: {activity_url: string}): string {
+  const sourceKeyParam = urlParam("sourceKey");
+  return sourceKeyParam || makeSourceKey(offering.activity_url);
 }
 
+// FIXME: If the user isn't logged in, and then they log in with a user that
+// isn't the student being reported on then just a blank screen is shown
 export const authorizeInPortal = (portalUrl: string, oauthClientName: string, state: string) => {
   // eslint-disable-next-line no-console
   console.log("authorizeInPortal");
@@ -248,7 +262,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
             platformId: verifiedFirebaseJWT.claims.platform_id,
             platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
             contextId: classData.class_hash,
-            sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+            sourceKey: getSourceKeyFromOffering(offeringData)
           };
         });
       } else {
@@ -261,10 +275,10 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: "https://fake.portal",
           platformUserId: "1",
           contextId: classData.class_hash,
-          // In most cases when using fake data the SOURCE_KEY will be null
+          // In most cases when using fake data the sourceKey param will be null
           // so the sourceKey will be based on the fake offeringData
           // and this offering data has a hostname of 'fake.authoring.system'
-          sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          sourceKey: getSourceKeyFromOffering(offeringData)
         };
       }
     });
