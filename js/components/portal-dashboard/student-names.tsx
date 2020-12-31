@@ -27,7 +27,7 @@ export class StudentNames extends React.PureComponent<IProps> {
               <div key={`student ${i}`}>
                 <div className={css.name}
                      data-cy="student-name"
-                     onClick={this.handleOpenStudentView("ResponseDetails", student.get("id"))}>
+                     onClick={this.handleOpenQuestionViewForStudent("ResponseDetails", student.get("id"))}>
                       {formattedName}
                 </div>
               </div>
@@ -38,7 +38,7 @@ export class StudentNames extends React.PureComponent<IProps> {
     );
   }
 
-  private handleOpenStudentView = (mode: DashboardViewMode, currentStudentId: string) => () => {
+  private handleOpenQuestionViewForStudent = (mode: DashboardViewMode, currentStudentId: string) => () => {
     this.props.setDashboardViewMode(mode);
     this.props.setListViewMode("Question");
     this.props.setCurrentStudent(currentStudentId);
