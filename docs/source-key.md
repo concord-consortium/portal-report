@@ -44,7 +44,7 @@ Soon the AP is going to start saving the page the student is currently on. I thi
 - the offeringUrl
 That'd make it easier for some reports to be launched without needing as many parameters as they currently do.
 
-### Details about `tool_id` in the answers documents
+## Details about `tool_id` in the answers documents
 It is always added by the AP with a value of `portalData.toolId`. And this is the activity-player URL including its path so it would include the version or branch info if that was used. So this tool_id value works well for identifying which tool actually wrote the answer regardless of which source it is under.
 
 LARA also always adds this to the answers. Its value is either the REPORT_SERVICE_TOOL_ID if it is set or REPORT_SERVICE_SELF_URL otherwise.  The REPORT_SERVICE_SELF_URL is required to be set. The REPORT_SERVICE_TOOL_ID is optional and normally used in the dev environment.  
@@ -101,7 +101,7 @@ The source is not currently checked by any of the access rules.
 ### What about conflicting documents?  
 If we don't use the source then the activity-player and LARA answer documents will be mixed in the same folder.
 
-The answer documents currently include a `tool_id`. In the AP this domain plus the path of the url of the running the activity player so it also includes the version or branch in. LARA always adds this to the answers, and it typically should be `https://authoring.concord.org` or a developer might set it to something else for testing purposes.
+The answer documents currently include a `tool_id`. In the AP this is a the AP domain plus the path, so for example it would be `https://activity-player.concord.org/version/1.0.0`. The LARA runtime also adds this to the answers, and it typically will be `https://authoring.concord.org`. See the Details about `tool_id`... section.
 
 So this is a way to differentiate between the two types of answer documents.
 
