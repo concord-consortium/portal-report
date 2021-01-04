@@ -50,9 +50,6 @@ export function initializeDB() {
 async function createDB() {
   const name = getFirebaseAppName();
 
-  // eslint-disable-next-line no-console
-  console.log("initializeDB: " + name);
-
   const config = configurations[name];
   firebase.initializeApp(config);
 
@@ -92,9 +89,6 @@ async function createDB() {
     // Which fake structure and fake answers to load could be specified in URL params
   }
 
-  // eslint-disable-next-line no-console
-  console.log("initializeDB: calling firebase.firestore()");
-
   return firebase.firestore();
 }
 
@@ -103,8 +97,6 @@ async function createDB() {
 // inside of the then, but using getFirestore() makes it easier to to say all direct calls to
 // firebase.firestore() should be here in db.ts
 export const getFirestore = (): Promise<firebase.firestore.Firestore> => {
-  // eslint-disable-next-line no-console
-  console.log("getFirestore");
   if(firestoreDBPromise == null) {
     throw new Error("firestore needs to be initialized first");
   }
@@ -115,17 +107,10 @@ export const getFirestore = (): Promise<firebase.firestore.Firestore> => {
 const SKIP_SIGN_IN = false;
 
 export const signInWithToken = (rawFirestoreJWT: string) => {
-  // eslint-disable-next-line no-console
-  console.log("signInWithToken: " + rawFirestoreJWT);
   // It's actually useful to sign out first, as firebase seems to stay signed in between page reloads otherwise.
   const signOutPromise = firebase.auth().signOut();
-  // eslint-disable-next-line no-console
-  console.log("signInWithToken: started signOut");
   if (!SKIP_SIGN_IN) {
     return signOutPromise.then(() => {
-      // eslint-disable-next-line no-console
-      console.log("signInWithToken: signedOut");
-
       return firebase.auth().signInWithCustomToken(rawFirestoreJWT);
     });
   } else {

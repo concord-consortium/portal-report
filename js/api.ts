@@ -82,9 +82,6 @@ function getSourceKeyFromOffering(offering: {activity_url: string}): string {
 // FIXME: If the user isn't logged in, and then they log in with a user that
 // isn't the student being reported on then just a blank screen is shown
 export const authorizeInPortal = (portalUrl: string, oauthClientName: string, state: string) => {
-  // eslint-disable-next-line no-console
-  console.log("authorizeInPortal");
-
   const portalAuth = new ClientOAuth2({
     clientId: oauthClientName,
     redirectUri: window.location.origin + window.location.pathname,
@@ -97,14 +94,10 @@ export const authorizeInPortal = (portalUrl: string, oauthClientName: string, st
 
 // Returns true if it is redirecting
 export const initializeAuthorization = () => {
-  // eslint-disable-next-line no-console
-  console.log("initializeAuthorization");
   const state = urlHashParam("state");
   accessToken = urlHashParam("access_token");
 
   if (accessToken && state) {
-    // eslint-disable-next-line no-console
-    console.log("initializeAuthorization: updating Params");
     const savedParamString = sessionStorage.getItem(state);
     window.history.pushState(null, "Portal Report", savedParamString);
   }
@@ -197,8 +190,6 @@ export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | nu
 }
 
 export function authFirestore(rawFirestoreJWT: string) {
-  // eslint-disable-next-line no-console
-  console.log("authFirestore");
   const authResult = signInWithToken(rawFirestoreJWT) as Promise<firebase.auth.UserCredential | void>;
   return authResult.catch(err => {
     console.error("Firebase auth failed", err);
@@ -218,9 +209,6 @@ function fakeUserType(): "teacher" | "learner" {
 }
 
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
-  // eslint-disable-next-line no-console
-  console.log("fetchPortalDataAndAuthFirestore");
-
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
@@ -242,9 +230,6 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
         }
         const verifiedFirebaseJWT = decodedFirebaseJWT as IFirebaseJWT;
         return authFirestore(rawFirestoreJWT).then(() => {
-          // eslint-disable-next-line no-console
-          console.log("authFirestore complete");
-
           return {
             offering: offeringData,
             resourceLinkId,
