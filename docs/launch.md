@@ -26,36 +26,62 @@ The portal report can run in multiple different modes depending on which URL par
 
 In this diagram the Activity Player could be substituted for another third party site. For example we plan to use this kind of launch from spreadsheets generated for researchers.
 
-1. Params passed by third party to the portal-report
-    - **class** URL to portal class api to get info about the class
-    - **classOfferings** URL to portal offering api using a class_id filter **TODO** why do we have this???
-    - **firebase-app** firebase app name in the portal. It defaults to "report-service". You might set this to work ith the development firestore database with "report-service-dev"
-    - **offering** URL used to request info from the portal about this assignment in the portal
-    - **activityUrl** URL to the authored activity typically this would be something like
-    `https://authoring.concord.org/activities/1234`
-    - **reportType** always set to `offering`
-    - **studentId** user id of the student this report is being opened for
-    - **tool-id** URI for tool that stored the resource structure in the report service. For the activity player this will often be `https://authoring.concord.org`
-    - **auth-domain** URL for the authentication domain, usually the portal so it would usually be `https://learn.concord.org`
+#### Initial Launch Params (#1 in the diagram)
+
+- **class** URL to portal class api to get info about the class
+- **firebase-app** firebase app name in the portal. It defaults to "report-service". You might set this to work ith the development firestore database with "report-service-dev"
+- **offering** URL used to request info from the portal about this assignment in the portal
+- **reportType** always set to `offering`
+- **studentId** user id of the student this report is being opened for
+- **sourceKey** main source key used in the paths for the various documents used by the portal report. See URL Parameters section below for more info.
+- **answersSourceKey** the source key for the answers. See URL Parameters section below for more info.
+- **auth-domain** URL for the authentication domain, usually the portal so it would usually be `https://learn.concord.org`
+
+#### Request to portal OAuth2 (#3 in the diagram)
+
+- URL: `${auth-domain}/auth/oauth_authorize` This uses the `auth-domain` from the launch params to know where to send the OAuth2 request to.
+- Params:
+  - **clientId** currently hardcoded to `"token-service-example-app"`. This needs to be the name of a client in the portal that has a redirect url which exactly matches the redirectUri below. And the client "client type" needs to be configured as 'public', so it allows browser requests for access_tokens.
+  - **redirectUri** current portal-report url without any parameters (this way it will include any version or branch path)
+  - **state** this is a random string that is used a key to restore all of the params from the launch after OAuth2 is done. The state has a size limit so the params be sent directly as the state.
+- Code Location: `api.ts#authorizeInPortal`
+
+#### Source Keys in Firestore
+
+This is brief description of source keys used by the portal report. A more detailed description is in [source-key.md](source-key.md)
+
+
+##### Resource Structure Source Key
+
+For Activity Player and LARA runtime activities the resource structure will generally be found under `authoring.concord.org`.
+
+For a logged in user the default sourceKey is taken from the portal's offering data activity_url. It is the domain of this URL. For an Activity Player activity this domain will typically be `activity-player.concord.org`. That isn't the right value, so for activity-player activities, the `sourceKey` parameter should be used when launching the report.  
+
+When the activity player launches the portal-report itself, it will set the sourceKey parameter.
+
+When the portal launches the portal-report, the parameters will be determined by the external report configured in the portal. The default external report for a resource in the portal is found by the source type of the resource. Regular activity player resources will have a source type of `ActivityPlayer`. Migrated activity player resources will have a source type of `ActivityPlayerMigrated`. The external reports for these source types should set the `sourceKey` and `answersSourceKey` params so the portal report can find the structure and answers.
+
+It is tempting to extract the right source key when the offering.activity_url is an activity player url. Then the sourceKey param would not be needed for activity player report launches. We do this kind of extraction in `_getResourceUrl`. However this level of auto-magic will be hard to track down. It is likely that some activity player activities in the portal will use custom urls for their activities instead of ones authored in LARA. So these setups would need to override the automatic sourceKey so their resource structure would be found. In these cases it is also likely the activity player activity launch would use a report-source to configure the source key where the activity player stores its answers. So in conclusion it is better to avoid URL parsing and be more explicit when possible.
+
+##### Answers Source Key
+
+LARA Runtime activities will generally store their answers with a source key of `authoring.concord.org`. This matches the source key of the resource structure so when viewing a report of the LARA Runtime the `answersSourceKey` won't need to be used.
+
+For activity player activities they will generally store their answers with a source of `activity-player.concord.org`. However, if a resource is migrated from the LARA Runtime to the activity player, the external_activity.url which launches the activity-player will have a `report-source=authoring.concord.org` url parameter. That way the activity player will load in answers that were saved by the LARA runtime and save them back to the same place. In this case when the portal-report is launched the `answersSourceKey` needs to be set so the portal-report also loads the answers from this same source.
+
+When the activity player launches the portal-report itself, it will set the answersSourceKey parameter appropriately.
+
+When the portal launches the portal-report, the parameters will be determined by the external report configured in the portal. The default external report for a resource in the portal is found by the source type of the resource. Regular activity player resources will have a source type of `ActivityPlayer`. Migrated activity player resources will have a source type of `ActivityPlayerMigrated`. The external reports for these source types should set the `sourceKey` and `answersSourceKey` params so the portal report can find the structure and answers.
 
 ### Using data
 
 Data is fetched using `api.js`.
 
-If the query parameters of the url do not include values for `offering` and `class`, we will load in fake data from
-the `js/data` folder. This data gets loaded in much the same way as real data, so can be used for testing.
+If the query parameters of the url do not include values for `offering` and `class`, we will load in fake data from the `js/data` folder. This data gets loaded in much the same way as real data, so can be used for testing.
 
-If we do have `offering` and `class` parameters, then `api.js` will first attempt to get the data for the offering and
-class from the portal. To do this it also needs a `token` parameter, which is used to authenticate with the portal and
-expires after one hour. Besides the class and offering data, we will also fetch a firestore JWT from the portal, given
-the classHash (from the fetched class data) and the token. Using this JWT, we can authenticate with Firestore. Once we
-have successfully authenticated, `receivePortalData` is called in `index.ts`, which starts watching the sequence
-structure and answer data.
+If we do have `offering` and `class` parameters, then `api.js` will first attempt to get the data for the offering and class from the portal. To do this it also needs a `token` parameter, which is used to authenticate with the portal and expires after one hour. Besides the class and offering data, we will also fetch a firestore JWT from the portal, given the classHash (from the fetched class data) and the token. Using this JWT, we can authenticate with Firestore. Once we have successfully authenticated, `receivePortalData` is called in `index.ts`, which starts watching the sequence structure and answer data.
 
-To test the portal using real data, the easiest way is simply to open a report as a teacher from the portal, and then
-replace the url host and path with `localhost:8080`. Alternatively, if you are able to edit the portal settings for the
-offering, you can add the "Developers Tracked Questions (Local)" report to the External Reports of the offering, and
-when you view the class details, you will see a "Local Tracked Q" button next to "Report" which will link to localhost.
+To test the portal using real data, the easiest way is simply to open a report as a teacher from the portal, and then replace the url host and path with `localhost:8080`. Alternatively, if it is OK mess with the assignment, you can add an additional report to the resource which launches your localhost report. An example of this is the "Developers Tracked Questions (Local)" external report.
 
 ### URL Parameters
 
@@ -63,33 +89,19 @@ when you view the class details, you will see a "Local Tracked Q" button next to
                     token when making requests to the portal
 * `class={url}`:    URL to get info about the class from the portal
 * `offering={url}`: URL to get info about the offering from the portal
-* `firebase-app={name}`: identifier for a portal Firebase App. This name is sent to the portal to get a FirebaseJWT.
-                    It defaults to "report-service".
-* `tool-id={uri}`:  URI identifying the tool that stored the activity structure and answers in Firestore. The `tool-id`
-                    is converted to a source key, which is used to query the activity structure and answers in firestore.
-                    The conversion from `tool-id` to source key matches the `make_source_key` method in LARA's
-                    report_service.rb. If the `tool-id` is not set then the source key is the hostname of the
-                    activity_url of the offering data retrieved from the portal.
+* `firebase-app={name}`: identifier for a portal Firebase App. This name is sent to the portal to get a FirebaseJWT. It defaults to "report-service".
 * `portal-dashboard`: boolean parameter which tells the report to render in a new dashboard style
 * `dashboard`:      boolean parameter which tells the report to render in old dashboard style
 * `activityIndex={index}`: when the activity is a sequence, only show this activity's questions
-* `studentId={id}`: This shows the report for a single student, and removes some UI affordances. The filtering of the
-                    student data happens client-side.
-* `iframeQuestionId={id}`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing
-                    the model referenced by `iframeQuestionId`, and the answer saved by `studentId` (either as state or as
-                    a url).
+* `studentId={id}`: This shows the report for a single student, and removes some UI affordances. The filtering of the student data happens client-side.
+* `iframeQuestionId={id}`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing the model referenced by `iframeQuestionId`, and the answer saved by `studentId` (either as state or as a url).
+* `sourceKey`: main source key used in the paths for the various documents used by the portal report. The paths are documented in [report-service.md](report-service.md). See the Source Keys section for more details. The parameter is ignored when launching anonymously. See `activity` param. Default value is the hostname of the activity URL from the portal offering data.
+* `answersSourceKey`: the source key for the answers. See the Source Keys section for more details. Default value is the value of the `sourceKey` param.
 
 Parameters for showing data stored anonymously in the report service
 
-* `runKey={string}`: identifier for anonymous answers stored in the report service. The activity player generates a
-                    a runkey when launched anonymously. The activity player then sends this runKey to the portal report
-                    when the user clicks the report button in the activity player.
-* `activity={uri}`: portal-report uses this uri to find the activity structure in the report service firestore database
-                    this uri is also parsed to make the source key for the activity structure similar to the `tool-id`
-                    above. It is important to note that the `tool-id` is ignored in this case. If the activity is not specified,
-                    fake activity structure will be used.
-* `answerSource={string}`: identifier used to construct the path to the answers in the report service. In the case of
-                    the activity player the answerSource is activity-player.concord.org.
+* `runKey={string}`: identifier for anonymous answers stored in the report service. The activity player generates a runkey when launched anonymously. The activity player then sends this runKey to the portal report when the user clicks the report button in the activity player.
+* `activity={uri}`: portal-report uses this uri to find the activity structure in the report service firestore database this uri is also parsed to make the source key for the activity structure. It is important to note that the `sourceKey` param is ignored in this case. If the activity is not specified, fake activity structure will be used.
 
 Parameters for 3rd party launching
 

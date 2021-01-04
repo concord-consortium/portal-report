@@ -71,18 +71,9 @@ export const makeSourceKey = (url: string | null) => {
   return url ? parseUrl(url.toLowerCase()).hostname : "";
 };
 
-// TODO: move this into the doc and reference it here
 // It is tempting to extract the right source key when the activity_url is
-// an activity player url. Then the sourceKey param would not be needed for
-// activity player report launches.
-// We do this kind of extraction here; _getResourceUrl
-// however this level of automagic will be hard to track down. It is likely
-// that some activity player activities in the portal will use custom urls to
-// their activities instead of ones authored in LARA. So these setups would
-// need to override the automatic sourceKey so their answers would be found
-// In these cases it is also likely the activity player activity launch
-// itself would use a report-source to configure the sorucekey where the
-// activity player stores its answers.
+// an activity player url. However the level of auto-magic will probably cause
+// problems in the future. See docs/launch.md for more info
 function getSourceKeyFromOffering(offering: {activity_url: string}): string {
   const sourceKeyParam = urlParam("sourceKey");
   return sourceKeyParam || makeSourceKey(offering.activity_url);
