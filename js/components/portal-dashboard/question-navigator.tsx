@@ -8,7 +8,6 @@ import css from "../../../css/portal-dashboard/question-navigator.less";
 
 
 interface IProps {
-  currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   questions?: Map<string, any>;
   sortedQuestionIds?: string[];
@@ -29,7 +28,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { currentActivity, currentQuestion, inOverlay, hasTeacherEdition } = this.props;
+    const { currentQuestion, inOverlay, hasTeacherEdition } = this.props;
     return (
       <div className={css.questionArea}>
         <div className={css.titleWrapper}>
@@ -49,7 +48,6 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           {inOverlay && this.renderChevron()}
         </div>
         <QuestionArea
-          currentActivity={currentActivity}
           currentQuestion={currentQuestion}
           hideQuestion={this.state.hideQuestion}
           useMinHeight={inOverlay}

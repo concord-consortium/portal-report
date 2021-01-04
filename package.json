@@ -33,7 +33,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:full": "npm run test && npm run cypress:test"
+    "test:full": "npm run test && npm run cypress:test",
+    "doc:diagrams": "mmdc -i docs/diagrams/thirdparty-authed-launch.mmd"
   },
   "jest": {
     "roots": [
@@ -62,6 +63,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.8.4",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@mermaid-js/mermaid-cli": "^8.8.4",
     "@svgr/webpack": "^5.4.0",
     "@testing-library/react": "^10.0.4",
     "@types/dompurify": "^2.0.4",
@@ -118,6 +120,7 @@
     "aws-sdk": "^2.451.0",
     "bootstrap": "^3.3.6",
     "chroma-js": "^2.1.0",
+    "client-oauth2": "^4.3.3",
     "dompurify": "^2.0.14",
     "firebase": "^7.14.3",
     "formik": "^2.1.4",

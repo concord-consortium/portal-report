@@ -25,7 +25,7 @@ export const FeedbackLegend: React.FC<IProps> = (props) => {
       <dd>Awaiting feedback</dd>
       <dt>{givenFeedbackIcon}</dt>
       <dd>Feedback given</dd>
-      { feedbackLevel === "Question" && 
+      { feedbackLevel === "Question" &&
         <React.Fragment>
           <dt>{updateFeedbackIcon}</dt>
           <dd>Student answer updated since feedback given</dd>

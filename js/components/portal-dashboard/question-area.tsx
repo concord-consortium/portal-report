@@ -7,7 +7,6 @@ import { Question } from "./questions/question";
 import css from "../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
-  currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   hideQuestion: boolean;
   useMinHeight?: boolean;
@@ -16,7 +15,7 @@ interface IProps {
 
 export class QuestionArea extends React.PureComponent<IProps>{
   render() {
-    const { currentActivity, currentQuestion, hideQuestion, useMinHeight, hasTeacherEdition } = this.props;
+    const { currentQuestion, hideQuestion, useMinHeight, hasTeacherEdition } = this.props;
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
     const type = currentQuestion?.get("type");
@@ -25,7 +24,8 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const interactiveName = type === "iframe_interactive" && currentQuestion?.get("name");
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
-    const activityURL = currentActivity?.get("url");
+    const activityURL = currentQuestion?.get("questionUrl");
+
     return (
       <div className={`${css.questionContentArea} ${hideQuestion ? css.hidden : ""}`}>
         <div className={css.questionTypeHeader}>
@@ -40,7 +40,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
               <LaunchIcon className={css.icon} />
             </a>
             {hasTeacherEdition &&
-              <a className={css.teacherEditionIcon} href={activityURL+"?mode=teacher-edition"} target="_blank" data-cy="open-teacher-edition-button">
+              <a className={css.teacherEditionIcon} href={`${activityURL}/?mode=teacher-edition`} target="_blank" data-cy="open-teacher-edition-button">
                 <div className={teacherEditionButtonClasses}>
                   <LaunchIcon className={css.icon} />
                 </div>

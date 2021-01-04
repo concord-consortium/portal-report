@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
-import { fetchClassData, fetchFirestoreJWT } from "../../api";
+import { fetchOfferingData, fetchClassData, fetchFirestoreJWT } from "../../api";
+import { urlParam } from "../../util/misc";
 
 export default class InteractiveIframe extends PureComponent {
   constructor (props) {
@@ -34,8 +35,14 @@ export default class InteractiveIframe extends PureComponent {
   }
 
   handleGetFirebaseJWT = (options) => {
-    return fetchClassData()
-      .then(classData => fetchFirestoreJWT(classData.class_hash, options.firebase_app))
+    return Promise.all([fetchOfferingData(), fetchClassData()])
+      .then(([offeringData, classData]) => {
+        const resourceLinkId = offeringData.id.toString();
+        // only pass resourceLinkId if there is a studentId
+        // FIXME: if this is a teacher viewing the report of a student there will be a studentId
+        // but the token will be for a teacher, so then the resourceLinkId should be null
+        return fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, options.firebase_app);
+      })
       .then(json => {
         this.iframePhone.post("firebaseJWT", json);
         return json;

@@ -21,7 +21,7 @@ export const StudentNavigator: React.FC<IProps> = (props) => {
                         : [<PrevNextButtons key={"prev-next-button"} {...props}/>, <StudentName key={"student-name"} {...props}/>];
   return (
     <div className={css.studentNavigator}>
-      <div className={css.header}>
+      <div className={css.header} data-cy="student-navigator">
         {componentOrder.map(component => component)}
       </div>
     </div>

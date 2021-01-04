@@ -13,7 +13,7 @@ describe("<InteractiveIframe />", () => {
   const height = "100px";
 
   beforeEach(() => {
-    window.history.replaceState({}, "Test", "/?class=https://portal.com/classes/123");
+    window.history.replaceState({}, "Test", "/?token=abcde&class=https://portal.com/classes/123");
     nock("https://portal.com/")
       .get("/classes/123")
       .reply(200, {class_hash: classHash});

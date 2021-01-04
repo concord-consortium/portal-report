@@ -6,7 +6,9 @@ import React from "react";
 import { render } from "react-dom";
 import App from "./containers/app";
 import configureStore from "./store/configure-store";
+import { initializeAuthorization } from "./api";
 
+initializeAuthorization();
 const store = configureStore();
 window.store = store;
 
