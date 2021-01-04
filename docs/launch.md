@@ -29,7 +29,7 @@ In this diagram the Activity Player could be substituted for another third party
 #### Initial Launch Params (#1 in the diagram)
 
 - **class** URL to portal class api to get info about the class
-- **firebase-app** firebase app name in the portal. It defaults to "report-service". You might set this to work ith the development firestore database with "report-service-dev"
+- **firebase-app** firebase app name in the portal. It defaults to "report-service". You might set this to work with the development firestore database with "report-service-dev"
 - **offering** URL used to request info from the portal about this assignment in the portal
 - **reportType** always set to `offering`
 - **studentId** user id of the student this report is being opened for
@@ -41,14 +41,14 @@ In this diagram the Activity Player could be substituted for another third party
 
 - URL: `${auth-domain}/auth/oauth_authorize` This uses the `auth-domain` from the launch params to know where to send the OAuth2 request to.
 - Params:
-  - **clientId** currently hardcoded to `"token-service-example-app"`. This needs to be the name of a client in the portal that has a redirect url which exactly matches the redirectUri below. And the client "client type" needs to be configured as 'public', so it allows browser requests for access_tokens.
+  - **clientId** currently hardcoded to `"token-service-example-app"`. This needs to be the name of a client in the portal that has a redirect url which exactly matches the `redirectUri` below. And the client "client type" needs to be configured as 'public', so it allows browser requests for access_tokens.
   - **redirectUri** current portal-report url without any parameters (this way it will include any version or branch path)
   - **state** this is a random string that is used a key to restore all of the params from the launch after OAuth2 is done. The state has a size limit so the params be sent directly as the state.
 - Code Location: `api.ts#authorizeInPortal`
 
 #### Source Keys in Firestore
 
-This is brief description of source keys used by the portal report. A more detailed description is in [source-key.md](source-key.md)
+This is a brief description of source keys used by the portal report. A more detailed description is in [source-key.md](source-key.md)
 
 
 ##### Resource Structure Source Key
@@ -81,7 +81,7 @@ If the query parameters of the url do not include values for `offering` and `cla
 
 If we do have `offering` and `class` parameters, then `api.js` will first attempt to get the data for the offering and class from the portal. To do this it also needs a `token` parameter, which is used to authenticate with the portal and expires after one hour. Besides the class and offering data, we will also fetch a firestore JWT from the portal, given the classHash (from the fetched class data) and the token. Using this JWT, we can authenticate with Firestore. Once we have successfully authenticated, `receivePortalData` is called in `index.ts`, which starts watching the sequence structure and answer data.
 
-To test the portal using real data, the easiest way is simply to open a report as a teacher from the portal, and then replace the url host and path with `localhost:8080`. Alternatively, if it is OK mess with the assignment, you can add an additional report to the resource which launches your localhost report. An example of this is the "Developers Tracked Questions (Local)" external report.
+To test the portal using real data, the easiest way is simply to open a report as a teacher from the portal, and then replace the url host and path with `localhost:8080`. Alternatively, if it is OK to mess with the assignment, you can add an additional report to the resource which launches your localhost report. An example of this is the "Developers Tracked Questions (Local)" external report.
 
 ### URL Parameters
 

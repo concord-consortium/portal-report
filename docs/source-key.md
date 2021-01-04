@@ -2,7 +2,7 @@
 
 In the report service database the data is segmented in to 'sources'. Each source has a 'sourceKey'.
 
-They were original intended to segment the data stored in the report-service. This way tools working with the report-service wouldn't accidentally clobber some other tools data. However, we are now sharing this data between multiple tools, so they aren't as useful as they used to be.
+They were original intended to segment the data stored in the report-service. This way tools working with the report-service wouldn't accidentally clobber some other tool's data. However, we are now sharing this data between multiple tools, so they aren't as useful as they used to be.
 
 ## Shared Source Keys
 
@@ -27,8 +27,8 @@ The sourceKey for production feedback documents is:
 - `authoring.concord.org`: this is where the portal-report writes
 
 ### resources
-These documents represent the activity or sequence structure that the portal-report and Athen report are reporting on. The structure includes the activity title, pages, questions, and question prompts.
-Currently only LARA writes resource documents. The portal-report and the Athena report reads these documents.
+These documents represent the activity or sequence structure that the portal-report and Athena report are reporting on. The structure includes the activity title, pages, questions, and question prompts.
+Currently only LARA writes resource documents. The portal-report and the Athena report read these documents.
 
 The sourceKey for production resource documents is:
 - `authoring.concord.org`
@@ -47,7 +47,7 @@ That'd make it easier for some reports to be launched without needing as many pa
 ### Details about `tool_id` in the answers documents
 It is always added by the AP with a value of `portalData.toolId`. And this is the activity-player URL including its path so it would include the version or branch info if that was used. So this tool_id value works well for identifying which tool actually wrote the answer regardless of which source it is under.
 
-LARA also always adds this to the answers. Is value is either the REPORT_SERVICE_TOOL_ID if it is set or REPORT_SERVICE_SELF_URL otherwise.  The REPORT_SERVICE_SELF_URL is required to be set. The REPORT_SERVICE_TOOL_ID is optional and normally used in the dev environment.  
+LARA also always adds this to the answers. Its value is either the REPORT_SERVICE_TOOL_ID if it is set or REPORT_SERVICE_SELF_URL otherwise.  The REPORT_SERVICE_SELF_URL is required to be set. The REPORT_SERVICE_TOOL_ID is optional and normally used in the dev environment.  
 
 Typically the tool_id in the answers will be authoring.concord.org.
 
@@ -70,7 +70,7 @@ If we say the source should be the domain of the application that writes the dat
 ### sourceKey is sort of the domain of resource the document is related to
 In this case the sourceKey is the domain that the documents are related too. So if a document is about a user and the user is authenticated in the portal then the sourceKey would be portal domain. Or if the document is feedback about an activity and the activity is coming from authoring.concord.org then the feedback document should also have a sourceKey of authoring.concord.org.
 
-A rational for this design goal is that the ids of the documents could then be relative to the resource they are related to. So then the document ids do not need to be globally unique and there is a no chance of conflicts.
+A rationale for this design goal is that the ids of the documents could then be relative to the resource they are related to. So then the document ids do not need to be globally unique and there is a no chance of conflicts.
 
 Looking at the current code though this filter:
 
@@ -81,13 +81,13 @@ Looking at the current code though this filter:
 
 #### Ambiguous
 - `question_feedbacks` is written by portal-report, but the documents are related to the answer created by the runtime (either activity player or LARA), the question created by LARA, and the assignment in the portal. The related resources can all be discovered from the answer, so we could say the source key should be the domain of the runtime which generated the answers. Currently the sourceKey is `authoring.concord.org`, which is correct for the LARA runtime but incorrect for the activity player runtime.
-- `activity_feedbacks` is written by portal-report, but the documents are related to the student's work on the assignment. Currently this associating is stored using the portal's contextId for the assignment and portalStudentId. The actual work is really from the runtime, but there not yet any document saved by the runtime representing the student's work. When the activity player saves the student's current page, then there will be a document for this work. Assuming we move towards this document of student work, then the related resource is the domain of the runtime which generated the work. Currently the sourceKey is `authoring.concord.org`, which is correct for the LARA runtime but incorrect for the activity player runtime.
+- `activity_feedbacks` is written by portal-report, but the documents are related to the student's work on the assignment. Currently this association is stored using the portal's contextId for the assignment and portalStudentId. The actual work is really from the runtime, but there is not yet any document saved by the runtime representing the student's work. When the activity player saves the student's current page, then there will be a document for this work. Assuming we move towards this document of student work, then the related resource is the domain of the runtime which generated the work. Currently the sourceKey is `authoring.concord.org`, which is correct for the LARA runtime but incorrect for the activity player runtime.
 
 #### Incorrect
 - `feedback_settings` is written by portal-report, but the settings are specific to an assignment in the portal. The sourceKey is `authoring.concord.org`. This is incorrect with this design goal, it should be `learn.concord.org`.
 
 ## Possible Improvement: Replace sourceKey with rootKey
-Here is an idea of way to improve the ambiguous use of sourceKeys above.
+Here is an idea to improve the ambiguous use of sourceKeys above.
 
 A single rootKey would be shared by AP, portal-report, LARA, and researcher report.
 The rootKey would default to something like 'production', but could be overridden for staging
@@ -105,11 +105,11 @@ The answer documents currently include a `tool_id`. In the AP this domain plus t
 
 So this is a way to differentiate between the two types of answer documents.
 
-The question_id in the answer documents is not globably unique by itself, but combining it with the resource_url should uniquely identify the question from the authored content. The same question might be shared by some LARA and AP answers, so a search of answers using just `question_id` and `resource_url` could turn up some answer documents from both systems. However, any reporting system should also be using a `resource_link_id` and/or `run_key` these fields should constrain the answers to a single system.  There are cases that come up with migration where some answers from both systems might share a `resource_link_id`, but that is intentional in the case of a migration.
+The question_id in the answer documents is not globally unique by itself, but combining it with the resource_url should uniquely identify the question from the authored content. The same question might be shared by some LARA and AP answers, so a search of answers using just `question_id` and `resource_url` could turn up some answer documents from both systems. However, any reporting system should also be using a `resource_link_id` and/or `run_key` these fields should constrain the answers to a single system.  There are cases that come up with migration where some answers from both systems might share a `resource_link_id`, but that is intentional in the case of a migration.
 
 Perhaps a researcher wants to look at answers to a question across many classes. In that case the query would be:
 `resource_url = https://example.com and question_id = 234`
-That could then pick up answers from different systems. That is hopefully what the researcher would want beause it indicates the same question was given in multiple systems. If a researcher wants to limit the search to just answers created by a particular runtime they'd need to include the `tool_id` in the query.
+That could then pick up answers from different systems. That is hopefully what the researcher would want because it indicates the same question was given in multiple systems. If a researcher wants to limit the search to just answers created by a particular runtime they'd need to include the `tool_id` in the query.
 
 ## What about local development?
 Currently the portal-report source is determined from the activityUrl from the offering when there is a logged in user.
