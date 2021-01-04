@@ -123,6 +123,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 sortByMethod={sortByMethod}
                 studentCount={students.size}
                 trackEvent={trackEvent}
+                viewMode={viewMode}
               />
               <LevelViewer
                 activities={activityTrees}

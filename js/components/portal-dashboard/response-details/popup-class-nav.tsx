@@ -23,23 +23,33 @@ interface IProps {
   studentCount: number;
   setListViewMode: (value: boolean) => void;
   trackEvent: (category: string, action: string, label: string) => void;
+  viewMode: string;
 }
 
 export class PopupClassNav extends React.PureComponent<IProps>{
   render() {
-    const { anonymous, inQuestionMode, questionCount, studentCount, setAnonymous } = this.props;
+    const { anonymous, inQuestionMode, questionCount, studentCount, setAnonymous, viewMode } = this.props;
+
+    const numItems = viewMode === "FeedbackReport" 
+                     ? 5 
+                     : inQuestionMode ? questionCount : studentCount;
+    const containerLabel = viewMode === "FeedbackReport" 
+                           ? "Awaiting feedback: " 
+                           : inQuestionMode ? "Questions: " : "Class: ";
+    const containerLabelType = viewMode === "FeedbackReport" || inQuestionMode ? undefined : "students";
+
     return (
       <div className={`${css.popupClassNav} ${css.column}`}>
         {this.renderViewListOptions()}
         <div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
           <CountContainer
-            numItems={inQuestionMode ? questionCount : studentCount}
-            containerLabel={inQuestionMode ? "Questions: " : "Class: "}
-            containerLabelType={!inQuestionMode ? "students" : undefined}
+            numItems={numItems}
+            containerLabel={containerLabel}
+            containerLabelType={containerLabelType}
           />
           {inQuestionMode ? this.renderQuestionFilter() : this.renderStudentFilter()}
-          {!inQuestionMode && this.renderSpotlightToggle()}
+          {!inQuestionMode && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
         </div>
       </div>
     );

@@ -101,6 +101,8 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             trackEvent={trackEvent}
             onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
             setListViewMode={this.setListViewMode}
+            viewMode={viewMode}
+            feedbackLevel={feedbackLevel}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             {isSequence &&

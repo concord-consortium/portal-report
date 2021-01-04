@@ -16,16 +16,21 @@ interface IProps {
   sortByMethod: string;
   studentCount: number;
   trackEvent: (category: string, action: string, label: string) => void;
+  viewMode: string;
 }
 
 export class ClassNav extends React.PureComponent<IProps> {
   render() {
-    const { anonymous, setAnonymous } = this.props;
+    const { anonymous, setAnonymous, viewMode } = this.props;
+    const containerLabel = viewMode === "FeedbackReport" ? "Awaiting feedback: " : "Class: ";
+    const containerLabelType = viewMode === "FeedbackReport" ? null : "students";
+    const numItems = viewMode === "FeedbackReport" ? 5 : this.props.studentCount;
+
     return (
       <div className={css.classNav} data-cy="class-nav">
         { this.renderClassSelect() }
         <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
-        <CountContainer numItems={this.props.studentCount} containerLabel={"Class: "} containerLabelType={"students"} />
+        <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
         { this.renderStudentSort() }
       </div>
     );
