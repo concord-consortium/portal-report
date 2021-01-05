@@ -10,11 +10,12 @@ interface IProps {
   activity: Map<any, any>;
   rubric: any;
   feedbackLevel: "Activity" | "Question";
+  listViewMode: listViewMode;
   setFeedbackLevel: (value: string) => void;
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const {feedbackLevel, setFeedbackLevel} = props;
+  const {feedbackLevel, setFeedbackLevel, listViewMode} = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -34,7 +35,7 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
       <div className={css.titleWrapper}>
         <div className={css.title}>Feedback Level:</div>
         <div className={css.viewToggle}>
-          <button className={activityButtonClass} onClick={handleActivityButtonClick}>Activity</button>
+          <button className={activityButtonClass} onClick={handleActivityButtonClick} disabled={listViewMode === "Question"}>Activity</button>
           <button className={questionButtonClass} onClick={handleQuestionButtonClick}>Questions</button>
         </div>
       </div>

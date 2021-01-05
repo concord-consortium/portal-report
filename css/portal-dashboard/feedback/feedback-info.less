@@ -62,6 +62,17 @@
             top: 2px;
             width: 24px;
           }
+
+          &:disabled {
+            border-color: @cc-charcoal-light1;
+
+            &:before {
+              opacity: .35;
+            }
+            &:hover {
+              background-color: @feedback-green-light4;
+            }
+          }
         }
         &.viewToggle__button__question {
           border: solid 1px #fff;

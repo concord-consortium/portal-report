@@ -2,11 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
-import { FeedbackRows } from "../../components/portal-dashboard/feedback-rows";
+import { FeedbackStudentRows } from "../../components/portal-dashboard/feedback-student-rows";
+import { FeedbackQuestionRows } from "../../components/portal-dashboard/feedback-question-rows";
 import activity from "../report/activity";
 
 interface IProps {
   activity: Map<any, any>;
+  activities: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
   feedbacks: Map<any, any>;
@@ -23,6 +25,9 @@ interface IProps {
   currentQuestion: any;
   isAnonymous: boolean;
   feedbackLevel: "Activity" | "Question";
+  listViewMode: listViewMode;
+  currentStudentId: string | null;
+  students: Map<any, any>;
 }
 
 class ActivityFeedbackPanel extends React.PureComponent<IProps> {
@@ -31,17 +36,31 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, answers, currentQuestion, feedbacks, feedbacksNeedingReview, isAnonymous, feedbackLevel } = this.props;
+    const { activity, activities, answers, currentQuestion, feedbacks, feedbacksNeedingReview, isAnonymous, feedbackLevel, listViewMode, currentStudentId, students } = this.props;
     return (
       <div>
-        <FeedbackRows
-          answers={answers}
-          currentQuestion={currentQuestion}
-          feedbacks={feedbacks}
-          feedbacksNeedingReview={feedbacksNeedingReview}
-          isAnonymous={isAnonymous}
-          feedbackLevel={feedbackLevel}
-        />
+        {listViewMode === "Student"
+          ? <FeedbackStudentRows
+              answers={answers}
+              currentQuestion={currentQuestion}
+              feedbacks={feedbacks}
+              feedbacksNeedingReview={feedbacksNeedingReview}
+              isAnonymous={isAnonymous}
+              feedbackLevel={feedbackLevel}
+            />
+          : <FeedbackQuestionRows
+              activities={activities}
+              currentActivity={activity}
+              answers={answers}
+              currentQuestion={currentQuestion}
+              feedbacks={feedbacks}
+              feedbacksNeedingReview={feedbacksNeedingReview}
+              isAnonymous={isAnonymous}
+              feedbackLevel={feedbackLevel}
+              currentStudentId={currentStudentId}
+              students={students}
+            />
+        }
       </div>
     );
   }

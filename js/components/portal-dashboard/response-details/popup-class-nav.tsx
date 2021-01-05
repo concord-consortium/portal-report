@@ -24,16 +24,17 @@ interface IProps {
   studentCount: number;
   setListViewMode: (value: ListViewMode) => void;
   trackEvent: (category: string, action: string, label: string) => void;
+  awaitingFeedbackCount: number;
   viewMode: string;
 }
 
 export class PopupClassNav extends React.PureComponent<IProps>{
   render() {
 
-    const { anonymous, listViewMode, questionCount, studentCount, setAnonymous, viewMode } = this.props;
+    const { anonymous, listViewMode, questionCount, studentCount, setAnonymous, viewMode, awaitingFeedbackCount } = this.props;
 
     const numItems = viewMode === "FeedbackReport"
-                     ? 5
+                     ? awaitingFeedbackCount
                      : listViewMode === "Question" ? questionCount : studentCount;
     const containerLabel = viewMode === "FeedbackReport"
                            ? "Awaiting feedback"

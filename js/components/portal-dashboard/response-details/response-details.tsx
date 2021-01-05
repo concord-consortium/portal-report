@@ -104,6 +104,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             setListViewMode={setListViewMode}
             viewMode={viewMode}
             feedbackLevel={feedbackLevel}
+            awaitingFeedbackCount={6}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             {isSequence &&
@@ -141,6 +142,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 activity={currentActivity || firstActivity}
                 feedbackLevel={feedbackLevel}
                 setFeedbackLevel={this.setFeedbackLevel}
+                listViewMode={listViewMode}
               />
             </div>
           }
@@ -164,10 +166,14 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           : <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
               <ActivityFeedbackPanel
                 activity={currentActivity || firstActivity}
+                activities={activities}
                 answers={answers}
                 currentQuestion={currentQuestion || firstQuestion}
                 isAnonymous={isAnonymous}
+                listViewMode={listViewMode}
                 feedbackLevel={feedbackLevel}
+                currentStudentId={currentStudentId}
+                students={students}
               />
             </div>
         }
