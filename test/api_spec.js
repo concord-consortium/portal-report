@@ -103,19 +103,19 @@ describe("api helper", () => {
           },
           href: {
             ...oldPropertyDescriptors.href,
-            set: (value) => {throw new Error("must use window.location.assign instead of window.location.href=") }
+            set: (value) => {throw new Error("must use window.location.assign instead of window.location.href="); }
           }
         }
-      )
+      );
     });
 
     beforeEach(() => {
-      window.location.assign.mockReset()
+      window.location.assign.mockReset();
     });
 
     afterAll(() => {
       // restore `window.location` to the `jsdom` `Location` object
-      window.location = oldWindowLocation
+      window.location = oldWindowLocation;
     });
 
     describe("when there is no access_token param", () => {
@@ -176,6 +176,6 @@ describe("api helper", () => {
         initializeAuthorization();
         expect(window.location.assign).toHaveBeenCalledTimes(0);
       });
-    })
+    });
   });
 });

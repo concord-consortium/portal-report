@@ -229,18 +229,17 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           });
         }
         const verifiedFirebaseJWT = decodedFirebaseJWT as IFirebaseJWT;
-        return authFirestore(rawFirestoreJWT).then(() => {
-          return {
-            offering: offeringData,
-            resourceLinkId,
-            classInfo: classData,
-            userType: verifiedFirebaseJWT.claims.user_type,
-            platformId: verifiedFirebaseJWT.claims.platform_id,
-            platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
-            contextId: classData.class_hash,
-            sourceKey: getSourceKeyFromOffering(offeringData)
-          };
-        });
+        return authFirestore(rawFirestoreJWT).then(() => ({
+          offering: offeringData,
+          resourceLinkId,
+          classInfo: classData,
+          userType: verifiedFirebaseJWT.claims.user_type,
+          platformId: verifiedFirebaseJWT.claims.platform_id,
+          platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
+          contextId: classData.class_hash,
+          sourceKey: getSourceKeyFromOffering(offeringData)
+          })
+        );
       } else {
         // We're using fake data, including fake JWT.
         return {
