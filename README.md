@@ -8,7 +8,7 @@ Demo: http://portal-report.concord.org/version/v3.0.0/
 
 Check recent git tags to open the most recent version.
 
-It expects two URL params: `reportUrl` and `token`. If they are not provided, it will use fake data, so it's easy to work on some features without connecting to the real Portal instance.
+It expects two URL params: `reportUrl` and `token`. If they are not provided, it will use fake sequence data, so it's easy to work on some features without connecting to the real Portal instance. If URL param `resourceType=activity` is provided, it will use fake activity data.
 
 At this time the portal report data can be presented in report view or in dashboard view. By default the report view is shown. Add the URL parameter `dashboard=true` (or any value other than "false") to show the tabular dashboard view. Add the URL parameter `portal-dashboard=true` (or any value other than "false") to show the updated and redesigned portal dashboard view.
 

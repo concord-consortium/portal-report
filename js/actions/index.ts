@@ -1,8 +1,8 @@
 import { firestoreInitialized } from "../db";
 import fakeSequenceStructure from "../data/sequence-structure.json";
-// import fakeActivityStructure from "../data/activity-structure.json";
+import fakeActivityStructure from "../data/activity-structure.json";
 import fakeAnswers from "../data/answers.json";
-// import fakeAnswers from "../data/average-class-activity-answers.json";
+import fakeActivityAnswers from "../data/activity-answers.json";
 import { AnyAction, Dispatch } from "redux";
 import {
   IPortalRawData,
@@ -122,19 +122,27 @@ function _receivePortalData(db: firebase.firestore.Firestore,
   }
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
-    // Use fake data.
-    dispatch({
-      type: RECEIVE_RESOURCE_STRUCTURE,
-      response: fakeSequenceStructure,
-    });
-    // dispatch({
-    //   type: RECEIVE_RESOURCE_STRUCTURE,
-    //   response: fakeActivityStructure,
-    // });
-    dispatch({
-      type: RECEIVE_ANSWERS,
-      response: fakeAnswers,
-    });
+    // Use fake data. Default shows sequence fake resource and answer
+    // resourceType query param allows for switching to show fake activity resource and answer
+    if(urlStringParam(window.location.search, "resourceType") === "activity") {
+      dispatch({
+        type: RECEIVE_RESOURCE_STRUCTURE,
+        response: fakeActivityStructure,
+      });
+      dispatch({
+        type: RECEIVE_ANSWERS,
+        response: fakeActivityAnswers,
+      });
+    } else {
+      dispatch({
+        type: RECEIVE_RESOURCE_STRUCTURE,
+        response: fakeSequenceStructure,
+      });
+      dispatch({
+        type: RECEIVE_ANSWERS,
+        response: fakeAnswers,
+      });
+    }
   } else {
     watchResourceStructure(db, source, resourceUrl, dispatch);
 
