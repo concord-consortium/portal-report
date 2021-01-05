@@ -1,0 +1,109 @@
+@import "./variables";
+
+@legend-width: 765px;
+@half-width: @legend-width / 2;
+
+.legendContainer {
+  font-size: 14px;
+  font-weight: normal;
+  color: @cc-charcoal;
+  border: 1.5px solid @cc-teal-light2;
+  box-sizing: border-box;
+  border-radius: 16px;
+  text-align: center;
+  width: @legend-width;
+  height: 32px;
+  line-height: 32px;
+  background-color: white;
+  left: calc(((100vw - @left-panel-width) / 2) - @half-width);
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  bottom: -19px;
+
+  .legendLabel{
+    display: inline-block;
+    position: relative;
+    bottom: 2px;
+  }
+
+  .legendKey {
+    display: inline-block;
+    height: 20px;
+    vertical-align: text-bottom;
+    padding-right: 9px;
+  }
+
+  .legendText {
+    display: inline-block;
+    position: relative;
+    bottom:10px;
+    line-height: 17px;
+    vertical-align: text-bottom;
+    position: relative;
+  }
+
+  .legendIcon {
+    margin: 5px;
+    position: relative;
+    bottom: 3px;
+    box-sizing: border-box;
+    height: 16px;
+    width: 16px;
+  }
+
+  .progressLegend {
+    display: inline-block;
+
+    .progressIcon {
+      border: 1px solid @cc-orange;
+      display: inline-block;
+    }
+    .completed {
+      background-color: @cc-orange;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .inProgress {
+      background-color: @cc-orange-light3;
+      border-radius: 50% 20% 20% 50%;
+      display: inline-block;
+    }
+    .notStarted {
+      background-color: white;
+      border-radius: 20%;
+      display: inline-block;
+    }
+  }
+
+  .divider{
+    width: 1px;
+    height: 20px;
+    margin: 0 12px;
+    display: inline-block;
+    border: solid 1px @cc-teal-light2;
+  }
+
+  .feedbackLegend {
+    display: inline-block;
+
+    .feedbackIcon {
+      background-color: @feedback-green;
+      width: 11px;
+      height: 11px;
+      display: inline-block;
+    }
+    .questionFeedbackGiven {
+      rotate: 45;
+      display: inline-block;
+    }
+    .answerUpdated {
+      background-color: @hi-yellow-light3;
+      border-radius: 50%;
+      width: 7px;
+      height: 7px;
+      rotate: 45;
+      display: inline-block;
+    }
+  }
+}
