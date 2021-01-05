@@ -131,7 +131,7 @@ describe("api helper", () => {
           const urlParts = queryString.parseUrl(redirectURL);
           expect(urlParts.url).toEqual("https://portal.concord.org/auth/oauth_authorize");
           expect(urlParts.query).toMatchObject({
-            client_id: "token-service-example-app",
+            client_id: "portal-report",
             redirect_uri: "https://portal-report.unexisting.url.com/",
             response_type: "token"
           });

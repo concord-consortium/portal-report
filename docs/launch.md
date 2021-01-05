@@ -41,7 +41,7 @@ In this diagram the Activity Player could be substituted for another third party
 
 - URL: `${auth-domain}/auth/oauth_authorize` This uses the `auth-domain` from the launch params to know where to send the OAuth2 request to.
 - Params:
-  - **clientId** currently hardcoded to `"token-service-example-app"`. This needs to be the name of a client in the portal that has a redirect url which exactly matches the `redirectUri` below. And the client "client type" needs to be configured as 'public', so it allows browser requests for access_tokens.
+  - **clientId** currently hardcoded to `"portal-report"`. This needs to be the `App Id` a client in the portal that has a redirect url which exactly matches the `redirectUri` below. And the client "client type" needs to be configured as 'public', so it allows browser requests for access_tokens.
   - **redirectUri** current portal-report url without any parameters (this way it will include any version or branch path)
   - **state** this is a random string that is used as a key to restore all of the params from the launch after OAuth2 is done. The state has a size limit so the params themselves cannot be sent directly as the state.
 - Code Location: `api.ts#authorizeInPortal`

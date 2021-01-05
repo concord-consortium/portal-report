@@ -103,7 +103,11 @@ export const initializeAuthorization = () => {
   }
   else {
     const authDomain = urlParam("auth-domain");
-    const oauthClientName = "token-service-example-app";
+    // Portal has to have AuthClient configured with this clientId.
+    // The AuthClient has to have:
+    // - redirect URLs of each branch being tested
+    // - "client type" needs to be configured as 'public', to allow browser requests
+    const oauthClientName = "portal-report";
     if (authDomain) {
       const key = Math.random().toString(36).substring(2,15);
       sessionStorage.setItem(key, window.location.search);
