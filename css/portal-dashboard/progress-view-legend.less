@@ -10,7 +10,6 @@
   border: 1.5px solid @cc-teal-light2;
   box-sizing: border-box;
   border-radius: 16px;
-  text-align: center;
   width: @legend-width;
   height: 32px;
   line-height: 32px;
@@ -20,59 +19,57 @@
   margin-right: auto;
   position: absolute;
   bottom: -19px;
-
-  .legendLabel{
-    display: inline-block;
-    position: relative;
-    bottom: 2px;
-  }
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 
   .legendKey {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     height: 20px;
-    vertical-align: text-bottom;
-    padding-right: 9px;
-  }
 
-  .legendText {
-    display: inline-block;
-    position: relative;
-    bottom:10px;
-    line-height: 17px;
-    vertical-align: text-bottom;
-    position: relative;
-  }
+    &.disabled {
+      opacity: .35;
+    }
+    
+    .legendText {
+      bottom:10px;
+      line-height: 16px;
+      padding-right: 9px;
 
-  .legendIcon {
-    margin: 5px;
-    position: relative;
-    bottom: 3px;
-    box-sizing: border-box;
-    height: 16px;
-    width: 16px;
+      &.noText {
+        padding-right: 0px;
+      }
+    }
+
+    .legendIcon {
+      margin: 5px;
+      box-sizing: border-box;
+      height: 16px;
+      width: 16px;
+    }
   }
 
   .progressLegend {
-    display: inline-block;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
 
     .progressIcon {
       border: 1px solid @cc-orange;
-      display: inline-block;
     }
     .completed {
       background-color: @cc-orange;
       border-radius: 50%;
-      display: inline-block;
     }
     .inProgress {
       background-color: @cc-orange-light3;
       border-radius: 50% 20% 20% 50%;
-      display: inline-block;
     }
     .notStarted {
       background-color: white;
       border-radius: 20%;
-      display: inline-block;
     }
   }
 
@@ -80,30 +77,30 @@
     width: 1px;
     height: 20px;
     margin: 0 12px;
-    display: inline-block;
-    border: solid 1px @cc-teal-light2;
+    background-color: @cc-teal-light2;
   }
 
   .feedbackLegend {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
 
     .feedbackIcon {
       background-color: @feedback-green;
       width: 11px;
       height: 11px;
-      display: inline-block;
     }
     .questionFeedbackGiven {
-      rotate: 45;
-      display: inline-block;
+      transform: rotate(45deg);
     }
     .answerUpdated {
       background-color: @hi-yellow-light3;
       border-radius: 50%;
       width: 7px;
       height: 7px;
-      rotate: 45;
-      display: inline-block;
+      position: relative;
+      top: 2px;
+      left: 2px;
     }
   }
 }

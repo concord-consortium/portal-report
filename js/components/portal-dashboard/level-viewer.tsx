@@ -20,6 +20,7 @@ interface IProps {
   activities: Map<any, any>;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
+  hideFeedbackBadges: boolean;
   leftPosition: number;
   studentProgress: any;
   toggleCurrentActivity: (activityId: string) => void;
@@ -28,7 +29,7 @@ interface IProps {
 
 export class LevelViewer extends React.PureComponent<IProps> {
   render() {
-    const { activities, leftPosition } = this.props;
+    const { activities, leftPosition, hideFeedbackBadges } = this.props;
     const position = {
       left: leftPosition,
     };
@@ -40,7 +41,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
           }
         </div>
         <div className={css.cover} />
-        <ProgressLegendContainer />
+        <ProgressLegendContainer hideFeedbackBadges={hideFeedbackBadges}/>
       </div>
     );
   }
