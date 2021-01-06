@@ -129,6 +129,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 activities={activityTrees}
                 currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
+                hideFeedbackBadges={hideFeedbackBadges}
                 leftPosition={this.state.scrollLeft}
                 studentProgress={studentProgress}
                 toggleCurrentActivity={toggleCurrentActivity}
