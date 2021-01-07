@@ -2,7 +2,7 @@
 
 In the report service database the data is segmented in to 'sources'. Each source has a 'sourceKey'.
 
-They were original intended to segment the data stored in the report-service. This way tools working with the report-service wouldn't accidentally clobber some other tool's data. However, we are now sharing this data between multiple tools, so they aren't as useful as they used to be.
+They were originally intended to segment the data stored in the report-service. This way tools working with the report-service wouldn't accidentally clobber some other tool's data. However, we are now sharing this data between multiple tools, so they aren't as useful as they used to be.
 
 ## Shared Source Keys
 
