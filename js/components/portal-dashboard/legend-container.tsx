@@ -1,24 +1,29 @@
 import React from "react";
+import ProgressNotYetStarted from "../../../img/svg-icons/progress-not-yet-started-icon.svg";
+import ProgressInProgressIcon from "../../../img/svg-icons/progress-in-progress-icon.svg";
+import ProgressCompletedIcon from "../../../img/svg-icons/progress-completed-icon.svg";
+import FeedbackActivityKeyIcon from "../../../img/svg-icons/feedback-activity-key-icon.svg";
+import FeedbackQuestionKeyIcon from "../../../img/svg-icons/feedback-question-key-icon.svg";
 
 import css from "../../../css/portal-dashboard/progress-view-legend.less";
 
 export interface LegendType {
   name: string | null;
-  class: any;
+  icon: any;
 }
 export const progress: LegendType[] =
   [
     {
       name: "Completed",
-      class: css.completed
+      icon: ProgressCompletedIcon
     },
     {
       name: "In progress",
-      class: css.inProgress
+      icon: ProgressInProgressIcon
     },
     {
       name: "Not started",
-      class: css.notStarted
+      icon: ProgressNotYetStarted
     }
   ];
 
@@ -26,15 +31,15 @@ export const progress: LegendType[] =
   [
     {
       name: null,
-      class: css.activityFeedbackGiven
+      icon: FeedbackActivityKeyIcon
     },
     {
       name: "Given",
-      class: css.questionFeedbackGiven
+      icon: FeedbackQuestionKeyIcon
     },
     {
       name: "Answer Updated",
-      class: css.answerUpdated
+      icon: FeedbackQuestionKeyIcon
     },
   ];
 
@@ -51,7 +56,7 @@ export class ProgressLegendContainer extends React.PureComponent<IProps>{
             const progressName = progress.name? progress.name.replace(/\ /g,'-') : "no-title";
             return (
               <div key={index} className={css.legendKey} data-cy={progressName + "-legend"}>
-                <div className={`${css.legendIcon} ${css.progressIcon} ${progress.class}`}></div>
+                <progress.icon className={`${css.legendIcon} ${css.progressIcon}`}/>
                 <div className={css.legendText}>{progress.name}</div>
               </div>
             );
@@ -67,10 +72,8 @@ export class ProgressLegendContainer extends React.PureComponent<IProps>{
                    className={`${css.legendKey} ${this.props.hideFeedbackBadges? css.disabled: ""}`}
                    data-cy={`${feedbackName}-legend${this.props.hideFeedbackBadges ? "-disabled" : ""}`}>
                   {feedback.name === "Answer Updated"
-                    ? <div className={`${css.legendIcon} ${css.feedbackIcon} ${css.questionFeedbackGiven}`}>
-                        <div className={`${feedback.class}`}></div>
-                      </div>
-                    : <div className={`${css.legendIcon} ${css.feedbackIcon} ${feedback.class}`}></div>
+                    ? <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon}`} />
+                    : <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon}`} />
                   }
                 <div className={`${css.legendText} ${!feedback.name && css.noText}`}>{feedback.name}</div>
               </div>
