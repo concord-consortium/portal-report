@@ -112,7 +112,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data. Default shows sequence fake resource and answer
     // resourceType query param allows for switching to show fake activity resource and answer
-    if(urlStringParam(window.location.search, "resourceType") === "activity") {
+    if(urlParam("resourceType") === "activity") {
       dispatch({
         type: RECEIVE_RESOURCE_STRUCTURE,
         response: fakeActivityStructure,
