@@ -6,7 +6,7 @@ import fakeOfferingData from "./data/offering-data.json";
 import fakeClassData from "./data/small-class-data.json";
 import { parseUrl, validFsId, urlParam, urlHashParam } from "./util/misc";
 import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
-import { FIREBASE_APP, signInWithToken } from "./db";
+import { getFirebaseAppName, signInWithToken } from "./db";
 
 const PORTAL_AUTH_PATH = "/auth/oauth_authorize";
 let accessToken: string | null = null;
@@ -66,13 +66,21 @@ export interface IFirebaseJWT {
   };
 }
 
-// This matches the make_source_key method in LARA's report_service.rb
-function getSourceKey(): string | null {
-  const toolId = urlParam("tool-id");
+// extract the hostname from the url
+export const makeSourceKey = (url: string | null) => {
+  return url ? parseUrl(url.toLowerCase()).hostname : "";
+};
 
-  return toolId ? toolId.replace(/https?:\/\/([^\/]+)/, "$1") : null;
+// It is tempting to extract the right source key when the activity_url is
+// an activity player url. However the level of auto-magic will probably cause
+// problems in the future. See docs/launch.md for more info
+function getSourceKeyFromOffering(offering: {activity_url: string}): string {
+  const sourceKeyParam = urlParam("sourceKey");
+  return sourceKeyParam || makeSourceKey(offering.activity_url);
 }
 
+// FIXME: If the user isn't logged in, and then they log in with a user that
+// isn't the student being reported on then just a blank screen is shown
 export const authorizeInPortal = (portalUrl: string, oauthClientName: string, state: string) => {
   const portalAuth = new ClientOAuth2({
     clientId: oauthClientName,
@@ -84,6 +92,7 @@ export const authorizeInPortal = (portalUrl: string, oauthClientName: string, st
   window.location.assign(portalAuth.token.getUri());
 };
 
+// Returns true if it is redirecting
 export const initializeAuthorization = () => {
   const state = urlHashParam("state");
   accessToken = urlHashParam("access_token");
@@ -94,13 +103,20 @@ export const initializeAuthorization = () => {
   }
   else {
     const authDomain = urlParam("auth-domain");
-    const oauthClientName = "token-service-example-app";
+    // Portal has to have AuthClient configured with this clientId.
+    // The AuthClient has to have:
+    // - redirect URLs of each branch being tested
+    // - "client type" needs to be configured as 'public', to allow browser requests
+    const oauthClientName = "portal-report";
     if (authDomain) {
       const key = Math.random().toString(36).substring(2,15);
       sessionStorage.setItem(key, window.location.search);
       authorizeInPortal(authDomain, oauthClientName, key);
+      return true;
     }
   }
+
+  return false;
 };
 
 const getPortalBaseUrl = () => {
@@ -112,7 +128,10 @@ const getPortalBaseUrl = () => {
   return `${protocol}//${hostname}`;
 };
 
-export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, firebaseApp: string = FIREBASE_APP ) => {
+export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, firebaseApp: string | undefined ) => {
+  if(!firebaseApp){
+    firebaseApp = getFirebaseAppName();
+  }
   const baseUrl = getPortalBaseUrl();
   if (!baseUrl) {
     return null;
@@ -222,7 +241,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: verifiedFirebaseJWT.claims.platform_id,
           platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
           contextId: classData.class_hash,
-          sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          sourceKey: getSourceKeyFromOffering(offeringData)
           })
         );
       } else {
@@ -235,10 +254,10 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: "https://fake.portal",
           platformUserId: "1",
           contextId: classData.class_hash,
-          // In most cases when using fake data the SOURCE_KEY will be null
+          // In most cases when using fake data the sourceKey param will be null
           // so the sourceKey will be based on the fake offeringData
           // and this offering data has a hostname of 'fake.authoring.system'
-          sourceKey: getSourceKey() || parseUrl(offeringData.activity_url.toLowerCase()).hostname
+          sourceKey: getSourceKeyFromOffering(offeringData)
         };
       }
     });

@@ -7,7 +7,7 @@ import {
   APIError,
   fetchRubric
 } from "./api";
-import { firestoreInitialized } from "./db";
+import { getFirestore } from "./db";
 
 // This middleware is executed only if action includes .callAPI object.
 // It calls API action defined in callAPI.type.
@@ -53,7 +53,7 @@ function callApi(type, data, state) {
   switch (type) {
     case API_FETCH_PORTAL_DATA_AND_AUTH_FIRESTORE:
       // Make sure firestore db is ready before fetching data
-      return firestoreInitialized.then(() => fetchPortalDataAndAuthFirestore());
+      return getFirestore().then(() => fetchPortalDataAndAuthFirestore());
     case API_UPDATE_REPORT_SETTINGS:
       return updateReportSettings(data, state.get("report").toJS());
     case API_UPDATE_FEEDBACK_SETTINGS:

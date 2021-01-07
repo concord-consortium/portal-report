@@ -103,19 +103,19 @@ describe("api helper", () => {
           },
           href: {
             ...oldPropertyDescriptors.href,
-            set: (value) => {throw new Error("must use window.location.assign instead of window.location.href=") }
+            set: (value) => {throw new Error("must use window.location.assign instead of window.location.href="); }
           }
         }
-      )
+      );
     });
 
     beforeEach(() => {
-      window.location.assign.mockReset()
+      window.location.assign.mockReset();
     });
 
     afterAll(() => {
       // restore `window.location` to the `jsdom` `Location` object
-      window.location = oldWindowLocation
+      window.location = oldWindowLocation;
     });
 
     describe("when there is no access_token param", () => {
@@ -131,7 +131,7 @@ describe("api helper", () => {
           const urlParts = queryString.parseUrl(redirectURL);
           expect(urlParts.url).toEqual("https://portal.concord.org/auth/oauth_authorize");
           expect(urlParts.query).toMatchObject({
-            client_id: "token-service-example-app",
+            client_id: "portal-report",
             redirect_uri: "https://portal-report.unexisting.url.com/",
             response_type: "token"
           });
@@ -176,6 +176,6 @@ describe("api helper", () => {
         initializeAuthorization();
         expect(window.location.assign).toHaveBeenCalledTimes(0);
       });
-    })
+    });
   });
 });
