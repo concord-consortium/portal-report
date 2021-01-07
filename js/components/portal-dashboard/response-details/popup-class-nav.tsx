@@ -1,9 +1,9 @@
 import React from "react";
 import { AnonymizeStudents } from "../anonymize-students";
 import { CustomSelect, SelectItem } from "../custom-select";
-import { ListViewMode } from "../../../util/misc";
+import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 import { CountContainer } from "../count-container";
-import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../../actions/dashboard";
+import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK } from "../../../actions/dashboard";
 import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
 import StudentViewIcon from "../../../../img/svg-icons/student-view-icon.svg";
 import QuestionViewIcon from "../../../../img/svg-icons/question-view-icon.svg";
@@ -26,6 +26,7 @@ interface IProps {
   trackEvent: (category: string, action: string, label: string) => void;
   awaitingFeedbackCount: number;
   viewMode: string;
+  feedbackLevel: FeedbackLevel;
 }
 
 export class PopupClassNav extends React.PureComponent<IProps>{
@@ -51,7 +52,12 @@ export class PopupClassNav extends React.PureComponent<IProps>{
             containerLabel={containerLabel}
             containerLabelType={containerLabelType}
           />
-          {listViewMode === "Question" ? this.renderQuestionFilter() : this.renderStudentFilter()}
+          {
+            viewMode === "FeedbackReport"
+              ? this.renderFeedbackFilter()
+              : listViewMode === "Question"
+                ? this.renderQuestionFilter() : this.renderStudentFilter()
+          }
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
         </div>
       </div>
@@ -96,6 +102,26 @@ export class PopupClassNav extends React.PureComponent<IProps>{
           trackEvent={trackEvent}
           value={sortByMethod}
           key={"student-sort"}
+        />
+      </div>
+    );
+  }
+
+  private renderFeedbackFilter = () => {
+    const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name",
+                                   onSelect: this.handleStudentSortSelect(SORT_BY_NAME) },
+                                 { value: SORT_BY_FEEDBACK, label: "Awaiting Feedback",
+                                   onSelect: this.handleStudentSortSelect(SORT_BY_FEEDBACK) }];
+    const { sortByMethod, trackEvent } = this.props;
+    return (
+      <div className={cssClassNav.itemSort}>
+        <CustomSelect
+          dataCy={"sort-feedback"}
+          HeaderIcon={SortIcon}
+          items={items}
+          trackEvent={trackEvent}
+          value={sortByMethod}
+          key={"feedback-sort"}
         />
       </div>
     );
