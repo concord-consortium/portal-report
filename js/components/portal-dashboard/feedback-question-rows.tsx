@@ -8,6 +8,7 @@ import GivenFeedbackActivityBadgeIcon from "../../../img/svg-icons/given-feedbac
 import AwaitingFeedbackQuestionBadgeIcon from "../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../img/svg-icons/update-feedback-question-badge-icon.svg";
+import { FeedbackLevel } from "../../../util/misc";
 
 import css from "../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -17,19 +18,27 @@ interface IProps {
   answers: any;
   currentQuestion: any;
   isAnonymous: boolean;
-  feedbackLevel: "Activity" | "Question";
+  feedbackLevel: FeedbackLevel;
   activities: Map<any, any>;
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
   students: Map<any, any>;
+  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  activityId: string | null;
+  activityIndex: number;
 }
 
 export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, feedbackLevel, activities, currentActivity, currentStudentId, students } = props;
+  const { answers, currentQuestion, feedbacks, isAnonymous, feedbackLevel, activities, currentActivity, currentStudentId, students, updateActivityFeedback, activityId, activityIndex } = props;
 
-  const onChangeHandler = () => {
-    // autosave feedback
+  const onChangeHandler = (studentId: string) => (event: React.FormEvent<HTMLInputElement>) => {
+    if (activityId && studentId != null) {
+      updateActivityFeedback(activityId, activityIndex, studentId, event.target.value);
+    }
   };
+
+  // eslint-disable-next-line no-console
+  console.log(feedbacks);
 
   const questions = currentActivity.get("questions");
   const feedbackRows = questions.map ((question: Map<any, any>, index: number) => {
@@ -82,7 +91,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
         </div>
         <div className={css.feedback}>
         {activityStarted &&
-          <textarea defaultValue={feedback} onChange={onChangeHandler}></textarea>
+          <textarea defaultValue={feedback} onChange={onChangeHandler(currentStudentId)}></textarea>
         }
         </div>
       </div>
