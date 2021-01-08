@@ -157,7 +157,7 @@ export function getAuthHeader() {
   if (accessToken) {
     return `Bearer ${accessToken}`;
   }
-  throw new APIError("No token available", { status: 0, statusText: "No token available" });
+  throw new APIError("No token available to set auth header", { status: 0, statusText: "No token available to set auth header" });
 }
 
 export function fetchOfferingData() {
@@ -293,7 +293,9 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
 
 // The updateReportSettings API middleware calls out to the deprecated Portal Report API.
 // It's necessary to keep the Portal progress table valid and updated.
-export function updateReportSettingsInPortal(data: any) {
+// The function is async so that it always returns a promise even if an exception is
+// thrown during the getAuthHeader.
+export async function updateReportSettingsInPortal(data: any) {
   const reportUrl = gePortalReportAPIUrl();
   const authHeader = getAuthHeader();
   if (reportUrl) {
@@ -308,7 +310,7 @@ export function updateReportSettingsInPortal(data: any) {
     }).then(checkStatus);
   } else {
     console.warn("No OFFERING/REPORT_URL. Faking put method.");
-    return new Promise(resolve => resolve({}));
+    return {};
   }
 }
 
@@ -324,15 +326,19 @@ export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?
 // `firestore().path().set()` returns a Promise that will resolve immediately.
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
+// NOTE: this returns promise that might have 3 sub promises, so if this is
+// used with a callApi successFunction it will have to deal with an array of
+// parameters. Currently this is not used with a successFunction
 export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
   const { settings } = data;
+  const promises = [];
 
   if (settings.activitySettings) {
     const { activityId, activityIndex } = data;
     const actSettings = settings.activitySettings[activityId];
     // Send data to Portal to keep progress table working. This is only one-way communication,
     // Portal Report never reads this data back from Portal.
-    updateReportSettingsInPortal({
+    const activitySettingsPromise = updateReportSettingsInPortal({
       activity_feedback_opts_v2: {
         enable_text_feedback: actSettings.textFeedbackEnabled,
         score_type: actSettings.scoreType,
@@ -341,13 +347,15 @@ export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
         activity_index: activityIndex
       }
     });
+    promises.push(activitySettingsPromise);
   }
   if (settings.rubric) {
-    updateReportSettingsInPortal({
+    const rubricPromise = updateReportSettingsInPortal({
       rubric_v2: {
         rubric: settings.rubric
       }
     });
+    promises.push(rubricPromise);
   }
 
   // Then, send it to Firestore.
@@ -356,9 +364,11 @@ export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
   // contextId is used by security rules.
   settings.contextId = state.contextId;
   const path = feedbackSettingsFirestorePath(state.sourceKey, {platformId: state.platformId, resourceLinkId: state.resourceLinkId});
-  return firebase.firestore()
+  const firestorePromise = firebase.firestore()
     .doc(path)
     .set(settings, {merge: true});
+  promises.push(firestorePromise);
+  return Promise.all(promises);
 }
 
 export function reportQuestionFeedbacksFireStorePath(sourceKey: string, answerId?: string) {
@@ -467,12 +477,16 @@ export function fetchRubric(rubricUrl: string) {
   });
 }
 
-export class APIError {
-  public message: string;
+// Extend the Error object so we can get stack traces
+// NOTE: this doesn't work with instanceof checks extending builtin objects has
+// to be handled specially by transpiliers and when doing that they break the
+// way instanceof works
+export class APIError extends Error{
   public response: IResponse;
 
   constructor(statusText: string, response: IResponse) {
-    this.message = statusText;
+    super(statusText);
+    this.name = "APIError";
     this.response = response;
   }
 }

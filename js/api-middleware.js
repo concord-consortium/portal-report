@@ -9,6 +9,35 @@ import {
 } from "./api";
 import { getFirestore } from "./db";
 
+// In some cases callApi returns a promise which might throw an error when it is
+// being resolved. In other cases callApi will throw an error directly before it
+// returns the promise
+function handleApiError(actionType, apiType, errorAction, next, error) {
+  // Log this error to the console in addtion to dispatching the errorAction
+  // In chrome this log message includes both the stack trace from the error
+  // object as well as the stack trace of the console state. Both can be useful
+  console.error(`error calling API: ${apiType} during action: ${actionType} (error below)\n`, error);
+  if ((error.name === "APIError") && errorAction) {
+    // CHECKME: is this valid middleware behavior? we are calling next and
+    // not returning it
+    next(errorAction(error.response));
+    return;
+  }
+  if ((error instanceof TypeError) && errorAction) {
+    // This happens when there is a network error while fetching
+    // Use a fake error code 599 so the errorAction code can render something informative
+    const response = {
+      url: apiType,
+      status: 599,
+      statusText: error.message,
+    };
+    // CHECKME: is this valid middleware behavior? we are calling next and
+    // not returning its result
+    next(errorAction(response));
+    return;
+  }
+}
+
 // This middleware is executed only if action includes .callAPI object.
 // It calls API action defined in callAPI.type.
 // If action succeeds and callAPI.successAction is defined, it will be called with response.
@@ -17,27 +46,21 @@ export default store => next => action => {
   if (action.callAPI) {
     const state = store.getState();
     const { type, data, successAction, errorAction} = action.callAPI;
-    callApi(type, data, state)
-      .then(response => successAction && next(successAction(response)))
-      .catch(error => {
-        // Log this error to the console in addtion to dispatching the errorAction
-        console.error(`error calling API: ${type} error object:\n`, error);
-        if (error instanceof APIError && errorAction) {
-          return next(errorAction(error.response));
-        }
-        if (error instanceof TypeError && errorAction) {
-          // This happens when there is a network error while fetching
-          // Use a fake error code 599 so the errorAction code can render something informative
-          const response = {
-            url: type,
-            status: 599,
-            statusText: error.message,
-          };
-          return next(errorAction(response));
-        }
-        // Remember to throw original error, as otherwise we would swallow every kind of error.
-        throw error;
-      });
+    try {
+      callApi(type, data, state)
+        // Try to catch errors from the promise returned by callApi
+        // The order here is important. In some cases the successAction causes its
+        // own error, we don't want to handle that here because we'd incorrectly
+        // be reporting the action type and api type
+        .catch(error => handleApiError(action.type, type, errorAction, next, error))
+        .then(response => successAction && next(successAction(response)));
+    } catch (error) {
+      // Some callApi functions throw errors during setup, before they
+      // return a promise this catch here handles that case.
+      // NOTE: if this an unhandled exception it will stop the `next(action)`
+      // from being called
+      handleApiError(action.type, type, errorAction, next, error);
+    }
   }
   return next(action);
 };
