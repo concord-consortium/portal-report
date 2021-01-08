@@ -31,7 +31,7 @@
     &.disabled {
       opacity: .35;
     }
-    
+
     .legendText {
       bottom:10px;
       line-height: 16px;
@@ -55,22 +55,6 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-
-    .progressIcon {
-      border: 1px solid @cc-orange;
-    }
-    .completed {
-      background-color: @cc-orange;
-      border-radius: 50%;
-    }
-    .inProgress {
-      background-color: @cc-orange-light3;
-      border-radius: 50% 20% 20% 50%;
-    }
-    .notStarted {
-      background-color: white;
-      border-radius: 20%;
-    }
   }
 
   .divider{
@@ -86,21 +70,12 @@
     flex-direction: row;
 
     .feedbackIcon {
-      background-color: @feedback-green;
+      fill: @feedback-green;
       width: 11px;
       height: 11px;
     }
     .questionFeedbackGiven {
       transform: rotate(45deg);
-    }
-    .answerUpdated {
-      background-color: @hi-yellow-light3;
-      border-radius: 50%;
-      width: 7px;
-      height: 7px;
-      position: relative;
-      top: 2px;
-      left: 2px;
     }
   }
 }

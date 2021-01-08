@@ -4,6 +4,7 @@ import ProgressInProgressIcon from "../../../img/svg-icons/progress-in-progress-
 import ProgressCompletedIcon from "../../../img/svg-icons/progress-completed-icon.svg";
 import FeedbackActivityKeyIcon from "../../../img/svg-icons/feedback-activity-key-icon.svg";
 import FeedbackQuestionKeyIcon from "../../../img/svg-icons/feedback-question-key-icon.svg";
+import FeedbackAnswerUpdatedKeyIcon from "../../../img/svg-icons/feedback-answer-updated-key-icon.svg";
 
 import css from "../../../css/portal-dashboard/progress-view-legend.less";
 
@@ -39,7 +40,7 @@ export const progress: LegendType[] =
     },
     {
       name: "Answer Updated",
-      icon: FeedbackQuestionKeyIcon
+      icon: FeedbackAnswerUpdatedKeyIcon
     },
   ];
 
@@ -56,7 +57,7 @@ export class ProgressLegendContainer extends React.PureComponent<IProps>{
             const progressName = progress.name? progress.name.replace(/\ /g,'-') : "no-title";
             return (
               <div key={index} className={css.legendKey} data-cy={progressName + "-legend"}>
-                <progress.icon className={`${css.legendIcon} ${css.progressIcon}`}/>
+                <progress.icon className={`${css.legendIcon}`}/>
                 <div className={css.legendText}>{progress.name}</div>
               </div>
             );
@@ -71,9 +72,9 @@ export class ProgressLegendContainer extends React.PureComponent<IProps>{
               <div key={index}
                    className={`${css.legendKey} ${this.props.hideFeedbackBadges? css.disabled: ""}`}
                    data-cy={`${feedbackName}-legend${this.props.hideFeedbackBadges ? "-disabled" : ""}`}>
-                  {feedback.name === "Answer Updated"
+                  {feedback.name === null
                     ? <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon}`} />
-                    : <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon}`} />
+                    : <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon} ${css.questionFeedbackGiven}`} />
                   }
                 <div className={`${css.legendText} ${!feedback.name && css.noText}`}>{feedback.name}</div>
               </div>
