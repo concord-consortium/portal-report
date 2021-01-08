@@ -80,3 +80,5 @@ export type ColorTheme = "progress" | "response" | "feedback" |
 export type DashboardViewMode = "ProgressDashboard" | "ResponseDetails" | "FeedbackReport";
 
 export type ListViewMode = "Student" | "Question";
+
+export type FeedbackLevel = "Activity" | "Question";

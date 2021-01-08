@@ -8,9 +8,10 @@ import { SpotlightStudentListDialog, spotlightColors } from "./spotlight-student
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { FeedbackInfo } from "../../../containers/portal-dashboard/feedback-info";
 import ActivityFeedbackPanel from "../../../containers/portal-dashboard/activity-feedback-panel";
+import QuestionFeedbackPanel from "../../../containers/portal-dashboard/question-feedback-panel";
 import { StudentNavigator } from "../student-navigator";
 import { ActivityNavigator } from "../activity-navigator";
-import { ListViewMode } from "../../../util/misc";
+import { ListViewMode, FeedbackLevel } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
@@ -44,13 +45,14 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   viewMode: viewMode;
-  feedbackLevel: "Activity" | "Question";
+  feedbackLevel: FeedbackLevel;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
   showSpotlightDialog: boolean;
   showSpotlightListDialog: boolean;
-  feedbackLevel: "Activity" | "Question";
+  feedbackLevel: FeedbackLevel;
+  numFeedbacksNeedingReview: number;
 }
 
 export class ResponseDetails extends React.PureComponent<IProps, IState> {
@@ -61,6 +63,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       showSpotlightDialog: false,
       showSpotlightListDialog: false,
       feedbackLevel: "Question",
+      numFeedbacksNeedingReview: 0
     };
   }
 
@@ -104,7 +107,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             setListViewMode={setListViewMode}
             viewMode={viewMode}
             feedbackLevel={feedbackLevel}
-            awaitingFeedbackCount={6}
+            awaitingFeedbackCount={this.state.numFeedbacksNeedingReview}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             {isSequence &&
@@ -125,13 +128,15 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   currentStudentId={currentStudentId}
                   nameFirst={false}
                 />
-              : <QuestionNavigator
+              : feedbackLevel === "Question" && 
+                <QuestionNavigator
                   currentQuestion={currentQuestion || firstQuestion}
                   questions={questions}
                   sortedQuestionIds={sortedQuestionIds}
                   toggleCurrentQuestion={this.handleChangeQuestion}
                   setCurrentActivity={setCurrentActivity}
                   hasTeacherEdition={hasTeacherEdition}
+                  feedbackLevel={feedbackLevel}
                 />
             }
             </div>
@@ -163,19 +168,32 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 selectedStudents={selectedStudents}
                 students={students}
               />
-          : <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
-              <ActivityFeedbackPanel
-                activity={currentActivity || firstActivity}
-                activities={activities}
-                answers={answers}
-                currentQuestion={currentQuestion || firstQuestion}
-                isAnonymous={isAnonymous}
-                listViewMode={listViewMode}
-                feedbackLevel={feedbackLevel}
-                currentStudentId={currentStudentId}
-                students={students}
-              />
-            </div>
+          : feedbackLevel === "Question"
+            ? <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
+                <QuestionFeedbackPanel
+                  activity={currentActivity || firstActivity}
+                  activities={activities}
+                  answers={answers}
+                  currentQuestion={currentQuestion || firstQuestion}
+                  isAnonymous={isAnonymous}
+                  listViewMode={listViewMode}
+                  feedbackLevel={feedbackLevel}
+                  currentStudentId={currentStudentId}
+                  students={students}
+                />
+              </div>
+            : <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
+                <ActivityFeedbackPanel
+                  activity={currentActivity || firstActivity}
+                  activities={activities}
+                  answers={answers}
+                  currentQuestion={currentQuestion || firstQuestion}
+                  isAnonymous={isAnonymous}
+                  listViewMode={listViewMode}
+                  currentStudentId={currentStudentId}
+                  students={students}
+                />
+              </div>
         }
         <TransitionGroup>
           {showSpotlightListDialog &&

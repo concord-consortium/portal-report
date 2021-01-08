@@ -8,7 +8,6 @@ import GivenFeedbackActivityBadgeIcon from "../../../img/svg-icons/given-feedbac
 import AwaitingFeedbackQuestionBadgeIcon from "../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../img/svg-icons/update-feedback-question-badge-icon.svg";
-import { FeedbackLevel } from "../../../util/misc";
 
 import css from "../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -18,27 +17,23 @@ interface IProps {
   answers: any;
   currentQuestion: any;
   isAnonymous: boolean;
-  feedbackLevel: FeedbackLevel;
   activities: Map<any, any>;
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
   students: Map<any, any>;
-  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  updateQuestionFeedback: (answerId: string, feedback: any) => void;
   activityId: string | null;
   activityIndex: number;
 }
 
 export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, feedbackLevel, activities, currentActivity, currentStudentId, students, updateActivityFeedback, activityId, activityIndex } = props;
+  const { answers, currentQuestion, feedbacks, isAnonymous, activities, currentActivity, currentStudentId, students, updateQuestionFeedback, activityId, activityIndex } = props;
 
-  const onChangeHandler = (studentId: string) => (event: React.FormEvent<HTMLInputElement>) => {
-    if (activityId && studentId != null) {
-      updateActivityFeedback(activityId, activityIndex, studentId, event.target.value);
+  const onChangeHandler = (answerId: string) => (event: React.FormEvent<HTMLInputElement>) => {
+    if (answerId !== undefined) {
+      updateQuestionFeedback(answerId, {feedback: event.target.value});
     }
   };
-
-  // eslint-disable-next-line no-console
-  console.log(feedbacks);
 
   const questions = currentActivity.get("questions");
   const feedbackRows = questions.map ((question: Map<any, any>, index: number) => {
@@ -51,25 +46,25 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     const activity = currentActivityId
                      ? activities.toArray().find((a: any) => a.get("id") === currentActivityId)
                      : activities.toArray()[0];
-    
-    // feedbackData needs to be updated to get feedback for each individual question
-    const feedbackData = currentStudentId
-                         ? feedbacks.toArray().find((f: any) => f.get("platformStudentId") === currentStudentId)
-                         : feedbacks.toArray()[0];
-    const activityStarted = feedbackData.get("activityStarted");
-    const hasBeenReviewed = feedbackData.get("hasBeenReviewed");
-    const feedback = feedbackData.get("feedback");
 
-    const questionNumber = currentQuestion.get("questionNumber");
-    const questionPrompt = currentQuestion.get("prompt");
+    const currentQuestionId = question.get("id");
+    const answer = currentStudentId
+                  ? answers.getIn([currentQuestionId, currentStudentId])
+                  : undefined;
+    const answerId = answer && answer.get("id");
+    const feedbackData = answerId && feedbacks.getIn([answerId]);
+    const feedback = feedbackData !== undefined ? feedbackData.get("feedback") : "";
 
-    const awaitingFeedbackIcon = feedbackLevel === "Activity" ? <AwaitingFeedbackActivityBadgeIcon /> : <AwaitingFeedbackQuestionBadgeIcon />;
-    const givenFeedbackIcon = feedbackLevel === "Activity" ? <GivenFeedbackActivityBadgeIcon /> : <GivenFeedbackQuestionBadgeIcon />;
+    const questionNumber = question.get("questionNumber");
+    const questionPrompt = question.get("prompt");
+
+    const awaitingFeedbackIcon = <AwaitingFeedbackQuestionBadgeIcon />;
+    const givenFeedbackIcon = <GivenFeedbackQuestionBadgeIcon />;
     const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
 
     // TODO: Work out case for when to use UpdateFeedbackBadgeIcon
     let feedbackBadge = awaitingFeedbackIcon;
-    if (hasBeenReviewed) {
+    if (feedback) {
       feedbackBadge = givenFeedbackIcon;
     }
   
@@ -90,8 +85,8 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
           <Answer question={question} student={student} responsive={false} />
         </div>
         <div className={css.feedback}>
-        {activityStarted &&
-          <textarea defaultValue={feedback} onChange={onChangeHandler(currentStudentId)}></textarea>
+        {answer &&
+          <textarea defaultValue={feedback} onChange={onChangeHandler(answerId)}></textarea>
         }
         </div>
       </div>

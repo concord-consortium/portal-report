@@ -193,8 +193,9 @@ export const makeGetStudentFeedbacks = () => {
     getActivity,
     getStudents,
     getActivityFeedbacks,
+    getQuestionFeedbacks,
     getStudentProgress,
-    (activity, students, activityFeedbacks, progress) => getStudentFeedbacks(activity, students, activityFeedbacks, progress),
+    (activity, students, activityFeedbacks, questionFeedbacks, progress) => getStudentFeedbacks(activity, students, activityFeedbacks, questionFeedbacks, progress),
   );
 };
 

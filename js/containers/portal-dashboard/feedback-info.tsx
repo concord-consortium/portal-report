@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 import {FeedbackNoteToggle} from "../../components/portal-dashboard/feedback-note-toggle";
 import {FeedbackLegend} from "../../components/portal-dashboard/feedback-legend";
 import { ColorTheme } from "../../util/misc";
+import { FeedbackLevel } from "../../../util/misc";
 
 import css from "../../../css/portal-dashboard/feedback/feedback-info.less";
 
 interface IProps {
   activity: Map<any, any>;
   rubric: any;
-  feedbackLevel: "Activity" | "Question";
+  feedbackLevel: FeedbackLevel;
   listViewMode: listViewMode;
   setFeedbackLevel: (value: string) => void;
 }
