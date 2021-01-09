@@ -331,7 +331,7 @@ export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?
 // parameters. Currently this is not used with a successFunction
 export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
   const { settings } = data;
-  const promises = [];
+  const promises: Promise<any>[] = [];
 
   if (settings.activitySettings) {
     const { activityId, activityIndex } = data;

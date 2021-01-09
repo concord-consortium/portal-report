@@ -4,7 +4,6 @@ import {
   updateFeedbackSettings,
   updateQuestionFeedbacks,
   updateActivityFeedbacks,
-  APIError,
   fetchRubric
 } from "./api";
 import { getFirestore } from "./db";
