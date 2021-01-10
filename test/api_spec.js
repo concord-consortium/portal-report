@@ -86,7 +86,7 @@ describe("api helper", () => {
     beforeEach(() => {
     });
 
-    describe("when offering and token URL param is present", () => {
+    describe("when both offering and token URL params are present", () => {
       beforeEach(() => {
         window.history.replaceState({}, "Test", `/?token=abc&offering=${fakeOfferingUrl}`);
       });
