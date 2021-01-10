@@ -295,8 +295,8 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
 // It's necessary to keep the Portal progress table valid and updated.
 export function updateReportSettingsInPortal(data: any) {
   const reportUrl = gePortalReportAPIUrl();
-  const authHeader = getAuthHeader();
   if (reportUrl) {
+    const authHeader = getAuthHeader();
     return fetch(reportUrl, {
       method: "put",
       headers: {
