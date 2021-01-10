@@ -1,9 +1,10 @@
 import React from "react";
+import { FeedbackLevel } from "../../../util/misc";
 
 import css from "../../../css/portal-dashboard/feedback/feedback-note-toggle.less";
 
 interface IProps {
-  feedbackLevel: "Activity" | "Question";
+  feedbackLevel: FeedbackLevel;
 }
 
 export const FeedbackNoteToggle: React.FC<IProps> = (props) => {

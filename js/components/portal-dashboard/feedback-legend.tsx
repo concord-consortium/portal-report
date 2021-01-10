@@ -4,11 +4,12 @@ import GivenFeedbackActivityBadgeIcon from "../../../img/svg-icons/given-feedbac
 import AwaitingFeedbackQuestionBadgeIcon from "../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../img/svg-icons/update-feedback-question-badge-icon.svg";
+import { FeedbackLevel } from "../../../util/misc";
 
 import css from "../../../css/portal-dashboard/feedback/feedback-legend.less";
 
 interface IProps {
-  feedbackLevel: "Activity" | "Question";
+  feedbackLevel: FeedbackLevel;
 }
 
 export const FeedbackLegend: React.FC<IProps> = (props) => {
