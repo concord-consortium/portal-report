@@ -297,8 +297,8 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
 // thrown during the getAuthHeader.
 export async function updateReportSettingsInPortal(data: any) {
   const reportUrl = gePortalReportAPIUrl();
-  const authHeader = getAuthHeader();
   if (reportUrl) {
+    const authHeader = getAuthHeader();
     return fetch(reportUrl, {
       method: "put",
       headers: {
