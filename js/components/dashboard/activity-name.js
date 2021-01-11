@@ -13,7 +13,7 @@ export default class ActivityName extends PureComponent {
     const { activity, expanded, setActivityExpanded, trackEvent } = this.props;
     setActivityExpanded(activity.get("id"), !expanded);
     const trackAction = expanded ? "Collapsed Activity Column" : "Expanded Activity Column";
-    trackEvent("Dashboard", trackAction, activity.get("name"));
+    trackEvent("Dashboard", trackAction, {label: activity.get("name")});
   }
 
   render() {

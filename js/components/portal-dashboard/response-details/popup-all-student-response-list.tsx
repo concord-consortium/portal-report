@@ -3,6 +3,7 @@ import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import { SelectedStudent } from "./response-details";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
 
@@ -13,11 +14,12 @@ interface IProps {
   onStudentSelect: (studentId: string) => void;
   selectedStudents: SelectedStudent[];
   students: Map<any, any>;
+  trackEvent: TrackEventFunction;
 }
 
 export class PopupStudentResponseList extends React.PureComponent<IProps> {
   render() {
-    const { answers, students, isAnonymous, currentQuestion, selectedStudents } = this.props;
+    const { answers, students, isAnonymous, currentQuestion, selectedStudents, trackEvent } = this.props;
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
         { students?.map((student: Map<any, any>, i: number) => {
@@ -29,7 +31,7 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
             <div className={css.listRow} key={`student ${i}`} data-cy="student-row">
               {this.renderStudentNameWrapper(student.get("id"), formattedName, isSelected, spotlightAllowed)}
               <div className={`${css.studentResponse} ${isSelected ? css.selected : ""}`} data-cy="student-response">
-                <Answer question={currentQuestion} student={student} responsive={false} studentName={formattedName} />
+                <Answer question={currentQuestion} student={student} responsive={false} studentName={formattedName} trackEvent={trackEvent} />
               </div>
             </div>
           );

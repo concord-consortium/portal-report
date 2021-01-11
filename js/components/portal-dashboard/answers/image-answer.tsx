@@ -2,6 +2,7 @@ import React, { useState }  from "react";
 import { AnswerModal } from "./answer-modal";
 import { MagnifyIcon } from "./magnify-icon";
 import useResizeObserver from "@react-hook/resize-observer";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/answers/image-answer.less";
 
@@ -10,18 +11,20 @@ interface IProps {
   responsive?: boolean;
   question?: Map<any, any>;
   studentName: string;
+  trackEvent: TrackEventFunction;
 }
 
 const kStaticHeight = 250;
 const kStaticWidth = 250;
 
 export const ImageAnswer: React.FC<IProps> = (props) => {
-  const { answer, responsive, question, studentName } = props;
+  const { answer, responsive, question, studentName, trackEvent } = props;
   const imgAnswer = answer.get("answer");
 
   const [modalOpen, setModalOpen] = useState(false);
   const handleShowModal = (show: boolean) => () => {
     setModalOpen(show);
+    trackEvent("Portal-Dashboard", "ShowImageAnswer", {label: show.toString(), parameters: {url: imgAnswer.get("imageUrl")}});
   };
 
   // get the native dimensions and aspect ratio of the image

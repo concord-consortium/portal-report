@@ -8,6 +8,7 @@ import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
 import { HeaderMenuItem } from "./header-menu-item";
 import { ColorTheme } from "../../util/misc";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -20,6 +21,7 @@ interface IProps {
   setCompact?: (value: boolean) => void;
   setHideFeedbackBadges?: (value: boolean) => void;
   colorTheme?: ColorTheme;
+  trackEvent: TrackEventFunction;
 }
 
 export interface MenuItemWithState {
@@ -33,6 +35,9 @@ interface MenuItemWithIcon {
   name: string;
   onSelect: () => void;
   dataCy: string;
+  logEvent?: {
+    action: string;
+  };
 }
 
 const items: MenuItemWithIcon[] = [
@@ -40,7 +45,10 @@ const items: MenuItemWithIcon[] = [
     MenuItemIcon: HelpIcon,
     name: "Help",
     dataCy: "help-menu-item",
-    onSelect: () => {window.open("https://docs.google.com/document/d/1C_6hiZzdSF_p6edhJeY_q_SvulFEPlawo7OKSaF7E88/edit?usp=sharing");}
+    onSelect: () => {window.open("https://docs.google.com/document/d/1C_6hiZzdSF_p6edhJeY_q_SvulFEPlawo7OKSaF7E88/edit?usp=sharing");},
+    logEvent: {
+      action: "OpenHelp"
+    }
   },
   // Removed for MVP:
   /*
@@ -93,13 +101,21 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   }
 
   private renderMenuItems = () => {
-    const { colorTheme } = this.props;
+    const { colorTheme, trackEvent } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
     const itemsWithState: MenuItemWithState[] = [];
+    const setCompact = (value: boolean) => {
+      this.props.setCompact?.(value);
+      trackEvent("Portal-Dashboard", "CompactStudentList", {label: value.toString()});
+    };
+    const setHideFeedbackBadges = (value: boolean) => {
+      this.props.setHideFeedbackBadges?.(value);
+      trackEvent("Portal-Dashboard", "HideFeedbackBadges", {label: value.toString()});
+    };
     this.props.setCompact && itemsWithState.push(
-      { name: "Compact student list", onSelect: this.props.setCompact, dataCy: "compact-menu-item" });
+      { name: "Compact student list", onSelect: setCompact, dataCy: "compact-menu-item" });
     this.props.setHideFeedbackBadges && itemsWithState.push(
-      { name: "Hide feedback badges", onSelect: this.props.setHideFeedbackBadges, dataCy: "feedback-menu-item" });
+      { name: "Hide feedback badges", onSelect: setHideFeedbackBadges, dataCy: "feedback-menu-item" });
     return (
       <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list">
         <div className={css.topMenu}>
@@ -108,8 +124,14 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
           )}
         </div>
         {items && items.map((item, i) => {
+          const onSelect = () => {
+            item.onSelect();
+            if (item.logEvent) {
+              trackEvent("Portal-Dashboard", item.logEvent.action);
+            }
+          };
           return (
-            <div key={`item ${i}`} className={`${css.menuItem} ${colorClass}`} onClick={item.onSelect}>
+            <div key={`item ${i}`} className={`${css.menuItem} ${colorClass}`} onClick={onSelect}>
               <item.MenuItemIcon className={`${css.menuItemIcon} ${colorClass}`} />
               <div className={css.menuItemName} data-cy={item.dataCy}>{item.name}</div>
             </div>
@@ -120,12 +142,20 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   }
 
   private handleMenuClick() {
-    this.setState({ showMenuItems: !this.state.showMenuItems });
+    this.showMenuItems(!this.state.showMenuItems);
   }
 
   private handleClick = (e: MouseEvent) => {
     if (this.divRef.current && e.target && !this.divRef.current.contains(e.target as Node)) {
-      this.setState({ showMenuItems: false });
+      this.showMenuItems(false);
+    }
+  }
+
+  private showMenuItems = (value: boolean) => {
+    this.setState({ showMenuItems: value });
+    // only log when opened
+    if (value) {
+      this.props.trackEvent("Portal-Dashboard", "ShowHamburgerMenu", {label: value.toString()});
     }
   }
 

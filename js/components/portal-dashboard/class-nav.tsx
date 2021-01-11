@@ -6,6 +6,7 @@ import { CountContainer } from "./count-container";
 import { DashboardViewMode } from "../../util/misc";
 import SortIcon from "../../../img/svg-icons/sort-icon.svg";
 import ClassIcon from "../../../img/svg-icons/class-icon.svg";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/class-nav.less";
 
@@ -16,8 +17,8 @@ interface IProps {
   setStudentSort: (value: string) => void;
   sortByMethod: string;
   studentCount: number;
-  trackEvent: (category: string, action: string, label: string) => void;
   viewMode: DashboardViewMode;
+  trackEvent: TrackEventFunction;
 }
 
 export class ClassNav extends React.PureComponent<IProps> {

@@ -9,6 +9,8 @@ import DashboardIcon from "../../../img/svg-icons/dashboard-icon.svg";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
 import { ColorTheme, DashboardViewMode } from "../../util/misc";
+import { TrackEventFunction } from "../../actions";
+
 import css from "../../../css/portal-dashboard/header.less";
 
 interface IProps {
@@ -16,7 +18,7 @@ interface IProps {
   assignmentName: string;
   setCompact?: (value: boolean) => void;
   setHideFeedbackBadges?: (value: boolean) => void;
-  trackEvent: (category: string, action: string, label: string) => void;
+  trackEvent: TrackEventFunction;
   setDashboardViewMode: (mode: DashboardViewMode) => void;
   viewMode: DashboardViewMode;
   colorTheme?: ColorTheme;
@@ -24,7 +26,7 @@ interface IProps {
 
 export class Header extends React.PureComponent<IProps> {
   render() {
-    const { colorTheme, userName, setCompact, setHideFeedbackBadges } = this.props;
+    const { colorTheme, userName, setCompact, setHideFeedbackBadges, trackEvent } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
     return (
       <div className={`${css.dashboardHeader} ${colorClass}`} data-cy="dashboard-header">
@@ -44,6 +46,7 @@ export class Header extends React.PureComponent<IProps> {
             setCompact={setCompact}
             setHideFeedbackBadges={setHideFeedbackBadges}
             colorTheme={colorTheme}
+            trackEvent={trackEvent}
           />
         </div>
       </div>

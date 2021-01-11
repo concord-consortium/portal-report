@@ -27,6 +27,7 @@ import "firebase/firestore";
 import { RootState } from "../reducers";
 import { urlParam } from "../util/misc";
 import queryString from "query-string";
+import { v4 as uuid } from "uuid";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -50,6 +51,23 @@ export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
+
+export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean; sendToLogManager?: boolean};
+export type TrackEventFunction = (category: "Dashboard" | "Portal-Dashboard" | "Report", action: string, options?: TrackEventFunctionOptions) => any;
+
+const logManagerUrl = "//cc-log-manager.herokuapp.com/api/logs";
+
+interface LogMessage {
+  session: string;
+  username: string;
+  application: string;
+  activity: string;
+  event: string;
+  time: number;
+  parameters: any;
+  event_value?: string;
+  run_remote_endpoint?: string;
+}
 
 // When fetch succeeds, receivePortalData action will be called with the response object (json in this case).
 // REQUEST_PORTAL_DATA action will be processed by the reducer immediately.
@@ -517,17 +535,55 @@ export function saveRubric(rubricContent: any) {
   };
 }
 
-export function trackEvent(category: string, action: string, label: string) {
+export function trackEvent(category: "Dashboard" | "Portal-Dashboard" | "Report", action: string, options?: TrackEventFunctionOptions) {
   return (dispatch: Dispatch, getState: () => RootState) => {
+    const label = options?.label || "";
     dispatch({
       type: TRACK_EVENT,
       category,
       action,
       label,
     });
-    const clazzId = getState().getIn(["report", "clazzId"]);
-    let labelText = "Class ID: " + clazzId + " - " + label;
-    labelText = labelText.replace(/ - $/, "");
-    (window as any).gtag("event", action, { event_category: category, event_label: labelText });
+    if (!options?.skipGTag) {
+      const clazzId = getState().getIn(["report", "clazzId"]);
+      let labelText = "Class ID: " + clazzId + " - " + label;
+      labelText = labelText.replace(/ - $/, "");
+      (window as any).gtag("event", action, { event_category: category, event_label: labelText });
+    }
+
+    if ((category === "Portal-Dashboard") || options?.sendToLogManager) {
+      const userId = getState().getIn(["report", "userId"]);
+      sendToLogManager(userId, category, action, options);
+    }
   };
+}
+
+const logSession = uuid();
+
+function sendToLogManager(userId: string, category: string, action: string, options?: TrackEventFunctionOptions) {
+  const logMessage: LogMessage = {
+    session: logSession,
+    username:  userId,
+    application: "portal-report",
+    activity: category,
+    event: action,
+    time: Date.now(),
+    parameters: options?.parameters || {},
+    event_value: options?.label,
+  };
+
+  // log nothing for empty event labels
+  if (logMessage.event_value === "") {
+    logMessage.event_value = undefined;
+  }
+
+  // NOTE: run_remote_endpoint is not logged as currently we are only logging teacher dashboard events which
+  // do not have a run_remote_endpoint to log.
+
+  console.log("LogEvent:", JSON.stringify(logMessage));  // eslint-disable-line
+
+  const request = new XMLHttpRequest();
+  request.open("POST", logManagerUrl, true);
+  request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+  request.send(JSON.stringify(logMessage));
 }

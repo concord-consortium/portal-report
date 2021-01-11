@@ -30,7 +30,7 @@ function mapStateToProps(state, ownProps) {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label))
+    trackEvent: (category, action, options) => dispatch(trackEvent(category, action, options))
   };
 };
 

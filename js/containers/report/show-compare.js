@@ -8,7 +8,7 @@ export class ShowCompareButton extends PureComponent {
 
   onCompareButtonClick = () => {
     const { reportTree, answer, onClick, trackEvent } = this.props;
-    trackEvent("Report", "Compare/Project", reportTree.get("name"));
+    trackEvent("Report", "Compare/Project", {label: reportTree.get("name")});
     return onClick(answer.get("questionId"));
   }
 
@@ -34,7 +34,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => {
   return {
     onClick: questionId => dispatch(showCompareView(questionId)),
-    trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label)),
+    trackEvent: (category, action, options) => dispatch(trackEvent(category, action, options)),
   };
 };
 

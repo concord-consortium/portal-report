@@ -118,7 +118,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setQuestionExpanded: (studentId, value) => dispatch(setQuestionExpanded(studentId, value)),
     setStudentSort: (value) => dispatch(setStudentSort(value)),
     selectQuestion: (value) => dispatch(selectQuestion(value)),
-    trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label)),
+    trackEvent: (category, action, options) => dispatch(trackEvent(category, action, options)),
   };
 };
 

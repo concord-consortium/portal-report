@@ -40,6 +40,7 @@ export interface IReportState {
   selectedStudentIds: List<string>;
   hideControls: boolean;
   hideSectionNames: boolean;
+  userId: string;
   platformUserId: string;
   platformUserName: string;
   contextId: string;
@@ -69,6 +70,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   selectedStudentIds: Immutable.fromJS([]),
   hideControls: false,
   hideSectionNames: false,
+  userId: "",
   platformUserId: "",
   platformUserName:"",
   contextId: "",
@@ -100,6 +102,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   selectedStudentIds: List<string>;
   hideControls: boolean;
   hideSectionNames: boolean;
+  userId: string;
   platformUserId: string;
   platformUserName: string;
   contextId: string;

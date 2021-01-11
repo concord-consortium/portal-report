@@ -2,9 +2,10 @@ import React from "react";
 import { Map } from "immutable";
 import Answer from "../../containers/portal-dashboard/answer";
 import { StudentNavigator } from "./student-navigator";
+import { getFormattedStudentName } from "../../util/student-utils";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/overlay-student-response.less";
-import { getFormattedStudentName } from "../../util/student-utils";
 
 interface IProps {
   students: any;
@@ -12,6 +13,7 @@ interface IProps {
   currentQuestion?: Map<string, any>;
   setCurrentStudent: (studentId: string | null) => void;
   currentStudentId: string | null;
+  trackEvent: TrackEventFunction;
 }
 
 export class StudentResponse extends React.PureComponent<IProps> {
@@ -35,7 +37,7 @@ export class StudentResponse extends React.PureComponent<IProps> {
   }
 
   private renderResponseArea = (currentStudentIndex: number) => {
-    const { currentQuestion, students, isAnonymous } = this.props;
+    const { currentQuestion, students, isAnonymous, trackEvent } = this.props;
     const studentSelected = currentStudentIndex >= 0;
     const studentName = studentSelected
                         ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
@@ -47,7 +49,8 @@ export class StudentResponse extends React.PureComponent<IProps> {
               question={currentQuestion}
               student={students.get(currentStudentIndex)}
               responsive={true}
-              studentName={studentName} />
+              studentName={studentName}
+              trackEvent={trackEvent} />
           : <div className={css.selectMessage}>Select a student’s answer in the dashboard to view their response.</div>
         }
       </div>

@@ -19,7 +19,7 @@ export default class QuestionForClass extends PureComponent {
   toggleAnswersVisibility() {
     const { trackEvent } = this.props;
     const trackAction = this.state.answersVisible ? "Hide responses" : "Show responses";
-    trackEvent("Report", trackAction, "");
+    trackEvent("Report", trackAction);
     this.setState({answersVisible: !this.state.answersVisible});
   }
 

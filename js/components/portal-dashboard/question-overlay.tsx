@@ -6,6 +6,7 @@ import { StudentResponse } from "./overlay-student-response";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg";
 import { DashboardViewMode, ListViewMode } from "../../util/misc";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/question-overlay.less";
 
@@ -23,11 +24,12 @@ interface IProps {
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
   hasTeacherEdition: boolean;
+  trackEvent: TrackEventFunction;
 }
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
-    const { students, currentActivity, currentQuestion, isAnonymous, setCurrentStudent, currentStudentId } = this.props;
+    const { students, currentActivity, currentQuestion, isAnonymous, setCurrentStudent, currentStudentId, trackEvent } = this.props;
     return (
       <div className={`${css.questionOverlay} ${(currentQuestion && currentActivity ? css.visible : "")}`} data-cy="question-overlay">
         { currentQuestion && this.renderQuestionDetails() }
@@ -39,6 +41,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
             currentQuestion={currentQuestion}
             setCurrentStudent={setCurrentStudent}
             currentStudentId={currentStudentId}
+            trackEvent={trackEvent}
           />
         }
       </div>
@@ -46,7 +49,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private renderQuestionDetails = () => {
-    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition } = this.props;
+    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition, trackEvent } = this.props;
     return (
       <React.Fragment>
         <div className={css.header} data-cy="question-overlay-header">
@@ -64,6 +67,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           setCurrentActivity={setCurrentActivity}
           inOverlay={true}
           hasTeacherEdition={hasTeacherEdition}
+          trackEvent={trackEvent}
         />
       </React.Fragment>
     );
@@ -87,5 +91,6 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   private handleShowAllResponsesButtonClick = () => {
     this.props.setDashboardViewMode("ResponseDetails");
     this.props.setListViewMode("Student");
+    this.props.trackEvent("Portal-Dashboard", "ShowAllResponses");
   }
 }

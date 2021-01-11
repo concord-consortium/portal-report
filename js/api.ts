@@ -44,6 +44,7 @@ export interface IPortalRawData extends ILTIPartial{
   };
   userType: "teacher" | "learner";
   sourceKey: string;
+  userId: string;
 }
 
 export interface IStudentRawData {
@@ -63,6 +64,7 @@ export interface IFirebaseJWT {
     user_type: "teacher" | "learner";
     platform_id: string;
     platform_user_id: number;
+    user_id: string;
   };
 }
 
@@ -212,6 +214,11 @@ function fakeUserType(): "teacher" | "learner" {
   return "teacher";
 }
 
+function fakeUserId() {
+  const userType = urlParam("fake-user-type") || "learner";
+  return `${userType}@fake.portal`;
+}
+
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
@@ -241,7 +248,8 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: verifiedFirebaseJWT.claims.platform_id,
           platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
           contextId: classData.class_hash,
-          sourceKey: getSourceKeyFromOffering(offeringData)
+          sourceKey: getSourceKeyFromOffering(offeringData),
+          userId: verifiedFirebaseJWT.claims.user_id
           })
         );
       } else {
@@ -257,7 +265,8 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           // In most cases when using fake data the sourceKey param will be null
           // so the sourceKey will be based on the fake offeringData
           // and this offering data has a hostname of 'fake.authoring.system'
-          sourceKey: getSourceKeyFromOffering(offeringData)
+          sourceKey: getSourceKeyFromOffering(offeringData),
+          userId: fakeUserId()
         };
       }
     });

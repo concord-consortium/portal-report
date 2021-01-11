@@ -3,6 +3,7 @@ import { Map } from "immutable";
 import { QuestionArea } from "./question-area";
 import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
 import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/question-navigator.less";
 
@@ -15,6 +16,7 @@ interface IProps {
   setCurrentActivity: (activityId: string) => void;
   inOverlay?: boolean;
   hasTeacherEdition: boolean;
+  trackEvent: TrackEventFunction;
 }
 interface IState {
   hideQuestion: boolean;
@@ -28,7 +30,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
     };
   }
   render() {
-    const { currentQuestion, inOverlay, hasTeacherEdition } = this.props;
+    const { currentQuestion, inOverlay, hasTeacherEdition, trackEvent } = this.props;
     return (
       <div className={css.questionArea}>
         <div className={css.titleWrapper}>
@@ -51,7 +53,9 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           currentQuestion={currentQuestion}
           hideQuestion={this.state.hideQuestion}
           useMinHeight={inOverlay}
-          hasTeacherEdition={hasTeacherEdition} />
+          hasTeacherEdition={hasTeacherEdition}
+          trackEvent={trackEvent}
+        />
       </div>
     );
   }
