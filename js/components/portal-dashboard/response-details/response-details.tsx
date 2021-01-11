@@ -1,6 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
-import { PopupClassNav } from "./popup-class-nav";
+import { PopupClassNav } from "../../../containers/portal-dashboard/popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
 import { PopupStudentResponseList } from "./popup-all-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
@@ -52,7 +52,6 @@ interface IState {
   showSpotlightDialog: boolean;
   showSpotlightListDialog: boolean;
   feedbackLevel: FeedbackLevel;
-  numFeedbacksNeedingReview: number;
 }
 
 export class ResponseDetails extends React.PureComponent<IProps, IState> {
@@ -62,8 +61,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       selectedStudents: [],
       showSpotlightDialog: false,
       showSpotlightListDialog: false,
-      feedbackLevel: "Question",
-      numFeedbacksNeedingReview: 0
+      feedbackLevel: "Question"
     };
   }
 
@@ -107,7 +105,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             setListViewMode={setListViewMode}
             viewMode={viewMode}
             feedbackLevel={feedbackLevel}
-            awaitingFeedbackCount={this.state.numFeedbacksNeedingReview}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             {isSequence &&
