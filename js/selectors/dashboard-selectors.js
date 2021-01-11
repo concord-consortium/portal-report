@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { getActivityTrees, getQuestionTrees, getAnswersByQuestion } from "./report-tree";
-import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../actions/dashboard";
+import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK } from "../actions/dashboard";
 import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
 
@@ -12,6 +12,7 @@ const getQuestions = state => state.getIn(["report", "questions"]);
 const getCurrentQuestionId = state => state.getIn(["dashboard", "currentQuestionId"]);
 export const getCurrentStudentId = state => state.getIn(["dashboard", "currentStudentId"]);
 const getStudents = state => state.getIn(["report", "students"]);
+const getFeedback = state => state.getIn(["feedback"]);
 export const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
 export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
@@ -88,8 +89,8 @@ export const getStudentAverageProgress = createSelector(
 
 // Returns sorted students
 export const getSortedStudents = createSelector(
-  [ getStudents, getDashboardSortBy, getStudentAverageProgress ],
-  (students, sortBy, studentProgress) => {
+  [ getStudents, getDashboardSortBy, getStudentAverageProgress, getFeedback ],
+  (students, sortBy, studentProgress, feedback) => {
     switch (sortBy) {
       case SORT_BY_NAME:
         return students.toList().sort((student1, student2) =>
@@ -108,6 +109,17 @@ export const getSortedStudents = createSelector(
           } else {
             return compareStudentsByName(student1, student2);
           }
+        });
+      case SORT_BY_FEEDBACK:
+        return students.toList().sort((student1, student2) => {
+          // TODO: add support for question feedback, also determine if student has started activity or answered question
+          const activityFeedbacks = feedback.get("activityFeedbacks");
+          const student1Feedback = activityFeedbacks.find(function(f) { return f.get('platformStudentId') === student1.get("id"); });
+          const student2Feedback = activityFeedbacks.find(function(f) { return f.get('platformStudentId') === student2.get("id"); });
+          const student1HasFeedback = student1Feedback !== undefined ? true : false;
+          const student2HasFeedback = student2Feedback !== undefined ? true : false;
+          const feedbackComp = (student1HasFeedback === student2HasFeedback) ? 0 : student1HasFeedback ? 1 : -1;
+          return feedbackComp;
         });
       default:
         return students.toList();
