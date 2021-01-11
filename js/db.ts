@@ -35,7 +35,21 @@ const configurations: IConfigs = {
   }
 };
 
-async function initializeDB(name: string) {
+export const DEFAULT_FIREBASE_APP = "report-service-dev";
+
+export function getFirebaseAppName(): string {
+  return urlParam("firebase-app") || DEFAULT_FIREBASE_APP;
+}
+
+let firestoreDBPromise: Promise<firebase.firestore.Firestore> | null = null;
+
+export function initializeDB() {
+  firestoreDBPromise = createDB();
+}
+
+async function createDB() {
+  const name = getFirebaseAppName();
+
   const config = configurations[name];
   firebase.initializeApp(config);
 
@@ -78,13 +92,16 @@ async function initializeDB(name: string) {
   return firebase.firestore();
 }
 
-export const FIREBASE_APP = urlParam("firebase-app") || "report-service-dev";
-
-// Intended usage is firestoreInitialized.then(db => [do something with the db]);
+// Intended usage is getFirestore().then(db => [do something with the db]);
 // The code using this promise could ignore the result here and just call firebase.firestore()
-// inside of the then, but using the result makes it easier to to say all direct calls to
+// inside of the then, but using getFirestore() makes it easier to to say all direct calls to
 // firebase.firestore() should be here in db.ts
-export const firestoreInitialized = initializeDB(FIREBASE_APP);
+export const getFirestore = (): Promise<firebase.firestore.Firestore> => {
+  if(firestoreDBPromise == null) {
+    throw new Error("firestore needs to be initialized first");
+  }
+  return firestoreDBPromise;
+};
 
 // Useful only for manual testing Firebase rules.
 const SKIP_SIGN_IN = false;
@@ -93,7 +110,9 @@ export const signInWithToken = (rawFirestoreJWT: string) => {
   // It's actually useful to sign out first, as firebase seems to stay signed in between page reloads otherwise.
   const signOutPromise = firebase.auth().signOut();
   if (!SKIP_SIGN_IN) {
-    return signOutPromise.then(() => firebase.auth().signInWithCustomToken(rawFirestoreJWT));
+    return signOutPromise.then(() => {
+      return firebase.auth().signInWithCustomToken(rawFirestoreJWT);
+    });
   } else {
     return signOutPromise;
   }

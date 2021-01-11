@@ -11,7 +11,7 @@ class ReportBody {
         return cy.get(".sticky-inner-wrapper > h2").eq(0);
     }
     getActivityName(idx) {
-        return cy.get(".activity").children("first").eq(idx);
+        return cy.get(".activity").first().eq(idx);
     }
     //
     //Activity Level
