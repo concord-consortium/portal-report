@@ -3,6 +3,43 @@ import React, { PureComponent } from "react";
 import "../../../css/report/data-fetch-error.less";
 
 export default class DataFetchError extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  // Inorder to reuse updateBodyText we can't call it in the constructor because
+  // we can't call setState until the component has been mounted
+  componentDidMount() {
+    this.updateBodyText();
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.error !== this.props.error) {
+      this.updateBodyText();
+    }
+  }
+
+  updateBodyText() {
+    const { error } = this.props;
+    const body = error.body;
+    if (typeof body === "string") {
+      // This Component is used to render plain text for example in the
+      // iframe-standalone-app
+      this.setState({errorBodyText: body});
+    } else if (typeof error.text === "function") {
+      // The error is like a fetch response which has a text message to get the
+      // text of the response
+
+      // set an initial message
+      this.setState({errorBodyText: "Loading error message..."});
+      // load text of actual body and update state when it has been loaded
+      error.text().then(text =>  this.setState({errorBodyText: text}));
+    } else {
+      this.setState({errorBodyText: null});
+    }
+  }
+
   renderUnauthorized() {
     return <div>
       You are not authorized to access report data. Your access token might have expired.
@@ -37,8 +74,8 @@ export default class DataFetchError extends PureComponent {
   }
 
   renderError(error) {
-    if (error.body) {
-      return this.renderGenericMessage(error.body);
+    if (this.state.errorBodyText) {
+      return this.renderGenericMessage(this.state.errorBodyText);
     }
     switch (error.status) {
       case 401:

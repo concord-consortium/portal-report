@@ -17,8 +17,6 @@ function handleApiError(actionType, apiType, errorAction, next, error) {
   // object as well as the stack trace of the console state. Both can be useful
   console.error(`error calling API: ${apiType} during action: ${actionType} (error below)\n`, error);
   if ((error.name === "APIError") && errorAction) {
-    // CHECKME: is this valid middleware behavior? we are calling next and
-    // not returning it
     next(errorAction(error.response));
     return;
   }
@@ -30,8 +28,6 @@ function handleApiError(actionType, apiType, errorAction, next, error) {
       status: 599,
       statusText: error.message,
     };
-    // CHECKME: is this valid middleware behavior? we are calling next and
-    // not returning its result
     next(errorAction(response));
     return;
   }
@@ -56,8 +52,6 @@ export default store => next => action => {
     } catch (error) {
       // Some callApi functions throw errors during setup, before they
       // return a promise this catch here handles that case.
-      // NOTE: if this an unhandled exception it will stop the `next(action)`
-      // from being called
       handleApiError(action.type, type, errorAction, next, error);
     }
   }
