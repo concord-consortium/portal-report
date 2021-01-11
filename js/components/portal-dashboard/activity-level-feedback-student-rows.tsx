@@ -22,7 +22,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
 
   const onChangeHandler = (studentId: string) => (event: React.FormEvent<HTMLInputElement>) => {
     if (activityId && studentId != null) {
-      updateActivityFeedback(activityId, activityIndex, studentId, event.target.value);
+      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: event.target.value});
     }
   };
 
