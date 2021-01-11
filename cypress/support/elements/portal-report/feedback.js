@@ -59,14 +59,14 @@ class Feedback {
         return cy.get(".feedback-row").eq(stuIdx).find("textarea");
     }
     getStudentScoreInput(stuIdx) {
-        return cy.get(".feedback-row").eq(stuIdx).within(() => {
-            cy.get(".score").find("input");
-        });
+        return cy.get(".feedback-row").eq(stuIdx)
+            .find(".score")
+            .find("input");
     }
     getCompleteStudentFeedback(stuIdx) {
-        return cy.get(".feedback-row").eq(stuIdx).within(() => {
-            cy.get(".feedback-complete").find("input");
-        });
+        return cy.get(".feedback-row").eq(stuIdx)
+            .find(".feedback-complete")
+            .find("input");
     }
 
     getStudentsAwaitingFeedbackCount(answersData) {

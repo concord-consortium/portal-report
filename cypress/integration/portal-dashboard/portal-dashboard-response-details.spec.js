@@ -32,7 +32,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=spotlight-toggle').should('be.visible').click();
       cy.get('[data-cy=spotlight-dialog]').should('be.visible');
       cy.get('[data-cy=spotlight-dialog-close-button]').should('be.visible').click();
-      cy.get('[data-cy=spotlight-dialog]').should('not.be.visible');
+      cy.get('[data-cy=spotlight-dialog]').should('not.exist');
     });
   });
   context('Activity nav area', ()=>{
@@ -150,7 +150,7 @@ context("Portal Dashboard Question Details Panel", () => {
       });
       it('verify close spotlight',()=>{
         cy.get('[data-cy=close-spotlight-dialog-button]').should('be.visible').click();
-        cy.get('[data-cy=spotlight-students-list-dialog]').should('not.be.visible');
+        cy.get('[data-cy=spotlight-students-list-dialog]').should('not.exist');
       });
     });
     //TODO add tests for filtering when implemented

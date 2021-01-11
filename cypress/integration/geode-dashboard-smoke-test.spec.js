@@ -139,8 +139,7 @@ context("Geode Dashboard Smoke Test", () => {
                 }
 
                 dashboard.getExpandedMCAnswerDetails()
-                    .should("not.be.visible")
-                    .and("not.exist");
+                    .should("not.exist");
 
                 // This is assuming the 2nd question is a multiple choice question
                 dashboard.getExpandQuestionDetails().eq(1)
@@ -154,7 +153,7 @@ context("Geode Dashboard Smoke Test", () => {
                     .should("exist")
                     .click({ force: true });
                 dashboard.getExpandedQuestionPanel()
-                    .should("not.be.visible");
+                    .should("not.exist");
             });
         });
         it("can expand activities to show questions", () => {
@@ -170,7 +169,7 @@ context("Geode Dashboard Smoke Test", () => {
                 });
             });
             dashboard.getActivityQuestionsText()
-                .should("not.be.visible");
+                .should("not.exist");
             dashboard.getActivityQuestionToggle().eq(0)
                 .click({ force: true });
             dashboard.getActivityQuestionsText()
@@ -178,7 +177,7 @@ context("Geode Dashboard Smoke Test", () => {
             dashboard.getActivityQuestionsText().eq(0)
                 .click({ force: true });
             dashboard.getActivityQuestionsText()
-                .should("not.be.visible");
+                .should("not.exist");
         });
 
         // it.only('Checks for one students data', () => {
@@ -255,8 +254,7 @@ context("Geode Dashboard Smoke Test", () => {
                     .and("contain", "No response");
 
                 dashboard.getExpandedMCAnswers()
-                    .should("not.exist")
-                    .and("not.be.visible");
+                    .should("not.exist");
                 dashboard.getShowHideResponse()
                     .should("exist")
                     .click({ force: true })
@@ -270,14 +268,13 @@ context("Geode Dashboard Smoke Test", () => {
                 .should("exist")
                 .click({ force: true });
             dashboard.getExpandedQuestionPanel()
-                .should("not.be.visible");
+                .should("not.exist");
         });
         it("hide responses", () => {
             dashboard.getOpenCloseStudents()
                 .click({ force: true });
             dashboard.getExpandedMCAnswers()
-                .should("not.be.visible")
-                .and("not.exist");
+                .should("not.exist");
             dashboard.getExpandQuestionDetails().eq(1)
                 .click({ force: true });
             dashboard.getShowHideResponse()
@@ -303,8 +300,7 @@ context("Geode Dashboard Smoke Test", () => {
                 .and("contain", "b")
                 .and("contain", "No response");
             dashboard.getExpandedMCAnswers()
-                .should("not.exist")
-                .and("not.be.visible");
+                .should("not.exist");
             dashboard.getShowHideResponse()
                 .should("exist")
                 .click({ force: true });
@@ -315,7 +311,7 @@ context("Geode Dashboard Smoke Test", () => {
                 .should("exist")
                 .click({ force: true });
             dashboard.getExpandedQuestionPanel()
-                .should("not.be.visible");
+                .should("not.exist");
         });
 
     });

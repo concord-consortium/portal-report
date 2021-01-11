@@ -27,10 +27,11 @@ class Header {
 
     getCheckbox(i) {
         return cy.get(".report-content")
-            .not(".hidden").within(() => {
-                cy.get(".question-header").eq(i)
-                    .children().eq(0);
-            });
+            .not(".hidden")
+            .find(".question-header")
+            .eq(i)
+            .children()
+            .eq(0);
     }
     getLogo() {
         return cy.get(".logo");
