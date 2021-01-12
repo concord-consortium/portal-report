@@ -44,7 +44,7 @@ function handleApiError(action, next, error) {
 export default store => next => action => {
   if (action.callAPI) {
     const state = store.getState();
-    const { type, data, successAction, errorAction} = action.callAPI;
+    const { type, data, successAction } = action.callAPI;
     try {
       callApi(type, data, state)
         // Try to catch errors from the promise returned by callApi
@@ -55,7 +55,7 @@ export default store => next => action => {
         .then(response => successAction && next(successAction(response)));
     } catch (error) {
       // Some callApi functions throw errors during setup, before they
-      // return a promise this catch here handles that case.
+      // return a promise. This catch here handles that case.
       handleApiError(action, next, error);
     }
   }
