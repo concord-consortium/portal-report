@@ -1,10 +1,8 @@
 import React from "react";
 import { Map } from "immutable";
 import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
-import QuestionFeedbackBadge from "../../../img/svg-icons/feedback-question-badge-icon.svg";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
-import answer from "../../containers/dashboard/answer";
 
 interface IProps {
   activities: Map<any, any>;
@@ -15,7 +13,6 @@ interface IProps {
   expandedActivities: Map<any, any>;
   isCompact: boolean;
   questionFeedbacks?: Map<any, any>;
-  hideFeedbackBadges: boolean;
   students: Map<any, any>;
   studentProgress: Map<any, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -78,25 +75,17 @@ export class StudentAnswers extends React.PureComponent<IProps> {
           const selected = (currentActivityId === activity.get("id") &&
             currentQuestionId === questionId &&
             currentStudentId === studentId);
-          // TODO: FEEDBACK
-          // get questionFeedbacks and hideFeedbackBadges from props
-          // if hideFeedbackBadges is false,
-          // search questionFeedbacks for entry that has student id and question id
-          // that match studentId and questionId and then
-          // optionally display feedback icon component if we found matching feedback
-          const hasFeedbackGiven = this.props.questionFeedbacks?.find(answer =>
-            (answer.get("questionId") === questionId) && (answer.get("platformStudentId") === studentId) && answer.get("hasBeenReviewedForAnswerHash"));
+          const feedback = this.props.questionFeedbacks?.find(feedback =>
+                            (feedback.get("questionId") === questionId) && (feedback.get("platformStudentId") === studentId));
           return (
-            <React.Fragment key={questionId}>
-              <AnswerCompact
-                key={questionId}
-                question={question}
-                student={student}
-                onAnswerSelect={this.handleAnswerSelect(currentActivityId, questionId, student.get("id"))}
-                selected={selected}
-              />
-              {!this.props.hideFeedbackBadges && hasFeedbackGiven && <QuestionFeedbackBadge className={css.feedbackGiven}/>}
-            </React.Fragment>
+            <AnswerCompact
+              key={questionId}
+              question={question}
+              student={student}
+              onAnswerSelect={this.handleAnswerSelect(currentActivityId, questionId, student.get("id"))}
+              selected={selected}
+              feedback={feedback}
+            />
           );
         })}
       </div>
