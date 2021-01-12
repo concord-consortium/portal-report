@@ -1,6 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
-import { PopupClassNav } from "../../../containers/portal-dashboard/popup-class-nav";
+import PopupClassNav from "../../../containers/portal-dashboard/popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
 import { PopupStudentResponseList } from "./popup-all-student-response-list";
 import { SpotlightMessageDialog } from "./spotlight-message-dialog";
@@ -92,6 +92,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       <>
         <div className={css.tableHeader}>
           <PopupClassNav
+            activity={currentActivity || firstActivity}
             anonymous={anonymous}
             isSpotlightOn={selectedStudents.length > 0}
             listViewMode={listViewMode}

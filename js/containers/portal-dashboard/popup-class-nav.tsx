@@ -15,6 +15,7 @@ import css from "../../../css/portal-dashboard/response-details/popup-class-nav.
 import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
+  activity: Map<any, any>;
   anonymous: boolean;
   isSpotlightOn: boolean;
   listViewMode: ListViewMode;
@@ -32,14 +33,14 @@ interface IProps {
   feedbackLevel: FeedbackLevel;
 }
 
-export class PopupClassNav extends React.PureComponent<IProps>{
+class PopupClassNav extends React.PureComponent<IProps>{
   constructor(props: IProps) {
     super(props);
   }
   
   render() {
 
-    const { anonymous, listViewMode, questionCount, studentCount, setAnonymous, viewMode, awaitingFeedbackCount, numFeedbacksNeedingReview } = this.props;
+    const { activity, anonymous, listViewMode, questionCount, studentCount, setAnonymous, viewMode, awaitingFeedbackCount, feedbackLevel, numFeedbacksNeedingReview } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;
@@ -163,15 +164,30 @@ export class PopupClassNav extends React.PureComponent<IProps>{
 
 }
 
-function mapStateToProps() {
+function mapStateToProps(state: any, ownProps?: any) {  
   return (state: any, ownProps: any) => {
-    const getFeedbacks: any = makeGetStudentFeedbacks();
-    const {
-      numFeedbacksNeedingReview
-    } = getFeedbacks(state, ownProps);
-    return {
-      numFeedbacksNeedingReview
-    };
+    // eslint-disable-next-line no-console
+    console.log(ownProps.feedbackLevel);
+    if (ownProps.feedbackLevel === "Question") {
+      const questionFeedbacks = state.getIn(["feedback", "questionFeedbacks"]);
+      const feedbackCount = questionFeedbacks.length || 0;
+      const numFeedbacksNeedingReview = ownProps.studentCount - feedbackCount;
+      // eslint-disable-next-line no-console
+      console.log(numFeedbacksNeedingReview);
+      return {
+        numFeedbacksNeedingReview
+      };
+    } else {
+      const getFeedbacks: any = makeGetStudentFeedbacks();
+      const {
+        numFeedbacksNeedingReview
+      } = getFeedbacks(state, ownProps);
+      // eslint-disable-next-line no-console
+      console.log(numFeedbacksNeedingReview);
+      return {
+        numFeedbacksNeedingReview
+      };
+    }
   };
 }
 
