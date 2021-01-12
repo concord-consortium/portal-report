@@ -1,0 +1,81 @@
+@import "./variables";
+
+@legend-width: 765px;
+@half-width: @legend-width / 2;
+
+.legendContainer {
+  font-size: 14px;
+  font-weight: normal;
+  color: @cc-charcoal;
+  border: 1.5px solid @cc-teal-light2;
+  box-sizing: border-box;
+  border-radius: 16px;
+  width: @legend-width;
+  height: 32px;
+  line-height: 32px;
+  background-color: white;
+  left: calc(((100vw - @left-panel-width) / 2) - @half-width);
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  bottom: -19px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  .legendKey {
+    display: flex;
+    align-items: center;
+    height: 20px;
+
+    &.disabled {
+      opacity: .35;
+    }
+
+    .legendText {
+      bottom:10px;
+      line-height: 16px;
+      padding-right: 9px;
+
+      &.noText {
+        padding-right: 0px;
+      }
+    }
+
+    .legendIcon {
+      margin: 5px;
+      box-sizing: border-box;
+      height: 16px;
+      width: 16px;
+    }
+  }
+
+  .progressLegend {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .divider{
+    width: 1px;
+    height: 20px;
+    margin: 0 12px;
+    background-color: @cc-teal-light2;
+  }
+
+  .feedbackLegend {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    .feedbackIcon {
+      fill: @feedback-green;
+      width: 11px;
+      height: 11px;
+    }
+    .questionFeedbackGiven {
+      transform: rotate(45deg);
+    }
+  }
+}
