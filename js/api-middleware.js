@@ -11,7 +11,11 @@ import { getFirestore } from "./db";
 // In some cases callApi returns a promise which might throw an error when it is
 // being resolved. In other cases callApi will throw an error directly before it
 // returns the promise
-function handleApiError(actionType, apiType, errorAction, next, error) {
+function handleApiError(action, next, error) {
+  const actionType = action.type;
+  const apiType = action.callAPI.type;
+  const errorAction = action.callAPI.errorAction;
+
   // Log this error to the console in addtion to dispatching the errorAction
   // In chrome this log message includes both the stack trace from the error
   // object as well as the stack trace of the console state. Both can be useful
@@ -47,12 +51,12 @@ export default store => next => action => {
         // The order here is important. In some cases the successAction causes its
         // own error, we don't want to handle that here because we'd incorrectly
         // be reporting the action type and api type
-        .catch(error => handleApiError(action.type, type, errorAction, next, error))
+        .catch(error => handleApiError(action, next, error))
         .then(response => successAction && next(successAction(response)));
     } catch (error) {
       // Some callApi functions throw errors during setup, before they
       // return a promise this catch here handles that case.
-      handleApiError(action.type, type, errorAction, next, error);
+      handleApiError(action, next, error);
     }
   }
   return next(action);
