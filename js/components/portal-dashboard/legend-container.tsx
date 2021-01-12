@@ -9,7 +9,7 @@ import FeedbackAnswerUpdatedKeyIcon from "../../../img/svg-icons/feedback-answer
 import css from "../../../css/portal-dashboard/progress-view-legend.less";
 
 export interface LegendType {
-  name: string | null;
+  name?: string;
   icon: any;
 }
 export const progress: LegendType[] =
@@ -31,7 +31,6 @@ export const progress: LegendType[] =
   export const feedback: LegendType[] =
   [
     {
-      name: null,
       icon: FeedbackActivityKeyIcon
     },
     {
@@ -67,15 +66,16 @@ export class ProgressLegendContainer extends React.PureComponent<IProps>{
         <div className={css.feedbackLegend} data-cy="feedback-legend">
           <div className={css.legendLabel}>Feedback:</div>
           { feedback.map((feedback, index) => {
-            const feedbackName = feedback.name? feedback.name.replace(/\ /g,'-') : "no-title";
+            const feedbackName = feedback.name ? feedback.name.replace(/\ /g,'-') : "no-title";
             return (
               <div key={index}
-                   className={`${css.legendKey} ${this.props.hideFeedbackBadges? css.disabled: ""}`}
-                   data-cy={`${feedbackName}-legend${this.props.hideFeedbackBadges ? "-disabled" : ""}`}>
-                  {feedback.name === null
-                    ? <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon}`} />
-                    : <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon} ${css.questionFeedbackGiven}`} />
-                  }
+                className={`${css.legendKey} ${this.props.hideFeedbackBadges? css.disabled: ""}`}
+                data-cy={`${feedbackName}-legend${this.props.hideFeedbackBadges ? "-disabled" : ""}`}
+              >
+                { feedback.name === undefined
+                  ? <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon}`} />
+                  : <feedback.icon className={`${css.legendIcon} ${css.feedbackIcon} ${css.questionFeedbackGiven}`} />
+                }
                 <div className={`${css.legendText} ${!feedback.name && css.noText}`}>{feedback.name}</div>
               </div>
             );
