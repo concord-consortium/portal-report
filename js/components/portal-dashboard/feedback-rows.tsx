@@ -1,6 +1,7 @@
 import React from "react";
 import Answer from "../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../util/student-utils";
+import { RubricTableContainer } from "./rubric-table";
 import AwaitingFeedbackActivityBadgeIcon from "../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
@@ -20,6 +21,7 @@ interface IProps {
 
 export const FeedbackRows: React.FC<IProps> = (props) => {
   const { answers, currentQuestion, feedbacks, isAnonymous, feedbackLevel } = props;
+  const hasRubric = true;
 
   const onChangeHandler = () => {
     // autosave feedback
@@ -59,7 +61,11 @@ export const FeedbackRows: React.FC<IProps> = (props) => {
         }
         <div className={css.feedback}>
           {activityStarted &&
+            <React.Fragment>
+              { (feedbackLevel==="Activity" && hasRubric) && <RubricTableContainer /> }
             <textarea value={feedback} onChange={onChangeHandler}></textarea>
+            </React.Fragment>
+
           }
         </div>
       </div>
