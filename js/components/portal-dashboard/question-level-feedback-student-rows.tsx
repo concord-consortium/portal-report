@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import Answer from "../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../util/student-utils";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
@@ -48,7 +49,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     }
 
     return (
-      <div key={index} className={css.feedbackRows__row}>
+      <div key={currentQuestionId + index.toString()} className={css.feedbackRows__row}>
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge}>
             {feedbackBadge}

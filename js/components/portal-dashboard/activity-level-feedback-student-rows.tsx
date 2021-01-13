@@ -44,7 +44,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     }
 
     return (
-      <div key={index} className={css.feedbackRows__row}>
+      <div key={activityId + index.toString()} className={css.feedbackRows__row}>
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge}>
             {feedbackBadge}
