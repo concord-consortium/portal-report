@@ -80,6 +80,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const isSequence = activities.size > 1;
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
+    const currentActivityWithQuestions = activities.find(activity => activity.get("id") === activityId);
     let qCount = 0;
 
     activities.toArray().forEach((activity: Map<any, any>) => {
@@ -92,7 +93,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       <>
         <div className={css.tableHeader}>
           <PopupClassNav
-            activity={currentActivity || firstActivity}
+            activity={currentActivityWithQuestions}
             anonymous={anonymous}
             answers={answers}
             isSpotlightOn={selectedStudents.length > 0}
@@ -144,7 +145,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           {viewMode === "FeedbackReport" &&
             <div className={css.feedbackInfo} data-cy="feedback-info">
               <FeedbackInfo
-                activity={currentActivity || firstActivity}
+                activity={currentActivityWithQuestions}
                 feedbackLevel={feedbackLevel}
                 setFeedbackLevel={this.setFeedbackLevel}
                 listViewMode={listViewMode}
@@ -156,7 +157,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           ? listViewMode === "Question"
             ? <PopupQuestionAnswerList
                 activities={activities}
-                currentActivity={currentActivity || firstActivity}
+                currentActivity={currentActivityWithQuestions}
                 currentStudentId={currentStudentId}
                 students={students}
               />
@@ -171,7 +172,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           : feedbackLevel === "Question"
             ? <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
                 <QuestionFeedbackPanel
-                  activity={currentActivity || firstActivity}
+                  activity={currentActivityWithQuestions}
                   activities={activities}
                   answers={answers}
                   currentQuestion={currentQuestion || firstQuestion}
@@ -184,7 +185,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
               </div>
             : <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
                 <ActivityFeedbackPanel
-                  activity={currentActivity || firstActivity}
+                  activity={currentActivityWithQuestions}
                   activities={activities}
                   answers={answers}
                   currentQuestion={currentQuestion || firstQuestion}
@@ -200,7 +201,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             <CSSTransition in={showSpotlightListDialog} classNames={"spotlightListDialog"} timeout={500}>
               <SpotlightStudentListDialog
                 anonymous={anonymous}
-                currentActivity={currentActivity || firstActivity}
+                currentActivity={currentActivityWithQuestions}
                 currentQuestion={currentQuestion || firstQuestion}
                 isAnonymous={isAnonymous}
                 onCloseDialog={this.setShowSpotlightListDialog}
