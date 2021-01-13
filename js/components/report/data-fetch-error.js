@@ -8,14 +8,14 @@ export default class DataFetchError extends PureComponent {
     this.state = {};
   }
 
-  // Inorder to reuse updateBodyText we can't call it in the constructor because
+  // In order to reuse updateBodyText we can't call it in the constructor because
   // we can't call setState until the component has been mounted
   componentDidMount() {
     this.updateBodyText();
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.error !== this.props.error) {
+    if (prevProps.error !== this.props.error) {
       this.updateBodyText();
     }
   }
