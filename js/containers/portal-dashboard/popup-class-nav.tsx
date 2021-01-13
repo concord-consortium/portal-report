@@ -17,9 +17,11 @@ import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
 interface IProps {
   activity: Map<any, any>;
   anonymous: boolean;
+  answers: Map<any, any>;
   isSpotlightOn: boolean;
   listViewMode: ListViewMode;
   onShowDialog: (show: boolean) => void;
+  currentQuestion: Map<any, any> | undefined;
   questionCount: number;
   setAnonymous: (value: boolean) => void;
   setStudentSort: (value: string) => void;
@@ -37,10 +39,10 @@ class PopupClassNav extends React.PureComponent<IProps>{
   constructor(props: IProps) {
     super(props);
   }
-  
+
   render() {
 
-    const { activity, anonymous, listViewMode, questionCount, studentCount, setAnonymous, viewMode, awaitingFeedbackCount, feedbackLevel, numFeedbacksNeedingReview } = this.props;
+    const { activity, anonymous, answers, listViewMode, currentQuestion, questionCount, studentCount, setAnonymous, viewMode, awaitingFeedbackCount, feedbackLevel, numFeedbacksNeedingReview } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;
@@ -164,16 +166,28 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
 }
 
-function mapStateToProps(state: any, ownProps?: any) {  
+function mapStateToProps(state: any, ownProps?: any) {
   return (state: any, ownProps: any) => {
-    // eslint-disable-next-line no-console
-    console.log(ownProps.feedbackLevel);
-    if (ownProps.feedbackLevel === "Question") {
+    const { answers, currentQuestion, feedbackLevel } = ownProps;
+    if (feedbackLevel === "Question") {
+      const questionId = currentQuestion.get("id");
       const questionFeedbacks = state.getIn(["feedback", "questionFeedbacks"]);
-      const feedbackCount = questionFeedbacks.length || 0;
-      const numFeedbacksNeedingReview = ownProps.studentCount - feedbackCount;
-      // eslint-disable-next-line no-console
-      console.log(numFeedbacksNeedingReview);
+      const feedbacksGiven = [];
+      questionFeedbacks.toArray().forEach((feedback: any) => {
+        if (feedback.get("questionId") === questionId && feedback.get("feedback").trim() !== "") {
+          feedbacksGiven.push(feedback);
+        }
+      });
+      const feedbackCount = feedbacksGiven.length || 0;
+      const studentAnswers = [];
+      answers.toArray().forEach((item: any) => {
+        item.forEach((ans: any) => {
+          if (ans.get("questionId") === questionId) {
+            studentAnswers.push(ans);
+          }
+        });
+      });
+      const numFeedbacksNeedingReview = studentAnswers.length - feedbackCount;
       return {
         numFeedbacksNeedingReview
       };
@@ -182,8 +196,6 @@ function mapStateToProps(state: any, ownProps?: any) {
       const {
         numFeedbacksNeedingReview
       } = getFeedbacks(state, ownProps);
-      // eslint-disable-next-line no-console
-      console.log(numFeedbacksNeedingReview);
       return {
         numFeedbacksNeedingReview
       };
