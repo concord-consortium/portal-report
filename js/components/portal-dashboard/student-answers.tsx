@@ -57,8 +57,8 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     // const visibleQuestions = activity.get("questions", []).filter((q: any) => q.get("visible"));
     return (
       <div className={css.activityAnswers} key={activity.get("id")}>
-        { pages.map((page: any) => this.renderActivityPage(activity, page, student))}
-        { this.renderScore(activity, student)}
+        { pages.map((page: any) => this.renderActivityPage(activity, page, student)) }
+        { this.renderScore(activity, student) }
       </div>
     );
   }
