@@ -5,7 +5,7 @@ context("Portal Dashboard Question Details Panel", () => {
 
   describe('opening and closing the question details panel', () => {
     it('verify we can click to open a question and see the question tab expanded', () => {
-      cy.get('[data-cy=question-overlay-header]').should('not.be.visible');
+      cy.get('[data-cy=question-overlay-header]').should('not.exist');
       cy.get('[data-cy=collapsed-activity-button]').first().click();
       cy.get('[data-cy=activity-question-button]').first().click();
       cy.get('[data-cy=question-overlay-header]').should('be.visible');
@@ -21,7 +21,7 @@ context("Portal Dashboard Question Details Panel", () => {
 
     it('verify we can click to close the question details panel', () => {
       cy.get('[data-cy=question-overlay-header-button]').first().click();
-      cy.get('[data-cy=question-overlay-header]').should('not.be.visible');
+      cy.get('[data-cy=question-overlay-header]').should('not.exist');
     });
   });
 
@@ -105,7 +105,7 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     it('verify show/hide button behaves correctly', () => {
       cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
-      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('not.be.visible');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('not.exist');
       cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
       cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-title]').should('be.visible');
       cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('be.visible');
