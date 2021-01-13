@@ -1,10 +1,7 @@
 import React from "react";
 import Answer from "../../containers/portal-dashboard/answer";
-import { getFormattedStudentName } from "../../util/student-utils";
 import striptags from "striptags";
 import { renderHTML } from "../../util/render-html";
-import AwaitingFeedbackActivityBadgeIcon from "../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
-import GivenFeedbackActivityBadgeIcon from "../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../img/svg-icons/update-feedback-question-badge-icon.svg";
@@ -15,9 +12,6 @@ interface IProps {
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
   answers: any;
-  currentQuestion: any;
-  isAnonymous: boolean;
-  activities: Map<any, any>;
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
   students: Map<any, any>;
@@ -27,7 +21,7 @@ interface IProps {
 }
 
 export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, activities, currentActivity, currentStudentId, students, updateQuestionFeedback, activityId, activityIndex } = props;
+  const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback, activityId, activityIndex } = props;
 
   const onChangeHandler = (answerId: string) => (event: React.FormEvent<HTMLInputElement>) => {
     if (answerId !== undefined) {
@@ -42,10 +36,6 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     const student = currentStudentId
                     ? students.toArray().find((s: any) => s.get("id") === currentStudentId)
                     : students.toArray()[0];
-    const formattedName = getFormattedStudentName(isAnonymous, student);
-    const activity = currentActivityId
-                     ? activities.toArray().find((a: any) => a.get("id") === currentActivityId)
-                     : activities.toArray()[0];
 
     const currentQuestionId = question.get("id");
     const answer = currentStudentId
@@ -54,9 +44,6 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     const answerId = answer && answer.get("id");
     const feedbackData = answerId && feedbacks.getIn([answerId]);
     const feedback = feedbackData !== undefined ? feedbackData.get("feedback") : "";
-
-    const questionNumber = question.get("questionNumber");
-    const questionPrompt = question.get("prompt");
 
     const awaitingFeedbackIcon = <AwaitingFeedbackQuestionBadgeIcon />;
     const givenFeedbackIcon = <GivenFeedbackQuestionBadgeIcon />;
@@ -67,7 +54,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     if (feedback) {
       feedbackBadge = givenFeedbackIcon;
     }
-  
+
     const blankRegEx = /\[([^)]+)\]/g;
     const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
 

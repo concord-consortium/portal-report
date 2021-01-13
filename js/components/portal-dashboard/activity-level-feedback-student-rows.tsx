@@ -9,8 +9,6 @@ import css from "../../../css/portal-dashboard/feedback/feedback-rows.less";
 interface IProps {
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
-  answers: any;
-  currentQuestion: any;
   isAnonymous: boolean;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   activityId: string | null;
@@ -18,7 +16,7 @@ interface IProps {
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, updateActivityFeedback, activityId, activityIndex } = props;
+  const { feedbacks, isAnonymous, updateActivityFeedback, activityId, activityIndex } = props;
 
   const onChangeHandler = (studentId: string) => (event: React.FormEvent<HTMLInputElement>) => {
     if (activityId && studentId != null) {

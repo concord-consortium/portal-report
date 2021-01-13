@@ -94,8 +94,10 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           <PopupClassNav
             activity={currentActivity || firstActivity}
             anonymous={anonymous}
+            answers={answers}
             isSpotlightOn={selectedStudents.length > 0}
             listViewMode={listViewMode}
+            currentQuestion={currentQuestion || firstQuestion}
             questionCount={qCount}
             studentCount={studentCount}
             setAnonymous={setAnonymous}
@@ -126,7 +128,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   currentStudentId={currentStudentId}
                   nameFirst={false}
                 />
-              : feedbackLevel === "Question" && 
+              : feedbackLevel === "Question" &&
                 <QuestionNavigator
                   currentQuestion={currentQuestion || firstQuestion}
                   questions={questions}

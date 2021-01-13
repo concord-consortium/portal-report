@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
 import { ActivityLevelFeedbackStudentRows } from "../../components/portal-dashboard/activity-level-feedback-student-rows";
-import { FeedbackQuestionRows } from "../../components/portal-dashboard/feedback-question-rows";
 import activity from "../report/activity";
 import { FeedbackLevel } from "../../../util/misc";
 
@@ -43,8 +42,6 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
     return (
       <div>
         <ActivityLevelFeedbackStudentRows
-          answers={answers}
-          currentQuestion={currentQuestion}
           feedbacks={feedbacks}
           feedbacksNeedingReview={feedbacksNeedingReview}
           isAnonymous={isAnonymous}

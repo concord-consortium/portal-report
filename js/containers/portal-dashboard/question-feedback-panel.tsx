@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../actions/index";
-import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
 import { QuestionLevelFeedbackStudentRows } from "../../components/portal-dashboard/question-level-feedback-student-rows";
 import { FeedbackQuestionRows } from "../../components/portal-dashboard/feedback-question-rows";
 import { FeedbackLevel } from "../../util/misc";
@@ -29,7 +28,6 @@ interface IProps {
   listViewMode: listViewMode;
   currentStudentId: string | null;
   students: Map<any, any>;
-  setNumFeedbacksNeedingReview: (numFeedbacksNeedingReview: number) => void;
 }
 
 class QuestionFeedbackPanel extends React.PureComponent<IProps> {
@@ -38,7 +36,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activities, answers, currentQuestion, feedbacks, questionFeedbacks, feedbacksNeedingReview, isAnonymous, listViewMode, currentStudentId, students, activityIndex, setNumFeedbacksNeedingReview } = this.props;
+    const { activity, activities, answers, currentQuestion, questionFeedbacks, feedbacksNeedingReview, isAnonymous, listViewMode, currentStudentId, students, activityIndex } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -56,13 +54,10 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               activityIndex={activityIndex}
             />
           : <FeedbackQuestionRows
-              activities={activities}
               currentActivity={activity}
               answers={answers}
-              currentQuestion={currentQuestion}
               feedbacks={questionFeedbacks}
               feedbacksNeedingReview={feedbacksNeedingReview}
-              isAnonymous={isAnonymous}
               currentStudentId={currentStudentId}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
@@ -77,8 +72,6 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 }
 
 function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
-  // eslint-disable-next-line no-console
-  // console.log(state);
   return () => {
     return {
       questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
