@@ -11,7 +11,7 @@ import ActivityFeedbackPanel from "../../../containers/portal-dashboard/activity
 import QuestionFeedbackPanel from "../../../containers/portal-dashboard/question-feedback-panel";
 import { StudentNavigator } from "../student-navigator";
 import { ActivityNavigator } from "../activity-navigator";
-import { ListViewMode, FeedbackLevel } from "../../../util/misc";
+import { DashboardViewMode, ListViewMode, FeedbackLevel } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
@@ -44,7 +44,7 @@ interface IProps {
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  viewMode: viewMode;
+  viewMode: DashboardViewMode;
   feedbackLevel: FeedbackLevel;
 }
 interface IState {
@@ -96,19 +96,19 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             activity={currentActivityWithQuestions}
             anonymous={anonymous}
             answers={answers}
+            currentQuestion={currentQuestion || firstQuestion}
+            feedbackLevel={feedbackLevel}
             isSpotlightOn={selectedStudents.length > 0}
             listViewMode={listViewMode}
-            currentQuestion={currentQuestion || firstQuestion}
+            onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
             questionCount={qCount}
-            studentCount={studentCount}
             setAnonymous={setAnonymous}
+            setListViewMode={setListViewMode}
             setStudentSort={setStudentFilter}
             sortByMethod={sortByMethod}
+            studentCount={studentCount}
             trackEvent={trackEvent}
-            onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
-            setListViewMode={setListViewMode}
             viewMode={viewMode}
-            feedbackLevel={feedbackLevel}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             {isSequence &&
@@ -137,7 +137,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   toggleCurrentQuestion={this.handleChangeQuestion}
                   setCurrentActivity={setCurrentActivity}
                   hasTeacherEdition={hasTeacherEdition}
-                  feedbackLevel={feedbackLevel}
                 />
             }
             </div>
@@ -145,7 +144,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           {viewMode === "FeedbackReport" &&
             <div className={css.feedbackInfo} data-cy="feedback-info">
               <FeedbackInfo
-                activity={currentActivityWithQuestions}
                 feedbackLevel={feedbackLevel}
                 setFeedbackLevel={this.setFeedbackLevel}
                 listViewMode={listViewMode}
@@ -173,13 +171,12 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             ? <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
                 <QuestionFeedbackPanel
                   activity={currentActivityWithQuestions}
-                  activities={activities}
                   answers={answers}
                   currentQuestion={currentQuestion || firstQuestion}
+                  currentStudentId={currentStudentId}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
                   feedbackLevel={feedbackLevel}
-                  currentStudentId={currentStudentId}
                   students={students}
                 />
               </div>
@@ -189,9 +186,9 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   activities={activities}
                   answers={answers}
                   currentQuestion={currentQuestion || firstQuestion}
+                  currentStudentId={currentStudentId}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
-                  currentStudentId={currentStudentId}
                   students={students}
                 />
               </div>
@@ -261,7 +258,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     this.setState({ selectedStudents: updatedSelectedStudents });
   }
 
-  private setFeedbackLevel = (feedbackLevel: string) => {
+  private setFeedbackLevel = (feedbackLevel: FeedbackLevel) => {
     this.setState({ feedbackLevel });
   }
 }

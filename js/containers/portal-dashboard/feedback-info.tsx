@@ -2,15 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import {FeedbackNoteToggle} from "../../components/portal-dashboard/feedback-note-toggle";
 import {FeedbackLegend} from "../../components/portal-dashboard/feedback-legend";
-import { FeedbackLevel } from "../../../util/misc";
+import { FeedbackLevel, ListViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/feedback/feedback-info.less";
 
 interface IProps {
-  activity: Map<any, any>;
-  rubric: any;
   feedbackLevel: FeedbackLevel;
-  listViewMode: listViewMode;
+  listViewMode: ListViewMode;
+  rubric?: any;
   setFeedbackLevel: (value: string) => void;
 }
 

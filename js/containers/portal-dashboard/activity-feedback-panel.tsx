@@ -1,33 +1,33 @@
 import React from "react";
+import { Map } from "immutable";
 import { connect } from "react-redux";
 import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
 import { ActivityLevelFeedbackStudentRows } from "../../components/portal-dashboard/activity-level-feedback-student-rows";
-import activity from "../report/activity";
-import { FeedbackLevel } from "../../../util/misc";
+import { FeedbackLevel, ListViewMode } from "../../util/misc";
 
 interface IProps {
-  activity: Map<any, any>;
   activities: Map<any, any>;
-  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
-  updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
-  feedbacks: Map<any, any>;
-  feedbacksNeedingReview: Map<any, any>;
-  numFeedbacksNeedingReview: number;
-  numFeedbacksGivenReview: number;
-  feedbacksNotAnswered: number;
-  computedMaxScore: number;
-  autoScores: any;
-  settings: any;
-  rubric: any;
+  activity: Map<any, any>;
   activityIndex: number;
   answers: any;
-  currentQuestion: any;
-  isAnonymous: boolean;
-  feedbackLevel: FeedbackLevel;
-  listViewMode: listViewMode;
+  autoScores: any;
+  computedMaxScore: number;
   currentStudentId: string | null;
+  currentQuestion: any;
+  feedbackLevel: FeedbackLevel;
+  feedbacks: Map<any, any>;
+  feedbacksNeedingReview: Map<any, any>;
+  feedbacksNotAnswered: number;
+  isAnonymous: boolean;
+  listViewMode: ListViewMode;
+  numFeedbacksGivenReview: number;
+  numFeedbacksNeedingReview: number;
+  rubric: any;
+  settings: any;
   students: Map<any, any>;
+  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
 }
 
 class ActivityFeedbackPanel extends React.PureComponent<IProps> {
@@ -36,18 +36,18 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activities, answers, currentQuestion, feedbacks, feedbacksNeedingReview, isAnonymous, listViewMode, currentStudentId, students, activityIndex } = this.props;
+    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, isAnonymous } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
       <div>
         <ActivityLevelFeedbackStudentRows
+          activityId={currentActivityId}
+          activityIndex={activityIndex}
           feedbacks={feedbacks}
           feedbacksNeedingReview={feedbacksNeedingReview}
           isAnonymous={isAnonymous}
           updateActivityFeedback={this.props.updateActivityFeedback}
-          activityId={currentActivityId}
-          activityIndex={activityIndex}
         />
       </div>
     );

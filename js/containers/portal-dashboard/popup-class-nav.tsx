@@ -18,21 +18,20 @@ interface IProps {
   activity: Map<any, any>;
   anonymous: boolean;
   answers: Map<any, any>;
+  currentQuestion: Map<any, any> | undefined;
+  feedbackLevel: FeedbackLevel;
   isSpotlightOn: boolean;
   listViewMode: ListViewMode;
+  numFeedbacksNeedingReview: number;
   onShowDialog: (show: boolean) => void;
-  currentQuestion: Map<any, any> | undefined;
   questionCount: number;
   setAnonymous: (value: boolean) => void;
+  setListViewMode: (value: ListViewMode) => void;
   setStudentSort: (value: string) => void;
   sortByMethod: string;
   studentCount: number;
-  setListViewMode: (value: ListViewMode) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  awaitingFeedbackCount: number;
-  numFeedbacksNeedingReview: number;
   viewMode: string;
-  feedbackLevel: FeedbackLevel;
 }
 
 class PopupClassNav extends React.PureComponent<IProps>{
@@ -42,7 +41,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
   render() {
 
-    const { activity, anonymous, answers, listViewMode, currentQuestion, questionCount, studentCount, setAnonymous, viewMode, awaitingFeedbackCount, feedbackLevel, numFeedbacksNeedingReview } = this.props;
+    const { activity, anonymous, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous, viewMode } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;
@@ -137,7 +136,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private renderViewListOptions() {
-    const { listViewMode, setListViewMode, feedbackLevel } = this.props;
+    const { feedbackLevel, listViewMode, setListViewMode } = this.props;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${listViewMode==="Student" ? css.selected : ""}`;
     const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${listViewMode==="Question" ? css.selected : ""}  ${feedbackLevel === "Activity" ? css.disabled : ""}`;
     return (

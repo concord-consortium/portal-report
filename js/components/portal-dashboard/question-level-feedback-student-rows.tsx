@@ -9,23 +9,25 @@ import UpdateFeedbackQuestionBadgeIcon from "../../../img/svg-icons/update-feedb
 import css from "../../../css/portal-dashboard/feedback/feedback-rows.less";
 
 interface IProps {
-  students: Map<any, any>;
-  feedbacks: Map<any, any>;
-  feedbacksNeedingReview: Map<any, any>;
-  answers: any;
-  currentQuestion: any;
-  isAnonymous: boolean;
-  updateQuestionFeedback: (answerId: string, feedback: any) => void;
   activityId: string | null;
   activityIndex: number;
+  answers: any;
+  currentQuestion: any;
+  feedbacks: Map<any, any>;
+  feedbacksNeedingReview: Map<any, any>;
+  isAnonymous: boolean;
+  students: Map<any, any>;
+  updateQuestionFeedback: (answerId: string, feedback: any) => void;
 }
 
 export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { students, answers, currentQuestion, feedbacks, isAnonymous, updateQuestionFeedback, activityId, activityIndex } = props;
+  const { answers, currentQuestion, feedbacks, isAnonymous, students,
+          updateQuestionFeedback } = props;
 
-  const onChangeHandler = (answerId: string) => (event: React.FormEvent<HTMLInputElement>) => {
+  const handleFeedbackChange = (answerId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
     if (answerId !== undefined) {
-      updateQuestionFeedback(answerId, {feedback: event.target.value});
+      const target = event.currentTarget as HTMLTextAreaElement;
+      updateQuestionFeedback(answerId, {feedback: target.value});
     }
   };
 
@@ -63,7 +65,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
         </div>
         <div className={css.feedback}>
           { answer &&
-            <textarea defaultValue={feedback} onChange={onChangeHandler(answerId)}></textarea>
+            <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)}></textarea>
           }
         </div>
       </div>

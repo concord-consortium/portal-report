@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import { getFormattedStudentName } from "../../util/student-utils";
 import AwaitingFeedbackActivityBadgeIcon from "../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
@@ -7,20 +8,21 @@ import UpdateFeedbackQuestionBadgeIcon from "../../../img/svg-icons/update-feedb
 import css from "../../../css/portal-dashboard/feedback/feedback-rows.less";
 
 interface IProps {
+  activityId: string | null;
+  activityIndex: number;
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
   isAnonymous: boolean;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
-  activityId: string | null;
-  activityIndex: number;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { feedbacks, isAnonymous, updateActivityFeedback, activityId, activityIndex } = props;
+  const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback} = props;
 
-  const onChangeHandler = (studentId: string) => (event: React.FormEvent<HTMLInputElement>) => {
+  const handleFeedbackChange = (studentId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
     if (activityId && studentId != null) {
-      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: event.target.value});
+      const target = event.currentTarget as HTMLTextAreaElement;
+      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: target.value});
     }
   };
 
@@ -55,7 +57,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
         </div>
         <div className={css.feedback}>
           {activityStarted &&
-            <textarea defaultValue={feedback} onChange={onChangeHandler(studentId)}></textarea>
+            <textarea defaultValue={feedback} onChange={handleFeedbackChange(studentId)}></textarea>
           }
         </div>
       </div>

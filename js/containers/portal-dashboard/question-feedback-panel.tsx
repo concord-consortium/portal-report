@@ -1,33 +1,33 @@
 import React from "react";
+import { Map } from "immutable";
 import { connect } from "react-redux";
 import { updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../actions/index";
 import { QuestionLevelFeedbackStudentRows } from "../../components/portal-dashboard/question-level-feedback-student-rows";
 import { FeedbackQuestionRows } from "../../components/portal-dashboard/feedback-question-rows";
-import { FeedbackLevel } from "../../util/misc";
+import { FeedbackLevel, ListViewMode } from "../../util/misc";
 
 interface IProps {
-  activity: Map<any, any>;
-  activities: Map<any, any>;
-  feedbacks: Map<any, any>;
-  questionFeedbacks: Map<any, any>;
-  currentQuestion: Map<any, any>;
-  updateQuestionFeedback: (answerId: string, feedback: any) => void;
-  updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
-  feedbacksNeedingReview: Map<any, any>;
-  numFeedbacksNeedingReview: number;
-  numFeedbacksGivenReview: number;
-  feedbacksNotAnswered: number;
-  computedMaxScore: number;
-  autoScores: any;
-  settings: any;
-  rubric: any;
+  activity: Map<string, any>;
   activityIndex: number;
   answers: any;
-  isAnonymous: boolean;
-  feedbackLevel: FeedbackLevel;
-  listViewMode: listViewMode;
+  autoScores: any;
+  computedMaxScore: number;
+  currentQuestion: Map<any, any>;
   currentStudentId: string | null;
+  feedbacks: Map<any, any>;
+  feedbackLevel: FeedbackLevel;
+  feedbacksNeedingReview: Map<any, any>;
+  feedbacksNotAnswered: number;
+  isAnonymous: boolean;
+  listViewMode: ListViewMode;
+  numFeedbacksGivenReview: number;
+  numFeedbacksNeedingReview: number;
+  questionFeedbacks: Map<any, any>;
+  rubric: any;
+  settings: any;
   students: Map<any, any>;
+  updateQuestionFeedback: (answerId: string, feedback: any) => void;
+  updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
 }
 
 class QuestionFeedbackPanel extends React.PureComponent<IProps> {
@@ -36,33 +36,32 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activities, answers, currentQuestion, questionFeedbacks, feedbacksNeedingReview, isAnonymous, listViewMode, currentStudentId, students, activityIndex } = this.props;
+    const { activity, activityIndex, answers, currentQuestion, currentStudentId, feedbacksNeedingReview,
+            isAnonymous, listViewMode, questionFeedbacks, students } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
       <div>
         {listViewMode === "Student"
           ? <QuestionLevelFeedbackStudentRows
-              students={students}
+              activityId={currentActivityId}
+              activityIndex={activityIndex}
               answers={answers}
               currentQuestion={currentQuestion}
               feedbacks={questionFeedbacks}
               feedbacksNeedingReview={feedbacksNeedingReview}
               isAnonymous={isAnonymous}
-              updateQuestionFeedback={this.props.updateQuestionFeedback}
-              activityId={currentActivityId}
-              activityIndex={activityIndex}
-            />
-          : <FeedbackQuestionRows
-              currentActivity={activity}
-              answers={answers}
-              feedbacks={questionFeedbacks}
-              feedbacksNeedingReview={feedbacksNeedingReview}
-              currentStudentId={currentStudentId}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
-              activityId={currentActivityId}
-              activityIndex={activityIndex}
+            />
+          : <FeedbackQuestionRows
+              answers={answers}
+              currentActivity={activity}
+              currentStudentId={currentStudentId}
+              feedbacks={questionFeedbacks}
+              feedbacksNeedingReview={feedbacksNeedingReview}
+              students={students}
+              updateQuestionFeedback={this.props.updateQuestionFeedback}
             />
         }
       </div>
@@ -72,11 +71,9 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 }
 
 function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
-  return () => {
-    return {
+  return {
       questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
       settings: state.getIn(["feedback", "settings"])
-    };
   };
 }
 

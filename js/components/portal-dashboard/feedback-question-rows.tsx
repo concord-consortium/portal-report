@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import Answer from "../../containers/portal-dashboard/answer";
 import striptags from "striptags";
 import { renderHTML } from "../../util/render-html";
@@ -9,30 +10,27 @@ import UpdateFeedbackQuestionBadgeIcon from "../../../img/svg-icons/update-feedb
 import css from "../../../css/portal-dashboard/feedback/feedback-rows.less";
 
 interface IProps {
-  feedbacks: Map<any, any>;
-  feedbacksNeedingReview: Map<any, any>;
   answers: any;
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
+  feedbacks: Map<any, any>;
+  feedbacksNeedingReview: Map<any, any>;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
-  activityId: string | null;
-  activityIndex: number;
 }
 
 export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
-  const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback, activityId, activityIndex } = props;
+  const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback } = props;
 
-  const onChangeHandler = (answerId: string) => (event: React.FormEvent<HTMLInputElement>) => {
+  const handleFeedbackChange = (answerId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
     if (answerId !== undefined) {
-      updateQuestionFeedback(answerId, {feedback: event.target.value});
+      const target = event.currentTarget as HTMLTextAreaElement;
+      updateQuestionFeedback(answerId, {feedback: target.value});
     }
   };
 
   const questions = currentActivity.get("questions");
   const feedbackRows = questions.map ((question: Map<any, any>, index: number) => {
-
-    const currentActivityId = currentActivity?.get("id");
     const student = currentStudentId
                     ? students.toArray().find((s: any) => s.get("id") === currentStudentId)
                     : students.toArray()[0];
@@ -73,7 +71,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
         </div>
         <div className={css.feedback}>
         {answer &&
-          <textarea defaultValue={feedback} onChange={onChangeHandler(answerId)}></textarea>
+          <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)}></textarea>
         }
         </div>
       </div>
