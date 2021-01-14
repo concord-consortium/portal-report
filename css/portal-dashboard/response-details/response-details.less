@@ -4,6 +4,8 @@
   display: flex;
 
   .responsePanel {
+    flex: 1;
+    margin-right: 3px;
     width: 100%;
     background-color: @cc-orange-light6;
 
@@ -15,4 +17,18 @@
       }
     }
   }
+  .questionArea {
+    background-color: @cc-teal-light6;
+    flex: 1;
+    margin-right: 3px;
+  }
+  .feedbackInfo {
+    background-color: @feedback-green-light5;
+    flex: 1;
+  }
+}
+
+.feedbackRowsContainer {
+  flex: 1;
+  overflow: auto;
 }

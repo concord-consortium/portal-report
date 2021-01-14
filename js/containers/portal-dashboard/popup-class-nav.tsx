@@ -1,41 +1,49 @@
 import React from "react";
-import { AnonymizeStudents } from "../anonymize-students";
-import { CustomSelect, SelectItem } from "../custom-select";
-import { FeedbackLevel, ListViewMode } from "../../../util/misc";
-import { CountContainer } from "../count-container";
-import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK } from "../../../actions/dashboard";
-import SortIcon from "../../../../img/svg-icons/sort-icon.svg";
-import StudentViewIcon from "../../../../img/svg-icons/student-view-icon.svg";
-import QuestionViewIcon from "../../../../img/svg-icons/question-view-icon.svg";
-import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
+import { connect } from "react-redux";
+import { AnonymizeStudents } from "../../components/portal-dashboard/anonymize-students";
+import { CustomSelect, SelectItem } from "../../components/portal-dashboard/custom-select";
+import { FeedbackLevel, ListViewMode } from "../../util/misc";
+import { makeGetStudentFeedbacks } from "../../selectors/activity-feedback-selectors";
+import { CountContainer } from "../../components/portal-dashboard/count-container";
+import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK } from "../../actions/dashboard";
+import SortIcon from "../../../img/svg-icons/sort-icon.svg";
+import StudentViewIcon from "../../../img/svg-icons/student-view-icon.svg";
+import QuestionViewIcon from "../../../img/svg-icons/question-view-icon.svg";
+import SpotlightIcon from "../../../img/svg-icons/spotlight-icon.svg";
 
-import css from "../../../../css/portal-dashboard/response-details/popup-class-nav.less";
-import cssClassNav from "../../../../css/portal-dashboard/class-nav.less";
+import css from "../../../css/portal-dashboard/response-details/popup-class-nav.less";
+import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
+  activity: Map<any, any>;
   anonymous: boolean;
+  answers: Map<any, any>;
+  currentQuestion: Map<any, any> | undefined;
+  feedbackLevel: FeedbackLevel;
   isSpotlightOn: boolean;
   listViewMode: ListViewMode;
+  numFeedbacksNeedingReview: number;
   onShowDialog: (show: boolean) => void;
   questionCount: number;
   setAnonymous: (value: boolean) => void;
+  setListViewMode: (value: ListViewMode) => void;
   setStudentSort: (value: string) => void;
   sortByMethod: string;
   studentCount: number;
-  setListViewMode: (value: ListViewMode) => void;
   trackEvent: (category: string, action: string, label: string) => void;
-  awaitingFeedbackCount: number;
   viewMode: string;
-  feedbackLevel: FeedbackLevel;
 }
 
-export class PopupClassNav extends React.PureComponent<IProps>{
+class PopupClassNav extends React.PureComponent<IProps>{
+  constructor(props: IProps) {
+    super(props);
+  }
+
   render() {
 
-    const { anonymous, listViewMode, questionCount, studentCount, setAnonymous, viewMode, awaitingFeedbackCount } = this.props;
-
+    const { activity, anonymous, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous, viewMode } = this.props;
     const numItems = viewMode === "FeedbackReport"
-                     ? awaitingFeedbackCount
+                     ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;
     const containerLabel = viewMode === "FeedbackReport"
                            ? "Awaiting feedback"
@@ -128,7 +136,7 @@ export class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private renderViewListOptions() {
-    const { listViewMode, setListViewMode, feedbackLevel } = this.props;
+    const { feedbackLevel, listViewMode, setListViewMode } = this.props;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${listViewMode==="Student" ? css.selected : ""}`;
     const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${listViewMode==="Question" ? css.selected : ""}  ${feedbackLevel === "Activity" ? css.disabled : ""}`;
     return (
@@ -154,4 +162,44 @@ export class PopupClassNav extends React.PureComponent<IProps>{
       </div>
     );
   }
+
 }
+
+function mapStateToProps(state: any, ownProps?: any) {
+  return (state: any, ownProps: any) => {
+    const { answers, currentQuestion, feedbackLevel } = ownProps;
+    if (feedbackLevel === "Question") {
+      const questionId = currentQuestion.get("id");
+      const questionFeedbacks = state.getIn(["feedback", "questionFeedbacks"]);
+      const feedbacksGiven = [];
+      questionFeedbacks.toArray().forEach((feedback: any) => {
+        if (feedback.get("questionId") === questionId && feedback.get("feedback").trim() !== "") {
+          feedbacksGiven.push(feedback);
+        }
+      });
+      const feedbackCount = feedbacksGiven.length || 0;
+      const studentAnswers = [];
+      answers.toArray().forEach((item: any) => {
+        item.forEach((ans: any) => {
+          if (ans.get("questionId") === questionId) {
+            studentAnswers.push(ans);
+          }
+        });
+      });
+      const numFeedbacksNeedingReview = studentAnswers.length - feedbackCount;
+      return {
+        numFeedbacksNeedingReview
+      };
+    } else {
+      const getFeedbacks: any = makeGetStudentFeedbacks();
+      const {
+        numFeedbacksNeedingReview
+      } = getFeedbacks(state, ownProps);
+      return {
+        numFeedbacksNeedingReview
+      };
+    }
+  };
+}
+
+export default connect(mapStateToProps)(PopupClassNav);
