@@ -45,7 +45,7 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   viewMode: DashboardViewMode;
-  feedbackLevel: FeedbackLevel;
+  feedbackLevel?: FeedbackLevel;
 }
 interface IState {
   selectedStudents: SelectedStudent[];

@@ -23,7 +23,7 @@ export class ClassNav extends React.PureComponent<IProps> {
   render() {
     const { anonymous, setAnonymous, viewMode } = this.props;
     const containerLabel = viewMode === "FeedbackReport" ? "Awaiting feedback" : "Class";
-    const containerLabelType = viewMode === "FeedbackReport" ? null : "students";
+    const containerLabelType = viewMode === "FeedbackReport" ? undefined : "students";
     const numItems = viewMode === "FeedbackReport" ? 5 : this.props.studentCount;
 
     return (
