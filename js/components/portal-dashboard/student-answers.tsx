@@ -13,7 +13,6 @@ interface IProps {
   expandedActivities: Map<any, any>;
   isCompact: boolean;
   questionFeedbacks?: Map<any, any>;
-  hideFeedbackBadges: boolean;
   students: Map<any, any>;
   studentProgress: Map<any, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -28,23 +27,23 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const compactClass = isCompact ? css.compact : "";
     return (
       <div className={css.studentAnswers} data-cy="student-answers">
-      {
-        students.map((s: any) => {
-          return (
-            <div key={s.get("id")} className={`${css.studentAnswersRow} ${compactClass}`} data-cy="student-answers-row">
-              {
-                activitiesList.map((a: any) => {
-                  return (
-                    (currentActivity && a.get("id") === currentActivity.get("id"))
-                    ? this.renderExpandedActivity(a, s)
-                    : this.renderProgress(a, s)
-                  );
-                })
-              }
-            </div>
-          );
-        })
-      }
+        {
+          students.map((s: any) => {
+            return (
+              <div key={s.get("id")} className={`${css.studentAnswersRow} ${compactClass}`} data-cy="student-answers-row">
+                {
+                  activitiesList.map((a: any) => {
+                    return (
+                      (currentActivity && a.get("id") === currentActivity.get("id"))
+                        ? this.renderExpandedActivity(a, s)
+                        : this.renderProgress(a, s)
+                    );
+                  })
+                }
+              </div>
+            );
+          })
+        }
       </div>
     );
   }
@@ -71,28 +70,24 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     return (
       <div className={css.activityPage} key={page.get("id")}>
         { page.get("children").map((question: any) => {
-            const questionId = question.get("id");
-            const studentId = student.get("id");
-            const selected = (currentActivityId === activity.get("id") &&
-                              currentQuestionId === questionId &&
-                              currentStudentId === studentId);
-            // TODO: FEEDBACK
-            // get questionFeedbacks and hideFeedbackBadges from props
-            // if hideFeedbackBadges is false,
-            // search questionFeedbacks for entry that has student id and question id
-            // that match studentId and questionId and then
-            // optionally display feedback icon component if we found matching feedback
-            return (
-              <AnswerCompact
-                key={questionId}
-                question={question}
-                student={student}
-                onAnswerSelect={this.handleAnswerSelect(currentActivityId, questionId, student.get("id"))}
-                selected={selected}
-               />
-            );
-          })
-        }
+          const questionId = question.get("id");
+          const studentId = student.get("id");
+          const selected = (currentActivityId === activity.get("id") &&
+            currentQuestionId === questionId &&
+            currentStudentId === studentId);
+          const feedback = this.props.questionFeedbacks?.find(feedback =>
+                            (feedback.get("questionId") === questionId) && (feedback.get("platformStudentId") === studentId));
+          return (
+            <AnswerCompact
+              key={questionId}
+              question={question}
+              student={student}
+              onAnswerSelect={this.handleAnswerSelect(currentActivityId, questionId, student.get("id"))}
+              selected={selected}
+              feedback={feedback}
+            />
+          );
+        })}
       </div>
     );
   }
@@ -104,7 +99,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const unselectStudent = currentActivityId === activityId && currentQuestionId === questionId && currentStudentId === studentId;
     this.props.setCurrentActivity(activityId);
     this.props.setCurrentQuestion(questionId);
-    this.props.setCurrentStudent(unselectStudent? null : studentId);
+    this.props.setCurrentStudent(unselectStudent ? null : studentId);
   }
 
   private renderScore = (activity: any, student: any) => {
@@ -121,7 +116,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     return (
       <div className={css.scoreHolder}>
         <div className={`${css.score} ${scoreClass}`}>
-          { `${correctQuestionCount}/${scoredQuestionCount}` }
+          {`${correctQuestionCount}/${scoredQuestionCount}`}
         </div>
       </div>
     );
@@ -135,9 +130,9 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const progressClass = progress > 0 ? css.progress : "";
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>
-        { this.renderProgressIcon(progress) }
+        { this.renderProgressIcon(progress)}
         { (progress > 0 && progress < 1) &&
-            <div><span className={css.numAnswered}>{numAnswered}</span><span>/{numQuestions}</span></div>
+          <div><span className={css.numAnswered}>{numAnswered}</span><span>/{numQuestions}</span></div>
         }
       </div>
     );
@@ -145,10 +140,10 @@ export class StudentAnswers extends React.PureComponent<IProps> {
 
   private renderProgressIcon = (progress: number) => {
     const cssClass = progress > 0
-                      ? progress === 1 ? css.completed : css.inProgress
-                      : "";
+      ? progress === 1 ? css.completed : css.inProgress
+      : "";
     return (
-      <div className={`${css.progressIcon} ${cssClass}`}/>
+      <div className={`${css.progressIcon} ${cssClass}`} />
     );
   }
 

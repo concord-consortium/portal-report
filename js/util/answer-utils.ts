@@ -1,3 +1,4 @@
+import { Map } from "immutable";
 import QFillInTheBlankCompletedIcon from "../../img/svg-icons/q-fill-in-the-blank-completed-icon.svg";
 import QImageCompletedIcon from "../../img/svg-icons/q-image-completed-icon.svg";
 import QImageWithOpenResponseCompletedIcon from "../../img/svg-icons/q-image-w-open-response-completed-icon.svg";
@@ -20,7 +21,7 @@ export interface AnswerType {
 }
 
 export interface AnswerProps {
-  answer: Map<any, any>;
+  answer: Map<string, any>;
   question: Map<string, any>;
   student: Map<any, any>;
   responsive?: boolean;

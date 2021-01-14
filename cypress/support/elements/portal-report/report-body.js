@@ -17,9 +17,8 @@ class ReportBody {
     //Activity Level
     //
     getProvideOverallFeedback(aIdx) {
-        return cy.get(".activity").eq(aIdx).within(() => {
-            getByCypressTag("feedbackButton").eq(0);
-        });
+        return cy.get(".activity").eq(aIdx)
+          .find("[data-cy=feedbackButton]:contains('overall')");
     }
     getActivities() {
         return cy.get('div [data-cy = "activity"]');
@@ -41,7 +40,7 @@ class ReportBody {
         return getByCypressTag("question-link");
     }
     getQuestionTitle(idx) {
-        return cy.get(".question").eq(idx).within(() => { cy.get("a").find("span"); });
+        return cy.get(".question").eq(idx).find("a").find("span");
     }
     getProvideFeedback(aIdx, qIdx) {
         return getByCypressTag("feedback");
