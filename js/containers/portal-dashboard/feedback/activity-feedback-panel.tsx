@@ -7,14 +7,10 @@ import { ActivityLevelFeedbackStudentRows } from "../../../components/portal-das
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 
 interface IProps {
-  activities: Map<any, any>;
   activity: Map<any, any>;
   activityIndex: number;
-  answers: any;
   autoScores: any;
   computedMaxScore: number;
-  currentStudentId: string | null;
-  currentQuestion: any;
   feedbackLevel: FeedbackLevel;
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
@@ -36,7 +32,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, isAnonymous } = this.props;
+    const { activity, activityIndex, feedbacks, isAnonymous } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -45,7 +41,6 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           activityId={currentActivityId}
           activityIndex={activityIndex}
           feedbacks={feedbacks}
-          feedbacksNeedingReview={feedbacksNeedingReview}
           isAnonymous={isAnonymous}
           updateActivityFeedback={this.props.updateActivityFeedback}
         />

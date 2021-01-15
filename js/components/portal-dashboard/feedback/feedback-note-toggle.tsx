@@ -17,7 +17,8 @@ export const FeedbackNoteToggle: React.FC<IProps> = (props) => {
 
   return (
     <div className={css.feedbackNoteToggle}>
-      <button className={css.feedbackNoteToggle__button} onClick={handleFeedbackNoteButtonClick}></button> <div>Note on {noteLabel} feedback</div>
+      <button className={css.feedbackNoteToggle__button} onClick={handleFeedbackNoteButtonClick} />
+      <div>Note on {noteLabel} feedback</div>
     </div>
   );
 };

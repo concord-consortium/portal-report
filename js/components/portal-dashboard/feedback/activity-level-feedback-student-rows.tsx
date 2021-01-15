@@ -3,24 +3,23 @@ import { Map } from "immutable";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
-import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
+// import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
 interface IProps {
-  activityId: string | null;
+  activityId?: string;
   activityIndex: number;
   feedbacks: Map<any, any>;
-  feedbacksNeedingReview: Map<any, any>;
   isAnonymous: boolean;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback} = props;
+  const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback } = props;
 
   const handleFeedbackChange = (studentId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
-    if (activityId && studentId != null) {
+    if (activityId) {
       const target = event.currentTarget as HTMLTextAreaElement;
       updateActivityFeedback(activityId, activityIndex, studentId, {feedback: target.value});
     }
@@ -37,7 +36,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
 
     const awaitingFeedbackIcon = <AwaitingFeedbackActivityBadgeIcon />;
     const givenFeedbackIcon = <GivenFeedbackActivityBadgeIcon />;
-    const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
+    // const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
 
     // TODO: Work out case for when to use UpdateFeedbackBadgeIcon
     const feedbackBadge = hasBeenReviewed ? givenFeedbackIcon : awaitingFeedbackIcon;

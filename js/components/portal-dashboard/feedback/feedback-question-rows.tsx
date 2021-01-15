@@ -5,16 +5,15 @@ import striptags from "striptags";
 import { renderHTML } from "../../../util/render-html";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/given-feedback-question-badge-icon.svg";
-import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
+// import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
 interface IProps {
-  answers: any;
+  answers: Map<any, any>;
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
   feedbacks: Map<any, any>;
-  feedbacksNeedingReview: Map<any, any>;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
 }
@@ -23,29 +22,29 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
   const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback } = props;
 
   const handleFeedbackChange = (answerId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
-    if (answerId !== undefined) {
+    if (answerId) {
       const target = event.currentTarget as HTMLTextAreaElement;
       updateQuestionFeedback(answerId, {feedback: target.value});
     }
   };
 
   const questions = currentActivity.get("questions");
-  const feedbackRows = questions.map ((question: Map<any, any>, index: number) => {
+  const feedbackRows = questions.map ((question: Map<any, any>) => {
     const student = currentStudentId
                     ? students.toArray().find((s: any) => s.get("id") === currentStudentId)
                     : students.toArray()[0];
 
     const currentQuestionId = question.get("id");
     const answer = currentStudentId
-                  ? answers.getIn([currentQuestionId, currentStudentId])
-                  : undefined;
+                   ? answers.getIn([currentQuestionId, currentStudentId])
+                   : undefined;
     const answerId = answer?.get("id");
     const feedbackData = answerId && feedbacks.getIn([answerId]);
     const feedback = feedbackData ? feedbackData.get("feedback") : "";
 
     const awaitingFeedbackIcon = <AwaitingFeedbackQuestionBadgeIcon />;
     const givenFeedbackIcon = <GivenFeedbackQuestionBadgeIcon />;
-    const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
+    // const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
 
     // TODO: Work out case for when to use UpdateFeedbackBadgeIcon
     let feedbackBadge = awaitingFeedbackIcon;

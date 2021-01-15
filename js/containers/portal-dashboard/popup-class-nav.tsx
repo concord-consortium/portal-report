@@ -15,7 +15,6 @@ import css from "../../../css/portal-dashboard/response-details/popup-class-nav.
 import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
 
 interface IProps {
-  activity: Map<any, any>;
   anonymous: boolean;
   answers: Map<any, any>;
   currentQuestion: Map<any, any> | undefined;
@@ -40,7 +39,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   render() {
-    const { activity, anonymous, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous, viewMode } = this.props;
+    const { anonymous, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous, viewMode } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;

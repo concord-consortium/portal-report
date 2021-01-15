@@ -22,12 +22,10 @@ export interface SelectedStudent {
 }
 
 interface IProps {
-  activities: Map<any, any>;
   anonymous: boolean;
   answers: Map<any, any>;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
-  currentStudentId: string | null;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
   listViewMode: ListViewMode;
@@ -45,7 +43,6 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: (category: string, action: string, label: string) => void;
   viewMode: DashboardViewMode;
-  feedbackLevel?: FeedbackLevel;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -72,8 +69,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, feedbackLevel } = this.state;
 
-    // TODO: FEEDBACK
-    // if feedback is on, show the QuestionFeedbackPanel or the Activity FeedbackPanel
     const firstActivity = activities.first();
     const firstQuestion = questions?.first();
     const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
@@ -111,7 +106,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             viewMode={viewMode}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
-            {isSequence &&
+            { isSequence &&
               <ActivityNavigator
                 activities={activities}
                 currentActivity={currentActivity}
@@ -141,7 +136,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             }
             </div>
           </div>
-          {viewMode === "FeedbackReport" &&
+          { viewMode === "FeedbackReport" &&
             <div className={css.feedbackInfo} data-cy="feedback-info">
               <FeedbackInfo
                 feedbackLevel={feedbackLevel}
@@ -151,7 +146,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             </div>
           }
         </div>
-        {viewMode !== "FeedbackReport"
+        { viewMode !== "FeedbackReport"
           ? listViewMode === "Question"
             ? <PopupQuestionAnswerList
                 activities={activities}
@@ -184,8 +179,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 <ActivityFeedbackPanel
                   activity={currentActivityWithQuestions}
                   activities={activities}
-                  answers={answers}
-                  currentQuestion={currentQuestion || firstQuestion}
                   currentStudentId={currentStudentId}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
@@ -194,7 +187,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
               </div>
         }
         <TransitionGroup>
-          {showSpotlightListDialog &&
+          { showSpotlightListDialog &&
             <CSSTransition in={showSpotlightListDialog} classNames={"spotlightListDialog"} timeout={500}>
               <SpotlightStudentListDialog
                 anonymous={anonymous}

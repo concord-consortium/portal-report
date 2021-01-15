@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import {FeedbackNoteToggle} from "../../../components/portal-dashboard/feedback/feedback-note-toggle";
-import {FeedbackLegend} from "../../../components/portal-dashboard/feedback/feedback-legend";
+import { FeedbackNoteToggle } from "../../../components/portal-dashboard/feedback/feedback-note-toggle";
+import { FeedbackLegend } from "../../../components/portal-dashboard/feedback/feedback-legend";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-info.less";
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const {feedbackLevel, setFeedbackLevel, listViewMode} = props;
+  const { feedbackLevel, listViewMode, setFeedbackLevel } = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -24,16 +24,24 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
     setFeedbackLevel("Question");
   };
 
-  const activityButtonClass = feedbackLevel === "Activity" ? css.active + " " + css.viewToggle__button__activity : css.viewToggle__button__activity;
-  const questionButtonClass = feedbackLevel !== "Activity" ? css.active + " " + css.viewToggle__button__question : css.viewToggle__button__question;
+  const activityButtonClass = feedbackLevel === "Activity" 
+                              ? css.active + " " + css.viewToggleButtonActivity 
+                              : css.viewToggleButtonActivity;
+  const questionButtonClass = feedbackLevel !== "Activity" 
+                              ? css.active + " " + css.viewToggleButtonQuestion 
+                              : css.viewToggleButtonQuestion;
 
   return (
     <div className={css.feedbackInfo}>
       <div className={css.titleWrapper}>
         <div className={css.title}>Feedback Level:</div>
         <div className={css.viewToggle}>
-          <button className={activityButtonClass} onClick={handleActivityButtonClick} disabled={listViewMode === "Question"}>Activity</button>
-          <button className={questionButtonClass} onClick={handleQuestionButtonClick}>Questions</button>
+          <button className={activityButtonClass} onClick={handleActivityButtonClick} disabled={listViewMode === "Question"}>
+            Activity
+          </button>
+          <button className={questionButtonClass} onClick={handleQuestionButtonClick}>
+            Questions
+          </button>
         </div>
       </div>
       <FeedbackNoteToggle feedbackLevel={feedbackLevel} />

@@ -13,26 +13,30 @@ interface IProps {
 }
 
 export const FeedbackLegend: React.FC<IProps> = (props) => {
-  const {feedbackLevel} = props;
-  const awaitingFeedbackIcon = feedbackLevel === "Activity" ? <AwaitingFeedbackActivityBadgeIcon /> : <AwaitingFeedbackQuestionBadgeIcon />;
-  const givenFeedbackIcon = feedbackLevel === "Activity" ? <GivenFeedbackActivityBadgeIcon /> : <GivenFeedbackQuestionBadgeIcon />;
+  const { feedbackLevel } = props;
+  const awaitingFeedbackIcon = feedbackLevel === "Activity"
+                               ? <AwaitingFeedbackActivityBadgeIcon />
+                               : <AwaitingFeedbackQuestionBadgeIcon />;
+  const givenFeedbackIcon = feedbackLevel === "Activity"
+                            ? <GivenFeedbackActivityBadgeIcon />
+                            : <GivenFeedbackQuestionBadgeIcon />;
   const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
 
   return (
     <aside className={css.feedbackBadgeLegend}>
-    <h2 className={css.feedbackBadgeLegend__heading}>{feedbackLevel}-level Feedback Key</h2>
-    <dl className={css.feedbackBadgeLegend__list}>
-      <dt>{awaitingFeedbackIcon}</dt>
-      <dd>Awaiting feedback</dd>
-      <dt>{givenFeedbackIcon}</dt>
-      <dd>Feedback given</dd>
-      { feedbackLevel === "Question" &&
-        <React.Fragment>
-          <dt>{updateFeedbackIcon}</dt>
-          <dd>Student answer updated since feedback given</dd>
-        </React.Fragment>
-      }
-    </dl>
-  </aside>
+      <h2 className={css.feedbackBadgeLegend__heading}>{feedbackLevel}-level Feedback Key</h2>
+      <dl className={css.feedbackBadgeLegend__list}>
+        <dt>{awaitingFeedbackIcon}</dt>
+        <dd>Awaiting feedback</dd>
+        <dt>{givenFeedbackIcon}</dt>
+        <dd>Feedback given</dd>
+        { feedbackLevel === "Question" &&
+          <React.Fragment>
+            <dt>{updateFeedbackIcon}</dt>
+            <dd>Student answer updated since feedback given</dd>
+          </React.Fragment>
+        }
+      </dl>
+    </aside>
   );
 };

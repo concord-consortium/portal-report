@@ -9,7 +9,7 @@ import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 interface IProps {
   activity: Map<string, any>;
   activityIndex: number;
-  answers: any;
+  answers: Map<any, any>;
   autoScores: any;
   computedMaxScore: number;
   currentQuestion: Map<any, any>;
@@ -17,13 +17,9 @@ interface IProps {
   feedbacks: Map<any, any>;
   feedbackLevel: FeedbackLevel;
   feedbacksNeedingReview: Map<any, any>;
-  feedbacksNotAnswered: number;
   isAnonymous: boolean;
   listViewMode: ListViewMode;
-  numFeedbacksGivenReview: number;
-  numFeedbacksNeedingReview: number;
   questionFeedbacks: Map<any, any>;
-  rubric: any;
   settings: any;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
@@ -42,7 +38,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 
     return (
       <div>
-        {listViewMode === "Student"
+        { listViewMode === "Student"
           ? <QuestionLevelFeedbackStudentRows
               activityId={currentActivityId}
               activityIndex={activityIndex}
@@ -59,7 +55,6 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               currentActivity={activity}
               currentStudentId={currentStudentId}
               feedbacks={questionFeedbacks}
-              feedbacksNeedingReview={feedbacksNeedingReview}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
             />
