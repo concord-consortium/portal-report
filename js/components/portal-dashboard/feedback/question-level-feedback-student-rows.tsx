@@ -21,11 +21,10 @@ interface IProps {
 }
 
 export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, students,
-          updateQuestionFeedback } = props;
+  const { answers, currentQuestion, feedbacks, isAnonymous, students, updateQuestionFeedback } = props;
 
   const handleFeedbackChange = (answerId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
-    if (answerId !== undefined) {
+    if (answerId) {
       const target = event.currentTarget as HTMLTextAreaElement;
       updateQuestionFeedback(answerId, {feedback: target.value});
     }
@@ -36,22 +35,19 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const currentQuestionId = currentQuestion.get("id");
     const formattedName = getFormattedStudentName(isAnonymous, student);
     const answer = answers.getIn([currentQuestionId, studentId]);
-    const answerId = answer && answer.get("id");
+    const answerId = answer?.get("id");
     const feedbackData = feedbacks.getIn([answerId]);
-    const feedback = feedbackData !== undefined ? feedbackData.get("feedback") : "";
+    const feedback = feedbackData ? feedbackData.get("feedback") : "";
 
     const awaitingFeedbackIcon = <AwaitingFeedbackQuestionBadgeIcon />;
     const givenFeedbackIcon = <GivenFeedbackQuestionBadgeIcon />;
     const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
 
     // TODO: Work out case for when to use UpdateFeedbackBadgeIcon
-    let feedbackBadge = awaitingFeedbackIcon;
-    if (feedback !== "") {
-      feedbackBadge = givenFeedbackIcon;
-    }
+    const feedbackBadge = feedback !== "" ? givenFeedbackIcon : awaitingFeedbackIcon;
 
     return (
-      <div key={currentQuestionId + index.toString()} className={css.feedbackRows__row}>
+      <div key={currentQuestionId + studentId} className={css.feedbackRows__row}>
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge}>
             {feedbackBadge}

@@ -40,7 +40,6 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   render() {
-
     const { activity, anonymous, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous, viewMode } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
@@ -55,17 +54,8 @@ class PopupClassNav extends React.PureComponent<IProps>{
         {this.renderViewListOptions()}
         <div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
           <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
-          <CountContainer
-            numItems={numItems}
-            containerLabel={containerLabel}
-            containerLabelType={containerLabelType}
-          />
-          {
-            viewMode === "FeedbackReport"
-              ? this.renderFeedbackFilter()
-              : listViewMode === "Question"
-                ? this.renderQuestionFilter() : this.renderStudentFilter()
-          }
+          <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
+          {this.renderSortMenu()}
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
         </div>
       </div>
@@ -75,6 +65,17 @@ class PopupClassNav extends React.PureComponent<IProps>{
   private handleStudentSortSelect = (value: string) => () => {
     const { setStudentSort } = this.props;
     setStudentSort(value);
+  }
+
+  private renderSortMenu = () => {
+    const { viewMode, listViewMode } = this.props;
+    if (listViewMode === "Question") {
+      return this.renderQuestionFilter();
+    }
+    if (viewMode === "FeedbackReport") {
+      return this.renderFeedbackFilter();
+    }
+    return this.renderStudentFilter();
   }
 
   private renderQuestionFilter = () => {
@@ -187,17 +188,11 @@ function mapStateToProps(state: any, ownProps?: any) {
         });
       });
       const numFeedbacksNeedingReview = studentAnswers.length - feedbackCount;
-      return {
-        numFeedbacksNeedingReview
-      };
+      return { numFeedbacksNeedingReview };
     } else {
       const getFeedbacks: any = makeGetStudentFeedbacks();
-      const {
-        numFeedbacksNeedingReview
-      } = getFeedbacks(state, ownProps);
-      return {
-        numFeedbacksNeedingReview
-      };
+      const { numFeedbacksNeedingReview } = getFeedbacks(state, ownProps);
+      return { numFeedbacksNeedingReview };
     }
   };
 }

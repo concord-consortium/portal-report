@@ -39,9 +39,9 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     const answer = currentStudentId
                   ? answers.getIn([currentQuestionId, currentStudentId])
                   : undefined;
-    const answerId = answer && answer.get("id");
+    const answerId = answer?.get("id");
     const feedbackData = answerId && feedbacks.getIn([answerId]);
-    const feedback = feedbackData !== undefined ? feedbackData.get("feedback") : "";
+    const feedback = feedbackData ? feedbackData.get("feedback") : "";
 
     const awaitingFeedbackIcon = <AwaitingFeedbackQuestionBadgeIcon />;
     const givenFeedbackIcon = <GivenFeedbackQuestionBadgeIcon />;
@@ -57,7 +57,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
 
     return (
-      <div className={css.feedbackRows__row} key={`question ${index}`} data-cy="question-row">
+      <div className={css.feedbackRows__row} key={currentQuestionId} data-cy="question-row">
         <div className={css.studentWrapper} data-cy="question-wrapper">
           <div className={css.feedbackBadge}>
             {feedbackBadge}
@@ -70,9 +70,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
           <Answer question={question} student={student} responsive={false} />
         </div>
         <div className={css.feedback}>
-        {answer &&
-          <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)}></textarea>
-        }
+          {answer && <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)}></textarea>}
         </div>
       </div>
     );

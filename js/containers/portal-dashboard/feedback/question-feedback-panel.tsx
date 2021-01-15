@@ -67,7 +67,6 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
       </div>
     );
   }
-
 }
 
 function mapStateToProps(state: any, ownProps: any): Partial<IProps> {

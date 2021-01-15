@@ -40,10 +40,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
 
     // TODO: Work out case for when to use UpdateFeedbackBadgeIcon
-    let feedbackBadge = awaitingFeedbackIcon;
-    if (hasBeenReviewed) {
-      feedbackBadge = givenFeedbackIcon;
-    }
+    const feedbackBadge = hasBeenReviewed ? givenFeedbackIcon : awaitingFeedbackIcon;
 
     return (
       <div key={activityId + index.toString()} className={css.feedbackRows__row}>
@@ -56,9 +53,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
           </div>
         </div>
         <div className={css.feedback}>
-          {activityStarted &&
-            <textarea defaultValue={feedback} onChange={handleFeedbackChange(studentId)}></textarea>
-          }
+          {activityStarted && <textarea defaultValue={feedback} onChange={handleFeedbackChange(studentId)}></textarea>}
         </div>
       </div>
     );
