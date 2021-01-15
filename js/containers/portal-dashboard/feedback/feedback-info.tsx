@@ -24,11 +24,11 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
     setFeedbackLevel("Question");
   };
 
-  const activityButtonClass = feedbackLevel === "Activity" 
-                              ? css.active + " " + css.viewToggleButtonActivity 
+  const activityButtonClass = feedbackLevel === "Activity"
+                              ? css.active + " " + css.viewToggleButtonActivity
                               : css.viewToggleButtonActivity;
-  const questionButtonClass = feedbackLevel !== "Activity" 
-                              ? css.active + " " + css.viewToggleButtonQuestion 
+  const questionButtonClass = feedbackLevel !== "Activity"
+                              ? css.active + " " + css.viewToggleButtonQuestion
                               : css.viewToggleButtonQuestion;
 
   return (

@@ -136,15 +136,16 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private renderViewListOptions() {
-    const { feedbackLevel, listViewMode, setListViewMode } = this.props;
+    const { feedbackLevel, listViewMode, setListViewMode, viewMode } = this.props;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${listViewMode==="Student" ? css.selected : ""}`;
-    const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${listViewMode==="Question" ? css.selected : ""}  ${feedbackLevel === "Activity" ? css.disabled : ""}`;
+    const disableListByQuestions = feedbackLevel === "Activity" && viewMode === "FeedbackReport" ? true : false;
+    const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${listViewMode==="Question" ? css.selected : ""}  ${disableListByQuestions ? css.disabled : ""}`;
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
         <button className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={() => setListViewMode("Student")}>
           <StudentViewIcon className={css.optionIcon} />
         </button>
-        <button className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={() => setListViewMode("Question")} disabled={feedbackLevel === "Activity"}>
+        <button className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={() => setListViewMode("Question")} disabled={disableListByQuestions}>
           <QuestionViewIcon className={css.optionIcon} />
         </button>
       </div>
