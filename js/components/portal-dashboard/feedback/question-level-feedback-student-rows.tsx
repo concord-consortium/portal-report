@@ -47,12 +47,12 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const feedbackBadge = feedback !== "" ? givenFeedbackIcon : awaitingFeedbackIcon;
 
     return (
-      <div key={currentQuestionId + studentId} className={css.feedbackRows__row}>
+      <div key={currentQuestionId + studentId} className={css.feedbackRows__row} data-cy="feedbackRow">
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge}>
             {feedbackBadge}
           </div>
-          <div className={css.studentName}>
+          <div className={css.studentName} data-cy="student-name">
             {formattedName}
           </div>
         </div>

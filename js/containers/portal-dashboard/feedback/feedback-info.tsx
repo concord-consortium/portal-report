@@ -32,14 +32,14 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
                               : css.viewToggleButtonQuestion;
 
   return (
-    <div className={css.feedbackInfo}>
+    <div className={css.feedbackInfo} data-cy="feedbackInfo">
       <div className={css.titleWrapper}>
         <div className={css.title}>Feedback Level:</div>
         <div className={css.viewToggle}>
-          <button className={activityButtonClass} onClick={handleActivityButtonClick} disabled={listViewMode === "Question"}>
+          <button className={activityButtonClass} onClick={handleActivityButtonClick} disabled={listViewMode === "Question"} data-cy="activityLevelFeedbackButton">
             Activity
           </button>
-          <button className={questionButtonClass} onClick={handleQuestionButtonClick}>
+          <button className={questionButtonClass} onClick={handleQuestionButtonClick} data-cy="questionLevelFeedbackButton">
             Questions
           </button>
         </div>

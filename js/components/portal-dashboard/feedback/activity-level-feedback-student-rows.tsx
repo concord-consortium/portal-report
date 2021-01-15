@@ -25,7 +25,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     }
   };
 
-  const feedbackRows = feedbacks.map ((feedbackData: Map<any, any>, index: number) => {
+  const feedbackRows = feedbacks.map ((feedbackData: Map<any, any>) => {
 
     const student = feedbackData.get("student");
     const studentId = student.get("id");
@@ -42,12 +42,12 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const feedbackBadge = hasBeenReviewed ? givenFeedbackIcon : awaitingFeedbackIcon;
 
     return (
-      <div key={activityId + index.toString()} className={css.feedbackRows__row}>
+      <div key={activityId + studentId} className={css.feedbackRows__row} data-cy="feedbackRow">
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge}>
             {feedbackBadge}
           </div>
-          <div className={css.studentName}>
+          <div className={css.studentName} data-cy="student-name">
             {formattedName}
           </div>
         </div>

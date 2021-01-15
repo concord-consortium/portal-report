@@ -23,7 +23,7 @@ export const FeedbackLegend: React.FC<IProps> = (props) => {
   const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
 
   return (
-    <aside className={css.feedbackBadgeLegend}>
+    <aside className={css.feedbackBadgeLegend} data-cy="feedbackBadgeLegend">
       <h2 className={css.feedbackBadgeLegend__heading}>{feedbackLevel}-level Feedback Key</h2>
       <dl className={css.feedbackBadgeLegend__list}>
         <dt>{awaitingFeedbackIcon}</dt>
