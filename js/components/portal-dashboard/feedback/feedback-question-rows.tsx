@@ -58,18 +58,18 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     return (
       <div className={css.feedbackRows__row} key={currentQuestionId} data-cy="question-row">
         <div className={css.studentWrapper} data-cy="question-wrapper">
-          <div className={css.feedbackBadge}>
+          <div className={css.feedbackBadge} data-cy="feedback-badge">
             {feedbackBadge}
           </div>
-          <div className={css.studentName}>
+          <div className={css.studentName} data-cy="student-name">
             Q{question.get("questionNumber")}: {renderHTML(striptags(promptText))}
           </div>
         </div>
         <div className={css.studentResponse} data-cy="student-response">
           <Answer question={question} student={student} responsive={false} />
         </div>
-        <div className={css.feedback}>
-          {answer && <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)}></textarea>}
+        <div className={css.feedback} data-cy="feedback-container">
+          {answer && <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)} data-cy="feedback-textarea"></textarea>}
         </div>
       </div>
     );

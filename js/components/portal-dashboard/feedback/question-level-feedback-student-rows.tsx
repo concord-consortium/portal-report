@@ -49,7 +49,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     return (
       <div key={currentQuestionId + studentId} className={css.feedbackRows__row} data-cy="feedbackRow">
         <div className={css.studentWrapper}>
-          <div className={css.feedbackBadge}>
+          <div className={css.feedbackBadge} data-cy="feedback-badge">
             {feedbackBadge}
           </div>
           <div className={css.studentName} data-cy="student-name">
@@ -59,9 +59,9 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
         <div className={css.studentResponse}>
           <Answer question={currentQuestion} student={student} responsive={false} studentName={formattedName} />
         </div>
-        <div className={css.feedback}>
+        <div className={css.feedback} data-cy="feedback-container">
           { answer &&
-            <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)}></textarea>
+            <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)} data-cy="feedback-textarea"></textarea>
           }
         </div>
       </div>

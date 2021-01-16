@@ -44,15 +44,15 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     return (
       <div key={activityId + studentId} className={css.feedbackRows__row} data-cy="feedbackRow">
         <div className={css.studentWrapper}>
-          <div className={css.feedbackBadge}>
+          <div className={css.feedbackBadge} data-cy="feedback-badge">
             {feedbackBadge}
           </div>
           <div className={css.studentName} data-cy="student-name">
             {formattedName}
           </div>
         </div>
-        <div className={css.feedback}>
-          {activityStarted && <textarea defaultValue={feedback} onChange={handleFeedbackChange(studentId)}></textarea>}
+        <div className={css.feedback} data-cy="feedback-container">
+          {activityStarted && <textarea defaultValue={feedback} onChange={handleFeedbackChange(studentId)} data-cy="feedback-textarea"></textarea>}
         </div>
       </div>
     );
