@@ -34,4 +34,11 @@ context("Portal Dashboard Student Sort",() =>{
       cy.get('[data-cy=student-name]').eq(5).should("contain", "Jenkins, John");
     });
 
+    it('verify we sort by awaiting feedback',()=>{
+      cy.get('[data-cy=navigation-select]').click();
+      cy.get('[data-cy="list-item-feedback-report"]').should('be.visible').click();
+      cy.get('[data-cy=sort-students]').click();
+      cy.get('[data-cy="list-item-awaiting-feedback"]').should('be.visible');
+    });
+
 });
