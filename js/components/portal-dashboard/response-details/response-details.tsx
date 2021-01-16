@@ -22,10 +22,12 @@ export interface SelectedStudent {
 }
 
 interface IProps {
+  activities: Map<any, any>;
   anonymous: boolean;
   answers: Map<any, any>;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
+  currentStudentId: string | null;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
   listViewMode: ListViewMode;
