@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { AnonymizeStudents } from "../../components/portal-dashboard/anonymize-students";
 import { CustomSelect, SelectItem } from "../../components/portal-dashboard/custom-select";
-import { FeedbackLevel, ListViewMode } from "../../util/misc";
+import { DashboardViewMode, FeedbackLevel, ListViewMode } from "../../util/misc";
 import { makeGetStudentFeedbacks } from "../../selectors/activity-feedback-selectors";
 import { CountContainer } from "../../components/portal-dashboard/count-container";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK } from "../../actions/dashboard";
@@ -30,7 +30,7 @@ interface IProps {
   sortByMethod: string;
   studentCount: number;
   trackEvent: (category: string, action: string, label: string) => void;
-  viewMode: string;
+  viewMode: DashboardViewMode;
 }
 
 class PopupClassNav extends React.PureComponent<IProps>{
