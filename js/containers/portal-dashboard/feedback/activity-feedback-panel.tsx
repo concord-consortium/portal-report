@@ -1,22 +1,29 @@
 import React from "react";
+import { Map } from "immutable";
 import { connect } from "react-redux";
-import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
-import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../selectors/activity-feedback-selectors";
+import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../../actions/index";
+import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../../selectors/activity-feedback-selectors";
+import { ActivityLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/activity-level-feedback-student-rows";
+import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 
 interface IProps {
   activity: Map<any, any>;
-  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
-  updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
+  activityIndex: number;
+  autoScores: any;
+  computedMaxScore: number;
+  feedbackLevel: FeedbackLevel;
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
-  numFeedbacksNeedingReview: number;
-  numFeedbacksGivenReview: number;
   feedbacksNotAnswered: number;
-  computedMaxScore: number;
-  autoScores: any;
-  settings: any;
+  isAnonymous: boolean;
+  listViewMode: ListViewMode;
+  numFeedbacksGivenReview: number;
+  numFeedbacksNeedingReview: number;
   rubric: any;
-  activityIndex: number;
+  settings: any;
+  students: Map<any, any>;
+  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
 }
 
 class ActivityFeedbackPanel extends React.PureComponent<IProps> {
@@ -25,11 +32,18 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    // TODO: FEEDBACK
-    // display the activity feedback
+    const { activity, activityIndex, feedbacks, isAnonymous } = this.props;
+    const currentActivityId = activity?.get("id");
+
     return (
       <div>
-        Activity Feedback Panel
+        <ActivityLevelFeedbackStudentRows
+          activityId={currentActivityId}
+          activityIndex={activityIndex}
+          feedbacks={feedbacks}
+          isAnonymous={isAnonymous}
+          updateActivityFeedback={this.props.updateActivityFeedback}
+        />
       </div>
     );
   }
@@ -56,7 +70,7 @@ function mapStateToProps() {
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),
       rubric: rubric && rubric.toJS(),
-      activityIndex: ownProps.activity.get("activityIndex")
+      activityIndex: ownProps.activity.get("activityIndex"),
     };
   };
 }

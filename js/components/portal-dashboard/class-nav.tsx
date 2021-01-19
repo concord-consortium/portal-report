@@ -3,6 +3,7 @@ import { CustomSelect, SelectItem } from "./custom-select";
 import { AnonymizeStudents } from "./anonymize-students";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS } from "../../actions/dashboard";
 import { CountContainer } from "./count-container";
+import { DashboardViewMode } from "../../util/misc";
 import SortIcon from "../../../img/svg-icons/sort-icon.svg";
 import ClassIcon from "../../../img/svg-icons/class-icon.svg";
 
@@ -16,16 +17,18 @@ interface IProps {
   sortByMethod: string;
   studentCount: number;
   trackEvent: (category: string, action: string, label: string) => void;
+  viewMode: DashboardViewMode;
 }
 
 export class ClassNav extends React.PureComponent<IProps> {
   render() {
-    const { anonymous, setAnonymous } = this.props;
+    const { anonymous, setAnonymous, studentCount } = this.props;
+
     return (
       <div className={css.classNav} data-cy="class-nav">
         { this.renderClassSelect() }
         <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
-        <CountContainer numItems={this.props.studentCount} containerLabel={"Class: "} containerLabelType={"students"} />
+        <CountContainer numItems={studentCount} containerLabel={"Class: "} containerLabelType={"students"} />
         { this.renderStudentSort() }
       </div>
     );

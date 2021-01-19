@@ -8,9 +8,10 @@ import {
   SELECT_QUESTION,
   SORT_BY_MOST_PROGRESS,
   SORT_BY_LEAST_PROGRESS,
+  SORT_BY_FEEDBACK,
 } from "../actions/dashboard";
 
-type SortType = typeof SORT_BY_NAME | typeof SORT_BY_MOST_PROGRESS | typeof SORT_BY_LEAST_PROGRESS;
+type SortType = typeof SORT_BY_NAME | typeof SORT_BY_MOST_PROGRESS | typeof SORT_BY_LEAST_PROGRESS | typeof SORT_BY_FEEDBACK;
 
 export interface IDashboardState {
   // Old dashboard props
