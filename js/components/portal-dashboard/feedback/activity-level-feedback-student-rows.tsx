@@ -1,5 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
+import { ActivityFeedbackTextarea } from "./activity-feedback-textarea";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
@@ -8,7 +9,7 @@ import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feed
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
 interface IProps {
-  activityId?: string;
+  activityId: string;
   activityIndex: number;
   feedbacks: Map<any, any>;
   isAnonymous: boolean;
@@ -18,15 +19,7 @@ interface IProps {
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback } = props;
 
-  const handleFeedbackChange = (studentId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
-    if (activityId) {
-      const target = event.currentTarget as HTMLTextAreaElement;
-      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: target.value});
-    }
-  };
-
   const feedbackRows = feedbacks.map ((feedbackData: Map<any, any>) => {
-
     const student = feedbackData.get("student");
     const studentId = student.get("id");
     const formattedName = getFormattedStudentName(isAnonymous, student);
@@ -52,7 +45,9 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
           </div>
         </div>
         <div className={css.feedback} data-cy="feedback-container">
-          {activityStarted && <textarea defaultValue={feedback} onChange={handleFeedbackChange(studentId)} data-cy="feedback-textarea"></textarea>}
+          { activityStarted &&
+            <ActivityFeedbackTextarea key={activityId + studentId + "-textarea"} activityId={activityId} activityIndex={activityIndex} studentId={studentId} feedback={feedback} updateActivityFeedback={updateActivityFeedback} />
+          }
         </div>
       </div>
     );
