@@ -62,12 +62,62 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=student-answer]').first().should('contain', "No response");
         cy.get('[data-cy=feedback-container]').first().should('be.empty');
         cy.get('[data-cy=next-student-button]').click().click();
-        cy.get('[data-cy=student-answer]').first().should('contain', "test answer");
+        cy.get('[data-cy=student-answer]').first().should('contain', "test answer 2");
         cy.get('[data-cy=feedback-container]').first().should('not.be.empty');
       });
       it("list by students", () => {
         cy.get('[data-cy=list-by-student-toggle]').should('be.visible').click();
         cy.get('[data-cy=feedbackRow] [data-cy=feedback-badge]').should('be.visible');
+      });
+    });
+  });
+  context('Feedback Rows', () => {
+    describe('verify question-level feedback textareas appear and accept input', () => {
+      it('shows feedback textareas for students who have started an activity', () => {
+        cy.get('[data-cy=activity-level-feedback-button]').click();
+        cy.get('[data-cy=feedback-container]')
+          .eq(2)
+          .children('[data-cy=feedback-textarea]')
+          .should('be.visible')
+          .type('This is activity-level feedback.');
+        cy.get('[data-cy=question-level-feedback-button]').click();
+        cy.get('[data-cy=activity-level-feedback-button]').click();
+        cy.get('[data-cy=feedback-container]')
+          .eq(2)
+          .children('[data-cy=feedback-textarea]')
+          .should('contain', 'This is activity-level feedback.');
+
+      });
+      it('shows feedback textareas for students who have answered a question', () => {
+        cy.get('[data-cy=question-level-feedback-button]').click();
+        cy.get('[data-cy=student-answer]').eq(2).should('contain', "test answer 2");
+        cy.get('[data-cy=feedback-container]')
+          .eq(2)
+          .children('[data-cy=feedback-textarea]')
+          .should('be.visible')
+          .type('This is question-level feedback entered while viewing list by student.');
+        cy.get('[data-cy=activity-level-feedback-button]').click();
+        cy.get('[data-cy=question-level-feedback-button]').click();
+        cy.get('[data-cy=feedback-container]')
+          .eq(2)
+          .children('[data-cy=feedback-textarea]')
+          .should('contain', 'This is question-level feedback entered while viewing list by student.');
+      });
+      it('shows feedback textareas for a question that has been answered by a student', () => {
+        cy.get('[data-cy=list-by-questions-toggle]').click();
+        cy.get('[data-cy=next-student-button]').click();
+        cy.get('[data-cy=student-response]').first().should('contain', "test answer 1");
+        cy.get('[data-cy=feedback-container]')
+          .first()
+          .children('[data-cy=feedback-textarea]')
+          .should('be.visible')
+          .type('This is question-level feedback entered when viewing list by question.');
+        cy.get('[data-cy=list-by-student-toggle]').click();
+        cy.get('[data-cy=list-by-questions-toggle]').click();
+        cy.get('[data-cy=feedback-container]')
+          .first()
+          .children('[data-cy=feedback-textarea]')
+          .should('contain', 'This is question-level feedback entered when viewing list by question.');
       });
     });
   });
