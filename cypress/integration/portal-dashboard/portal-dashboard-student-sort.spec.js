@@ -37,7 +37,7 @@ context("Portal Dashboard Student Sort",() =>{
     it('verify we sort by awaiting feedback',()=>{
       cy.get('[data-cy=navigation-select]').click();
       cy.get('[data-cy="list-item-feedback-report"]').should('be.visible').click();
-      cy.get('[data-cy=sort-students]').click();
+      cy.get('[data-cy=sort-feedback]').click();
       cy.get('[data-cy="list-item-awaiting-feedback"]').should('be.visible');
     });
 
