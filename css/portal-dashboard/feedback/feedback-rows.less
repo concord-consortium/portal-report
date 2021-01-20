@@ -66,12 +66,18 @@
       textarea {
         border: solid 1.5px @cc-charcoal-light2;
         border-radius: 8px;
+        box-sizing: border-box;
         font: 16px lato, arial, helvetica, sans-serif;
         height: auto;
         min-height: 50px;
+        outline: none;
         padding: 5px 10px 13px;
         resize: vertical;
         width: calc(100% - 20px);
+
+        &:focus {
+          border-color: @cc-charcoal-light1;
+        }
       }
     }
   }
