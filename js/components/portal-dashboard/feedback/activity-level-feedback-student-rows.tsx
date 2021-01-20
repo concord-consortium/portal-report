@@ -46,7 +46,14 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
         </div>
         <div className={css.feedback} data-cy="feedback-container">
           { activityStarted &&
-            <ActivityFeedbackTextarea key={activityId + studentId + "-textarea"} activityId={activityId} activityIndex={activityIndex} studentId={studentId} feedback={feedback} updateActivityFeedback={updateActivityFeedback} />
+            <ActivityFeedbackTextarea
+              key={activityId + studentId + "-textarea"}
+              activityId={activityId}
+              activityIndex={activityIndex}
+              studentId={studentId}
+              feedback={feedback}
+              updateActivityFeedback={updateActivityFeedback}
+            />
           }
         </div>
       </div>

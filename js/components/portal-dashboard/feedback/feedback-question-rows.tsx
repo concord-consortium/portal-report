@@ -64,7 +64,12 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
         </div>
         <div className={css.feedback} data-cy="feedback-container">
           { answer &&
-            <QuestionFeedbackTextarea key={currentQuestionId + currentStudentId + "textarea"} answerId={answerId} feedback={feedback} updateQuestionFeedback={updateQuestionFeedback} />
+            <QuestionFeedbackTextarea
+              key={currentQuestionId + currentStudentId + "textarea"}
+              answerId={answerId}
+              feedback={feedback}
+              updateQuestionFeedback={updateQuestionFeedback}
+            />
           }
         </div>
       </div>
