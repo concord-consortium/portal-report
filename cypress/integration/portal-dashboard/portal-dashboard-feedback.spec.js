@@ -94,6 +94,7 @@ context("Portal Dashboard Feedback Panel", () => {
           .children('[data-cy=feedback-textarea]')
           .should('be.visible')
           .type('This is activity-level feedback.');
+        cy.wait(2100);
         cy.get('[data-cy=question-level-feedback-button]').click();
         cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=feedback-container]')
@@ -110,6 +111,7 @@ context("Portal Dashboard Feedback Panel", () => {
           .children('[data-cy=feedback-textarea]')
           .should('be.visible')
           .type('This is question-level feedback entered while viewing list by student.');
+        cy.wait(2100);
         cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=question-level-feedback-button]').click();
         cy.get('[data-cy=feedback-container]')
@@ -126,6 +128,7 @@ context("Portal Dashboard Feedback Panel", () => {
           .children('[data-cy=feedback-textarea]')
           .should('be.visible')
           .type('This is question-level feedback entered when viewing list by question.');
+        cy.wait(2100);
         cy.get('[data-cy=list-by-student-toggle]').click();
         cy.get('[data-cy=list-by-questions-toggle]').click();
         cy.get('[data-cy=feedback-container]')
