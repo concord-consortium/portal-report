@@ -7,7 +7,7 @@
   font-weight: normal;
   margin: 10px 20px;
 
-  .feedbackNoteToggle__button {
+  .feedbackNoteToggleButton {
     border: solid 1px @cc-charcoal-light1;
     border-radius: 3px;
     cursor: pointer;
@@ -19,6 +19,14 @@
 
     &:hover {
       background-color: @feedback-green-light3;
+    }
+
+    &:active, &.active {
+      background-color: @feedback-green;
+
+      &:before {
+        background-color: white;
+      }
     }
 
     &:before {
