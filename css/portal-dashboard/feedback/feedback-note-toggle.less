@@ -17,16 +17,16 @@
     position: relative;
     width: 24px;
 
-    &.active {
+    &:hover {
+      background-color: @feedback-green-light3;
+    }
+
+    &:active, &.active {
       background-color: @feedback-green;
 
       &:before {
         background-color: white;
       }
-    }
-
-    &:hover {
-      background-color: @feedback-green-light3;
     }
 
     &:before {
