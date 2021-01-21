@@ -18,6 +18,13 @@ context("Portal Dashboard Feedback Panel", () => {
       it('show activity-level feedback', () => {
         cy.get('[data-cy=activity-level-feedback-button]').should('be.visible').click();
         cy.get('[data-cy=list-by-questions-toggle]').should('be.disabled');
+        cy.get('[data-cy=feedback-note-toggle-button]').should('be.visible').click();
+        cy.get('[data-cy=feedback-note-modal]')
+          .should('be.visible')
+          .should('contain', 'Activity-level Feedback')
+          .should('contain', 'You may provide a student with written feedback at the activity level once the student has completed the activity.');
+        cy.get('[data-cy=feedback-note-modal-close-button]').should('be.visible').click();
+        cy.get('[data-cy=feedback-note-modal]').should('not.exist');
         cy.get('[data-cy=feedback-badge-legend]').should('contain', 'Activity-level Feedback Key');
         cy.get('[data-cy=feedback-badge-legend]').should('contain', 'Awaiting feedback');
         cy.get('[data-cy=feedback-badge-legend]').should('contain', 'Feedback given');
@@ -27,6 +34,13 @@ context("Portal Dashboard Feedback Panel", () => {
       it("show question-level feedback", () => {
         cy.get('[data-cy=question-level-feedback-button]').should('be.visible').click();
         cy.get('[data-cy=list-by-questions-toggle]').should('not.be.disabled');
+        cy.get('[data-cy=feedback-note-toggle-button]').should('be.visible').click();
+        cy.get('[data-cy=feedback-note-modal]')
+          .should('be.visible')
+          .should('contain', 'Question-level Feedback')
+          .should('contain', 'You may provide a student with written feedback at the question level once an answer has been submitted.');
+        cy.get('[data-cy=feedback-note-modal-close-button]').should('be.visible').click();
+        cy.get('[data-cy=feedback-note-modal]').should('not.exist');
         cy.get('[data-cy=feedback-badge-legend]').should('contain', 'Question-level Feedback Key');
         cy.get('[data-cy=feedback-badge-legend]').should('contain', 'Awaiting feedback');
         cy.get('[data-cy=feedback-badge-legend]').should('contain', 'Feedback given');

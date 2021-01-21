@@ -24,7 +24,7 @@ export const FeedbackNoteToggle: React.FC<IProps> = (props) => {
 
   return (
     <div className={css.feedbackNoteToggle} data-cy="feedback-note-toggle">
-      <button className={buttonClass} onClick={handleShowModal(true)} />
+      <button className={buttonClass} onClick={handleShowModal(true)} data-cy="feedback-note-toggle-button" />
       <div>Note on {noteLabel} feedback</div>
       <FeedbackNoteModal
         backdrop={false}
