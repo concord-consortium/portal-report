@@ -26,10 +26,8 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
   };
 
   const updateFeedback = () => {
-    if (answerId) {
+    if (answerId && textareaRef.current?.value !== undefined) {
       updateQuestionFeedback(answerId, {feedback: textareaRef.current?.value});
-      // eslint-disable-next-line no-console
-      console.log(textareaRef.current?.value);
     }
   };
 
@@ -44,6 +42,7 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
       onChange={handleQuestionFeedbackChange}
       style={{ height: height + "px" }}
       data-cy="feedback-textarea"
+      onBlur={updateFeedback}
     />
   );
 };

@@ -28,10 +28,8 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
   };
 
   const updateFeedback = () => {
-    if (activityId && studentId && updateActivityFeedback) {
+    if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined) {
       updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value});
-      // eslint-disable-next-line no-console
-      console.log(textareaRef.current?.value);
     }
   };
 
@@ -46,6 +44,7 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
       onChange={handleActivityFeedbackChange}
       style={{ height: height + "px" }}
       data-cy="feedback-textarea"
+      onBlur={updateFeedback}
     />
   );
 };
