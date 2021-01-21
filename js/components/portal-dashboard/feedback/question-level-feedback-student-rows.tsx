@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
+import { QuestionFeedbackTextarea } from "./question-feedback-textarea";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/given-feedback-question-badge-icon.svg";
@@ -22,13 +23,6 @@ interface IProps {
 
 export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { answers, currentQuestion, feedbacks, isAnonymous, students, updateQuestionFeedback } = props;
-
-  const handleFeedbackChange = (answerId: string) => (event: React.FormEvent<HTMLTextAreaElement>) => {
-    if (answerId) {
-      const target = event.currentTarget as HTMLTextAreaElement;
-      updateQuestionFeedback(answerId, {feedback: target.value});
-    }
-  };
 
   const feedbackRows = students.map ((student: Map<any, any>, index: number) => {
     const studentId = student.get("id");
@@ -61,7 +55,12 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
         </div>
         <div className={css.feedback} data-cy="feedback-container">
           { answer &&
-            <textarea defaultValue={feedback} onChange={handleFeedbackChange(answerId)} data-cy="feedback-textarea"></textarea>
+            <QuestionFeedbackTextarea
+              key={currentQuestionId + studentId + "-textarea"}
+              answerId={answerId}
+              feedback={feedback}
+              updateQuestionFeedback={updateQuestionFeedback}
+            />
           }
         </div>
       </div>
