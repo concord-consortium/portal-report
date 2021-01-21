@@ -2,6 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { ActivityFeedbackTextarea } from "./activity-feedback-textarea";
 import { getFormattedStudentName } from "../../../util/student-utils";
+import { RubricTableContainer } from "./rubric-table";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
 
@@ -11,14 +12,26 @@ interface IProps {
   activityId: string;
   activityIndex: number;
   feedbacks: Map<any, any>;
+  feedbacksNeedingReview: Map<any, any>;
   isAnonymous: boolean;
+  rubric: any;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback } = props;
+  const { activityId, activityIndex, feedbacks, isAnonymous, rubric, updateActivityFeedback } = props;
 
-  const feedbackRows = feedbacks.map ((feedbackData: Map<any, any>) => {
+
+  const rubricChange = (rubricFeedback: any, studentId: string) => {
+    changeFeedback({ rubricFeedback }, studentId);
+  };
+
+  const changeFeedback = (newData: any, studentId: string) => {
+    const { activityId, activityIndex, updateActivityFeedback } = props;
+    activityId && updateActivityFeedback(activityId, activityIndex, studentId, newData);
+  };
+
+  const feedbackRows = feedbacks.map((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
     const studentId = student.get("id");
     const formattedName = getFormattedStudentName(isAnonymous, student);
@@ -47,6 +60,29 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             studentId={studentId}
             updateActivityFeedback={updateActivityFeedback}
           />
+          {activityStarted &&
+            <React.Fragment>
+              {hasRubric &&
+                <RubricTableContainer
+                  rubric={rubric}
+                  student={student}
+                  rubricFeedback={rubricFeedback}
+                  activityId={activityId}
+                  activityIndex={activityIndex}
+                  rubricChange={rubricChange}
+                />
+              }
+              <ActivityFeedbackTextarea
+                key={activityId + studentId + "-textarea"}
+                activityId={activityId}
+                activityIndex={activityIndex}
+                studentId={studentId}
+                feedback={feedback}
+                updateActivityFeedback={updateActivityFeedback}
+              />
+            </React.Fragment>
+
+          }
         </div>
       </div>
     );

@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const {feedbackLevel, setFeedbackLevel} = props;
+  const {feedbackLevel, setFeedbackLevel, rubric} = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -45,12 +45,10 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
 
 };
 
-function mapStateToProps() {
-  return (state: any, ownProps: any) => {
-    const rubric = state.getIn(["feedback", "settings", "rubric"]);
-    return {
-      rubric: rubric && rubric.toJS()
-    };
+function mapStateToProps(state: any) {
+  const rubric = state.getIn(["feedback", "settings", "rubric"]);
+  return {
+    rubric: rubric && rubric.toJS()
   };
 }
 

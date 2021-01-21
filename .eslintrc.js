@@ -42,7 +42,7 @@ module.exports = {
     "eol-last": "warn",
     eqeqeq: ["error", "smart"],
     "no-case-declarations": "off",
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    // "no-console": ["error", { allow: ["warn", "error"] }],
     "no-trailing-spaces": "warn",
     "no-useless-escape": "off",
     "no-useless-rename": "warn",

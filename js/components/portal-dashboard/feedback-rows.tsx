@@ -1,7 +1,8 @@
 import React from "react";
+import { Map } from "immutable";
 import Answer from "../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../util/student-utils";
-import { RubricTableContainer } from "./rubric-table";
+import { RubricTableContainer } from "./feedback/rubric-table";
 import AwaitingFeedbackActivityBadgeIcon from "../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
@@ -17,12 +18,14 @@ interface IProps {
   currentQuestion: any;
   isAnonymous: boolean;
   feedbackLevel: "Activity" | "Question";
+  rubric: any;
+  activityIndex: number;
+  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
 }
 
 export const FeedbackRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, feedbackLevel } = props;
+  const { answers, currentQuestion, feedbacks, isAnonymous, feedbackLevel, rubric, activityIndex, updateActivityFeedback } = props;
   const hasRubric = true;
-
   const onChangeHandler = () => {
     // autosave feedback
   };
@@ -33,6 +36,9 @@ export const FeedbackRows: React.FC<IProps> = (props) => {
     const activityStarted = feedbackData.get("activityStarted");
     const hasBeenReviewed = feedbackData.get("hasBeenReviewed");
     const feedback = feedbackData.get("feedback");
+    const rubricFeedback = feedbackData.get("rubricFeedback");
+    const complete = hasBeenReviewed || false;
+    const activityId = feedbackData.get("activityId");
 
     const awaitingFeedbackIcon = feedbackLevel === "Activity" ? <AwaitingFeedbackActivityBadgeIcon /> : <AwaitingFeedbackQuestionBadgeIcon />;
     const givenFeedbackIcon = feedbackLevel === "Activity" ? <GivenFeedbackActivityBadgeIcon /> : <GivenFeedbackQuestionBadgeIcon />;
@@ -62,10 +68,18 @@ export const FeedbackRows: React.FC<IProps> = (props) => {
         <div className={css.feedback}>
           {activityStarted &&
             <React.Fragment>
-              { (feedbackLevel==="Activity" && hasRubric) && <RubricTableContainer /> }
+              { (feedbackLevel==="Activity" && hasRubric) &&
+                <RubricTableContainer rubric={rubric}
+                                      student={student}
+                                      disabled={complete}
+                                      rubricFeedback={rubricFeedback}
+                                      activityId={activityId}
+                                      activityIndex={activityIndex}
+                                      updateActivityFeedback={updateActivityFeedback}
+                />
+              }
             <textarea value={feedback} onChange={onChangeHandler}></textarea>
             </React.Fragment>
-
           }
         </div>
       </div>

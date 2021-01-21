@@ -1,4 +1,4 @@
-@import "./variables";
+@import "../variables";
 @scoreHeader-width: 92px;
 
 .rubricContainer {
@@ -15,7 +15,6 @@
     flex-direction: row;
     align-items: center;
     text-align: center;
-    border-bottom: solid 1.5px @cc-charcoal-light2;
 
     .rubricDescriptionHeader {
       display: flex;
@@ -65,7 +64,7 @@
 
       .rubricDescriptionTitle {
         justify-content: center;
-        width: 85%
+        width: 75%
       }
     }
     .rubricScoreHeader {
@@ -81,47 +80,73 @@
   }
 
   .rubricTable {
+    width: 100%;
+
     .rubricTableRow {
       display: flex;
       flex-direction: row;
       align-items: center;
-      height: 62px;
+      height: auto;
+      border-top: solid 1.5px @cc-charcoal-light2;
 
       .rubricDescription {
         width: 73%;
-        margin: 5px 10px;
+        padding: 5px 10px;
         font-weight: normal;
+        height: 100%;
       }
+
       .rubricScore {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 92px;
-        height: 100%;
         border-left: solid 1.5px @cc-charcoal-light2;
 
-        .radioButton {
-          border-radius: 50%;
-          border: solid 1.5px @cc-charcoal-light1;
-          background-color: white;
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
+        .radioInput {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
 
-          .selected {
+          input {
+            // opacity: 0;
+            // width: 0;
+            // height: 0;
+            display: block;
             border-radius: 50%;
-            width: 12px;
-            height: 12px;
-            background-color: @feedback-green;
-            position: relative;
-            top: 4px;
-            left: 4px;
+            border: solid 1.5px @cc-charcoal-light1;
+            background-color: white;
+            width: 20px;
+            height: 20px;
+            margin: 16px;
+            cursor: pointer;
+
+            // &:checked + .radioButton {
+            &:checked {
+              border-radius: 50%;
+              border: solid 1.5px @cc-charcoal-light1;
+              width: 12px;
+              height: 12px;
+              background-color: @feedback-green;
+              position: relative;
+              top: 4px;
+              left: 4px;
+            }
           }
+
+          // .radioButton {
+          //   display: block;
+          //   border-radius: 50%;
+          //   border: solid 1.5px @cc-charcoal-light1;
+          //   background-color: white;
+          //   width: 20px;
+          //   height: 20px;
+          //   margin: 16px;
+          //   cursor: pointer;
+          // }
         }
       }
-
     }
-
   }
-
 }
