@@ -30,10 +30,12 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
   const updateFeedback = () => {
     if (activityId && studentId && updateActivityFeedback) {
       updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value});
+      // eslint-disable-next-line no-console
       console.log(textareaRef.current?.value);
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateFeedbackThrottled = useCallback(throttle(updateFeedback, 2000), []);
 
   return (

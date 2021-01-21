@@ -28,10 +28,12 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
   const updateFeedback = () => {
     if (answerId) {
       updateQuestionFeedback(answerId, {feedback: textareaRef.current?.value});
+      // eslint-disable-next-line no-console
       console.log(textareaRef.current?.value);
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateFeedbackThrottled = useCallback(throttle(updateFeedback, 2000), []);
 
   return (
