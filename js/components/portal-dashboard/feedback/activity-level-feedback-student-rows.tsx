@@ -4,7 +4,6 @@ import { ActivityFeedbackTextarea } from "./activity-feedback-textarea";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
-// import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -26,35 +25,28 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const activityStarted = feedbackData.get("activityStarted");
     const hasBeenReviewed = feedbackData.get("hasBeenReviewed");
     const feedback = feedbackData.get("feedback");
-
-    const awaitingFeedbackIcon = <AwaitingFeedbackActivityBadgeIcon />;
-    const givenFeedbackIcon = <GivenFeedbackActivityBadgeIcon />;
-    // const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
-
-    // TODO: Work out case for when to use UpdateFeedbackBadgeIcon
-    const feedbackBadge = hasBeenReviewed ? givenFeedbackIcon : awaitingFeedbackIcon;
+    const feedbackBadge = hasBeenReviewed ? <GivenFeedbackActivityBadgeIcon /> : <AwaitingFeedbackActivityBadgeIcon />;
 
     return (
-      <div key={activityId + studentId} className={css.feedbackRows__row} data-cy="feedbackRow">
+      <div key={activityId + studentId} className={css.feedbackRowsRow} data-cy="feedbackRow">
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge} data-cy="feedback-badge">
-            {feedbackBadge}
+            { activityStarted && feedbackBadge }
           </div>
           <div className={css.studentName} data-cy="student-name">
             {formattedName}
           </div>
         </div>
         <div className={css.feedback} data-cy="feedback-container">
-          { activityStarted &&
-            <ActivityFeedbackTextarea
-              key={activityId + studentId + "-textarea"}
-              activityId={activityId}
-              activityIndex={activityIndex}
-              studentId={studentId}
-              feedback={feedback}
-              updateActivityFeedback={updateActivityFeedback}
-            />
-          }
+          <ActivityFeedbackTextarea
+            activityId={activityId}
+            activityIndex={activityIndex}
+            activityStarted={activityStarted}
+            feedback={feedback}
+            key={activityId + studentId + "-textarea"}
+            studentId={studentId}
+            updateActivityFeedback={updateActivityFeedback}
+          />
         </div>
       </div>
     );
