@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
+import { throttle } from "lodash";
 
 interface IProps {
   activityId: string | null;
@@ -20,22 +21,30 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
     }
   }, [textareaRef]);
 
-  const handleActivityFeedbackChange = (studentId: string | undefined) => (event: React.FormEvent<HTMLTextAreaElement>) => {
-    if (activityId && studentId && updateActivityFeedback) {
-      const target = event.currentTarget as HTMLTextAreaElement;
-      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: target.value});
-      setHeight(target.scrollHeight);
+  const handleActivityFeedbackChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
+    const target = event.currentTarget as HTMLTextAreaElement;
+    setHeight(target.scrollHeight);
+    updateFeedbackThrottled();
+  };
+
+  const updateFeedback = () => {
+    if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined) {
+      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value});
     }
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const updateFeedbackThrottled = useCallback(throttle(updateFeedback, 2000), []);
 
   return (
     <textarea
       ref={textareaRef}
       defaultValue={feedback}
       placeholder="Enter feedback"
-      onChange={handleActivityFeedbackChange(studentId)}
+      onChange={handleActivityFeedbackChange}
       style={{ height: height + "px" }}
       data-cy="feedback-textarea"
+      onBlur={updateFeedback}
     />
   );
 };
