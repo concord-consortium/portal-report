@@ -2,11 +2,12 @@ import React from "react";
 import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { QuestionFeedbackTextarea } from "./question-feedback-textarea";
+import { feedbackValidForAnswer } from "../../../util/misc";
 import striptags from "striptags";
 import { renderHTML } from "../../../util/render-html";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/given-feedback-question-badge-icon.svg";
-// import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
+import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -22,6 +23,17 @@ interface IProps {
 export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
   const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback } = props;
 
+  const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer: Map<string, any>) => {
+    let feedbackBadge = <AwaitingFeedbackQuestionBadgeIcon />;
+    if (feedback !== "") {
+      feedbackBadge = feedbackValidForAnswer(feedbackData, answer)
+                      ? <GivenFeedbackQuestionBadgeIcon />
+                      : <UpdateFeedbackQuestionBadgeIcon />;
+    }
+
+    return feedbackBadge;
+  };
+
   const questions = currentActivity.get("questions");
   const feedbackRows = questions.map ((question: Map<any, any>) => {
     const student = currentStudentId
@@ -35,22 +47,13 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     const answerId = answer?.get("id");
     const feedbackData = answerId && feedbacks.getIn([answerId]);
     const feedback = feedbackData ? feedbackData.get("feedback") : "";
-
-    const awaitingFeedbackIcon = <AwaitingFeedbackQuestionBadgeIcon />;
-    const givenFeedbackIcon = <GivenFeedbackQuestionBadgeIcon />;
-    // const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
-
-    // TODO: Work out case for when to use UpdateFeedbackBadgeIcon
-    let feedbackBadge = awaitingFeedbackIcon;
-    if (feedback) {
-      feedbackBadge = givenFeedbackIcon;
-    }
+    const feedbackBadge = getFeedbackIcon(feedback, feedbackData, answer);
 
     const blankRegEx = /\[([^)]+)\]/g;
     const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
 
     return (
-      <div className={css.feedbackRows__row} key={currentQuestionId} data-cy="question-row">
+      <div className={css.feedbackRowsRow} key={currentQuestionId} data-cy="question-row">
         <div className={css.studentWrapper} data-cy="question-wrapper">
           <div className={css.feedbackBadge} data-cy="feedback-badge">
             {feedbackBadge}
@@ -65,10 +68,10 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
         <div className={css.feedback} data-cy="feedback-container">
           { answer &&
             <QuestionFeedbackTextarea
-              key={currentQuestionId + currentStudentId + "textarea"}
               answer={answer}
               answerId={answerId}
               feedback={feedback}
+              key={currentQuestionId + currentStudentId + "textarea"}
               updateQuestionFeedback={updateQuestionFeedback}
             />
           }

@@ -4,14 +4,14 @@ import { answerHash } from "../../../util/misc";
 import { Map } from "immutable";
 
 interface IProps {
-  answerId: string;
   answer: Map<string, any>;
+  answerId: string;
   feedback: any;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
 }
 
 export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { answerId, feedback, updateQuestionFeedback } = props;
+  const { answer, answerId, feedback, updateQuestionFeedback } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -31,7 +31,7 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
   const updateFeedback = () => {
     if (answerId && textareaRef.current?.value !== undefined) {
       updateQuestionFeedback(answerId, {feedback: textareaRef.current?.value,
-                                        hasBeenReviewedForAnswerHash: answerHash(props.answer)});
+                                        hasBeenReviewedForAnswerHash: answerHash(answer)});
     }
   };
 

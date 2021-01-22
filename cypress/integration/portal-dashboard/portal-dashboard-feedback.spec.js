@@ -86,9 +86,14 @@ context("Portal Dashboard Feedback Panel", () => {
     });
   });
   context('Feedback Rows', () => {
-    describe('verify question-level feedback textareas appear and accept input', () => {
+    describe('verify activity-level feedback textareas appear and accept input', () => {
       it('shows feedback textareas for students who have started an activity', () => {
         cy.get('[data-cy=activity-level-feedback-button]').click();
+        cy.get('[data-cy=feedback-container]')
+        .eq(1)
+        .should('contain', "This student hasn't started yet.")
+        .children('[data-cy=feedback-textarea]')
+        .should('not.exist');
         cy.get('[data-cy=feedback-container]')
           .eq(2)
           .children('[data-cy=feedback-textarea]')
@@ -101,8 +106,9 @@ context("Portal Dashboard Feedback Panel", () => {
           .eq(2)
           .children('[data-cy=feedback-textarea]')
           .should('contain', 'This is activity-level feedback.');
-
       });
+    });
+    describe('verify question-level feedback textareas appear and accept input', () => {
       it('shows feedback textareas for students who have answered a question', () => {
         cy.get('[data-cy=question-level-feedback-button]').click();
         cy.get('[data-cy=student-answer]').eq(2).should('contain', "test answer 2");

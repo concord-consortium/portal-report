@@ -4,13 +4,14 @@ import { throttle } from "lodash";
 interface IProps {
   activityId: string | null;
   activityIndex: number;
+  activityStarted: boolean;
   feedback: any;
   studentId: string;
   updateActivityFeedback?: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
 }
 
 export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedback, studentId, updateActivityFeedback } = props;
+  const { activityId, activityIndex, activityStarted, feedback, studentId, updateActivityFeedback } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -29,23 +30,30 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
 
   const updateFeedback = () => {
     if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined) {
+      const hasBeenReviewed = textareaRef.current.value !== "" ? true : false;
       updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value,
-                                                                    hasBeenReviewed: true});
+                                                                    hasBeenReviewed});
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateFeedbackThrottled = useCallback(throttle(updateFeedback, 2000), []);
 
+  if (activityStarted) {
+    return (
+      <textarea
+        data-cy="feedback-textarea"
+        defaultValue={feedback}
+        onBlur={updateFeedback}
+        onChange={handleActivityFeedbackChange}
+        placeholder="Enter feedback"
+        ref={textareaRef}
+        style={{ height: height + "px" }}
+      />
+    );
+  }
+
   return (
-    <textarea
-      ref={textareaRef}
-      defaultValue={feedback}
-      placeholder="Enter feedback"
-      onChange={handleActivityFeedbackChange}
-      style={{ height: height + "px" }}
-      data-cy="feedback-textarea"
-      onBlur={updateFeedback}
-    />
+    <p>This student hasn't started yet.</p>
   );
 };
