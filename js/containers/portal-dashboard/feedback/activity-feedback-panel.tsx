@@ -32,7 +32,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activityIndex, feedbacks, isAnonymous } = this.props;
+    const { activity, activityIndex, feedbacks, isAnonymous, settings } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -42,7 +42,9 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           activityIndex={activityIndex}
           feedbacks={feedbacks}
           isAnonymous={isAnonymous}
+          settings={settings}
           updateActivityFeedback={this.props.updateActivityFeedback}
+          updateActivityFeedbackSettings={this.props.updateActivityFeedbackSettings}
         />
       </div>
     );
