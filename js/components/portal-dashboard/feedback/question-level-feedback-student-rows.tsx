@@ -50,7 +50,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
       <div key={currentQuestionId + studentId} className={css.feedbackRowsRow} data-cy="feedbackRow">
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge} data-cy="feedback-badge">
-            {feedbackBadge}
+            { answer && feedbackBadge }
           </div>
           <div className={css.studentName} data-cy="student-name">
             {formattedName}

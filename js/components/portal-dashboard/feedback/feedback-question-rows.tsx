@@ -56,7 +56,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
       <div className={css.feedbackRowsRow} key={currentQuestionId} data-cy="question-row">
         <div className={css.studentWrapper} data-cy="question-wrapper">
           <div className={css.feedbackBadge} data-cy="feedback-badge">
-            {feedbackBadge}
+            { answer && feedbackBadge }
           </div>
           <div className={css.studentName} data-cy="student-name">
             Q{question.get("questionNumber")}: {renderHTML(striptags(promptText))}
