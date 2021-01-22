@@ -29,7 +29,8 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
 
   const updateFeedback = () => {
     if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined) {
-      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value});
+      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value,
+                                                                    hasBeenReviewed: true});
     }
   };
 

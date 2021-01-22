@@ -1,8 +1,11 @@
 import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import { throttle } from "lodash";
+import { answerHash } from "../../../util/misc";
+import { Map } from "immutable";
 
 interface IProps {
   answerId: string;
+  answer: Map<string, any>;
   feedback: any;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
 }
@@ -27,7 +30,8 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
 
   const updateFeedback = () => {
     if (answerId && textareaRef.current?.value !== undefined) {
-      updateQuestionFeedback(answerId, {feedback: textareaRef.current?.value});
+      updateQuestionFeedback(answerId, {feedback: textareaRef.current?.value,
+                                        hasBeenReviewedForAnswerHash: answerHash(props.answer)});
     }
   };
 

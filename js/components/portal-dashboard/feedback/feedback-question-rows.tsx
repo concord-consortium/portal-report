@@ -66,6 +66,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
           { answer &&
             <QuestionFeedbackTextarea
               key={currentQuestionId + currentStudentId + "textarea"}
+              answer={answer}
               answerId={answerId}
               feedback={feedback}
               updateQuestionFeedback={updateQuestionFeedback}
