@@ -1,13 +1,14 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 
 interface IProps {
+  answerHash: any;
   answerId: string;
   feedback: any;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
 }
 
 export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { answerId, feedback, updateQuestionFeedback } = props;
+  const { answerHash, answerId, feedback, updateQuestionFeedback } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -22,6 +23,7 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
     if (answerId) {
       const target = event.currentTarget as HTMLTextAreaElement;
       updateQuestionFeedback(answerId, {feedback: target.value});
+      updateQuestionFeedback(answerId, {hasBeenReviewedForAnswerHash: answerHash});
       setHeight(target.scrollHeight);
     }
   };
