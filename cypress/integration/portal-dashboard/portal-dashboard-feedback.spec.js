@@ -90,10 +90,13 @@ context("Portal Dashboard Feedback Panel", () => {
       it('shows feedback textareas for students who have started an activity', () => {
         cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=feedback-container]')
-        .eq(1)
-        .should('contain', "This student hasn't started yet.")
-        .children('[data-cy=feedback-textarea]')
-        .should('not.exist');
+          .first()
+          .should('contain', "This student hasn't started yet.")
+          .children('[data-cy=feedback-textarea]')
+          .should('not.exist');
+        cy.get('[data-cy=feedback-badge]')
+          .first()
+          .should('be.empty');
         cy.get('[data-cy=feedback-container]')
           .eq(2)
           .children('[data-cy=feedback-textarea]')
@@ -111,7 +114,16 @@ context("Portal Dashboard Feedback Panel", () => {
     describe('verify question-level feedback textareas appear and accept input', () => {
       it('shows feedback textareas for students who have answered a question', () => {
         cy.get('[data-cy=question-level-feedback-button]').click();
+        cy.get('[data-cy=student-answer]').first().should('contain', "No response");
+        cy.get('[data-cy=feedback-badge]')
+          .first()
+          .should('be.empty');      
         cy.get('[data-cy=student-answer]').eq(2).should('contain', "test answer 2");
+        cy.get('[data-cy=feedback-badge]')
+          .eq(2)
+          .find('circle')
+          .should('have.attr', 'fill')
+          .and('include', '#FFF');
         cy.get('[data-cy=feedback-container]')
           .eq(2)
           .children('[data-cy=feedback-textarea]')
@@ -120,6 +132,11 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.wait(2100);
         cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=question-level-feedback-button]').click();
+        cy.get('[data-cy=feedback-badge]')
+          .eq(2)
+          .find('circle')
+          .should('have.attr', 'fill')
+          .and('include', '#4EA15A');
         cy.get('[data-cy=feedback-container]')
           .eq(2)
           .children('[data-cy=feedback-textarea]')
@@ -129,6 +146,11 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=list-by-questions-toggle]').click();
         cy.get('[data-cy=next-student-button]').click();
         cy.get('[data-cy=student-response]').first().should('contain', "test answer 1");
+        cy.get('[data-cy=feedback-badge]')
+          .first()
+          .find('circle')
+          .should('have.attr', 'fill')
+          .and('include', '#FFF');
         cy.get('[data-cy=feedback-container]')
           .first()
           .children('[data-cy=feedback-textarea]')
@@ -137,6 +159,11 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.wait(2100);
         cy.get('[data-cy=list-by-student-toggle]').click();
         cy.get('[data-cy=list-by-questions-toggle]').click();
+        cy.get('[data-cy=feedback-badge]')
+          .first()
+          .find('circle')
+          .should('have.attr', 'fill')
+          .and('include', '#4EA15A');
         cy.get('[data-cy=feedback-container]')
           .first()
           .children('[data-cy=feedback-textarea]')
