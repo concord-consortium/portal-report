@@ -5,6 +5,7 @@ import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-table.less";
 interface IProps {
+  activityStarted: boolean;
   rubric: any;
   student: any;
   rubricFeedback: any;
@@ -14,39 +15,51 @@ interface IProps {
 }
 export class RubricTableContainer extends React.PureComponent<IProps> {
   render() {
-    const { rubric, student, rubricFeedback } = this.props;
+    const { activityStarted, rubric, student, rubricFeedback } = this.props;
     const learnerId = student.get("id");
-    const { ratings, criteria, referenceURL } = rubric;
-    return (
-      <div className={css.rubricContainer} data-cy="rubric-table">
-        <div className={css.columnHeaders}>
-          <div className={css.rubricDescriptionHeader}>
-            <div className={css.scoringGuideArea}>
-              <a className={css.launchButton}>
-                <LaunchIcon className={css.icon} href={referenceURL} target="_blank"/>
-              </a>
-              Scoring Guide
-            </div>
-            <div className={css.rubricDescriptionTitle}>{rubric.criteriaLabel}</div>
+    const { ratings, criteria } = rubric;
+
+    if (activityStarted) {
+      return (
+        <div className={css.rubricContainer} data-cy="rubric-table">
+          {this.renderColumnHeaders(rubric)}
+          <div className={css.rubricTable}>
+            {criteria.map((crit: any, critIndex: any) =>
+              <div className={css.rubricTableRow} key={crit.id} id={crit.id}>
+                <div className={css.rubricDescription}>
+                  <Markdown>{crit.description}</Markdown>
+                </div>
+                {ratings.map((rating: any) => this.renderStudentRating(crit, rating, learnerId, rubricFeedback))}
+              </div>
+            )}
           </div>
-          { rubric.ratings.map((rating: any) =>
-              <div className={css.rubricScoreHeader} key={rating.id}>
-                <div className={css.rubricScoreLevel}>{rating.label}</div>
-                {rubric.scoreUsingPoints && <div className={css.rubricScoreNumber}>({rating.score})</div>}
-              </div>
-            )
-          }
         </div>
-        <div className={css.rubricTable}>
-          { criteria.map((crit: any, critIndex: any) =>
-            <div className={css.rubricTableRow} key={crit.id} id={crit.id}>
-              <div className={css.rubricDescription}>
-                <Markdown>{crit.description}</Markdown>
-              </div>
-              { ratings.map((rating: any) => this.renderStudentRating(crit, rating, learnerId, rubricFeedback)) }
-            </div>
-          )}
+      );
+    }
+
+    return null;
+  }
+
+  private renderColumnHeaders = (rubric: any) => {
+    const { referenceURL } = rubric;
+    return (
+      <div className={css.columnHeaders}>
+        <div className={css.rubricDescriptionHeader}>
+          <div className={css.scoringGuideArea}>
+            <a className={css.launchButton}>
+              <LaunchIcon className={css.icon} href={referenceURL} target="_blank" />
+            </a>
+            Scoring Guide
         </div>
+          <div className={css.rubricDescriptionTitle}>{rubric.criteriaLabel}</div>
+        </div>
+        { rubric.ratings.map((rating: any) =>
+          <div className={css.rubricScoreHeader} key={rating.id}>
+            <div className={css.rubricScoreLevel}>{rating.label}</div>
+            {rubric.scoreUsingPoints && <div className={css.rubricScoreNumber}>({rating.score})</div>}
+          </div>
+          )
+        }
       </div>
     );
   }
@@ -63,7 +76,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
       (crit.ratingDescriptions && crit.ratingDescriptions[ratingId]) ||
       null;
     const isApplicableRating = crit.nonApplicableRatings === undefined ||
-                               crit.nonApplicableRatings.indexOf(ratingId) < 0;
+      crit.nonApplicableRatings.indexOf(ratingId) < 0;
     const isNotApplicable = !isApplicableRating;
     return (
       <div key={radioButtonKey} className={css.rubricScore} title={(isApplicableRating) ? ratingDescription : "Not Applicable"}>
@@ -76,10 +89,10 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   }
 
   private renderButton = (learnerId: number, critId: string, checked: boolean, ratingId: string, radioButtonKey: string) => {
-    const handleRatingChange = (ratingId: string,  radioButtonKey: string, event: React.ChangeEvent<HTMLInputElement>)  => {
+    const handleRatingChange = (ratingId: string, radioButtonKey: string, event: React.ChangeEvent<HTMLInputElement>) => {
       // TODO: if rating was previously checked, uncheck it, else update!checked;} : () => this.updateSelection(critId, ratingId);
-        updateSelection(critId, ratingId);
-      };
+      updateSelection(critId, ratingId);
+    };
 
     const updateSelection = (critId: any, ratingId: string) => {
       const { rubric, rubricFeedback, student, rubricChange } = this.props;
@@ -88,7 +101,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
       const criteria = rubric.criteria.find((c: any) => c.id === critId);
       const score = rating.score;
       const label = rating.label;
-      const studentId= student.get("id");
+      const studentId = student.get("id");
 
       newSelection[critId] = {
         id: ratingId,
@@ -96,19 +109,19 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
         label,
         description: criteria.ratingDescriptions[ratingId],
       };
-      const newFeedback = Object.assign({}, rubricFeedback, newSelection) ;
+      const newFeedback = Object.assign({}, rubricFeedback, newSelection);
       rubricChange(newFeedback, studentId);
     };
 
     return (
-        <input
-          name={`${learnerId}_${critId}`}
-          type="radio"
-          checked={checked || false}
-          value={ratingId}
-          onChange={handleRatingChange.bind(null, ratingId, radioButtonKey)}
-          id={radioButtonKey}
-        />
+      <input
+        name={`${learnerId}_${critId}`}
+        type="radio"
+        checked={checked || false}
+        value={ratingId}
+        onChange={handleRatingChange.bind(null, ratingId, radioButtonKey)}
+        id={radioButtonKey}
+      />
     );
   }
 }

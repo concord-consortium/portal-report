@@ -38,6 +38,8 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const activityStarted = feedbackData.get("activityStarted");
     const hasBeenReviewed = feedbackData.get("hasBeenReviewed");
     const feedback = feedbackData.get("feedback");
+    const hasRubric = rubric;
+    const { rubricFeedback } = feedbackData.toJS();
     const feedbackBadge = hasBeenReviewed ? <GivenFeedbackActivityBadgeIcon /> : <AwaitingFeedbackActivityBadgeIcon />;
 
     return (
@@ -51,6 +53,17 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
           </div>
         </div>
         <div className={css.feedback} data-cy="feedback-container">
+          {hasRubric &&
+            <RubricTableContainer
+              activityStarted={activityStarted}
+              rubric={rubric}
+              student={student}
+              rubricFeedback={rubricFeedback}
+              activityId={activityId}
+              activityIndex={activityIndex}
+              rubricChange={rubricChange}
+            />
+          }
           <ActivityFeedbackTextarea
             activityId={activityId}
             activityIndex={activityIndex}
@@ -60,29 +73,6 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             studentId={studentId}
             updateActivityFeedback={updateActivityFeedback}
           />
-          {activityStarted &&
-            <React.Fragment>
-              {hasRubric &&
-                <RubricTableContainer
-                  rubric={rubric}
-                  student={student}
-                  rubricFeedback={rubricFeedback}
-                  activityId={activityId}
-                  activityIndex={activityIndex}
-                  rubricChange={rubricChange}
-                />
-              }
-              <ActivityFeedbackTextarea
-                key={activityId + studentId + "-textarea"}
-                activityId={activityId}
-                activityIndex={activityIndex}
-                studentId={studentId}
-                feedback={feedback}
-                updateActivityFeedback={updateActivityFeedback}
-              />
-            </React.Fragment>
-
-          }
         </div>
       </div>
     );
