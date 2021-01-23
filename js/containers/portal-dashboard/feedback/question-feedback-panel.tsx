@@ -80,7 +80,6 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
       if (!this.props.settings.get("questionSettings")?.get(questionId)?.get("feedbackEnabled")) {
         this.props.updateQuestionFeedbackSettings(questionId, { feedbackEnabled: true });
       }
-      this.props.updateQuestionFeedbackSettings(questionId, { feedbackEnabled: true });
     });
   }
 }
