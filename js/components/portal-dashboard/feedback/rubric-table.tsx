@@ -15,9 +15,8 @@ interface IProps {
 }
 export class RubricTableContainer extends React.PureComponent<IProps> {
   render() {
-    const { activityStarted, rubric, student, rubricFeedback } = this.props;
-    const learnerId = student.get("id");
-    const { ratings, criteria } = rubric;
+    const { activityStarted, rubric } = this.props;
+    const { criteria } = rubric;
 
     if (activityStarted) {
       return (
@@ -29,7 +28,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
                 <div className={css.rubricDescription}>
                   <Markdown>{crit.description}</Markdown>
                 </div>
-                {ratings.map((rating: any) => this.renderStudentRating(crit, rating, learnerId, rubricFeedback))}
+                {this.renderRatings(crit)}
               </div>
             )}
           </div>
@@ -58,18 +57,33 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
             <div className={css.rubricScoreLevel}>{rating.label}</div>
             {rubric.scoreUsingPoints && <div className={css.rubricScoreNumber}>({rating.score})</div>}
           </div>
-          )
+        )
         }
       </div>
     );
   }
 
+  private renderRatings = (crit: any) => {
+    const { rubric, student, rubricFeedback } = this.props;
+    const learnerId = student.get("id");
+    const { ratings } = rubric;
+    return (
+      <div id={`${crit.id}_ratings`} className={css.ratingsGroup}>
+        {ratings.map((rating: any) => this.renderStudentRating(crit, rating, learnerId, rubricFeedback))}
+      </div>
+    );
+  }
+
   private renderStudentRating = (crit: any, rating: any, learnerId: number, rubricFeedback: any) => {
+    const { rubric } = this.props;
+    const { ratings } = rubric;
+
     const critId = crit.id;
     const ratingId = rating.id;
     const radioButtonKey = `${critId}-${ratingId}`;
-    const checked = (rubricFeedback && rubricFeedback[critId] && rubricFeedback[critId].id === ratingId);
-
+    const selected = (rubricFeedback && rubricFeedback[critId] && rubricFeedback[critId].id === ratingId);
+    const currentIndex = ratings.indexOf(rating);
+    console.log(ratings, " " , ratingId, " " ,ratings.indexOf(rating));
     // Tooltips displayed to teacher should actually show student description if it's available.
     const ratingDescription =
       (crit.ratingDescriptionsForStudent && crit.ratingDescriptionsForStudent[ratingId]) ||
@@ -78,19 +92,28 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     const isApplicableRating = crit.nonApplicableRatings === undefined ||
       crit.nonApplicableRatings.indexOf(ratingId) < 0;
     const isNotApplicable = !isApplicableRating;
+
     return (
-      <div key={radioButtonKey} className={css.rubricScore} title={(isApplicableRating) ? ratingDescription : "Not Applicable"}>
-        { isNotApplicable
-          ? <span className={css.noRating}>N/A</span>
-          : this.renderButton(learnerId, critId, checked, ratingId, radioButtonKey)
-        }
+      <div className={css.rubricScoreBox} key={radioButtonKey}>
+        <div  className={css.rubricButton} title={(isApplicableRating) ? ratingDescription : "Not Applicable"}>
+          { isNotApplicable
+            ? <span className={css.noRating}>N/A</span>
+            : this.renderButton(learnerId, critId, selected, rating, ratingId, radioButtonKey, currentIndex)
+          }
+        </div>
       </div>
     );
   }
 
-  private renderButton = (learnerId: number, critId: string, checked: boolean, ratingId: string, radioButtonKey: string) => {
-    const handleRatingChange = (ratingId: string, radioButtonKey: string, event: React.ChangeEvent<HTMLInputElement>) => {
+  private renderButton = (learnerId: number, critId: string, selected: boolean, rating: any, ratingId: string, radioButtonKey: string, currentIndex: number) => {
+    const handleRatingChange = (rating: string, currentIndex: number) => () => {
       // TODO: if rating was previously checked, uncheck it, else update!checked;} : () => this.updateSelection(critId, ratingId);
+
+      if (currentIndex === this.props.rubric.ratings.indexOf(rating)) {
+        console.log("currentIndex is the same ", currentIndex, " ", this.props.rubric.ratings.indexOf(rating));
+        // critId="";
+        // ratingId="";
+      }
       updateSelection(critId, ratingId);
     };
 
@@ -114,14 +137,13 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     };
 
     return (
-      <input
-        name={`${learnerId}_${critId}`}
-        type="radio"
-        checked={checked || false}
-        value={ratingId}
-        onChange={handleRatingChange.bind(null, ratingId, radioButtonKey)}
+      <button
+        className={css.outerCircle}
+        onClick={handleRatingChange(rating, currentIndex)}
         id={radioButtonKey}
-      />
+      >
+        <div className={`${css.innerCircle} ${selected ? css.selected : ""}`}></div>
+      </button>
     );
   }
 }

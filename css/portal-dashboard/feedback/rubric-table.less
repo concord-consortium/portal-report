@@ -6,7 +6,7 @@
   border-radius: 8px;
   background-color: white;
   margin: 10px 0;
-  width: calc(100%-20px);
+  width: 100%;
   font-size: 14px;
 
   .columnHeaders {
@@ -80,71 +80,62 @@
   }
 
   .rubricTable {
-    width: 100%;
 
     .rubricTableRow {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: auto;
       border-top: solid 1.5px @cc-charcoal-light2;
 
       .rubricDescription {
-        width: 73%;
         padding: 5px 10px;
         font-weight: normal;
-        height: 100%;
+        min-width: 70%;
+          li {
+          margin-left: 20px
+        }
       }
 
-      .rubricScore {
+      .ratingsGroup{
         display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 92px;
-        border-left: solid 1.5px @cc-charcoal-light2;
+        min-height: 45px;
 
-        .radioInput {
+        .rubricScoreBox {
           display: flex;
-          flex-direction: row;
           align-items: center;
           justify-content: center;
+          width: 90px;
+          border-left: solid 1.5px @cc-charcoal-light2;
 
-          input {
-            // opacity: 0;
-            // width: 0;
-            // height: 0;
-            display: block;
-            border-radius: 50%;
-            border: solid 1.5px @cc-charcoal-light1;
-            background-color: white;
-            width: 20px;
-            height: 20px;
-            margin: 16px;
+          .rubricButton{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            margin: 5px;
             cursor: pointer;
 
-            // &:checked + .radioButton {
-            &:checked {
+            .outerCircle {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 20px;
+              height: 20px;
               border-radius: 50%;
               border: solid 1.5px @cc-charcoal-light1;
-              width: 12px;
-              height: 12px;
-              background-color: @feedback-green;
-              position: relative;
-              top: 4px;
-              left: 4px;
+              background-color: white;
+
+              .innerCircle {
+                width: 12px;
+                height: 12px;
+                background-color: white;
+                border-radius: 50%;
+
+                &.selected {
+                  background-color: @feedback-green;
+                }
+              }
             }
           }
-
-          // .radioButton {
-          //   display: block;
-          //   border-radius: 50%;
-          //   border: solid 1.5px @cc-charcoal-light1;
-          //   background-color: white;
-          //   width: 20px;
-          //   height: 20px;
-          //   margin: 16px;
-          //   cursor: pointer;
-          // }
         }
       }
     }
