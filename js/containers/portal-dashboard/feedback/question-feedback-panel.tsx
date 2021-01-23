@@ -31,6 +31,16 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
     super(props);
   }
 
+  componentDidMount() {
+    this.updateQuestionFeedbackSettings();
+  }
+
+  componentDidUpdate(prevProps: IProps) {
+    if (prevProps.activity?.get("id") !== this.props.activity?.get("id")) {
+      this.updateQuestionFeedbackSettings();
+    }
+  }
+
   render() {
     const { activity, activityIndex, answers, currentQuestion, currentStudentId, feedbacksNeedingReview,
             isAnonymous, listViewMode, questionFeedbacks, students } = this.props;
@@ -61,6 +71,17 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
         }
       </div>
     );
+  }
+
+  private updateQuestionFeedbackSettings = () => {
+    const questions = this.props.activity.get("questions");
+    questions.forEach((question: any) => {
+      const questionId = question.get("id");
+      if (!this.props.settings.get("questionSettings")?.get(questionId)?.get("feedbackEnabled")) {
+        this.props.updateQuestionFeedbackSettings(questionId, { feedbackEnabled: true });
+      }
+      this.props.updateQuestionFeedbackSettings(questionId, { feedbackEnabled: true });
+    });
   }
 }
 
