@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Map } from "immutable";
 import { ActivityFeedbackTextarea } from "./activity-feedback-textarea";
 import { getFormattedStudentName } from "../../../util/student-utils";
@@ -12,23 +12,11 @@ interface IProps {
   activityIndex: number;
   feedbacks: Map<any, any>;
   isAnonymous: boolean;
-  settings: any;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
-  updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, isAnonymous, settings, updateActivityFeedback,
-          updateActivityFeedbackSettings } = props;
-
-  useEffect(() => {
-    if (activityId) {
-      if (!settings.get("activitySettings")?.get(activityId)?.get("textFeedbackEnabled")) {
-        updateActivityFeedbackSettings(activityId, activityIndex, { textFeedbackEnabled: true });
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activityId, activityIndex]);
+  const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback } = props;
 
   const feedbackRows = feedbacks.map ((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
