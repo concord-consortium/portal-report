@@ -31,6 +31,16 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
     super(props);
   }
 
+  componentDidMount() {
+    this.updateActivityFeedbackSettings();
+  }
+
+  componentDidUpdate(prevProps: IProps) {
+    if (prevProps.activityIndex !== this.props.activityIndex) {
+      this.updateActivityFeedbackSettings();
+    }
+  }
+
   render() {
     const { activity, activityIndex, feedbacks, isAnonymous } = this.props;
     const currentActivityId = activity?.get("id");
@@ -48,6 +58,15 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
     );
   }
 
+  private updateActivityFeedbackSettings = () => {
+    const { activity, activityIndex, settings } = this.props;
+    const activityId = activity.get("id");
+    if (activityId) {
+      if (!settings.get("activitySettings")?.get(activityId)?.get("textFeedbackEnabled")) {
+        this.props.updateActivityFeedbackSettings(activityId, activityIndex, { textFeedbackEnabled: true });
+      }
+    }
+  }
 }
 
 function mapStateToProps() {
