@@ -16,7 +16,7 @@ interface IProps {
 export class ActivityNavigator extends React.PureComponent<IProps> {
   render() {
     const { activities, currentActivity, isSequence } = this.props;
-    const currentActivityId = currentActivity? currentActivity.get("id") : activities.first().get("id");
+    const currentActivityId = currentActivity ? currentActivity.get("id") : activities.first().get("id");
     const currentActivityIndex = activities.toArray().findIndex((a: any) => a.get("id") === currentActivityId);
     const activityTitle = this.setActivityTitle(currentActivityIndex);
 
