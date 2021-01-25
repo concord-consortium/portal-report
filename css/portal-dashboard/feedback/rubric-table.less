@@ -18,9 +18,8 @@
 
     .rubricDescriptionHeader {
       display: flex;
-      flex-direction: row;
       align-items: center;
-      width: 75%;
+      flex: auto;
 
       .scoringGuideArea {
         width: 100px;
@@ -73,6 +72,8 @@
       justify-content: center;
       align-items: center;
       width: 92px;
+      flex-grow: 0;
+      flex-shrink: 0;
       height: 100%;
       border-left: solid 1.5px @cc-charcoal-light2;
     }
@@ -88,9 +89,10 @@
       .rubricDescription {
         padding: 5px 10px;
         font-weight: normal;
-        min-width: 70%;
+        flex: auto;
           li {
-          margin-left: 20px
+          margin-left: 20px;
+          list-style-type: disc;
         }
       }
 
@@ -102,7 +104,9 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 90px;
+          width: 92px;
+          flex-grow: 0;
+          flex-shrink: 0;
           border-left: solid 1.5px @cc-charcoal-light2;
 
           .rubricButton{
@@ -114,6 +118,20 @@
             margin: 5px;
             cursor: pointer;
 
+            &:hover .outerCircle {
+              background-color: white;
+
+              .innerCircle {
+                background-color: @feedback-green-light3B;
+              }
+            }
+            &:active .outerCircle {
+              background-color: white;
+              // color: @feedback-green;
+              .innerCircle {
+                background-color: @feedback-green;
+              }
+            }
             .outerCircle {
               display: flex;
               align-items: center;
@@ -123,6 +141,7 @@
               border-radius: 50%;
               border: solid 1.5px @cc-charcoal-light1;
               background-color: white;
+              cursor: pointer;
 
               .innerCircle {
                 width: 12px;
@@ -132,6 +151,12 @@
 
                 &.selected {
                   background-color: @feedback-green;
+                  &:hover {
+                    background-color: @feedback-green-light3B;
+                  }
+                  &:active {
+                    background-color: white;
+                  }
                 }
               }
             }
