@@ -21,16 +21,6 @@ interface IProps {
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { activityId, activityIndex, feedbacks, isAnonymous, rubric, updateActivityFeedback } = props;
 
-
-  const rubricChange = (rubricFeedback: any, studentId: string) => {
-    changeFeedback({ rubricFeedback }, studentId);
-  };
-
-  const changeFeedback = (newData: any, studentId: string) => {
-    const { activityId, activityIndex, updateActivityFeedback } = props;
-    activityId && updateActivityFeedback(activityId, activityIndex, studentId, newData);
-  };
-
   const feedbackRows = feedbacks.map((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
     const studentId = student.get("id");
@@ -55,13 +45,13 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
         <div className={css.feedback} data-cy="feedback-container">
           {hasRubric &&
             <RubricTableContainer
+              activityId={activityId}
+              activityIndex={activityIndex}
               activityStarted={activityStarted}
               rubric={rubric}
               student={student}
               rubricFeedback={rubricFeedback}
-              activityId={activityId}
-              activityIndex={activityIndex}
-              rubricChange={rubricChange}
+              updateActivityFeedback={updateActivityFeedback}
             />
           }
           <ActivityFeedbackTextarea

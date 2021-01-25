@@ -11,7 +11,7 @@ interface IProps {
   rubricFeedback: any;
   activityId: string;
   activityIndex: number;
-  rubricChange: (feedback: any, studentId: string) => void;
+  updateActivityFeedback?: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
 }
 export class RubricTableContainer extends React.PureComponent<IProps> {
   render() {
@@ -64,7 +64,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   }
 
   private renderRatings = (crit: any) => {
-    const { rubric, student, rubricFeedback } = this.props;
+    const { rubric } = this.props;
     const { ratings } = rubric;
     return (
       <div id={`${crit.id}_ratings`} className={css.ratingsGroup}>
@@ -74,8 +74,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   }
 
   private renderStudentRating = (crit: any, rating: any, buttonIndex: number) => {
-    const { rubric, student, rubricFeedback } = this.props;
-    const learnerId = student.get("id");
+    const { student, rubricFeedback } = this.props;
 
     const critId = crit.id;
     const ratingId = rating.id;
@@ -111,7 +110,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     };
 
     const updateSelection = (critId: any, ratingId: string, deselect: boolean) => {
-      const { rubric, rubricFeedback, student, rubricChange } = this.props;
+      const { rubric, rubricFeedback, student } = this.props;
       const newSelection = {};
       const rating = rubric.ratings.find((r: any) => r.id === ratingId);
       const criteria = rubric.criteria.find((c: any) => c.id === critId);
@@ -133,7 +132,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
                 };
       const newFeedback = Object.assign({}, rubricFeedback, newSelection);
 
-      rubricChange(newFeedback, studentId);
+      this.rubricChange(newFeedback, studentId);
     };
 
     return (
@@ -142,4 +141,10 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
       </button>
     );
   }
+
+  private rubricChange = (rubricFeedback: any, studentId: string) => {
+    const { activityId, activityIndex, updateActivityFeedback } = this.props;
+    activityId && studentId && updateActivityFeedback && updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback } );
+
+  };
 }
