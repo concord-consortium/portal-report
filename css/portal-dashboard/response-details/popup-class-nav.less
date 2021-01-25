@@ -36,18 +36,24 @@
       margin: 0 auto 0;
     }
     .toggle {
-      display: flex;
-      justify-content: center;
       align-items: center;
-      width: 47px;
-      height: 30px;
       background-color: @cc-teal-light5;
-      fill: @cc-teal;
       border: 1.5px solid @cc-charcoal-light1;
       box-sizing: border-box;
       cursor: pointer;
+      display: flex;
+      fill: @cc-teal;
+      height: 30px;
+      justify-content: center;
+      width: 47px;
+
       &:hover {
         background-color: @cc-teal-light3;
+      }
+      &:active {
+        background-color: @cc-teal;
+        border-color: white;
+        fill: white;
       }
     }
     .listByStudents {
@@ -67,9 +73,9 @@
       }
     }
     .selected {
+      background-color: @cc-teal;
       border-color: white;
       fill: white;
-      background-color: @cc-teal;
     }
     // For MVP: disables any action to question toggle button
     .disabled {
