@@ -108,13 +108,15 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             viewMode={viewMode}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
-            { isSequence &&
-              <ActivityNavigator
-                activities={activities}
-                currentActivity={currentActivity}
-                setCurrentActivity={setCurrentActivity}
-                setCurrentQuestion={setCurrentQuestion}
-              />
+            { isSequence || feedbackLevel === "Activity"
+              ? <ActivityNavigator
+                  activities={activities}
+                  currentActivity={currentActivity}
+                  isSequence={isSequence}
+                  setCurrentActivity={setCurrentActivity}
+                  setCurrentQuestion={setCurrentQuestion}
+               />
+              : ""
             }
             <div className={`${css.contentNavigatorArea} ${isSequence ? css.short : ""}`}>
             { listViewMode === "Question"

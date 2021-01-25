@@ -57,14 +57,14 @@ const PrevNextButtons: React.FC<IProps> = (props) => {
 
   return (
     <div className={css.nextStudentButtons}>
-    <div className={`${css.button} ${(studentSelected && currentStudentIndex > 0) ? "" : css.disabled}`}
-      data-cy="previous-student-button" onClick={changeCurrentStudent(currentStudentIndex - 1)}>
-      <ArrowLeftIcon className={css.icon} />
+      <div className={`${css.button} ${(studentSelected && currentStudentIndex > 0) ? "" : css.disabled}`}
+        data-cy="previous-student-button" onClick={changeCurrentStudent(currentStudentIndex - 1)}>
+        <ArrowLeftIcon className={css.icon} />
+      </div>
+      <div className={`${css.button} ${(studentSelected && currentStudentIndex < students.size - 1) ? "" : css.disabled}`}
+        data-cy="next-student-button" onClick={changeCurrentStudent(currentStudentIndex + 1)}>
+        <ArrowLeftIcon className={css.icon} />
+      </div>
     </div>
-    <div className={`${css.button} ${(studentSelected && currentStudentIndex < students.size - 1) ? "" : css.disabled}`}
-      data-cy="next-student-button" onClick={changeCurrentStudent(currentStudentIndex + 1)}>
-      <ArrowLeftIcon className={css.icon} />
-    </div>
-  </div>
   );
 };

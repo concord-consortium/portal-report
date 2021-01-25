@@ -171,4 +171,18 @@ context("Portal Dashboard Feedback Panel", () => {
       });
     });
   });
+  context('Standalone Activity', () => {
+    describe('verify activity navigator section behaves correctly for standalone activities', () => {
+      it('does not exist when viewing question-level feedback', ()=>{
+        cy.visit("/?portal-dashboard&resourceType=activity");
+        cy.get('[data-cy=navigation-select]').click();
+        cy.get('[data-cy="list-item-feedback-report"]').click();
+        cy.get('[data-cy=activity-navigator]').should('not.exist');
+      });
+      it('exists but does not include title when viewing activity-level feedback', ()=>{
+        cy.get('[data-cy=activity-level-feedback-button]').click();
+        cy.get('[data-cy=activity-title]').should('be.empty');
+      });
+    });
+  });
 });
