@@ -120,8 +120,8 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
 
       deselect  ? newSelection[critId] = {
                   id: "",
-                  score,
-                  label,
+                  score: 0,
+                  label: "",
                   description: "",
                 }
                 : newSelection[critId] = {
@@ -131,7 +131,6 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
                   description: criteria.ratingDescriptions[ratingId],
                 };
       const newFeedback = Object.assign({}, rubricFeedback, newSelection);
-
       this.rubricChange(newFeedback, studentId);
     };
 
@@ -143,8 +142,14 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   }
 
   private rubricChange = (rubricFeedback: any, studentId: string) => {
-    const { activityId, activityIndex, updateActivityFeedback } = this.props;
-    activityId && studentId && updateActivityFeedback && updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback } );
+    const { rubric, activityId, activityIndex, updateActivityFeedback } = this.props;
+    let numFeedback = 0;
+    rubric.criteria.map((crit: any)=>{
+      rubricFeedback[crit.id].id !== "" && numFeedback++;
+    });
+
+    const hasBeenReviewed  = numFeedback !== 0 ? true : false;
+    activityId && studentId && updateActivityFeedback && updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback, hasBeenReviewed } );
 
   };
 }
