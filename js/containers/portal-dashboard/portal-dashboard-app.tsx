@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
-import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions } from "../../actions/index";
+import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
          getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges
         } from "../../selectors/dashboard-selectors";
@@ -351,7 +351,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setCurrentQuestion: (questionId: string) => dispatch(setCurrentQuestion(questionId)),
     toggleCurrentActivity: (activityId: string) => dispatch(toggleCurrentActivity(activityId)),
     toggleCurrentQuestion: (questionId: string) => dispatch(toggleCurrentQuestion(questionId)),
-    trackEvent: (category: "Dashboard" | "Report", action: string, options?: TrackEventFunctionOptions) => dispatch(trackEvent(category, action, options)),
+    trackEvent: (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => dispatch(trackEvent(category, action, options)),
   };
 };
 

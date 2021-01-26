@@ -53,7 +53,8 @@ export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
 
 export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean; sendToLogManager?: boolean};
-export type TrackEventFunction = (category: "Dashboard" | "Portal-Dashboard" | "Report", action: string, options?: TrackEventFunctionOptions) => any;
+export type TrackEventCategory = "Dashboard" | "Portal-Dashboard" | "Report";
+export type TrackEventFunction = (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => any;
 
 const logManagerUrl = "//cc-log-manager.herokuapp.com/api/logs";
 
@@ -535,7 +536,7 @@ export function saveRubric(rubricContent: any) {
   };
 }
 
-export function trackEvent(category: "Dashboard" | "Portal-Dashboard" | "Report", action: string, options?: TrackEventFunctionOptions) {
+export function trackEvent(category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) {
   return (dispatch: Dispatch, getState: () => RootState) => {
     const label = options?.label || "";
     dispatch({

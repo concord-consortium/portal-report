@@ -4,6 +4,7 @@ import { ActivityFeedbackTextarea } from "./activity-feedback-textarea";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -13,10 +14,11 @@ interface IProps {
   feedbacks: Map<any, any>;
   isAnonymous: boolean;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback } = props;
+  const { activityId, activityIndex, feedbacks, isAnonymous, updateActivityFeedback, trackEvent } = props;
 
   const feedbackRows = feedbacks.map ((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
@@ -46,6 +48,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             key={activityId + studentId + "-textarea"}
             studentId={studentId}
             updateActivityFeedback={updateActivityFeedback}
+            trackEvent={trackEvent}
           />
         </div>
       </div>

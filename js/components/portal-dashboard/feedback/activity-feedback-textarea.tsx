@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef, useState, useCallback } from "react";
 import { throttle } from "lodash";
+import { TrackEventFunction } from "../../../actions";
 
 interface IProps {
   activityId: string | null;
@@ -8,10 +9,11 @@ interface IProps {
   feedback: any;
   studentId: string;
   updateActivityFeedback?: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, activityStarted, feedback, studentId, updateActivityFeedback } = props;
+  const { activityId, activityIndex, activityStarted, feedback, studentId, updateActivityFeedback, trackEvent } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -25,26 +27,32 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
   const handleActivityFeedbackChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const target = event.currentTarget as HTMLTextAreaElement;
     setHeight(target.scrollHeight);
-    updateFeedbackThrottled();
+    updateFeedbackThrottledAndNotLogged();
   };
 
-  const updateFeedback = () => {
+  const updateFeedback = (logUpdate: boolean) => {
     if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined) {
       const hasBeenReviewed = textareaRef.current.value !== "" ? true : false;
+      if (logUpdate) {
+        trackEvent("Portal-Dashboard", "AddActivityLevelFeedback", { label: feedback, parameters: { activityId, studentId }});
+      }
       updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value,
                                                                     hasBeenReviewed});
     }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateFeedbackThrottled = useCallback(throttle(updateFeedback, 2000), []);
+  const updateFeedbackThrottledAndNotLogged = useCallback(throttle(() => updateFeedback(false), 2000), []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const updateFeedbackLogged = useCallback(() => updateFeedback(true), []);
 
   if (activityStarted) {
     return (
       <textarea
         data-cy="feedback-textarea"
         defaultValue={feedback}
-        onBlur={updateFeedback}
+        onBlur={updateFeedbackLogged}
         onChange={handleActivityFeedbackChange}
         placeholder="Enter feedback"
         ref={textareaRef}
