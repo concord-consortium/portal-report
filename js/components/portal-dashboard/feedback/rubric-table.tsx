@@ -74,7 +74,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   }
 
   private renderStudentRating = (crit: any, rating: any, buttonIndex: number) => {
-    const { student, rubricFeedback } = this.props;
+    const { rubricFeedback } = this.props;
 
     const critId = crit.id;
     const ratingId = rating.id;
@@ -111,7 +111,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
 
     const updateSelection = (critId: any, ratingId: string, deselect: boolean) => {
       const { rubric, rubricFeedback, student } = this.props;
-      const newSelection = {};
+      const newSelection: any = {};
       const rating = rubric.ratings.find((r: any) => r.id === ratingId);
       const criteria = rubric.criteria.find((c: any) => c.id === critId);
       const score = rating.score;
