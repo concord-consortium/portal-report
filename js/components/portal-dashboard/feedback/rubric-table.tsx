@@ -104,7 +104,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   private renderButton = (critId: string, selected: boolean, ratingId: string, buttonIndex: number) => {
     const handleRatingChange = (buttonIndex: number) => () => {
       const { rubric, rubricFeedback } = this.props;
-      const deselect = rubric.ratings.findIndex((r: any) => r.id === (rubricFeedback[critId].id)) === buttonIndex;
+      const deselect = rubric.ratings.findIndex((r: any) => r.id === (rubricFeedback?.[critId].id)) === buttonIndex;
 
       updateSelection(critId, ratingId, deselect);
     };
@@ -145,7 +145,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     const { rubric, activityId, activityIndex, updateActivityFeedback } = this.props;
     let numFeedback = 0;
     rubric.criteria.map((crit: any)=>{
-      rubricFeedback[crit.id].id !== "" && numFeedback++;
+      rubricFeedback[crit.id]?.id !== "" && numFeedback++;
     });
 
     const hasBeenReviewed  = numFeedback !== 0 ? true : false;
