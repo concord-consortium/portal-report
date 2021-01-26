@@ -120,17 +120,18 @@
             &:hover .outerCircle {
               background-color: white;
 
-              .innerCircle {
+              &:hover .innerCircle {
                 background-color: @feedback-green-light3B;
               }
             }
             &:active .outerCircle {
-              background-color: white;
-              // color: @feedback-green;
-              .innerCircle {
-                background-color: @feedback-green;
+              background-color: @feedback-green;
+
+              &:active .innerCircle {
+                background-color: white;
               }
             }
+
             .outerCircle {
               display: flex;
               align-items: center;
@@ -150,12 +151,6 @@
 
                 &.selected {
                   background-color: @feedback-green;
-                  &:hover {
-                    background-color: @feedback-green-light3B;
-                  }
-                  &:active {
-                    background-color: white;
-                  }
                 }
               }
             }

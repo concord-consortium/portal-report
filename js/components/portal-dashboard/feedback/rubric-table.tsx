@@ -1,9 +1,9 @@
 import React from "react";
-// import { Map } from "immutable";
 import Markdown from "markdown-to-jsx";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-table.less";
+
 interface IProps {
   activityStarted: boolean;
   rubric: any;
@@ -45,8 +45,8 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
       <div className={css.columnHeaders}>
         <div className={css.rubricDescriptionHeader}>
           <div className={css.scoringGuideArea}>
-            <a className={css.launchButton}>
-              <LaunchIcon className={css.icon} href={referenceURL} target="_blank" />
+            <a className={css.launchButton} href={referenceURL} target="_blank" data-cy="scoring-guide-launch-icon">
+              <LaunchIcon className={css.icon} />
             </a>
             Scoring Guide
         </div>
@@ -104,7 +104,8 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   private renderButton = (critId: string, selected: boolean, ratingId: string, buttonIndex: number) => {
     const handleRatingChange = (buttonIndex: number) => () => {
       const { rubric, rubricFeedback } = this.props;
-      const deselect = rubric.ratings.findIndex((r: any) => r.id === (rubricFeedback?.[critId].id)) === buttonIndex;
+      const deselect = (rubricFeedback && rubricFeedback[critId])
+                        && (rubric.ratings.findIndex((r: any) => r.id === (rubricFeedback[critId].id)) === buttonIndex);
 
       updateSelection(critId, ratingId, deselect);
     };
@@ -135,7 +136,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     };
 
     return (
-      <button className={css.outerCircle} onClick={handleRatingChange(buttonIndex)}>
+      <button className={css.outerCircle} onClick={handleRatingChange(buttonIndex)} data-cy="rating-radio-button">
         <div className={`${css.innerCircle} ${selected ? css.selected : ""}`}></div>
       </button>
     );
@@ -145,7 +146,8 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     const { rubric, activityId, activityIndex, updateActivityFeedback } = this.props;
     let numFeedback = 0;
     rubric.criteria.map((crit: any)=>{
-      rubricFeedback[crit.id]?.id !== "" && numFeedback++;
+      (rubricFeedback && rubricFeedback[crit.id])
+        && (rubricFeedback[crit.id].id !== "") && numFeedback++;
     });
 
     const hasBeenReviewed  = numFeedback !== 0 ? true : false;
