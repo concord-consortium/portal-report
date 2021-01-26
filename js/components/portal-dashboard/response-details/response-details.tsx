@@ -87,7 +87,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       }
     });
     return (
-      <>
+      <div className={css.responseDetailsContainer}>
         <div className={css.tableHeader}>
           <PopupClassNav
             activity={currentActivityWithQuestions}
@@ -213,7 +213,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             onCloseDialog={this.setShowSpotlightDialog}
           />
         }
-      </>
+      </div>
     );
   }
 

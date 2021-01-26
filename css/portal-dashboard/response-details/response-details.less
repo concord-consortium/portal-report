@@ -1,36 +1,39 @@
 @import "../variables";
 
-.tableHeader {
-  display: flex;
+.responseDetailsContainer {
+  overflow: auto;
 
-  .responsePanel {
-    flex: 1;
-    margin-right: 3px;
-    min-width: 389px;
-    width: 100%;
-    background-color: @cc-orange-light6;
+  .tableHeader {
+    display: flex;
 
-    .contentNavigatorArea {
-      background: @cc-teal-light6;
-      min-height: 250px;
+    .responsePanel {
+      flex: 1;
+      margin-right: 3px;
+      min-width: 389px;
+      width: 100%;
+      background-color: @cc-orange-light6;
 
-      &.short {
-        min-height: 200px;
+      .contentNavigatorArea {
+        background: @cc-teal-light6;
+        min-height: 250px;
+
+        &.short {
+          min-height: 200px;
+        }
       }
     }
+    .questionArea {
+      background-color: @cc-teal-light6;
+      flex: 1;
+      margin-right: 3px;
+    }
+    .feedbackInfo {
+      background-color: @feedback-green-light5;
+      flex: 1;
+    }
   }
-  .questionArea {
-    background-color: @cc-teal-light6;
-    flex: 1;
-    margin-right: 3px;
-  }
-  .feedbackInfo {
-    background-color: @feedback-green-light5;
-    flex: 1;
-  }
-}
 
-.feedbackRowsContainer {
-  flex: 1;
-  overflow: auto;
+  .feedbackRowsContainer {
+    flex-grow: auto;
+  }
 }
