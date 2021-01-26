@@ -43,11 +43,10 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
           </div>
         </div>
         <div className={css.feedback} data-cy="feedback-container">
-          {hasRubric &&
+          {activityStarted && hasRubric &&
             <RubricTableContainer
               activityId={activityId}
               activityIndex={activityIndex}
-              activityStarted={activityStarted}
               rubric={rubric}
               student={student}
               rubricFeedback={rubricFeedback}
