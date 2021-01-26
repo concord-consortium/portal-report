@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import Markdown from "markdown-to-jsx";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
 
@@ -6,7 +7,7 @@ import css from "../../../../css/portal-dashboard/feedback/rubric-table.less";
 
 interface IProps {
   rubric: any;
-  student: any;
+  student: Map<any,any>;
   rubricFeedback: any;
   activityId: string;
   activityIndex: number;
@@ -148,7 +149,6 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
 
     const hasBeenReviewed  = numFeedback !== 0 ? true : false;
     activityId && studentId
-      && updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback, hasBeenReviewed } );
-
+      && updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback, hasBeenReviewed });
   };
 }
