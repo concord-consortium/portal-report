@@ -29,6 +29,7 @@ interface IProps {
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   currentStudentId: string | null;
+  feedbackSortByMethod: string;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
   listViewMode: ListViewMode;
@@ -38,6 +39,7 @@ interface IProps {
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
   setListViewMode: (mode: ListViewMode) => void;
+  setStudentFeebackFilter: (value: string) => void;
   setStudentFilter: (value: string) => void;
   sortByMethod: string;
   sortedQuestionIds?: string[];
@@ -66,9 +68,10 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous, listViewMode, questions,
-      setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setListViewMode, setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students,
-      trackEvent, viewMode } = this.props;
+    const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
+      listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setListViewMode,
+      setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
+      feedbackSortByMethod, setStudentFeebackFilter } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, feedbackLevel } = this.state;
 
@@ -96,12 +99,14 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             answers={answers}
             currentQuestion={currentQuestion || firstQuestion}
             feedbackLevel={feedbackLevel}
+            feedbackSortByMethod={feedbackSortByMethod}
             isSpotlightOn={selectedStudents.length > 0}
             listViewMode={listViewMode}
             onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
             questionCount={qCount}
             setAnonymous={setAnonymous}
             setListViewMode={setListViewMode}
+            setStudentFeedbackSort={setStudentFeebackFilter}
             setStudentSort={setStudentFilter}
             sortByMethod={sortByMethod}
             studentCount={studentCount}

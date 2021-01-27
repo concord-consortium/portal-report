@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import { getActivityTrees, getQuestionTrees, getAnswersByQuestion } from "./report-tree";
-import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK } from "../actions/dashboard";
+import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS,
+         SORT_BY_FEEDBACK_NAME, SORT_BY_FEEDBACK_PROGRESS } from "../actions/dashboard";
 import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
 
@@ -14,6 +15,7 @@ export const getCurrentStudentId = state => state.getIn(["dashboard", "currentSt
 const getStudents = state => state.getIn(["report", "students"]);
 const getFeedback = state => state.getIn(["feedback"]);
 export const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
+export const getDashboardFeedbackSortBy = state => state.getIn(["dashboard", "feedbackSortBy"]);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
 export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
 export const getHideFeedbackBadges = state => state.getIn(["dashboard", "hideFeedbackBadges"]);
@@ -89,8 +91,8 @@ export const getStudentAverageProgress = createSelector(
 
 // Returns sorted students
 export const getSortedStudents = createSelector(
-  [ getStudents, getDashboardSortBy, getStudentAverageProgress, getFeedback ],
-  (students, sortBy, studentProgress, feedback) => {
+  [ getStudents, getDashboardSortBy, getStudentAverageProgress ],
+  (students, sortBy, studentProgress) => {
     switch (sortBy) {
       case SORT_BY_NAME:
         return students.toList().sort((student1, student2) =>
@@ -110,7 +112,23 @@ export const getSortedStudents = createSelector(
             return compareStudentsByName(student1, student2);
           }
         });
-      case SORT_BY_FEEDBACK:
+      default:
+        return students.toList();
+    }
+  },
+);
+
+
+// Returns sorted students in feedback view
+export const getFeedbackSortedStudents = createSelector(
+  [ getStudents, getDashboardFeedbackSortBy, getFeedback ],
+  (students, feedbackSortBy, feedback) => {
+    switch (feedbackSortBy) {
+      case SORT_BY_FEEDBACK_NAME:
+        return students.toList().sort((student1, student2) =>
+          compareStudentsByName(student1, student2),
+        );
+      case SORT_BY_FEEDBACK_PROGRESS:
         return students.toList().sort((student1, student2) => {
           // TODO: add support for question feedback, also determine if student has started activity or answered question
           const activityFeedbacks = feedback.get("activityFeedbacks");
