@@ -127,7 +127,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     response: rawPortalData
   });
   const resourceUrl = _getResourceUrl(rawPortalData.offering.activity_url);
-  _setLoggingActivityName(resourceUrl);
+  _setLoggingParameters(resourceUrl, rawPortalData);
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data. Default shows sequence fake resource and answer
@@ -538,16 +538,18 @@ export function saveRubric(rubricContent: any) {
 }
 
 let loggingActivityName = "n/a";
+let loggingContextId = "n/a";
 const loggingSession = uuid();
 const parsedQuery = queryString.parseUrl(window.location.toString()).query;
 let loggingEnabled = parsedQuery.logging === "true";
 const debugLogging = parsedQuery.debugLogging === "true";
 
-function _setLoggingActivityName(resourceUrl: string) {
+function _setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawData) {
   const match = resourceUrl.match(/\/(activities|sequences)\/(\d)+/);
   if (match) {
     const type = match[1] === "activities" ? "activity" : "sequence";
     loggingActivityName = `${type}: ${match[2]}`;
+    loggingContextId = rawPortalData.contextId;
   }
 }
 
@@ -574,6 +576,9 @@ export function trackEvent(category: TrackEventCategory, action: string, options
     }
 
     if (loggingEnabled) {
+      const parameters = options?.parameters || {};
+      parameters.contextId = loggingContextId;
+
       const logMessage: LogMessage = {
         session: loggingSession,
         username: getState().getIn(["report", "userId"]),
@@ -581,7 +586,7 @@ export function trackEvent(category: TrackEventCategory, action: string, options
         activity: loggingActivityName,
         event: action,
         time: Date.now(),
-        parameters: options?.parameters || {},
+        parameters,
         event_value: options?.label,
       };
 
