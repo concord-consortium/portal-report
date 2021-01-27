@@ -52,7 +52,7 @@ export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
 
-export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean; sendToLogManager?: boolean};
+export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean};
 export type TrackEventCategory = "Dashboard" | "Portal-Dashboard" | "Report";
 export type TrackEventFunction = (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => any;
 
@@ -127,6 +127,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     response: rawPortalData
   });
   const resourceUrl = _getResourceUrl(rawPortalData.offering.activity_url);
+  _setLoggingActivityName(resourceUrl);
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data. Default shows sequence fake resource and answer
@@ -536,6 +537,25 @@ export function saveRubric(rubricContent: any) {
   };
 }
 
+let loggingActivityName = "n/a";
+const loggingSession = uuid();
+const parsedQuery = queryString.parseUrl(window.location.toString()).query;
+let loggingEnabled = parsedQuery.logging === "true";
+const debugLogging = parsedQuery.debugLogging === "true";
+
+function _setLoggingActivityName(resourceUrl: string) {
+  const match = resourceUrl.match(/\/(activities|sequences)\/(\d)+/);
+  if (match) {
+    const type = match[1] === "activities" ? "activity" : "sequence";
+    loggingActivityName = `${type}: ${match[2]}`;
+  }
+}
+
+// used by tests to enable/disable logging
+export function enableLogging(enable: boolean) {
+  loggingEnabled = enable;
+}
+
 export function trackEvent(category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) {
   return (dispatch: Dispatch, getState: () => RootState) => {
     const label = options?.label || "";
@@ -545,6 +565,7 @@ export function trackEvent(category: TrackEventCategory, action: string, options
       action,
       label,
     });
+
     if (!options?.skipGTag) {
       const clazzId = getState().getIn(["report", "clazzId"]);
       let labelText = "Class ID: " + clazzId + " - " + label;
@@ -552,39 +573,34 @@ export function trackEvent(category: TrackEventCategory, action: string, options
       (window as any).gtag("event", action, { event_category: category, event_label: labelText });
     }
 
-    if ((category === "Portal-Dashboard") || options?.sendToLogManager) {
-      const userId = getState().getIn(["report", "userId"]);
-      sendToLogManager(userId, category, action, options);
+    if (loggingEnabled) {
+      const logMessage: LogMessage = {
+        session: loggingSession,
+        username: getState().getIn(["report", "userId"]),
+        application: "portal-report",
+        activity: loggingActivityName,
+        event: action,
+        time: Date.now(),
+        parameters: options?.parameters || {},
+        event_value: options?.label,
+      };
+
+      // log nothing for empty event labels
+      if (logMessage.event_value === "") {
+        logMessage.event_value = undefined;
+      }
+
+      // NOTE: run_remote_endpoint is not logged as currently we are only logging teacher dashboard events which
+      // do not have a run_remote_endpoint to log.
+
+      if (debugLogging) {
+        console.log("Logging [DEBUG]: sent", JSON.stringify(logMessage), "to", logManagerUrl);  // eslint-disable-line
+      }
+
+      const request = new XMLHttpRequest();
+      request.open("POST", logManagerUrl, true);
+      request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+      request.send(JSON.stringify(logMessage));
     }
   };
-}
-
-const logSession = uuid();
-
-function sendToLogManager(userId: string, category: string, action: string, options?: TrackEventFunctionOptions) {
-  const logMessage: LogMessage = {
-    session: logSession,
-    username:  userId,
-    application: "portal-report",
-    activity: category,
-    event: action,
-    time: Date.now(),
-    parameters: options?.parameters || {},
-    event_value: options?.label,
-  };
-
-  // log nothing for empty event labels
-  if (logMessage.event_value === "") {
-    logMessage.event_value = undefined;
-  }
-
-  // NOTE: run_remote_endpoint is not logged as currently we are only logging teacher dashboard events which
-  // do not have a run_remote_endpoint to log.
-
-  console.log("LogEvent:", JSON.stringify(logMessage));  // eslint-disable-line
-
-  const request = new XMLHttpRequest();
-  request.open("POST", logManagerUrl, true);
-  request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-  request.send(JSON.stringify(logMessage));
 }

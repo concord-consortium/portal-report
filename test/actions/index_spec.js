@@ -2,7 +2,8 @@ import {
   RECEIVE_ANSWERS,
   RECEIVE_QUESTION_FEEDBACKS,
   correctKey,
-  trackEvent } from "../../js/actions/index";
+  trackEvent,
+  enableLogging } from "../../js/actions/index";
 
 describe("actions/index", () => {
   describe("correctKey", () => {
@@ -43,11 +44,12 @@ describe("actions/index", () => {
       }));
     })
 
-    describe("for Report events", () => {
-      it("calls gtag", () => {
-        trackEvent("Report", "action 1")(dispatch, getState);
-        expect(gtag).toHaveBeenCalledWith("event", "action 1", {"event_category": "Report", "event_label": "Class ID: test"});
-      });
+    it("calls gtag", () => {
+      trackEvent("Report", "action 1")(dispatch, getState);
+      expect(gtag).toHaveBeenCalledWith("event", "action 1", {"event_category": "Report", "event_label": "Class ID: test"});
+    });
+
+    describe("when logging is disabled", () => {
 
       it("does not log events", () => {
         trackEvent("Report", "action 1")(dispatch, getState);
@@ -55,14 +57,16 @@ describe("actions/index", () => {
       });
     });
 
-    describe("for Dashboard events", () => {
-      it("calls gtag", () => {
-        trackEvent("Dashboard", "action 1")(dispatch, getState);
-        expect(gtag).toHaveBeenCalledWith("event", "action 1", {"event_category": "Dashboard", "event_label": "Class ID: test"});
+    describe("when logging is enabled", () => {
+      beforeAll(() => {
+        enableLogging(true);
+      });
+      afterAll(() => {
+        enableLogging(false);
       });
 
       it("logs events", () => {
-        trackEvent("Portal-Dashboard", "action 1")(dispatch, getState);
+        trackEvent("Report", "action 1")(dispatch, getState);
         expect(xmlHTTPSend).toHaveBeenCalled();
       });
     });

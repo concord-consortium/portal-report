@@ -141,7 +141,7 @@ export default class Report extends PureComponent {
   onShowHideNamesClick = (isAnonymous) => {
     const { setAnonymous, trackEvent } = this.props;
     const trackAction = isAnonymous ? "Show Student Names" : "Hide Student Names";
-    trackEvent("Report", trackAction, {sendToLogManager: true});
+    trackEvent("Report", trackAction);
     return setAnonymous(!isAnonymous);
   }
 
