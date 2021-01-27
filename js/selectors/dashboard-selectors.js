@@ -118,7 +118,6 @@ export const getSortedStudents = createSelector(
   },
 );
 
-
 // Returns sorted students in feedback view
 export const getFeedbackSortedStudents = createSelector(
   [ getStudents, getDashboardFeedbackSortBy, getFeedback ],
