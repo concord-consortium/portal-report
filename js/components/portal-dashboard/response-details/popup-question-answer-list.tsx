@@ -3,6 +3,7 @@ import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import striptags from "striptags";
 import { renderHTML } from "../../../util/render-html";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
 
@@ -11,11 +12,12 @@ interface IProps {
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
   students: Map<any, any>;
+  trackEvent: TrackEventFunction;
 }
 
 export class PopupQuestionAnswerList extends React.PureComponent<IProps> {
   render() {
-    const { activities, currentStudentId, students, currentActivity } = this.props;
+    const { activities, currentStudentId, students, currentActivity, trackEvent } = this.props;
     const currentActivityId = currentActivity?.get("id");
     const student = currentStudentId
                     ? students.toArray().find((s: any) => s.get("id") === currentStudentId)
@@ -35,7 +37,7 @@ export class PopupQuestionAnswerList extends React.PureComponent<IProps> {
                 <span>Q{question.get("questionNumber")}: {renderHTML(striptags(promptText))}</span>
               </div>
               <div className={css.studentResponse} data-cy="student-response">
-                <Answer question={question} student={student} responsive={false} />
+                <Answer question={question} student={student} responsive={false} trackEvent={trackEvent} />
               </div>
             </div>
           );

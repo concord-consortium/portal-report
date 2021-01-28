@@ -9,6 +9,7 @@ import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
 import { SelectedStudent } from "./response-details";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/response-details/spotlight-student-list-dialog.less";
 
@@ -33,6 +34,7 @@ interface IProps {
   selectedStudents: SelectedStudent[];
   setAnonymous: (value: boolean) => void;
   students: Map<any, any>;
+  trackEvent: TrackEventFunction;
 }
 export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   render() {
@@ -94,7 +96,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   }
 
   private renderStudentAnswers = () => {
-    const { currentQuestion, isAnonymous, selectedStudents, students } = this.props;
+    const { currentQuestion, isAnonymous, selectedStudents, students, trackEvent } = this.props;
     return (
       <div className={css.selectedStudentResponseTable} data-cy="selected-students-response-table">
         { students?.filter((student: Map<any, any>) => selectedStudents.findIndex((s: SelectedStudent) => s.id === student.get("id")) >= 0)
@@ -107,7 +109,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
               <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
                 {this.renderStudentNameWrapper(student.get("id"), formattedName, backgroundColorClass, fillColorClass)}
                 <div className={`${css.studentResponse} ${backgroundColorClass}`} data-cy="student-response">
-                  <Answer question={currentQuestion} student={student} responsive={false} />
+                  <Answer question={currentQuestion} student={student} responsive={false} trackEvent={trackEvent} />
                 </div>
               </div>
             );

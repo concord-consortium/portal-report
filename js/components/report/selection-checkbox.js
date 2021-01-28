@@ -5,7 +5,7 @@ export default class SelectionCheckbox extends PureComponent {
     const {questionKey, setQuestionSelected, trackEvent} = this.props;
     setQuestionSelected(questionKey, evt.target.checked);
     const trackAction = evt.target.checked ? "Select question" : "Unselect question";
-    trackEvent("Report", trackAction, "");
+    trackEvent("Report", trackAction);
   }
 
   render() {

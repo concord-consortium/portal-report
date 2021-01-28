@@ -12,6 +12,7 @@ import QuestionFeedbackPanel from "../../../containers/portal-dashboard/feedback
 import { StudentNavigator } from "../student-navigator";
 import { ActivityNavigator } from "../activity-navigator";
 import { DashboardViewMode, ListViewMode, FeedbackLevel } from "../../../util/misc";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
@@ -43,8 +44,8 @@ interface IProps {
   studentCount: number;
   students: any;
   toggleCurrentQuestion: (questionId: string) => void;
-  trackEvent: (category: string, action: string, label: string) => void;
   viewMode: DashboardViewMode;
+  trackEvent: TrackEventFunction;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -136,6 +137,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   toggleCurrentQuestion={this.handleChangeQuestion}
                   setCurrentActivity={setCurrentActivity}
                   hasTeacherEdition={hasTeacherEdition}
+                  trackEvent={trackEvent}
                 />
             }
             </div>
@@ -157,6 +159,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 currentActivity={currentActivityWithQuestions}
                 currentStudentId={currentStudentId}
                 students={students}
+                trackEvent={trackEvent}
               />
             : <PopupStudentResponseList
                 answers={answers}
@@ -165,6 +168,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 onStudentSelect={this.toggleSelectedStudent}
                 selectedStudents={selectedStudents}
                 students={students}
+                trackEvent={trackEvent}
               />
           : feedbackLevel === "Question"
             ? <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
@@ -204,6 +208,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 selectedStudents={selectedStudents}
                 setAnonymous={setAnonymous}
                 students={students}
+                trackEvent={trackEvent}
               />
             </CSSTransition>
           }
@@ -253,6 +258,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       updatedSelectedStudents.push(newStudent);
     }
     this.setState({ selectedStudents: updatedSelectedStudents });
+    this.props.trackEvent("Portal-Dashboard", "SelectStudentResponse", {parameters: {selectedStudents: updatedSelectedStudents.map(s => s.id)}});
   }
 
   private setFeedbackLevel = (feedbackLevel: FeedbackLevel) => {

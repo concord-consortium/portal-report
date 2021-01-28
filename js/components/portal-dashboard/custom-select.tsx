@@ -3,6 +3,7 @@ import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
 import CheckIcon from "../../../img/svg-icons/check-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
 import { ColorTheme } from "../../util/misc";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/custom-select.less";
 
@@ -12,7 +13,7 @@ interface IProps {
   HeaderIcon?: SvgIcon;
   items: SelectItem[];
   value?: string;
-  trackEvent: (category: string, action: string, label: string) => void;
+  trackEvent: TrackEventFunction;
   width?: number;
   colorTheme?: ColorTheme;
 }
@@ -118,7 +119,7 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   private handleChange = (value: string) => () => {
     const item = this.props.items.find((si: SelectItem) => si.value === value);
     item?.onSelect?.();
-    this.props.trackEvent("Portal-Dashboard", "Dropdown", value);
+    this.props.trackEvent("Portal-Dashboard", "Dropdown", {label: value});
     this.setState({
       value,
       showList: false

@@ -7,6 +7,7 @@ import { getFormattedStudentName } from "../../../util/student-utils";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -20,10 +21,11 @@ interface IProps {
   isAnonymous: boolean;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, students, updateQuestionFeedback } = props;
+  const { answers, currentQuestion, feedbacks, isAnonymous, students, activityId, updateQuestionFeedback, trackEvent } = props;
 
   const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer: Map<string, any>) => {
     let feedbackBadge = <AwaitingFeedbackQuestionBadgeIcon />;
@@ -65,8 +67,12 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               answer={answer}
               answerId={answerId}
               feedback={feedback}
+              studentId={studentId}
+              questionId={currentQuestionId}
+              activityId={activityId}
               key={currentQuestionId + studentId + "-textarea"}
               updateQuestionFeedback={updateQuestionFeedback}
+              trackEvent={trackEvent}
             />
           }
         </div>
