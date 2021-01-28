@@ -562,7 +562,7 @@ export function setLoggingParameters(resourceUrl: string, rawPortalData: IPortal
     loggingActivityName,
     loggingContextId,
     logManagerUrl
-  }
+  };
 }
 
 // used by tests to enable/disable logging
