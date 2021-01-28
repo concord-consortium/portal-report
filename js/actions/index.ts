@@ -552,7 +552,7 @@ function _setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawDat
     loggingContextId = rawPortalData.contextId;
 
     // use production log manager on production portals
-    logManagerUrl = /(learn|portal)\.concord.org/.test(rawPortalData.platformId)
+    logManagerUrl = /(learn|portal)\.concord\.org/.test(rawPortalData.platformId)
       ? "//cc-log-manager.herokuapp.com/api/logs"
       : "//cc-log-manager-dev.herokuapp.com/api/logs";
   }
