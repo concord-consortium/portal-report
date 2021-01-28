@@ -4,7 +4,6 @@
   height: 100%;
   color: @cc-charcoal;
   font-family: lato, arial, helvetica, sans-serif;
-  overflow: hidden;
 
   .navigation {
     display: flex;
@@ -16,7 +15,7 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    height: calc(100vh - @top-nav-height - @header-height - @top-margin);
+    height: calc(100vh - @top-nav-height - @header-height - @top-margin - 14px);
     width: 100%;
     overflow-x: auto;
     overflow-y: auto;
@@ -25,6 +24,7 @@
 
 
   .responseDetails {
+    overflow-x: auto;
     position: fixed;
     bottom: 0;
     padding: 0;
