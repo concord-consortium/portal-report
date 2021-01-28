@@ -125,7 +125,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     response: rawPortalData
   });
   const resourceUrl = _getResourceUrl(rawPortalData.offering.activity_url);
-  setLoggingParameters(resourceUrl, rawPortalData);
+  setLoggingVars(resourceUrl, rawPortalData);
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data. Default shows sequence fake resource and answer
@@ -537,19 +537,21 @@ export function saveRubric(rubricContent: any) {
 
 // default logging to staging, this is updated after receiving the portal info
 let logManagerUrl = "//cc-log-manager-dev.herokuapp.com/api/logs";
-let loggingActivityName = "n/a";
+let loggingActivity = "n/a";
 let loggingContextId = "n/a";
+let loggingIsSequence = false;
 const loggingSession = uuid();
 const parsedQuery = queryString.parseUrl(window.location.toString()).query;
 let loggingEnabled = parsedQuery.logging === "true";
 const debugLogging = parsedQuery.debugLogging === "true";
 
-export function setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawData) {
+export function setLoggingVars(resourceUrl: string, rawPortalData: IPortalRawData) {
   const match = resourceUrl.match(/\/(activities|sequences)\/(\d)+/);
   if (match) {
     const type = match[1] === "activities" ? "activity" : "sequence";
-    loggingActivityName = `${type}: ${match[2]}`;
+    loggingActivity = `${type}: ${match[2]}`;
     loggingContextId = rawPortalData.contextId;
+    loggingIsSequence = match[1] === "sequences";
 
     // use production log manager on production portals
     logManagerUrl = /(learn|portal)\.concord\.org/.test(rawPortalData.platformId)
@@ -559,10 +561,19 @@ export function setLoggingParameters(resourceUrl: string, rawPortalData: IPortal
 
   // return these values for tests
   return {
-    loggingActivityName,
+    loggingActivity,
     loggingContextId,
     logManagerUrl
   };
+}
+
+let loggingClassName: string | null = null;
+let loggingSequenceName: string | null = null;
+let loggingCurrentActivityName: string | null = null;
+export function setExtraEventLoggingParameters(options: {className: string; sequenceName: string | null; currentActivityName: string | null}) {
+  loggingClassName = options.className;
+  loggingSequenceName = options.sequenceName;
+  loggingCurrentActivityName = options.currentActivityName;
 }
 
 // used by tests to enable/disable logging
@@ -590,12 +601,22 @@ export function trackEvent(category: TrackEventCategory, action: string, options
     if (loggingEnabled) {
       const parameters = options?.parameters || {};
       parameters.contextId = loggingContextId;
+      if (loggingClassName !== null) {
+        parameters.className = loggingClassName;
+      }
+      if (loggingIsSequence && (loggingSequenceName !== null)) {
+        parameters.sequenceName = loggingSequenceName;
+      }
+      if (loggingCurrentActivityName !== null) {
+        // events can override the activity name
+        parameters.activityName = parameters.activityName || loggingCurrentActivityName;
+      }
 
       const logMessage: LogMessage = {
         session: loggingSession,
         username: getState().getIn(["report", "userId"]),
         application: "portal-report",
-        activity: loggingActivityName,
+        activity: loggingActivity,
         event: action,
         time: Date.now(),
         parameters,
