@@ -141,13 +141,13 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     let numFeedback = 0;
     rubric.criteria.forEach((crit: any) => {
       if (rubricFeedback && rubricFeedback[crit.id]) {
-        if  (rubricFeedback[crit.id].id !== "") {
+        if (rubricFeedback[crit.id].id !== "") {
           numFeedback++;
         }
       }
     });
 
-    const hasBeenReviewed  = numFeedback !== 0 ? true : false;
+    const hasBeenReviewed  = numFeedback !== 0;
     activityId && studentId
       && updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback, hasBeenReviewed });
   };
