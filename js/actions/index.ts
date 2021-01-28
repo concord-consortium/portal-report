@@ -125,7 +125,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     response: rawPortalData
   });
   const resourceUrl = _getResourceUrl(rawPortalData.offering.activity_url);
-  _setLoggingParameters(resourceUrl, rawPortalData);
+  setLoggingParameters(resourceUrl, rawPortalData);
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data. Default shows sequence fake resource and answer
@@ -544,7 +544,7 @@ const parsedQuery = queryString.parseUrl(window.location.toString()).query;
 let loggingEnabled = parsedQuery.logging === "true";
 const debugLogging = parsedQuery.debugLogging === "true";
 
-function _setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawData) {
+export function setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawData) {
   const match = resourceUrl.match(/\/(activities|sequences)\/(\d)+/);
   if (match) {
     const type = match[1] === "activities" ? "activity" : "sequence";
@@ -555,6 +555,13 @@ function _setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawDat
     logManagerUrl = /(learn|portal)\.concord\.org/.test(rawPortalData.platformId)
       ? "//cc-log-manager.herokuapp.com/api/logs"
       : "//cc-log-manager-dev.herokuapp.com/api/logs";
+  }
+
+  // return these values for tests
+  return {
+    loggingActivityName,
+    loggingContextId,
+    logManagerUrl
   }
 }
 
@@ -580,7 +587,7 @@ export function trackEvent(category: TrackEventCategory, action: string, options
       (window as any).gtag("event", action, { event_category: category, event_label: labelText });
     }
 
-    if (loggingEnabled && logManagerUrl) {
+    if (loggingEnabled) {
       const parameters = options?.parameters || {};
       parameters.contextId = loggingContextId;
 

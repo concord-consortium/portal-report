@@ -3,7 +3,8 @@ import {
   RECEIVE_QUESTION_FEEDBACKS,
   correctKey,
   trackEvent,
-  enableLogging } from "../../js/actions/index";
+  enableLogging,
+  setLoggingParameters } from "../../js/actions/index";
 
 describe("actions/index", () => {
   describe("correctKey", () => {
@@ -14,6 +15,34 @@ describe("actions/index", () => {
       expect(correctKey("platform_user_id", RECEIVE_QUESTION_FEEDBACKS)).toBe("platformStudentId");
     });
   });
+
+  describe("setLoggingParameters", () => {
+
+    it("handles activities", () => {
+      expect(setLoggingParameters("http://example.com/activities/1", {}).loggingActivityName).toBe("activity: 1");
+    });
+
+    it("handles sequences", () => {
+      expect(setLoggingParameters("http://example.com/sequences/2", {}).loggingActivityName).toBe("sequence: 2");
+    });
+
+    it("handles contextId", () => {
+      expect(setLoggingParameters("http://example.com/activities/1", {contextId: "12345"}).loggingContextId).toBe("12345");
+    });
+
+    it("handles production portal logging", () => {
+      const prodLogManagerUrl = "//cc-log-manager.herokuapp.com/api/logs"
+      expect(setLoggingParameters("http://example.com/activities/1", {platformId: "https://learn.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
+      expect(setLoggingParameters("http://example.com/activities/1", {platformId: "https://itsi.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
+      expect(setLoggingParameters("http://example.com/activities/1", {platformId: "https://ngsa.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
+    });
+
+    it("handles staging/development portal logging", () => {
+      const stagingLogManagerUrl = "//cc-log-manager-dev.herokuapp.com/api/logs"
+      expect(setLoggingParameters("http://example.com/activities/1", {platformId: "https://learn.staging.concord.org"}).logManagerUrl).toBe(stagingLogManagerUrl);
+      expect(setLoggingParameters("http://example.com/activities/1", {platformId: "https://app.rigse.docker"}).logManagerUrl).toBe(stagingLogManagerUrl);
+    });
+  })
 
   describe("trackEvent", () => {
     let gtag;
