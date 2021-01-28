@@ -2,16 +2,18 @@ import { RecordFactory } from "../util/record-factory";
 import { Map } from "immutable";
 import {
   SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, SET_CURRENT_QUESTION, SET_CURRENT_STUDENT,
-  TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION,
+  TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION, SET_STUDENT_FEEDBACK_SORT,
   SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT, SET_COMPACT_REPORT, SET_HIDE_FEEDBACK_BADGES,
   SORT_BY_NAME, SET_QUESTION_EXPANDED,
   SELECT_QUESTION,
   SORT_BY_MOST_PROGRESS,
   SORT_BY_LEAST_PROGRESS,
-  SORT_BY_FEEDBACK,
+  SORT_BY_FEEDBACK_NAME,
+  SORT_BY_FEEDBACK_PROGRESS,
 } from "../actions/dashboard";
 
-type SortType = typeof SORT_BY_NAME | typeof SORT_BY_MOST_PROGRESS | typeof SORT_BY_LEAST_PROGRESS | typeof SORT_BY_FEEDBACK;
+type SortType = typeof SORT_BY_NAME | typeof SORT_BY_MOST_PROGRESS | typeof SORT_BY_LEAST_PROGRESS;
+type FeedbackSortType = typeof SORT_BY_FEEDBACK_NAME | typeof SORT_BY_FEEDBACK_PROGRESS;
 
 export interface IDashboardState {
   // Old dashboard props
@@ -26,6 +28,7 @@ export interface IDashboardState {
   currentStudentId: string | null;
   compactReport: boolean;
   hideFeedbackBadges: boolean;
+  feedbackSortBy: FeedbackSortType;
 }
 
 const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
@@ -39,6 +42,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   currentStudentId: null,
   compactReport: false,
   hideFeedbackBadges: false,
+  feedbackSortBy: SORT_BY_FEEDBACK_NAME,
 });
 
 export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboardState {
@@ -55,6 +59,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   currentStudentId: string | null;
   compactReport: boolean;
   hideFeedbackBadges: boolean;
+  feedbackSortBy: FeedbackSortType;
 }
 
 export default function dashboard(state = new DashboardState({}), action: any) {
@@ -72,6 +77,8 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       return state;
     case SET_STUDENT_SORT:
       return state.set("sortBy", action.value);
+    case SET_STUDENT_FEEDBACK_SORT:
+      return state.set("feedbackSortBy", action.value);
     case SELECT_QUESTION:
       return state.set("selectedQuestion", action.value);
     case SET_CURRENT_ACTIVITY:

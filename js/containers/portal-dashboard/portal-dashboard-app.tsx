@@ -2,9 +2,9 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId,
-         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges
-        } from "../../selectors/dashboard-selectors";
+import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getDashboardFeedbackSortBy,
+         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getFeedbackSortedStudents
+       } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -14,7 +14,7 @@ import LoadingIcon from "../../components/report/loading-icon";
 import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree, getAnswersByQuestion } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
-import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent,
+import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setStudentFeedbackSort,
          toggleCurrentActivity, toggleCurrentQuestion, setCompactReport, setHideFeedbackBadges } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
@@ -34,6 +34,7 @@ interface IProps {
   currentStudentId: string | null;
   error: IResponse;
   expandedActivities: Map<any, any>;
+  feedbackStudents: any;
   hasTeacherEdition: boolean;
   isFetching: boolean;
   questions?: Map<string, any>;
@@ -42,6 +43,7 @@ interface IProps {
   sequenceTree: Map<any, any>;
   hideFeedbackBadges: boolean;
   sortByMethod: string;
+  feedbackSortByMethod: string;
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
@@ -52,6 +54,7 @@ interface IProps {
   setCompactReport: (value: boolean) => void;
   setHideFeedbackBadges: (value: boolean) => void;
   setStudentSort: (value: string) => void;
+  setStudentFeedbackSort: (value: string) => void;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string) => void;
@@ -98,7 +101,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
       setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
-      trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges } = this.props;
+      trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod, setStudentFeedbackSort,
+      feedbackStudents } = this.props;
     const { initialLoading, viewMode, listViewMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -239,6 +243,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   currentActivity={currentActivity}
                   currentQuestion={currentQuestion}
                   currentStudentId={currentStudentId}
+                  feedbackSortByMethod={feedbackSortByMethod}
                   hasTeacherEdition={hasTeacherEdition}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
@@ -248,11 +253,12 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   setCurrentQuestion={trackSetCurrentQuestion}
                   setCurrentStudent={trackSetCurrentStudent}
                   setListViewMode={this.setListViewMode}
+                  setStudentFeebackFilter={setStudentFeedbackSort}
                   setStudentFilter={setStudentSort}
                   sortByMethod={sortByMethod}
                   sortedQuestionIds={sortedQuestionIds}
                   studentCount={students.size}
-                  students={students}
+                  students={viewMode === "ResponseDetails" ? students : feedbackStudents}
                   toggleCurrentQuestion={trackToggleCurrentQuestion}
                   trackEvent={trackEvent}
                   viewMode={viewMode}
@@ -335,6 +341,8 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     currentStudentId: getCurrentStudentId(state),
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
+    feedbackSortByMethod: getDashboardFeedbackSortBy(state),
+    feedbackStudents: dataDownloaded && getFeedbackSortedStudents(state),
     hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
     isFetching: data.get("isFetching"),
     questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
@@ -357,6 +365,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setHideFeedbackBadges: (value: boolean) => dispatch(setHideFeedbackBadges(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
+    setStudentFeedbackSort: (value: string) => dispatch(setStudentFeedbackSort(value)),
     setCurrentActivity: (activityId: string) => dispatch(setCurrentActivity(activityId)),
     setCurrentStudent: (studentId: string) => dispatch(setCurrentStudent(studentId)),
     setCurrentQuestion: (questionId: string) => dispatch(setCurrentQuestion(questionId)),
