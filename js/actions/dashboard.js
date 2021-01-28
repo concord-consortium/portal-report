@@ -2,6 +2,7 @@ export const SET_ACTIVITY_EXPANDED = "SET_ACTIVITY_EXPANDED";
 export const SET_STUDENT_EXPANDED = "SET_STUDENT_EXPANDED";
 export const SET_STUDENTS_EXPANDED = "SET_STUDENTS_EXPANDED";
 export const SET_STUDENT_SORT = "SET_STUDENT_SORT";
+export const SET_STUDENT_FEEDBACK_SORT = "SET_STUDENT_FEEDBACK_SORT";
 
 export const SET_CURRENT_ACTIVITY = "SET_CURRENT_ACTIVITY";
 export const SET_CURRENT_QUESTION = "SET_CURRENT_QUESTION";
@@ -13,7 +14,8 @@ export const TOGGLE_ALL_RESPONSES_TO_CURRENT_QUESTION = "TOGGLE_ALL_RESPONSES_TO
 export const SORT_BY_NAME = "NAME";
 export const SORT_BY_MOST_PROGRESS = "MOST_PROGRESS";
 export const SORT_BY_LEAST_PROGRESS = "LEAST_PROGRESS";
-export const SORT_BY_FEEDBACK = "FEEDBACK";
+export const SORT_BY_FEEDBACK_NAME = "FEEDBACK_NAME";
+export const SORT_BY_FEEDBACK_PROGRESS = "FEEDBACK_PROGRESS";
 
 export const SET_QUESTION_EXPANDED = "SET_QUESTION_EXPANDED";
 export const SELECT_QUESTION = "SELECT_QUESTION";
@@ -91,6 +93,13 @@ export function setStudentsExpanded(studentIds, value) {
 export function setStudentSort(value) {
   return {
     type: SET_STUDENT_SORT,
+    value,
+  };
+}
+
+export function setStudentFeedbackSort(value) {
+  return {
+    type: SET_STUDENT_FEEDBACK_SORT,
     value,
   };
 }

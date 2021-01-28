@@ -40,12 +40,13 @@ context("Portal Dashboard Student Sort",() =>{
       cy.get('[data-cy=sort-feedback]').click();
       cy.get('[data-cy="list-item-awaiting-feedback"]').should('be.visible').click();
       // TODO: The order below will need to be changed once sorting by awaiting feedback works
-      cy.get('[data-cy=student-name]').eq(0).should("contain", "Jenkins, John");
-      cy.get('[data-cy=student-name]').eq(1).should("contain", "Armstrong, Jenna");
-      cy.get('[data-cy=student-name]').eq(2).should("contain", "Galloway, Amy");
-      cy.get('[data-cy=student-name]').eq(3).should("contain", "Ross, John");
-      cy.get('[data-cy=student-name]').eq(4).should("contain", "Crosby, Kate");
-      cy.get('[data-cy=student-name]').eq(5).should("contain", "Wu, Jerome");
+      // note that we offset the index by 6 to skip the student names in the progress view
+      cy.get('[data-cy=student-name]').eq(6).should("contain", "Jenkins, John");
+      cy.get('[data-cy=student-name]').eq(7).should("contain", "Armstrong, Jenna");
+      cy.get('[data-cy=student-name]').eq(8).should("contain", "Galloway, Amy");
+      cy.get('[data-cy=student-name]').eq(9).should("contain", "Ross, John");
+      cy.get('[data-cy=student-name]').eq(10).should("contain", "Crosby, Kate");
+      cy.get('[data-cy=student-name]').eq(11).should("contain", "Wu, Jerome");
     });
 
 });
