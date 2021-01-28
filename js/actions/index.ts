@@ -56,8 +56,6 @@ export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipG
 export type TrackEventCategory = "Dashboard" | "Portal-Dashboard" | "Report";
 export type TrackEventFunction = (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => any;
 
-const logManagerUrl = "//cc-log-manager.herokuapp.com/api/logs";
-
 interface LogMessage {
   session: string;
   username: string;
@@ -537,6 +535,8 @@ export function saveRubric(rubricContent: any) {
   };
 }
 
+// default logging to staging, this is updated after receiving the portal info
+let logManagerUrl = "//cc-log-manager-dev.herokuapp.com/api/logs";
 let loggingActivityName = "n/a";
 let loggingContextId = "n/a";
 const loggingSession = uuid();
@@ -550,6 +550,11 @@ function _setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawDat
     const type = match[1] === "activities" ? "activity" : "sequence";
     loggingActivityName = `${type}: ${match[2]}`;
     loggingContextId = rawPortalData.contextId;
+
+    // use production log manager on production portals
+    logManagerUrl = /(learn|portal)\.concord.org/.test(rawPortalData.platformId)
+      ? "//cc-log-manager.herokuapp.com/api/logs"
+      : "//cc-log-manager-dev.herokuapp.com/api/logs";
   }
 }
 
@@ -575,7 +580,7 @@ export function trackEvent(category: TrackEventCategory, action: string, options
       (window as any).gtag("event", action, { event_category: category, event_label: labelText });
     }
 
-    if (loggingEnabled) {
+    if (loggingEnabled && logManagerUrl) {
       const parameters = options?.parameters || {};
       parameters.contextId = loggingContextId;
 
