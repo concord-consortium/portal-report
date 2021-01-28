@@ -56,8 +56,6 @@ export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipG
 export type TrackEventCategory = "Dashboard" | "Portal-Dashboard" | "Report";
 export type TrackEventFunction = (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => any;
 
-const logManagerUrl = "//cc-log-manager.herokuapp.com/api/logs";
-
 interface LogMessage {
   session: string;
   username: string;
@@ -127,7 +125,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     response: rawPortalData
   });
   const resourceUrl = _getResourceUrl(rawPortalData.offering.activity_url);
-  _setLoggingParameters(resourceUrl, rawPortalData);
+  setLoggingParameters(resourceUrl, rawPortalData);
   const source = rawPortalData.sourceKey;
   if (source === "fake.authoring.system") { // defined in data/offering-data.json
     // Use fake data. Default shows sequence fake resource and answer
@@ -537,6 +535,8 @@ export function saveRubric(rubricContent: any) {
   };
 }
 
+// default logging to staging, this is updated after receiving the portal info
+let logManagerUrl = "//cc-log-manager-dev.herokuapp.com/api/logs";
 let loggingActivityName = "n/a";
 let loggingContextId = "n/a";
 const loggingSession = uuid();
@@ -544,13 +544,25 @@ const parsedQuery = queryString.parseUrl(window.location.toString()).query;
 let loggingEnabled = parsedQuery.logging === "true";
 const debugLogging = parsedQuery.debugLogging === "true";
 
-function _setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawData) {
+export function setLoggingParameters(resourceUrl: string, rawPortalData: IPortalRawData) {
   const match = resourceUrl.match(/\/(activities|sequences)\/(\d)+/);
   if (match) {
     const type = match[1] === "activities" ? "activity" : "sequence";
     loggingActivityName = `${type}: ${match[2]}`;
     loggingContextId = rawPortalData.contextId;
+
+    // use production log manager on production portals
+    logManagerUrl = /(learn|portal)\.concord\.org/.test(rawPortalData.platformId)
+      ? "//cc-log-manager.herokuapp.com/api/logs"
+      : "//cc-log-manager-dev.herokuapp.com/api/logs";
   }
+
+  // return these values for tests
+  return {
+    loggingActivityName,
+    loggingContextId,
+    logManagerUrl
+  };
 }
 
 // used by tests to enable/disable logging
