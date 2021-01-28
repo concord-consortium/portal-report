@@ -12,6 +12,7 @@ import QMCNonScoredCompletedIcon from "../../img/svg-icons/q-mc-nonscored-comple
 import QMCScoredCorrectIcon from "../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import QMCScoredIncorrectIcon from "../../img/svg-icons/q-mc-scored-incorrect-icon.svg";
 import QOpenResponseCompletedIcon from "../../img/svg-icons/q-open-response-completed-icon.svg";
+import { TrackEventFunction } from "../actions";
 
 export interface AnswerType {
   name: string;
@@ -28,6 +29,7 @@ export interface AnswerProps {
   studentName?: string;
   onAnswerSelect?: () => void;
   selected?: boolean;
+  trackEvent: TrackEventFunction;
 }
 
 export const AnswerTypes: AnswerType[] = [

@@ -100,7 +100,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     setNowShowing: (nowShowingValue, selectedStudentIds) => dispatch(setNowShowing(nowShowingValue, selectedStudentIds)),
     setAnonymous: value => dispatch(setAnonymous(value)),
     hideCompareView: () => dispatch(hideCompareView()),
-    trackEvent: (category, action, label) => dispatch(trackEvent(category, action, label)),
+    trackEvent: (category, action, options) => dispatch(trackEvent(category, action, options)),
   };
 };
 

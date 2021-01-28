@@ -12,6 +12,8 @@ It expects two URL params: `reportUrl` and `token`. If they are not provided, it
 
 At this time the portal report data can be presented in report view or in dashboard view. By default the report view is shown. Add the URL parameter `dashboard=true` (or any value other than "false") to show the tabular dashboard view. Add the URL parameter `portal-dashboard=true` (or any value other than "false") to show the updated and redesigned portal dashboard view.
 
+To send events to the log manager add the URL parameter of `logging=true`.  To see what is logged in the console add the URL parameter of `debugLogging=true`.
+
 ## Library
 
 Portal Report is a standalone application, but it also provides some React components that can be used by other projects

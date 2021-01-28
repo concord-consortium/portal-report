@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
 
@@ -18,6 +19,7 @@ interface IProps {
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export class StudentAnswers extends React.PureComponent<IProps> {
@@ -97,6 +99,9 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const currentQuestionId = this.props.currentQuestion?.get("id");
     const currentStudentId = this.props.currentStudentId;
     const unselectStudent = currentActivityId === activityId && currentQuestionId === questionId && currentStudentId === studentId;
+    this.props.trackEvent("Portal-Dashboard", "SelectStudentAnswer", {parameters: {
+      activityId, questionId, studentId: unselectStudent? null : studentId
+    }});
     this.props.setCurrentActivity(activityId);
     this.props.setCurrentQuestion(questionId);
     this.props.setCurrentStudent(unselectStudent ? null : studentId);

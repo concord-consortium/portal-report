@@ -33,20 +33,20 @@
         &:before {
           background-color: @feedback-green;
         }
-        &.active {
+        &:active, &.active {
           background-color: @feedback-green;
-          color: #fff;
+          border-color: white;
+          color: white;
 
           &:hover {
             background-color: @feedback-green;
           }
           &:before {
-            background-color: #fff;
+            background-color: white;
           }
         }
   
         &.viewToggleButtonActivity {
-          border: solid 1px @feedback-green;
           border-radius: 15px 0 0 15px;
           margin-right: 5px;
           padding: 6px 10px 6px 34px;
@@ -76,8 +76,8 @@
             }
           }
         }
+
         &.viewToggleButtonQuestion {
-          border: solid 1px #fff;
           border-radius: 0 15px 15px 0;
           padding: 6px 34px 6px 10px;
           position: relative;

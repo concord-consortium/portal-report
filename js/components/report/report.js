@@ -129,19 +129,19 @@ export default class Report extends PureComponent {
   onShowSelectedClick = () => {
     const { reportTree, hideUnselectedQuestions, trackEvent } = this.props;
     hideUnselectedQuestions();
-    trackEvent("Report", "Show Selected Question(s)", reportTree.get("name"));
+    trackEvent("Report", "Show Selected Question(s)", {label: reportTree.get("name")});
   }
 
   onShowUnselectedClick = () => {
     const { reportTree, showUnselectedQuestions, trackEvent } = this.props;
     showUnselectedQuestions();
-    trackEvent("Report", "Show All Questions", reportTree.get("name"));
+    trackEvent("Report", "Show All Questions", {label: reportTree.get("name")});
   }
 
   onShowHideNamesClick = (isAnonymous) => {
     const { setAnonymous, trackEvent } = this.props;
     const trackAction = isAnonymous ? "Show Student Names" : "Hide Student Names";
-    trackEvent("Report", trackAction, "");
+    trackEvent("Report", trackAction);
     return setAnonymous(!isAnonymous);
   }
 
@@ -160,7 +160,7 @@ export default class Report extends PureComponent {
       // happens too early.
       setTimeout(() => { this.afterPrint(); }, 1);
     };
-    trackEvent("Report", "Print Student Reports", reportTree.get("name"));
+    trackEvent("Report", "Print Student Reports", {label: reportTree.get("name")});
   }
 
   afterPrint() {

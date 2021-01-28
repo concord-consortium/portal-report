@@ -13,6 +13,7 @@ import SpotlightIcon from "../../../img/svg-icons/spotlight-icon.svg";
 
 import css from "../../../css/portal-dashboard/response-details/popup-class-nav.less";
 import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
+import { TrackEventFunction } from "../../actions";
 
 interface IProps {
   anonymous: boolean;
@@ -29,7 +30,7 @@ interface IProps {
   setStudentSort: (value: string) => void;
   sortByMethod: string;
   studentCount: number;
-  trackEvent: (category: string, action: string, label: string) => void;
+  trackEvent: TrackEventFunction;
   viewMode: DashboardViewMode;
 }
 

@@ -5,6 +5,7 @@ import { getFormattedStudentName } from "../../../util/student-utils";
 import { RubricTableContainer } from "./rubric-table";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -16,10 +17,11 @@ interface IProps {
   isAnonymous: boolean;
   rubric: any;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, isAnonymous, rubric, updateActivityFeedback } = props;
+  const { activityId, activityIndex, feedbacks, isAnonymous, rubric, updateActivityFeedback, trackEvent } = props;
 
   const feedbackRows = feedbacks.map((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
@@ -61,6 +63,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             key={activityId + studentId + "-textarea"}
             studentId={studentId}
             updateActivityFeedback={updateActivityFeedback}
+            trackEvent={trackEvent}
           />
         </div>
       </div>

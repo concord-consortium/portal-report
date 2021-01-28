@@ -75,6 +75,7 @@
     "@types/markdown-to-jsx": "^6.11.3",
     "@types/md5": "^2.2.0",
     "@types/react-redux": "^7.1.8",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "autoprefixer": "^9.7.6",
@@ -154,6 +155,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "semver": "^7.3.2",
-    "striptags": "^3.1.1"
+    "striptags": "^3.1.1",
+    "uuid": "^8.3.2"
   }
 }

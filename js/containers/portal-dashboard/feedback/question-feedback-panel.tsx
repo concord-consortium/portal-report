@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
-import { updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../../actions/index";
+import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../../actions/index";
 import { QuestionLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/question-level-feedback-student-rows";
 import { FeedbackQuestionRows } from "../../../components/portal-dashboard/feedback/feedback-question-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
@@ -24,6 +24,7 @@ interface IProps {
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
+  trackEvent: TrackEventFunction;
 }
 
 class QuestionFeedbackPanel extends React.PureComponent<IProps> {
@@ -43,7 +44,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 
   render() {
     const { activity, activityIndex, answers, currentQuestion, currentStudentId, feedbacksNeedingReview,
-            isAnonymous, listViewMode, questionFeedbacks, students } = this.props;
+            isAnonymous, listViewMode, questionFeedbacks, students, trackEvent } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -59,6 +60,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               isAnonymous={isAnonymous}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
+              trackEvent={trackEvent}
             />
           : <FeedbackQuestionRows
               answers={answers}
@@ -67,6 +69,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               feedbacks={questionFeedbacks}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
+              trackEvent={trackEvent}
             />
         }
       </div>
@@ -95,6 +98,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
     updateQuestionFeedbackSettings: (embeddableKey, feedbackFlags) => dispatch(updateQuestionFeedbackSettings(embeddableKey, feedbackFlags)),
+    trackEvent: (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => dispatch(trackEvent(category, action, options)),
   };
 };
 

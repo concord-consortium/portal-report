@@ -8,6 +8,7 @@ import { renderHTML } from "../../../util/render-html";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -18,10 +19,11 @@ interface IProps {
   feedbacks: Map<any, any>;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
-  const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback } = props;
+  const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback, trackEvent } = props;
 
   const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer: Map<string, any>) => {
     let feedbackBadge = <AwaitingFeedbackQuestionBadgeIcon />;
@@ -35,6 +37,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
   };
 
   const questions = currentActivity.get("questions");
+  const currentActivityId = currentActivity.get("id");
   const feedbackRows = questions.map ((question: Map<any, any>) => {
     const student = currentStudentId
                     ? students.toArray().find((s: any) => s.get("id") === currentStudentId)
@@ -71,8 +74,12 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
               answer={answer}
               answerId={answerId}
               feedback={feedback}
+              studentId={currentStudentId}
+              questionId={currentQuestionId}
+              activityId={currentActivityId}
               key={currentQuestionId + currentStudentId + "textarea"}
               updateQuestionFeedback={updateQuestionFeedback}
+              trackEvent={trackEvent}
             />
           }
         </div>
