@@ -25,6 +25,7 @@ import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
 interface IProps {
   // from mapStateToProps
+  activityFeedbacks: Map<any, any>;
   anonymous: boolean;
   answers: Map<any, any>;
   clazzName: string;
@@ -98,7 +99,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
+    const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
       sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
       setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
       trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod, setStudentFeedbackSort,
@@ -191,6 +192,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               />
               <StudentAnswers
                 activities={activityTrees}
+                activityFeedbacks={activityFeedbacks}
                 answers={answers}
                 currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
@@ -321,6 +323,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     });
   }
   return {
+    activityFeedbacks: state.getIn(["feedback", "activityFeedbacks"]),
     anonymous: getAnonymous(state),
     answers,
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
