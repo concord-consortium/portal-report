@@ -1,6 +1,6 @@
 context("Portal Dashboard Feedback Panel", () => {
   before(() => {
-    cy.visit("/?portal-dashboard");
+    cy.visit("/?portal-dashboard&enableFirestorePersistence=true&clearFirestorePersistence=true");
     cy.get('[data-cy=navigation-select]').click();
     cy.get('[data-cy="list-item-feedback-report"]').should('be.visible').click();
   });
@@ -86,7 +86,7 @@ context("Portal Dashboard Feedback Panel", () => {
     });
   });
   context('Feedback Rows', () => {
-    describe('verify activity-level feedback textareas appear and accept input', () => {
+    describe('verify activity-level feedback appear and accept input', () => {
       it('shows feedback textareas for students who have started an activity', () => {
         cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=feedback-container]')
@@ -110,6 +110,27 @@ context("Portal Dashboard Feedback Panel", () => {
           .children('[data-cy=feedback-textarea]')
           .should('contain', 'This is activity-level feedback.');
       });
+      it('shows rubric feedback area', () => {
+        cy.get('[data-cy=rubric-table]').should('be.visible');
+      });
+      it('rubric feedback can be given', () => {
+        cy.get('[data-cy=rating-radio-button]').eq(0).click();
+        cy.get('[data-cy=rating-radio-button] div').eq(0)
+          .should('have.css', 'background-color')
+          .and('eq', 'rgb(78, 161, 90)');
+        cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
+          .should('have.attr', 'fill')
+          .and('include', '#4EA15A');
+      });
+      it('rubric feedback can be deselected', () => {
+        cy.get('[data-cy=rating-radio-button]').eq(0).click();
+        cy.get('[data-cy=rating-radio-button] div').eq(0)
+          .should('have.css', 'background-color')
+          .and('eq', 'rgb(255, 255, 255)');
+        cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
+          .should('have.attr', 'fill')
+          .and('include', '#FFF');
+      });
     });
     describe('verify question-level feedback textareas appear and accept input', () => {
       it('shows feedback textareas for students who have answered a question', () => {
@@ -117,7 +138,7 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=student-answer]').first().should('contain', "No response");
         cy.get('[data-cy=feedback-badge]')
           .first()
-          .should('be.empty');      
+          .should('be.empty');
         cy.get('[data-cy=student-answer]').eq(2).should('contain', "test answer 2");
         cy.get('[data-cy=feedback-badge]')
           .eq(2)
