@@ -62,7 +62,6 @@
           }
         }
       }
-
     }
 
     .activityProgress {
@@ -73,9 +72,19 @@
       width: 120px;
       margin: 0 10px 0 10px;
       font-size: 14px;
+      position: relative;
+
+      &.reviewed {
+        background-color: @feedback-green-light4;
+      }
 
       &.progress {
         background-color: @cc-orange-light5
+      }
+
+      .activityFeedbackBadge {
+        position: absolute;
+        left: 25px;
       }
 
       .progressIcon {

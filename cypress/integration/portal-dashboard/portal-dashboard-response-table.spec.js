@@ -72,3 +72,24 @@ context("Portal Dashboard Response Table",()=>{
     cy.get('[data-cy=student-response]').eq(0).should('contain', 'test answer 2');
   })
 });
+
+context("Feedback badges in response table", () => {
+  before(()=>{
+    cy.visit("/?portal-dashboard&enableFirestorePersistence=true&clearFirestorePersistence=true");
+    cy.get("[data-cy=navigation-select]").click();
+    cy.get("[data-cy=list-item-feedback-report]").click();
+    cy.get("[data-cy=feedback-textarea]").eq(0).click().type("Good job!");
+    cy.get("[data-cy=activity-level-feedback-button]").click();
+    cy.get("[data-cy=feedback-textarea]").eq(0).click().type("Good job!");
+    cy.get("[data-cy=navigation-select]").eq(1).click();
+    cy.get("[data-cy=list-item-progress-dashboard]").eq(1).click();
+  })
+
+  it("Activity feedback badge appears in response table when there is feedback given", () => {
+    cy.get("[data-cy=activity-feedback-badge]").should("be.visible");
+  });
+  it("Question feedback badge appears in response table when there is feedback given", () => {
+    cy.get("[data-cy=collapsed-activity-button]").eq(0).click();
+    cy.get("[data-cy=question-feedback-badge]").should("be.visible");
+  });
+});

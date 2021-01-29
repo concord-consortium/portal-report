@@ -31,8 +31,8 @@ class AnswerCompact extends React.PureComponent<IProps> {
         }
         {(feedback && !hideFeedbackBadges &&
           (feedbackValidForAnswer(feedback, answer)
-           ? <QuestionFeedbackBadge className={css.feedbackBadge}/>
-           : <FeedbackAnswerUpdatedBadge className={css.feedbackBadge}/>)
+           ? <QuestionFeedbackBadge className={css.feedbackBadge} data-cy="question-feedback-badge" />
+           : <FeedbackAnswerUpdatedBadge className={css.feedbackBadge} data-cy="answer-updated-feedback-badge" />)
         )}
       </div>
     );

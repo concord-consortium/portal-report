@@ -2,11 +2,14 @@ import React from "react";
 import { Map } from "immutable";
 import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
 import { TrackEventFunction } from "../../actions";
+import ActivityFeedbackGivenIcon from "../../../img/svg-icons/feedback-activity-badge-icon.svg";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
 
+
 interface IProps {
   activities: Map<any, any>;
+  activityFeedbacks: Map<any, any>;
   answers: Map<any, any>;
   currentActivity: Map<any, any> | undefined;
   currentQuestion: Map<any, any> | undefined;
@@ -128,13 +131,21 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderProgress = (activity: any, student: any) => {
-    const { studentProgress } = this.props;
+    const { studentProgress, activityFeedbacks } = this.props;
     const numQuestions = activity.get("questions").size;
     const progress = studentProgress.getIn([student.get("id"), activity.get("id")]);
+    const activityStudentId = activity.get("id")+"-"+student.get("id");
+    const activityStudentFeedback = activityFeedbacks.get(activityStudentId);
+    const hasBeenReviewed = activityFeedbacks.size > 0
+                            && activityStudentFeedback
+                            && activityStudentFeedback.get("hasBeenReviewed");
     const numAnswered = Math.round(progress * numQuestions);
-    const progressClass = progress > 0 ? css.progress : "";
+    const progressClass = hasBeenReviewed ? css.reviewed
+                                          : progress > 0 ? css.progress : "";
+
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>
+        { hasBeenReviewed && <ActivityFeedbackGivenIcon className={css.activityFeedbackBadge} data-cy="activity-feedback-badge"/> }
         { this.renderProgressIcon(progress)}
         { (progress > 0 && progress < 1) &&
           <div><span className={css.numAnswered}>{numAnswered}</span><span>/{numQuestions}</span></div>
