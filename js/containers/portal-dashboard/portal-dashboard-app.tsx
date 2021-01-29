@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
-import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory } from "../../actions/index";
+import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getDashboardFeedbackSortBy,
          getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getFeedbackSortedStudents
        } from "../../selectors/dashboard-selectors";
@@ -116,6 +116,12 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       assignmentName = activityTrees && activityTrees.first().get("name");
     }
 
+    setExtraEventLoggingParameters({
+      className: clazzName,
+      sequenceName: assignmentName,
+      currentActivityName: currentActivity?.get("name")
+    });
+
     const trackSetAnonymous = (value: boolean) => {
       trackEvent("Portal-Dashboard", "SetAnonymous", {label: value.toString()});
       setAnonymous(value);
@@ -123,8 +129,18 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
     const trackToggleCurrentActivity = (activityId: string) => {
       toggleCurrentActivity(activityId);
+      const activity = activityTrees && activityTrees.find(a => a.get("id") === activityId);
       trackEvent("Portal-Dashboard", "ToggleCurrentActivity", {label: activityId, parameters: {
-        show: currentActivity?.get("id") !== activityId
+        show: currentActivity?.get("id") !== activityId,
+        activityName: activity && activity.get("name")
+      }});
+    };
+
+    const trackSetCurrentActivity = (activityId: string) => {
+      setCurrentActivity(activityId);
+      const activity = activityTrees && activityTrees.find(a => a.get("id") === activityId);
+      trackEvent("Portal-Dashboard", "SetCurrentActivity", {label: activityId, parameters: {
+        activityName: activity && activity.get("name")
       }});
     };
 
@@ -134,11 +150,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
         activityId: currentActivity && currentActivity.get("id"),
         show: currentQuestion?.get("id") !== questionId
       }});
-    };
-
-    const trackSetCurrentActivity = (activityId: string) => {
-      setCurrentActivity(activityId);
-      trackEvent("Portal-Dashboard", "SetCurrentActivity", {label: activityId});
     };
 
     const trackSetCurrentQuestion = (questionId: string) => {

@@ -1,5 +1,5 @@
 {
-  "activity_url": "http://fake.authoring.system/activities/1",
+  "activity_url": "http://fake.authoring.system/sequences/1",
   "id": 1,
   "rubric_url": "sample-rubric.json",
   "teacher": "Kristen Teachername",
