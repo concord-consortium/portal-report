@@ -546,7 +546,7 @@ let loggingEnabled = parsedQuery.logging === "true";
 const debugLogging = parsedQuery.debugLogging === "true";
 
 export function setLoggingVars(resourceUrl: string, rawPortalData: IPortalRawData) {
-  const match = resourceUrl.match(/\/(activities|sequences)\/(\d)+/);
+  const match = resourceUrl.match(/\/(activities|sequences)\/(\d+)/);
   if (match) {
     const type = match[1] === "activities" ? "activity" : "sequence";
     loggingActivity = `${type}: ${match[2]}`;

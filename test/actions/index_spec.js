@@ -20,11 +20,11 @@ describe("actions/index", () => {
   describe("setLoggingVars", () => {
 
     it("handles activities", () => {
-      expect(setLoggingVars("http://example.com/activities/1", {}).loggingActivity).toBe("activity: 1");
+      expect(setLoggingVars("http://example.com/activities/100", {}).loggingActivity).toBe("activity: 100");
     });
 
     it("handles sequences", () => {
-      expect(setLoggingVars("http://example.com/sequences/2", {}).loggingActivity).toBe("sequence: 2");
+      expect(setLoggingVars("http://example.com/sequences/200", {}).loggingActivity).toBe("sequence: 200");
     });
 
     it("handles contextId", () => {
