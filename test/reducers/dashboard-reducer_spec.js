@@ -15,7 +15,7 @@ describe("dashboard reducer", () => {
       compactReport: false,
       hideFeedbackBadges: false,
       feedbackSortBy: types.SORT_BY_FEEDBACK_NAME,
-      feedbackSortRefreshEnabled: true,
+      feedbackSortRefreshEnabled: false,
     });
   });
 
