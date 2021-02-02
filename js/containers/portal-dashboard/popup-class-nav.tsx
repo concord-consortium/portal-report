@@ -47,7 +47,8 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   render() {
-    const { anonymous, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous, viewMode } = this.props;
+    const { anonymous, feedbackSortByMethod, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous,
+            viewMode } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;
@@ -64,7 +65,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
           <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
           {this.renderSortMenu()}
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
-          { viewMode === "FeedbackReport" && this.renderRefreshButton() }
+          {viewMode === "FeedbackReport" && feedbackSortByMethod === SORT_BY_FEEDBACK_PROGRESS && this.renderRefreshButton()}
         </div>
       </div>
     );
@@ -77,6 +78,8 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
   private handleStudentFeedbackSortSelect = (value: string) => () => {
     const { setStudentFeedbackSort } = this.props;
+    // TODO: update feedback sort
+    this.props.setFeedbackSortRefreshEnabled(false);
     setStudentFeedbackSort(value);
   }
 
@@ -179,6 +182,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private handleRefeshSelect = () => {
+    // TODO: update feedback sort
     this.props.setFeedbackSortRefreshEnabled(false);
   }
 
