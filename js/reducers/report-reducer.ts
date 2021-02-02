@@ -5,7 +5,8 @@ import config from "../config";
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
-  preprocessAnswersJSON
+  preprocessAnswersJSON,
+  IPortalData
 } from "../core/transform-json-response";
 import {
   SET_ANONYMOUS_VIEW,
@@ -43,6 +44,7 @@ export interface IReportState {
   userId: string;
   platformUserId: string;
   platformUserName: string;
+  loggingUserName: string;
   contextId: string;
   resourceLinkId: string;
   platformId: string;
@@ -73,6 +75,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   userId: "",
   platformUserId: "",
   platformUserName:"",
+  loggingUserName:"",
   contextId: "",
   resourceLinkId: "",
   platformId: "",
@@ -105,6 +108,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   userId: string;
   platformUserId: string;
   platformUserName: string;
+  loggingUserName: string;
   contextId: string;
   resourceLinkId: string;
   platformId: string;
@@ -155,6 +159,7 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
         .set("platformUserId", data.platformUserId)
         .set("platformUserName",data.offering.teacher)
+        .set("loggingUserName", getLoggingUserName(data))
         .set("contextId", data.contextId)
         .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId)
@@ -268,4 +273,11 @@ function setAnonymous(state: ReportState, anonymous: boolean) {
   const newStudents = state.get("students")
     .map(s => s.set("name", anonymous ? `Student ${idx++}` : s.get("realName"))) as Map<any, any>;
   return state.set("anonymous", anonymous).set("students", newStudents);
+}
+
+export function getLoggingUserName(data: IPortalData) {
+  const matches = data.platformId.match(/:\/\/([^/]*)/); // extracts example.com from <protocol>://example.com</optional-path>
+  const platformDomain = matches?.[1] || "unknown";
+  const platformUserId = data.platformUserId || "unknown";
+  return `${platformUserId}@${platformDomain}`;
 }
