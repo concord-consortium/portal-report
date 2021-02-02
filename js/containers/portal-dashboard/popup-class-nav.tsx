@@ -179,7 +179,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
   private renderRefreshButton = () => {
     return (
       <div className={css.refreshSortContainer}>
-        <button className={`${css.refreshButton}`}>
+        <button className={css.refreshButton}>
           <RefreshIcon className={css.refreshIcon}/>
         </button>
         <span className={css.refreshButtonLabel}>Refresh list</span>
