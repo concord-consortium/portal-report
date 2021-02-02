@@ -17,13 +17,15 @@ interface IProps {
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
   feedbacks: Map<any, any>;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
 }
 
 export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
-  const { answers, feedbacks, currentActivity, currentStudentId, students, updateQuestionFeedback, trackEvent } = props;
+  const { answers, feedbacks, currentActivity, currentStudentId, setFeedbackSortRefreshEnabled, students, updateQuestionFeedback,
+          trackEvent } = props;
 
   const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer: Map<string, any>) => {
     let feedbackBadge = <AwaitingFeedbackQuestionBadgeIcon />;
@@ -78,6 +80,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
               questionId={currentQuestionId}
               activityId={currentActivityId}
               key={currentQuestionId + currentStudentId + "textarea"}
+              setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
               updateQuestionFeedback={updateQuestionFeedback}
               trackEvent={trackEvent}
             />

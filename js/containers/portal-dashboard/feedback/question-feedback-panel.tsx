@@ -70,6 +70,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               currentActivity={activity}
               currentStudentId={currentStudentId}
               feedbacks={questionFeedbacks}
+              setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
               trackEvent={trackEvent}
