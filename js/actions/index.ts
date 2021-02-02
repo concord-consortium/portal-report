@@ -614,7 +614,7 @@ export function trackEvent(category: TrackEventCategory, action: string, options
 
       const logMessage: LogMessage = {
         session: loggingSession,
-        username: getState().getIn(["report", "userId"]),
+        username: getState().getIn(["report", "loggingUserName"]),
         application: "portal-report",
         activity: loggingActivity,
         event: action,
