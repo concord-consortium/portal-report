@@ -19,6 +19,7 @@ interface IProps {
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
   isAnonymous: boolean;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
@@ -71,6 +72,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               questionId={currentQuestionId}
               activityId={activityId}
               key={currentQuestionId + studentId + "-textarea"}
+              setFeedbackSortRefreshEnabled={props.setFeedbackSortRefreshEnabled}
               updateQuestionFeedback={updateQuestionFeedback}
               trackEvent={trackEvent}
             />

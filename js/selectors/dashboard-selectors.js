@@ -19,6 +19,7 @@ export const getDashboardFeedbackSortBy = state => state.getIn(["dashboard", "fe
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
 export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
 export const getHideFeedbackBadges = state => state.getIn(["dashboard", "hideFeedbackBadges"]);
+export const getfeedbackSortRefreshEnabled = state => state.getIn(["dashboard", "feedbackSortRefreshEnabled"]);
 
 // When a user selects a to display question details by
 // Clicking on the question column expand icon.

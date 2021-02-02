@@ -7,6 +7,7 @@ interface IProps {
   activityIndex: number;
   activityStarted: boolean;
   feedback: any;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   studentId: string;
   updateActivityFeedback?: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
@@ -36,6 +37,7 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
       if (logUpdate) {
         trackEvent("Portal-Dashboard", "AddActivityLevelFeedback", { label: feedback, parameters: { activityId, studentId }});
       }
+      props.setFeedbackSortRefreshEnabled(true);
       updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value,
                                                                     hasBeenReviewed});
     }

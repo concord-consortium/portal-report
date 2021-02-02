@@ -3,6 +3,7 @@ import { Map } from "immutable";
 import { connect } from "react-redux";
 import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateActivityFeedback, updateActivityFeedbackSettings } from "../../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../../selectors/activity-feedback-selectors";
+import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
 import { ActivityLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/activity-level-feedback-student-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 
@@ -20,6 +21,7 @@ interface IProps {
   numFeedbacksGivenReview: number;
   numFeedbacksNeedingReview: number;
   rubric: any;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
   students: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
@@ -43,7 +45,8 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, isAnonymous, rubric, updateActivityFeedback, trackEvent } = this.props;
+    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, isAnonymous, rubric, updateActivityFeedback,
+            trackEvent } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -55,6 +58,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           feedbacksNeedingReview={feedbacksNeedingReview}
           isAnonymous={isAnonymous}
           rubric={rubric}
+          setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
           updateActivityFeedback={updateActivityFeedback}
           trackEvent={trackEvent}
         />
@@ -100,6 +104,7 @@ function mapStateToProps() {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
+    setFeedbackSortRefreshEnabled: (value) => dispatch(setFeedbackSortRefreshEnabled(value)),
     updateActivityFeedback: (activityId, activityIndex, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, activityIndex, platformStudentId, feedback)),
     updateActivityFeedbackSettings: (activityId, activityIndex, feedbackFlags) => dispatch(updateActivityFeedbackSettings(activityId, activityIndex, feedbackFlags)),
     trackEvent: (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => dispatch(trackEvent(category, action, options)),

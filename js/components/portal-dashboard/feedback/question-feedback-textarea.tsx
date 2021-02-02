@@ -11,6 +11,7 @@ interface IProps {
   studentId: string | null;
   questionId: string | null;
   activityId: string | null;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
 }
@@ -39,6 +40,7 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
       if (logUpdate) {
         trackEvent("Portal-Dashboard", "AddQuestionLevelFeedback", { label: feedback, parameters: { activityId, studentId, questionId, answerId }});
       }
+      props.setFeedbackSortRefreshEnabled(true);
       updateQuestionFeedback(answerId, {feedback, hasBeenReviewedForAnswerHash: answerHash(answer)});
     }
   };
