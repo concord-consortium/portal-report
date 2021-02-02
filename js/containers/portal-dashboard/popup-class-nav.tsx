@@ -11,6 +11,7 @@ import SortIcon from "../../../img/svg-icons/sort-icon.svg";
 import StudentViewIcon from "../../../img/svg-icons/student-view-icon.svg";
 import QuestionViewIcon from "../../../img/svg-icons/question-view-icon.svg";
 import SpotlightIcon from "../../../img/svg-icons/spotlight-icon.svg";
+import RefreshIcon from "../../../img/svg-icons/refresh-icon.svg";
 
 import css from "../../../css/portal-dashboard/response-details/popup-class-nav.less";
 import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
@@ -60,6 +61,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
           <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
           {this.renderSortMenu()}
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
+          { viewMode === "FeedbackReport" && this.renderRefreshButton() }
         </div>
       </div>
     );
@@ -170,6 +172,17 @@ class PopupClassNav extends React.PureComponent<IProps>{
           <SpotlightIcon className={css.spotlightIcon} />
         </div>
         <span>Spotlight selected</span>
+      </div>
+    );
+  }
+
+  private renderRefreshButton = () => {
+    return (
+      <div className={css.refreshSortContainer}>
+        <button className={css.refreshButton}>
+          <RefreshIcon className={css.refreshIcon}/>
+        </button>
+        <span className={css.refreshButtonLabel}>Refresh list</span>
       </div>
     );
   }

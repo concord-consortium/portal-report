@@ -87,7 +87,7 @@
     }
   }
   .popupClassNavControllers {
-    height: 183px;
+    height: 200px;
     padding-top: 10px;
 
     .spotlightToggle {
@@ -136,6 +136,52 @@
 
       span {
         color: @cc-charcoal;
+      }
+    }
+
+    .refreshSortContainer {
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      margin: 10px 0 0 20px;
+
+      .refreshButton {
+        height: 30px;
+        width: 30px;
+        background-color: @cc-teal-light6;
+        border: solid 1.5px @cc-charcoal-light1;
+        border-radius: 5px;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+          background-color: @cc-teal-light4;
+        }
+        &:active {
+          background-color: @cc-teal;
+          .refreshIcon {
+              fill: white;
+          }
+        }
+
+        .refreshIcon {
+          height: 24px;
+          width: 24px;
+          fill: @cc-teal;
+        }
+      }
+
+      .refreshButtonLabel {
+        font-family: lato, arial, helvetica, sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        color: @cc-charcoal;
+        margin-left: 11px;
+      }
+
+      &.disabled {
+        opacity: .35;
+        cursor: none;
       }
     }
   }
