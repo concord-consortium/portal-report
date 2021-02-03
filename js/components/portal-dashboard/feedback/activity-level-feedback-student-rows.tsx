@@ -62,6 +62,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               rubric={rubric}
               student={student}
               rubricFeedback={rubricFeedback}
+              setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
               updateActivityFeedback={updateActivityFeedback}
             />
           }

@@ -5,6 +5,10 @@ import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS,
 import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
 
+const kSortGroupFirst = 1;
+const kSortGroupSecond = 2;
+const kSortGroupThird = 3;
+
 // Inputs
 const getActivities = state => state.getIn(["report", "activities"]);
 export const getAnonymous = state => state.getIn(["report", "anonymous"]);
@@ -162,8 +166,8 @@ export const getFeedbackSortedStudents = createSelector(
           const student2HasFeedback = student2Feedback !== undefined;
           const student1Progress = studentProgress.getIn([student1.get("id"), currentActivityId]);
           const student2Progress = studentProgress.getIn([student2.get("id"), currentActivityId]);
-          const student1SortGroup = student1Progress === 0 ? 3 : student1HasFeedback ? 2 : 1;
-          const student2SortGroup = student2Progress === 0 ? 3 : student2HasFeedback ? 2 : 1;
+          const student1SortGroup = student1Progress === 0 ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
+          const student2SortGroup = student2Progress === 0 ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;
           const feedbackComp = student1SortGroup === student2SortGroup ? 0 : student1SortGroup > student2SortGroup ? 1 : -1;
           return feedbackComp;
         });
