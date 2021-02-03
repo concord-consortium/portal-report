@@ -39,7 +39,8 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
       }
       props.setFeedbackSortRefreshEnabled(true);
       updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value,
-                                                                    hasBeenReviewed});
+                                                                    hasBeenReviewed,
+                                                                    ignoreFeedbackWhenSorting: props.feedback === "" ? true: undefined});
     }
   };
 

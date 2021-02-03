@@ -3,6 +3,7 @@ import { Map } from "immutable";
 import { connect } from "react-redux";
 import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../../actions/index";
 import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
+import { getQuestionFeedbackSortedStudents } from "../../../selectors/dashboard-selectors";
 import { QuestionLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/question-level-feedback-student-rows";
 import { FeedbackQuestionRows } from "../../../components/portal-dashboard/feedback/feedback-question-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
@@ -23,7 +24,7 @@ interface IProps {
   questionFeedbacks: Map<any, any>;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
-  students: Map<any, any>;
+  questionFeedbackStudents: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
   trackEvent: TrackEventFunction;
@@ -46,7 +47,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 
   render() {
     const { activity, activityIndex, answers, currentQuestion, currentStudentId, feedbacksNeedingReview,
-            isAnonymous, listViewMode, questionFeedbacks, students, trackEvent } = this.props;
+            isAnonymous, listViewMode, questionFeedbacks, questionFeedbackStudents, trackEvent } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -61,7 +62,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               feedbacksNeedingReview={feedbacksNeedingReview}
               isAnonymous={isAnonymous}
               setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
-              students={students}
+              students={questionFeedbackStudents}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
               trackEvent={trackEvent}
             />
@@ -71,7 +72,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               currentStudentId={currentStudentId}
               feedbacks={questionFeedbacks}
               setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
-              students={students}
+              students={questionFeedbackStudents}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
               trackEvent={trackEvent}
             />
@@ -93,8 +94,9 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 
 function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
   return {
-      questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
-      settings: state.getIn(["feedback", "settings"])
+    questionFeedbackStudents: getQuestionFeedbackSortedStudents(state),
+    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
+    settings: state.getIn(["feedback", "settings"])
   };
 }
 

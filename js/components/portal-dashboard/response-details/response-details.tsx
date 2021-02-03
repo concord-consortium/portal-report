@@ -129,7 +129,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
               ? <StudentNavigator
                   students={students}
                   isAnonymous={isAnonymous}
-                  currentStudentIndex={currentStudentIndex>=0 ? currentStudentIndex : 0}
+                  currentStudentIndex={currentStudentIndex >= 0 ? currentStudentIndex : 0}
                   setCurrentStudent={setCurrentStudent}
                   currentStudentId={currentStudentId}
                   nameFirst={false}
@@ -185,7 +185,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
                   feedbackLevel={feedbackLevel}
-                  students={students}
                 />
               </div>
             : <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
@@ -196,7 +195,6 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   feedbackSortByMethod={feedbackSortByMethod}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
-                  students={students}
                 />
               </div>
         }
