@@ -42,11 +42,11 @@ context("Portal Dashboard Student Sort",() =>{
       // TODO: The order below will need to be changed once sorting by awaiting feedback works
       // note that we offset the index by 6 to skip the student names in the progress view
       cy.get('[data-cy=student-name]').eq(6).should("contain", "Jenkins, John");
-      cy.get('[data-cy=student-name]').eq(7).should("contain", "Armstrong, Jenna");
-      cy.get('[data-cy=student-name]').eq(8).should("contain", "Galloway, Amy");
-      cy.get('[data-cy=student-name]').eq(9).should("contain", "Ross, John");
-      cy.get('[data-cy=student-name]').eq(10).should("contain", "Crosby, Kate");
-      cy.get('[data-cy=student-name]').eq(11).should("contain", "Wu, Jerome");
+      cy.get('[data-cy=student-name]').eq(7).should("contain", "Galloway, Amy");
+      cy.get('[data-cy=student-name]').eq(8).should("contain", "Ross, John");
+      cy.get('[data-cy=student-name]').eq(9).should("contain", "Wu, Jerome");
+      cy.get('[data-cy=student-name]').eq(10).should("contain", "Armstrong, Jenna");
+      cy.get('[data-cy=student-name]').eq(11).should("contain", "Crosby, Kate");
     });
 
 });
