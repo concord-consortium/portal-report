@@ -11,6 +11,7 @@ interface IProps {
   rubricFeedback: any;
   activityId: string;
   activityIndex: number;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
 }
 export class RubricTableContainer extends React.PureComponent<IProps> {
@@ -105,7 +106,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     };
 
     const updateSelection = (critId: any, ratingId: string, deselect: boolean) => {
-      const { rubric, rubricFeedback, student } = this.props;
+      const { rubric, rubricFeedback, student, setFeedbackSortRefreshEnabled } = this.props;
       const newSelection: any = {};
       const rating = rubric.ratings.find((r: any) => r.id === ratingId);
       const criteria = rubric.criteria.find((c: any) => c.id === critId);
@@ -127,6 +128,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
                 };
       const newFeedback = Object.assign({}, rubricFeedback, newSelection);
       this.rubricChange(newFeedback, studentId);
+      setFeedbackSortRefreshEnabled(true);
     };
 
     return (

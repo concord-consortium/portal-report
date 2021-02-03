@@ -5,6 +5,10 @@ import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS,
 import { compareStudentsByName } from "../util/misc";
 import { fromJS } from "immutable";
 
+const kSortGroupFirst = 1;
+const kSortGroupSecond = 2;
+const kSortGroupThird = 3;
+
 // Inputs
 const getActivities = state => state.getIn(["report", "activities"]);
 export const getAnonymous = state => state.getIn(["report", "anonymous"]);
@@ -90,6 +94,27 @@ export const getStudentAverageProgress = createSelector(
   },
 );
 
+export const getCurrentActivity = createSelector(
+  [ getActivities, getCurrentActivityId ],
+  (activities, currentActivityId) => {
+    return activities.find(activity => activity.get("id") === currentActivityId);
+  }
+);
+
+export const getFirstActivity = createSelector(
+  [ getActivities ],
+  (activities) => {
+    return activities.first();
+  }
+);
+
+export const getCurrentQuestion = createSelector(
+  [ getQuestions, getCurrentQuestionId ],
+  (questions, currentQuestionId) => {
+    return questions.find(activity => activity.get("id") === currentQuestionId);
+  }
+);
+
 // Returns sorted students
 export const getSortedStudents = createSelector(
   [ getStudents, getDashboardSortBy, getStudentAverageProgress ],
@@ -121,8 +146,8 @@ export const getSortedStudents = createSelector(
 
 // Returns sorted students in feedback view
 export const getFeedbackSortedStudents = createSelector(
-  [ getStudents, getDashboardFeedbackSortBy, getFeedback ],
-  (students, feedbackSortBy, feedback) => {
+  [ getStudents, getDashboardFeedbackSortBy, getFeedback, getStudentProgress, getCurrentActivity, getFirstActivity ],
+  (students, feedbackSortBy, feedback, studentProgress, currentActivity, firstActivity) => {
     switch (feedbackSortBy) {
       case SORT_BY_FEEDBACK_NAME:
         return students.toList().sort((student1, student2) =>
@@ -130,13 +155,20 @@ export const getFeedbackSortedStudents = createSelector(
         );
       case SORT_BY_FEEDBACK_PROGRESS:
         return students.toList().sort((student1, student2) => {
-          // TODO: add support for question feedback, also determine if student has started activity or answered question
+          // TODO: add support for question feedback
           const activityFeedbacks = feedback.get("activityFeedbacks");
-          const student1Feedback = activityFeedbacks.find(function(f) { return f.get('platformStudentId') === student1.get("id"); });
-          const student2Feedback = activityFeedbacks.find(function(f) { return f.get('platformStudentId') === student2.get("id"); });
-          const student1HasFeedback = student1Feedback !== undefined ? true : false;
-          const student2HasFeedback = student2Feedback !== undefined ? true : false;
-          const feedbackComp = (student1HasFeedback === student2HasFeedback) ? 0 : student1HasFeedback ? 1 : -1;
+          const currentActivityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
+          const student1Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student1.get("id")
+                                                                          && f.get("activityId") === currentActivityId; });
+          const student2Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
+                                                                          && f.get("activityId") === currentActivityId; });
+          const student1HasFeedback = student1Feedback !== undefined;
+          const student2HasFeedback = student2Feedback !== undefined;
+          const student1Progress = studentProgress.getIn([student1.get("id"), currentActivityId]);
+          const student2Progress = studentProgress.getIn([student2.get("id"), currentActivityId]);
+          const student1SortGroup = student1Progress === 0 ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
+          const student2SortGroup = student2Progress === 0 ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;
+          const feedbackComp = student1SortGroup === student2SortGroup ? 0 : student1SortGroup > student2SortGroup ? 1 : -1;
           return feedbackComp;
         });
       default:
@@ -145,16 +177,3 @@ export const getFeedbackSortedStudents = createSelector(
   },
 );
 
-export const getCurrentActivity = createSelector(
-  [ getActivities, getCurrentActivityId ],
-  (activities, currentActivityId) => {
-    return activities.find(activity => activity.get("id") === currentActivityId);
-  }
-);
-
-export const getCurrentQuestion = createSelector(
-  [ getQuestions, getCurrentQuestionId ],
-  (questions, currentQuestionId) => {
-    return questions.find(activity => activity.get("id") === currentQuestionId);
-  }
-);
