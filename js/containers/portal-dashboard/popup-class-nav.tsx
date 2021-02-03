@@ -56,7 +56,6 @@ class PopupClassNav extends React.PureComponent<IProps>{
                            ? "Awaiting feedback"
                            : listViewMode === "Question" ? "Questions" : "Class";
     const containerLabelType = viewMode === "FeedbackReport" || listViewMode === "Question" ? undefined : "students";
-
     return (
       <div className={`${css.popupClassNav} ${css.column}`}>
         {this.renderViewListOptions()}
@@ -65,7 +64,8 @@ class PopupClassNav extends React.PureComponent<IProps>{
           <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
           {this.renderSortMenu()}
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
-          {viewMode === "FeedbackReport" && feedbackSortByMethod === SORT_BY_FEEDBACK_PROGRESS && this.renderRefreshButton()}
+          {viewMode === "FeedbackReport" && listViewMode === "Student" && feedbackSortByMethod === SORT_BY_FEEDBACK_PROGRESS &&
+           this.renderRefreshButton()}
         </div>
       </div>
     );
