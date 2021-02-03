@@ -22,6 +22,7 @@ export const SELECT_QUESTION = "SELECT_QUESTION";
 
 export const SET_COMPACT_REPORT = "SET_COMPACT_REPORT";
 export const SET_HIDE_FEEDBACK_BADGES = "SET_HIDE_FEEDBACK_BADGES";
+export const SET_FEEDBACK_SORT_REFRESH_ENABLED = "SET_FEEDBACK_SORT_REFRESH_ENABLED";
 
 export const TRACK_EVENT = "TRACK_EVENT";
 
@@ -157,5 +158,12 @@ export function setHideFeedbackBadges(hideFeedbackBadges) {
   return {
     type: SET_HIDE_FEEDBACK_BADGES,
     value: hideFeedbackBadges,
+  };
+}
+
+export function setFeedbackSortRefreshEnabled(refreshEnabled) {
+  return {
+    type: SET_FEEDBACK_SORT_REFRESH_ENABLED,
+    value: refreshEnabled,
   };
 }

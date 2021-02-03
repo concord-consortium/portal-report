@@ -16,12 +16,14 @@ interface IProps {
   feedbacksNeedingReview: Map<any, any>;
   isAnonymous: boolean;
   rubric: any;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, isAnonymous, rubric, updateActivityFeedback, trackEvent } = props;
+  const { activityId, activityIndex, feedbacks, isAnonymous, rubric, setFeedbackSortRefreshEnabled, updateActivityFeedback,
+          trackEvent } = props;
 
   const feedbackRows = feedbacks.map((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
@@ -62,6 +64,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             feedback={feedback}
             key={activityId + studentId + "-textarea"}
             studentId={studentId}
+            setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
             updateActivityFeedback={updateActivityFeedback}
             trackEvent={trackEvent}
           />

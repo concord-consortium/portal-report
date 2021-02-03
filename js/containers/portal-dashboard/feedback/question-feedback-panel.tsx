@@ -2,6 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../../actions/index";
+import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
 import { QuestionLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/question-level-feedback-student-rows";
 import { FeedbackQuestionRows } from "../../../components/portal-dashboard/feedback/feedback-question-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
@@ -20,6 +21,7 @@ interface IProps {
   isAnonymous: boolean;
   listViewMode: ListViewMode;
   questionFeedbacks: Map<any, any>;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
   students: Map<any, any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
@@ -58,6 +60,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               feedbacks={questionFeedbacks}
               feedbacksNeedingReview={feedbacksNeedingReview}
               isAnonymous={isAnonymous}
+              setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
               trackEvent={trackEvent}
@@ -67,6 +70,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               currentActivity={activity}
               currentStudentId={currentStudentId}
               feedbacks={questionFeedbacks}
+              setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
               students={students}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
               trackEvent={trackEvent}
@@ -96,6 +100,7 @@ function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
+    setFeedbackSortRefreshEnabled: (value) => dispatch(setFeedbackSortRefreshEnabled(value)),
     updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
     updateQuestionFeedbackSettings: (embeddableKey, feedbackFlags) => dispatch(updateQuestionFeedbackSettings(embeddableKey, feedbackFlags)),
     trackEvent: (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => dispatch(trackEvent(category, action, options)),

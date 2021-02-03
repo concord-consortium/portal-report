@@ -4,18 +4,19 @@ import { AnonymizeStudents } from "../../components/portal-dashboard/anonymize-s
 import { CustomSelect, SelectItem } from "../../components/portal-dashboard/custom-select";
 import { DashboardViewMode, FeedbackLevel, ListViewMode } from "../../util/misc";
 import { makeGetStudentFeedbacks } from "../../selectors/activity-feedback-selectors";
+import { getfeedbackSortRefreshEnabled } from "../../selectors/dashboard-selectors";
 import { CountContainer } from "../../components/portal-dashboard/count-container";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK_NAME,
-         SORT_BY_FEEDBACK_PROGRESS } from "../../actions/dashboard";
+         SORT_BY_FEEDBACK_PROGRESS, setFeedbackSortRefreshEnabled } from "../../actions/dashboard";
 import SortIcon from "../../../img/svg-icons/sort-icon.svg";
 import StudentViewIcon from "../../../img/svg-icons/student-view-icon.svg";
 import QuestionViewIcon from "../../../img/svg-icons/question-view-icon.svg";
 import SpotlightIcon from "../../../img/svg-icons/spotlight-icon.svg";
 import RefreshIcon from "../../../img/svg-icons/refresh-icon.svg";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/response-details/popup-class-nav.less";
 import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
-import { TrackEventFunction } from "../../actions";
 
 interface IProps {
   anonymous: boolean;
@@ -23,12 +24,14 @@ interface IProps {
   currentQuestion: Map<any, any> | undefined;
   feedbackLevel: FeedbackLevel;
   feedbackSortByMethod: string;
+  feedbackSortRefreshEnabled: boolean;
   isSpotlightOn: boolean;
   listViewMode: ListViewMode;
   numFeedbacksNeedingReview: number;
   onShowDialog: (show: boolean) => void;
   questionCount: number;
   setAnonymous: (value: boolean) => void;
+  setFeedbackSortRefreshEnabled: (value: boolean) => void;
   setListViewMode: (value: ListViewMode) => void;
   setStudentFeedbackSort: (value: string) => void;
   setStudentSort: (value: string) => void;
@@ -44,7 +47,8 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   render() {
-    const { anonymous, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous, viewMode } = this.props;
+    const { anonymous, feedbackSortByMethod, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous,
+            viewMode } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;
@@ -52,7 +56,6 @@ class PopupClassNav extends React.PureComponent<IProps>{
                            ? "Awaiting feedback"
                            : listViewMode === "Question" ? "Questions" : "Class";
     const containerLabelType = viewMode === "FeedbackReport" || listViewMode === "Question" ? undefined : "students";
-
     return (
       <div className={`${css.popupClassNav} ${css.column}`}>
         {this.renderViewListOptions()}
@@ -61,7 +64,8 @@ class PopupClassNav extends React.PureComponent<IProps>{
           <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
           {this.renderSortMenu()}
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
-          { viewMode === "FeedbackReport" && this.renderRefreshButton() }
+          {viewMode === "FeedbackReport" && listViewMode === "Student" && feedbackSortByMethod === SORT_BY_FEEDBACK_PROGRESS &&
+           this.renderRefreshButton()}
         </div>
       </div>
     );
@@ -74,9 +78,10 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
   private handleStudentFeedbackSortSelect = (value: string) => () => {
     const { setStudentFeedbackSort } = this.props;
+    // TODO: update feedback sort
+    this.props.setFeedbackSortRefreshEnabled(false);
     setStudentFeedbackSort(value);
   }
-
 
   private renderSortMenu = () => {
     const { viewMode, listViewMode } = this.props;
@@ -176,9 +181,18 @@ class PopupClassNav extends React.PureComponent<IProps>{
     );
   }
 
+  private handleRefeshSelect = () => {
+    // TODO: update feedback sort
+    this.props.setFeedbackSortRefreshEnabled(false);
+  }
+
   private renderRefreshButton = () => {
+    const { feedbackSortRefreshEnabled } = this.props;
     return (
-      <div className={css.refreshSortContainer}>
+      <div
+        className={`${css.refreshSortContainer} ${!feedbackSortRefreshEnabled ? css.disabled : ""}`}
+        onClick={this.handleRefeshSelect}
+      >
         <button className={css.refreshButton}>
           <RefreshIcon className={css.refreshIcon}/>
         </button>
@@ -211,13 +225,25 @@ function mapStateToProps(state: any, ownProps?: any) {
         });
       });
       const numFeedbacksNeedingReview = studentAnswers.length - feedbackCount;
-      return { numFeedbacksNeedingReview };
+      return {
+        numFeedbacksNeedingReview,
+        feedbackSortRefreshEnabled: getfeedbackSortRefreshEnabled(state),
+      };
     } else {
       const getFeedbacks: any = makeGetStudentFeedbacks();
       const { numFeedbacksNeedingReview } = getFeedbacks(state, ownProps);
-      return { numFeedbacksNeedingReview };
+      return {
+        numFeedbacksNeedingReview,
+        feedbackSortRefreshEnabled: getfeedbackSortRefreshEnabled(state),
+      };
     }
   };
 }
 
-export default connect(mapStateToProps)(PopupClassNav);
+const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
+  return {
+    setFeedbackSortRefreshEnabled: (value) => dispatch(setFeedbackSortRefreshEnabled(value)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PopupClassNav);

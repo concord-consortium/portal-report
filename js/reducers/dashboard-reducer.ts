@@ -2,7 +2,7 @@ import { RecordFactory } from "../util/record-factory";
 import { Map } from "immutable";
 import {
   SET_ACTIVITY_EXPANDED, SET_CURRENT_ACTIVITY, SET_CURRENT_QUESTION, SET_CURRENT_STUDENT,
-  TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION, SET_STUDENT_FEEDBACK_SORT,
+  TOGGLE_CURRENT_ACTIVITY, TOGGLE_CURRENT_QUESTION, SET_STUDENT_FEEDBACK_SORT, SET_FEEDBACK_SORT_REFRESH_ENABLED,
   SET_STUDENT_EXPANDED, SET_STUDENTS_EXPANDED, SET_STUDENT_SORT, SET_COMPACT_REPORT, SET_HIDE_FEEDBACK_BADGES,
   SORT_BY_NAME, SET_QUESTION_EXPANDED,
   SELECT_QUESTION,
@@ -29,6 +29,7 @@ export interface IDashboardState {
   compactReport: boolean;
   hideFeedbackBadges: boolean;
   feedbackSortBy: FeedbackSortType;
+  feedbackSortRefreshEnabled: boolean;
 }
 
 const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
@@ -43,6 +44,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   compactReport: false,
   hideFeedbackBadges: false,
   feedbackSortBy: SORT_BY_FEEDBACK_NAME,
+  feedbackSortRefreshEnabled: false,
 });
 
 export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboardState {
@@ -60,6 +62,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   compactReport: boolean;
   hideFeedbackBadges: boolean;
   feedbackSortBy: FeedbackSortType;
+  feedbackSortRefreshEnabled: boolean;
 }
 
 export default function dashboard(state = new DashboardState({}), action: any) {
@@ -103,6 +106,8 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       return state.set("compactReport", action.value);
     case SET_HIDE_FEEDBACK_BADGES:
       return state.set("hideFeedbackBadges", action.value);
+    case SET_FEEDBACK_SORT_REFRESH_ENABLED:
+      return state.set("feedbackSortRefreshEnabled", action.value);
     default:
       return state;
   }
