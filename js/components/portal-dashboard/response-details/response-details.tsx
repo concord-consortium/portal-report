@@ -193,6 +193,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   activity={currentActivityWithQuestions}
                   activities={activities}
                   currentStudentId={currentStudentId}
+                  feedbackSortByMethod={feedbackSortByMethod}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
                   students={students}

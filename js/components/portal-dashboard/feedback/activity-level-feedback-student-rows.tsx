@@ -5,6 +5,7 @@ import { getFormattedStudentName } from "../../../util/student-utils";
 import { RubricTableContainer } from "./rubric-table";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
+import { SORT_BY_FEEDBACK_PROGRESS } from "../../../actions/dashboard";
 import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
@@ -14,18 +15,25 @@ interface IProps {
   activityIndex: number;
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
+  feedbackSortByMethod: string;
   isAnonymous: boolean;
   rubric: any;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
+  students: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, isAnonymous, rubric, setFeedbackSortRefreshEnabled, updateActivityFeedback,
-          trackEvent } = props;
-
-  const feedbackRows = feedbacks.map((feedbackData: Map<any, any>) => {
+  const { activityId, activityIndex, feedbacks, feedbackSortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
+          students, trackEvent, updateActivityFeedback } = props;
+  const displayedFeedbacks = feedbackSortByMethod !== SORT_BY_FEEDBACK_PROGRESS
+    ? feedbacks
+    : students.map((student: any) => {
+        const feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
+        return feedback;
+      });
+  const feedbackRows = displayedFeedbacks.map((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
     const studentId = student.get("id");
     const formattedName = getFormattedStudentName(isAnonymous, student);
