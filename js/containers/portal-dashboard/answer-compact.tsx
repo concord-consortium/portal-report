@@ -29,7 +29,7 @@ class AnswerCompact extends React.PureComponent<IProps> {
           ? this.renderAnswer(answerType?.icon, iconId)
           : this.renderNoAnswer()
         }
-        {(feedback && !hideFeedbackBadges &&
+        {(feedback && feedback.get("feedback") !== "" && !hideFeedbackBadges &&
           (feedbackValidForAnswer(feedback, answer)
            ? <QuestionFeedbackBadge className={css.feedbackBadge} data-cy="question-feedback-badge" />
            : <FeedbackAnswerUpdatedBadge className={css.feedbackBadge} data-cy="answer-updated-feedback-badge" />)
