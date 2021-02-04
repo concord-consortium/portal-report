@@ -151,8 +151,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
 
     const hasBeenReviewed = numFeedback !== 0;
     if (activityId && studentId) {
-      updateActivityFeedback(activityId, activityIndex, studentId,
-        { rubricFeedback, hasBeenReviewed, ignoreFeedbackWhenSorting: this.props.rubricFeedback === undefined ? true: undefined });
+      updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback, hasBeenReviewed });
     }
   };
 }

@@ -169,9 +169,9 @@ export const getActivityFeedbackSortedStudents = createSelector(
           const student2Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
                                                                           && f.get("activityId") === currentActivityId; });
           const student1HasFeedback = student1Feedback !== undefined && student1Feedback !== ""
-            && !(student1Feedback.get("ignoreFeedbackWhenSorting") === true);
+            && (student1Feedback.get("existingFeedbackSinceLastSort") === true);
           const student2HasFeedback = student2Feedback !== undefined && student1Feedback !== ""
-            && !(student2Feedback.get("ignoreFeedbackWhenSorting") === true);
+            && (student2Feedback.get("existingFeedbackSinceLastSort") === true);
           const student1Progress = studentProgress.getIn([student1.get("id"), currentActivityId]);
           const student2Progress = studentProgress.getIn([student2.get("id"), currentActivityId]);
           const student1SortGroup = student1Progress === 0 ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
@@ -205,9 +205,9 @@ export const getQuestionFeedbackSortedStudents = createSelector(
           const student2Feedback = questionFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
                                                                           && f.get("questionId") === questionId; });
           const student1HasFeedback = student1Feedback !== undefined && student1Feedback !== ""
-            && !(student1Feedback.get("ignoreFeedbackWhenSorting") === true);
+            && (student1Feedback.get("existingFeedbackSinceLastSort") === true);
           const student2HasFeedback = student2Feedback !== undefined && student2Feedback !== ""
-            && !(student2Feedback.get("ignoreFeedbackWhenSorting") === true);
+            && (student2Feedback.get("existingFeedbackSinceLastSort") === true);
 
           const student1Answer = answers.getIn([questionId, student1.get("id")]);
           const student2Answer = answers.getIn([questionId, student2.get("id")]);

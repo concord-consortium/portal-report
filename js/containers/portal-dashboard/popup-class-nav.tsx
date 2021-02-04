@@ -194,14 +194,14 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
   private updateFeedbackSortIgnoreFlag = () => {
     this.props.questionFeedbacks?.forEach((feedback: any) => {
-      if (feedback.get("ignoreFeedbackWhenSorting")) {
-        this.props.updateQuestionFeedback(feedback.get("answerId"), {ignoreFeedbackWhenSorting: false});
+      if (!feedback.get("existingFeedbackSinceLastSort")) {
+        this.props.updateQuestionFeedback(feedback.get("answerId"), {existingFeedbackSinceLastSort: true});
       }
     });
     this.props.activityFeedbacks?.forEach((feedback: any) => {
-      if (feedback.get("ignoreFeedbackWhenSorting")) {
+      if (!feedback.get("existingFeedbackSinceLastSort")) {
         this.props.updateActivityFeedback(feedback.get("activityId"),
-         feedback.get("activityIndex"), feedback.get("platformStudentId"), {ignoreFeedbackWhenSorting: false});
+         feedback.get("activityIndex"), feedback.get("platformStudentId"), {existingFeedbackSinceLastSort: true});
       }
     });
   }
