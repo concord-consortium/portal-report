@@ -170,7 +170,7 @@ export const getActivityFeedbackSortedStudents = createSelector(
                                                                           && f.get("activityId") === currentActivityId; });
           const student1HasFeedback = student1Feedback !== undefined && student1Feedback !== ""
             && (student1Feedback.get("existingFeedbackSinceLastSort") === true);
-          const student2HasFeedback = student2Feedback !== undefined && student1Feedback !== ""
+          const student2HasFeedback = student2Feedback !== undefined && student2Feedback !== ""
             && (student2Feedback.get("existingFeedbackSinceLastSort") === true);
           const student1Progress = studentProgress.getIn([student1.get("id"), currentActivityId]);
           const student2Progress = studentProgress.getIn([student2.get("id"), currentActivityId]);
