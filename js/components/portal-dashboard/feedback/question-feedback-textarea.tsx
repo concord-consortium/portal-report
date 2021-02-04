@@ -28,9 +28,12 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
     }
   }, [textareaRef]);
 
+  const [ feedbackChanged, setFeedbackChanged ] = useState(false);
+
   const handleQuestionFeedbackChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const target = event.currentTarget as HTMLTextAreaElement;
     setHeight(target.scrollHeight);
+    setFeedbackChanged(true);
     updateFeedbackThrottledAndNotLogged();
   };
 
@@ -42,8 +45,6 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
       }
       props.setFeedbackSortRefreshEnabled(true);
       updateQuestionFeedback(answerId, {feedback, hasBeenReviewedForAnswerHash: answerHash(answer), deletedSinceLastSort: feedback === "" ? true : undefined });
-      console.log("new feedback:" + feedback);
-      console.log("original feedback props:" + props.feedback);
     }
   };
 
@@ -61,7 +62,7 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
       onChange={handleQuestionFeedbackChange}
       style={{ height: height + "px" }}
       data-cy="feedback-textarea"
-      onBlur={updateFeedbackLogged}
+      onBlur={feedbackChanged ? updateFeedbackLogged : undefined}
     />
   );
 };

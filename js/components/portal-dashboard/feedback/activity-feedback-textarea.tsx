@@ -25,9 +25,12 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
     }
   }, [textareaRef]);
 
+  const [ feedbackChanged, setFeedbackChanged ] = useState(false);
+
   const handleActivityFeedbackChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const target = event.currentTarget as HTMLTextAreaElement;
     setHeight(target.scrollHeight);
+    setFeedbackChanged(true);
     updateFeedbackThrottledAndNotLogged();
   };
 
@@ -53,7 +56,7 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
       <textarea
         data-cy="feedback-textarea"
         defaultValue={feedback}
-        onBlur={updateFeedbackLogged}
+        onBlur={feedbackChanged ? updateFeedbackLogged : undefined}
         onChange={handleActivityFeedbackChange}
         placeholder="Enter feedback"
         ref={textareaRef}
