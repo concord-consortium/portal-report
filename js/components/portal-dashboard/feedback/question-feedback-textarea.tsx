@@ -41,7 +41,9 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
         trackEvent("Portal-Dashboard", "AddQuestionLevelFeedback", { label: feedback, parameters: { activityId, studentId, questionId, answerId }});
       }
       props.setFeedbackSortRefreshEnabled(true);
-      updateQuestionFeedback(answerId, {feedback, hasBeenReviewedForAnswerHash: answerHash(answer)});
+      updateQuestionFeedback(answerId, {feedback, hasBeenReviewedForAnswerHash: answerHash(answer), deletedSinceLastSort: feedback === "" ? true : undefined });
+      console.log("new feedback:" + feedback);
+      console.log("original feedback props:" + props.feedback);
     }
   };
 
