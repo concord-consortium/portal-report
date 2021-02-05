@@ -76,14 +76,14 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, feedbackLevel } = this.state;
 
     const firstActivity = activities.first();
-    const firstQuestion = questions?.first();
     const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
     const isSequence = activities.size > 1;
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
     const currentActivityWithQuestions = activities.find(activity => activity.get("id") === activityId);
-    let qCount = 0;
+    const firstQuestion = currentActivityWithQuestions.get("questions").first();
 
+    let qCount = 0;
     activities.toArray().forEach((activity: Map<any, any>) => {
       if (activityId === activity.get("id")) {
         const questions = activity.get("questions");
