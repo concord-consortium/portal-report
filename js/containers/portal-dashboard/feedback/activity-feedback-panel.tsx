@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateActivityFeedback, updateActivityFeedbackSettings } from "../../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../../selectors/activity-feedback-selectors";
 import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
+import { getActivityFeedbackSortedStudents } from "../../../selectors/dashboard-selectors";
 import { ActivityLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/activity-level-feedback-student-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 
@@ -24,8 +25,9 @@ interface IProps {
   rubric: any;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
-  students: Map<any, any>;
+  activityFeedbackStudents: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  updateQuestionFeedback: (answerId: string, feedback: any) => void;
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
   trackEvent: TrackEventFunction;
 }
@@ -46,8 +48,8 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, feedbackSortByMethod, isAnonymous, rubric, students,
-            updateActivityFeedback, trackEvent } = this.props;
+    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, feedbackSortByMethod, isAnonymous, rubric,
+            updateActivityFeedback, trackEvent, activityFeedbackStudents } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -61,7 +63,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           isAnonymous={isAnonymous}
           rubric={rubric}
           setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
-          students={students}
+          students={activityFeedbackStudents}
           updateActivityFeedback={updateActivityFeedback}
           trackEvent={trackEvent}
         />
@@ -96,6 +98,7 @@ function mapStateToProps() {
     const autoScores = getAutoscores(state, ownProps);
     const rubric = state.getIn(["feedback", "settings", "rubric"]);
     return {
+      activityFeedbackStudents: getActivityFeedbackSortedStudents(state),
       feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),

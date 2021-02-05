@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import { connect } from "react-redux";
 import { AnonymizeStudents } from "../../components/portal-dashboard/anonymize-students";
 import { CustomSelect, SelectItem } from "../../components/portal-dashboard/custom-select";
@@ -14,6 +15,7 @@ import QuestionViewIcon from "../../../img/svg-icons/question-view-icon.svg";
 import SpotlightIcon from "../../../img/svg-icons/spotlight-icon.svg";
 import RefreshIcon from "../../../img/svg-icons/refresh-icon.svg";
 import { TrackEventFunction } from "../../actions";
+import { updateActivityFeedback, updateQuestionFeedback } from "../../actions/index";
 
 import css from "../../../css/portal-dashboard/response-details/popup-class-nav.less";
 import cssClassNav from "../../../css/portal-dashboard/class-nav.less";
@@ -25,6 +27,10 @@ interface IProps {
   feedbackLevel: FeedbackLevel;
   feedbackSortByMethod: string;
   feedbackSortRefreshEnabled: boolean;
+  activityFeedbacks: Map<any, any>;
+  questionFeedbacks: Map<any, any>;
+  updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  updateQuestionFeedback: (answerId: string, feedback: any) => void;
   isSpotlightOn: boolean;
   listViewMode: ListViewMode;
   numFeedbacksNeedingReview: number;
@@ -78,7 +84,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
   private handleStudentFeedbackSortSelect = (value: string) => () => {
     const { setStudentFeedbackSort } = this.props;
-    // TODO: update feedback sort
+    this.updateFeedbackSortIgnoreFlag();
     this.props.setFeedbackSortRefreshEnabled(false);
     setStudentFeedbackSort(value);
   }
@@ -182,8 +188,27 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private handleRefeshSelect = () => {
-    // TODO: update feedback sort
+    this.updateFeedbackSortIgnoreFlag();
     this.props.setFeedbackSortRefreshEnabled(false);
+  }
+
+  private updateFeedbackSortIgnoreFlag = () => {
+    // TODO: this could be more efficient and only update feedbacks if needed
+    this.props.questionFeedbacks?.forEach((feedback: any) => {
+      const existingFeeback = !!feedback.get("feedback");
+      this.props.updateQuestionFeedback(feedback.get("answerId"), {existingFeedbackSinceLastSort: existingFeeback});
+    });
+    this.props.activityFeedbacks?.forEach((feedback: any) => {
+      const existingFeeback = !!feedback.get("feedback");
+      let existingRubricFeeback = false;
+      feedback.get("rubricFeedback")?.forEach((rf: any) => {
+        if (rf.get("id") && rf.get("id") !== "") {
+          existingRubricFeeback = true;
+        }
+      });
+      this.props.updateActivityFeedback(feedback.get("activityId"),
+        feedback.get("activityIndex"), feedback.get("platformStudentId"), {existingFeedbackSinceLastSort: existingFeeback || existingRubricFeeback});
+    });
   }
 
   private renderRefreshButton = () => {
@@ -226,6 +251,8 @@ function mapStateToProps(state: any, ownProps?: any) {
       });
       const numFeedbacksNeedingReview = studentAnswers.length - feedbackCount;
       return {
+        questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
+        activityFeedbacks: state.getIn(["feedback", "activityFeedbacks"]),
         numFeedbacksNeedingReview,
         feedbackSortRefreshEnabled: getfeedbackSortRefreshEnabled(state),
       };
@@ -233,6 +260,8 @@ function mapStateToProps(state: any, ownProps?: any) {
       const getFeedbacks: any = makeGetStudentFeedbacks();
       const { numFeedbacksNeedingReview } = getFeedbacks(state, ownProps);
       return {
+        questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
+        activityFeedbacks: state.getIn(["feedback", "activityFeedbacks"]),
         numFeedbacksNeedingReview,
         feedbackSortRefreshEnabled: getfeedbackSortRefreshEnabled(state),
       };
@@ -243,6 +272,8 @@ function mapStateToProps(state: any, ownProps?: any) {
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     setFeedbackSortRefreshEnabled: (value) => dispatch(setFeedbackSortRefreshEnabled(value)),
+    updateActivityFeedback: (activityId, activityIndex, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, activityIndex, platformStudentId, feedback)),
+    updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
   };
 };
 

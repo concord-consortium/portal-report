@@ -25,9 +25,12 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
     }
   }, [textareaRef]);
 
+  const [ feedbackChanged, setFeedbackChanged ] = useState(false);
+
   const handleActivityFeedbackChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const target = event.currentTarget as HTMLTextAreaElement;
     setHeight(target.scrollHeight);
+    setFeedbackChanged(true);
     updateFeedbackThrottledAndNotLogged();
   };
 
@@ -38,8 +41,7 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
         trackEvent("Portal-Dashboard", "AddActivityLevelFeedback", { label: feedback, parameters: { activityId, studentId }});
       }
       props.setFeedbackSortRefreshEnabled(true);
-      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value,
-                                                                    hasBeenReviewed});
+      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value, hasBeenReviewed});
     }
   };
 
@@ -54,7 +56,7 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
       <textarea
         data-cy="feedback-textarea"
         defaultValue={feedback}
-        onBlur={updateFeedbackLogged}
+        onBlur={feedbackChanged ? updateFeedbackLogged : undefined}
         onChange={handleActivityFeedbackChange}
         placeholder="Enter feedback"
         ref={textareaRef}

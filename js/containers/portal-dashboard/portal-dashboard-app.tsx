@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getDashboardFeedbackSortBy,
-         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getFeedbackSortedStudents
+         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges
        } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
@@ -35,7 +35,6 @@ interface IProps {
   currentStudentId: string | null;
   error: IResponse;
   expandedActivities: Map<any, any>;
-  feedbackStudents: any;
   hasTeacherEdition: boolean;
   isFetching: boolean;
   questions?: Map<string, any>;
@@ -103,7 +102,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
       setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
       trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod, setStudentFeedbackSort,
-      feedbackStudents } = this.props;
+      } = this.props;
     const { initialLoading, viewMode, listViewMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -260,7 +259,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   sortByMethod={sortByMethod}
                   sortedQuestionIds={sortedQuestionIds}
                   studentCount={students.size}
-                  students={viewMode === "ResponseDetails" ? students : feedbackStudents}
+                  students={students}
                   toggleCurrentQuestion={trackToggleCurrentQuestion}
                   trackEvent={trackEvent}
                   viewMode={viewMode}
@@ -345,7 +344,6 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     feedbackSortByMethod: getDashboardFeedbackSortBy(state),
-    feedbackStudents: dataDownloaded && getFeedbackSortedStudents(state),
     hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
     isFetching: data.get("isFetching"),
     questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
