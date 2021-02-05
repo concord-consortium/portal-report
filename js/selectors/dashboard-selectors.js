@@ -168,17 +168,12 @@ export const getActivityFeedbackSortedStudents = createSelector(
                                                                           && f.get("activityId") === currentActivityId; });
           const student2Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
                                                                           && f.get("activityId") === currentActivityId; });
-          // TODO: need to handle case where feedback is empty string. This happens when feedback is deleted.
-          // In this case feedback must retain sort position with the completed feedback until refresh is pressed
-          // and it returns to awaiting feedback sort position at top of list. deletedSinceLastSort flag is used to determine this.
-          const student1HasFeedback = student1Feedback !== undefined
-            && (student1Feedback.get("feedback") !== "" || student1Feedback.get("deletedSinceLastSort") === true)
-            && (student1Feedback.get("existingFeedbackSinceLastSort") === true);
-          const student2HasFeedback = student2Feedback !== undefined
-            && (student2Feedback.get("feedback") !== "" || student2Feedback.get("deletedSinceLastSort") === true)
-            && (student2Feedback.get("existingFeedbackSinceLastSort") === true);
+          const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
+          const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
+
           const student1Progress = studentProgress.getIn([student1.get("id"), currentActivityId]);
           const student2Progress = studentProgress.getIn([student2.get("id"), currentActivityId]);
+
           const student1SortGroup = student1Progress === 0 ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
           const student2SortGroup = student2Progress === 0 ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;
           const feedbackComp = student1SortGroup === student2SortGroup ? 0 : student1SortGroup > student2SortGroup ? 1 : -1;
@@ -209,15 +204,8 @@ export const getQuestionFeedbackSortedStudents = createSelector(
                                                                           && f.get("questionId") === questionId; });
           const student2Feedback = questionFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
                                                                           && f.get("questionId") === questionId; });
-          // Handle case where feedback is empty string. This happens when feedback is deleted.
-          // In this case feedback must retain sort position with the completed feedback until refresh is pressed
-          // and it returns to awaiting feedback sort position at top of list. deletedSinceLastSort flag is used to determine this.
-          const student1HasFeedback = student1Feedback !== undefined
-            && (student1Feedback.get("feedback") !== "" || student1Feedback.get("deletedSinceLastSort") === true)
-            && (student1Feedback.get("existingFeedbackSinceLastSort") === true);
-          const student2HasFeedback = student2Feedback !== undefined
-            && (student2Feedback.get("feedback") !== "" || student2Feedback.get("deletedSinceLastSort") === true)
-            && (student2Feedback.get("existingFeedbackSinceLastSort") === true);
+          const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
+          const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
 
           const student1Answer = answers.getIn([questionId, student1.get("id")]);
           const student2Answer = answers.getIn([questionId, student2.get("id")]);

@@ -193,16 +193,21 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private updateFeedbackSortIgnoreFlag = () => {
+    // TODO: this could be more efficient and only update feedbacks if needed
     this.props.questionFeedbacks?.forEach((feedback: any) => {
-      if (!feedback.get("existingFeedbackSinceLastSort") || feedback.get("deletedSinceLastSort")) {
-        this.props.updateQuestionFeedback(feedback.get("answerId"), {existingFeedbackSinceLastSort: true, deletedSinceLastSort: false});
-      }
+      const existingFeeback = !!feedback.get("feedback");
+      this.props.updateQuestionFeedback(feedback.get("answerId"), {existingFeedbackSinceLastSort: existingFeeback});
     });
     this.props.activityFeedbacks?.forEach((feedback: any) => {
-      if (!feedback.get("existingFeedbackSinceLastSort") || feedback.get("deletedSinceLastSort")) {
-        this.props.updateActivityFeedback(feedback.get("activityId"),
-         feedback.get("activityIndex"), feedback.get("platformStudentId"), {existingFeedbackSinceLastSort: true, deletedSinceLastSort: false});
-      }
+      const existingFeeback = !!feedback.get("feedback");
+      let existingRubricFeeback = false;
+      feedback.get("rubricFeedback")?.forEach((rf: any) => {
+        if (rf.get("id") && rf.get("id") !== "") {
+          existingRubricFeeback = true;
+        }
+      });
+      this.props.updateActivityFeedback(feedback.get("activityId"),
+        feedback.get("activityIndex"), feedback.get("platformStudentId"), {existingFeedbackSinceLastSort: existingFeeback || existingRubricFeeback});
     });
   }
 
