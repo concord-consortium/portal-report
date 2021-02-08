@@ -8,6 +8,8 @@ import {
   setExtraEventLoggingParameters } from "../../js/actions/index";
 
 describe("actions/index", () => {
+  const classInfo = { id: 1 }
+
   describe("correctKey", () => {
     it("Should not change keys for RECEIVE_ANSWERS", () => {
       expect(correctKey("platform_user_id", RECEIVE_ANSWERS)).toBe("platform_user_id");
@@ -20,28 +22,32 @@ describe("actions/index", () => {
   describe("setLoggingVars", () => {
 
     it("handles activities", () => {
-      expect(setLoggingVars("http://example.com/activities/100", {}).loggingActivity).toBe("activity: 100");
+      expect(setLoggingVars("http://example.com/activities/100", {classInfo}).loggingActivity).toBe("activity: 100");
     });
 
     it("handles sequences", () => {
-      expect(setLoggingVars("http://example.com/sequences/200", {}).loggingActivity).toBe("sequence: 200");
+      expect(setLoggingVars("http://example.com/sequences/200", {classInfo}).loggingActivity).toBe("sequence: 200");
     });
 
     it("handles contextId", () => {
-      expect(setLoggingVars("http://example.com/activities/1", {contextId: "12345"}).loggingContextId).toBe("12345");
+      expect(setLoggingVars("http://example.com/activities/1", {classInfo, contextId: "12345"}).loggingContextId).toBe("12345");
+    });
+
+    it("handles classId", () => {
+      expect(setLoggingVars("http://example.com/activities/1", {classInfo}).loggingClassId).toBe(1);
     });
 
     it("handles production portal logging", () => {
       const prodLogManagerUrl = "//cc-log-manager.herokuapp.com/api/logs";
-      expect(setLoggingVars("http://example.com/activities/1", {platformId: "https://learn.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
-      expect(setLoggingVars("http://example.com/activities/1", {platformId: "https://itsi.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
-      expect(setLoggingVars("http://example.com/activities/1", {platformId: "https://ngsa.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
+      expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://learn.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
+      expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://itsi.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
+      expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://ngsa.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
     });
 
     it("handles staging/development portal logging", () => {
       const stagingLogManagerUrl = "//cc-log-manager-dev.herokuapp.com/api/logs";
-      expect(setLoggingVars("http://example.com/activities/1", {platformId: "https://learn.staging.concord.org"}).logManagerUrl).toBe(stagingLogManagerUrl);
-      expect(setLoggingVars("http://example.com/activities/1", {platformId: "https://app.rigse.docker"}).logManagerUrl).toBe(stagingLogManagerUrl);
+      expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://learn.staging.concord.org"}).logManagerUrl).toBe(stagingLogManagerUrl);
+      expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://app.rigse.docker"}).logManagerUrl).toBe(stagingLogManagerUrl);
     });
   });
 
@@ -103,7 +109,7 @@ describe("actions/index", () => {
 
       describe("for activities", () => {
         beforeEach(() => {
-          setLoggingVars("http://example.com/activities/1", {contextId: "12345"});
+          setLoggingVars("http://example.com/activities/1", {classInfo, contextId: "12345"});
           setExtraEventLoggingParameters({
             className: "Test Class",
             sequenceName: "Should Not Appear In Logs for Activities",
@@ -113,13 +119,13 @@ describe("actions/index", () => {
 
         it("logs logging vars and extra parameters", () => {
           trackEvent("Report", "action 1")(dispatch, getState);
-          expect(xmlHTTPSend).toHaveBeenCalledWith(expect.stringContaining("\"parameters\":{\"contextId\":\"12345\",\"className\":\"Test Class\",\"activityName\":\"Test Activity\"}"));
+          expect(xmlHTTPSend).toHaveBeenCalledWith(expect.stringContaining("\"parameters\":{\"contextId\":\"12345\",\"classId\":1,\"className\":\"Test Class\",\"activityName\":\"Test Activity\"}"));
         });
       });
 
       describe("for sequences", () => {
         beforeEach(() => {
-          setLoggingVars("http://example.com/sequences/1", {contextId: "12345"});
+          setLoggingVars("http://example.com/sequences/1", {classInfo, contextId: "12345"});
           setExtraEventLoggingParameters({
             className: "Test Class",
             sequenceName: "Test Sequence",
@@ -129,7 +135,7 @@ describe("actions/index", () => {
 
         it("logs logging vars and extra parameters", () => {
           trackEvent("Report", "action 1")(dispatch, getState);
-          expect(xmlHTTPSend).toHaveBeenCalledWith(expect.stringContaining("\"parameters\":{\"contextId\":\"12345\",\"className\":\"Test Class\",\"sequenceName\":\"Test Sequence\",\"activityName\":\"Test Activity\"}"));
+          expect(xmlHTTPSend).toHaveBeenCalledWith(expect.stringContaining("\"parameters\":{\"contextId\":\"12345\",\"classId\":1,\"className\":\"Test Class\",\"sequenceName\":\"Test Sequence\",\"activityName\":\"Test Activity\"}"));
         });
       });
     });

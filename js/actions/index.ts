@@ -539,6 +539,7 @@ export function saveRubric(rubricContent: any) {
 let logManagerUrl = "//cc-log-manager-dev.herokuapp.com/api/logs";
 let loggingActivity = "n/a";
 let loggingContextId = "n/a";
+let loggingClassId = 0;
 let loggingIsSequence = false;
 const loggingSession = uuid();
 const parsedQuery = queryString.parseUrl(window.location.toString()).query;
@@ -551,6 +552,7 @@ export function setLoggingVars(resourceUrl: string, rawPortalData: IPortalRawDat
     const type = match[1] === "activities" ? "activity" : "sequence";
     loggingActivity = `${type}: ${match[2]}`;
     loggingContextId = rawPortalData.contextId;
+    loggingClassId = rawPortalData.classInfo.id;
     loggingIsSequence = match[1] === "sequences";
 
     // use production log manager on production portals
@@ -563,6 +565,7 @@ export function setLoggingVars(resourceUrl: string, rawPortalData: IPortalRawDat
   return {
     loggingActivity,
     loggingContextId,
+    loggingClassId,
     logManagerUrl
   };
 }
@@ -601,6 +604,7 @@ export function trackEvent(category: TrackEventCategory, action: string, options
     if (loggingEnabled) {
       const parameters = options?.parameters || {};
       parameters.contextId = loggingContextId;
+      parameters.classId = loggingClassId;
       if (loggingClassName !== null) {
         parameters.className = loggingClassName;
       }
