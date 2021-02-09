@@ -5,6 +5,7 @@ import { TrackEventFunction } from "../../actions";
 import ActivityFeedbackGivenIcon from "../../../img/svg-icons/feedback-activity-badge-icon.svg";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
+import { hasRubricFeedback } from "../../util/activity-feedback-helper";
 
 
 interface IProps {
@@ -17,6 +18,7 @@ interface IProps {
   expandedActivities: Map<any, any>;
   isCompact: boolean;
   questionFeedbacks?: Map<any, any>;
+  rubric: any;
   students: Map<any, any>;
   studentProgress: Map<any, any>;
   setCurrentActivity: (activityId: string) => void;
@@ -131,7 +133,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderProgress = (activity: any, student: any) => {
-    const { studentProgress, activityFeedbacks } = this.props;
+    const { studentProgress, activityFeedbacks, rubric  } = this.props;
     const numQuestions = activity.get("questions").size;
     const progress = studentProgress.getIn([student.get("id"), activity.get("id")]);
     const activityStudentId = activity.get("id")+"-"+student.get("id");
@@ -142,10 +144,16 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const numAnswered = Math.round(progress * numQuestions);
     const progressClass = hasBeenReviewed ? css.reviewed
                                           : progress > 0 ? css.progress : "";
+    const rubricFeedback = (activityFeedbacks.size > 0 && activityStudentFeedback) && (activityStudentFeedback.get("rubricFeedback"));
+    const rubricFeedbackGiven = rubric && hasRubricFeedback(rubric, rubricFeedback);
+    // eslint-disable-next-line no-console
+    console.log(student.get("name"), activityStudentFeedback?.get("feedback") !=="", " and ", rubricFeedbackGiven);
+    const hasFeedbacks = (activityFeedbacks.size > 0 && activityStudentFeedback)
+                         && (activityStudentFeedback.get("feedback") !=="" || rubricFeedbackGiven);
 
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>
-        { hasBeenReviewed && <ActivityFeedbackGivenIcon className={css.activityFeedbackBadge} data-cy="activity-feedback-badge"/> }
+        { hasFeedbacks && <ActivityFeedbackGivenIcon className={css.activityFeedbackBadge} data-cy="activity-feedback-badge"/> }
         { this.renderProgressIcon(progress)}
         { (progress > 0 && progress < 1) &&
           <div><span className={css.numAnswered}>{numAnswered}</span><span>/{numQuestions}</span></div>
