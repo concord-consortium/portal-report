@@ -129,7 +129,7 @@ context("Portal Dashboard Feedback Panel", () => {
           .and('eq', 'rgb(255, 255, 255)');
         cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
           .should('have.attr', 'fill')
-          .and('include', '#FFF');
+          .and('include', '#4EA15A'); //Still green because it has text feedback
       });
     });
     describe('verify question-level feedback textareas appear and accept input', () => {

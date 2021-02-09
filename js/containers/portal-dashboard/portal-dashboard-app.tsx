@@ -99,11 +99,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, feedback, report,
-      sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
-      setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
-      trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod, setStudentFeedbackSort,
-      } = this.props;
+    const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId,
+      error, feedback, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
+      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
+      toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
+      setStudentFeedbackSort} = this.props;
     const { initialLoading, viewMode, listViewMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -322,7 +322,6 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const dataDownloaded = !error && !data.get("isFetching");
   const questions = dataDownloaded ? state.getIn(["report", "questions"]) : undefined;
   const activities = dataDownloaded ? state.getIn(["report", "activities"]) : undefined;
-  // const feedback = state.get("feedback").get("rubric");
 
   let sortedQuestionIds;
   if (questions && activities) {

@@ -22,5 +22,5 @@ export function hasRubricFeedback(rubric: any, rubricFeedback: any) {
       }
     }
   });
-  return numFeedback !==0;
+  return numFeedback !== 0;
 }
