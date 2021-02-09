@@ -144,10 +144,8 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const numAnswered = Math.round(progress * numQuestions);
     const progressClass = hasBeenReviewed ? css.reviewed
                                           : progress > 0 ? css.progress : "";
-    const rubricFeedback = (activityFeedbacks.size > 0 && activityStudentFeedback) && (activityStudentFeedback.get("rubricFeedback"));
+    const rubricFeedback = activityFeedbacks.size > 0 && activityStudentFeedback?.get("rubricFeedback")?.toJS();
     const rubricFeedbackGiven = rubric && hasRubricFeedback(rubric, rubricFeedback);
-    // eslint-disable-next-line no-console
-    console.log(student.get("name"), activityStudentFeedback?.get("feedback") !=="", " and ", rubricFeedbackGiven);
     const hasFeedbacks = (activityFeedbacks.size > 0 && activityStudentFeedback)
                          && (activityStudentFeedback.get("feedback") !=="" || rubricFeedbackGiven);
 
