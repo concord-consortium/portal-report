@@ -12,3 +12,15 @@ export interface IActivityFeedbackRecord {
 export function getActivityStudentFeedbackKey(data: IActivityFeedbackRecord) {
   return validFsId(`${data.activityId}-${data.platformStudentId}`);
 }
+
+export function hasRubricFeedback(rubric: any, rubricFeedback: any) {
+  let numFeedback = 0;
+  rubric.criteria.forEach((crit: any) => {
+    if (rubricFeedback && rubricFeedback[crit.id]) {
+      if (rubricFeedback[crit.id].id !== "") {
+        numFeedback++;
+      }
+    }
+  });
+  return numFeedback > 0;
+}

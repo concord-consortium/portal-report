@@ -2,6 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import Markdown from "markdown-to-jsx";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
+import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-table.less";
 
@@ -140,16 +141,8 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
 
   private rubricChange = (rubricFeedback: any, studentId: string) => {
     const { rubric, activityId, activityIndex, updateActivityFeedback } = this.props;
-    let numFeedback = 0;
-    rubric.criteria.forEach((crit: any) => {
-      if (rubricFeedback && rubricFeedback[crit.id]) {
-        if (rubricFeedback[crit.id].id !== "") {
-          numFeedback++;
-        }
-      }
-    });
+    const hasBeenReviewed = hasRubricFeedback(rubric, rubricFeedback);
 
-    const hasBeenReviewed = numFeedback !== 0;
     if (activityId && studentId) {
       updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback, hasBeenReviewed });
     }
