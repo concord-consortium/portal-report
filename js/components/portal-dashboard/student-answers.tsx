@@ -147,7 +147,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const rubricFeedback = activityFeedbacks.size > 0 && activityStudentFeedback?.get("rubricFeedback")?.toJS();
     const rubricFeedbackGiven = rubric && hasRubricFeedback(rubric, rubricFeedback);
     const hasFeedbacks = (activityFeedbacks.size > 0 && activityStudentFeedback)
-                         && (activityStudentFeedback.get("feedback") !=="" || rubricFeedbackGiven);
+                         && (activityStudentFeedback.get("feedback") !== "" || rubricFeedbackGiven);
 
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>

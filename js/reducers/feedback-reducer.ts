@@ -17,8 +17,7 @@ const INITIAL_FEEDBACK_STATE = RecordFactory<IFeedbackState>({
   settings: fromJS({}),
   questionFeedbacks: fromJS({}),
   activityFeedbacks: fromJS({}),
-  rubric: fromJS({}),
-
+  rubric: fromJS({})
 });
 
 export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackState {
