@@ -7,6 +7,7 @@ import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaitin
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
 import { SORT_BY_FEEDBACK_PROGRESS } from "../../../actions/dashboard";
 import { TrackEventFunction } from "../../../actions";
+import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -26,29 +27,29 @@ interface IProps {
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { activityId, activityIndex, feedbacks, feedbackSortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
-          students, trackEvent, updateActivityFeedback } = props;
+    students, trackEvent, updateActivityFeedback } = props;
   const displayedFeedbacks = feedbackSortByMethod !== SORT_BY_FEEDBACK_PROGRESS
     ? feedbacks
     : students.map((student: any) => {
-        const feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
-        return feedback;
-      });
+      const feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
+      return feedback;
+    });
   const feedbackRows = displayedFeedbacks.map((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
     const studentId = student.get("id");
     const formattedName = getFormattedStudentName(isAnonymous, student);
     const activityStarted = feedbackData.get("activityStarted");
-    const hasBeenReviewed = feedbackData.get("hasBeenReviewed");
     const feedback = feedbackData.get("feedback");
     const hasRubric = rubric;
     const { rubricFeedback } = feedbackData.toJS();
-    const feedbackBadge = hasBeenReviewed ? <GivenFeedbackActivityBadgeIcon /> : <AwaitingFeedbackActivityBadgeIcon />;
+    const hasFeedbacks = feedback || hasRubricFeedback(rubric, rubricFeedback);
+    const feedbackBadge = hasFeedbacks ? <GivenFeedbackActivityBadgeIcon /> : <AwaitingFeedbackActivityBadgeIcon />;
 
     return (
       <div key={activityId + studentId} className={css.feedbackRowsRow} data-cy="feedbackRow">
         <div className={css.studentWrapper}>
           <div className={css.feedbackBadge} data-cy="feedback-badge">
-            { activityStarted && feedbackBadge }
+            {activityStarted && feedbackBadge}
           </div>
           <div className={css.studentName} data-cy="student-name">
             {formattedName}

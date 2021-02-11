@@ -35,6 +35,7 @@ interface IProps {
   currentStudentId: string | null;
   error: IResponse;
   expandedActivities: Map<any, any>;
+  feedback: any;
   hasTeacherEdition: boolean;
   isFetching: boolean;
   questions?: Map<string, any>;
@@ -98,17 +99,19 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   render() {
-    const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId, error, report,
-      sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions, expandedActivities,
-      setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity, toggleCurrentQuestion,
-      trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod, setStudentFeedbackSort,
-      } = this.props;
+    const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId,
+      error, feedback, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
+      expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
+      toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
+      setStudentFeedbackSort} = this.props;
     const { initialLoading, viewMode, listViewMode } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
+    const rubric = feedback.get("rubric")?.toJS();
     let assignmentName: string;
+
     if (sequenceTree && sequenceTree.get("name") !== "") {
       assignmentName = sequenceTree.get("name");
     }
@@ -210,6 +213,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 expandedActivities={expandedActivities}
                 isCompact={compactReport}
                 questionFeedbacks={questionFeedbacks}
+                rubric={rubric}
                 setCurrentActivity={trackSetCurrentActivity}
                 setCurrentQuestion={trackSetCurrentQuestion}
                 setCurrentStudent={trackSetCurrentStudent}
@@ -318,6 +322,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const dataDownloaded = !error && !data.get("isFetching");
   const questions = dataDownloaded ? state.getIn(["report", "questions"]) : undefined;
   const activities = dataDownloaded ? state.getIn(["report", "activities"]) : undefined;
+
   let sortedQuestionIds;
   if (questions && activities) {
     sortedQuestionIds = questions.keySeq().toArray().sort((q1Id: string, q2Id: string) => {
@@ -332,6 +337,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
       }
     });
   }
+
   return {
     activityFeedbacks: state.getIn(["feedback", "activityFeedbacks"]),
     anonymous: getAnonymous(state),
@@ -343,6 +349,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     currentStudentId: getCurrentStudentId(state),
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
+    feedback: state.getIn(["feedback", "settings"]),
     feedbackSortByMethod: getDashboardFeedbackSortBy(state),
     hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
     isFetching: data.get("isFetching"),

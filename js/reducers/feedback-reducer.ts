@@ -10,12 +10,14 @@ export interface IFeedbackState {
   settings: Map<any, any>;
   questionFeedbacks: Map<any, any>;
   activityFeedbacks: Map<any, any>;
+  rubric: any;
 }
 
 const INITIAL_FEEDBACK_STATE = RecordFactory<IFeedbackState>({
   settings: fromJS({}),
   questionFeedbacks: fromJS({}),
-  activityFeedbacks: fromJS({})
+  activityFeedbacks: fromJS({}),
+  rubric: fromJS({})
 });
 
 export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackState {
@@ -25,6 +27,7 @@ export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackSt
   settings: Map<any, any>;
   questionFeedbacks: Map<any, any>;
   activityFeedbacks: Map<any, any>;
+  rubric: any;
 }
 
 export default function feedback(state = new FeedbackState({}), action: any) {
