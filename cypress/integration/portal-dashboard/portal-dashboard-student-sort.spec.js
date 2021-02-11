@@ -25,7 +25,7 @@ context("Portal Dashboard Student Sort",() =>{
 
     it('verify we sort by least progress',()=>{
       cy.get('[data-cy=sort-students]').click();
-      cy.get('[data-cy="list-item-least-progress"]').should('be.visible').click();
+      cy.get('[data-cy="list-item-least-progress"]').click({force:true});
       cy.get('[data-cy=student-name]').eq(0).should("contain", "Galloway, Amy");
       cy.get('[data-cy=student-name]').eq(1).should("contain", "Crosby, Kate");
       cy.get('[data-cy=student-name]').eq(2).should("contain", "Armstrong, Jenna");
