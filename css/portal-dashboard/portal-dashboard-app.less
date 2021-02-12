@@ -4,6 +4,7 @@
   height: 100%;
   color: @cc-charcoal;
   font-family: lato, arial, helvetica, sans-serif;
+  overflow-x: hidden;
 
   .navigation {
     display: flex;
@@ -26,6 +27,7 @@
   .responseDetails {
     overflow-x: auto;
     position: fixed;
+    top: @header-height;
     bottom: 0;
     padding: 0;
     box-sizing: border-box;
@@ -33,7 +35,6 @@
     background-color: #ffffff;
     transition: all 0.5s ease;
     width: 100%;
-    height: 100%;
     font-weight: bold;
     z-index: 1;
     display: flex;
