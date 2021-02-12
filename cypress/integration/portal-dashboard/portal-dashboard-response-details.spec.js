@@ -80,8 +80,8 @@ context("Portal Dashboard Question Details Panel", () => {
       })
     });
     after(()=>{
-      cy.get('[data-cy=navigation-select]').eq(1).should('be.visible').click();
-      cy.get('[data-cy=list-item-progress-dashboard]').eq(1).click();
+      cy.get('[data-cy=navigation-select]').should('be.visible').click();
+      cy.get('[data-cy=list-item-progress-dashboard]').click();
     });
   });
   context('Question nav area',()=>{

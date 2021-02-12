@@ -32,7 +32,7 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=student-answer]').should('not.exist');
       });
       it("show question-level feedback", () => {
-        cy.get('[data-cy=question-level-feedback-button]').should('be.visible').click();
+        cy.get('[data-cy=question-level-feedback-button]').scrollIntoView().should('be.visible').click();
         cy.get('[data-cy=list-by-questions-toggle]').should('not.be.disabled');
         cy.get('[data-cy=feedback-note-toggle-button]').should('be.visible').click();
         cy.get('[data-cy=feedback-note-modal]')
