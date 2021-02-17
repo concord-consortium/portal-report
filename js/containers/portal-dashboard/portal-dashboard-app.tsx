@@ -169,78 +169,79 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
     return (
       <div className={css.portalDashboardApp}>
-        {sequenceTree && this.renderHeader(assignmentName, "ProgressDashboard" )}
+
+        {this.renderHeader(assignmentName, viewMode )}
         {activityTrees &&
-          <div>
-            <div className={css.navigation}>
-              <ClassNav
-                anonymous={anonymous}
-                clazzName={clazzName}
-                setAnonymous={trackSetAnonymous}
-                setStudentSort={setStudentSort}
-                sortByMethod={sortByMethod}
-                studentCount={students.size}
-                trackEvent={trackEvent}
-                viewMode={viewMode}
-              />
-              <LevelViewer
-                activities={activityTrees}
-                currentActivity={currentActivity}
-                currentQuestion={currentQuestion}
-                hideFeedbackBadges={hideFeedbackBadges}
-                leftPosition={this.state.scrollLeft}
-                studentProgress={studentProgress}
-                toggleCurrentActivity={trackToggleCurrentActivity}
-                toggleCurrentQuestion={trackToggleCurrentQuestion}
-              />
-            </div>
-            <div className={css.progressTable} onScroll={this.handleScroll} data-cy="progress-table">
-              <StudentNames
-                students={students}
-                isAnonymous={isAnonymous}
-                isCompact={compactReport}
-                setCurrentStudent={trackSetCurrentStudent}
-                setDashboardViewMode={this.setDashboardViewMode}
-                setListViewMode={this.setListViewMode}
-              />
-              <StudentAnswers
-                activities={activityTrees}
-                activityFeedbacks={activityFeedbacks}
-                answers={answers}
+          ( viewMode === "ProgressDashboard"
+            ? <div>
+              <div className={css.navigation}>
+                <ClassNav
+                  anonymous={anonymous}
+                  clazzName={clazzName}
+                  setAnonymous={trackSetAnonymous}
+                  setStudentSort={setStudentSort}
+                  sortByMethod={sortByMethod}
+                  studentCount={students.size}
+                  trackEvent={trackEvent}
+                  viewMode={viewMode}
+                />
+                <LevelViewer
+                  activities={activityTrees}
+                  currentActivity={currentActivity}
+                  currentQuestion={currentQuestion}
+                  hideFeedbackBadges={hideFeedbackBadges}
+                  leftPosition={this.state.scrollLeft}
+                  studentProgress={studentProgress}
+                  toggleCurrentActivity={trackToggleCurrentActivity}
+                  toggleCurrentQuestion={trackToggleCurrentQuestion}
+                />
+              </div>
+              <div className={css.progressTable} onScroll={this.handleScroll} data-cy="progress-table">
+                <StudentNames
+                  students={students}
+                  isAnonymous={isAnonymous}
+                  isCompact={compactReport}
+                  setCurrentStudent={trackSetCurrentStudent}
+                  setDashboardViewMode={this.setDashboardViewMode}
+                  setListViewMode={this.setListViewMode}
+                />
+                <StudentAnswers
+                  activities={activityTrees}
+                  activityFeedbacks={activityFeedbacks}
+                  answers={answers}
+                  currentActivity={currentActivity}
+                  currentQuestion={currentQuestion}
+                  currentStudentId={currentStudentId}
+                  expandedActivities={expandedActivities}
+                  isCompact={compactReport}
+                  questionFeedbacks={questionFeedbacks}
+                  rubric={rubric}
+                  setCurrentActivity={trackSetCurrentActivity}
+                  setCurrentQuestion={trackSetCurrentQuestion}
+                  setCurrentStudent={trackSetCurrentStudent}
+                  students={students}
+                  studentProgress={studentProgress}
+                  trackEvent={trackEvent}
+                />
+              </div>
+              <QuestionOverlay
                 currentActivity={currentActivity}
                 currentQuestion={currentQuestion}
                 currentStudentId={currentStudentId}
-                expandedActivities={expandedActivities}
-                isCompact={compactReport}
-                questionFeedbacks={questionFeedbacks}
-                rubric={rubric}
+                setDashboardViewMode={this.setDashboardViewMode}
+                isAnonymous={isAnonymous}
+                questions={questions}
                 setCurrentActivity={trackSetCurrentActivity}
-                setCurrentQuestion={trackSetCurrentQuestion}
                 setCurrentStudent={trackSetCurrentStudent}
+                setListViewMode={this.setListViewMode}
+                sortedQuestionIds={sortedQuestionIds}
                 students={students}
-                studentProgress={studentProgress}
+                toggleCurrentQuestion={trackToggleCurrentQuestion}
+                hasTeacherEdition={hasTeacherEdition}
                 trackEvent={trackEvent}
               />
             </div>
-            <QuestionOverlay
-              currentActivity={currentActivity}
-              currentQuestion={currentQuestion}
-              currentStudentId={currentStudentId}
-              setDashboardViewMode={this.setDashboardViewMode}
-              isAnonymous={isAnonymous}
-              questions={questions}
-              setCurrentActivity={trackSetCurrentActivity}
-              setCurrentStudent={trackSetCurrentStudent}
-              setListViewMode={this.setListViewMode}
-              sortedQuestionIds={sortedQuestionIds}
-              students={students}
-              toggleCurrentQuestion={trackToggleCurrentQuestion}
-              hasTeacherEdition={hasTeacherEdition}
-              trackEvent={trackEvent}
-            />
-            { viewMode !== "ProgressDashboard" &&
-              <div className={css.responseDetails} data-cy="response-details-container">
-                {this.renderHeader(assignmentName, viewMode)}
+            : <div className={css.responseDetails} data-cy="response-details-container">
                 <ResponseDetails
                   activities={activityTrees}
                   anonymous={anonymous}
@@ -268,9 +269,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   trackEvent={trackEvent}
                   viewMode={viewMode}
                 />
-              </div>
-            }
-          </div>
+            </div>
+          )
         }
         {error && <DataFetchError error={error} />}
         {initialLoading && <LoadingIcon />}
@@ -279,22 +279,23 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode) => {
-    const { userName, setCompactReport, setHideFeedbackBadges, trackEvent } = this.props;
+    const { sequenceTree, userName, setCompactReport, setHideFeedbackBadges, trackEvent } = this.props;
     const { viewMode} = this.state;
     const color: ColorTheme = headerViewMode === "ProgressDashboard"
       ? "progress"
       : headerViewMode === "ResponseDetails" ? "response" : "feedback";
+
     return (
-      <Header
-        userName={userName}
-        setCompact={headerViewMode === "ProgressDashboard" ? setCompactReport : undefined}
-        setHideFeedbackBadges={headerViewMode === "ProgressDashboard" ? setHideFeedbackBadges : undefined}
-        assignmentName={assignmentName}
-        trackEvent={trackEvent}
-        setDashboardViewMode={this.setDashboardViewMode}
-        viewMode={viewMode}
-        colorTheme={color}
-      />
+      sequenceTree && <Header
+                        userName={userName}
+                        setCompact={headerViewMode === "ProgressDashboard" ? setCompactReport : undefined}
+                        setHideFeedbackBadges={headerViewMode === "ProgressDashboard" ? setHideFeedbackBadges : undefined}
+                        assignmentName={assignmentName}
+                        trackEvent={trackEvent}
+                        setDashboardViewMode={this.setDashboardViewMode}
+                        viewMode={viewMode}
+                        colorTheme={color}
+                      />
     );
   }
 

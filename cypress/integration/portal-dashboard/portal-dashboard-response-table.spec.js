@@ -81,8 +81,8 @@ context("Feedback badges in response table", () => {
     cy.get("[data-cy=feedback-textarea]").eq(0).click().type("Good job!");
     cy.get("[data-cy=activity-level-feedback-button]").click();
     cy.get("[data-cy=feedback-textarea]").eq(0).click().type("Good job!");
-    cy.get("[data-cy=navigation-select]").eq(1).click();
-    cy.get("[data-cy=list-item-progress-dashboard]").eq(1).click();
+    cy.get("[data-cy=navigation-select]").click();
+    cy.get("[data-cy=list-item-progress-dashboard]").click();
   })
 
   it("Activity feedback badge appears in response table when there is feedback given", () => {
