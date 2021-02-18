@@ -286,16 +286,17 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       : headerViewMode === "ResponseDetails" ? "response" : "feedback";
 
     return (
-      sequenceTree && <Header
-                        userName={userName}
-                        setCompact={headerViewMode === "ProgressDashboard" ? setCompactReport : undefined}
-                        setHideFeedbackBadges={headerViewMode === "ProgressDashboard" ? setHideFeedbackBadges : undefined}
-                        assignmentName={assignmentName}
-                        trackEvent={trackEvent}
-                        setDashboardViewMode={this.setDashboardViewMode}
-                        viewMode={viewMode}
-                        colorTheme={color}
-                      />
+      sequenceTree &&
+        <Header
+          userName={userName}
+          setCompact={headerViewMode === "ProgressDashboard" ? setCompactReport : undefined}
+          setHideFeedbackBadges={headerViewMode === "ProgressDashboard" ? setHideFeedbackBadges : undefined}
+          assignmentName={assignmentName}
+          trackEvent={trackEvent}
+          setDashboardViewMode={this.setDashboardViewMode}
+          viewMode={viewMode}
+          colorTheme={color}
+        />
     );
   }
 
