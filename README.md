@@ -14,6 +14,8 @@ At this time the portal report data can be presented in report view or in dashbo
 
 To send events to the log manager add the URL parameter of `logging=true`.  To see what is logged in the console add the URL parameter of `debugLogging=true`.
 
+More details on the available url parameters are in [launch.md](docs/launch.md#url-parameters).
+
 ## Library
 
 Portal Report is a standalone application, but it also provides some React components that can be used by other projects
