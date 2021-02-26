@@ -79,7 +79,7 @@ Data is fetched using `api.js`.
 
 If the query parameters of the url do not include values for `offering` and `class`, we will load in fake data from the `js/data` folder. This data gets loaded in much the same way as real data, so can be used for testing.
 
-If we do have `offering` and `class` parameters, then `api.js` will first attempt to get the data for the offering and class from the portal. To do this it also needs a `token` parameter, which is used to authenticate with the portal and expires after one hour. Besides the class and offering data, we will also fetch a firestore JWT from the portal, given the classHash (from the fetched class data) and the token. Using this JWT, we can authenticate with Firestore. Once we have successfully authenticated, `receivePortalData` is called in `index.ts`, which starts watching the sequence structure and answer data.
+If we do have `offering` and `class` parameters, then `api.js` will first attempt to get the data for the offering and class from the portal. To do this it also needs a `token` parameter, which is used to authenticate with the portal and expires after one hour. Besides the class and offering data, we will also fetch a firestore JWT from the portal, given the classHash (from the fetched class data), the resourceLinkId (from the offering info), and the auth token. Using this JWT, we can authenticate with Firestore. Once we have successfully authenticated, `receivePortalData` is called in `index.ts`, which starts watching the sequence structure and answer data.
 
 To test the portal using real data, the easiest way is simply to open a report as a teacher from the portal, and then replace the url host and path with `localhost:8080`. Alternatively, if it is OK to mess with the assignment, you can add an additional report to the resource which launches your localhost report. An example of this is the "Developers Tracked Questions (Local)" external report.
 
@@ -97,6 +97,7 @@ To test the portal using real data, the easiest way is simply to open a report a
 * `iframeQuestionId={id}`: This, combined with a valid `studentId`, will show a stand-alone, full-size iframe containing the model referenced by `iframeQuestionId`, and the answer saved by `studentId` (either as state or as a url).
 * `sourceKey`: main source key used in the paths for the various documents used by the portal report. The paths are documented in [report-service.md](report-service.md). See the Source Keys section for more details. The parameter is ignored when launching anonymously. See `activity` param. Default value is the hostname of the activity URL from the portal offering data.
 * `answersSourceKey`: the source key for the answers. See the Source Keys section for more details. Default value is the value of the `sourceKey` param.
+* `logging`: send events to the log manager with `logging=true`
 
 Parameters for showing data stored anonymously in the report service
 
@@ -109,9 +110,11 @@ Parameters for 3rd party launching
                     used instead of the `token` param. The portal report will do an OAuth2 request to the auth-domain
                     in order to get an access-token.
 
-Parameters to help with running local tests
+Parameters to help with testing
 
 * `enableFirestorePersistence=true`: Uses a local firestore DB for data persistance across sessions and tabs. Clear the
                     DB by going to `dev tools > Application > IndexedDB > firebaseLocalStorageDb > Delete database`
 * `clearFirestorePersistence=true`: Clears local firestore DB. If this and `enableFirestorePersistence=true` are set
                     then the DB will be cleared first before the local persistence is enabled.
+* `resourceType`: By default the report loads a fake sequence, with the `resourceType=activity`, it will load a fake activity
+* `debugLogging`: Set this to true `debugLogging=true` to record log events to the console
