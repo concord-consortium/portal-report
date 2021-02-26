@@ -16,6 +16,7 @@ interface IProps {
   currentQuestion: Map<any, any> | undefined;
   currentStudentId: string | null;
   expandedActivities: Map<any, any>;
+  hideFeedbackBadges: boolean;
   isCompact: boolean;
   questionFeedbacks?: Map<any, any>;
   rubric: any;
@@ -133,7 +134,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderProgress = (activity: any, student: any) => {
-    const { studentProgress, activityFeedbacks, rubric  } = this.props;
+    const { studentProgress, activityFeedbacks, rubric, hideFeedbackBadges  } = this.props;
     const numQuestions = activity.get("questions").size;
     const progress = studentProgress.getIn([student.get("id"), activity.get("id")]);
     const activityStudentId = activity.get("id")+"-"+student.get("id");
@@ -142,7 +143,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
                             && activityStudentFeedback
                             && activityStudentFeedback.get("hasBeenReviewed");
     const numAnswered = Math.round(progress * numQuestions);
-    const progressClass = hasBeenReviewed ? css.reviewed
+    const progressClass = !hideFeedbackBadges && hasBeenReviewed ? css.reviewed
                                           : progress > 0 ? css.progress : "";
     const rubricFeedback = activityFeedbacks.size > 0 && activityStudentFeedback?.get("rubricFeedback")?.toJS();
     const rubricFeedbackGiven = rubric && hasRubricFeedback(rubric, rubricFeedback);
@@ -151,7 +152,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
 
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>
-        { hasFeedbacks && <ActivityFeedbackGivenIcon className={css.activityFeedbackBadge} data-cy="activity-feedback-badge"/> }
+        { !hideFeedbackBadges && hasFeedbacks && <ActivityFeedbackGivenIcon className={css.activityFeedbackBadge} data-cy="activity-feedback-badge"/> }
         { this.renderProgressIcon(progress)}
         { (progress > 0 && progress < 1) &&
           <div><span className={css.numAnswered}>{numAnswered}</span><span>/{numQuestions}</span></div>

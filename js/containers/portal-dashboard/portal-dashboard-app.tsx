@@ -213,6 +213,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   currentQuestion={currentQuestion}
                   currentStudentId={currentStudentId}
                   expandedActivities={expandedActivities}
+                  hideFeedbackBadges={hideFeedbackBadges}
                   isCompact={compactReport}
                   questionFeedbacks={questionFeedbacks}
                   rubric={rubric}
