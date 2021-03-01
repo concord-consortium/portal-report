@@ -38,6 +38,7 @@ export interface IQuestion extends IResource {
   section: string;
   page: string;
   questionUrl: string;
+  questionTeacherEditionUrl: string;
   prompt: string;
   selected: boolean;
   scored?: boolean; // multiple choice only
@@ -126,6 +127,13 @@ export function normalizeResourceJSON(json: any) {
   return normalize(camelizedJson, sequence);
 }
 
+// This is used to add mode=teacher-edition
+export function addMode(url: string, mode: string) {
+  const urlParts = queryString.parseUrl(url);
+  urlParts.query.mode = mode;
+  return queryString.stringifyUrl(urlParts);
+}
+
 export function preprocessResourceJSON(resourceJson: IResource) {
   // Provide fake sequence if it's not present to simplify app logic.
   if (resourceJson.type === "activity") {
@@ -157,6 +165,7 @@ export function preprocessResourceJSON(resourceJson: IResource) {
           question.section = section.id;
           question.page = page.id;
           question.questionUrl = page.previewUrl;
+          question.questionTeacherEditionUrl = addMode(page.previewUrl, "teacher-edition");
           // Nothing is selected by default.
           question.selected = false;
           if (question.type === "multiple_choice") {

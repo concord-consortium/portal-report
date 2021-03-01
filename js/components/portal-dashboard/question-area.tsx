@@ -27,6 +27,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const activityURL = currentQuestion?.get("questionUrl");
+    const activityTeacherEdtionURL = currentQuestion?.get("questionTeacherEditionUrl");
 
     return (
       <div className={`${css.questionContentArea} ${hideQuestion ? css.hidden : ""}`}>
@@ -41,10 +42,8 @@ export class QuestionArea extends React.PureComponent<IProps>{
             <a className={css.externalLinkButton} href={activityURL} target="_blank" data-cy="open-activity-button" onClick={() => trackEvent("Portal-Dashboard", "OpenExternalLink", {label: activityURL})}>
               <LaunchIcon className={css.icon} />
             </a>
-            { // FIXME: notice how the 'teacher-edition' url is setup, this will not work with the activity player
-            }
             {hasTeacherEdition &&
-              <a className={css.teacherEditionIcon} href={`${activityURL}/?mode=teacher-edition`} target="_blank" data-cy="open-teacher-edition-button" onClick={() => trackEvent("Portal-Dashboard", "OpenTeacherEdition", {label: `${activityURL}/?mode=teacher-edition`})}>
+              <a className={css.teacherEditionIcon} href={activityTeacherEdtionURL} target="_blank" data-cy="open-teacher-edition-button" onClick={() => trackEvent("Portal-Dashboard", "OpenTeacherEdition", {label: `${activityURL}/?mode=teacher-edition`})}>
                 <div className={teacherEditionButtonClasses}>
                   <LaunchIcon className={css.icon} />
                 </div>

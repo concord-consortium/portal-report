@@ -130,8 +130,7 @@ context("Portal Dashboard Question Details Panel", () => {
       });
       it('verify activity button opens teacher edition page', function() {
         cy.get("[data-cy=response-details-container] [data-cy=open-teacher-edition-button]").should('have.attr', 'href')
-        // FIXME: This will break for a correctly formed activity player preview url
-        .and('include', '?mode=teacher-edition');
+        .and('include', "http://activity-player.concord.org?activity=http%3A%2F%2Fapp.lara.docker%2Factivities%2F10&mode=teacher-edition&page=1&preview");
       });
     });
   });
