@@ -70,7 +70,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
             <div className={`${css.activityImage} ${this.activityColorClass(idx)}`} />
           </div>
           <div className={css.externalLink}>
-            <a className={css.externalLinkButton} href={activity.get("url")} target="_blank">
+            <a className={css.externalLinkButton} href={activity.get("previewUrl")} target="_blank">
               <LaunchIcon className={css.icon} />
             </a>
           </div>

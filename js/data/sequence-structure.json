@@ -132,6 +132,7 @@
       "name": "Report Test Activity 2",
       "type": "activity",
       "url": "http://app.lara.docker/activities/10",
+      "preview_url": "http://activity-player.concord.org?activity=http://app.lara.docker/activities/10&preview",
       "children": [
         {
           "id": "section-10",
@@ -144,6 +145,7 @@
               "name": "State-saving interactives",
               "type": "page",
               "url": "http://app.lara.docker/pages/27",
+              "preview_url": "http://activity-player.concord.org?activity=http://app.lara.docker/activities/10&page=1&preview",
               "children": [
                 {
                   "display_in_iframe": true,
