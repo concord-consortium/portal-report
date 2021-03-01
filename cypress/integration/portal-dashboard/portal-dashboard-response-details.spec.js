@@ -86,6 +86,9 @@ context("Portal Dashboard Question Details Panel", () => {
   });
   context('Question nav area',()=>{
     before( function() {
+      // Start from a known location
+      cy.visit("/?portal-dashboard");
+      cy.get('[data-cy=collapsed-activity-button]').first().click();
       cy.get('[data-cy=activity-question-button]').eq(3).click();
       cy.get('[data-cy=question-overlay] [data-cy=question-overlay-title]').invoke('text').as('questionOverlayTitle');
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').invoke('text').as('questionTitle');
@@ -111,8 +114,37 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get("[data-cy=response-details-container] [data-cy=open-teacher-edition-button]").should('have.attr', 'href')
       .and('include', '?mode=teacher-edition');
     });
+    context('Question nav of second activity with preview urls', ()=>{
+      before( function() {
+        // Start from a known location
+        cy.visit("/?portal-dashboard");
+        cy.get('[data-cy=collapsed-activity-button]').eq(1).click();
+        // open sidebar focused on the first question
+        cy.get('[data-cy=activity-question-button]').first().click();
+        // go into response details
+        cy.get('[data-cy=view-all-student-responses-button]').should('be.visible').click();
+      });
+      it('verify activity button opens preview_url page', function() {
+        cy.get("[data-cy=response-details-container] [data-cy=open-activity-button]").should('have.attr', 'href')
+        .and('include', "http://activity-player.concord.org?activity=http://app.lara.docker/activities/10&page=1&preview");
+      });
+      it('verify activity button opens teacher edition page', function() {
+        cy.get("[data-cy=response-details-container] [data-cy=open-teacher-edition-button]").should('have.attr', 'href')
+        // FIXME: This will break for a correctly formed activity player preview url
+        .and('include', '?mode=teacher-edition');
+      });
+    });
   });
   context('Student list and responses area', () => {
+    before( function() {
+      // Start from a known location
+      cy.visit("/?portal-dashboard");
+      cy.get('[data-cy=collapsed-activity-button]').first().click();
+      // open sidebar focused on the 4th question
+      cy.get('[data-cy=activity-question-button]').eq(3).click();
+      // go into response details
+      cy.get('[data-cy=view-all-student-responses-button]').should('be.visible').click();
+    });
     it('verify student names are listed',()=>{
       cy.get('[data-cy=student-name]').eq(0).should("contain", "Armstrong, Jenna");
       cy.get('[data-cy=student-name]').eq(1).should("contain", "Crosby, Kate");

@@ -10,6 +10,20 @@ context("Portal Dashboard Activity Buttons",() =>{
       cy.get('[data-cy=collapsed-activity-button]').should('have.length', 2);
     });
 
+    it('verify the preview (external link) buttons are working',() =>{
+      cy.get('[data-cy=collapsed-activity-button]')
+        .eq(0)
+        .find('[data-cy=external-link-button]')
+        .should('have.attr', 'href')
+        .and('include', 'http://app.lara.docker/activities/9');
+
+      cy.get('[data-cy=collapsed-activity-button]')
+        .eq(1)
+        .find('[data-cy=external-link-button]')
+        .should('have.attr', 'href')
+        .and('include', 'http://activity-player.concord.org?activity=http://app.lara.docker/activities/10&preview');
+    });
+
     describe('when clicking on activity buttons', () =>{
       it('verify we can click to open an activity button and see it expanded',() =>{
         cy.get('[data-cy=collapsed-activity-button]').first().click();
