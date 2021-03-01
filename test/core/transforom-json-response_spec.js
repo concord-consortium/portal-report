@@ -39,7 +39,7 @@ describe("preprocessResourceJSON helper", () => {
     ]
   };
 
-  // Note the incoming data would be use preview_url, but that gets
+  // Note the incoming data uses preview_url, but that gets
   // camelized before being sent to preprocessResourceJSON
   const activityJSONWithPreviewUrls = {
     id: 1,
