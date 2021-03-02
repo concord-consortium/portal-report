@@ -29,7 +29,7 @@ export class ClassNav extends React.PureComponent<IProps> {
       <div className={css.classNav} data-cy="class-nav">
         { this.renderClassSelect() }
         <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
-        <CountContainer numItems={studentCount} containerLabel={"Class: "} containerLabelType={"students"} />
+        <CountContainer numItems={studentCount} containerLabel={"Class"} containerLabelType={"students"} />
         { this.renderStudentSort() }
       </div>
     );
