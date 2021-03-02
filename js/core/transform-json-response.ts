@@ -12,6 +12,11 @@ export interface IResource {
 
 export interface IActivity extends IResource {
   activityIndex: number;
+  url: string;
+  // Note that when the data comes down this field is optional
+  // But this interface is really intended for users of this data
+  // after it has been transformed by the function below
+  previewUrl: string;
 }
 
 export interface ISection extends IResource {
@@ -22,6 +27,10 @@ export interface IPage extends IResource {
   activity: string;
   section: string;
   url: string;
+  // Note that when the data comes down this field is optional
+  // But this interface is really intended for users of this data
+  // after it has been transformed by the function below
+  previewUrl: string;
 }
 
 export interface IQuestion extends IResource {
@@ -29,6 +38,7 @@ export interface IQuestion extends IResource {
   section: string;
   page: string;
   questionUrl: string;
+  questionTeacherEditionUrl: string;
   prompt: string;
   selected: boolean;
   scored?: boolean; // multiple choice only
@@ -117,6 +127,13 @@ export function normalizeResourceJSON(json: any) {
   return normalize(camelizedJson, sequence);
 }
 
+// This is used to add mode=teacher-edition
+export function addMode(url: string, mode: string) {
+  const urlParts = queryString.parseUrl(url);
+  urlParts.query.mode = mode;
+  return queryString.stringifyUrl(urlParts);
+}
+
 export function preprocessResourceJSON(resourceJson: IResource) {
   // Provide fake sequence if it's not present to simplify app logic.
   if (resourceJson.type === "activity") {
@@ -130,16 +147,25 @@ export function preprocessResourceJSON(resourceJson: IResource) {
   // Add some question properties, e.g. question numbers, selection, visibility.
   resourceJson.children.forEach((activity: IActivity, idx: number) => {
     activity.activityIndex = idx;
+    if (!activity.previewUrl) {
+      activity.previewUrl = activity.url;
+    }
     activity.children.forEach((section: ISection) => {
       section.activity = activity.id;
       section.children.forEach((page: IPage) => {
         page.activity = activity.id;
         page.section = section.id;
+        // Note the incoming field is 'preview_url', but this gets camelized
+        // before being sent to preprocessResourceJSON
+        if (!page.previewUrl) {
+          page.previewUrl = page.url;
+        }
         page.children.forEach((question: IQuestion) => {
           question.activity = activity.id;
           question.section = section.id;
           question.page = page.id;
-          question.questionUrl = page.url;
+          question.questionUrl = page.previewUrl;
+          question.questionTeacherEditionUrl = addMode(page.previewUrl, "teacher-edition");
           // Nothing is selected by default.
           question.selected = false;
           if (question.type === "multiple_choice") {

@@ -27,6 +27,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
     const QuestionIcon = questionType?.icon;
     const activityURL = currentQuestion?.get("questionUrl");
+    const activityTeacherEditionURL = currentQuestion?.get("questionTeacherEditionUrl");
 
     return (
       <div className={`${css.questionContentArea} ${hideQuestion ? css.hidden : ""}`}>
@@ -42,7 +43,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
               <LaunchIcon className={css.icon} />
             </a>
             {hasTeacherEdition &&
-              <a className={css.teacherEditionIcon} href={`${activityURL}/?mode=teacher-edition`} target="_blank" data-cy="open-teacher-edition-button" onClick={() => trackEvent("Portal-Dashboard", "OpenTeacherEdition", {label: `${activityURL}/?mode=teacher-edition`})}>
+              <a className={css.teacherEditionIcon} href={activityTeacherEditionURL} target="_blank" data-cy="open-teacher-edition-button" onClick={() => trackEvent("Portal-Dashboard", "OpenTeacherEdition", {label: `${activityURL}/?mode=teacher-edition`})}>
                 <div className={teacherEditionButtonClasses}>
                   <LaunchIcon className={css.icon} />
                 </div>

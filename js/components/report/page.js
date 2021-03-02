@@ -9,19 +9,19 @@ export default class Page extends PureComponent {
     const { page, reportFor } = this.props;
     const pageName = page.get("name");
     const showLinks = reportFor === "class";
-    const url = showLinks ? page.get("url") : null;
+    const previewUrl = showLinks ? page.get("previewUrl") : null;
     return (
       <div className={`page ${page.get("visible") ? "" : "hidden"}`}>
         <Sticky top={100}>
           <h4>
-            <MaybeLink url={url}>
+            <MaybeLink url={previewUrl}>
               <span>Page: {pageName}</span>
             </MaybeLink>
           </h4>
         </Sticky>
         <div>
           {page.get("children").map((question) => {
-            return <Question key={question.get("id")} question={question} reportFor={reportFor} url={url} />;
+            return <Question key={question.get("id")} question={question} reportFor={reportFor} url={previewUrl} />;
           })}
         </div>
       </div>
