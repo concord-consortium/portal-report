@@ -4,6 +4,7 @@ import { answerHash } from "../../js/util/misc";
 describe("misc util functions", () => {
   it("determines if answer hash is properly generated", () => {
 
+    // test string answer content
     const simpleAnswer1 = Map({ answer: "foo" });
     const simpleAnswer2 = Map({ answer: "foo" });
     const simpleAnswer3 = Map({ answer: "bar" });
@@ -16,6 +17,7 @@ describe("misc util functions", () => {
     expect(simpleAnswer1Hash).not.toEqual(simpleAnswer3Hash);
     expect(simpleAnswer2Hash).not.toEqual(simpleAnswer3Hash);
 
+    // test map answer content
     const complexAnswerContent1 = Map({ image: "www.test.com/image.jpg", text: "foo" });
     const complexAnswerContent2 = Map({ text: "foo", image: "www.test.com/image.jpg" });
     const complexAnswerContent3 = Map({ image: "www.test.com/image.jpg", text: "bar" });
@@ -32,5 +34,18 @@ describe("misc util functions", () => {
 
     expect(complexAnswer1Hash).not.toEqual(complexAnswer3Hash);
     expect(complexAnswer2Hash).not.toEqual(complexAnswer3Hash);
+
+    // test non-map, non-string answer content
+    const arrayAnswer1 = Map({ answer: [1, 2, 3] });
+    const arrayAnswer2 = Map({ answer: [1, 2, 3] });
+    const arrayAnswer3 = Map({ answer: [4, 5, 6] });
+
+    const arrayAnswer1Hash = answerHash(arrayAnswer1);
+    const arrayAnswer2Hash = answerHash(arrayAnswer2);
+    const arrayAnswer3Hash = answerHash(arrayAnswer3);
+
+    expect(arrayAnswer1Hash).toEqual(arrayAnswer2Hash);
+    expect(arrayAnswer2Hash).not.toEqual(arrayAnswer3Hash);
+    expect(arrayAnswer1Hash).not.toEqual(simpleAnswer3Hash);
   });
 });
