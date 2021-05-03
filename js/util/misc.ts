@@ -27,7 +27,11 @@ export const compareStudentsByName = (student1: Map<string, any>, student2: Map<
 export const answerHash = (answer: Map<string, any>) => {
   let answerContent = answer.get("answer");
   if (typeof answerContent !== "string") {
-    answerContent = JSON.stringify(answerContent.toJS());
+    // the non-Map case likely doesn't hit at present, but this adds protection
+    // in case future answerContent has non-string/non-Map value
+    answerContent = Map.isMap(answerContent)
+      ? JSON.stringify(answerContent.sortBy((v: any, k: any) => k).toJS())
+      : JSON.stringify(answerContent);
   }
   return md5(answerContent);
 };
