@@ -82,6 +82,15 @@ npm publish --access=public
 
 NPM will automatically build the library first, as `package.json` defines `script/prepare`.
 
+#### Production Release
+To deploy a production release:
+
+1. Merge all changes to `master`
+2. Use https://github.com/concord-consortium/portal-report/releases to create a new release tag
+3. Login to https://learn.staging.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
+4. Run any QA and testing on staging release.
+5. Once testing is complete, login to https://learn.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
+
 ### Frameworks, conventions
 
 This app is built using [React](https://facebook.github.io/react/), [Redux](http://redux.js.org/) and [ImmutableJS](https://facebook.github.io/immutable-js/). If you are not familiar with one of these, take a look at [this great tutorial](http://teropa.info/blog/2015/09/10/full-stack-redux-tutorial.html). It also uses lots of ES6 syntax, so it might be good to review it first. Semicolons are discussable, but I've decided to follow Redux examples style.
