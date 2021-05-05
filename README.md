@@ -85,12 +85,13 @@ NPM will automatically build the library first, as `package.json` defines `scrip
 #### Production Release
 To deploy a production release:
 
-1. Merge all changes to `master`
-2. Use https://github.com/concord-consortium/portal-report/releases to create a new release tag
-3. Login to https://learn.staging.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
-4. Run any QA and testing on staging release.
-5. Once testing is complete, login to https://learn.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
-6. Run any QA and testing on production release.
+1. Merge all changes to `master`.
+2. Make a new version tag using your local git client with the version number in the description (e.g., `git tag -a v1.1.1 -m "version 1.1.1"`) and push the tag to the portal-report repo (e.g., `git push origin v1.1.1`).
+3. Use https://github.com/concord-consortium/portal-report/releases to create a new release using the newly created tag.
+4. Login to https://learn.staging.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
+5. Run any QA and testing on staging release.
+6. Once testing is complete, login to https://learn.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
+7. Run any QA and testing on production release.
 
 ### Frameworks, conventions
 
