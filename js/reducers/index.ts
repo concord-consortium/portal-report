@@ -1,13 +1,11 @@
 import feedback, { FeedbackState } from "./feedback-reducer";
 import dashboard, { DashboardState } from "./dashboard-reducer";
-import view, { ViewState } from "./view-reducer";
 import data, { DataState } from "./data-reducer";
 import report, { ReportState } from "./report-reducer";
 import { RecordFactory } from "../util/record-factory";
 import { Action } from "redux";
 
 export interface IRootState {
-  view: ViewState;
   data: DataState;
   report: ReportState;
   feedback: FeedbackState;
@@ -17,7 +15,6 @@ export interface IRootState {
 const dummyAction = {type: ""};
 
 const INITIAL_ROOT_STATE = RecordFactory<IRootState>({
-  view: view(undefined, dummyAction),
   data: data(undefined, dummyAction),
   report: report(undefined, dummyAction),
   feedback: feedback(undefined, dummyAction),
@@ -32,7 +29,6 @@ export class RootState extends INITIAL_ROOT_STATE {
 
 export default function reducer(state = new RootState({}), action: Action) {
   return new RootState({
-    view: view(state.get("view"), action),
     data: data(state.get("data"), action),
     report: report(state.get("report"), action),
     feedback: feedback(state.get("feedback"), action),

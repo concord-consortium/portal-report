@@ -1,7 +1,6 @@
 import Immutable, { Map, List, Set } from "immutable";
 import queryString from "query-string";
 import { RecordFactory } from "../util/record-factory";
-import config from "../config";
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
@@ -53,7 +52,6 @@ export interface IReportState {
   compareViewAnswers: Set<string> | null;
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: boolean;
-  iframeQuestionId: string;
   hasTeacherEdition: boolean;
 }
 
@@ -83,7 +81,6 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   anonymous: false,
   compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
-  iframeQuestionId: config("iframeQuestionId") as string || "",
   hasTeacherEdition: false,
 });
 
@@ -116,7 +113,6 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   anonymous: boolean;
   compareViewAnswers: Set<string> | null;
   showFeaturedQuestionsOnly: boolean;
-  iframeQuestionId: string;
   hasTeacherEdition: boolean;
 }
 

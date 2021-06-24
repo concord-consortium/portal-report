@@ -22,7 +22,7 @@
   "homepage": "https://github.com/concord-consortium/portal-report#readme",
   "scripts": {
     "start": "webpack-dev-server",
-    "start:secure": "webpack-dev-server --https --inline --hot --content-base dist/ --cert ./LocalhostCertificates/localhost.pem --key ./LocalhostCertificates/localhost.key",
+    "start:secure": "webpack-dev-server --https --inline --hot --content-base dist/ --cert ~/.localhost-ssl/localhost.pem --key ~/.localhost-ssl/localhost.key",
     "start:secure:no-certs": "webpack-dev-server --https --inline --hot --content-base dist/",
     "build": "webpack --mode production",
     "prepublishOnly": "WEBPACK_TARGET=lib webpack --mode production",
