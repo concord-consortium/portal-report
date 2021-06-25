@@ -77,6 +77,10 @@ export function urlStringParam(stringToParse: string, name: string): string | nu
   }
 }
 
+export function inTest() {
+  return window.location.search !== null || urlParam("enableFirestorePersistence");
+}
+
 export type ColorTheme = "progress" | "response" | "feedback" |
                          "progressNavigation" | "responseNavigation" | "feedbackNavigation" |
                          "progressAssignment" | "responseAssignment" | "feedbackAssignment";

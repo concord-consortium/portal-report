@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import queryString from "query-string";
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
-import { DEFAULT_FIREBASE_APP } from "../../db";
+import { inTest } from "../../util/misc";
 
 import "../../../css/report/iframe-answer.less";
 
@@ -52,26 +52,9 @@ export default class IframeAnswer extends PureComponent {
     const params = queryString.parse(window.location.search);
     params.studentId = answer.get("platformUserId");
     params.iframeQuestionId = question.get("id");
-    const answersSourceKey = params.answersSourceKey;
-    const authDomain = params.class.split("/api")[0];
-    const classUrl = params.class;
-    const resourceLinkId = params.offering.split("offerings/")[1];
-    const iframeQuestionId = question.get("id");
-    const sourceKey = params.sourceKey;
-    const studentId = answer.get("platformUserId");
-    const offering = params.offering;
-    const classOfferings = params.classOfferings;
-    const newSearch = "answersSourceKey=" + answersSourceKey
-                      + "&class=" +  encodeURIComponent(classUrl)
-                      + "&iframeQuestionId=" + iframeQuestionId
-                      + "&studentId=" + studentId
-                      + "&firebase-app=" + DEFAULT_FIREBASE_APP
-                      + "&resourceLinkId=" + resourceLinkId
-                      + "&reportType=offering"
-                      + "&sourceKey=" + sourceKey
-                      + "&offering=" + encodeURIComponent(offering)
-                      + "&classOfferings=" + classOfferings
-                      + "&auth-domain=" + authDomain;
+    // Tests do not have the correct params and can't pass back an oauth token
+    if (!inTest) { params["auth-domain"] = params.class.split("/api")[0];}
+    const newSearch = queryString.stringify(params);
     return `${baseUrl}?${newSearch}`;
   }
 

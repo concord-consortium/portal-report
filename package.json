@@ -62,7 +62,7 @@
     "report-dir": "coverage-cypress"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.8.4",
+    "@cypress/code-coverage": "^3.9.7",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@mermaid-js/mermaid-cli": "^8.8.4",
     "@svgr/webpack": "^5.4.0",
@@ -82,7 +82,7 @@
     "autoprefixer": "^9.7.6",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.5.3",
-    "cypress": "^6.4.0",
+    "cypress": "^7.6.0",
     "cypress-commands": "^1.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",

@@ -1,6 +1,5 @@
 import { fromJS } from "immutable";
 import getSequenceTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from "../../js/selectors/report-tree";
-import { FULL_REPORT, DASHBOARD } from "../../js/containers/app";
 
 describe("report tree selectors", () => {
   const state = ({ questionVisible = true, hideSectionNames = true }) => fromJS({
