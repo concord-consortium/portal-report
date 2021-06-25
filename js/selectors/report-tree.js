@@ -22,10 +22,11 @@ const getShowFeaturedQuestionsOnly = state => state.getIn(["report", "showFeatur
 // The problem is that if all the questions on given page are not visible, page should not be visible too.
 // If all the pages are not visible, then section is not visible too. And the same thing applies to activities.
 // It's convenient to calculate all that here while building a report tree.
-const viewType = config("iframeQuestionId") ? "IFRAME_STANDALONE" :
+
+const isQuestionVisible = (question, featuredOnly) => {
+  const viewType = config("iframeQuestionId") ? "IFRAME_STANDALONE" :
                  configBool("portal-dashboard") ? "PORTAL_DASHBOARD" :
                  configBool("dashboard") ? "DASHBOARD" : "FULL_REPORT";
-const isQuestionVisible = (question, featuredOnly) => {
   // Custom question filtering is currently supported only by regular, non-dashboard report.
   // There are no checkboxes and controls in dashboard.
     if (viewType === "FULL_REPORT" && question.get("hiddenByUser")) {
@@ -102,7 +103,7 @@ export const getQuestionTrees = createSelector(
         // This is only a temporal solution. Answers should no longer be added to a report tree.
         // Components that need answer content should become containers and request answers from redux state.
         .set("answers", Immutable.fromJS([]))
-        .set("visible", isQuestionVisible(question, viewType, showFeaturedQuestionsOnly))
+        .set("visible", isQuestionVisible(question, showFeaturedQuestionsOnly))
     );
   },
 );
