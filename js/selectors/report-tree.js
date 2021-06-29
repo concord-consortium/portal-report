@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import Immutable, { Map } from "immutable";
-import config, { configBool } from "../config";
+import { getViewType, FULL_REPORT, DASHBOARD, PORTAL_DASHBOARD } from "../util/misc";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // Redux state has flat structure. This selector maps all the IDs and keys and creates a tree-like hierarchy.
@@ -24,12 +24,10 @@ const getShowFeaturedQuestionsOnly = state => state.getIn(["report", "showFeatur
 // It's convenient to calculate all that here while building a report tree.
 
 const isQuestionVisible = (question, featuredOnly) => {
-  const viewType = config("iframeQuestionId") ? "IFRAME_STANDALONE" :
-                 configBool("portal-dashboard") ? "PORTAL_DASHBOARD" :
-                 configBool("dashboard") ? "DASHBOARD" : "FULL_REPORT";
+  const viewType = getViewType();
   // Custom question filtering is currently supported only by regular, non-dashboard report.
   // There are no checkboxes and controls in dashboard.
-    if (viewType === "FULL_REPORT" && question.get("hiddenByUser")) {
+    if (viewType === FULL_REPORT && question.get("hiddenByUser")) {
     return false;
   }
   // Only dashboard is considered to be "featured question report". In the future, when there's a toggle
@@ -38,7 +36,7 @@ const isQuestionVisible = (question, featuredOnly) => {
   // (so the value is undefined or null), assume that the question is visible in the featured question report.
   // It's necessary so this report works before Portal (API) is updated to provide this flag. Later, it will be
   // less important. Additionally, for now we assume that the newer portal-dashboard follows the same logic.
-  if (((viewType === "DASHBOARD") || (viewType === "PORTAL_DASHBOARD")) && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
+  if (((viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD)) && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
     return false;
   }
   return true;

@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import queryString from "query-string";
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
-import { inTest } from "../../util/misc";
 
 import "../../../css/report/iframe-answer.less";
 
@@ -52,8 +51,9 @@ export default class IframeAnswer extends PureComponent {
     const params = queryString.parse(window.location.search);
     params.studentId = answer.get("platformUserId");
     params.iframeQuestionId = question.get("id");
-    // Tests do not have the correct params and can't pass back an oauth token
-    if (!inTest) { params["auth-domain"] = params.class.split("/api")[0];}
+    // Need to get the auth-domain from the class url
+    const authDomain = params.class?.split("/api")[0];
+    authDomain && (params["auth-domain"] = authDomain);
     const newSearch = queryString.stringify(params);
     return `${baseUrl}?${newSearch}`;
   }
