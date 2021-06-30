@@ -4,16 +4,15 @@ import DashboardApp from "./dashboard/dashboard-app";
 import PortalDashboardApp from "./portal-dashboard/portal-dashboard-app";
 import IframeStandaloneApp from "./report/iframe-standalone-app";
 import { connect } from "react-redux";
-import { DASHBOARD, PORTAL_DASHBOARD, IFRAME_STANDALONE, FULL_REPORT } from "../reducers/view-reducer";
 import { RootState } from "../reducers";
+import { DASHBOARD, FULL_REPORT, IFRAME_STANDALONE, PORTAL_DASHBOARD, getViewType } from "../util/misc";
 
 interface IProps {
-  viewType: string;
 }
 
 export class App extends React.PureComponent<IProps> {
   render() {
-    const { viewType } = this.props;
+    const viewType = getViewType();
     switch (viewType) {
       case DASHBOARD:
         return <DashboardApp />;
@@ -29,7 +28,6 @@ export class App extends React.PureComponent<IProps> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  viewType: state.getIn(["view", "type"]),
 });
 
 export default connect(mapStateToProps)(App);

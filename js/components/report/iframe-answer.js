@@ -51,6 +51,9 @@ export default class IframeAnswer extends PureComponent {
     const params = queryString.parse(window.location.search);
     params.studentId = answer.get("platformUserId");
     params.iframeQuestionId = question.get("id");
+    // Need to get the auth-domain from the class url
+    const authDomain = params.class?.split("/api")[0];
+    authDomain && (params["auth-domain"] = authDomain);
     const newSearch = queryString.stringify(params);
     return `${baseUrl}?${newSearch}`;
   }

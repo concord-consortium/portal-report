@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
+import queryString from "query-string";
 import { fetchAndObserveData } from "../../actions/index";
 import DataFetchError from "../../components/report/data-fetch-error";
 import LoadingIcon from "../../components/report/loading-icon";
@@ -20,7 +21,8 @@ class IframeStandaloneApp extends PureComponent {
   }
 
   renderIframe() {
-    const { report, iframeQuestionId, answers } = this.props;
+    const { report, answers } = this.props;
+    const { iframeQuestionId } = queryString.parse(window.location.search);
 
     const question = report.get("questions").get(iframeQuestionId);
 
@@ -74,12 +76,10 @@ function mapStateToProps(state) {
   const data = state.get("data");
   const error = data.get("error");
   const reportState = state.get("report");
-  const iframeQuestionId = reportState && reportState.get("iframeQuestionId");
   const answers = reportState && reportState.get("answers");
   const dataDownloaded = !error && !data.get("isFetching");
   return {
     report: dataDownloaded && reportState,
-    iframeQuestionId,
     answers,
     isFetching: data.get("isFetching"),
     error,

@@ -1,14 +1,10 @@
 import { fromJS } from "immutable";
 import getSequenceTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from "../../js/selectors/report-tree";
-import { FULL_REPORT, DASHBOARD } from "../../js/reducers/view-reducer";
 
 describe("report tree selectors", () => {
   const state = ({ questionVisible = true, hideSectionNames = true }) => fromJS({
     // Note that `questionVisible` parameter uses just one of the many ways to make question visible or not.
     // `getQuestionTrees` specs below test all these ways. This is used for tests that deal with the whole state.
-    view: {
-      type: "fullReport"
-    },
     report: {
       students: {
         "1": { id: "1", firstName: "John", lastName: "Doe" }
@@ -141,6 +137,21 @@ describe("report tree selectors", () => {
   });
 
   describe("getQuestionTrees", () => {
+    const originalLocation = window.location;
+    const mockWindowLocation = (newLocation) => {
+      delete window.location;
+      window.location = newLocation;
+    };
+    const setLocation = (url) => {
+      mockWindowLocation(new URL(url));
+    };
+    const setQueryParams = (params) => {
+      setLocation(`https://concord.org${params ? '?' : ''}${params || ""}`);
+    };
+    afterEach(() => {
+      mockWindowLocation(originalLocation);
+    });
+
     it("should not fail when there are no questions", () => {
       expect(getQuestionTrees(state({}).deleteIn(["report", "questions"])).toJS()).toEqual({});
     });
@@ -152,6 +163,7 @@ describe("report tree selectors", () => {
     describe("when there are some questions hidden by user", () => {
       describe("and full report view is used", () => {
         it('should set visibility based on "hiddenByUser" property', () => {
+          setQueryParams(null);
           const questions = fromJS({
             1: { hiddenByUser: false },
             2: { hiddenByUser: true }
@@ -160,13 +172,14 @@ describe("report tree selectors", () => {
           const sections = fromJS({});
           const pages = fromJS({});
           const showFeaturedQuestionsOnly = false;
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(false);
         });
       });
       describe("and dashboard view is used", () => {
         it('should ignore "hiddenByUser" property', () => {
+          setQueryParams("dashboard");
           const questions = fromJS({
             1: { hiddenByUser: false },
             2: { hiddenByUser: true }
@@ -175,7 +188,7 @@ describe("report tree selectors", () => {
           const sections = fromJS({});
           const pages = fromJS({});
           const showFeaturedQuestionsOnly = false;
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, DASHBOARD, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(true);
         });
@@ -185,6 +198,7 @@ describe("report tree selectors", () => {
     describe('when "showFeaturedQuestionsOnly" filter is enabled', () => {
       describe("and the full report is used", () => {
         it('should ignore "showInFeaturedQuestionReport" property', () => {
+          setQueryParams(null);
           const questions = fromJS({
             1: { showInFeaturedQuestionReport: true },
             2: { showInFeaturedQuestionReport: false }
@@ -193,7 +207,8 @@ describe("report tree selectors", () => {
           const sections = fromJS({});
           const pages = fromJS({});
           const showFeaturedQuestionsOnly = true;
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
+          // const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(true);
         });
@@ -201,6 +216,7 @@ describe("report tree selectors", () => {
 
       describe("and dashboard view is used", () => {
         it('should set visibility based on "showInFeaturedQuestionReport" property', () => {
+          setQueryParams("dashboard");
           const questions = fromJS({
             1: { showInFeaturedQuestionReport: true },
             2: { showInFeaturedQuestionReport: false }
@@ -209,7 +225,8 @@ describe("report tree selectors", () => {
           const sections = fromJS({});
           const pages = fromJS({});
           const showFeaturedQuestionsOnly = true;
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, DASHBOARD, showFeaturedQuestionsOnly).toJS();
+          // const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, DASHBOARD, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(false);
         });

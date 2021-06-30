@@ -1,6 +1,7 @@
 import { Map } from "immutable";
 import md5 from "md5";
 import queryString from "query-string";
+import config, { configBool } from "../config";
 
 // Truncate strings eg:
 // truncate("this is a sentence", 5) // → "this i…"
@@ -86,3 +87,14 @@ export type DashboardViewMode = "ProgressDashboard" | "ResponseDetails" | "Feedb
 export type ListViewMode = "Student" | "Question";
 
 export type FeedbackLevel = "Activity" | "Question";
+
+export const FULL_REPORT = "fullReport";
+export const DASHBOARD = "dashboard";
+export const PORTAL_DASHBOARD = "portalDashboard";
+export const IFRAME_STANDALONE = "iframeStandalone";
+
+export function getViewType () {
+  return config("iframeQuestionId") ? IFRAME_STANDALONE :
+         configBool("portal-dashboard") ? PORTAL_DASHBOARD :
+         configBool("dashboard") ? DASHBOARD : FULL_REPORT;
+}

@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import Immutable, { Map } from "immutable";
-import { FULL_REPORT, isDashboardView } from "../reducers/view-reducer";
+import { getViewType, FULL_REPORT, DASHBOARD, PORTAL_DASHBOARD } from "../util/misc";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
 // Redux state has flat structure. This selector maps all the IDs and keys and creates a tree-like hierarchy.
@@ -16,18 +16,18 @@ const getAnswers = state => state.getIn(["report", "answers"]);
 const getStudents = state => state.getIn(["report", "students"]);
 const getHideSectionNames = state => state.getIn(["report", "hideSectionNames"]);
 const getShowFeaturedQuestionsOnly = state => state.getIn(["report", "showFeaturedQuestionsOnly"]);
-const getViewType = state => state.getIn(["view", "type"]);
 
 // Helpers
-
 // Why isn't this helper used by React components directly? So we don't have to care about view type here?
 // The problem is that if all the questions on given page are not visible, page should not be visible too.
 // If all the pages are not visible, then section is not visible too. And the same thing applies to activities.
 // It's convenient to calculate all that here while building a report tree.
-const isQuestionVisible = (question, viewType, featuredOnly) => {
+
+const isQuestionVisible = (question, featuredOnly) => {
+  const viewType = getViewType();
   // Custom question filtering is currently supported only by regular, non-dashboard report.
   // There are no checkboxes and controls in dashboard.
-  if (viewType === FULL_REPORT && question.get("hiddenByUser")) {
+    if (viewType === FULL_REPORT && question.get("hiddenByUser")) {
     return false;
   }
   // Only dashboard is considered to be "featured question report". In the future, when there's a toggle
@@ -36,7 +36,7 @@ const isQuestionVisible = (question, viewType, featuredOnly) => {
   // (so the value is undefined or null), assume that the question is visible in the featured question report.
   // It's necessary so this report works before Portal (API) is updated to provide this flag. Later, it will be
   // less important. Additionally, for now we assume that the newer portal-dashboard follows the same logic.
-  if (isDashboardView(viewType) && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
+  if (((viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD)) && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
     return false;
   }
   return true;
@@ -94,14 +94,14 @@ export const getAnswersByQuestion = createSelector(
 );
 
 export const getQuestionTrees = createSelector(
-  [ getActivities, getSections, getPages, getQuestions, getViewType, getShowFeaturedQuestionsOnly ],
-  ( activities, sections, pages, questions, viewType, showFeaturedQuestionsOnly) => {
+  [ getActivities, getSections, getPages, getQuestions, getShowFeaturedQuestionsOnly ],
+  ( activities, sections, pages, questions, showFeaturedQuestionsOnly) => {
     return (questions || Immutable.fromJS({})).map(question =>
       question
         // This is only a temporal solution. Answers should no longer be added to a report tree.
         // Components that need answer content should become containers and request answers from redux state.
         .set("answers", Immutable.fromJS([]))
-        .set("visible", isQuestionVisible(question, viewType, showFeaturedQuestionsOnly))
+        .set("visible", isQuestionVisible(question, showFeaturedQuestionsOnly))
     );
   },
 );
