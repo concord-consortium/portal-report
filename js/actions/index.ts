@@ -88,7 +88,7 @@ export function fetchAndObserveData() {
           watchResourceStructure(db, source, activity, dispatch);
         }
         else {
-          // Th network will be disabled in this case, see db.ts
+          // The network will be disabled in this case, see db.ts
 
           // Use fake data.
           dispatch({
@@ -178,8 +178,10 @@ function _getResourceUrl(activityUrl: string) {
   // This is to support reporting on activity player based external activities.
   // In those cases the offering.activity_url will look something like:
   // https://activity-player.concord.org?activity=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Factivities%2F123.json
+  // or in the case of a sequence, something like:
+  // https://activity-player.concord.org?sequence=https%3A%2F%2Fauthoring.concord.org%2Fapi%2Fv1%2Fsequences%2F125.json
   const activityUrlParts = queryString.parseUrl(activityUrl);
-  const activityUrlActivityParam = activityUrlParts.query.activity;
+  const activityUrlActivityParam = activityUrlParts.query.activity || activityUrlParts.query.sequence;
   if (activityUrlActivityParam && typeof activityUrlActivityParam === "string" ) {
     // The activity param of an activity-player url points to a /api/v1/activities/123.json
     // However the activity structure is stored in the report service using its canonical url of /activites/123
