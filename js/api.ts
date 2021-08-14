@@ -130,7 +130,7 @@ const getPortalBaseUrl = () => {
   return `${protocol}//${hostname}`;
 };
 
-export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, firebaseApp: string | undefined ) => {
+export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: string | null, targetUserId: string | null, firebaseApp: string | undefined ) => {
   if(!firebaseApp){
     firebaseApp = getFirebaseAppName();
   }
@@ -139,7 +139,8 @@ export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: strin
     return null;
   }
   const resourceLinkParam = resourceLinkId ? `&resource_link_id=${resourceLinkId}` : "";
-  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}${resourceLinkParam}`;
+  const targetUserParam = targetUserId ? `&target_user_id=${targetUserId}` : "";
+  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}${resourceLinkParam}${targetUserParam}`;
 };
 
 const gePortalReportAPIUrl = () => {
@@ -184,8 +185,8 @@ export function fetchClassData() {
   }
 }
 
-export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, firebaseApp?: string) {
-  const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, resourceLinkId, firebaseApp );
+export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, targetUserId: string | null = null, firebaseApp?: string) {
+  const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, resourceLinkId, targetUserId, firebaseApp );
   if (firestoreJWTUrl) {
     return fetch(firestoreJWTUrl, {headers: {Authorization: getAuthHeader()}})
       .then(checkStatus)
@@ -227,7 +228,8 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
     // only pass resourceLinkId if there is a studentId
     // FIXME: if this is a teacher viewing the report of a student there will be a studentId
     // but the token will be for a teacher, so then the resourceLinkId should be null
-    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null);
+    // I don't understand this comment anymore.
+    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"));
     return firestoreJWTPromise.then((result: any) => {
       const rawFirestoreJWT = result.token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {

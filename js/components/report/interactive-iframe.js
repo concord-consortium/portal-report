@@ -41,7 +41,8 @@ export default class InteractiveIframe extends PureComponent {
         // only pass resourceLinkId if there is a studentId
         // FIXME: if this is a teacher viewing the report of a student there will be a studentId
         // but the token will be for a teacher, so then the resourceLinkId should be null
-        return fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, options.firebase_app);
+        // I don't understand this comment anymore
+        return fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"), options.firebase_app);
       })
       .then(json => {
         this.iframePhone.post("firebaseJWT", json);
