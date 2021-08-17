@@ -226,9 +226,8 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
     const resourceLinkId = offeringData.id.toString();
     // only pass resourceLinkId if there is a studentId
-    // FIXME: if this is a teacher viewing the report of a student there will be a studentId
-    // but the token will be for a teacher, so then the resourceLinkId should be null
-    // I don't understand this comment anymore.
+    // This could be a teacher or researcher viewing the report of a student
+    // The studentId is also passed as the target_user_id 
     const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"));
     return firestoreJWTPromise.then((result: any) => {
       const rawFirestoreJWT = result.token;

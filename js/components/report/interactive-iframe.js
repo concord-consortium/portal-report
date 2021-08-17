@@ -39,9 +39,8 @@ export default class InteractiveIframe extends PureComponent {
       .then(([offeringData, classData]) => {
         const resourceLinkId = offeringData.id.toString();
         // only pass resourceLinkId if there is a studentId
-        // FIXME: if this is a teacher viewing the report of a student there will be a studentId
-        // but the token will be for a teacher, so then the resourceLinkId should be null
-        // I don't understand this comment anymore
+        // This could be a teacher or researcher viewing the report of a student
+        // The studentId is sent in the firestore JWT request as the target_user_id
         return fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"), options.firebase_app);
       })
       .then(json => {
