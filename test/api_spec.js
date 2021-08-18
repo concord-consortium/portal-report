@@ -33,22 +33,54 @@ describe("api helper", () => {
       beforeEach(() => {
         window.history.replaceState({}, "Test", "/?offering=https://portal.com/offerings/123");
       });
-      describe("when no resourceLinkId is passed", () => {
-        it("should return the portal firebase jwt url without a resource_link_id", () => {
-          const classHash = "1234";
-          const firebaseApp = "test_app";
-          const resourceLinkId = null;
-          const url = getPortalFirebaseJWTUrl(classHash, resourceLinkId, firebaseApp);
-          expect(url).toEqual(`https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`);
+      const classHash = "1234";
+      const firebaseApp = "test_app";
+      let resourceLinkId = null;
+      let targetUserId = null;
+
+      function getUrl() {
+        return getPortalFirebaseJWTUrl(classHash, resourceLinkId, targetUserId, firebaseApp);
+      }
+
+      const baseResultUrl = `https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`
+
+      describe("when no resourceLinkId is passed or targetUserId is passed", () => {
+        beforeAll(() => {
+          resourceLinkId = null;
+          targetUserId = null;
+        });
+        it("should return the portal firebase jwt url without a resource_link_id or target_link_id", () => {
+          expect(getUrl()).toEqual(baseResultUrl);
         });
       });
-      describe("when a resourceLinkId is passed", () => {
+      describe("when only resourceLinkId is passed", () => {
+        beforeAll(() => {
+          resourceLinkId = "abcde";
+          targetUserId = null;
+        });
+
         it("should return the portal firebase jwt url with a resource_link_id", () => {
-          const classHash = "1234";
-          const firebaseApp = "test_app";
-          const resourceLinkId = "abcde";
-          const url = getPortalFirebaseJWTUrl(classHash, resourceLinkId, firebaseApp);
-          expect(url).toEqual(`https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=${resourceLinkId}`);
+          expect(getUrl()).toEqual(`${baseResultUrl}&resource_link_id=${resourceLinkId}`);
+        });
+      });
+      describe("when only a targetUserId is passed", () => {
+        beforeAll(() => {
+          resourceLinkId = null;
+          targetUserId = "abcde";
+        });
+
+        it("should return the portal firebase jwt url with a target_user_id", () => {
+          expect(getUrl()).toEqual(`${baseResultUrl}&target_user_id=${targetUserId}`);
+        });
+      });
+      describe("when both a resourceLinkId or targetUserId is passed", () => {
+        beforeAll(() => {
+          resourceLinkId = "abcde";
+          targetUserId = "fghik";
+        });
+
+        it("should return the portal firebase jwt url with a resource_link_id and target_user_id", () => {
+          expect(getUrl()).toEqual(`${baseResultUrl}&resource_link_id=${resourceLinkId}&target_user_id=${targetUserId}`);
         });
       });
     });
@@ -59,20 +91,40 @@ describe("api helper", () => {
     const firebaseApp = "test_app";
     const okResponse = { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" };
 
-    beforeEach(() => {
-      nock("https://portal.com/")
-        .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`)
-        .reply(200, okResponse);
-    });
-
     describe("when offering URL param is present", () => {
       beforeEach(() => {
         window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123");
       });
-      it("should fetch the firestore jwt", async () => {
-        const resourceLinkId = null;
-        const resp = await fetchFirestoreJWT(classHash, resourceLinkId, firebaseApp);
-        expect(resp).toEqual(okResponse);
+
+      describe("when no resourceLinkId or targetUserId is included", () => {
+        beforeEach(() => {
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`)
+            .reply(200, okResponse);
+        });
+
+        it("should fetch the firestore jwt", async () => {
+          const resourceLinkId = null;
+          const targetUserId = null;
+          const resp = await fetchFirestoreJWT(classHash, resourceLinkId, targetUserId, firebaseApp);
+          expect(resp).toEqual(okResponse);
+        });
+
+      });
+      describe("when a resourceLinkId and targetUserId is included", () => {
+        beforeEach(() => {
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=abcde&target_user_id=fghijk`)
+            .reply(200, okResponse);
+        });
+
+        it("should fetch the firestore jwt", async () => {
+          const resourceLinkId = "abcde";
+          const targetUserId = "fghijk";
+          const resp = await fetchFirestoreJWT(classHash, resourceLinkId, targetUserId, firebaseApp);
+          expect(resp).toEqual(okResponse);
+        });
+
       });
     });
   });

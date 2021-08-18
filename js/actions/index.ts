@@ -319,6 +319,14 @@ function watchCollection(db: firebase.firestore.Firestore, path: string, receive
     // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
     // but that lets us use context_id value in the Firestore security rules.
     query = query.where(correctKey("context_id", receiveMsg), "==", rawPortalData.contextId);
+
+    // If there is a studentId url param add that as a platform_user_id filter too
+    // This optimizes the query when looking at a single student
+    // It is also necessary when a researcher is looking at a single student's data
+    const studentId = urlParam("studentId");
+    if (studentId) {
+      query = query.where(correctKey("platform_user_id", receiveMsg), "==", studentId);
+    }
   }
 
   addSnapshotDispatchListener(query, receiveMsg, dispatch,
