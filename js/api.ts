@@ -227,7 +227,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
     const resourceLinkId = offeringData.id.toString();
     // only pass resourceLinkId if there is a studentId
     // This could be a teacher or researcher viewing the report of a student
-    // The studentId is also passed as the target_user_id 
+    // The studentId is sent in the firestore JWT request as the target_user_id
     const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"));
     return firestoreJWTPromise.then((result: any) => {
       const rawFirestoreJWT = result.token;
