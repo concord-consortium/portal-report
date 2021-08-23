@@ -55,4 +55,25 @@ describe("<InteractiveIframe />", () => {
     phone._trigger("height", 321);
     expect(wrapper.find("iframe").prop("height")).toEqual(321);
   });
+
+
+  it("should try to parse interactiveState in the provided state", (done) => {
+    const state = {
+      mode: "report",
+      interactiveState: '{ "foo": "bar" }'
+    };
+    shallow(<InteractiveIframe state={state} src={src} />);
+
+    setTimeout(() => {
+      // iframe-phone mock is defined in __mocks__/iframe-phone.ts
+      expect(iframePhone._parentInstances.length).toEqual(1);
+      const phone = iframePhone._parentInstances[0];
+      const stateWithParsedInteractiveState = {
+        mode: "report",
+        interactiveState: { foo: "bar" }
+      };
+      expect(phone.post).toHaveBeenCalledWith("initInteractive", stateWithParsedInteractiveState);
+      done();
+    }, 10); // iframe-mock calls phoneAnsweredCallback after 1ms
+  });
 });
