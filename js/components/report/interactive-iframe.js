@@ -25,7 +25,22 @@ export default class InteractiveIframe extends PureComponent {
     if (!state) { return; }
 
     const phoneAnswered = () => {
-      this.iframePhone.post("initInteractive", typeof state === "string" ? JSON.parse(state) : state);
+      let initMsgContent = typeof state === "string" ? JSON.parse(state) : state;
+      if (initMsgContent.interactiveState && typeof initMsgContent.interactiveState === "string") {
+        try {
+          // Try to provide parsed interactiveState to be consistent with other LARA Interactive API providers
+          // like LARA or Activity Player.
+          initMsgContent = {
+            ...initMsgContent,
+            interactiveState: JSON.parse(initMsgContent.interactiveState)
+          };
+        } catch (e) {
+          // InteractiveState isn't a valid JSON. Just pass it through to the interactive.
+          // Note that it shouldn't happen in practice, as other systems seem to use mostly JSON states,
+          // or they JSON.stringify even plain values like strings.
+        }
+      }
+      this.iframePhone.post("initInteractive", initMsgContent);
     };
     // eslint-disable-next-line react/no-string-refs
     this.iframePhone = new iframePhone.ParentEndpoint(this.refs.iframe, phoneAnswered);
