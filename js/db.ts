@@ -111,6 +111,8 @@ export const signInWithToken = (rawFirestoreJWT: string) => {
   const signOutPromise = firebase.auth().signOut();
   if (!SKIP_SIGN_IN) {
     return signOutPromise.then(() => {
+      return firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    }).then(() => {
       return firebase.auth().signInWithCustomToken(rawFirestoreJWT);
     });
   } else {
