@@ -1,10 +1,11 @@
 import React from "react";
 import { Map } from "immutable";
+import striptags from "striptags";
+import { renderHTML } from "../../../util/render-html";
 import { AnonymizeStudents } from "../anonymize-students";
 import { QuestionTypes } from "../../../util/question-utils";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
-import striptags from "striptags";
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
@@ -78,7 +79,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     const typeText = type?.replace(/_/gm, ' ');
     const interactiveName = type === "iframe_interactive" ? currentQuestion?.get("name") : typeText;
     const prompt = currentQuestion?.get("prompt");
-    const prompText = prompt ? striptags(prompt.replace(/&nbsp;/g, ' ')) : interactiveName;
+    const prompText = prompt ? renderHTML(striptags(prompt.replace(/&nbsp;/g, ' '))) : interactiveName;
 
     return (
       <div className={css.spotlightColumnHeaders} data-cy="select-students-header">
