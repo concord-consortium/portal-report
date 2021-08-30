@@ -25,7 +25,7 @@ export const compareStudentsByName = (student1: Map<string, any>, student2: Map<
   }
 };
 
-// A fake MD5 hash that we'll use whenever the answer field is
+// A fake MD5 hash that we'll use whenever the answer field is undefined
 export const MD5_FOR_UNDEFINED = "0def0def0def0def0def0def0def0def";
 
 export const answerHash = (answer: Map<string, any>) => {
