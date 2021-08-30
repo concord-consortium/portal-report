@@ -46,6 +46,8 @@ export default class ImageQuestionDetails extends PureComponent {
     this.setState({selectedAnswer: index});
   }
 
+  // If the answer has no answer field, a.getIn(["answer", "imageUrl"]) returns undefined
+  // which then is !== null, so these invalid answers get included in this list
   get answersWithImage() {
     const { answers } = this.props;
     return answers.filter(a => a.getIn(["answer", "imageUrl"]) !== null);

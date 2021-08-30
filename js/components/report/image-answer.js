@@ -17,7 +17,7 @@ export default class ImageAnswer extends PureComponent {
     const imgAnswer = answer.get("answer");
     if (!imgAnswer) {
       // There are broken answer documents that do not include an answer field
-      // Don't crash, just provide a
+      // Don't crash, just provide a error message to the teacher
       return renderInvalidAnswer(answer, "response is missing answer field");
     }
     return (

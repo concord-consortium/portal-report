@@ -1,5 +1,5 @@
 import { Map } from "immutable";
-import { answerHash } from "../../js/util/misc";
+import { answerHash, MD5_FOR_UNDEFINED } from "../../js/util/misc";
 
 describe("misc util functions", () => {
   it("determines if answer hash is properly generated", () => {
@@ -47,5 +47,12 @@ describe("misc util functions", () => {
     expect(arrayAnswer1Hash).toEqual(arrayAnswer2Hash);
     expect(arrayAnswer2Hash).not.toEqual(arrayAnswer3Hash);
     expect(arrayAnswer1Hash).not.toEqual(simpleAnswer3Hash);
+  });
+
+  it("handles answer document without an answer field", () => {
+    const answerDoc = Map({ otherField: "foo" });
+    const hash = answerHash(answerDoc);
+
+    expect(hash).toEqual(MD5_FOR_UNDEFINED);
   });
 });
