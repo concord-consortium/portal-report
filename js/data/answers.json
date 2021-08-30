@@ -35,7 +35,7 @@
     "resource_url": "http://app.lara.docker/sequences/1",
     "report_state": "This is an example of a broken answer, it has a type of image_question but has no answer field. This report_state is also not normal, but it should be ignored",
     "type": "image_question_answer",
-    "platform_user_id": "2",
+    "platform_user_id": "3",
     "version": "1"
   },
   {
