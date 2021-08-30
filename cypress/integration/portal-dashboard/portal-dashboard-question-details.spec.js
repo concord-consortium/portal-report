@@ -163,5 +163,11 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy="modal-header"] [data-cy="close-button"]').should('be.visible').click();
       cy.get('[data-cy="answer-lightbox"]').should('not.exist');
     });
+    it('verify invalid image answer',()=>{
+      cy.get('[data-cy=previous-student-button]').click();
+      cy.get('[data-cy=previous-student-button]').click();
+      cy.get('[data-cy=previous-student-button]').click();
+      cy.get('[data-cy=student-answer]').should('contain', "Error");
+    });
   });
 });

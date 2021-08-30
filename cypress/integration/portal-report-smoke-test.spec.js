@@ -66,6 +66,12 @@ context("Portal Report Sequence Smoke Test", () => {
       cy.get('.answers-table').should('be.visible');
       cy.get('.answers-table').should('contain', '[the selected choice has been deleted by question author]');
     });
+
+    it('handles image questions including invalid ones', () => {
+      body.openAnswersForQuestion('question-image_question_2');
+      cy.get('.answers-table').should('be.visible');
+      cy.get('.answers-table').should('contain', 'Error');
+    });
   });
 
   context("Portal Report Settings", () => {
