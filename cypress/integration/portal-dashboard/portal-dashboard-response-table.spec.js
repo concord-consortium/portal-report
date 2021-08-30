@@ -11,7 +11,7 @@ context("Portal Dashboard Response Table",()=>{
   it('verify we display the correct student progress',()=>{
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
-      .should("contain", "1/7");
+      .should("contain", "2/7");
     cy.get('[data-cy=student-answers-row]')
       .eq(5)
       .should("contain", "5/7");
