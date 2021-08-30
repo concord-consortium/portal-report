@@ -25,8 +25,23 @@ export const compareStudentsByName = (student1: Map<string, any>, student2: Map<
   }
 };
 
+// A fake MD5 hash that we'll use whenever the answer field is
+const MD5_FOR_UNDEFINED = "0def0def0def0def0def0def0def0def";
+
 export const answerHash = (answer: Map<string, any>) => {
   let answerContent = answer.get("answer");
+  if (answerContent === undefined) {
+    // There are error cases where the answer property is not defined
+    // JSON.stringify of undefined is undefined and undefined breaks the md5 function
+    // Rather than throwing an exception, we return a fixed value this way if the answer
+    // get repaired the hash will change.
+    // In theory, this also means the teacher can provide feedback to the student even in
+    // these error cases.
+    // However in the standard report some other code is preventing this feedback.
+    // In the portal dashboard this feedback is working for these error cases.
+    return MD5_FOR_UNDEFINED;
+  }
+
   if (typeof answerContent !== "string") {
     // the non-Map case likely doesn't hit at present, but this adds protection
     // in case future answerContent has non-string/non-Map value

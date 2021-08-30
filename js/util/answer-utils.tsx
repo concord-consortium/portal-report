@@ -13,6 +13,7 @@ import QMCScoredCorrectIcon from "../../img/svg-icons/q-mc-scored-correct-icon.s
 import QMCScoredIncorrectIcon from "../../img/svg-icons/q-mc-scored-incorrect-icon.svg";
 import QOpenResponseCompletedIcon from "../../img/svg-icons/q-open-response-completed-icon.svg";
 import { TrackEventFunction } from "../actions";
+import React from "react";
 
 export interface AnswerType {
   name: string;
@@ -128,3 +129,15 @@ export const getAnswerIconId = (answerType: any) => {
   return iconId;
 };
 
+export const renderInvalidAnswer = (answer: any, errorMessage = "unknown") => {
+  return (
+    <div>
+      <b>Error: {errorMessage}</b>
+      <div>
+        Details:<br/>
+        id: {answer.get("id")}<br/>
+        questionId: {answer.get("questionId")}
+      </div>
+    </div>
+  );
+};

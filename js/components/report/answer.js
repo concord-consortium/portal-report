@@ -4,6 +4,7 @@ import MultipleChoiceAnswer from "./multiple-choice-answer";
 import ImageAnswer from "./image-answer";
 import IframeAnswer from "./iframe-answer";
 import NoAnswer from "./no-answer";
+import { renderInvalidAnswer } from "../../util/answer-utils";
 
 const AnswerComponent = {
   "open_response": OpenResponseAnswer,
@@ -23,7 +24,7 @@ export default class Answer extends PureComponent {
     }
     const AComponent = AnswerComponent[answer.get("questionType")];
     if (!AComponent) {
-      return <div>Answer type not supported.</div>;
+      return renderInvalidAnswer("Answer type not supported");
     }
     return <AComponent answer={answer} alwaysOpen={alwaysOpen} question={question} data-cy="answer"/>;
   }

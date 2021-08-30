@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import ImageAnswerModal from "./image-answer-modal";
 
 import "../../../css/report/image-answer.less";
+import { renderInvalidAnswer } from "../../util/answer-utils";
 
 export default class ImageAnswer extends PureComponent {
   constructor(props) {
@@ -14,6 +15,11 @@ export default class ImageAnswer extends PureComponent {
   render() {
     const { answer } = this.props;
     const imgAnswer = answer.get("answer");
+    if (!imgAnswer) {
+      // There are broken answer documents that do not include an answer field
+      // Don't crash, just provide a
+      return renderInvalidAnswer(answer, "response is missing answer field");
+    }
     return (
       <div>
         <div className="image-answer">

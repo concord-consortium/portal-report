@@ -3,6 +3,7 @@ import { AnswerModal } from "./answer-modal";
 import { MagnifyIcon } from "./magnify-icon";
 import useResizeObserver from "@react-hook/resize-observer";
 import { TrackEventFunction } from "../../../actions";
+import { renderInvalidAnswer } from "../../../util/answer-utils";
 
 import css from "../../../../css/portal-dashboard/answers/image-answer.less";
 
@@ -41,7 +42,10 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
   const useSize = (target: any) => {
     const [size, setSize] = React.useState(new DOMRect(0, 0, 0, 0));
     React.useLayoutEffect(() => {
-      setSize(target.current.getBoundingClientRect());
+      if (target.current) {
+        // target.current can be null in the case of an invalid answer
+        setSize(target.current.getBoundingClientRect());
+      }
     }, [target]);
     useResizeObserver(target, (entry: any) => setSize(entry.contentRect));
     return size;
@@ -58,6 +62,14 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
   const constrainX = naturalWidth / containerWidth >= naturalHeight / containerHeight;
   const imgWidth = aspectRatio > 0 ? (constrainX ? containerWidth : containerHeight / aspectRatio) : 0;
   const imgHeight = aspectRatio > 0 ? (constrainX ? containerWidth / aspectRatio : containerHeight) : 0;
+
+  if (!imgAnswer) {
+    // There are broken answer documents that do not include an answer field
+    // Don't crash, just provide a error message to the teacher
+    // This needs to happen after all of the useState calls otherwise React will get
+    // messed up
+    return renderInvalidAnswer(answer, "response is missing answer field");
+  }
 
   return (
     <React.Fragment>
