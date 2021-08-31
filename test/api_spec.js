@@ -1,6 +1,6 @@
 import nock from "nock";
 import { fetchOfferingData, getPortalFirebaseJWTUrl, fetchFirestoreJWT,
-  initializeAuthorization, getAuthHeader, updateReportSettingsInPortal } from "../js/api";
+  initializeAuthorization, getAuthHeader, updateReportSettingsInPortal, fetchFirestoreJWTWithDefaultParams } from "../js/api";
 import queryString from "query-string";
 
 describe("api helper", () => {
@@ -124,7 +124,60 @@ describe("api helper", () => {
           const resp = await fetchFirestoreJWT(classHash, resourceLinkId, targetUserId, firebaseApp);
           expect(resp).toEqual(okResponse);
         });
+      });
+    });
+  });
 
+  describe("fetchFirestoreJWTWithDefaultParams", () => {
+    const classHash = "1234";
+    const firebaseApp = "test_app";
+    const resourceLinkId = "abcde";
+    const studentId = "fghijk";
+    const okResponse = { token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" };
+
+    describe("when offering and class URL params are present", () => {
+      beforeEach(() => {
+        window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123&class=https://portal.com/classes/123");
+
+        nock("https://portal.com/")
+          .get("/offerings/123")
+          .reply(200, {
+            id: resourceLinkId
+          });
+
+        nock("https://portal.com/")
+          .get("/classes/123")
+          .reply(200, {
+            class_hash: classHash
+          });
+      });
+
+      describe("when no resourceLinkId or targetUserId is included", () => {
+        beforeEach(() => {
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`)
+            .reply(200, okResponse);
+        });
+
+        it("should fetch the firestore jwt", async () => {
+          const resp = await fetchFirestoreJWTWithDefaultParams(firebaseApp);
+          expect(resp).toEqual(okResponse);
+        });
+      });
+
+      describe("when a resourceLinkId and targetUserId is included", () => {
+        beforeEach(() => {
+          window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123&class=https://portal.com/classes/123&studentId=fghijk");
+
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=${resourceLinkId}&target_user_id=${studentId}`)
+            .reply(200, okResponse);
+        });
+
+        it("should fetch the firestore jwt", async () => {
+          const resp = await fetchFirestoreJWTWithDefaultParams(firebaseApp);
+          expect(resp).toEqual(okResponse);
+        });
       });
     });
   });

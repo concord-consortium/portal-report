@@ -3,6 +3,13 @@ import nock from "nock";
 import { shallow } from "enzyme";
 import InteractiveIframe from "../../../js/components/report/interactive-iframe";
 import iframePhone from "iframe-phone";
+import { Map } from "immutable";
+
+const mockAttachmentUrlResponse = { url: "test_attachment_url" };
+const mockHandleGetAttachmentUrl = jest.fn(() => Promise.resolve(mockAttachmentUrlResponse));
+jest.mock("@concord-consortium/interactive-api-host", () => ({
+  handleGetAttachmentUrl: (...args) => mockHandleGetAttachmentUrl(...args)
+}));
 
 describe("<InteractiveIframe />", () => {
   const classHash = "1234";
@@ -11,6 +18,7 @@ describe("<InteractiveIframe />", () => {
   const src = "https://portal.com/fake-frame";
   const width = "200px";
   const height = "100px";
+  const answerMap = new Map({});
 
   beforeEach(() => {
     window.history.replaceState({}, "Test", "/?token=abcde&class=https://portal.com/classes/123");
@@ -32,18 +40,33 @@ describe("<InteractiveIframe />", () => {
     expect(wrapper.find("iframe").html()).toContain(`<iframe src="${src}" width="${width}" height="${height}" style="border:none;margin-top:0.5em"`);
   });
 
-  it("should support handleGetFirebaseJWT", () => {
+  it("should support getFirebaseJWT API", () => {
     const wrapper = shallow(<InteractiveIframe state={{foo: "bar"}} src={src} width="100px" height="100px" />);
-    return wrapper
-            .instance()
-            .handleGetFirebaseJWT({firebase_app: firebaseApp})
-            .then(json => {
-              expect(json).toEqual(firebaseJWTJson);
-              // iframe-phone mock is defined in __mocks__/iframe-phone.ts
-              expect(iframePhone._parentInstances.length).toEqual(1);
-              const phone = iframePhone._parentInstances[0];
-              expect(phone.post).toHaveBeenCalledWith("firebaseJWT", json);
-            });
+    wrapper
+      .instance()
+      .handleGetFirebaseJWT({firebase_app: firebaseApp})
+      .then(json => {
+        expect(json).toEqual(firebaseJWTJson);
+        // iframe-phone mock is defined in __mocks__/iframe-phone.ts
+        expect(iframePhone._parentInstances.length).toEqual(1);
+        const phone = iframePhone._parentInstances[0];
+        expect(phone.post).toHaveBeenCalledWith("firebaseJWT", json);
+      });
+  });
+
+  it("should support getAttachmentUrl API", () => {
+    const wrapper = shallow(<InteractiveIframe state={{foo: "bar"}} src={src} answer={answerMap} width="100px" height="100px" />);
+    wrapper
+      .instance()
+      .handleGetAttachmentUrl({ fakeRequest: true })
+      .then(json => {
+        expect(mockHandleGetAttachmentUrl).toHaveBeenCalled();
+        expect(json).toEqual(mockAttachmentUrlResponse);
+        // iframe-phone mock is defined in __mocks__/iframe-phone.ts
+        expect(iframePhone._parentInstances.length).toEqual(1);
+        const phone = iframePhone._parentInstances[0];
+        expect(phone.post).toHaveBeenCalledWith("attachmentUrl", json);
+      });
   });
 
   it("should handle Interactive API height message", () => {

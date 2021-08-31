@@ -54,7 +54,7 @@ class IframeStandaloneApp extends PureComponent {
       state = answer.get("answer");
     }
     return (
-      <InteractiveIframe src={url} state={state} style={{border: "none"}} width="100%" height="100%" />
+      <InteractiveIframe src={url} state={state} answer={answer} style={{border: "none"}} width="100%" height="100%" />
     );
   }
 
