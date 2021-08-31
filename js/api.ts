@@ -143,16 +143,6 @@ export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: strin
   return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}${resourceLinkParam}${targetUserParam}`;
 };
 
-const gePortalReportAPIUrl = () => {
-  const offeringUrl = urlParam("offering");
-  if (offeringUrl) {
-    // When this report is used an external report, it will be launched with offering URL parameter.
-    // Modify this URL to point to get the deprecated Report API URL.
-    return offeringUrl.replace("/offerings/", "/reports/");
-  }
-  return null;
-};
-
 export function getAuthHeader() {
   if (urlParam("token")) {
     return `Bearer ${urlParam("token")}`;
@@ -312,29 +302,6 @@ export function updateReportSettings(update: any, state: ILTIPartial) {
       .set(update, {merge: true});
 }
 
-// The updateReportSettings API middleware calls out to the deprecated Portal Report API.
-// It's necessary to keep the Portal progress table valid and updated.
-// The function is async so that it always returns a promise even if an exception is
-// thrown during the getAuthHeader.
-export async function updateReportSettingsInPortal(data: any) {
-  const reportUrl = gePortalReportAPIUrl();
-  if (reportUrl) {
-    const authHeader = getAuthHeader();
-    return fetch(reportUrl, {
-      method: "put",
-      headers: {
-        "Authorization": authHeader,
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }).then(checkStatus);
-  } else {
-    console.warn("No OFFERING/REPORT_URL. Faking put method.");
-    return {};
-  }
-}
-
 export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?: { platformId?: string; resourceLinkId?: string }) {
   const path = `/sources/${sourceKey}/feedback_settings`;
   if (instanceParams) {
@@ -353,31 +320,6 @@ export function feedbackSettingsFirestorePath(sourceKey: string, instanceParams?
 export function updateFeedbackSettings(data: any, state: IStateReportPartial) {
   const { settings } = data;
   const promises: Promise<any>[] = [];
-
-  if (settings.activitySettings) {
-    const { activityId, activityIndex } = data;
-    const actSettings = settings.activitySettings[activityId];
-    // Send data to Portal to keep progress table working. This is only one-way communication,
-    // Portal Report never reads this data back from Portal.
-    const activitySettingsPromise = updateReportSettingsInPortal({
-      activity_feedback_opts_v2: {
-        enable_text_feedback: actSettings.textFeedbackEnabled,
-        score_type: actSettings.scoreType,
-        max_score: actSettings.maxScore,
-        use_rubric: actSettings.useRubric,
-        activity_index: activityIndex
-      }
-    });
-    promises.push(activitySettingsPromise);
-  }
-  if (settings.rubric) {
-    const rubricPromise = updateReportSettingsInPortal({
-      rubric_v2: {
-        rubric: settings.rubric
-      }
-    });
-    promises.push(rubricPromise);
-  }
 
   // Then, send it to Firestore.
   settings.platformId = state.platformId;
@@ -446,20 +388,8 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
 // This due to a feature in the FireStore API called "latency compensation."
 // See: https://firebase.google.com/docs/firestore/query-data/listen
 export function updateActivityFeedbacks(data: any, reportState: IStateReportPartial) {
-  const { activityId, platformStudentId, feedback, activityIndex } = data;
-  // Send data to Portal to keep progress table working. This is only one-way communication,
-  // Portal Report never reads this data back from Portal.
-  updateReportSettingsInPortal({
-    activity_feedback_v2: {
-      has_been_reviewed: feedback.hasBeenReviewed,
-      text_feedback: feedback.feedback,
-      score: feedback.score,
-      rubric_feedback: feedback.rubricFeedback,
-      activity_index: activityIndex,
-      student_user_id: platformStudentId
-    }
-  });
-  // Then, send it to Firestore.
+  const { activityId, platformStudentId, feedback } = data;
+  // Send data to Firestore.
   const { platformId, platformUserId, resourceLinkId, contextId } = reportState;
   const activityStudentKey = getActivityStudentFeedbackKey(data);
   feedback.platformId = platformId;
