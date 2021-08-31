@@ -175,7 +175,7 @@ export function fetchClassData() {
   }
 }
 
-export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, targetUserId: string | null = null, firebaseApp?: string) {
+export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, targetUserId: string | null = null, firebaseApp?: string): Promise<{token: string}> {
   const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, resourceLinkId, targetUserId, firebaseApp );
   if (firestoreJWTUrl) {
     return fetch(firestoreJWTUrl, {headers: {Authorization: getAuthHeader()}})
@@ -186,7 +186,7 @@ export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | nu
   }
 }
 
-export function fetchFirestoreJWTWithDefaultParams(firebaseApp?: string) {
+export function fetchFirestoreJWTWithDefaultParams(firebaseApp?: string): Promise<{token: string}> {
   return Promise.all([fetchOfferingData(), fetchClassData()])
     .then(([offeringData, classData]) => {
       const resourceLinkId = offeringData.id.toString();
