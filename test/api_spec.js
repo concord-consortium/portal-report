@@ -1,6 +1,6 @@
 import nock from "nock";
 import { fetchOfferingData, getPortalFirebaseJWTUrl, fetchFirestoreJWT,
-  initializeAuthorization, getAuthHeader, updateReportSettingsInPortal } from "../js/api";
+  initializeAuthorization, getAuthHeader } from "../js/api";
 import queryString from "query-string";
 
 describe("api helper", () => {
@@ -127,65 +127,6 @@ describe("api helper", () => {
 
       });
     });
-  });
-
-  describe("updateReportSettingsInPortal", () => {
-    // need a fake offering url param that includes /offerings/
-    const fakeOfferingUrl = "https://portal.com/offerings/123";
-    const okResponse = "OK";
-    const fakeSettings = {something: "important"};
-
-    beforeEach(() => {
-    });
-
-    describe("when both offering and token URL params are present", () => {
-      beforeEach(() => {
-        window.history.replaceState({}, "Test", `/?token=abc&offering=${fakeOfferingUrl}`);
-      });
-      it("should put data", async () => {
-        const request = nock("https://portal.com/", {
-          reqheaders: {
-            authorization: "Bearer abc"
-          }
-        })
-          .put(`/reports/123`, fakeSettings)
-          .reply(200, okResponse);
-        const resp = await updateReportSettingsInPortal(fakeSettings);
-        expect(request.isDone()).toBeTruthy();
-      });
-    });
-
-    describe("when offering param is present and token is not", () => {
-      beforeEach(() => {
-        window.history.replaceState({}, "Test", `/?offering=${fakeOfferingUrl}`);
-      });
-      it("throws an exception", async () => {
-        expect.assertions(2);
-        try {
-          await updateReportSettingsInPortal(fakeSettings);
-        } catch( e) {
-          expect(e).toBeTruthy();
-        }
-        expect(nock.isDone()).toBeTruthy();
-      });
-    });
-
-    describe("when offering param is not present", () => {
-      const originalWarn = console.warn
-      beforeEach(() => {
-        window.history.replaceState({}, "Test", `/`);
-        console.warn = jest.fn();
-      });
-      afterEach(() => {
-        console.warn = originalWarn;
-      });
-      it("resolves without any requests, and prints a warning", async () => {
-        await updateReportSettingsInPortal(fakeSettings);
-        expect(nock.isDone()).toBeTruthy();
-        expect(console.warn).toHaveBeenCalled();
-      });
-    });
-
   });
 
   describe("initializeAuthorization", () => {
