@@ -190,10 +190,11 @@ export function fetchFirestoreJWTWithDefaultParams(firebaseApp?: string): Promis
   return Promise.all([fetchOfferingData(), fetchClassData()])
     .then(([offeringData, classData]) => {
       const resourceLinkId = offeringData.id.toString();
+      const studentId = urlParam("studentId");
       // only pass resourceLinkId if there is a studentId
       // This could be a teacher or researcher viewing the report of a student
       // The studentId is sent in the firestore JWT request as the target_user_id
-      return fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"), firebaseApp);
+      return fetchFirestoreJWT(classData.class_hash, studentId ? resourceLinkId : null, studentId, firebaseApp);
     });
 }
 
@@ -226,10 +227,11 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
     const resourceLinkId = offeringData.id.toString();
+    const studentId = urlParam("studentId");
     // only pass resourceLinkId if there is a studentId
     // This could be a teacher or researcher viewing the report of a student
     // The studentId is sent in the firestore JWT request as the target_user_id
-    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"));
+    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, studentId ? resourceLinkId : null, studentId);
     return firestoreJWTPromise.then((result: any) => {
       const rawFirestoreJWT = result.token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {
