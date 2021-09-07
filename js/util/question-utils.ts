@@ -9,6 +9,7 @@ import QMAScoredIcon from "../../img/svg-icons/q-ma-scored-type-icon.svg";
 import QMCNonScoredIcon from "../../img/svg-icons/q-mc-nonscored-type-icon.svg";
 import QMCScoredIcon from "../../img/svg-icons/q-mc-scored-type-icon.svg";
 import QOpenResponseIcon from "../../img/svg-icons/q-open-response-type-icon.svg";
+import { Map } from "immutable";
 
 export interface QuestionType {
   name: string;
@@ -86,3 +87,18 @@ export const QuestionTypes: QuestionType[] = [
   },
 
 ];
+
+export const getQuestionIcon = (question?: Map<string, any>): any => {
+  if (!question) {
+    console.warn("No question given, using default iframe interactive icon");
+    return QInteractiveIcon;
+  }
+
+  const questionType = QuestionTypes.find(qt => qt.type === question.get("type") && qt.scored === question.get("scored"));
+  if (!questionType) {
+    console.warn(`Cannot find icon for question type ${question.get("type")} and scored value: ${question.get("scored")}`);
+    return QInteractiveIcon;
+  }
+
+  return questionType.icon;
+};
