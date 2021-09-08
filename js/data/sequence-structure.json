@@ -236,6 +236,14 @@
                   "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/scaffolded-question/",
                   "width": 576,
                   "prompt": "<p>Clues to do what?</p>"
+                },
+                {
+                  "drawing_prompt": "",
+                  "id": "image_question_3",
+                  "prompt": "",
+                  "question_number": 9,
+                  "show_in_featured_question_report": true,
+                  "type": "image_question"
                 }
               ]
             },
