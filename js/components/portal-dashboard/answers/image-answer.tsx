@@ -4,13 +4,14 @@ import { MagnifyIcon } from "./magnify-icon";
 import useResizeObserver from "@react-hook/resize-observer";
 import { TrackEventFunction } from "../../../actions";
 import { renderInvalidAnswer } from "../../../util/answer-utils";
+import { Map } from "immutable";
 
 import css from "../../../../css/portal-dashboard/answers/image-answer.less";
 
 interface IProps {
   answer: Map<any, any>;
   responsive?: boolean;
-  question?: Map<any, any>;
+  question?: Map<string, any>;
   studentName: string;
   trackEvent: TrackEventFunction;
 }

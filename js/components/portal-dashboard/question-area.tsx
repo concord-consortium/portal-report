@@ -1,6 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
-import { getQuetionIcon } from "../../util/question-utils";
+import { getQuestionIcon } from "../../util/question-utils";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import { Question } from "./questions/question";
 import { TrackEventFunction } from "../../actions";

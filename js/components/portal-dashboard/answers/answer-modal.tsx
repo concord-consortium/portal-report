@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
 import { getQuestionIcon } from "../../../util/question-utils";
 import striptags from "striptags";
+import { Map } from "immutable";
 
 import css from "../../../../css/portal-dashboard/answers/answer-modal.less";
 
@@ -10,7 +11,7 @@ interface IProps {
   answer: Map<any, any>;
   show: boolean;
   onHide: (value: boolean) => void;
-  question?: Map<any, any>;
+  question?: Map<string, any>;
   studentName: string;
 }
 
