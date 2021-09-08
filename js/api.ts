@@ -175,7 +175,7 @@ export function fetchClassData() {
   }
 }
 
-export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, targetUserId: string | null = null, firebaseApp?: string) {
+export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | null = null, targetUserId: string | null = null, firebaseApp?: string): Promise<{token: string}> {
   const firestoreJWTUrl = getPortalFirebaseJWTUrl(classHash, resourceLinkId, targetUserId, firebaseApp );
   if (firestoreJWTUrl) {
     return fetch(firestoreJWTUrl, {headers: {Authorization: getAuthHeader()}})
@@ -184,6 +184,18 @@ export function fetchFirestoreJWT(classHash: string, resourceLinkId: string | nu
   } else {
     return new Promise(resolve => setTimeout(() => resolve({token: FAKE_FIRESTORE_JWT}), 250));
   }
+}
+
+export function fetchFirestoreJWTWithDefaultParams(firebaseApp?: string): Promise<{token: string}> {
+  return Promise.all([fetchOfferingData(), fetchClassData()])
+    .then(([offeringData, classData]) => {
+      const resourceLinkId = offeringData.id.toString();
+      const studentId = urlParam("studentId");
+      // only pass resourceLinkId if there is a studentId
+      // This could be a teacher or researcher viewing the report of a student
+      // The studentId is sent in the firestore JWT request as the target_user_id
+      return fetchFirestoreJWT(classData.class_hash, studentId ? resourceLinkId : null, studentId, firebaseApp);
+    });
 }
 
 export function authFirestore(rawFirestoreJWT: string) {
@@ -215,10 +227,11 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
     const resourceLinkId = offeringData.id.toString();
+    const studentId = urlParam("studentId");
     // only pass resourceLinkId if there is a studentId
     // This could be a teacher or researcher viewing the report of a student
     // The studentId is sent in the firestore JWT request as the target_user_id
-    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"));
+    const firestoreJWTPromise = fetchFirestoreJWT(classData.class_hash, studentId ? resourceLinkId : null, studentId);
     return firestoreJWTPromise.then((result: any) => {
       const rawFirestoreJWT = result.token;
       if (rawFirestoreJWT !== FAKE_FIRESTORE_JWT) {

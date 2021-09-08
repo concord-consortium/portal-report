@@ -94,7 +94,7 @@ export default class IframeAnswer extends PureComponent {
     }
     return (
       <div className={`iframe-answer-content ${responsive ? "responsive" : ""}`}>
-        <InteractiveIframe src={url} state={state} width={question.get("width")} height={question.get("height")} />
+        <InteractiveIframe src={url} state={state} answer={answer} width={question.get("width")} height={question.get("height")} />
       </div>
     );
   }

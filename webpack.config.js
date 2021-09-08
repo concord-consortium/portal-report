@@ -1,5 +1,4 @@
 const path = require('path')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 // WEBPACK_TARGET=lib webpack will build UMD library.
@@ -49,10 +48,7 @@ module.exports = (env, argv) => {
         {
           test: /\.[tj]sx?$/,
           exclude: path.join(__dirname, 'node_modules'),
-          loader: 'ts-loader',
-          options: {
-            transpileOnly: true // IMPORTANT! use transpileOnly mode to speed-up compilation
-          }
+          loader: 'ts-loader'
         },
         // This code coverage instrumentation should only be added when needed. It makes
         // the code larger and slower
@@ -141,9 +137,7 @@ module.exports = (env, argv) => {
       ]
     },
     devtool: 'source-map',
-    plugins: [
-      new ForkTsCheckerWebpackPlugin()
-    ]
+    plugins: []
   };
 
   if (!lib) {

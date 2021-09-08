@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
-import { fetchOfferingData, fetchClassData, fetchFirestoreJWT } from "../../api";
-import { urlParam } from "../../util/misc";
+import { fetchFirestoreJWTWithDefaultParams } from "../../api";
+import { handleGetAttachmentUrl } from "@concord-consortium/interactive-api-host";
 
 export default class InteractiveIframe extends PureComponent {
   constructor (props) {
@@ -47,20 +47,24 @@ export default class InteractiveIframe extends PureComponent {
 
     this.iframePhone.addListener("getFirebaseJWT", this.handleGetFirebaseJWT);
     this.iframePhone.addListener("height", this.handleHeight);
+    this.iframePhone.addListener("getAttachmentUrl", this.handleGetAttachmentUrl);
   }
 
   handleGetFirebaseJWT = (options) => {
-    return Promise.all([fetchOfferingData(), fetchClassData()])
-      .then(([offeringData, classData]) => {
-        const resourceLinkId = offeringData.id.toString();
-        // only pass resourceLinkId if there is a studentId
-        // This could be a teacher or researcher viewing the report of a student
-        // The studentId is sent in the firestore JWT request as the target_user_id
-        return fetchFirestoreJWT(classData.class_hash, urlParam("studentId") ? resourceLinkId : null, urlParam("studentId"), options.firebase_app);
-      })
+    return fetchFirestoreJWTWithDefaultParams(options.firebase_app)
       .then(json => {
         this.iframePhone.post("firebaseJWT", json);
         return json;
+      })
+      .catch(console.error);
+  }
+
+  handleGetAttachmentUrl = (request) => {
+    const answerMeta = this.props.answer.toJS();
+    return handleGetAttachmentUrl({ request, answerMeta })
+      .then(response => {
+        this.iframePhone.post("attachmentUrl", response);
+        return response;
       })
       .catch(console.error);
   }
