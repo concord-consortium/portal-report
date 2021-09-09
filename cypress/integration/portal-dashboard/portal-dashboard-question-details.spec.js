@@ -89,6 +89,18 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get("[data-cy=question-overlay] [data-cy=open-activity-button]").should('be.visible');
       cy.get("[data-cy=question-overlay] [data-cy=open-teacher-edition-button]").should('be.visible');
     });
+    it('verify open activity button is logged', () => {
+      cy.window().its("store").then(store => {
+        cy.spy(store, "dispatch").as("dispatch");
+      })
+      cy.get("[data-cy=question-overlay] [data-cy=open-activity-button]")
+        // This prevents the navigation,
+        .then(($button) => {$button.click(event => event.preventDefault()) })
+        // The click here should trigger a log event
+        .click();
+      // TODO: trying to monitor if track event was called, but this approach isn't working
+      // cy.get("@dispatch").should("be.called");
+    });
     it('verify show/hide button behaves correctly', () => {
       cy.get('[data-cy=question-overlay] [data-cy=show-hide-question-button]').should('be.visible').click();
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('not.be.visible');
