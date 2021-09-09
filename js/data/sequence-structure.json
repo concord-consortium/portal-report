@@ -238,10 +238,16 @@
                   "prompt": "<p>Clues to do what?</p>"
                 },
                 {
-                  "drawing_prompt": "",
                   "id": "image_question_3",
-                  "prompt": "",
+                  "prompt": "take a shot",
                   "question_number": 9,
+                  "show_in_featured_question_report": true,
+                  "type": "image_question"
+                },
+                {
+                  "drawing_prompt": "draw something",
+                  "id": "image_question_4",
+                  "question_number": 10,
                   "show_in_featured_question_report": true,
                   "type": "image_question"
                 }
