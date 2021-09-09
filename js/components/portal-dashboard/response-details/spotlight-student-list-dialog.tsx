@@ -78,7 +78,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     const typeText = type?.replace(/_/gm, ' ');
     const interactiveName = type === "iframe_interactive" ? currentQuestion?.get("name") : typeText;
     const prompt = currentQuestion?.get("prompt");
-    const prompText = prompt ? renderHTML(striptags(prompt.replace(/&nbsp;/g, ' '))) : interactiveName;
+    const prompText = prompt ? renderHTML((prompt?.replace(/&nbsp;/g, ' '))) : interactiveName;
 
     return (
       <div className={css.spotlightColumnHeaders} data-cy="select-students-header">

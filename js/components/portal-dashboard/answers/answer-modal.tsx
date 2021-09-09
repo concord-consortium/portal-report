@@ -23,8 +23,8 @@ export class AnswerModal extends PureComponent<IProps> {
     const type = answer?.get("questionType");
     const questionType = QuestionTypes.find(qt => qt.type === type);
     const QuestionIcon = questionType?.icon;
-    const drawingPrompt = question?.get("drawingPrompt") ? striptags((question.get("drawingPrompt")).replace(/&nbsp;/g,' ')) : "";
-    const questionPrompt = question?.get("prompt") ? striptags((question.get("prompt")).replace(/&nbsp;/g,' ')) : "";
+    const drawingPrompt = question?.get("drawingPrompt") ? striptags((question.get("drawingPrompt"))?.replace(/&nbsp;/g,' ')) : "";
+    const questionPrompt = question?.get("prompt") ? striptags((question.get("prompt"))?.replace(/&nbsp;/g,' ')) : "";
     const prompt = drawingPrompt + questionPrompt;
 
     if (!answer) { return null; }
