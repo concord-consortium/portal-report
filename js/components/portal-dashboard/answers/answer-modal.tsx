@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { Modal } from "react-bootstrap";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
-import { getQuestionIcon } from "../../../util/question-utils";
+import { QuestionTypes } from "../../../util/question-utils";
 import striptags from "striptags";
 import { Map } from "immutable";
 

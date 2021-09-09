@@ -2,7 +2,7 @@ import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 import { AnswerProps } from "../../util/answer-utils";
-import { getQuestionIcon } from "../../util/question-utils";
+import { QuestionTypes } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
 import { ImageAnswer } from "../../components/portal-dashboard/answers/image-answer";
@@ -18,7 +18,9 @@ class Answer extends React.PureComponent<AnswerProps> {
   render() {
     const { answer, question, student } = this.props;
     const atype = answer && answer.get("type");
-    const QuestionIcon = getQuestionIcon(question);
+    const type = question?.get("type");
+    const questionType = QuestionTypes.find(qt => qt.type === type);
+    const QuestionIcon = questionType?.icon;
     const key = `student-${student ? student.get("id") : "NA"}-question-${question ? question.get("id") : "NA"}`;
     return (
       <div className={css.answer} data-cy="student-answer" key={key}>
