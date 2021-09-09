@@ -90,11 +90,24 @@ context("Geode Dashboard Smoke Test", () => {
             dashboard.getStudentAnswersRow()
                 .should("not.have.class", dashboard.answersOpen);
         });
-        it("can scroll across the different activities", () => {
+        it.only("can scroll across the different activities", () => {
             dashboard.getOpenCloseStudents()
                 .click({ force: true });
+
+            // It isn't clear why, but multiple scrolls are needed to scroll all of the way over
+            dashboard.getActivityHeaders().scrollTo("right");
+            cy.wait(500);
+            dashboard.getActivityHeaders().scrollTo("right");
+            cy.wait(500);
+            dashboard.getActivityHeaders().scrollTo("right");
             dashboard.getActivityNames().last()
-                .scrollIntoView({ duration: 2000 });
+                .should("be.visible");
+            dashboard.getStudentAnswersRow().eq(0)
+                .within(() => {
+                    dashboard.getProgressBar().eq(0)
+                        .should("be.visible");
+                });
+
         });
     });
 
