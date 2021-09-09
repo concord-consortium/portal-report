@@ -107,9 +107,11 @@ export const FULL_REPORT = "fullReport";
 export const DASHBOARD = "dashboard";
 export const PORTAL_DASHBOARD = "portalDashboard";
 export const IFRAME_STANDALONE = "iframeStandalone";
+export const EXPORT = "exportPage";
 
 export function getViewType () {
   return config("iframeQuestionId") ? IFRAME_STANDALONE :
          configBool("portal-dashboard") ? PORTAL_DASHBOARD :
+         configBool("export") ? EXPORT :
          configBool("dashboard") ? DASHBOARD : FULL_REPORT;
 }

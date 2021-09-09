@@ -21,6 +21,7 @@ import {
   RECEIVE_ANSWERS,
   RECEIVE_ANSWERS_EXPORT
 } from "../actions";
+import config from "../config";
 
 export type ReportType = "class" | "student";
 

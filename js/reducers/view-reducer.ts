@@ -15,8 +15,8 @@ export interface IViewState {
 
 const initialType =
   config("iframeQuestionId") ? IFRAME_STANDALONE :
-  configBool("portal-dashboard") ? PORTAL_DASHBOARD :
   configBool("export") ? EXPORT :
+  configBool("portal-dashboard") ? PORTAL_DASHBOARD :
   configBool("dashboard") ? DASHBOARD : FULL_REPORT ;
 
 const INITIAL_VIEW_STATE = RecordFactory<IViewState>({

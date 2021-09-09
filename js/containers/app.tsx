@@ -5,9 +5,9 @@ import PortalDashboardApp from "./portal-dashboard/portal-dashboard-app";
 import IframeStandaloneApp from "./report/iframe-standalone-app";
 import ExportApp from "../components/export/export";
 import { connect } from "react-redux";
-import { DASHBOARD, PORTAL_DASHBOARD, IFRAME_STANDALONE, FULL_REPORT, EXPORT } from "../reducers/view-reducer";
+// import { DASHBOARD, PORTAL_DASHBOARD, IFRAME_STANDALONE, FULL_REPORT, EXPORT } from "../reducers/view-reducer";
 import { RootState } from "../reducers";
-import { DASHBOARD, FULL_REPORT, IFRAME_STANDALONE, PORTAL_DASHBOARD, getViewType } from "../util/misc";
+import { DASHBOARD, FULL_REPORT, IFRAME_STANDALONE, PORTAL_DASHBOARD, getViewType, EXPORT } from "../util/misc";
 
 interface IProps {
 }
