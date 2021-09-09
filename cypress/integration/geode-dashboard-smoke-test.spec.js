@@ -90,7 +90,7 @@ context("Geode Dashboard Smoke Test", () => {
             dashboard.getStudentAnswersRow()
                 .should("not.have.class", dashboard.answersOpen);
         });
-        it.only("can scroll across the different activities", () => {
+        it("can scroll across the different activities", () => {
             dashboard.getOpenCloseStudents()
                 .click({ force: true });
 

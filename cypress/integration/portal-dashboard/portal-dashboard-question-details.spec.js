@@ -169,5 +169,17 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=previous-student-button]').click();
       cy.get('[data-cy=student-answer]').should('contain', "Error");
     });
+    it('verify invalid answer type',()=>{
+      // collapse the student answer pane just to make sure the cell we want to click on
+      // is visible
+      cy.get('[data-cy=question-overlay-header-button]').click();
+      cy.get('[data-cy=collapsed-activity-button]').first().click();
+      cy.get('[data-cy=student-answers-row]')
+        .eq(0)
+        .find('[data-cy=interactive-completed]')
+        .last()
+        .click();
+      cy.get('[data-cy=student-answer]').should('contain', "Answer type not supported");
+    });
   });
 });
