@@ -125,7 +125,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
         <div onClick={this.handleSelect(studentId)} className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
           <div className={css.check} />
         </div>
-        <div className={css.spotlightBadge} onClick={this.handleSpotlightColorSelect(studentId)}>
+        <div className={css.spotlightBadge} onClick={this.handleSpotlightColorSelect(studentId)} data-cy="spotlight-badge">
           <SpotlightIcon className={`${css.listSpotlightIcon} ${fillColorClass}`} />
         </div>
         <div className={css.studentName} data-cy="student-name">{formattedName}</div>
