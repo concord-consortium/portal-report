@@ -97,6 +97,13 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
       cy.get('[data-cy=question-overlay] [data-cy=question-content]').should('be.visible');
     });
+    it("Question 9 missing prompt, verify question detail loads", () => {
+      cy.get("[data-cy=question-overlay-header-button]").click();
+      cy.get("[data-cy=collapsed-activity-button]").click();
+      cy.get("[data-cy=image-question-with-open-response-completed]").click();
+      cy.get("[data-cy=question-content] [data-cy=current-question]").should("contain", "");
+      cy.get("[data-cy=collapsed-activity-button]").click();
+    });
   });
   // Removed for MVP:
   describe.skip('Class Response Area', () => {
@@ -134,7 +141,7 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     it('verify next button is disabled when end of list is reached',()=>{
       cy.get('[data-cy=next-student-button]').click();
-      cy.get('[data-cy=next-student-button]').click();
+      // cy.get('[data-cy=next-student-button]').click();
       cy.get('[data-cy=student-name]').should('contain','Wu, Jerome');
       cy.get('[data-cy=next-student-button]').click({force: true});//Can't verify if button is disabled
       cy.get('[data-cy=student-name]').should('contain','Wu, Jerome');
