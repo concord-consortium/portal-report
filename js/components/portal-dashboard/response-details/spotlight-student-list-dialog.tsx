@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import striptags from "striptags";
 import { renderHTML } from "../../../util/render-html";
 import { AnonymizeStudents } from "../anonymize-students";
-import { QuestionTypes } from "../../../util/question-utils";
+import { getQuestionIcon } from "../../../util/question-utils";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
@@ -74,8 +74,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   private renderColumnHeaders = () => {
     const { anonymous, setAnonymous, currentQuestion } = this.props;
     const type = currentQuestion?.get("type");
-    const questionType = QuestionTypes.find(qt => qt.type === type);
-    const QuestionIcon = questionType?.icon;
+    const QuestionIcon = getQuestionIcon(currentQuestion);
     const typeText = type?.replace(/_/gm, ' ');
     const interactiveName = type === "iframe_interactive" ? currentQuestion?.get("name") : typeText;
     const prompt = currentQuestion?.get("prompt");

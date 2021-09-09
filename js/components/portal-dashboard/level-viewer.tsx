@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { ProgressLegendContainer } from "./legend-container";
-import { QuestionTypes } from "../../util/question-utils";
+import { getQuestionIcon } from "../../util/question-utils";
 import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import LinesEllipsis from "react-lines-ellipsis";
@@ -164,8 +164,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
 
   private renderQuestion = (question: Map<string, any>) => {
     let questionClass = css.question;
-    const questionType = QuestionTypes.find(qt => qt.type === question.get("type") && qt.scored === question.get("scored"));
-    const QuestionIcon = questionType?.icon;
+    const QuestionIcon = getQuestionIcon(question);
     if (question.get("id") === this.props.currentQuestion?.get("id")) {
       questionClass += " " + css.active;
     }

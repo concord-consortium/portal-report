@@ -238,6 +238,26 @@
                   "prompt": "<p>Clues to do what?</p>"
                 }
               ]
+            },
+            {
+              "id": "page-29",
+              "name": "Broken interactives",
+              "type": "page",
+              "url": "http://app.lara.docker/pages/28",
+              "preview_url": "http://activity-player.concord.org?activity=http://app.lara.docker/activities/10&page=1&preview",
+              "children": [
+                {
+                  "display_in_iframe": true,
+                  "height": 435,
+                  "id": "mw_interactive_40",
+                  "name": "Broken Table Interactive",
+                  "question_number": 9,
+                  "show_in_featured_question_report": true,
+                  "type": "type_not_known_by_report",
+                  "url": "https://models-resources.concord.org/table-interactive/index.html",
+                  "width": 576
+                }
+              ]
             }
           ]
         }

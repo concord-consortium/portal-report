@@ -1,8 +1,9 @@
 import React, { PureComponent } from "react";
 import { Modal } from "react-bootstrap";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
-import { QuestionTypes } from "../../../util/question-utils";
+import { getQuestionIcon } from "../../../util/question-utils";
 import striptags from "striptags";
+import { Map } from "immutable";
 
 import css from "../../../../css/portal-dashboard/answers/answer-modal.less";
 
@@ -10,7 +11,7 @@ interface IProps {
   answer: Map<any, any>;
   show: boolean;
   onHide: (value: boolean) => void;
-  question?: Map<any, any>;
+  question?: Map<string, any>;
   studentName: string;
 }
 
@@ -19,9 +20,7 @@ export class AnswerModal extends PureComponent<IProps> {
   render() {
     const { answer, show, onHide, question } = this.props;
     const isQuestion = false;
-    const type = answer?.get("questionType");
-    const questionType = QuestionTypes.find(qt => qt.type === type);
-    const QuestionIcon = questionType?.icon;
+    const QuestionIcon = getQuestionIcon(question);
     const prompt = question? striptags((question.get("drawingPrompt")).replace(/&nbsp;/g,' ')) + striptags((question.get("prompt")).replace(/&nbsp;/g,' ')) : "";
 
     if (!answer) { return null; }

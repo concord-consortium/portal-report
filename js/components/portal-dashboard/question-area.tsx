@@ -1,6 +1,6 @@
 import React from "react";
 import { Map } from "immutable";
-import { QuestionTypes } from "../../util/question-utils";
+import { getQuestionIcon } from "../../util/question-utils";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import { Question } from "./questions/question";
 import { TrackEventFunction } from "../../actions";
@@ -21,11 +21,9 @@ export class QuestionArea extends React.PureComponent<IProps>{
     const teacherEditionButtonClasses = css.teacherEditionButton;
     const teacherEditionBadge = css.teacherEditionBadge;
     const type = currentQuestion?.get("type");
-    const scored = currentQuestion?.get("scored");
     const typeText = type?.replace(/_/gm, ' ');
     const interactiveName = type === "iframe_interactive" && currentQuestion?.get("name");
-    const questionType = QuestionTypes.find(qt => qt.type === type && qt.scored === scored);
-    const QuestionIcon = questionType?.icon;
+    const QuestionIcon = getQuestionIcon(currentQuestion);
     const activityURL = currentQuestion?.get("questionUrl");
     const activityTeacherEditionURL = currentQuestion?.get("questionTeacherEditionUrl");
 
