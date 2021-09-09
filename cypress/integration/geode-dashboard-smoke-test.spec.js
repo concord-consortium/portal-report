@@ -66,7 +66,7 @@ context("Geode Dashboard Smoke Test", () => {
                 .within(() => {
                     dashboard.getProgressBar().eq(0)
                         .should("be.visible")
-                        .and("have.attr", "style", "width: 85.7143%;");
+                        .and("have.attr", "style", "width: 100%;");
                 });
         });
         it("can sort by student name", () => {

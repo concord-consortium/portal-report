@@ -150,6 +150,21 @@
     "version": "1"
   },
   {
+    "answer": {
+      "choice_ids": [
+        123
+      ]
+    },
+    "created": "2019-06-06 14:53:28 UTC",
+    "id": "multiple_choice_answer_removed_choice_2",
+    "question_id": "multiple_choice_without_choices",
+    "question_type": "multiple_choice",
+    "resource_url": "http://app.lara.docker/sequences/1",
+    "type": "multiple_choice_answer",
+    "platform_user_id": "1",
+    "version": "1"
+  },
+  {
     "answer": "test answer 1",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_30",

@@ -28,6 +28,26 @@ interface IProps {
   trackEvent: TrackEventFunction;
 }
 
+const PROGRESS_ICONS_CSS = {
+  NotStarted: "",
+  InProgress: css.inProgress,
+  Completed: css.completed
+} as const;
+
+type ProgressStatus = keyof typeof PROGRESS_ICONS_CSS;
+
+const getProgressStatus = (progress: number): ProgressStatus => {
+  if (progress === 0) {
+    return "NotStarted";
+  }
+
+  if (progress === 1) {
+    return "Completed";
+  }
+
+  return "InProgress";
+};
+
 export class StudentAnswers extends React.PureComponent<IProps> {
   render() {
     const { students, activities, currentActivity, isCompact } = this.props;
@@ -162,11 +182,11 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderProgressIcon = (progress: number) => {
-    const cssClass = progress > 0
-      ? progress === 1 ? css.completed : css.inProgress
-      : "";
+    const progressStatus = getProgressStatus(progress);
+    const cssClass = PROGRESS_ICONS_CSS[progressStatus];
+
     return (
-      <div className={`${css.progressIcon} ${cssClass}`} />
+      <div className={`${css.progressIcon} ${cssClass}`} data-cy={progressStatus}/>
     );
   }
 
