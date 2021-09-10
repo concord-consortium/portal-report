@@ -597,7 +597,7 @@
     "id": "image_question_answer_6",
     "question_id": "image_question_3",
     "question_type": "image_question",
-    "resource_url": "http://app.lara.docker/sequences/1",
+    "resource_url": "http://app.lara.docker/activities/9",
     "type": "image_question_answer",
     "platform_user_id": "1",
     "version": "1"
@@ -611,7 +611,7 @@
     "id": "image_question_answer_7",
     "question_id": "image_question_4",
     "question_type": "image_question",
-    "resource_url": "http://app.lara.docker/sequences/1",
+    "resource_url": "http://app.lara.docker/activities/9",
     "type": "image_question_answer",
     "platform_user_id": "1",
     "version": "1"
@@ -625,7 +625,7 @@
     "id": "image_question_answer_8",
     "question_id": "image_question_4",
     "question_type": "image_question",
-    "resource_url": "http://app.lara.docker/sequences/1",
+    "resource_url": "http://app.lara.docker/activities/9",
     "type": "image_question_answer",
     "platform_user_id": "5",
     "version": "1"
