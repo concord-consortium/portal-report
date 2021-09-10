@@ -70,14 +70,14 @@ context("Portal Dashboard Question Details Panel", () => {
         cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('contain', 'Galloway, Amy');
         cy.get('[data-cy=response-details-container] [data-cy=previous-student-button]').click();
         cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('contain', 'Crosby, Kate');
-      })
+      });
       it('verify response section updates when student is navigated', ()=>{
         cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('be.visible').and('contain', "No response");
         cy.get('[data-cy=response-details-container] [data-cy=next-student-button]').click();
         cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('contain', "test answer 2");
         cy.get('[data-cy=response-details-container] [data-cy=previous-student-button]').click();
         cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('contain', "No response");
-      })
+      });
     });
     after(()=>{
       cy.get('[data-cy=navigation-select]').should('be.visible').click();
@@ -158,7 +158,7 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     describe("spotlight students",()=>{
       it("verify students with no answer cannot be selected",()=>{
-        cy.get('[data-cy=spotlight-selection-checkbox]').eq(0).attribute("class").should("contain","disabled");
+        cy.get('[data-cy=spotlight-selection-checkbox]').eq(0).should("not.have.class","disabled");
       });
       it("verify spotlight students dialog is opened when students are selected and spotlight is clicked",()=>{
         cy.get('[data-cy=spotlight-selection-checkbox]').should('have.length', 6);
