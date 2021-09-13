@@ -9,7 +9,7 @@ context("Test api error", () => {
   });
   context("when the server returns an error status code", () => {
     before(() => {
-      cy.intercept(/[^=]\/fakeOfferingPath/, {statusCode: 500, body: "Cypress Fake Error"})
+      cy.intercept(/[^=]\/fakeOfferingPath/, {statusCode: 500, body: "Cypress Fake Error"});
       cy.visit("/?token=1234&offering=/fakeOfferingPath");
     });
     it('shows an error message to user', () => {

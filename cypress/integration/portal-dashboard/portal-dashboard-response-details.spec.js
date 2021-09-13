@@ -70,14 +70,14 @@ context("Portal Dashboard Question Details Panel", () => {
         cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('contain', 'Galloway, Amy');
         cy.get('[data-cy=response-details-container] [data-cy=previous-student-button]').click();
         cy.get('[data-cy=response-details-container] [data-cy=student-name]').should('contain', 'Crosby, Kate');
-      })
+      });
       it('verify response section updates when student is navigated', ()=>{
         cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('be.visible').and('contain', "No response");
         cy.get('[data-cy=response-details-container] [data-cy=next-student-button]').click();
         cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('contain', "test answer 2");
         cy.get('[data-cy=response-details-container] [data-cy=previous-student-button]').click();
         cy.get('[data-cy=popup-response-table] [data-cy=student-response]').should('contain', "No response");
-      })
+      });
     });
     after(()=>{
       cy.get('[data-cy=navigation-select]').should('be.visible').click();
