@@ -58,11 +58,11 @@ context("Portal Dashboard Question Details Panel", () => {
     });
 
     it('verify the last question of the last activity is disabled', () => {
-      cy.get('[data-cy=activity-question-button]').eq(8).click({ force: true });
+      cy.get('[data-cy=activity-question-button]').eq(10).click({ force: true });
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 2: Report Test Activity 2");
-      cy.get('[data-cy=question-overlay]').should("contain", "Question #9");
+      cy.get('[data-cy=question-overlay]').should("contain", "Question #11");
       cy.get('[data-cy=question-navigator-next-button]').click();
-      cy.get('[data-cy=question-overlay]').should("contain", "Question #9");
+      cy.get('[data-cy=question-overlay]').should("contain", "Question #11");
     });
 
     it('verify we can page back from the first question of a later activity', () => {
@@ -96,6 +96,18 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=question-overlay] [data-cy=show-hide-question-button]').should('be.visible').click();
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').should('be.visible');
       cy.get('[data-cy=question-overlay] [data-cy=question-content]').should('be.visible');
+    });
+    it("Question 9 missing drawing prompt, verify question detail loads", () => {
+      cy.get("[data-cy=question-overlay-header-button]").click();
+      cy.get("[data-cy=collapsed-activity-button]").click();
+      cy.get("[data-cy=image-question-with-open-response-completed]").first().click();
+      cy.get("[data-cy=question-content] [data-cy=current-question]").should("contain", "");
+    });
+    it("Question 10 missing question prompt, verify question detail loads", () => {
+      cy.get("[data-cy=question-overlay-header-button]").click();
+      cy.get("[data-cy=image-question-with-open-response-completed]").last().click();
+      cy.get("[data-cy=question-content] [data-cy=current-question]").should("contain", "");
+      cy.get("[data-cy=collapsed-activity-button]").click();
     });
   });
   // Removed for MVP:
@@ -134,7 +146,7 @@ context("Portal Dashboard Question Details Panel", () => {
     });
     it('verify next button is disabled when end of list is reached',()=>{
       cy.get('[data-cy=next-student-button]').click();
-      cy.get('[data-cy=next-student-button]').click();
+      // cy.get('[data-cy=next-student-button]').click();
       cy.get('[data-cy=student-name]').should('contain','Wu, Jerome');
       cy.get('[data-cy=next-student-button]').click({force: true});//Can't verify if button is disabled
       cy.get('[data-cy=student-name]').should('contain','Wu, Jerome');

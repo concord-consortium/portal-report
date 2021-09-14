@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { Modal } from "react-bootstrap";
+import { renderInvalidAnswer } from "../../util/answer-utils";
 
 export default class ImageAnswerModal extends PureComponent {
   componentDidMount() {
@@ -20,7 +21,11 @@ export default class ImageAnswerModal extends PureComponent {
 
   render() {
     const { answer, show, onHide } = this.props;
-    if (!answer) { return null; }
+    if(!answer) {
+      return null;
+    } else {
+      if (!(answer.getIn(["answer", "imageUrl"]))) { return renderInvalidAnswer(answer, "response is missing answer field"); }
+    }
     return (
       <Modal show={show} onHide={onHide} animation={false}>
         <Modal.Header closeButton closeLabel="" />

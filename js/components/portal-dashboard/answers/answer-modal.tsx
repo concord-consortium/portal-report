@@ -21,7 +21,9 @@ export class AnswerModal extends PureComponent<IProps> {
     const { answer, show, onHide, question } = this.props;
     const isQuestion = false;
     const QuestionIcon = getQuestionIcon(question);
-    const prompt = question? striptags((question.get("drawingPrompt")).replace(/&nbsp;/g,' ')) + striptags((question.get("prompt")).replace(/&nbsp;/g,' ')) : "";
+    const drawingPrompt = question?.get("drawingPrompt") ? striptags((question?.get("drawingPrompt"))?.replace(/&nbsp;/g,' ')) : "";
+    const questionPrompt = question?.get("prompt") ? striptags((question?.get("prompt"))?.replace(/&nbsp;/g,' ')) : "";
+    const prompt = drawingPrompt + questionPrompt;
 
     if (!answer) { return null; }
     return (
