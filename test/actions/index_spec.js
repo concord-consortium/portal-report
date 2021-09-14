@@ -8,7 +8,7 @@ import {
   setExtraEventLoggingParameters } from "../../js/actions/index";
 
 describe("actions/index", () => {
-  const classInfo = { id: 1 }
+  const classInfo = { id: 1 };
 
   describe("correctKey", () => {
     it("Should not change keys for RECEIVE_ANSWERS", () => {
