@@ -78,7 +78,7 @@ context("Portal Dashboard Response Table",()=>{
     cy.get('[data-cy=student-navigator] [data-cy=student-name]').should('contain','Galloway, Amy');
     cy.get('[data-cy=question-wrapper]').eq(0).should('contain', 'Q1');
     cy.get('[data-cy=student-response]').eq(0).should('contain', 'test answer 2');
-  })
+  });
 });
 
 context("Feedback badges in response table", () => {
@@ -91,7 +91,7 @@ context("Feedback badges in response table", () => {
     cy.get("[data-cy=feedback-textarea]").eq(0).click().type("Good job!");
     cy.get("[data-cy=navigation-select]").click();
     cy.get("[data-cy=list-item-progress-dashboard]").click();
-  })
+  });
 
   it("Activity feedback badge appears in response table when there is feedback given", () => {
     cy.get("[data-cy=activity-feedback-badge]").should("be.visible");

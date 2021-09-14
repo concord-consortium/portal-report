@@ -41,7 +41,7 @@ context("Portal Dashboard Activity Buttons",() =>{
         cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 2: Report Test Activity 2");
         cy.get('[data-cy=collapsed-activity-button]').should('have.length', 1);
         cy.get('[data-cy=activity-question-button]').should('be.visible');
-        cy.get('[data-cy=activity-question-button]').should('have.length', 9);
+        cy.get('[data-cy=activity-question-button]').should('have.length', 11);
       });
     });
 });

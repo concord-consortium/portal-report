@@ -201,6 +201,14 @@
               "type": "iframe_interactive",
               "url": "https://geocode-app.concord.org/branch/master/index.html",
               "width": 576
+            },
+            {
+              "drawing_prompt": "",
+              "id": "image_question_3",
+              "prompt": "",
+              "question_number": 7,
+              "show_in_featured_question_report": true,
+              "type": "image_question"
             }
           ]
         },
@@ -213,7 +221,7 @@
             {
               "id": "open_response_65",
               "prompt": "<p>The only question on this page is open response</p>",
-              "question_number": 7,
+              "question_number": 8,
               "show_in_featured_question_report": true,
               "type": "open_response"
             }

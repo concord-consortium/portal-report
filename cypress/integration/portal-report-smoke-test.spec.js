@@ -257,4 +257,9 @@ context("Portal Report Activity Smoke Test", () => {
       });
     });
   });
+  describe("Report does not crash when image question does not have a prompt", () => {
+    it("Question 3 missing prompt, verify report loads", () => {
+      cy.get("[data-cy=question-image_question_3] .question-summary").should("not.exist");
+    });
+  });
 });

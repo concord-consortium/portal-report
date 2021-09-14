@@ -236,6 +236,20 @@
                   "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/scaffolded-question/",
                   "width": 576,
                   "prompt": "<p>Clues to do what?</p>"
+                },
+                {
+                  "id": "image_question_3",
+                  "prompt": "take a shot",
+                  "question_number": 9,
+                  "show_in_featured_question_report": true,
+                  "type": "image_question"
+                },
+                {
+                  "drawing_prompt": "draw something",
+                  "id": "image_question_4",
+                  "question_number": 10,
+                  "show_in_featured_question_report": true,
+                  "type": "image_question"
                 }
               ]
             },
@@ -251,7 +265,7 @@
                   "height": 435,
                   "id": "mw_interactive_40",
                   "name": "Broken Table Interactive",
-                  "question_number": 9,
+                  "question_number": 11,
                   "show_in_featured_question_report": true,
                   "type": "type_not_known_by_report",
                   "url": "https://models-resources.concord.org/table-interactive/index.html",

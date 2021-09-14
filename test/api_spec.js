@@ -42,7 +42,7 @@ describe("api helper", () => {
         return getPortalFirebaseJWTUrl(classHash, resourceLinkId, targetUserId, firebaseApp);
       }
 
-      const baseResultUrl = `https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`
+      const baseResultUrl = `https://portal.com/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`;
 
       describe("when no resourceLinkId is passed or targetUserId is passed", () => {
         beforeAll(() => {
