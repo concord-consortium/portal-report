@@ -175,6 +175,15 @@ context("Portal Dashboard Question Details Panel", () => {
         cy.get('[data-cy=selected-students-response-table]').should('be.visible');
         cy.get('[data-cy=selected-students-response-table] [data-cy=student-row]').should('have.length', 2);
       });
+      it('verify color change button',()=>{
+        cy.get('[data-cy=selected-students-response-table] [data-cy=student-row]').eq(0)
+          .children()
+          .should('have.css', 'background-color', 'rgb(255, 255, 255)');
+        cy.get('[data-cy=selected-students-response-table] [data-cy=spotlight-badge]').eq(0).click();
+        cy.get('[data-cy=selected-students-response-table] [data-cy=student-row]').eq(0)
+          .children()
+          .should('have.css', 'background-color', 'rgb(255, 254, 191)');
+      });
       it('verify deselect student',()=>{
         cy.get('[data-cy=selected-students-response-table] [data-cy=spotlight-selection-checkbox]').eq(0).click();
         cy.get('[data-cy=selected-students-response-table] [data-cy=student-row]').should('have.length', 1);

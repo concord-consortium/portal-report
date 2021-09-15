@@ -144,7 +144,7 @@ export default class Dashboard extends PureComponent {
           />
           <div className={css.headers}>
             <ExpandStudents setStudentsExpanded={setStudentsExpanded} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />
-            <div ref={el => { this.activityHeaders = el; }} className={css.activityHeaders}>
+            <div ref={el => { this.activityHeaders = el; }} className={css.activityHeaders} data-cy="activityHeaders">
               <div>
                 {
                   activitiesList.map((a, num) =>

@@ -49,7 +49,7 @@ context("Geode Dashboard Smoke Test", () => {
                 .select("Least Progress")
                 .should("be.visible");
             dashboard.getStudentNames().eq(0)
-                .should("contain", "Armstrong, Jenna" );
+                .should("contain", "Crosby, Kate" );
             dashboard.getStudentAnswersRow().eq(0)
                 .within(() => {
                     dashboard.getProgressBar().eq(0)
@@ -66,7 +66,7 @@ context("Geode Dashboard Smoke Test", () => {
                 .within(() => {
                     dashboard.getProgressBar().eq(0)
                         .should("be.visible")
-                        .and("have.attr", "style", "width: 85.7143%;");
+                        .and("have.attr", "style", "width: 100%;");
                 });
         });
         it("can sort by student name", () => {
@@ -93,8 +93,21 @@ context("Geode Dashboard Smoke Test", () => {
         it("can scroll across the different activities", () => {
             dashboard.getOpenCloseStudents()
                 .click({ force: true });
+
+            // It isn't clear why, but multiple scrolls are needed to scroll all of the way over
+            dashboard.getActivityHeaders().scrollTo("right");
+            cy.wait(500);
+            dashboard.getActivityHeaders().scrollTo("right");
+            cy.wait(500);
+            dashboard.getActivityHeaders().scrollTo("right");
             dashboard.getActivityNames().last()
-                .scrollIntoView({ duration: 2000 });
+                .should("be.visible");
+            dashboard.getStudentAnswersRow().eq(0)
+                .within(() => {
+                    dashboard.getProgressBar().eq(0)
+                        .should("be.visible");
+                });
+
         });
     });
 

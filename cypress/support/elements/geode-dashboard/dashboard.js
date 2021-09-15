@@ -14,6 +14,9 @@ class Dashboard {
     getOpenCloseStudents() {
         return getByCypressTag("openCloseStudents").find("a");
     }
+    getActivityHeaders() {
+        return getByCypressTag("activityHeaders");
+    }
 
     //Students
     getStudentNames() {

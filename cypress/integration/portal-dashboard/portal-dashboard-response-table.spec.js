@@ -11,10 +11,18 @@ context("Portal Dashboard Response Table",()=>{
   it('verify we display the correct student progress',()=>{
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
-      .should("contain", "2/7");
+      .should("contain", "2/7")
+      .find('[data-cy=InProgress]').should('be.visible');
     cy.get('[data-cy=student-answers-row]')
       .eq(5)
-      .should("contain", "5/7");
+      .should("contain", "5/7")
+      .find('[data-cy=InProgress]').should('be.visible');
+    cy.get('[data-cy=student-answers-row]')
+      .eq(3)
+      .find('[data-cy=Completed]').should('be.visible');
+    cy.get('[data-cy=student-answers-row]')
+      .eq(0)
+      .find('[data-cy=NotStarted]').should('be.visible');
   });
 
   it('verify we display the correct student answer icons',()=>{
