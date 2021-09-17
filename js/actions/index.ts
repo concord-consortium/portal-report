@@ -25,7 +25,7 @@ import { requestRubric } from "./rubric";
 import * as firebase from "firebase/app";
 import "firebase/firestore";
 import { RootState } from "../reducers";
-import { urlParam } from "../util/misc";
+import { urlParam, getViewType, IFRAME_STANDALONE } from "../util/misc";
 import queryString from "query-string";
 import { v4 as uuid } from "uuid";
 
@@ -163,13 +163,18 @@ function _receivePortalData(db: firebase.firestore.Firestore,
   }
   watchFirestoreFeedbackSettings(db, rawPortalData, dispatch);
 
-  const questionFeedbacksPath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceKey);
-  watchCollection(db, questionFeedbacksPath, RECEIVE_QUESTION_FEEDBACKS,
-    rawPortalData, dispatch);
+  if (getViewType() !== IFRAME_STANDALONE) {
+    // There's no point in downloading feedback in iframe standalone mode. First, it's never shown there.
+    // Second, it'd cause errors related to insufficient permissions for answers shared between students,
+    // as feedback is not meant to be shared and doesn't support explicit sharing.
+    const questionFeedbacksPath = reportQuestionFeedbacksFireStorePath(rawPortalData.sourceKey);
+    watchCollection(db, questionFeedbacksPath, RECEIVE_QUESTION_FEEDBACKS,
+      rawPortalData, dispatch);
 
-  const activityFeedbacksPath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceKey);
-  watchCollection(db, activityFeedbacksPath, RECEIVE_ACTIVITY_FEEDBACKS,
-    rawPortalData, dispatch);
+    const activityFeedbacksPath = reportActivityFeedbacksFireStorePath(rawPortalData.sourceKey);
+    watchCollection(db, activityFeedbacksPath, RECEIVE_ACTIVITY_FEEDBACKS,
+      rawPortalData, dispatch);
+  }
 }
 
 function _getResourceUrl(activityUrl: string) {
@@ -313,8 +318,18 @@ function watchCollection(db: firebase.firestore.Firestore, path: string, receive
     .where(correctKey("platform_id", receiveMsg), "==", rawPortalData.platformId)
     .where(correctKey("resource_link_id", receiveMsg), "==", rawPortalData.resourceLinkId);
   if (rawPortalData.userType === "learner") {
-    query = query.where(correctKey("platform_user_id", receiveMsg), "==",
-      rawPortalData.platformUserId.toString());
+    const studentId = urlParam("studentId");
+    if (studentId && rawPortalData.platformUserId.toString() !== studentId) {
+      // If studentId URL param is provided, and it's different than logged in student platformUserId, it means that
+      // a student is trying to see another student's work. This should be allowed only if context is matching
+      // and answers have been explicitely shared with the class.
+      query = query.where(correctKey("context_id", receiveMsg), "==", rawPortalData.contextId);
+      query = query.where(correctKey("platform_user_id", receiveMsg), "==", studentId); // another student work!
+      query = query.where(correctKey("shared_with", receiveMsg), "==", "context"); // explicitly shared with a class (context)
+    } else {
+      // In this case, student is just looking at his own work.
+      query = query.where(correctKey("platform_user_id", receiveMsg), "==", rawPortalData.platformUserId.toString());
+    }
   } else {
     // "context_id" is theoretically redundant here, since we already filter by resource_link_id,
     // but that lets us use context_id value in the Firestore security rules.
