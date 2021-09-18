@@ -322,7 +322,7 @@ function watchCollection(db: firebase.firestore.Firestore, path: string, receive
     if (studentId && rawPortalData.platformUserId.toString() !== studentId) {
       // If studentId URL param is provided, and it's different than logged in student platformUserId, it means that
       // a student is trying to see another student's work. This should be allowed only if context is matching
-      // and answers have been explicitely shared with the class.
+      // and answers have been explicitly shared with the class.
       query = query.where(correctKey("context_id", receiveMsg), "==", rawPortalData.contextId);
       query = query.where(correctKey("platform_user_id", receiveMsg), "==", studentId); // another student work!
       query = query.where(correctKey("shared_with", receiveMsg), "==", "context"); // explicitly shared with a class (context)
