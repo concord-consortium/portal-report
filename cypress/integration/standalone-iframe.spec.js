@@ -1,6 +1,16 @@
 import React from "react";
 import { getByCypressTag } from "../utils";
 
+// This spec does not hit firestore for the answers
+// Because there is no offering url parameter, then the fakeOfferingData is used.
+// And the fakeOfferingData results in a sourceKey of fake.authoring.system
+// and when that is the sourceKey then the fake answers are returned here by:
+// actions/index.ts
+// Most of the tests also do not hit firestore for the feedback because feedback is disabled for
+// the standalone iframe view. But there is one hacky test at the end which requests
+// feedback because it is requesting the full student report.  See that test for more
+// information.
+
 describe("Opening stand-alone iframe question with saved state", function() {
   beforeEach(() => {
     cy.visit("/?iframeQuestionId=mw_interactive_19&studentId=1");
@@ -74,3 +84,28 @@ describe("Opening non-existant iframe question", function() {
     cy.get("iframe").should("not.exist");
   });
 });
+
+describe("HACK: exercise code which queries firestore for another student's work", function() {
+  // The portal report supports a mode where the studentId does not match the platformUserId
+  // and the user type is a learner. In this mode it checks to see if the answers from studentId
+  // have been shared with the context. This is done using a "sharedWith": "context" field in
+  // answer documents.
+  // This isn't easy to test with our current test setup. When there is no offering url parameter
+  // we use fake answer data and do not hit the firestore apis to get the answers. So the code
+  // which adds the sharedWith logic cannot be covered with the tests above.
+  // However, when viewing a full student report the feedback to the student is still queried
+  // from firestore apis. This feedback querying is done with the same bit of code.
+  // So if we view a student report with a studentId that doesn't match the platformUserId then
+  // the feedback for this student will be requested.  This is a hack because in real life
+  // we wouldn't share a teachers feedback with another student.
+  // An additional note here is that the firestore apis have networking disabled because there is
+  // no offering, activity, or class url parameters. So these tests will not actually hit the
+  // real firestore database
+  beforeEach(() => {
+    cy.visit("/?studentId=3&fakeUserType=learner&fakePlatformUserId=1");
+  });
+
+  it("should not show an error", function () {
+    cy.contains("Amy Galloway");
+  });
+})

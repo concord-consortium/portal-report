@@ -210,7 +210,7 @@ export function authFirestore(rawFirestoreJWT: string) {
 }
 
 function fakeUserType(): "teacher" | "learner" {
-  const userType = urlParam("fake-user-type");
+  const userType = urlParam("fakeUserType");
   if (userType === "teacher" || userType === "learner") {
     return userType;
   }
@@ -218,7 +218,7 @@ function fakeUserType(): "teacher" | "learner" {
 }
 
 function fakeUserId() {
-  const userType = urlParam("fake-user-type") || "learner";
+  const userType = urlParam("fakeUserType") || "learner";
   return `${userType}@fake.portal`;
 }
 
@@ -264,7 +264,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           classInfo: classData,
           userType: fakeUserType(),
           platformId: "https://fake.portal",
-          platformUserId: "1",
+          platformUserId: urlParam("fakePlatformUserId") || "1",
           contextId: classData.class_hash,
           // In most cases when using fake data the sourceKey param will be null
           // so the sourceKey will be based on the fake offeringData

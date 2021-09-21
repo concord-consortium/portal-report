@@ -299,7 +299,8 @@ export function correctKey(keyName: string, receiveMsg: string) {
     platform_id: "platformId",
     platform_user_id: "platformStudentId",
     resource_link_id: "resourceLinkId",
-    context_id: "contextId"
+    context_id: "contextId",
+    shared_with: "sharedWith"
   };
 
   switch (receiveMsg) {

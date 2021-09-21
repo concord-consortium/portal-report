@@ -264,7 +264,7 @@ describe("Provide Feedback", function() {
     feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
 
     // Open the student page
-    cy.visit("/?studentId=3&enableFirestorePersistence=true");
+    cy.visit("/?studentId=3&fakeUserType=learner&&fakePlatformUserId=3&enableFirestorePersistence=true");
     cy.wait(3000);
     cy.get(".act-feedback-panel").should("contain", "Your work was great!");
     cy.get(".studentScore").should("contain", "5");
@@ -325,7 +325,7 @@ describe("Provide Feedback", function() {
     cy.wait(3000);
 
     // Open the student page
-    cy.visit("/?studentId=1&enableFirestorePersistence=true");
+    cy.visit("/?studentId=1&fakeUserType=learner&enableFirestorePersistence=true");
     cy.wait(3000);
     cy.get(".act-feedback-panel").should("contain", "Your work was great!");
     cy.get(".act-feedback-panel .studentScore").should("contain", "7");
