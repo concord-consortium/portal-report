@@ -3,11 +3,21 @@ import {
   getActivityData,
  } from "../utils";
 
+ // This spec does not hit firestore for the answers
+ // Because there is no offering url parameter, then the fakeOfferingData is used.
+ // And the fakeOfferingData results in a sourceKey of fake.authoring.system
+ // and when that is the sourceKey then the fake answers are returned by:
+ // actions/index.ts
+
+// However this spec does attempt to hit firestore for the feedback.
+// Firestore queries are executed in the client side but the network is disabled because
+// there is no "class", "offering", or "activity" url parmeters. See: db.ts
+
 context("Student Report", () => {
   const body = new ReportBody();
 
   beforeEach(() => {
-    cy.visit("/?studentId=3&fake-user-type=learner");
+    cy.visit("/?studentId=3&fakeUserType=learner&fakePlatformUserId=3");
     cy.fixture("sequence-structure.json").as("sequenceData");
 
   });
