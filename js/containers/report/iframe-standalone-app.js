@@ -6,6 +6,7 @@ import DataFetchError from "../../components/report/data-fetch-error";
 import LoadingIcon from "../../components/report/loading-icon";
 import InteractiveIframe from "../../components/report/interactive-iframe";
 import Answer from "../../components/report/answer";
+import { getAnswerTrees } from "../../selectors/report-tree";
 
 import "../../../css/report/report-app.less";
 import "../../../css/report/iframe-standalone-app.less";
@@ -90,7 +91,7 @@ function mapStateToProps(state) {
   const dataDownloaded = !error && !data.get("isFetching");
   return {
     report: dataDownloaded && reportState,
-    answers,
+    answers: dataDownloaded && getAnswerTrees(state),
     isFetching: data.get("isFetching"),
     error,
   };
