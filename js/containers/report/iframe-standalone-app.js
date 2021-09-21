@@ -87,7 +87,6 @@ function mapStateToProps(state) {
   const data = state.get("data");
   const error = data.get("error");
   const reportState = state.get("report");
-  const answers = reportState && reportState.get("answers");
   const dataDownloaded = !error && !data.get("isFetching");
   return {
     report: dataDownloaded && reportState,

@@ -10,7 +10,7 @@ import {
  // actions/index.ts
 
 // However this spec does attempt to hit firestore for the feedback.
-// Firestore queries are excuted in the client side but the network is disabled because
+// Firestore queries are executed in the client side but the network is disabled because
 // there is no "class", "offering", or "activity" url parmeters. See: db.ts
 
 context("Student Report", () => {
