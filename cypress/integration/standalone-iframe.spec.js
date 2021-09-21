@@ -13,6 +13,44 @@ describe("Opening stand-alone iframe question with saved state", function() {
   });
 });
 
+describe("Opening stand-alone open response answer", function() {
+  beforeEach(() => {
+    cy.visit("/?iframeQuestionId=open_response_60&studentId=1");
+  });
+
+  it("should show the text of the answer", function() {
+    getByCypressTag("standaloneIframe")
+      .should("be.visible")
+      .should("have.text", "test answer 1");
+  });
+});
+
+describe("Opening stand-alone multiple choice answer", function() {
+  beforeEach(() => {
+    cy.visit("/?iframeQuestionId=multiple_choice_19&studentId=1");
+  });
+
+  it("should show the text of the answer", function() {
+    getByCypressTag("standaloneIframe")
+      .should("be.visible")
+      .should("have.text", "b");
+  });
+});
+
+describe("Opening stand-alone image question answer", function() {
+  beforeEach(() => {
+    cy.visit("/?iframeQuestionId=image_question_2&studentId=1");
+  });
+
+  it("should show the the answer", function() {
+    getByCypressTag("standaloneIframe")
+      .should("be.visible")
+      .find("img")
+      .should("have.attr", "src", "https://ccshutterbug.s3.amazonaws.com/1559832112573-671081.png");
+
+  });
+});
+
 describe("Opening stand-alone iframe question with saved learner url", function() {
   beforeEach(() => {
     cy.visit("/?iframeQuestionId=mw_interactive_22&studentId=1");
