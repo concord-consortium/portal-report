@@ -42,9 +42,6 @@ const isQuestionVisible = (question, featuredOnly) => {
   return true;
 };
 
-// allow for anonymous students
-const getStudentId = (answer) => answer.get("platformUserId") || answer.get("runKey");
-
 // Selectors
 export const getAnswerTrees = createSelector(
   [ getAnswers, getStudents, getQuestions],
@@ -54,7 +51,7 @@ export const getAnswerTrees = createSelector(
       // Filter out answers that are not matching any students in the class. Class could have been updated.
       // Also, filter out answers that are not matching any question. It might happen if the activity gets updated and
       // some questions are deleted.
-      .filter(answer => students.has(getStudentId(answer)) && questions.has(answer.get("questionId")))
+      .filter(answer => students.has(answer.get("platformUserId")) && questions.has(answer.get("questionId")))
       .map(answer => {
         if (answer.get("type") === "multiple_choice_answer") {
           const question = questions.get(answer.get("questionId"));
@@ -69,7 +66,7 @@ export const getAnswerTrees = createSelector(
             .set("correct", selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size);
         }
         return answer
-          .set("student", students.get(getStudentId(answer)));
+          .set("student", students.get(answer.get("platformUserId")));
       });
     }
 );
@@ -87,7 +84,7 @@ export const getAnswersByQuestion = createSelector(
       return answers.reduce((answerTree, answer) => {
         const questionId = answer.get("questionId");
         let studentMap = answerTree.get(questionId) || Map();
-        studentMap = studentMap.set(getStudentId(answer), answer);
+        studentMap = studentMap.set(answer.get("platformUserId"), answer);
         return answerTree.set(questionId, studentMap);
       }, mutableTree);
     });
