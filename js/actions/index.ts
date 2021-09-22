@@ -11,7 +11,7 @@ import {
   reportQuestionFeedbacksFireStorePath,
   reportActivityFeedbacksFireStorePath,
   feedbackSettingsFirestorePath,
-  makeSourceKey
+  getSourceKey
 } from "../api";
 import {
   API_UPDATE_QUESTION_FEEDBACK,
@@ -75,8 +75,7 @@ export function fetchAndObserveData() {
   const runKeyValue = urlParam("runKey");
   if (runKeyValue) {
     const activity = urlParam("activity") || "";
-    const sourceKey = urlParam("sourceKey") || "";
-    const source = sourceKey ? sourceKey : (activity ? makeSourceKey(activity) : "");
+    const source = getSourceKey(activity);
     const answersSourceKey = urlParam("answersSourceKey") || source;
     return (dispatch: Dispatch, getState: any) => {
       dispatch({

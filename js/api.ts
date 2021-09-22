@@ -73,13 +73,10 @@ export const makeSourceKey = (url: string | null) => {
   return url ? parseUrl(url.toLowerCase()).hostname : "";
 };
 
-// It is tempting to extract the right source key when the activity_url is
-// an activity player url. However the level of auto-magic will probably cause
-// problems in the future. See docs/launch.md for more info
-function getSourceKeyFromOffering(offering: {activity_url: string}): string {
+export const getSourceKey = (url: string): string => {
   const sourceKeyParam = urlParam("sourceKey");
-  return sourceKeyParam || makeSourceKey(offering.activity_url);
-}
+  return sourceKeyParam || makeSourceKey(url);
+};
 
 // FIXME: If the user isn't logged in, and then they log in with a user that
 // isn't the student being reported on then just a blank screen is shown
@@ -252,7 +249,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformId: verifiedFirebaseJWT.claims.platform_id,
           platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
           contextId: classData.class_hash,
-          sourceKey: getSourceKeyFromOffering(offeringData),
+          sourceKey: getSourceKey(offeringData.activity_url),
           userId: verifiedFirebaseJWT.claims.user_id
           })
         );
@@ -269,7 +266,7 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           // In most cases when using fake data the sourceKey param will be null
           // so the sourceKey will be based on the fake offeringData
           // and this offering data has a hostname of 'fake.authoring.system'
-          sourceKey: getSourceKeyFromOffering(offeringData),
+          sourceKey: getSourceKey(offeringData.activity_url),
           userId: fakeUserId()
         };
       }
