@@ -131,6 +131,7 @@ export default function report(state = new ReportState({}), action?: any) {
       .set("type", "student")
       .set("nowShowing", "student")
       .set("selectedStudentIds", Immutable.fromJS([action.runKey]))
+      .set("hideControls", true)
       .set("students", Immutable.fromJS({[action.runKey]: {name: "Anonymous", id: action.runKey}}))
       .set("platformUserId", action.runKey);
       return state;
