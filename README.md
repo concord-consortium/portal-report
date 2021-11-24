@@ -93,6 +93,33 @@ To deploy a production release:
 6. Once testing is complete, login to https://learn.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
 7. Add the new released portal report version (https://portal-report.concord.org/version/vx.y.z/) to Auth Client > Portal Report SPA > Allowed redirect URIs
 8. Run any QA and testing on production release.
+9. Since the portal-report is also used in the Activity Player when "Show my work" is used in the AP, a new release of the portal report needs an update of its version in the AP and hence a release too. To do this, follow these steps:
+  - #### If you do not have activity player repo locally
+  Clone activity player
+  ```
+  git clone https://github.com/concord-consortium/activity-player.git
+  cd activity-player
+  ```
+  #### If you already have activity player repo locally
+  Checkout master and get latest master
+  ```
+  cd activity-player
+  git checkout master
+  git pull --rebase
+  ```
+  - Create a new branch called portal-report-version-update
+  ```
+  git checkout -b portal-report-version-update
+  ```
+  - Update the version number of the portal-report on line-12 activity-player/src/utilities/report-utils.ts - https://github.com/concord-consortium/activity-player/blob/master/src/utilities/report-utils.ts#L12
+
+  - Commit and Push the branch
+    ```
+    git add -u
+    git commit -m "Updating portal-report version number that is used in Show My Work"
+    git push -u origin portal-report-version-update
+    ```
+  - Get this branch reviewed and follow the Production Deployment steps in the Activity Player README.md to deploy this to Production.
 
 ### Frameworks, conventions
 
