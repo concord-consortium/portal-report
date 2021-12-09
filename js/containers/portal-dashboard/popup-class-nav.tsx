@@ -236,7 +236,7 @@ function mapStateToProps(state: any, ownProps?: any) {
       const questionFeedbacks = state.getIn(["feedback", "questionFeedbacks"]);
       const feedbacksGiven = [];
       questionFeedbacks.toArray().forEach((feedback: any) => {
-        if (feedback.get("questionId") === questionId && feedback.get("feedback").trim() !== "") {
+        if (feedback.get("questionId") === questionId && feedback.get("feedback")?.trim() !== "") {
           feedbacksGiven.push(feedback);
         }
       });
