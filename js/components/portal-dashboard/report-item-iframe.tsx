@@ -1,21 +1,27 @@
 import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
 import { /* handleGetAttachmentUrl, */ IReportItemInitInteractive, IStudentHTML } from "@concord-consortium/interactive-api-host";
+import { getSortedStudents } from "../../selectors/report";
+import { RootState } from "../../reducers";
+import { connect } from "react-redux";
+import { getAnswersByQuestion } from "../../selectors/report-tree";
 
-interface Props {
+interface IProps {
   question: any;
   view: "singleAnswer" | "multipleAnswer";
+  students: any;
+  answersByQuestion: any;
 }
 
-interface State {
+interface IState {
   requestedHeight: number|null;
   src?: string;
 }
 
-export default class ReportItemIframe extends PureComponent<Props, State> {
+class ReportItemIframe extends PureComponent<IProps, IState> {
   private iframePhone: any;
 
-  constructor (props: Props) {
+  constructor (props: IProps) {
     super(props);
     this.state = {
       // Height requested by interactive itself, using iframe-phone.
@@ -34,14 +40,18 @@ export default class ReportItemIframe extends PureComponent<Props, State> {
 
   connect() {
     const phoneAnswered = () => {
+      const questionId = this.props.question.get("id");
+      const authoredState = this.props.question.get("authored_state") || {};
+      const students = this.getStudentsForInitMessage();
+
       const initMessage: IReportItemInitInteractive = {
         version: 1,
         mode: "reportItem",
-        hostFeatures: {}, // TODO
-        authoredState: {}, // TODO
-        interactiveItemId: this.props.question.get("id"),
+        hostFeatures: {}, // no host features supported in report-items
+        authoredState,
+        interactiveItemId: questionId,
         view: this.props.view,
-        students: {} // TODO: Record<string, {hasAnswer: boolean}>,
+        students,
       };
       this.iframePhone.post("initInteractive", initMessage);
     };
@@ -51,6 +61,26 @@ export default class ReportItemIframe extends PureComponent<Props, State> {
     this.iframePhone.addListener("studentHTML", this.handleStudentHTML);
     this.iframePhone.addListener("height", this.handleHeight);
     // this.iframePhone.addListener("getAttachmentUrl", this.handleGetAttachmentUrl);
+  }
+
+  getStudentsForInitMessage() {
+    const questionId = this.props.question.get("id");
+    const answers = this.props.answersByQuestion.get(questionId);
+
+    // construct a map of student id to answer present
+    const studentHasAnswers = answers?.reduce((acc: Record<string, boolean>, answer: any) => {
+      acc[answer.get("platformUserId")] = true;
+      return acc;
+    }, {});
+
+    // construct a map of all students to answer present
+    const students = this.props.students.reduce((acc: Record<string, {hasAnswer: boolean}>, student: any) => {
+      const id = student.get("id");
+      acc[id] = {hasAnswer: !!studentHasAnswers?.[id]};
+      return acc;
+    }, {});
+
+    return students;
   }
 
   handleStudentHTML = (response: IStudentHTML) => {
@@ -90,6 +120,9 @@ export default class ReportItemIframe extends PureComponent<Props, State> {
       return null;
     }
 
+    // eslint-disable-next-line no-console
+    console.log("QUESTION", this.props.question.toJS());
+
     return (
       // eslint-disable-next-line react/no-string-refs
       <iframe ref="iframe"
@@ -100,3 +133,21 @@ export default class ReportItemIframe extends PureComponent<Props, State> {
     );
   }
 }
+
+function mapStateToProps(state: RootState): Partial<IProps> {
+  const data = state.get("data");
+  const error = data.get("error");
+  const dataDownloaded = !error && !data.get("isFetching");
+
+  return {
+    students: dataDownloaded && getSortedStudents(state),
+    answersByQuestion: dataDownloaded && getAnswersByQuestion(state)
+  };
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
+  return {
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportItemIframe);
