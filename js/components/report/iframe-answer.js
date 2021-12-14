@@ -10,12 +10,19 @@ export default class IframeAnswer extends PureComponent {
     super(props);
     this.state = {
       iframeVisible: false,
+      reportItemHTMLHeight: 0
     };
     this.toggleIframe = this.toggleIframe.bind(this);
+    this.handleReportItemHTMLIFrameLoaded = this.handleReportItemHTMLIFrameLoaded.bind(this);
   }
 
   toggleIframe() {
     this.setState({iframeVisible: !this.state.iframeVisible});
+  }
+
+  handleReportItemHTMLIFrameLoaded(e) {
+    // the +6 is for the hidden iframe chrome
+    this.setState({reportItemHTMLHeight: e.target.contentDocument.body.offsetHeight + 8});
   }
 
   getLinkURL(answer) {
@@ -112,7 +119,14 @@ export default class IframeAnswer extends PureComponent {
 
   render() {
     const { alwaysOpen, answer, responsive } = this.props;
+    const { reportItemHTMLHeight } = this.state;
     const answerText = answer.get("answerText");
+    const answerReportItemHTML = answer.get("reportItemHTML");
+
+    // eslint-disable-next-line no-console
+    // console.log("ANSWER", answer.toJS());
+    // TODO: STORE.updateReportItemHTML(answer)
+
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
         <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
@@ -121,6 +135,7 @@ export default class IframeAnswer extends PureComponent {
               : !alwaysOpen && this.renderLink() /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
           }
         </div>
+        {answerReportItemHTML && <iframe className="iframe-answer-report-item-html" style={{height: reportItemHTMLHeight}} srcDoc={answerReportItemHTML} onLoad={this.handleReportItemHTMLIFrameLoaded} />}
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>
     );
