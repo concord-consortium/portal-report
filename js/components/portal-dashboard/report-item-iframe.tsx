@@ -36,13 +36,14 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
     };
   }
 
-  componentDidMount() {
-    this.connect();
+  componentWillUnmount() {
+    this.disconnect();
   }
 
-  componentWillUnmount() {
-    this.props.unregisterReportItem(this.props.question.get("id"));
-    this.disconnect();
+  UNSAFE_componentWillReceiveProps(newProps: IProps) {
+    if (newProps.question.get("id") !== this.props.question.get("id")) {
+      this.disconnect();
+    }
   }
 
   connect() {
@@ -116,8 +117,13 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
     this.setState({ requestedHeight: height });
   }
 
+  handleIframeLoaded = () => {
+    this.connect();
+  }
+
   disconnect() {
     if (this.iframePhone) {
+      this.props.unregisterReportItem(this.props.question.get("id"));
       this.iframePhone.disconnect();
       this.iframePhone = null;
     }
@@ -139,7 +145,7 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
 
     return (
       // eslint-disable-next-line react/no-string-refs
-      <iframe ref="iframe" className={className} src={src} style={style} />
+      <iframe key={this.props.question.get("id")} ref="iframe" className={className} src={src} style={style} onLoad={this.handleIframeLoaded} />
     );
   }
 }
