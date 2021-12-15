@@ -6,6 +6,7 @@ import css from "../../../../css/portal-dashboard/questions/image-question.less"
 
 interface IProps {
   question?: Map<string, any>;
+  useMinHeight?: boolean;
 }
 
 export const ImageQuestion: React.FC<IProps> = (props) => {

@@ -6,11 +6,17 @@ import { RootState } from "../../reducers";
 import { connect } from "react-redux";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 
+import css from "../../../css/portal-dashboard/report-item-iframe.less";
+import { registerReportItem, unregisterReportItem, setStudentHTML } from "../../actions";
+
 interface IProps {
   question: any;
   view: "singleAnswer" | "multipleAnswer";
   students: any;
   answersByQuestion: any;
+  registerReportItem: (questionId: string, iframePhone: any) => void;
+  unregisterReportItem: (questionId: string) => void;
+  setStudentHTML: (questionId: string, studentId: string, html: string) => void;
 }
 
 interface IState {
@@ -35,6 +41,7 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
   }
 
   componentWillUnmount() {
+    this.props.unregisterReportItem(this.props.question.get("id"));
     this.disconnect();
   }
 
@@ -60,6 +67,9 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
 
     this.iframePhone.addListener("studentHTML", this.handleStudentHTML);
     this.iframePhone.addListener("height", this.handleHeight);
+    this.iframePhone.addListener("reportItemClientReady", () => {
+      this.props.registerReportItem(this.props.question.get("id"), this.iframePhone);
+    });
     // this.iframePhone.addListener("getAttachmentUrl", this.handleGetAttachmentUrl);
   }
 
@@ -84,7 +94,7 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
   }
 
   handleStudentHTML = (response: IStudentHTML) => {
-    // TODO
+    this.props.setStudentHTML(this.props.question.get("id"), response.studentId, response.html);
   }
 
   /*
@@ -114,22 +124,22 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
   }
 
   render() {
-    const { requestedHeight, src } = this.state;
+    const { src } = this.state;
 
     if (!src) {
       return null;
     }
 
-    // eslint-disable-next-line no-console
-    console.log("QUESTION", this.props.question.toJS());
+    const className = this.props.view === "singleAnswer"
+      ? css.singleAnswerReportItemIframe
+      : css.multipleAnswerReportItemIframe;
+
+    const requestedHeight = this.state.requestedHeight || 0;
+    const style = requestedHeight > 0 ? {height: requestedHeight} : {};
 
     return (
       // eslint-disable-next-line react/no-string-refs
-      <iframe ref="iframe"
-        src={src}
-        height={requestedHeight || "300px"}
-        style={{border: "none", marginTop: "0.5em"}}
-      />
+      <iframe ref="iframe" className={className} src={src} style={style} />
     );
   }
 }
@@ -147,6 +157,9 @@ function mapStateToProps(state: RootState): Partial<IProps> {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
+    registerReportItem: (questionId: string, iframePhone: any) => dispatch(registerReportItem(questionId, iframePhone)),
+    unregisterReportItem: (questionId: string) => dispatch(unregisterReportItem(questionId)),
+    setStudentHTML: (questionId: string, studentId: string, html: string) => dispatch(setStudentHTML(questionId, studentId, html)),
   };
 };
 

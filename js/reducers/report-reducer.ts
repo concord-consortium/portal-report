@@ -1,6 +1,7 @@
 import Immutable, { Map, List, Set } from "immutable";
 import queryString from "query-string";
 import { RecordFactory } from "../util/record-factory";
+
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
@@ -18,7 +19,11 @@ import {
   SET_ANSWER_SELECTED_FOR_COMPARE,
   SHOW_COMPARE_VIEW,
   HIDE_COMPARE_VIEW,
-  RECEIVE_ANSWERS
+  RECEIVE_ANSWERS,
+  REGISTER_REPORT_ITEM,
+  UNREGISTER_REPORT_ITEM,
+  GET_STUDENT_HTML,
+  SET_STUDENT_HTML
 } from "../actions";
 
 export type ReportType = "class" | "student";
@@ -53,6 +58,8 @@ export interface IReportState {
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
+  reportItemIFramePhones: Map<string, any>;
+  reportItemStudentHTML: Map<string, string>;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -82,6 +89,8 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
   hasTeacherEdition: false,
+  reportItemIFramePhones: Map(),
+  reportItemStudentHTML: Map(),
 });
 
 export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
@@ -114,6 +123,8 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   compareViewAnswers: Set<string> | null;
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
+  reportItemIFramePhones: Map<string, any>;
+  reportItemStudentHTML: Map<string, string>;
 }
 
 export default function report(state = new ReportState({}), action?: any) {
@@ -215,9 +226,61 @@ export default function report(state = new ReportState({}), action?: any) {
       return state.set("compareViewAnswers", Set(selectedAnswerIds));
     case HIDE_COMPARE_VIEW:
       return state.set("compareViewAnswers", null);
+
+    case REGISTER_REPORT_ITEM:
+      processReportItemRequests(state.setIn(["reportItemIFramePhones", action.questionId], action.iframePhone));
+      return state;
+    case UNREGISTER_REPORT_ITEM:
+      return state.setIn(["reportItemIFramePhones", action.questionId], null);
+    case GET_STUDENT_HTML:
+      reportItemStudentHTMLRequests.push({
+        questionId: action.questionId,
+        platformUserId: action.studentId,
+      });
+      processReportItemRequests(state);
+      return state;
+    case SET_STUDENT_HTML:
+      const answer = getAnswer(state, action.questionId, action.studentId);
+      if (answer) {
+        return state.setIn(["reportItemStudentHTML", answer.get("id")], action.html);
+      } else {
+        return state;
+      }
+
     default:
       return state;
   }
+}
+
+let reportItemStudentHTMLRequests: Array<{questionId: string; platformUserId: string}> = [];
+
+function getAnswer(state: ReportState, questionId: string, platformUserId: string) {
+  return state.answers.find(a => {
+    return a.get("questionId") === questionId && a.get("platformUserId") === platformUserId;
+  });
+}
+
+function processReportItemRequests(state: ReportState) {
+  reportItemStudentHTMLRequests = reportItemStudentHTMLRequests.filter(({questionId, platformUserId}) => {
+    const iframePhone = state.getIn(["reportItemIFramePhones", questionId as any]);
+    if (iframePhone) {
+      const answer = getAnswer(state, questionId, platformUserId);
+      if (answer) {
+        let interactiveState: any = answer.get("answer");
+        try {
+          interactiveState = JSON.parse(interactiveState);
+        } catch {
+          // noop
+        }
+        const request = { // : IGetStudentHTML
+          studentId: platformUserId,
+          interactiveState
+        };
+        iframePhone.post("getStudentHTML", request);
+      }
+    }
+    return !iframePhone;
+  });
 }
 
 // This action has to be explicit, otherwise, a question will disappear

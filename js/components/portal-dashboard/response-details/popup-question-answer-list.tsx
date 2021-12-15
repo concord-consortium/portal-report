@@ -30,8 +30,6 @@ export class PopupQuestionAnswerList extends React.PureComponent<IProps> {
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
         {activity.get("questions").map((question: Map<any, any>, i: number) => {
-          // eslint-disable-next-line no-console
-          console.log("QUESTION", question.toJS());
           const blankRegEx = /\[([^)]+)\]/g;
           const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
           return (

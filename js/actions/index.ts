@@ -51,6 +51,10 @@ export const SHOW_FEEDBACK = "SHOW_FEEDBACK";
 export const UPDATE_ACTIVITY_FEEDBACK = "UPDATE_ACTIVITY_FEEDBACK";
 export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
+export const REGISTER_REPORT_ITEM = "REGISTER_REPORT_ITEM";
+export const UNREGISTER_REPORT_ITEM = "UNREGISTER_REPORT_ITEM";
+export const GET_STUDENT_HTML = "GET_STUDENT_HTML";
+export const SET_STUDENT_HTML = "SET_STUDENT_HTML";
 
 export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean};
 export type TrackEventCategory = "Dashboard" | "Portal-Dashboard" | "Report";
@@ -670,5 +674,37 @@ export function trackEvent(category: TrackEventCategory, action: string, options
       request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
       request.send(JSON.stringify(logMessage));
     }
+  };
+}
+
+export function registerReportItem(questionId: string, iframePhone: any) {
+  return {
+    type: REGISTER_REPORT_ITEM,
+    questionId,
+    iframePhone
+  };
+}
+
+export function unregisterReportItem(questionId: string) {
+  return {
+    type: UNREGISTER_REPORT_ITEM,
+    questionId
+  };
+}
+
+export function getStudentHTML(questionId: string, studentId: string) {
+  return {
+    type: GET_STUDENT_HTML,
+    questionId,
+    studentId
+  };
+}
+
+export function setStudentHTML(questionId: string, studentId: string, html: string) {
+  return {
+    type: SET_STUDENT_HTML,
+    questionId,
+    studentId,
+    html
   };
 }
