@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import queryString from "query-string";
 import { fetchAndObserveData } from "../../actions/index";
 import DataFetchError from "../../components/report/data-fetch-error";
 import LoadingIcon from "../../components/report/loading-icon";
@@ -24,21 +23,22 @@ class IframeStandaloneApp extends PureComponent {
 
   renderIframe() {
     const { report, answers } = this.props;
-    const { iframeQuestionId } = queryString.parse(window.location.search);
+    const iframeQuestionId = config("iframeQuestionId");
 
     const question = report.get("questions").get(iframeQuestionId);
 
-    const studentId = config("studentId");
+    // check explicit studentId first for logged in users and then fall back to runKey for anonymous users
+    const platformUserId = config("studentId") || config("runKey");
     const answer = answers.filter(a =>
       a.get("questionId") === iframeQuestionId &&
-      a.get("platformUserId") === studentId
+      a.get("platformUserId") === platformUserId
     ).first();
 
     if (!answer) {
       const errorText =
         !iframeQuestionId ? "Parameter 'iframeQuestionId' is missing" :
-        !studentId ? "Parameter 'studentId' is missing" :
-        `No data for question '${iframeQuestionId}' by student '${studentId}'`;
+        !platformUserId ? "Parameter 'studentId' or 'runKey' is missing" :
+        `No data for question '${iframeQuestionId}' by student '${platformUserId}'`;
       return <DataFetchError error={{title: "Unable to fetch data", body: errorText}} />;
     }
 
