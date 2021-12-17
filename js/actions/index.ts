@@ -73,7 +73,8 @@ interface LogMessage {
 // See: api-middleware.js
 export function fetchAndObserveData() {
   const runKeyValue = urlParam("runKey");
-  if (runKeyValue) {
+  const _useFakeDataForTest = urlParam("_useFakeDataForTest");
+  if (runKeyValue && !_useFakeDataForTest) {
     const activity = urlParam("activity") || "";
     const source = getSourceKey(activity);
     const answersSourceKey = urlParam("answersSourceKey") || source;
