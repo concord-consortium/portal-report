@@ -1,17 +1,17 @@
 import React from "react";
 import { getByCypressTag } from "../utils";
 
-// This spec does not hit FireStore for the answers
+// This spec does not hit Firestore for the answers
 // Because there is no offering url parameter, then the fakeOfferingData is used.
 // And the fakeOfferingData results in a sourceKey of fake.authoring.system
 // and when that is the sourceKey then the fake answers are returned here by:
 // actions/index.ts
-// Most of the tests also do not hit FireStore for the feedback because feedback is disabled for
+// Most of the tests also do not hit Firestore for the feedback because feedback is disabled for
 // the standalone iframe view. But there is one hacky test at the end which requests
 // feedback because it is requesting the full student report.  See that test for more
 // information.
 //
-// 2021-12-17 NP: FireStore will **also** be used if there is a `runKey` url param.
+// 2021-12-17 NP: Firestore will **also** be used if there is a `runKey` url param.
 //  in order to test logic in the anonymous run previews in the IFrameStandaloneApp
 //  an additional url parameter `_useFakeDataForTest`
 //  see `js/actions/index.ts:77` for more info.
