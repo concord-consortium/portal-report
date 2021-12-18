@@ -1,15 +1,21 @@
 import React from "react";
 import { getByCypressTag } from "../utils";
 
-// This spec does not hit firestore for the answers
+// This spec does not hit Firestore for the answers
 // Because there is no offering url parameter, then the fakeOfferingData is used.
 // And the fakeOfferingData results in a sourceKey of fake.authoring.system
 // and when that is the sourceKey then the fake answers are returned here by:
 // actions/index.ts
-// Most of the tests also do not hit firestore for the feedback because feedback is disabled for
+// Most of the tests also do not hit Firestore for the feedback because feedback is disabled for
 // the standalone iframe view. But there is one hacky test at the end which requests
 // feedback because it is requesting the full student report.  See that test for more
 // information.
+//
+// 2021-12-17 NP: Firestore will **also** be used if there is a `runKey` url param.
+//  in order to test logic in the anonymous run previews in the IFrameStandaloneApp
+//  an additional url parameter `_useFakeDataForTest`
+//  see `js/actions/index.ts:77` for more info.
+
 
 describe("Opening stand-alone iframe question with saved state", function() {
   beforeEach(() => {
@@ -24,15 +30,29 @@ describe("Opening stand-alone iframe question with saved state", function() {
 });
 
 describe("Opening stand-alone open response answer", function() {
-  beforeEach(() => {
-    cy.visit("/?iframeQuestionId=open_response_60&studentId=1");
-  });
+  describe("When specifying an student answer run via studentId", () => {
+    beforeEach(() => {
+      cy.visit("/?iframeQuestionId=open_response_60&studentId=1");
+    });
 
-  it("should show the text of the answer", function() {
-    getByCypressTag("standaloneIframe")
-      .should("be.visible")
-      .should("have.text", "test answer 1");
-  });
+    it("should show the text of the answer", function() {
+      getByCypressTag("standaloneIframe")
+        .should("be.visible")
+        .should("have.text", "test answer 1");
+    });
+  })
+
+  describe("When specifying an anonymous user answer run via runKey", () => {
+    beforeEach(() => {
+      cy.visit("/?iframeQuestionId=open_response_60&runKey=1&_useFakeDataForTest=true");
+    });
+
+    it("should show the text of the answer", function() {
+      getByCypressTag("standaloneIframe")
+        .should("be.visible")
+        .should("have.text", "test answer 1");
+    });
+  })
 });
 
 describe("Opening stand-alone multiple choice answer", function() {
