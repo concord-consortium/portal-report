@@ -40,9 +40,12 @@ class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   handleReportItemHTMLIFrameLoaded(e: any) {
-    // the +32 is for the hidden iframe chrome
-    // TODO: figure out better height calculation
-    this.setState({reportItemHTMLHeight: e.target.contentDocument.body.offsetHeight + 32});
+    const contentDocument = e.target.contentDocument;
+    const body = contentDocument.body;
+    const html = contentDocument.documentElement;
+    const reportItemHTMLHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+
+    this.setState({reportItemHTMLHeight});
   }
 
   getLinkURL(answer: string) {
@@ -156,6 +159,9 @@ class IframeAnswer extends PureComponent<IProps, IState> {
       <html>
       <head>
         <style>
+          body {
+            font-family: lato, arial, helvetica, sans-serif;
+          }
           .tall {
             display: ${displayTall ? "block" : "none"};
           }
