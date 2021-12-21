@@ -39,7 +39,13 @@ export class PopupQuestionAnswerList extends React.PureComponent<IProps> {
                 {question.get("reportItemUrl") && <ReportItemIframe question={question} view="singleAnswer" />}
               </div>
               <div className={css.studentResponse} data-cy="student-response">
-                <Answer question={question} student={student} responsive={false} trackEvent={trackEvent} />
+                <Answer
+                  question={question}
+                  student={student}
+                  responsive={false}
+                  trackEvent={trackEvent}
+                  answerOrientation="wide"
+                />
               </div>
             </div>
           );

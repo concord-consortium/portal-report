@@ -41,7 +41,7 @@ class Answer extends React.PureComponent<AnswerProps> {
   }
 
   renderAnswer = (type: string) => {
-    const { answer, question, responsive, studentName, trackEvent } = this.props;
+    const { answer, question, responsive, studentName, trackEvent, answerOrientation } = this.props;
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,
       "open_response_answer": OpenResponseAnswer,
@@ -57,7 +57,15 @@ class Answer extends React.PureComponent<AnswerProps> {
     }
     else {
       return (
-        <AComponent answer={answer} question={question} showFullAnswer={true} responsive={responsive} studentName={studentName} trackEvent={trackEvent} />
+        <AComponent
+          answer={answer}
+          question={question}
+          showFullAnswer={true}
+          responsive={responsive}
+          studentName={studentName}
+          trackEvent={trackEvent}
+          answerOrientation={answerOrientation}
+        />
       );
     }
   }

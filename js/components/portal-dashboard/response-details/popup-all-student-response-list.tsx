@@ -31,7 +31,14 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
             <div className={css.listRow} key={`student ${i}`} data-cy="student-row">
               {this.renderStudentNameWrapper(student.get("id"), formattedName, isSelected, spotlightAllowed)}
               <div className={`${css.studentResponse} ${isSelected ? css.selected : ""}`} data-cy="student-response">
-                <Answer question={currentQuestion} student={student} responsive={false} studentName={formattedName} trackEvent={trackEvent} />
+                <Answer
+                  question={currentQuestion}
+                  student={student}
+                  responsive={false}
+                  studentName={formattedName}
+                  trackEvent={trackEvent}
+                  answerOrientation="wide"
+                />
               </div>
             </div>
           );

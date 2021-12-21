@@ -16,6 +16,7 @@ interface IProps {
   alwaysOpen: boolean;
   getStudentHTML: (questionId: string, studentId: string) => void;
   reportItemHTML?: string;
+  answerOrientation: "wide" | "tall";
 }
 
 interface IState {
@@ -137,10 +138,11 @@ class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   render() {
-    const { alwaysOpen, answer, responsive, question, reportItemHTML } = this.props;
+    const { alwaysOpen, answer, responsive, question, reportItemHTML, answerOrientation } = this.props;
     const { reportItemHTMLHeight } = this.state;
     const answerText = answer.get("answerText");
     const hasReportItemUrl = !!question.get("reportItemUrl");
+    const displayTall = answerOrientation === "tall";
 
     // request the latest student report html
     if (hasReportItemUrl) {
@@ -148,6 +150,25 @@ class IframeAnswer extends PureComponent<IProps, IState> {
         this.props.getStudentHTML(question.get("id"), answer.getIn(["student", "id"]));
       }, 0);
     }
+
+    const injectedHTML = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          .tall {
+            display: ${displayTall ? "block" : "none"};
+          }
+          .wide {
+            display: ${displayTall ? "none" : "block"};
+          }
+        </style>
+      </head>
+      <body>
+        ${reportItemHTML}
+      </body>
+      </html>
+    `;
 
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
@@ -157,7 +178,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
               : !alwaysOpen && this.renderLink() /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
           }
         </div>
-        {reportItemHTML && <iframe className="iframe-answer-report-item-html" style={{height: reportItemHTMLHeight}} srcDoc={reportItemHTML} onLoad={this.handleReportItemHTMLIFrameLoaded} />}
+        {reportItemHTML && <iframe className="iframe-answer-report-item-html" style={{height: reportItemHTMLHeight}} srcDoc={injectedHTML} onLoad={this.handleReportItemHTMLIFrameLoaded} />}
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>
     );
