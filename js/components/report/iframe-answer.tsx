@@ -39,8 +39,9 @@ class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   handleReportItemHTMLIFrameLoaded(e: any) {
-    // the +6 is for the hidden iframe chrome
-    this.setState({reportItemHTMLHeight: e.target.contentDocument.body.offsetHeight + 8});
+    // the +32 is for the hidden iframe chrome
+    // TODO: figure out better height calculation
+    this.setState({reportItemHTMLHeight: e.target.contentDocument.body.offsetHeight + 32});
   }
 
   getLinkURL(answer: string) {
@@ -102,7 +103,6 @@ class IframeAnswer extends PureComponent<IProps, IState> {
       return <a href={linkUrl} target="_blank" data-cy="externalIframe">View work in new tab {externalLinkIcon}</a>;
     }
   }
-
   renderIframe() {
     const { answer, question, responsive } = this.props;
     let url;
