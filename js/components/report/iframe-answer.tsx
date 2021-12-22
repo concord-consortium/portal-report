@@ -2,13 +2,13 @@ import React, { PureComponent } from "react";
 import queryString from "query-string";
 import { connect } from "react-redux";
 import { Map } from "immutable";
+import { IReportItemAnswer } from "@concord-consortium/interactive-api-host";
 
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
 import { getReportItemAnswer } from "../../actions";
 
 import "../../../css/report/iframe-answer.less";
-import { IReportItemAnswer } from "@concord-consortium/interactive-api-host";
 
 interface IProps {
   answer: Map<any, any>;
