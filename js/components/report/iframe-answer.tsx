@@ -5,17 +5,18 @@ import { Map } from "immutable";
 
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
-import { getStudentHTML } from "../../actions";
+import { getReportItemAnswer } from "../../actions";
 
 import "../../../css/report/iframe-answer.less";
+import { IReportItemAnswer } from "@concord-consortium/interactive-api-host";
 
 interface IProps {
   answer: Map<any, any>;
   question: Map<any, any>;
   responsive: boolean;
   alwaysOpen: boolean;
-  getStudentHTML: (questionId: string, studentId: string) => void;
-  reportItemHTML?: string;
+  getReportItemAnswer: (questionId: string, studentId: string) => void;
+  reportItemAnswer?: IReportItemAnswer;
   answerOrientation: "wide" | "tall";
 }
 
@@ -141,40 +142,47 @@ class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   render() {
-    const { alwaysOpen, answer, responsive, question, reportItemHTML, answerOrientation } = this.props;
+    const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
     const { reportItemHTMLHeight } = this.state;
     const answerText = answer.get("answerText");
     const hasReportItemUrl = !!question.get("reportItemUrl");
     const displayTall = answerOrientation === "tall";
+    let reportItemHTML: string | undefined;
 
     // request the latest student report html
     if (hasReportItemUrl) {
       setTimeout(() => {
-        this.props.getStudentHTML(question.get("id"), answer.getIn(["student", "id"]));
+        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]));
       }, 0);
     }
 
-    const injectedHTML = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          body {
-            font-family: lato, arial, helvetica, sans-serif;
-          }
-          .tall {
-            display: ${displayTall ? "block" : "none"};
-          }
-          .wide {
-            display: ${displayTall ? "none" : "block"};
-          }
-        </style>
-      </head>
-      <body>
-        ${reportItemHTML}
-      </body>
-      </html>
-    `;
+    if (reportItemAnswer) {
+      switch (reportItemAnswer.type) {
+        case "html":
+          reportItemHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body {
+                  font-family: lato, arial, helvetica, sans-serif;
+                }
+                .tall {
+                  display: ${displayTall ? "block" : "none"};
+                }
+                .wide {
+                  display: ${displayTall ? "none" : "block"};
+                }
+              </style>
+            </head>
+            <body>
+              ${reportItemAnswer.html}
+            </body>
+            </html>
+          `;
+          break;
+      }
+    }
 
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
@@ -184,7 +192,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
               : !alwaysOpen && this.renderLink() /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
           }
         </div>
-        {reportItemHTML && <iframe className="iframe-answer-report-item-html" style={{height: reportItemHTMLHeight}} srcDoc={injectedHTML} onLoad={this.handleReportItemHTMLIFrameLoaded} />}
+        {reportItemHTML && <iframe className="iframe-answer-report-item-html" style={{height: reportItemHTMLHeight}} srcDoc={reportItemHTML} onLoad={this.handleReportItemHTMLIFrameLoaded} />}
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>
     );
@@ -194,14 +202,14 @@ class IframeAnswer extends PureComponent<IProps, IState> {
 function mapStateToProps() {
   return (state: any, ownProps: any) => {
     return {
-      reportItemHTML: state.getIn(["report", "reportItemStudentHTML", ownProps.answer.get("id")])
+      reportItemAnswer: state.getIn(["report", "reportItemAnswers", ownProps.answer.get("id")])
     };
   };
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
-    getStudentHTML: (questionId: string, studentId: string) => dispatch(getStudentHTML(questionId, studentId)),
+    getReportItemAnswer: (questionId: string, studentId: string) => dispatch(getReportItemAnswer(questionId, studentId)),
   };
 };
 

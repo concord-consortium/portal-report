@@ -28,6 +28,7 @@ import { RootState } from "../reducers";
 import { urlParam, getViewType, IFRAME_STANDALONE } from "../util/misc";
 import queryString from "query-string";
 import { v4 as uuid } from "uuid";
+import { IReportItemAnswer } from "@concord-consortium/interactive-api-host";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -53,8 +54,8 @@ export const TRACK_EVENT = "TRACK_EVENT";
 export const API_CALL = "API_CALL";
 export const REGISTER_REPORT_ITEM = "REGISTER_REPORT_ITEM";
 export const UNREGISTER_REPORT_ITEM = "UNREGISTER_REPORT_ITEM";
-export const GET_STUDENT_HTML = "GET_STUDENT_HTML";
-export const SET_STUDENT_HTML = "SET_STUDENT_HTML";
+export const GET_REPORT_ITEM_ANSWER = "GET_REPORT_ITEM_ANSWER";
+export const SET_REPORT_ITEM_ANSWER = "SET_STUDENT_HTML";
 
 export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean};
 export type TrackEventCategory = "Dashboard" | "Portal-Dashboard" | "Report";
@@ -692,19 +693,18 @@ export function unregisterReportItem(questionId: string) {
   };
 }
 
-export function getStudentHTML(questionId: string, studentId: string) {
+export function getReportItemAnswer(questionId: string, platformUserId: string) {
   return {
-    type: GET_STUDENT_HTML,
+    type: GET_REPORT_ITEM_ANSWER,
     questionId,
-    studentId
+    platformUserId
   };
 }
 
-export function setStudentHTML(questionId: string, studentId: string, html: string) {
+export function setReportItemAnswer(questionId: string, reportItemAnswer: IReportItemAnswer) {
   return {
-    type: SET_STUDENT_HTML,
+    type: SET_REPORT_ITEM_ANSWER,
     questionId,
-    studentId,
-    html
+    reportItemAnswer
   };
 }

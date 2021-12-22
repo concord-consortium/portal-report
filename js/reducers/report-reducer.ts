@@ -22,9 +22,10 @@ import {
   RECEIVE_ANSWERS,
   REGISTER_REPORT_ITEM,
   UNREGISTER_REPORT_ITEM,
-  GET_STUDENT_HTML,
-  SET_STUDENT_HTML
+  SET_REPORT_ITEM_ANSWER,
+  GET_REPORT_ITEM_ANSWER
 } from "../actions";
+import { IGetReportItemAnswer } from "@concord-consortium/interactive-api-host";
 
 export type ReportType = "class" | "student";
 
@@ -59,7 +60,7 @@ export interface IReportState {
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
   reportItemIFramePhones: Map<string, any>;
-  reportItemStudentHTML: Map<string, string>;
+  reportItemAnswers: Map<string, string>;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -90,7 +91,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   showFeaturedQuestionsOnly: true,
   hasTeacherEdition: false,
   reportItemIFramePhones: Map(),
-  reportItemStudentHTML: Map(),
+  reportItemAnswers: Map(),
 });
 
 export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
@@ -124,7 +125,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
   reportItemIFramePhones: Map<string, any>;
-  reportItemStudentHTML: Map<string, string>;
+  reportItemAnswers: Map<string, string>;
 }
 
 export default function report(state = new ReportState({}), action?: any) {
@@ -232,17 +233,17 @@ export default function report(state = new ReportState({}), action?: any) {
       return state;
     case UNREGISTER_REPORT_ITEM:
       return state.setIn(["reportItemIFramePhones", action.questionId], null);
-    case GET_STUDENT_HTML:
-      reportItemStudentHTMLRequests.push({
+    case GET_REPORT_ITEM_ANSWER:
+      reportItemAnswerRequests.push({
         questionId: action.questionId,
-        platformUserId: action.studentId,
+        platformUserId: action.platformUserId,
       });
       processReportItemRequests(state);
       return state;
-    case SET_STUDENT_HTML:
-      const answer = getAnswer(state, action.questionId, action.studentId);
+    case SET_REPORT_ITEM_ANSWER:
+      const answer = getAnswer(state, action.questionId, action.reportItemAnswer.platformUserId);
       if (answer) {
-        return state.setIn(["reportItemStudentHTML", answer.get("id")], action.html);
+        return state.setIn(["reportItemAnswers", answer.get("id")], action.reportItemAnswer);
       } else {
         return state;
       }
@@ -252,7 +253,7 @@ export default function report(state = new ReportState({}), action?: any) {
   }
 }
 
-let reportItemStudentHTMLRequests: Array<{questionId: string; platformUserId: string}> = [];
+let reportItemAnswerRequests: Array<{questionId: string; platformUserId: string}> = [];
 
 function getAnswer(state: ReportState, questionId: string, platformUserId: string) {
   return state.answers.find(a => {
@@ -261,7 +262,7 @@ function getAnswer(state: ReportState, questionId: string, platformUserId: strin
 }
 
 function processReportItemRequests(state: ReportState) {
-  reportItemStudentHTMLRequests = reportItemStudentHTMLRequests.filter(({questionId, platformUserId}) => {
+  reportItemAnswerRequests = reportItemAnswerRequests.filter(({questionId, platformUserId}) => {
     const iframePhone = state.getIn(["reportItemIFramePhones", questionId as any]);
     if (iframePhone) {
       const answer = getAnswer(state, questionId, platformUserId);
@@ -272,11 +273,13 @@ function processReportItemRequests(state: ReportState) {
         } catch {
           // noop
         }
-        const request = { // : IGetStudentHTML
-          studentId: platformUserId,
-          interactiveState
+        const request: Omit<IGetReportItemAnswer, "requestId"> = {
+          type: "html",
+          platformUserId,
+          interactiveState,
+          authoredState: {} // TODO
         };
-        iframePhone.post("getStudentHTML", request);
+        iframePhone.post("getReportItemAnswer", request);
       }
     }
     return !iframePhone;
