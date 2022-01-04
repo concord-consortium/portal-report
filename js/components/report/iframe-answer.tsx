@@ -168,10 +168,12 @@ class IframeAnswer extends PureComponent<IProps, IState> {
                   font-family: lato, arial, helvetica, sans-serif;
                 }
                 .tall {
-                  display: ${displayTall ? "block" : "none"};
+                  display: ${displayTall ? "flex" : "none"};
+                  flex-direction: column;
                 }
                 .wide {
-                  display: ${displayTall ? "none" : "block"};
+                  display: ${displayTall ? "none" : "flex"};
+                  flex-direction: row;
                 }
               </style>
             </head>
