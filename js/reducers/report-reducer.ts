@@ -267,17 +267,31 @@ function processReportItemRequests(state: ReportState) {
     if (iframePhone) {
       const answer = getAnswer(state, questionId, platformUserId);
       if (answer) {
-        let interactiveState: any = answer.get("answer");
+        let interactiveState: any = null;
+        let authoredState: any = null;
+        let answerValue: any = answer.get("answer");
+        try {
+          answerValue = JSON.parse(answerValue);
+          interactiveState = answerValue.interactiveState;
+          authoredState = answerValue.authoredState;
+        } catch {
+          console.error("Unable to JSON parse answer, sending null for interactiveState and authoredState.  Unparseable answer:", answerValue);
+        }
         try {
           interactiveState = JSON.parse(interactiveState);
         } catch {
-          // noop
+          console.error("Unable to JSON parse interactiveState in answer, sending interactiveState as null.  Unparseable interactiveState:", interactiveState);
+        }
+        try {
+          authoredState = JSON.parse(authoredState);
+        } catch {
+          console.error("Unable to JSON parse authoredState in answer, sending authoredState as null.  Unparseable authoredState:", authoredState);
         }
         const request: Omit<IGetReportItemAnswer, "requestId"> = {
           type: "html",
           platformUserId,
           interactiveState,
-          authoredState: {} // TODO
+          authoredState,
         };
         iframePhone.post("getReportItemAnswer", request);
       }
