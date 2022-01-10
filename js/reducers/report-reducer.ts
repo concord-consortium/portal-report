@@ -59,7 +59,6 @@ export interface IReportState {
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
-  reportItemIFramePhones: Map<string, any>;
   reportItemAnswers: Map<string, string>;
 }
 
@@ -90,9 +89,10 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
   hasTeacherEdition: false,
-  reportItemIFramePhones: Map(),
   reportItemAnswers: Map(),
 });
+
+const reportItemIFramePhones: Record<string, any> = {};
 
 export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   constructor(config: Partial<IReportState>) {
@@ -124,7 +124,6 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   compareViewAnswers: Set<string> | null;
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
-  reportItemIFramePhones: Map<string, any>;
   reportItemAnswers: Map<string, string>;
 }
 
@@ -229,20 +228,22 @@ export default function report(state = new ReportState({}), action?: any) {
       return state.set("compareViewAnswers", null);
 
     case REGISTER_REPORT_ITEM:
-      processReportItemRequests(state.setIn(["reportItemIFramePhones", action.questionId], action.iframePhone));
-      return state;
+      reportItemIFramePhones[action.questionId] = action.iframePhone;
+      return processReportItemRequests(state);
     case UNREGISTER_REPORT_ITEM:
-      return state.setIn(["reportItemIFramePhones", action.questionId], null);
+      delete reportItemIFramePhones[action.questionId];
+      return state;
     case GET_REPORT_ITEM_ANSWER:
       reportItemAnswerRequests.push({
         questionId: action.questionId,
         platformUserId: action.platformUserId,
       });
-      processReportItemRequests(state);
-      return state;
+      return processReportItemRequests(state);
     case SET_REPORT_ITEM_ANSWER:
       const answer = getAnswer(state, action.questionId, action.reportItemAnswer.platformUserId);
-      if (answer) {
+      const currentReportItemAnswer = (answer && state.getIn(["reportItemAnswers", answer.get("id")])) || null;
+      const reportItemAnswerChanged = JSON.stringify(currentReportItemAnswer) !== JSON.stringify(action.reportItemAnswer);
+      if (answer && reportItemAnswerChanged) {
         return state.setIn(["reportItemAnswers", answer.get("id")], action.reportItemAnswer);
       } else {
         return state;
@@ -262,8 +263,9 @@ function getAnswer(state: ReportState, questionId: string, platformUserId: strin
 }
 
 function processReportItemRequests(state: ReportState) {
+  // use filter to remove requests that have iframe phones registered, regardless of the existence of an answer
   reportItemAnswerRequests = reportItemAnswerRequests.filter(({questionId, platformUserId}) => {
-    const iframePhone = state.getIn(["reportItemIFramePhones", questionId as any]);
+    const iframePhone = reportItemIFramePhones[questionId];
     if (iframePhone) {
       const answer = getAnswer(state, questionId, platformUserId);
       if (answer) {
@@ -298,6 +300,7 @@ function processReportItemRequests(state: ReportState) {
     }
     return !iframePhone;
   });
+  return state;
 }
 
 // This action has to be explicit, otherwise, a question will disappear
