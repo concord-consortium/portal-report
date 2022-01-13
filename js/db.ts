@@ -10,6 +10,7 @@ interface IConfig {
   storageBucket: string;
   messagingSenderId: string;
   appId: string;
+  measurementId: string;
 }
 interface IConfigs {
   [index: string]: IConfig;
@@ -22,7 +23,9 @@ const configurations: IConfigs = {
     projectId: "report-service-dev",
     storageBucket: "report-service-dev.appspot.com",
     messagingSenderId: "402218300971",
-    appId: "1:402218300971:web:32b7266ef5226ff7"
+    appId: "1:402218300971:web:32b7266ef5226ff7",
+    measurementId: "G-E7KQQ747NR"
+
   },
   "report-service-pro": {
     apiKey: "AIzaSyBmNSa2Uz3DaEwKclsvHPBwfucSmZWAAzg",
@@ -31,7 +34,8 @@ const configurations: IConfigs = {
     projectId: "report-service-pro",
     storageBucket: "report-service-pro.appspot.com",
     messagingSenderId: "22386066971",
-    appId: "1:22386066971:web:e0cdec7cb0f0893a8a5abe"
+    appId: "1:22386066971:web:e0cdec7cb0f0893a8a5abe",
+    measurementId: "G-GNBLKPF6EY"
   }
 };
 
