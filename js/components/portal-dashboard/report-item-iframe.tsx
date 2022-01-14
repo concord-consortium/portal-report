@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
-import { IReportItemAnswer, IReportItemInitInteractive } from "@concord-consortium/interactive-api-host";
+import { handleGetAttachmentUrl, IAttachmentUrlRequest, IReportItemAnswer, IReportItemInitInteractive } from "@concord-consortium/interactive-api-host";
 import { connect } from "react-redux";
 
 import { getSortedStudents } from "../../selectors/report";
@@ -70,7 +70,7 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
     this.iframePhone.addListener("reportItemClientReady", () => {
       this.props.registerReportItem(this.props.question.get("id"), this.iframePhone);
     });
-    // this.iframePhone.addListener("getAttachmentUrl", this.handleGetAttachmentUrl);
+    this.iframePhone.addListener("getAttachmentUrl", this.handleGetAttachmentUrl.bind(this));
   }
 
   getUsersForInitMessage() {
@@ -97,20 +97,21 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
     this.props.setReportItemAnswer(this.props.question.get("id"), reportItemAnswer);
   }
 
-  /*
+  handleGetAttachmentUrl = async (request: IAttachmentUrlRequest) => {
+    const questionId = this.props.question.get("id");
+    const answers = this.props.answersByQuestion.get(questionId);
+    const answer = answers.get(request.platformUserId);
+    const attachments = answer?.get("attachments")?.toJS() || undefined;
 
-  TODO LATER
+    if (attachments) {
+      const response = await handleGetAttachmentUrl({
+        request,
+        answerMeta: {attachments}
+      });
 
-  handleGetAttachmentUrl = (request) => {
-    const answerMeta = this.props.answer.toJS();
-    return handleGetAttachmentUrl({ request, answerMeta })
-      .then(response => {
-        this.iframePhone.post("attachmentUrl", response);
-        return response;
-      })
-      .catch(console.error);
+      this.iframePhone.post("attachmentUrl", response);
+    }
   }
-  */
 
   handleHeight = (height: number) => {
     this.setState({ requestedHeight: height });
