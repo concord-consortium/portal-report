@@ -121,7 +121,7 @@
   "dependencies": {
     "@concord-consortium/interactive-api-host": "^0.7.0",
     "@react-hook/resize-observer": "^1.1.0",
-    "aws-sdk": "^2.451.0",
+    "aws-sdk": "^2.814.0",
     "bootstrap": "^3.3.6",
     "chroma-js": "^2.1.0",
     "client-oauth2": "^4.3.3",
