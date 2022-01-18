@@ -9,6 +9,7 @@ import css from "../../../../css/portal-dashboard/question-area.less";
 
 interface IProps {
   question?: Map<string,any>;
+  useMinHeight?: boolean;
 }
 export class Question extends React.PureComponent <IProps> {
 
@@ -24,7 +25,7 @@ export class Question extends React.PureComponent <IProps> {
   }
 
   renderQuestion = (type: string) => {
-    const { question } = this.props;
+    const { question, useMinHeight } = this.props;
     const QuestionComponent: any = {
       "multiple_choice": MultipleChoiceQuestion,
       "open_response": OpenResponseQuestion,
@@ -34,7 +35,7 @@ export class Question extends React.PureComponent <IProps> {
     const QComponent = (question && QuestionComponent[type]);
 
     return (
-      QComponent ? <QComponent question={question} /> : <div>Question type not supported.</div>
+      QComponent ? <QComponent question={question} useMinHeight={useMinHeight} /> : <div>Question type not supported.</div>
     );
   }
 }

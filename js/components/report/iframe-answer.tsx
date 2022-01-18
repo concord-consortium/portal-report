@@ -1,24 +1,55 @@
 import React, { PureComponent } from "react";
 import queryString from "query-string";
+import { connect } from "react-redux";
+import { Map } from "immutable";
+import { IReportItemAnswer } from "@concord-consortium/interactive-api-host";
+
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
+import { getReportItemAnswer } from "../../actions";
 
 import "../../../css/report/iframe-answer.less";
 
-export default class IframeAnswer extends PureComponent {
-  constructor(props) {
+interface IProps {
+  answer: Map<any, any>;
+  question: Map<any, any>;
+  responsive: boolean;
+  alwaysOpen: boolean;
+  getReportItemAnswer: (questionId: string, studentId: string) => void;
+  reportItemAnswer?: IReportItemAnswer;
+  answerOrientation: "wide" | "tall";
+}
+
+interface IState {
+  iframeVisible: boolean;
+  reportItemHTMLHeight: number;
+}
+
+class IframeAnswer extends PureComponent<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       iframeVisible: false,
+      reportItemHTMLHeight: 0
     };
     this.toggleIframe = this.toggleIframe.bind(this);
+    this.handleReportItemHTMLIFrameLoaded = this.handleReportItemHTMLIFrameLoaded.bind(this);
   }
 
   toggleIframe() {
     this.setState({iframeVisible: !this.state.iframeVisible});
   }
 
-  getLinkURL(answer) {
+  handleReportItemHTMLIFrameLoaded(e: any) {
+    const contentDocument = e.target.contentDocument;
+    const body = contentDocument.body;
+    const html = contentDocument.documentElement;
+    const reportItemHTMLHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+
+    this.setState({reportItemHTMLHeight});
+  }
+
+  getLinkURL(answer: string) {
     /*
     If the author initially sets the interactive to not have a report_url in LARA, then some student works on the interactive,
     then the author sets the interactive to have a report_url in LARA, the portal will send down the full interactive state to the report.
@@ -46,13 +77,14 @@ export default class IframeAnswer extends PureComponent {
   /**
    * Adds a studentId and iframeQuestionId to the existing url
    */
-  getStandaloneLinkUrl(question, answer) {
+  getStandaloneLinkUrl(question: Map<any, any>, answer: Map<any, any>) {
     const baseUrl = `${window.location.origin}${window.location.pathname}`;
     const params = queryString.parse(window.location.search);
     params.studentId = answer.get("platformUserId");
     params.iframeQuestionId = question.get("id");
     // Need to get the auth-domain from the class url
-    const authDomain = params.class?.split("/api")[0];
+    const clazz = Array.isArray(params.class) ? params.class[0] : params.class;
+    const authDomain = clazz?.split("/api")[0];
     authDomain && (params["auth-domain"] = authDomain);
     const newSearch = queryString.stringify(params);
     return `${baseUrl}?${newSearch}`;
@@ -76,7 +108,6 @@ export default class IframeAnswer extends PureComponent {
       return <a href={linkUrl} target="_blank" data-cy="externalIframe">View work in new tab {externalLinkIcon}</a>;
     }
   }
-
   renderIframe() {
     const { answer, question, responsive } = this.props;
     let url;
@@ -111,8 +142,50 @@ export default class IframeAnswer extends PureComponent {
   }
 
   render() {
-    const { alwaysOpen, answer, responsive } = this.props;
+    const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
+    const { reportItemHTMLHeight } = this.state;
     const answerText = answer.get("answerText");
+    const hasReportItemUrl = !!question.get("reportItemUrl");
+    const displayTall = answerOrientation === "tall";
+    let reportItemHTML: string | undefined;
+
+    // request the latest student report html
+    if (hasReportItemUrl) {
+      setTimeout(() => {
+        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]));
+      }, 0);
+    }
+
+    if (reportItemAnswer) {
+      switch (reportItemAnswer.type) {
+        case "html":
+          reportItemHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body {
+                  font-family: lato, arial, helvetica, sans-serif;
+                }
+                .tall {
+                  display: ${displayTall ? "flex" : "none"};
+                  flex-direction: column;
+                }
+                .wide {
+                  display: ${displayTall ? "none" : "flex"};
+                  flex-direction: row;
+                }
+              </style>
+            </head>
+            <body>
+              ${reportItemAnswer.html}
+            </body>
+            </html>
+          `;
+          break;
+      }
+    }
+
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
         <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
@@ -121,8 +194,25 @@ export default class IframeAnswer extends PureComponent {
               : !alwaysOpen && this.renderLink() /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
           }
         </div>
+        {reportItemHTML && <iframe className="iframe-answer-report-item-html" style={{height: reportItemHTMLHeight}} srcDoc={reportItemHTML} onLoad={this.handleReportItemHTMLIFrameLoaded} />}
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>
     );
   }
 }
+
+function mapStateToProps() {
+  return (state: any, ownProps: any) => {
+    return {
+      reportItemAnswer: state.getIn(["report", "reportItemAnswers", ownProps.answer.get("id")])
+    };
+  };
+}
+
+const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
+  return {
+    getReportItemAnswer: (questionId: string, studentId: string) => dispatch(getReportItemAnswer(questionId, studentId)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(IframeAnswer);

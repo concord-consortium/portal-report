@@ -6,6 +6,7 @@ import { renderHTML } from "../../../util/render-html";
 import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
+import ReportItemIframe from "../report-item-iframe";
 
 interface IProps {
   activities: Map<any, any>;
@@ -35,9 +36,16 @@ export class PopupQuestionAnswerList extends React.PureComponent<IProps> {
             <div className={css.listRow} key={`question ${i}`} data-cy="question-row">
               <div className={css.itemWrapper} data-cy="question-wrapper">
                 <span>Q{question.get("questionNumber")}: {renderHTML(striptags(promptText))}</span>
+                {question.get("reportItemUrl") && <ReportItemIframe question={question} view="singleAnswer" />}
               </div>
               <div className={css.studentResponse} data-cy="student-response">
-                <Answer question={question} student={student} responsive={false} trackEvent={trackEvent} />
+                <Answer
+                  question={question}
+                  student={student}
+                  responsive={false}
+                  trackEvent={trackEvent}
+                  answerOrientation="wide"
+                />
               </div>
             </div>
           );

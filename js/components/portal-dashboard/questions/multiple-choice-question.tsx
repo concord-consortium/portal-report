@@ -6,6 +6,7 @@ import css from "../../../../css/portal-dashboard/questions/multiple-choice-ques
 
 interface IProps {
   question?: Map<string, any>;
+  useMinHeight?: boolean;
 }
 
 export const MultipleChoiceQuestion: React.FC<IProps> = (props) => {

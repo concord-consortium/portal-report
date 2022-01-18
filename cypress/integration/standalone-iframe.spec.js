@@ -128,4 +128,4 @@ describe("HACK: exercise code which queries firestore for another student's work
   it("should not show an error", function () {
     cy.contains("Amy Galloway");
   });
-})
+});

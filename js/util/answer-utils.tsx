@@ -31,6 +31,7 @@ export interface AnswerProps {
   onAnswerSelect?: () => void;
   selected?: boolean;
   trackEvent: TrackEventFunction;
+  answerOrientation: "tall" | "wide";
 }
 
 export const AnswerTypes: AnswerType[] = [

@@ -16,7 +16,7 @@ const AnswerComponent = {
 
 export default class Answer extends PureComponent {
   render() {
-    const { question, answer, alwaysOpen } = this.props;
+    const { question, answer, alwaysOpen, answerOrientation } = this.props;
     if (typeof answer === "undefined") {
       // TODO:  This should be set, but in the case of sequences
       // it seems its not. TBD later.
@@ -26,6 +26,12 @@ export default class Answer extends PureComponent {
     if (!AComponent) {
       return renderInvalidAnswer("Answer type not supported");
     }
-    return <AComponent answer={answer} alwaysOpen={alwaysOpen} question={question} data-cy="answer"/>;
+    return <AComponent
+              answer={answer}
+              alwaysOpen={alwaysOpen}
+              question={question}
+              answerOrientation={answerOrientation}
+              data-cy="answer"
+            />;
   }
 }

@@ -51,7 +51,7 @@ export class QuestionArea extends React.PureComponent<IProps>{
           </div>
         </div>
         <div className={`${css.questionTextArea} ${!useMinHeight ? css.minHeight : ""}`} data-cy="question-content">
-          <Question question={currentQuestion} />
+          <Question question={currentQuestion} useMinHeight={useMinHeight} />
         </div>
       </div>
     );

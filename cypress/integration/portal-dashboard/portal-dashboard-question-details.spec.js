@@ -92,10 +92,10 @@ context("Portal Dashboard Question Details Panel", () => {
     it('verify open activity button is logged', () => {
       cy.window().its("store").then(store => {
         cy.spy(store, "dispatch").as("dispatch");
-      })
+      });
       cy.get("[data-cy=question-overlay] [data-cy=open-activity-button]")
         // This prevents the navigation,
-        .then(($button) => {$button.click(event => event.preventDefault()) })
+        .then(($button) => {$button.click(event => event.preventDefault()); })
         // The click here should trigger a log event
         .click();
       // TODO: trying to monitor if track event was called, but this approach isn't working

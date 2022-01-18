@@ -1,6 +1,7 @@
 import Immutable, { Map, List, Set } from "immutable";
 import queryString from "query-string";
 import { RecordFactory } from "../util/record-factory";
+
 import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
@@ -18,8 +19,13 @@ import {
   SET_ANSWER_SELECTED_FOR_COMPARE,
   SHOW_COMPARE_VIEW,
   HIDE_COMPARE_VIEW,
-  RECEIVE_ANSWERS
+  RECEIVE_ANSWERS,
+  REGISTER_REPORT_ITEM,
+  UNREGISTER_REPORT_ITEM,
+  SET_REPORT_ITEM_ANSWER,
+  GET_REPORT_ITEM_ANSWER
 } from "../actions";
+import { IGetReportItemAnswer } from "@concord-consortium/interactive-api-host";
 
 export type ReportType = "class" | "student";
 
@@ -53,6 +59,7 @@ export interface IReportState {
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
+  reportItemAnswers: Map<string, string>;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -82,7 +89,10 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
   hasTeacherEdition: false,
+  reportItemAnswers: Map(),
 });
+
+const reportItemIFramePhones: Record<string, any> = {};
 
 export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   constructor(config: Partial<IReportState>) {
@@ -114,6 +124,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   compareViewAnswers: Set<string> | null;
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
+  reportItemAnswers: Map<string, string>;
 }
 
 export default function report(state = new ReportState({}), action?: any) {
@@ -215,9 +226,81 @@ export default function report(state = new ReportState({}), action?: any) {
       return state.set("compareViewAnswers", Set(selectedAnswerIds));
     case HIDE_COMPARE_VIEW:
       return state.set("compareViewAnswers", null);
+
+    case REGISTER_REPORT_ITEM:
+      reportItemIFramePhones[action.questionId] = action.iframePhone;
+      return processReportItemRequests(state);
+    case UNREGISTER_REPORT_ITEM:
+      delete reportItemIFramePhones[action.questionId];
+      return state;
+    case GET_REPORT_ITEM_ANSWER:
+      reportItemAnswerRequests.push({
+        questionId: action.questionId,
+        platformUserId: action.platformUserId,
+      });
+      return processReportItemRequests(state);
+    case SET_REPORT_ITEM_ANSWER:
+      const answer = getAnswer(state, action.questionId, action.reportItemAnswer.platformUserId);
+      const currentReportItemAnswer = (answer && state.getIn(["reportItemAnswers", answer.get("id")])) || null;
+      const reportItemAnswerChanged = JSON.stringify(currentReportItemAnswer) !== JSON.stringify(action.reportItemAnswer);
+      if (answer && reportItemAnswerChanged) {
+        return state.setIn(["reportItemAnswers", answer.get("id")], action.reportItemAnswer);
+      } else {
+        return state;
+      }
+
     default:
       return state;
   }
+}
+
+let reportItemAnswerRequests: Array<{questionId: string; platformUserId: string}> = [];
+
+function getAnswer(state: ReportState, questionId: string, platformUserId: string) {
+  return state.answers.find(a => {
+    return a.get("questionId") === questionId && a.get("platformUserId") === platformUserId;
+  });
+}
+
+function processReportItemRequests(state: ReportState) {
+  // use filter to remove requests that have iframe phones registered, regardless of the existence of an answer
+  reportItemAnswerRequests = reportItemAnswerRequests.filter(({questionId, platformUserId}) => {
+    const iframePhone = reportItemIFramePhones[questionId];
+    if (iframePhone) {
+      const answer = getAnswer(state, questionId, platformUserId);
+      if (answer) {
+        let interactiveState: any = null;
+        let authoredState: any = null;
+        let answerValue: any = answer.get("answer");
+        try {
+          answerValue = JSON.parse(answerValue);
+          interactiveState = answerValue.interactiveState;
+          authoredState = answerValue.authoredState;
+        } catch {
+          console.error("Unable to JSON parse answer, sending null for interactiveState and authoredState.  Unparseable answer:", answerValue);
+        }
+        try {
+          interactiveState = JSON.parse(interactiveState);
+        } catch {
+          console.error("Unable to JSON parse interactiveState in answer, sending interactiveState as null.  Unparseable interactiveState:", interactiveState);
+        }
+        try {
+          authoredState = JSON.parse(authoredState);
+        } catch {
+          console.error("Unable to JSON parse authoredState in answer, sending authoredState as null.  Unparseable authoredState:", authoredState);
+        }
+        const request: Omit<IGetReportItemAnswer, "requestId"> = {
+          type: "html",
+          platformUserId,
+          interactiveState,
+          authoredState,
+        };
+        iframePhone.post("getReportItemAnswer", request);
+      }
+    }
+    return !iframePhone;
+  });
+  return state;
 }
 
 // This action has to be explicit, otherwise, a question will disappear

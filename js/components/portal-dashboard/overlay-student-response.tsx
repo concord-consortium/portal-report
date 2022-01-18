@@ -50,7 +50,9 @@ export class StudentResponse extends React.PureComponent<IProps> {
               student={students.get(currentStudentIndex)}
               responsive={true}
               studentName={studentName}
-              trackEvent={trackEvent} />
+              trackEvent={trackEvent}
+              answerOrientation="tall"
+            />
           : <div className={css.selectMessage}>Select a student’s answer in the dashboard to view their response.</div>
         }
       </div>
