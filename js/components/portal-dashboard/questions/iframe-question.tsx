@@ -19,7 +19,7 @@ export const IframeQuestion: React.FC<IProps> = (props) => {
   return (
     <div className={css.questionText}>
       {prompt && renderHTML(promptText)}
-      {question && question.get("reportItemUrl") && <ReportItemIframe question={question} view={useMinHeight ? "singleAnswer" : "multipleAnswer"} />}
+      {question && question.get("reportItemUrl") && <ReportItemIframe key={question.get("id")} question={question} view={useMinHeight ? "singleAnswer" : "multipleAnswer"} />}
     </div>
   );
 };
