@@ -50,10 +50,12 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
   private renderStudentNameWrapper(studentId: string, formattedName: string, selected: boolean, spotlightAllowed: boolean) {
     return (
       <div className={`${css.itemWrapper} ${selected ? css.selected : ""}`}>
-        <div onClick={this.handleSelect(studentId)} className={`${css.spotlightSelectionCheckbox} ${!spotlightAllowed ? css.disabled : ""}`} data-cy="spotlight-selection-checkbox">
-          <div className={`${css.check} ${selected ? css.selected : ""}`} />
+        <div className={css.checkboxListItem}>
+          <div onClick={this.handleSelect(studentId)} className={`${css.spotlightSelectionCheckbox} ${!spotlightAllowed ? css.disabled : ""}`} data-cy="spotlight-selection-checkbox">
+            <div className={`${css.check} ${selected ? css.selected : ""}`} />
+          </div>
+          <div className={css.studentName} data-cy="student-name">{formattedName}</div>
         </div>
-        <div className={css.studentName} data-cy="student-name">{formattedName}</div>
       </div>
     );
   }
