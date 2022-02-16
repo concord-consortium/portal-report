@@ -60,6 +60,13 @@ class IframeStandaloneApp extends PureComponent {
         url = question.get("url");
         state = answer.get("answer");
       }
+
+      const iFrameUrl = new URL(url);
+      const urlParams = new URLSearchParams(iFrameUrl.search);
+      urlParams.set("view", "standalone");
+      iFrameUrl.search = urlParams.toString();
+      url = iFrameUrl;
+
       return (
         <InteractiveIframe src={url} state={state} answer={answer} style={{border: "none"}} width="100%" height="100%" />
       );
