@@ -25,7 +25,7 @@ describe("Opening stand-alone iframe question with saved state", function() {
   it("should show an iframe with the base url", function() {
     getByCypressTag("standaloneIframe").should("be.visible");
     cy.get("iframe").should("exist")
-      .and('have.attr', 'src', 'https://models-resources.concord.org/table-interactive/index.html');
+      .and('have.attr', 'src', 'https://models-resources.concord.org/table-interactive/index.html?view=standalone');
   });
 });
 
@@ -40,7 +40,7 @@ describe("Opening stand-alone open response answer", function() {
         .should("be.visible")
         .should("have.text", "test answer 1");
     });
-  })
+  });
 
   describe("When specifying an anonymous user answer run via runKey", () => {
     beforeEach(() => {
@@ -52,7 +52,7 @@ describe("Opening stand-alone open response answer", function() {
         .should("be.visible")
         .should("have.text", "test answer 1");
     });
-  })
+  });
 });
 
 describe("Opening stand-alone multiple choice answer", function() {
@@ -77,7 +77,6 @@ describe("Opening stand-alone image question answer", function() {
       .should("be.visible")
       .find("img")
       .should("have.attr", "src", "https://ccshutterbug.s3.amazonaws.com/1559832112573-671081.png");
-
   });
 });
 
@@ -89,7 +88,7 @@ describe("Opening stand-alone iframe question with saved learner url", function(
   it("should show an iframe with the saved url", function() {
     getByCypressTag("standaloneIframe").should("be.visible");
     cy.get("iframe").should("exist")
-      .and('have.attr', 'src', 'https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19');
+      .and('have.attr', 'src', 'https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19?view=standalone');
   });
 });
 
