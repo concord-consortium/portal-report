@@ -25,7 +25,7 @@ describe("Opening stand-alone iframe question with saved state", function() {
   it("should show an iframe with the base url", function() {
     getByCypressTag("standaloneIframe").should("be.visible");
     cy.get("iframe").should("exist")
-      .and('have.attr', 'src', 'https://models-resources.concord.org/table-interactive/index.html?view=standalone');
+      .and('have.attr', 'src', 'https://models-resources.concord.org/table-interactive/index.html');
   });
 });
 
@@ -88,7 +88,7 @@ describe("Opening stand-alone iframe question with saved learner url", function(
   it("should show an iframe with the saved url", function() {
     getByCypressTag("standaloneIframe").should("be.visible");
     cy.get("iframe").should("exist")
-      .and('have.attr', 'src', 'https://codap.concord.org/releases/staging/static/dg/en/cert/index.html?view=standalone#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19');
+      .and('have.attr', 'src', 'https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19');
   });
 });
 
