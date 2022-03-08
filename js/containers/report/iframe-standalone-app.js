@@ -58,8 +58,11 @@ class IframeStandaloneApp extends PureComponent {
         // URL field is provided by question. Answer field is a state that will be passed
         // to the iframe using iframe-phone.
         url = question.get("url");
-        state = answer.get("answer");
+        const answerVal = answer.get("answer");
+        state = typeof answerVal === "string" ? JSON.parse(answerVal) : answerVal;
+        state.view = "standalone";
       }
+
       return (
         <InteractiveIframe src={url} state={state} answer={answer} style={{border: "none"}} width="100%" height="100%" />
       );

@@ -40,7 +40,7 @@ describe("Opening stand-alone open response answer", function() {
         .should("be.visible")
         .should("have.text", "test answer 1");
     });
-  })
+  });
 
   describe("When specifying an anonymous user answer run via runKey", () => {
     beforeEach(() => {
@@ -52,7 +52,7 @@ describe("Opening stand-alone open response answer", function() {
         .should("be.visible")
         .should("have.text", "test answer 1");
     });
-  })
+  });
 });
 
 describe("Opening stand-alone multiple choice answer", function() {
@@ -77,7 +77,6 @@ describe("Opening stand-alone image question answer", function() {
       .should("be.visible")
       .find("img")
       .should("have.attr", "src", "https://ccshutterbug.s3.amazonaws.com/1559832112573-671081.png");
-
   });
 });
 

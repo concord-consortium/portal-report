@@ -123,6 +123,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
       url = question.get("url");
       state = answer.get("answer");
     }
+
     return (
       <div className={`iframe-answer-content ${responsive ? "responsive" : ""}`}>
         <InteractiveIframe src={url} state={state} answer={answer} width={question.get("width")} height={question.get("height")} />
@@ -145,6 +146,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
     const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
     const { reportItemHTMLHeight } = this.state;
     const answerText = answer.get("answerText");
+    const questionType = answer.get("questionType");
     const hasReportItemUrl = !!question.get("reportItemUrl");
     const displayTall = answerOrientation === "tall";
     let reportItemHTML: string | undefined;
@@ -187,7 +189,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
     }
 
     return (
-      <div className={`iframe-answer ${responsive ? "responsive" : ""}`} data-cy="iframe-answer">
+      <div className={`iframe-answer ${responsive ? "responsive" : ""} ${questionType === "iframe_interactive" ? "scaled" : ""}`} data-cy="iframe-answer">
         <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
           { answerText
               ? <div>{ renderHTML(answerText) }</div>
