@@ -90,7 +90,8 @@ export default class InteractiveIframe extends PureComponent {
         width={width || "300px"}
         height={requestedHeight || height || "300px"}
         style={style || {border: "none", marginTop: "0.5em"}}
-        allow={"fullscreen"} />
+        allow={"fullscreen"}
+        scrolling={"no"} />
     );
   }
 }
