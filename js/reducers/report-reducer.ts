@@ -127,6 +127,11 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   reportItemAnswers: Map<string, string>;
 }
 
+// this exists to handle older interactives until they are updated to use the new report item api
+interface IInterimGetReportItemAnswer extends IGetReportItemAnswer {
+  type: "html";
+}
+
 export default function report(state = new ReportState({}), action?: any) {
   let data;
   // Report type depends on what kind of user is launching the report and whether `studentId` URL param is provided.
@@ -289,7 +294,8 @@ function processReportItemRequests(state: ReportState) {
         } catch {
           console.error("Unable to JSON parse authoredState in answer, sending authoredState as null.  Unparseable authoredState:", authoredState);
         }
-        const request: Omit<IGetReportItemAnswer, "requestId"> = {
+        const request: Omit<IInterimGetReportItemAnswer, "requestId"> = {
+          version: "2.0.0",
           type: "html",
           platformUserId,
           interactiveState,
