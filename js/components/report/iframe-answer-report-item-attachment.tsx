@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
 import { Map } from "immutable";
-import { handleGetAttachmentUrl, IAttachmentUrlRequest } from "@concord-consortium/interactive-api-host";
+import { handleGetAttachmentUrl, IAttachmentUrlRequest, IReportItemAnswerItemAttachment } from "@concord-consortium/interactive-api-host";
 
 interface IProps {
-  name: string;
+  item: IReportItemAnswerItemAttachment;
   answer: Map<any, any>;
 }
 
@@ -23,18 +23,18 @@ export class IframeAnswerReportItemAttachment extends PureComponent<IProps, ISta
   }
 
   UNSAFE_componentWillMount() {
-    const { name, answer } = this.props;
+    const { item, answer } = this.props;
     const answerMeta = answer.toJS();
     // TODO: the next step, I believe is to the get attachment info from
-    // answerMeta.attachments[name] to get contentType and save it in the state
+    // answerMeta.attachments[item.name] to get contentType and save it in the state
   }
 
   handleLoadAttachment() {
-    const { name, answer } = this.props;
+    const { item, answer } = this.props;
     const answerMeta = answer.toJS();
 
     const request: IAttachmentUrlRequest = {
-      name,
+      name: item.name,
       operation: "read",
       requestId: Math.round(Math.random() * Number.MAX_SAFE_INTEGER)
     };
@@ -51,7 +51,7 @@ export class IframeAnswerReportItemAttachment extends PureComponent<IProps, ISta
   }
 
   render() {
-    const { name } = this.props;
+    const { item } = this.props;
     const { loading, url, error, contentType} = this.state;
 
     if (contentType) {
@@ -67,13 +67,13 @@ export class IframeAnswerReportItemAttachment extends PureComponent<IProps, ISta
           if (url) {
             return <audio controls src={url} />;
           }
-          return <div onClick={this.handleLoadAttachment}>Click to load...</div>;
+          return <div onClick={this.handleLoadAttachment}>{item.label || "Click to load..."}</div>;
 
         default:
           return <div>Attachments of type {contentType} are not yet handled</div>
       }
     } else {
-      return <div>Can't load {name}, content type not known.</div>
+      return <div>Can't load {item.name}, content type not known.</div>
     }
   }
 }

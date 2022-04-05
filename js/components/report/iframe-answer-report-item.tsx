@@ -42,7 +42,7 @@ export class IframeAnswerReportItem extends PureComponent<IProps, IState> {
         return <div>{ renderHTML(answerText) }</div>;
 
       case "attachment":
-        return <IframeAnswerReportItemAttachment name={item.name} answer={answer} />;
+        return <IframeAnswerReportItemAttachment item={item} answer={answer} />;
 
       case "html":
         return <iframe className="iframe-answer-report-item-html" style={{height}} srcDoc={item.html} onLoad={this.handleIFrameLoaded} />;
