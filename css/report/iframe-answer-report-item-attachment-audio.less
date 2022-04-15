@@ -1,0 +1,61 @@
+.audio-response {
+  audio {
+    display: none;
+  }
+  button {
+    align-items: center;
+    color: #2ba5c1;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 0 5px;
+    padding: 0;
+    text-decoration: underline;
+    transition: .2s;
+
+    &:hover {
+      color: #ffc320;
+
+      .audioIcon {
+        fill: #ffc320;
+      }
+    }
+    &.active {
+      animation: isActive .7s infinite;
+      color: #da5936;
+
+      .audioIcon {
+        fill: #da5936;
+      }
+    }
+    &:active {
+      color: #0481a0;
+
+      .audioIcon {
+        fill: #0481a0;
+      }
+    }
+    .audioIcon {
+      fill: #2ba5c1;
+      height: 22px;
+      margin: 0 4px;
+      transition: .2s;
+      width: 22px;
+    }
+  }
+  .noWrittenResponse {
+    align-items: center;
+    display: flex;
+
+    .noResponseIcon {
+      fill: #979797;
+    }
+  }
+}
+
+@keyframes isActive {
+  0% { opacity: 1; }
+  50% { opacity: .6 }
+  100% { opacity: 1; }
+}

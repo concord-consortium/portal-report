@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import OpenResponseAnswer from "./open-response-answer";
 import MultipleChoiceAnswer from "./multiple-choice-answer";
 import ImageAnswer from "./image-answer";
 import IframeAnswer from "./iframe-answer";
@@ -7,7 +6,7 @@ import NoAnswer from "./no-answer";
 import { renderInvalidAnswer } from "../../util/answer-utils";
 
 const AnswerComponent = {
-  "open_response": OpenResponseAnswer,
+  "open_response": IframeAnswer,
   "multiple_choice": MultipleChoiceAnswer,
   "image_question": ImageAnswer,
   "iframe_interactive": IframeAnswer,
@@ -16,7 +15,7 @@ const AnswerComponent = {
 
 export default class Answer extends PureComponent {
   render() {
-    const { question, answer, alwaysOpen, answerOrientation } = this.props;
+    const { question, answer, alwaysOpen, answerOrientation, reportItemAnswer } = this.props;
     if (typeof answer === "undefined") {
       // TODO:  This should be set, but in the case of sequences
       // it seems its not. TBD later.
@@ -31,6 +30,7 @@ export default class Answer extends PureComponent {
               alwaysOpen={alwaysOpen}
               question={question}
               answerOrientation={answerOrientation}
+              reportItemAnswer={reportItemAnswer}
               data-cy="answer"
             />;
   }

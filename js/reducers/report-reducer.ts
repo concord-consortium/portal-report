@@ -276,13 +276,13 @@ function processReportItemRequests(state: ReportState) {
       if (answer) {
         let interactiveState: any = null;
         let authoredState: any = null;
-        let answerValue: any = answer.get("answer");
+        let reportState: any = answer.get("reportState");
         try {
-          answerValue = JSON.parse(answerValue);
-          interactiveState = answerValue.interactiveState;
-          authoredState = answerValue.authoredState;
+          reportState = JSON.parse(reportState);
+          interactiveState = reportState.interactiveState;
+          authoredState = reportState.authoredState;
         } catch {
-          console.error("Unable to JSON parse answer, sending null for interactiveState and authoredState.  Unparseable answer:", answerValue);
+          console.error("Unable to JSON parse reportState, sending null for interactiveState and authoredState.  Unparseable reportState:", reportState);
         }
         try {
           interactiveState = JSON.parse(interactiveState);

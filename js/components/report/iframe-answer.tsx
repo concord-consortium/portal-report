@@ -3,13 +3,12 @@ import queryString from "query-string";
 import { connect } from "react-redux";
 import { Map } from "immutable";
 import { IReportItemAnswer, IReportItemAnswerItem } from "@concord-consortium/interactive-api-host";
-
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
 import { getReportItemAnswer } from "../../actions";
+import { IframeAnswerReportItem } from "./iframe-answer-report-item";
 
 import "../../../css/report/iframe-answer.less";
-import { IframeAnswerReportItem } from "./iframe-answer-report-item";
 
 // this exists to handle older interactives until they are updated to use the new report item api
 interface IInterimReportItemAnswer extends IReportItemAnswer {

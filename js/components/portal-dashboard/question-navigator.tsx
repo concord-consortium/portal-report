@@ -6,6 +6,7 @@ import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
 import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/question-navigator.less";
+import ReportItemIframe from "./report-item-iframe";
 
 
 interface IProps {
@@ -56,6 +57,7 @@ export class QuestionNavigator extends React.PureComponent<IProps, IState> {
           hasTeacherEdition={hasTeacherEdition}
           trackEvent={trackEvent}
         />
+        {currentQuestion?.get("reportItemUrl") && <ReportItemIframe question={currentQuestion} view="singleAnswer" />}
       </div>
     );
   }

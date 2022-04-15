@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { AnswerProps } from "../../util/answer-utils";
 import { getQuestionIcon } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
-import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
 import { ImageAnswer } from "../../components/portal-dashboard/answers/image-answer";
 import IframeAnswer from "../../components/report/iframe-answer";
 
@@ -44,7 +43,7 @@ class Answer extends React.PureComponent<AnswerProps> {
     const { answer, question, responsive, studentName, trackEvent, answerOrientation } = this.props;
     const AnswerComponent: any = {
       "multiple_choice_answer": MultipleChoiceAnswer,
-      "open_response_answer": OpenResponseAnswer,
+      "open_response_answer": IframeAnswer,
       "image_question_answer": ImageAnswer,
       "external_link": IframeAnswer,
       "interactive_state": IframeAnswer,

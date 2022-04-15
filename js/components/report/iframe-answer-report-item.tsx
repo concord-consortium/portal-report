@@ -3,6 +3,9 @@ import { Map } from "immutable";
 import { IReportItemAnswerItem } from "@concord-consortium/interactive-api-host";
 import { renderHTML } from "../../util/render-html";
 import { IframeAnswerReportItemAttachment } from "./iframe-answer-report-item-attachment";
+import QOpenResponseIcon from "../../../img/svg-icons/q-open-response-type-icon.svg";
+
+import "../../../css/report/iframe-answer-report-item.less";
 
 interface IProps {
   answer: Map<any, any>;
@@ -33,13 +36,23 @@ export class IframeAnswerReportItem extends PureComponent<IProps, IState> {
     this.setState({height});
   }
 
+  renderAnswerText() {
+    const { answerText } = this.props;
+    const writtenResponse = answerText
+                              ? renderHTML(answerText)
+                              : <div className="noWrittenResponse">
+                                  <QOpenResponseIcon className="noResponseIcon" />No written response
+                                </div>;
+    return <div className="testing">{ writtenResponse }</div>;
+  }
+
   render() {
-    const { answer, item, answerText, renderLink } = this.props;
+    const { answer, item, renderLink } = this.props;
     const { height } = this.state;
 
     switch (item.type) {
       case "answerText":
-        return <div>{ renderHTML(answerText) }</div>;
+        return this.renderAnswerText();
 
       case "attachment":
         return <IframeAnswerReportItemAttachment item={item} answer={answer} />;
