@@ -3,7 +3,7 @@ import { Map } from "immutable";
 import { IReportItemAnswerItem } from "@concord-consortium/interactive-api-host";
 import { renderHTML } from "../../util/render-html";
 import { IframeAnswerReportItemAttachment } from "./iframe-answer-report-item-attachment";
-import QOpenResponseIcon from "../../../img/svg-icons/q-open-response-type-icon.svg";
+import { QOpenResponseIcon } from "../../../img/svg-icons/q-open-response-type-icon";
 
 import "../../../css/report/iframe-answer-report-item.less";
 

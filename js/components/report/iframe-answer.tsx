@@ -30,7 +30,7 @@ interface IState {
   iframeVisible: boolean;
 }
 
-class IframeAnswer extends PureComponent<IProps, IState> {
+export class IframeAnswer extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -190,7 +190,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
     let maybeAnswerTextOrLinks: JSX.Element | false = false;
     if (reportItemAnswerItems.length === 0) {
       maybeAnswerTextOrLinks = answerText
-        ? <div>{ renderHTML(answerText) }</div>
+        ? <div data-cy="answerText">{ renderHTML(answerText) }</div>
         : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
     }
 

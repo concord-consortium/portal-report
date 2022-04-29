@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import AudioIcon from "../../../img/svg-icons/audio-icon.svg";
+import { AudioIcon } from "../../../img/svg-icons/audio-icon";
 
 import "../../../css/report/iframe-answer-report-item-attachment-audio.less";
 
@@ -19,20 +19,21 @@ export class IframeAnswerReportItemAttachmentAudio extends PureComponent<IProps,
     this.state = {
       audioPlaying: false
     };
-    this.handlePlayAudio = this.handlePlayAudio.bind(this);
+    this.handleToggleAudio = this.handleToggleAudio.bind(this);
     this.handleStartAudio = this.handleStartAudio.bind(this);
     this.handleEndAudio = this.handleEndAudio.bind(this);
   }
 
-  handlePlayAudio(event: React.MouseEvent) {
+  handleToggleAudio(event: React.MouseEvent) {
+    const { audioPlaying } = this.state;
     const button = event.target as HTMLButtonElement;
     const audioPlayer = button.previousElementSibling as HTMLAudioElement;
-    if (audioPlayer.paused || audioPlayer.ended) {
+    if (!audioPlaying) {
       audioPlayer.play();
       this.setState({audioPlaying: true});
     } else {
       audioPlayer.pause();
-      this.setState({audioPlaying: true});
+      this.setState({audioPlaying: false});
     }
   }
 
@@ -48,7 +49,7 @@ export class IframeAnswerReportItemAttachmentAudio extends PureComponent<IProps,
     const { handleLoadAttachment } = this.props;
     return (
       <div className="audio-response">
-        <button onClick={handleLoadAttachment}>
+        <button data-cy="audio-response-button" onClick={handleLoadAttachment}>
           <AudioIcon className="audioIcon" />
           Play student audio response
         </button>
@@ -61,8 +62,8 @@ export class IframeAnswerReportItemAttachmentAudio extends PureComponent<IProps,
     const { audioPlaying } = this.state;
     return (
       <div className="audio-response">
-        <audio controls src={url} preload="auto" autoPlay={true} onPlay={this.handleStartAudio} onEnded={this.handleEndAudio} />
-        <button className={audioPlaying ? "active" : ""} onClick={this.handlePlayAudio}>
+        <audio data-testid="audio" controls src={url} preload="auto" autoPlay={true} onPlay={this.handleStartAudio} onEnded={this.handleEndAudio} />
+        <button className={audioPlaying ? "active" : ""} onClick={this.handleToggleAudio}>
           <AudioIcon className="audioIcon" />
           Play student audio response
         </button>
