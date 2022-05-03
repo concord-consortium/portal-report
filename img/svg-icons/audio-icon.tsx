@@ -1,7 +1,7 @@
 import * as React from "react";
 
-const kDefaultHeight = "32px";
-const kDefaultWidth = "32px";
+const kDefaultHeight = "24";
+const kDefaultWidth = "24";
 
 export interface IAudioIconProps {
   className?: string;
@@ -18,7 +18,7 @@ export const AudioIcon = (props: IAudioIconProps) => {
     <svg
       className={className}
       height={height}
-      viewBox="0 0 32 32"
+      viewBox={`0 0 24 24`}
       width={width}
       xmlns="http://www.w3.org/2000/svg"
     >
