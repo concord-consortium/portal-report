@@ -191,7 +191,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     if (reportItemAnswerItems.length === 0) {
       maybeAnswerTextOrLinks = answerText
         ? <div data-cy="answerText">{ renderHTML(answerText) }</div>
-        : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
+        : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded, fill in the blank, and open response questions have answerTexts */
     }
 
     return (
