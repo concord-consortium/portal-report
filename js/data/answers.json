@@ -208,7 +208,8 @@
     "type": "open_response_answer",
     "platform_user_id": "1",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
@@ -221,7 +222,8 @@
     "type": "open_response_answer",
     "platform_user_id": "6",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },  {
     "answer": {
       "choice_ids": [

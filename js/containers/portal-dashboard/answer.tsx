@@ -22,7 +22,7 @@ class Answer extends React.PureComponent<AnswerProps> {
       "multiple_choice_answer": MultipleChoiceAnswer,
       // Answers to LARA-native open response questions must be handled differently than
       // answers to managed interactive open response questions.
-      "open_response_answer": answer.has("answerText") ? IframeAnswer : OpenResponseAnswer,
+      "open_response_answer": answer.has("reportState") ? IframeAnswer : OpenResponseAnswer,
       "image_question_answer": ImageAnswer,
       "external_link": IframeAnswer,
       "interactive_state": IframeAnswer,
