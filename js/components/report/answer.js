@@ -18,7 +18,7 @@ export default class Answer extends PureComponent {
     const AnswerComponent = {
       // Answers to LARA-native open response questions must be handled differently than
       // answers to managed interactive open response questions.
-      "open_response": answer.has("answerText") ? IframeAnswer : OpenResponseAnswer,
+      "open_response": answer.has("reportState") ? IframeAnswer : OpenResponseAnswer,
       "multiple_choice": MultipleChoiceAnswer,
       "image_question": ImageAnswer,
       "iframe_interactive": IframeAnswer,
