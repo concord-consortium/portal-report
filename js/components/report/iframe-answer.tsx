@@ -141,7 +141,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
     const answerText = answer.get("answerText");
     const questionType = answer.get("questionType");
-    const hasReportItemUrl = !!question.get("reportItemUrl");
+    const hasReportItemUrl = !!question?.get("reportItemUrl");
     const displayTall = answerOrientation === "tall";
     let reportItemAnswerItems: IReportItemAnswerItem[] = [];
 
