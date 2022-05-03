@@ -15,7 +15,7 @@ class Answer extends React.PureComponent<AnswerProps> {
     super(props);
   }
 
-  setAnswerComponent() {
+  getAnswerComponent() {
     const { answer, question } = this.props;
     const atype = answer && answer.get("type");
     const AnswerComponent: any = {
@@ -44,7 +44,7 @@ class Answer extends React.PureComponent<AnswerProps> {
 
   renderAnswer = () => {
     const { answer, question, responsive, studentName, trackEvent, answerOrientation } = this.props;
-    const AComponent = this.setAnswerComponent();
+    const AComponent = this.getAnswerComponent();
     if (!AComponent) {
       return (
         <div>Answer type not supported.</div>

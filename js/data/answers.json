@@ -166,7 +166,6 @@
   },
   {
     "answer": "test answer 1",
-    "answer_text": "test answer 1",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_30",
     "question_id": "open_response_60",
@@ -178,7 +177,6 @@
   },
   {
     "answer": "test answer 2",
-    "answer_text": "test answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_31",
     "question_id": "open_response_60",
@@ -190,7 +188,6 @@
   },
   {
     "answer": "test answer 3",
-    "answer_text": "test answer 3",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_32",
     "question_id": "open_response_60",
