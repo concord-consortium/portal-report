@@ -2,13 +2,19 @@ import React, { PureComponent } from "react";
 import queryString from "query-string";
 import { connect } from "react-redux";
 import { Map } from "immutable";
-import { IReportItemAnswer } from "@concord-consortium/interactive-api-host";
-
+import { IReportItemAnswer, IReportItemAnswerItem } from "@concord-consortium/interactive-api-host";
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
 import { getReportItemAnswer } from "../../actions";
+import { IframeAnswerReportItem } from "./iframe-answer-report-item";
 
 import "../../../css/report/iframe-answer.less";
+
+// this exists to handle older interactives until they are updated to use the new report item api
+interface IInterimReportItemAnswer extends IReportItemAnswer {
+  type: "html";
+  html: string;
+}
 
 interface IProps {
   answer: Map<any, any>;
@@ -16,37 +22,25 @@ interface IProps {
   responsive: boolean;
   alwaysOpen: boolean;
   getReportItemAnswer: (questionId: string, studentId: string) => void;
-  reportItemAnswer?: IReportItemAnswer;
+  reportItemAnswer?: IInterimReportItemAnswer;
   answerOrientation: "wide" | "tall";
 }
 
 interface IState {
   iframeVisible: boolean;
-  reportItemHTMLHeight: number;
 }
 
-class IframeAnswer extends PureComponent<IProps, IState> {
+export class IframeAnswer extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      iframeVisible: false,
-      reportItemHTMLHeight: 0
+      iframeVisible: false
     };
     this.toggleIframe = this.toggleIframe.bind(this);
-    this.handleReportItemHTMLIFrameLoaded = this.handleReportItemHTMLIFrameLoaded.bind(this);
   }
 
   toggleIframe() {
     this.setState({iframeVisible: !this.state.iframeVisible});
-  }
-
-  handleReportItemHTMLIFrameLoaded(e: any) {
-    const contentDocument = e.target.contentDocument;
-    const body = contentDocument.body;
-    const html = contentDocument.documentElement;
-    const reportItemHTMLHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-
-    this.setState({reportItemHTMLHeight});
   }
 
   getLinkURL(answer: string) {
@@ -90,7 +84,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
     return `${baseUrl}?${newSearch}`;
   }
 
-  renderLink() {
+  renderLink(options?: {hideViewInNewTab?: boolean; hideViewInline?: boolean}) {
     const { answer, question } = this.props;
     const { iframeVisible } = this.state;
     const linkUrl = this.getLinkURL(answer.get("answer"));
@@ -108,6 +102,7 @@ class IframeAnswer extends PureComponent<IProps, IState> {
       return <a href={linkUrl} target="_blank" data-cy="externalIframe">View work in new tab {externalLinkIcon}</a>;
     }
   }
+
   renderIframe() {
     const { answer, question, responsive } = this.props;
     let url;
@@ -144,12 +139,11 @@ class IframeAnswer extends PureComponent<IProps, IState> {
 
   render() {
     const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
-    const { reportItemHTMLHeight } = this.state;
     const answerText = answer.get("answerText");
     const questionType = answer.get("questionType");
-    const hasReportItemUrl = !!question.get("reportItemUrl");
+    const hasReportItemUrl = !!question?.get("reportItemUrl");
     const displayTall = answerOrientation === "tall";
-    let reportItemHTML: string | undefined;
+    let reportItemAnswerItems: IReportItemAnswerItem[] = [];
 
     // request the latest student report html
     if (hasReportItemUrl) {
@@ -159,44 +153,63 @@ class IframeAnswer extends PureComponent<IProps, IState> {
     }
 
     if (reportItemAnswer) {
-      switch (reportItemAnswer.type) {
-        case "html":
-          reportItemHTML = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <style>
-                body {
-                  font-family: lato, arial, helvetica, sans-serif;
-                }
-                .tall {
-                  display: ${displayTall ? "flex" : "none"};
-                  flex-direction: column;
-                }
-                .wide {
-                  display: ${displayTall ? "none" : "flex"};
-                  flex-direction: row;
-                }
-              </style>
-            </head>
-            <body>
-              ${reportItemAnswer.html}
-            </body>
-            </html>
-          `;
-          break;
+      // handle interactives using the older api format and create a single html item
+      if (reportItemAnswer.type === "html") {
+        reportItemAnswerItems.push({
+          type: "html",
+          html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body {
+                font-family: lato, arial, helvetica, sans-serif;
+              }
+              .tall {
+                display: ${displayTall ? "flex" : "none"};
+                flex-direction: column;
+              }
+              .wide {
+                display: ${displayTall ? "none" : "flex"};
+                flex-direction: row;
+              }
+            </style>
+          </head>
+          <body>
+            ${reportItemAnswer.html}
+          </body>
+          </html>
+        `});
+      } else {
+        // use the new api format which returns a list of items
+        reportItemAnswerItems = reportItemAnswer.items || [];
       }
+    }
+
+    // if there are no report answer items, show the answer text or the links to view the interactive
+    let maybeAnswerTextOrLinks: JSX.Element | false = false;
+    if (reportItemAnswerItems.length === 0) {
+      maybeAnswerTextOrLinks = answerText
+        ? <div data-cy="answerText">{ renderHTML(answerText) }</div>
+        : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded, fill in the blank, and open response questions have answerTexts */
     }
 
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""} ${questionType === "iframe_interactive" ? "scaled" : ""}`} data-cy="iframe-answer">
-        <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
-          { answerText
-              ? <div>{ renderHTML(answerText) }</div>
-              : !alwaysOpen && this.renderLink() /* This assumes only scaffolded questions and fill in the blank questions have answerTexts */
-          }
-        </div>
-        {reportItemHTML && <iframe className="iframe-answer-report-item-html" style={{height: reportItemHTMLHeight}} srcDoc={reportItemHTML} onLoad={this.handleReportItemHTMLIFrameLoaded} />}
+        {maybeAnswerTextOrLinks && (
+          <div className={`iframe-answer-header ${responsive ? "responsive" : ""}`}>
+            {maybeAnswerTextOrLinks}
+          </div>
+        )}
+        {reportItemAnswerItems.map((item, index) => (
+          <IframeAnswerReportItem
+            key={index}
+            item={item}
+            answerText={answerText}
+            renderLink={this.renderLink}
+            answer={answer}
+          />
+        ))}
         {this.shouldRenderIframe() && this.renderIframe()}
       </div>
     );

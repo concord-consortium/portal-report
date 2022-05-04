@@ -30,7 +30,7 @@ describe("Opening stand-alone iframe question with saved state", function() {
 });
 
 describe("Opening stand-alone open response answer", function() {
-  describe("When specifying an student answer run via studentId", () => {
+  describe("When specifying a student answer run via studentId", () => {
     beforeEach(() => {
       cy.visit("/?iframeQuestionId=open_response_60&studentId=1");
     });

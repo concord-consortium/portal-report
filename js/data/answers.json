@@ -199,6 +199,7 @@
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_33",
     "question_id": "open_response_61",
@@ -207,10 +208,12 @@
     "type": "open_response_answer",
     "platform_user_id": "1",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_34",
     "question_id": "open_response_61",
@@ -219,7 +222,8 @@
     "type": "open_response_answer",
     "platform_user_id": "6",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },  {
     "answer": {
       "choice_ids": [

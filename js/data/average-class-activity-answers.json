@@ -1297,6 +1297,7 @@
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_33",
     "question_id": "open_response_61",
@@ -1305,10 +1306,12 @@
     "type": "open_response_answer",
     "platform_user_id": "51",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_34",
     "question_id": "open_response_61",
@@ -1317,10 +1320,12 @@
     "type": "open_response_answer",
     "platform_user_id": "57",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_51",
     "question_id": "open_response_61",
@@ -1329,10 +1334,12 @@
     "type": "open_response_answer",
     "platform_user_id": "54",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_52",
     "question_id": "open_response_61",
@@ -1341,10 +1348,12 @@
     "type": "open_response_answer",
     "platform_user_id": "60",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_53",
     "question_id": "open_response_61",
@@ -1353,10 +1362,12 @@
     "type": "open_response_answer",
     "platform_user_id": "63",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_54",
     "question_id": "open_response_61",
@@ -1365,10 +1376,12 @@
     "type": "open_response_answer",
     "platform_user_id": "66",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_55",
     "question_id": "open_response_61",
@@ -1377,10 +1390,12 @@
     "type": "open_response_answer",
     "platform_user_id": "69",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_56",
     "question_id": "open_response_61",
@@ -1389,10 +1404,12 @@
     "type": "open_response_answer",
     "platform_user_id": "72",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_57",
     "question_id": "open_response_61",
@@ -1401,10 +1418,12 @@
     "type": "open_response_answer",
     "platform_user_id": "75",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_58",
     "question_id": "open_response_61",
@@ -1413,10 +1432,12 @@
     "type": "open_response_answer",
     "platform_user_id": "78",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_59",
     "question_id": "open_response_61",
@@ -1425,10 +1446,12 @@
     "type": "open_response_answer",
     "platform_user_id": "81",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_60",
     "question_id": "open_response_61",
@@ -1437,10 +1460,12 @@
     "type": "open_response_answer",
     "platform_user_id": "84",
     "version": "1",
-    "submitted": true
+    "submitted": true,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_61",
     "question_id": "open_response_61",
@@ -1449,10 +1474,12 @@
     "type": "open_response_answer",
     "platform_user_id": "86",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_62",
     "question_id": "open_response_61",
@@ -1461,10 +1488,12 @@
     "type": "open_response_answer",
     "platform_user_id": "85",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_63",
     "question_id": "open_response_61",
@@ -1473,10 +1502,12 @@
     "type": "open_response_answer",
     "platform_user_id": "80",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_64",
     "question_id": "open_response_61",
@@ -1485,10 +1516,12 @@
     "type": "open_response_answer",
     "platform_user_id": "75",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_65",
     "question_id": "open_response_61",
@@ -1497,10 +1530,12 @@
     "type": "open_response_answer",
     "platform_user_id": "70",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_66",
     "question_id": "open_response_61",
@@ -1509,10 +1544,12 @@
     "type": "open_response_answer",
     "platform_user_id": "65",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_67",
     "question_id": "open_response_61",
@@ -1521,10 +1558,12 @@
     "type": "open_response_answer",
     "platform_user_id": "60",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": "test required answer 2",
+    "answer_text": "test required answer 2",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_68",
     "question_id": "open_response_61",
@@ -1533,7 +1572,8 @@
     "type": "open_response_answer",
     "platform_user_id": "55",
     "version": "1",
-    "submitted": false
+    "submitted": false,
+    "reportState": {}
   },
   {
     "answer": {

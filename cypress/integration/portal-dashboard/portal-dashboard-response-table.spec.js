@@ -66,7 +66,7 @@ context("Portal Dashboard Response Table",()=>{
   });
   it('verify click on response icon opens question detail for student', ()=>{
     cy.get('[data-cy=open-response-completed]').eq(2).click();
-    cy.get('[data-cy=openResponseText]').should('be.visible').and('contain', "test required answer 2");
+    cy.get('[data-cy=answerText]').should('be.visible').and('contain', "test required answer 2");
     cy.get('[data-cy=student-name').should('contain', 'Jenkins, John');
     cy.get('[data-cy=multiple-choice-nonscored-completed]').eq(2).click();
     cy.get('[data-cy=multiple-choice-answers]').should('be.visible');

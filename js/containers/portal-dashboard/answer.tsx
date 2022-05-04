@@ -15,23 +15,25 @@ class Answer extends React.PureComponent<AnswerProps> {
     super(props);
   }
 
-  render() {
-    const { answer, question, student } = this.props;
+  getAnswerComponent() {
+    const { answer, question } = this.props;
     const atype = answer && answer.get("type");
-    const QuestionIcon = getQuestionIcon(question);
-    const key = `student-${student ? student.get("id") : "NA"}-question-${question ? question.get("id") : "NA"}`;
-    return (
-      <div className={css.answer} data-cy="student-answer" key={key}>
-        {answer && (!question.get("required") || answer.get("submitted"))
-          ? this.renderAnswer(atype)
-          : this.renderNoAnswer(QuestionIcon)
-        }
-      </div>
-    );
+    const AnswerComponent: any = {
+      "multiple_choice_answer": MultipleChoiceAnswer,
+      // Answers to LARA-native open response questions must be handled differently than
+      // answers to managed interactive open response questions.
+      "open_response_answer": answer.has("reportState") ? IframeAnswer : OpenResponseAnswer,
+      "image_question_answer": ImageAnswer,
+      "external_link": IframeAnswer,
+      "interactive_state": IframeAnswer,
+    };
+    const AComponent = (answer && (!question.get("required") || answer.get("submitted"))) ? AnswerComponent[atype] : undefined;
+    return AComponent;
   }
 
-  renderNoAnswer = (icon: any) => {
-    const QuestionIcon = icon;
+  renderNoAnswer = () => {
+    const { question } = this.props;
+    const QuestionIcon = getQuestionIcon(question);
     return (
       <div className={css.noAnswer}>
         <QuestionIcon />
@@ -40,16 +42,9 @@ class Answer extends React.PureComponent<AnswerProps> {
     );
   }
 
-  renderAnswer = (type: string) => {
+  renderAnswer = () => {
     const { answer, question, responsive, studentName, trackEvent, answerOrientation } = this.props;
-    const AnswerComponent: any = {
-      "multiple_choice_answer": MultipleChoiceAnswer,
-      "open_response_answer": OpenResponseAnswer,
-      "image_question_answer": ImageAnswer,
-      "external_link": IframeAnswer,
-      "interactive_state": IframeAnswer,
-    };
-    const AComponent = (answer && (!question.get("required") || answer.get("submitted"))) ? AnswerComponent[type] : undefined;
+    const AComponent = this.getAnswerComponent();
     if (!AComponent) {
       return (
         <div>Answer type not supported.</div>
@@ -68,6 +63,19 @@ class Answer extends React.PureComponent<AnswerProps> {
         />
       );
     }
+  }
+
+  render() {
+    const { answer, question, student } = this.props;
+    const key = `student-${student ? student.get("id") : "NA"}-question-${question ? question.get("id") : "NA"}`;
+    return (
+      <div className={css.answer} data-cy="student-answer" key={key}>
+        {answer && (!question.get("required") || answer.get("submitted"))
+          ? this.renderAnswer()
+          : this.renderNoAnswer()
+        }
+      </div>
+    );
   }
 }
 
