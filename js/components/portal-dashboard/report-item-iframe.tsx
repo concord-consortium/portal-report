@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
 import { handleGetAttachmentUrl, IAttachmentUrlRequest, IReportItemAnswer, IReportItemInitInteractive } from "@concord-consortium/interactive-api-host";
 import { connect } from "react-redux";
-
 import { getSortedStudents } from "../../selectors/report";
 import { RootState } from "../../reducers";
 import { getAnswersByQuestion } from "../../selectors/report-tree";

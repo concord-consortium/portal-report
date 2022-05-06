@@ -4,9 +4,9 @@ import { QuestionArea } from "./question-area";
 import ArrowIcon from "../../../img/svg-icons/arrow-icon.svg";
 import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
 import { TrackEventFunction } from "../../actions";
+import ReportItemIframe from "./report-item-iframe";
 
 import css from "../../../css/portal-dashboard/question-navigator.less";
-import ReportItemIframe from "./report-item-iframe";
 
 
 interface IProps {

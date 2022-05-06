@@ -51,7 +51,7 @@ export class IframeAnswerReportItemAttachmentAudio extends PureComponent<IProps,
       <div className="audio-response">
         <button data-cy="audio-response-button" onClick={handleLoadAttachment}>
           <AudioIcon className="audioIcon" />
-          Play student audio response
+          Play audio response
         </button>
       </div>
     );
@@ -65,7 +65,7 @@ export class IframeAnswerReportItemAttachmentAudio extends PureComponent<IProps,
         <audio data-testid="audio" controls src={url} preload="auto" autoPlay={true} onPlay={this.handleStartAudio} onEnded={this.handleEndAudio} />
         <button className={audioPlaying ? "active" : ""} onClick={this.handleToggleAudio}>
           <AudioIcon className="audioIcon" />
-          Play student audio response
+          Play audio response
         </button>
       </div>
     );
