@@ -1,7 +1,7 @@
 import React from "react";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { AnswerProps } from "../../util/answer-utils";
+import { AnswerProps, hasValidResponse } from "../../util/answer-utils";
 import { getQuestionIcon } from "../../util/question-utils";
 import MultipleChoiceAnswer from "../../components/portal-dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
@@ -70,10 +70,7 @@ class Answer extends React.PureComponent<AnswerProps> {
     const key = `student-${student ? student.get("id") : "NA"}-question-${question ? question.get("id") : "NA"}`;
     return (
       <div className={css.answer} data-cy="student-answer" key={key}>
-        {answer && (!question.get("required") || answer.get("submitted"))
-          ? this.renderAnswer()
-          : this.renderNoAnswer()
-        }
+        { answer && hasValidResponse(answer, question) ? this.renderAnswer() : this.renderNoAnswer() }
       </div>
     );
   }

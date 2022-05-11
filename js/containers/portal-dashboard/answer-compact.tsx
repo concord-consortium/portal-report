@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { getAnswerType, getAnswerIconId, AnswerProps } from "../../util/answer-utils";
+import { getAnswerType, getAnswerIconId, AnswerProps, hasValidResponse } from "../../util/answer-utils";
 import { feedbackValidForAnswer } from "../../util/misc";
 import { getHideFeedbackBadges } from "../../selectors/dashboard-selectors";
 import QuestionFeedbackBadge from "../../../img/svg-icons/feedback-question-badge-icon.svg";
@@ -25,7 +25,7 @@ class AnswerCompact extends React.PureComponent<IProps> {
 
     return (
       <div className={css.answerCompact} data-cy="student-answer">
-        { answer && (!question.get("required") || answer.get("submitted"))
+        { answer && hasValidResponse(answer, question)
           ? this.renderAnswer(answerType?.icon, iconId)
           : this.renderNoAnswer()
         }

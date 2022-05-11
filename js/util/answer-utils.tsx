@@ -142,3 +142,16 @@ export const renderInvalidAnswer = (answer: any, errorMessage = "unknown") => {
     </div>
   );
 };
+
+export const hasValidResponse = (answer: any, question: any) => {
+  let answerReportState;
+  try {
+    answerReportState = answer.get("reportState") ? JSON.parse(answer.get("reportState")) : undefined;
+  } catch (e) {
+    answerReportState = undefined;
+  }
+  const interactiveState = answerReportState ? JSON.parse(answerReportState.interactiveState) : {};
+
+  return (!question.get("required") || answer.get("submitted")) &&
+         (answer.get("type") !== "interactive_state" || Object.keys(interactiveState).length !== 0);
+};
