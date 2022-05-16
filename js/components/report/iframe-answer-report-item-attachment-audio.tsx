@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { AudioIcon } from "../../../img/svg-icons/audio-icon";
+import { LoadingIcon } from "../../../img/svg-icons/loading-icon";
 
 import "../../../css/report/iframe-answer-report-item-attachment-audio.less";
 
@@ -46,12 +47,13 @@ export class IframeAnswerReportItemAttachmentAudio extends PureComponent<IProps,
   }
 
   renderInitialState() {
-    const { handleLoadAttachment } = this.props;
+    const { handleLoadAttachment, loading } = this.props;
     return (
       <div className="audio-response">
         <button data-cy="audio-response-button" onClick={handleLoadAttachment}>
           <AudioIcon className="audioIcon" />
           Play audio response
+          {loading && <LoadingIcon className="audio-loading" />}
         </button>
       </div>
     );
@@ -63,7 +65,7 @@ export class IframeAnswerReportItemAttachmentAudio extends PureComponent<IProps,
     return (
       <div className="audio-response">
         <audio data-testid="audio" controls src={url} preload="auto" autoPlay={true} onPlay={this.handleStartAudio} onEnded={this.handleEndAudio} />
-        <button className={audioPlaying ? "active" : ""} onClick={this.handleToggleAudio}>
+        <button className={audioPlaying ? "active" : ""} data-cy="audio-response-button" onClick={this.handleToggleAudio}>
           <AudioIcon className="audioIcon" />
           Play audio response
         </button>
