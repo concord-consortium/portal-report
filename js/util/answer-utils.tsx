@@ -142,3 +142,25 @@ export const renderInvalidAnswer = (answer: any, errorMessage = "unknown") => {
     </div>
   );
 };
+
+export const hasResponse = (answer: any, question: any) => {
+  if (question.get("required") && !answer.get("submitted")) {
+    return false;
+  }
+
+  const hasAttachment = answer.get("attachments") && answer.get("attachments").size > 0;
+  let answerReportState;
+  try {
+    answerReportState = answer.get("reportState") ? JSON.parse(answer.get("reportState")) : undefined;
+  } catch (e) {
+    answerReportState = undefined;
+  }
+  // It is better if interactives don't save an empty interactive state when there is no response,
+  // but there are cases where they may. So we need to check for that.
+  const interactiveState = answerReportState ? JSON.parse(answerReportState.interactiveState) : {};
+  const isNotInteractiveStateAnswer = answer.get("type") !== "interactive_state";
+  const hasInteractiveStateKeys = Object.keys(interactiveState).length !== 0;
+  const isNotEmptyResponse = hasAttachment || isNotInteractiveStateAnswer || hasInteractiveStateKeys;
+
+  return isNotEmptyResponse;
+};
