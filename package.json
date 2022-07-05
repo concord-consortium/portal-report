@@ -1,6 +1,7 @@
 {
   "name": "@concord-consortium/portal-report",
   "description": "",
+  "version": "4.11.0",
   "main": "dist/library/portal-report.js",
   "files": [
     "dist/library"
@@ -158,6 +159,5 @@
     "semver": "^7.3.2",
     "striptags": "^3.2.0",
     "uuid": "^8.3.2"
-  },
-  "version": "4.11.0"
+  }
 }
