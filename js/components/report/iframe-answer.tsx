@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import queryString from "query-string";
 import { connect } from "react-redux";
 import { Map } from "immutable";
-import { IReportItemAnswer, IReportItemAnswerItem } from "@concord-consortium/interactive-api-host";
+import { IReportItemAnswer, IReportItemAnswerItem, ReportItemsType } from "@concord-consortium/interactive-api-host";
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
 import { getReportItemAnswer } from "../../actions";
@@ -21,7 +21,7 @@ interface IProps {
   question: Map<any, any>;
   responsive: boolean;
   alwaysOpen: boolean;
-  getReportItemAnswer: (questionId: string, studentId: string) => void;
+  getReportItemAnswer: (questionId: string, studentId: string, itemsType: ReportItemsType) => void;
   reportItemAnswer?: IInterimReportItemAnswer;
   answerOrientation: "wide" | "tall";
 }
@@ -148,7 +148,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     // request the latest student report html
     if (hasReportItemUrl) {
       setTimeout(() => {
-        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]));
+        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]), "fullAnswer");
       }, 0);
     }
 
@@ -219,14 +219,14 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
 function mapStateToProps() {
   return (state: any, ownProps: any) => {
     return {
-      reportItemAnswer: state.getIn(["report", "reportItemAnswers", ownProps.answer.get("id")])
+      reportItemAnswer: state.getIn(["report", "reportItemAnswersFull", ownProps.answer.get("id")])
     };
   };
 }
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
-    getReportItemAnswer: (questionId: string, studentId: string) => dispatch(getReportItemAnswer(questionId, studentId)),
+    getReportItemAnswer: (questionId: string, studentId: string, itemsType: ReportItemsType) => dispatch(getReportItemAnswer(questionId, studentId, itemsType)),
   };
 };
 

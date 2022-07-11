@@ -64,5 +64,6 @@ export class IframeAnswerReportItem extends PureComponent<IProps, IState> {
         const {hideViewInNewTab, hideViewInline} = item;
         return renderLink({hideViewInNewTab, hideViewInline});
     }
+    return null; // unsupported type, don't render anything
   }
 }

@@ -4,6 +4,7 @@
   margin: 0 10px 0 10px;
   width: 50px;
   height: 100%;
+  position: relative;
 
   .answerContent {
     display: flex;
@@ -29,6 +30,13 @@
     &.selected, &:active {
       background-color: @cc-orange;
     }
+  }
+
+  .scoreContainer {
+    position: absolute;
+    left: -4px;
+    top: 2px;
+    pointer-events: none;
   }
 
   .feedbackBadge {

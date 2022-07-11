@@ -25,7 +25,7 @@ import {
   SET_REPORT_ITEM_ANSWER,
   GET_REPORT_ITEM_ANSWER
 } from "../actions";
-import { IGetReportItemAnswer } from "@concord-consortium/interactive-api-host";
+import { IGetReportItemAnswer, IReportItemAnswer, IReportItemHandlerMetadata } from "@concord-consortium/interactive-api-host";
 
 export type ReportType = "class" | "student";
 
@@ -59,7 +59,9 @@ export interface IReportState {
   // Note that this filter will be respected only in Dashboard report. Check report-tree.js and isQuestionVisible helper.
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
-  reportItemAnswers: Map<string, string>;
+  reportItemAnswersFull: Map<string, IReportItemAnswer>;
+  reportItemAnswersCompact: Map<string, IReportItemAnswer>;
+  reportItemMetadata: Map<string, IReportItemHandlerMetadata>;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -89,7 +91,9 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   compareViewAnswers: null,
   showFeaturedQuestionsOnly: true,
   hasTeacherEdition: false,
-  reportItemAnswers: Map(),
+  reportItemAnswersFull: Map(),
+  reportItemAnswersCompact: Map(),
+  reportItemMetadata: Map(),
 });
 
 const reportItemIFramePhones: Record<string, any> = {};
@@ -124,7 +128,9 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   compareViewAnswers: Set<string> | null;
   showFeaturedQuestionsOnly: boolean;
   hasTeacherEdition: boolean;
-  reportItemAnswers: Map<string, string>;
+  reportItemAnswersFull: Map<string, IReportItemAnswer>;
+  reportItemAnswersCompact: Map<string, IReportItemAnswer>;
+  reportItemMetadata: Map<string, IReportItemHandlerMetadata>;
 }
 
 // this exists to handle older interactives until they are updated to use the new report item api
@@ -234,7 +240,7 @@ export default function report(state = new ReportState({}), action?: any) {
 
     case REGISTER_REPORT_ITEM:
       reportItemIFramePhones[action.questionId] = action.iframePhone;
-      return processReportItemRequests(state);
+      return processReportItemRequests(state.setIn(["reportItemMetadata", action.questionId], action.reportItemMetadata || {}));
     case UNREGISTER_REPORT_ITEM:
       delete reportItemIFramePhones[action.questionId];
       return state;
@@ -242,14 +248,16 @@ export default function report(state = new ReportState({}), action?: any) {
       reportItemAnswerRequests.push({
         questionId: action.questionId,
         platformUserId: action.platformUserId,
+        itemsType: action.itemsType
       });
       return processReportItemRequests(state);
     case SET_REPORT_ITEM_ANSWER:
       const answer = getAnswer(state, action.questionId, action.reportItemAnswer.platformUserId);
-      const currentReportItemAnswer = (answer && state.getIn(["reportItemAnswers", answer.get("id")])) || null;
+      const storageName = action.reportItemAnswer.itemsType === "fullAnswer" ? "reportItemAnswersFull" : "reportItemAnswersCompact";
+      const currentReportItemAnswer = (answer && state.getIn([storageName, answer.get("id")])) || null;
       const reportItemAnswerChanged = JSON.stringify(currentReportItemAnswer) !== JSON.stringify(action.reportItemAnswer);
       if (answer && reportItemAnswerChanged) {
-        return state.setIn(["reportItemAnswers", answer.get("id")], action.reportItemAnswer);
+        return state.setIn([storageName, answer.get("id")], action.reportItemAnswer);
       } else {
         return state;
       }
@@ -259,7 +267,7 @@ export default function report(state = new ReportState({}), action?: any) {
   }
 }
 
-let reportItemAnswerRequests: Array<{questionId: string; platformUserId: string}> = [];
+let reportItemAnswerRequests: Array<{questionId: string; platformUserId: string; itemsType?: "fullAnswer" | "compactAnswer"}> = [];
 
 function getAnswer(state: ReportState, questionId: string, platformUserId: string) {
   return state.answers.find(a => {
@@ -269,9 +277,16 @@ function getAnswer(state: ReportState, questionId: string, platformUserId: strin
 
 function processReportItemRequests(state: ReportState) {
   // use filter to remove requests that have iframe phones registered, regardless of the existence of an answer
-  reportItemAnswerRequests = reportItemAnswerRequests.filter(({questionId, platformUserId}) => {
+  reportItemAnswerRequests = reportItemAnswerRequests.filter(({questionId, platformUserId, itemsType}) => {
     const iframePhone = reportItemIFramePhones[questionId];
+    const reportItemMetadata = state.get("reportItemMetadata").get(questionId);
     if (iframePhone) {
+      // Interactive has to send report item metadata with `compactAnswerReportItemsAvailable=true` so the requests for
+      // compact answer are issued. Otherwise, they're ignored for performance reasons (old interactives might not
+      // handle report item type and render all the report items in response to this request).
+      if (itemsType === "compactAnswer" && !reportItemMetadata?.compactAnswerReportItemsAvailable) {
+        return false; // request processed, can be removed from array
+      }
       const answer = getAnswer(state, questionId, platformUserId);
       if (answer) {
         let interactiveState: any = null;
@@ -295,16 +310,18 @@ function processReportItemRequests(state: ReportState) {
           console.error("Unable to JSON parse authoredState in answer, sending authoredState as null.  Unparseable authoredState:", authoredState);
         }
         const request: Omit<IInterimGetReportItemAnswer, "requestId"> = {
-          version: "2.0.0",
+          version: "2.1.0",
           type: "html",
           platformUserId,
           interactiveState,
           authoredState,
+          itemsType: itemsType || "fullAnswer"
         };
         iframePhone.post("getReportItemAnswer", request);
       }
+      return false; // request processed, can be removed from array
     }
-    return !iframePhone;
+    return true; // iframe not available, request not processed, needs to stay in the array
   });
   return state;
 }

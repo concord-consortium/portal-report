@@ -64,7 +64,6 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.9.7",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@mermaid-js/mermaid-cli": "^8.8.4",
     "@svgr/webpack": "^5.4.0",
     "@testing-library/react": "^10.0.4",
     "@types/dompurify": "^2.0.4",
@@ -119,7 +118,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "@concord-consortium/interactive-api-host": "^0.8.0",
+    "@concord-consortium/interactive-api-host": "^0.9.0-pre.1",
     "@react-hook/resize-observer": "^1.1.0",
     "aws-sdk": "^2.1127.0",
     "bootstrap": "^3.3.6",

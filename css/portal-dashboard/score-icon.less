@@ -1,0 +1,32 @@
+@import "./variables";
+
+.score {
+  font-size: 12px;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px;
+  background: red;
+  color: white;
+
+  // Styles specific to HAS ScoreBOT question type.
+  // More generic styling might need to be added in the future.
+  &.score-0-4 { background-color: #020202; color: white; }
+  &.score-1-4 { background-color: #be2325; color: white; }
+  &.score-2-4 { background-color: #f8b113; color: black; }
+  &.score-3-4 { background-color: #97cb45; color: black; }
+  &.score-4-4 { background-color: #76a640; color: black; }
+
+  &.score-0-6 { background-color: #020202; color: white; }
+  &.score-1-6 { background-color: #be2325; color: white; }
+  &.score-2-6 { background-color: #eb401a; color: white; }
+  &.score-3-6 { background-color: #f8b113; color: black; }
+  &.score-4-6 { background-color: #b0cc23; color: black; }
+  &.score-5-6 { background-color: #97cb45; color: black; }
+  &.score-6-6 { background-color: #76a640; color: black; }
+}
