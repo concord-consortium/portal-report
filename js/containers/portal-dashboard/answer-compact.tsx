@@ -20,7 +20,7 @@ interface IProps extends AnswerProps {
   reportItemAnswer?: IReportItemAnswer;
 }
 
-class AnswerCompact extends React.PureComponent<IProps> {
+export class AnswerCompact extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
   }
