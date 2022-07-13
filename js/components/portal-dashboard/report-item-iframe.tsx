@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
-import { handleGetAttachmentUrl, IAttachmentUrlRequest, IReportItemAnswer, IReportItemInitInteractive } from "@concord-consortium/interactive-api-host";
+import { handleGetAttachmentUrl, IAttachmentUrlRequest, IReportItemAnswer, IReportItemHandlerMetadata, IReportItemInitInteractive } from "@concord-consortium/interactive-api-host";
 import { connect } from "react-redux";
 import { getSortedStudents } from "../../selectors/report";
 import { RootState } from "../../reducers";
@@ -11,10 +11,10 @@ import css from "../../../css/portal-dashboard/report-item-iframe.less";
 
 interface IProps {
   question: any;
-  view: "singleAnswer" | "multipleAnswer";
+  view: "singleAnswer" | "multipleAnswer" | "hidden";
   users: any;
   answersByQuestion: any;
-  registerReportItem: (questionId: string, iframePhone: any) => void;
+  registerReportItem: (questionId: string, iframePhone: any, metadata: IReportItemHandlerMetadata) => void;
   unregisterReportItem: (questionId: string) => void;
   setReportItemAnswer: (questionId: string, reportItemAnswer: IReportItemAnswer) => void;
 }
@@ -23,6 +23,12 @@ interface IState {
   requestedHeight: number|null;
   src?: string;
 }
+
+const className = {
+  singleAnswer: css.singleAnswerReportItemIframe,
+  multipleAnswer: css.multipleAnswerReportItemIframe,
+  hidden: css.hidden
+};
 
 class ReportItemIframe extends PureComponent<IProps, IState> {
   private iframePhone: any;
@@ -66,8 +72,8 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
 
     this.iframePhone.addListener("reportItemAnswer", this.handleReportItemAnswer);
     this.iframePhone.addListener("height", this.handleHeight);
-    this.iframePhone.addListener("reportItemClientReady", () => {
-      this.props.registerReportItem(this.props.question.get("id"), this.iframePhone);
+    this.iframePhone.addListener("reportItemClientReady", (reportItemMetadata: IReportItemHandlerMetadata) => {
+      this.props.registerReportItem(this.props.question.get("id"), this.iframePhone, reportItemMetadata);
     });
     this.iframePhone.addListener("getAttachmentUrl", this.handleGetAttachmentUrl.bind(this));
   }
@@ -135,16 +141,12 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
       return null;
     }
 
-    const className = this.props.view === "singleAnswer"
-      ? css.singleAnswerReportItemIframe
-      : css.multipleAnswerReportItemIframe;
-
     const requestedHeight = this.state.requestedHeight || 0;
     const style = requestedHeight > 0 ? {height: requestedHeight} : {};
 
     return (
       // eslint-disable-next-line react/no-string-refs
-      <iframe key={this.props.question.get("id")} ref="iframe" className={className} src={src} style={style} onLoad={this.handleIframeLoaded} />
+      <iframe key={this.props.question.get("id")} ref="iframe" className={className[this.props.view]} src={src} style={style} onLoad={this.handleIframeLoaded} />
     );
   }
 }
@@ -162,7 +164,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
-    registerReportItem: (questionId: string, iframePhone: any) => dispatch(registerReportItem(questionId, iframePhone)),
+    registerReportItem: (questionId: string, iframePhone: any, reportItemMetadata: IReportItemHandlerMetadata) => dispatch(registerReportItem(questionId, iframePhone, reportItemMetadata)),
     unregisterReportItem: (questionId: string) => dispatch(unregisterReportItem(questionId)),
     setReportItemAnswer: (questionId: string, reportItemAnswer: IReportItemAnswer) => dispatch(setReportItemAnswer(questionId, reportItemAnswer)),
   };

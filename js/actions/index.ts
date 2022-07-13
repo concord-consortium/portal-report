@@ -28,7 +28,7 @@ import { RootState } from "../reducers";
 import { urlParam, getViewType, IFRAME_STANDALONE } from "../util/misc";
 import queryString from "query-string";
 import { v4 as uuid } from "uuid";
-import { IReportItemAnswer } from "@concord-consortium/interactive-api-host";
+import { IReportItemAnswer, IReportItemHandlerMetadata, ReportItemsType } from "@concord-consortium/interactive-api-host";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -679,11 +679,12 @@ export function trackEvent(category: TrackEventCategory, action: string, options
   };
 }
 
-export function registerReportItem(questionId: string, iframePhone: any) {
+export function registerReportItem(questionId: string, iframePhone: any, reportItemMetadata: IReportItemHandlerMetadata) {
   return {
     type: REGISTER_REPORT_ITEM,
     questionId,
-    iframePhone
+    iframePhone,
+    reportItemMetadata
   };
 }
 
@@ -694,11 +695,12 @@ export function unregisterReportItem(questionId: string) {
   };
 }
 
-export function getReportItemAnswer(questionId: string, platformUserId: string) {
+export function getReportItemAnswer(questionId: string, platformUserId: string, itemsType: ReportItemsType) {
   return {
     type: GET_REPORT_ITEM_ANSWER,
     questionId,
-    platformUserId
+    platformUserId,
+    itemsType
   };
 }
 

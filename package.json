@@ -53,7 +53,8 @@
     "testRegex": "(_spec)\\.[tj]sx?$",
     "moduleNameMapper": {
       "\\.(css|scss|less)$": "identity-obj-proxy",
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "identity-obj-proxy"
+      "\\.svg$": "<rootDir>/__mocks__/svgMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "identity-obj-proxy"
     },
     "coverageDirectory": "coverage-jest"
   },
@@ -120,7 +121,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "@concord-consortium/interactive-api-host": "^0.8.0",
+    "@concord-consortium/interactive-api-host": "^0.9.0",
     "@react-hook/resize-observer": "^1.1.0",
     "aws-sdk": "^2.1127.0",
     "bootstrap": "^3.3.6",

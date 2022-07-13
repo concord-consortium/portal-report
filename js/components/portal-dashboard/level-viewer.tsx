@@ -5,6 +5,7 @@ import { getQuestionIcon } from "../../util/question-utils";
 import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import LinesEllipsis from "react-lines-ellipsis";
+import ReportItemIframe from "./report-item-iframe";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
@@ -176,6 +177,7 @@ export class LevelViewer extends React.PureComponent<IProps> {
         </div>
         <div>
           <QuestionIcon className={css.icon} />
+          { question.get("reportItemUrl") && <ReportItemIframe question={question} view="hidden" /> }
         </div>
       </div>
     );
