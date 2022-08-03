@@ -25,46 +25,85 @@ context("Portal Dashboard Response Table",()=>{
       .find('[data-cy=NotStarted]').should('be.visible');
   });
 
+  function aType(name) {
+    // TODO: Figure out how to import AnswerTypes so we can do the following:
+    // const foundType = AnswerTypes.find(at => at.name === name);
+    // if (!foundType) {
+    //   throw new Error(`Invalid answer type: ${name}`);
+    // }
+    return {name};
+  }
+
+  function getAnswerIconId (answerType) {
+    const searchRegExp = / /g;
+    const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
+    return iconId;
+  }
+
+  function aTypeMatcher(answerType) {
+    const dataCy = answerType === null ?
+      "no-answer" :
+      getAnswerIconId(answerType);
+    return `[data-cy=${dataCy}]`;
+  }
+
+  function checkAnswerTable(answerTable) {
+    const numRows = answerTable.length;
+    const numCols = answerTable[0].length;
+    for (let row = 0; row < numRows; row++){
+      for (let col = 0; col < numCols; col++){
+        const expectedAnswerType = answerTable[row][col];
+        cy.get('[data-cy=student-answers-row]')
+        .eq(row)
+        .find('[data-cy=student-answer]')
+        .eq(col)
+        .find(aTypeMatcher(expectedAnswerType)).should('be.visible');
+      }
+    }
+  }
+
   it('verify we display the correct student answer icons',()=>{
+    const OR = aType("Open Response Completed");
+    const MC = aType("Multiple Choice NonScored Completed");
+    const Mx = aType("Multiple Choice Scored Incorrect");
+    const Mv = aType("Multiple Choice Scored Correct");
+    const IQ = aType("Image Question with Open Response Completed");
+    const IA = aType("Interactive Completed");
+    const __ = null;
+
     cy.get('[data-cy=collapsed-activity-button]').first().click();
 
-    cy.get('[data-cy=student-answers-row]')
-      .eq(2)
-      .get('[data-cy=student-answer]')
-      .eq(0)
-      .get('[data-cy=open-response-completed]').should('be.visible');
-    cy.get('[data-cy=student-answers-row]')
-      .eq(2)
-      .get('[data-cy=student-answer]')
-      .eq(1)
-      .get('[data-cy=multiple-choice-nonscored-completed]').should('be.visible');
-    cy.get('[data-cy=student-answers-row]')
-      .eq(2)
-      .get('[data-cy=student-answer]')
-      .eq(2)
-      .get('[data-cy=multiple-choice-scored-incorrect]').should('be.visible');
-    cy.get('[data-cy=student-answers-row]')
-      .eq(2)
-      .get('[data-cy=student-answer]')
-      .eq(3)
-      .get('[data-cy=open-response-completed]').should('be.visible');
-    cy.get('[data-cy=student-answers-row]')
-      .eq(2)
-      .get('[data-cy=student-answer]')
-      .eq(4)
-      .get('[data-cy=image-question-with-open-response-completed]').should('be.visible');
-    cy.get('[data-cy=student-answers-row]')
-      .eq(2)
-      .get('[data-cy=student-answer]')
-      .eq(4)
-      .get('[data-cy=interactive-completed]').should('be.visible');
-    cy.get('[data-cy=student-answers-row]')
-      .eq(5)
-      .get('[data-cy=student-answer]')
-      .eq(2)
-      .get('[data-cy=multiple-choice-scored-correct]').should('be.visible');
+    const activity1Table = [
+    // P1                  | P2
+    // Q1, Q2, Q3, Q4, Q5, | Q6, Q7  
+      [__, __, __, __, __,   __, __],
+      [__, __, __, __, __,   __, __],
+      [OR, __, __, __, __,   IQ, __],
+      [OR, MC, Mx, OR, MC,   IQ, IA],
+      [__, __, __, __, MC,   IQ, __],
+      [OR, MC, Mv, __, __,   IQ, IA],
+    ];
+
+    checkAnswerTable(activity1Table);
+
+    cy.get('[data-cy=collapsed-activity-button]').first().click();
+
+    const activity2Table = [
+    // P1                                      | P2
+    // Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10 | Q11
+      [__, __, IA, IA, IA, IA, IA, IA, __, __,   IA ],
+      [__, __, IA, __, IA, IA, IA, IA, __, IQ,   __ ],
+      [__, __, IA, __, __, IA, __, IA, __, __,   __ ],
+      [IA, IA, IA, IA, IA, IA, IA, __, IQ, IQ,   __ ],
+      [__, __, IA, __, IA, IA, IA, IA, __, __,   __ ],
+      [IA, IA, IA, __, __, __, __, IA, __, __,   __ ],
+    ];
+
+    checkAnswerTable(activity2Table);
+
   });
   it('verify click on response icon opens question detail for student', ()=>{
+    cy.get('[data-cy=collapsed-activity-button]').first().click();
     cy.get('[data-cy=open-response-completed]').eq(2).click();
     cy.get('[data-cy=answerText]').should('be.visible').and('contain', "test required answer 2");
     cy.get('[data-cy=student-name').should('contain', 'Jenkins, John');
