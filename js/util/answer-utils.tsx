@@ -159,7 +159,9 @@ export const hasResponse = (answer: any, question: any) => {
   // but there are cases where they may. So we need to check for that.
   const interactiveState = answerReportState ? JSON.parse(answerReportState.interactiveState) : {};
   const isNotInteractiveStateAnswer = answer.get("type") !== "interactive_state";
-  const hasInteractiveStateKeys = Object.keys(interactiveState).length !== 0;
+  // There are cases where the answerReportState.interactiveState is "null".
+  // So JSON.parse will return null for the interactiveState.
+  const hasInteractiveStateKeys = interactiveState && Object.keys(interactiveState).length !== 0;
   const isNotEmptyResponse = hasAttachment || isNotInteractiveStateAnswer || hasInteractiveStateKeys;
 
   return isNotEmptyResponse;
