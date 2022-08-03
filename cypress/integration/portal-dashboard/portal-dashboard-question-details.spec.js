@@ -58,11 +58,11 @@ context("Portal Dashboard Question Details Panel", () => {
     });
 
     it('verify the last question of the last activity is disabled', () => {
-      cy.get('[data-cy=activity-question-button]').eq(10).click({ force: true });
+      cy.get('[data-cy=activity-question-button]').eq(11).click({ force: true });
       cy.get('[data-cy=expanded-activity-button]').first().should("contain", "Activity 2: Report Test Activity 2");
-      cy.get('[data-cy=question-overlay]').should("contain", "Question #11");
+      cy.get('[data-cy=question-overlay]').should("contain", "Question #12");
       cy.get('[data-cy=question-navigator-next-button]').click();
-      cy.get('[data-cy=question-overlay]').should("contain", "Question #11");
+      cy.get('[data-cy=question-overlay]').should("contain", "Question #12");
     });
 
     it('verify we can page back from the first question of a later activity', () => {

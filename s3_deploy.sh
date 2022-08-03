@@ -3,10 +3,6 @@
 # Typically this is the Project name
 # The portal report has its own bucket and deploys to the root of it
 S3_BUCKET_PREFIX=''
-# AWS CloudFront distribution ID
-DISTRIBUTION_ID='E19KBL7INSABNU'
-# AWS CloudFront distribution domain
-DISTRIBUTION_DOMAIN='portal-report.concord.org'
 # name of branch to deploy to root of site
 ROOT_BRANCH='production'
 # Bucket to deploy to, typically this is 'model-resources', but some projects
@@ -83,8 +79,6 @@ fi
 # used by s3_website.yml
 export S3_BUCKET_PREFIX
 export IGNORE_ON_SERVER
-export DISTRIBUTION_ID
-export DISTRIBUTION_DOMAIN
 export S3_BUCKET
 
 # copy files to destination
@@ -93,7 +87,3 @@ mv $SRC_DIR $DEPLOY_DEST
 # deploy the site contents
 echo Deploying "$BRANCH_OR_TAG" to "$S3_BUCKET:$S3_BUCKET_PREFIX$S3_DEPLOY_DIR"...
 s3_website push --site _site
-
-# explicit CloudFront invalidation to workaround s3_website gem invalidation bug
-# with origin path (https://github.com/laurilehmijoki/s3_website/issues/207).
-aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths $INVAL_PATH
