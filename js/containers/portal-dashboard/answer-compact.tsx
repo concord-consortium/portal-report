@@ -49,7 +49,7 @@ export class AnswerCompact extends React.PureComponent<IProps> {
     const answerType = getAnswerType(answer, question);
     const iconId = getAnswerIconId(answerType);
 
-    // Early versions of reportItemAnswer did not have items. 
+    // Early versions of reportItemAnswer did not have items.
     // We believe that all report item interactives have been updated so
     // this code does not need to handle that case anymore
     const scoreItem: IReportItemAnswerItemScore | undefined =
