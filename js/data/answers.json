@@ -691,5 +691,17 @@
     "platform_user_id": "2",
     "version": "1",
     "answer":""
+  },
+  {
+    "answer": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Read-only value\\\",\\\"readOnly\\\":true,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Test value\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 1 (m)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 2 (s)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240,\\\"rowLines\\\":1,\\\"chartAvgs\\\":false}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\"],[\\\"b\\\",\\\"4\\\",\\\"5\\\",\\\"6\\\"],[\\\"c\\\",\\\"7\\\",\\\"8\\\",\\\"9\\\"]]}\"}",
+    "reportState": "{\"version\":1,\"mode\":\"report\",\"authoredState\":\"{\\\"columns\\\":[{\\\"heading\\\":\\\"Read-only value\\\",\\\"readOnly\\\":true,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Test value\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":false,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 1 (m)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"\\\"},{\\\"heading\\\":\\\"Value 2 (s)\\\",\\\"readOnly\\\":false,\\\"average\\\":false,\\\"chart\\\":true,\\\"chartColor\\\":\\\"green\\\"}],\\\"labels\\\":[\\\"a\\\",\\\"b\\\",\\\"c\\\"],\\\"chartWidth\\\":295,\\\"chartHeight\\\":240,\\\"rowLines\\\":1,\\\"chartAvgs\\\":false}\",\"interactiveState\":\"{\\\"data\\\":[[\\\"a\\\",\\\"1\\\",\\\"2\\\",\\\"3\\\"],[\\\"b\\\",\\\"4\\\",\\\"5\\\",\\\"6\\\"],[\\\"c\\\",\\\"7\\\",\\\"8\\\",\\\"9\\\"]]}\"}",
+    "created": "2019-06-06 14:53:26 UTC",
+    "id": "interactive_run_state_52",
+    "question_id": "mw_interactive_32",
+    "question_type": "iframe_interactive",
+    "resource_url": "http://app.lara.docker/sequences/1",
+    "type": "interactive_state",
+    "platform_user_id": "1",
+    "version": "1"
   }
 ]

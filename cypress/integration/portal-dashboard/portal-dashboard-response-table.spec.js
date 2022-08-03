@@ -89,14 +89,14 @@ context("Portal Dashboard Response Table",()=>{
     cy.get('[data-cy=collapsed-activity-button]').first().click();
 
     const activity2Table = [
-    // P1                                      | P2
-    // Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10 | Q11
-      [__, __, IA, IA, IA, IA, IA, IA, __, __,   IA ],
-      [__, __, IA, __, IA, IA, IA, IA, __, IQ,   __ ],
-      [__, __, IA, __, __, IA, __, IA, __, __,   __ ],
-      [IA, IA, IA, IA, IA, IA, IA, __, IQ, IQ,   __ ],
-      [__, __, IA, __, IA, IA, IA, IA, __, __,   __ ],
-      [IA, IA, IA, __, __, __, __, IA, __, __,   __ ],
+    // P1                                           | P2
+    // Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11 | Q11
+      [__, __, IA, IA, IA, IA, IA, IA, __, __, __,    IA ],
+      [__, __, IA, __, IA, IA, IA, IA, __, IQ, __,    __ ],
+      [__, __, IA, __, __, IA, __, IA, __, __, __,    __ ],
+      [IA, IA, IA, IA, IA, IA, IA, __, IQ, IQ, IA,    __ ],
+      [__, __, IA, __, IA, IA, IA, IA, __, __, __,    __ ],
+      [IA, IA, IA, __, __, __, __, IA, __, __, __,    __ ],
     ];
 
     checkAnswerTable(activity2Table);
