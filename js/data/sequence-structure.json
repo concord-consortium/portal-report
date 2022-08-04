@@ -157,19 +157,18 @@
                   "type": "iframe_interactive",
                   "url": "https://models-resources.concord.org/table-interactive/index.html",
                   "width": 576,
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
+                  "prompt": "Basic Table Interactive (no report item interactive)"
                 },
                 {
                   "display_in_iframe": false,
                   "height": 435,
                   "id": "mw_interactive_22",
-                  "name": "CODAP interactive",
+                  "name": "Old DocStore CODAP interactive",
                   "question_number": 2,
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "url": "https://document-store.concord.org/v2/documents/107956/autolaunch?server=https%3A%2F%2Fcodap.concord.org%2Freleases%2Flatest%2F%3Fapp%3Dis&scaling",
-                  "width": 576,
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
+                  "width": 576
                 },
                 {
                   "display_in_iframe": true,
@@ -180,9 +179,7 @@
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "url": "https://geocode-app.concord.org/",
-                  "width": 576,
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
-                },
+                  "width": 576                },
                 {
                   "display_in_iframe": true,
                   "height": 435,
@@ -192,8 +189,7 @@
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/drawing-tool/",
-                  "width": 576,
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
+                  "width": 576
                 },
                 {
                   "display_in_iframe": true,
@@ -204,8 +200,7 @@
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "url": "https://models-resources.concord.org/table-interactive/index.html",
-                  "width": 576,
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
+                  "width": 576
                 },
                 {
                   "display_in_iframe": true,
@@ -216,8 +211,7 @@
                   "show_in_featured_question_report": true,
                   "type": "iframe_interactive",
                   "url": "https://connected-bio-spaces.concord.org/?%7B%22curriculum%22%3A%22mouse%22%2C%22topBar%22%3Afalse%2C%22ui%22%3A%7B%22showPopulationSpace%22%3Afalse%2C%22showBreedingSpace%22%3Afalse%2C%22showOrganismSpace%22%3Atrue%2C%22showDNASpace%22%3Afalse%2C%22investigationPanelSpace%22%3A%22organism%22%7D%2C%22backpack%22%3A%7B%22collectedMice%22%3A%5B%7B%22sex%22%3A%22female%22%2C%22genotype%22%3A%22RR%22%7D%2C%7B%22sex%22%3A%22male%22%2C%22genotype%22%3A%22CC%22%7D%5D%7D%2C%22populations%22%3A%7B%22instructions%22%3A%22%22%2C%22environment%22%3A%22white%22%2C%22showSwitchEnvironmentsButton%22%3Atrue%2C%22includeNeutralEnvironment%22%3Atrue%2C%22initialPopulation%22%3A%7B%22white%22%3A33.33%2C%22tan%22%3A33.33%7D%2C%22numHawks%22%3A2%2C%22inheritance%22%3A%7B%22showStudentControlOfMutations%22%3Afalse%2C%22breedWithMutations%22%3Afalse%2C%22chanceOfMutations%22%3A2%2C%22showStudentControlOfInheritance%22%3Afalse%2C%22breedWithInheritance%22%3Atrue%2C%22randomOffspring%22%3A%7B%22white%22%3A33.33%2C%22tan%22%3A33.33%7D%7D%2C%22deadMice%22%3A%7B%22chanceOfShowingBody%22%3A50%2C%22timeToShowBody%22%3A50%7D%2C%22enableColorChart%22%3Atrue%2C%22enableGenotypeChart%22%3Atrue%2C%22enableAllelesChart%22%3Atrue%7D%2C%22organisms%22%3A%7B%22instructions%22%3A%22If%20you%20would%20like%20to%20compare%20the%20chromosomes%20of%20a%20male%20and%20female%20mouse%2C%20zoom%20in%20to%20the%20nucleus%20of%20each%20mouse.%20%22%2C%22useMysteryOrganelles%22%3Afalse%2C%22useMysterySubstances%22%3Afalse%2C%22showZoomToReceptor%22%3Afalse%2C%22showZoomToNucleus%22%3Atrue%7D%2C%22breeding%22%3A%7B%22instructions%22%3A%22%22%2C%22breedingType%22%3A%22litter%22%7D%7D",
-                  "width": 576,
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
+                  "width": 576
                 },
                 {
                   "display_in_iframe": true,
@@ -229,8 +223,7 @@
                   "type": "iframe_interactive",
                   "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/fill-in-the-blank/",
                   "width": 576,
-                  "prompt": "<p>The day I saw the Monkey King [blank-verb] (verb) was one of the mostinteresting days of the year.</p><p> After he did that, the king played chess on his brother&#x27;s [blank-noun] (noun) and then combed his [blank-adjective] (adjective) hair with a comb made out of old fish bones. Later that same day, I saw the Monkey King dance [blank-adverb] (adverb) in front of an audience of kangaroos and wombats.</p>",
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
+                  "prompt": "<p>The day I saw the Monkey King [blank-verb] (verb) was one of the mostinteresting days of the year.</p><p> After he did that, the king played chess on his brother&#x27;s [blank-noun] (noun) and then combed his [blank-adjective] (adjective) hair with a comb made out of old fish bones. Later that same day, I saw the Monkey King dance [blank-adverb] (adverb) in front of an audience of kangaroos and wombats.</p>"
                 },
                 {
                   "display_in_iframe": true,
@@ -242,8 +235,7 @@
                   "type": "iframe_interactive",
                   "url": "https://models-resources.concord.org/question-interactives/version/v0.4.1/scaffolded-question/",
                   "width": 576,
-                  "prompt": "<p>Clues to do what?</p>",
-                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/create-demo-report-item-interactive/report-item/index.html"
+                  "prompt": "<p>Clues to do what?</p>"
                 },
                 {
                   "id": "image_question_3",
@@ -258,6 +250,19 @@
                   "question_number": 10,
                   "show_in_featured_question_report": true,
                   "type": "image_question"
+                },
+                {
+                  "display_in_iframe": true,
+                  "height": 435,
+                  "id": "mw_interactive_32",
+                  "name": "Table with report item",
+                  "question_number": 11,
+                  "show_in_featured_question_report": true,
+                  "type": "iframe_interactive",
+                  "url": "https://models-resources.concord.org/table-interactive/index.html",
+                  "width": 576,
+                  "prompt": "This uses a generic report item interactive to provide info about the Table answer.                               This generic report item interactive used to provide a custom prompt in this location as well. You can see that working in this version https://portal-report.concord.org/version/v4.10.0/?portal-dashboard look at Activity2: Q1, Q2, Q3, Q4, Q5, Q6, Q7, or Q8",
+                  "report_item_url": "https://models-resources.concord.org/lara-example-interactives/branch/master/report-item/index.html"
                 }
               ]
             },
@@ -273,7 +278,7 @@
                   "height": 435,
                   "id": "mw_interactive_40",
                   "name": "Broken Table Interactive",
-                  "question_number": 11,
+                  "question_number": 12,
                   "show_in_featured_question_report": true,
                   "type": "type_not_known_by_report",
                   "url": "https://models-resources.concord.org/table-interactive/index.html",
