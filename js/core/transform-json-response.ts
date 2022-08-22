@@ -1,6 +1,6 @@
 import { normalize, schema } from "normalizr";
 import humps from "humps";
-import { IPortalRawData } from "../api";
+import { getPortalBaseUrl, IPortalRawData } from "../api";
 import queryString from "query-string";
 
 export interface IResource {
@@ -128,9 +128,13 @@ export function normalizeResourceJSON(json: any) {
 }
 
 // This is used to add mode=teacher-edition
-export function addMode(url: string, mode: string) {
+export function addTeacherEditionMode(url: string) {
   const urlParts = queryString.parseUrl(url);
-  urlParts.query.mode = mode;
+  urlParts.query.mode = "teacher-edition";
+  const portalBaseUrl = getPortalBaseUrl();
+  if (portalBaseUrl) {
+    urlParts.query["auth-domain"] = portalBaseUrl;
+  }
   return queryString.stringifyUrl(urlParts);
 }
 
@@ -165,7 +169,7 @@ export function preprocessResourceJSON(resourceJson: IResource) {
           question.section = section.id;
           question.page = page.id;
           question.questionUrl = page.previewUrl;
-          question.questionTeacherEditionUrl = addMode(page.previewUrl, "teacher-edition");
+          question.questionTeacherEditionUrl = addTeacherEditionMode(page.previewUrl);
           // Nothing is selected by default.
           question.selected = false;
           if (question.type === "multiple_choice") {
