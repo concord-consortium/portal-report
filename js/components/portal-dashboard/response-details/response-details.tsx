@@ -69,7 +69,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
 
   render() {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
-      listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setListViewMode,
+      listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
       feedbackSortByMethod, setStudentFeebackFilter } = this.props;
 
@@ -119,7 +119,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   activities={activities}
                   currentActivity={currentActivity}
                   isSequence={isSequence}
-                  setCurrentActivity={setCurrentActivity}
+                  setCurrentActivity={this.handleChangeActivity}
                   setCurrentQuestion={setCurrentQuestion}
                />
               : ""
@@ -130,7 +130,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   students={students}
                   isAnonymous={isAnonymous}
                   currentStudentIndex={currentStudentIndex >= 0 ? currentStudentIndex : 0}
-                  setCurrentStudent={setCurrentStudent}
+                  setCurrentStudent={this.handleChangeStudent}
                   currentStudentId={currentStudentId}
                   nameFirst={false}
                 />
@@ -239,9 +239,20 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     }
   }
 
+  private handleChangeActivity = (activityId: string) => {
+    this.props.setCurrentActivity(activityId);
+    this.props.trackEvent("Portal-Dashboard", "ResponseDetailsChangeActivity", {label: activityId});
+  }
+
   private handleChangeQuestion = (questionId: string) => {
     this.props.toggleCurrentQuestion(questionId);
     this.setState({ selectedStudents: [] });
+    this.props.trackEvent("Portal-Dashboard", "ResponseDetailsChangeQuestion", {label: questionId});
+  }
+
+  private handleChangeStudent = (studentId: string) => {
+    this.props.setCurrentStudent(studentId);
+    this.props.trackEvent("Portal-Dashboard", "ResponseDetailsChangeStudent", {label: studentId});
   }
 
   private setShowSpotlightListDialog = (show: boolean) => {

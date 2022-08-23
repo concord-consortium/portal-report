@@ -130,43 +130,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       setAnonymous(value);
     };
 
-    const trackToggleCurrentActivity = (activityId: string) => {
-      toggleCurrentActivity(activityId);
-      const activity = activityTrees && activityTrees.find(a => a.get("id") === activityId);
-      trackEvent("Portal-Dashboard", "ToggleCurrentActivity", {label: activityId, parameters: {
-        show: currentActivity?.get("id") !== activityId,
-        activityName: activity && activity.get("name")
-      }});
-    };
-
-    const trackSetCurrentActivity = (activityId: string) => {
-      setCurrentActivity(activityId);
-      const activity = activityTrees && activityTrees.find(a => a.get("id") === activityId);
-      trackEvent("Portal-Dashboard", "SetCurrentActivity", {label: activityId, parameters: {
-        activityName: activity && activity.get("name")
-      }});
-    };
-
-    const trackToggleCurrentQuestion = (questionId: string) => {
-      toggleCurrentQuestion(questionId);
-      trackEvent("Portal-Dashboard", "ToggleCurrentQuestion", {label: questionId, parameters: {
-        activityId: currentActivity && currentActivity.get("id"),
-        show: currentQuestion?.get("id") !== questionId
-      }});
-    };
-
-    const trackSetCurrentQuestion = (questionId: string) => {
-      setCurrentQuestion(questionId);
-      trackEvent("Portal-Dashboard", "SetCurrentQuestion", {label: questionId, parameters: {
-        currentActivity: currentActivity && currentActivity.get("id")
-      }});
-    };
-
-    const trackSetCurrentStudent = (studentId: string) => {
-      setCurrentStudent(studentId);
-      trackEvent("Portal-Dashboard", "SetCurrentStudent", {label: studentId});
-    };
-
     return (
       <div className={css.portalDashboardApp}>
 
@@ -192,8 +155,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   hideFeedbackBadges={hideFeedbackBadges}
                   leftPosition={this.state.scrollLeft}
                   studentProgress={studentProgress}
-                  toggleCurrentActivity={trackToggleCurrentActivity}
-                  toggleCurrentQuestion={trackToggleCurrentQuestion}
+                  toggleCurrentActivity={toggleCurrentActivity}
+                  toggleCurrentQuestion={toggleCurrentQuestion}
+                  trackEvent={trackEvent}
                 />
               </div>
               <div className={css.progressTable} onScroll={this.handleScroll} data-cy="progress-table">
@@ -201,9 +165,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   students={students}
                   isAnonymous={isAnonymous}
                   isCompact={compactReport}
-                  setCurrentStudent={trackSetCurrentStudent}
+                  setCurrentStudent={setCurrentStudent}
                   setDashboardViewMode={this.setDashboardViewMode}
                   setListViewMode={this.setListViewMode}
+                  trackEvent={trackEvent}
                 />
                 <StudentAnswers
                   activities={activityTrees}
@@ -217,9 +182,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   isCompact={compactReport}
                   questionFeedbacks={questionFeedbacks}
                   rubric={rubric}
-                  setCurrentActivity={trackSetCurrentActivity}
-                  setCurrentQuestion={trackSetCurrentQuestion}
-                  setCurrentStudent={trackSetCurrentStudent}
+                  setCurrentActivity={setCurrentActivity}
+                  setCurrentQuestion={setCurrentQuestion}
+                  setCurrentStudent={setCurrentStudent}
                   students={students}
                   studentProgress={studentProgress}
                   trackEvent={trackEvent}
@@ -232,12 +197,12 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 setDashboardViewMode={this.setDashboardViewMode}
                 isAnonymous={isAnonymous}
                 questions={questions}
-                setCurrentActivity={trackSetCurrentActivity}
-                setCurrentStudent={trackSetCurrentStudent}
+                setCurrentActivity={setCurrentActivity}
+                setCurrentStudent={setCurrentStudent}
                 setListViewMode={this.setListViewMode}
                 sortedQuestionIds={sortedQuestionIds}
                 students={students}
-                toggleCurrentQuestion={trackToggleCurrentQuestion}
+                toggleCurrentQuestion={toggleCurrentQuestion}
                 hasTeacherEdition={hasTeacherEdition}
                 trackEvent={trackEvent}
               />
@@ -255,10 +220,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
                   questions={questions}
-                  setAnonymous={setAnonymous}
-                  setCurrentActivity={trackSetCurrentActivity}
-                  setCurrentQuestion={trackSetCurrentQuestion}
-                  setCurrentStudent={trackSetCurrentStudent}
+                  setAnonymous={trackSetAnonymous}
+                  setCurrentActivity={setCurrentActivity}
+                  setCurrentQuestion={setCurrentQuestion}
+                  setCurrentStudent={setCurrentStudent}
                   setListViewMode={this.setListViewMode}
                   setStudentFeebackFilter={setStudentFeedbackSort}
                   setStudentFilter={setStudentSort}
@@ -266,7 +231,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   sortedQuestionIds={sortedQuestionIds}
                   studentCount={students.size}
                   students={students}
-                  toggleCurrentQuestion={trackToggleCurrentQuestion}
+                  toggleCurrentQuestion={toggleCurrentQuestion}
                   trackEvent={trackEvent}
                   viewMode={viewMode}
                 />

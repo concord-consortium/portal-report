@@ -55,6 +55,7 @@ export class Header extends React.PureComponent<IProps> {
 
   private changeViewMode = (mode: DashboardViewMode) => () => {
     this.props.setDashboardViewMode(mode);
+    this.props.trackEvent("Portal-Dashboard", "DashboardViewModeDropdownChange", {label: mode});
   }
 
   private renderNavigationSelect = () => {

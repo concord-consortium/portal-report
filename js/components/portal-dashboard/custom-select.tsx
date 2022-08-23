@@ -119,7 +119,6 @@ export class CustomSelect extends React.PureComponent<IProps, IState> {
   private handleChange = (value: string) => () => {
     const item = this.props.items.find((si: SelectItem) => si.value === value);
     item?.onSelect?.();
-    this.props.trackEvent("Portal-Dashboard", "Dropdown", {label: value});
     this.setState({
       value,
       showList: false
