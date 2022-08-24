@@ -53,6 +53,7 @@ export class ClassNav extends React.PureComponent<IProps> {
   private handleStudentSortSelect = (value: string) => () => {
     const { setStudentSort } = this.props;
     setStudentSort(value);
+    this.props.trackEvent("Portal-Dashboard", "StudentSortDropdownChange", {label: value});
   }
 
   private renderStudentSort = () => {

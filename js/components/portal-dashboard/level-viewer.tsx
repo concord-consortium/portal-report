@@ -6,6 +6,7 @@ import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import LinesEllipsis from "react-lines-ellipsis";
 import ReportItemIframe from "./report-item-iframe";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
@@ -26,6 +27,7 @@ interface IProps {
   studentProgress: any;
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export class LevelViewer extends React.PureComponent<IProps> {
@@ -205,10 +207,21 @@ export class LevelViewer extends React.PureComponent<IProps> {
   private handleActivityButtonClick = (activityId: string) => () => {
     this.props.toggleCurrentQuestion(this.props.currentQuestion?.get("id"));
     this.props.toggleCurrentActivity(activityId);
+
+    const activity = this.props.activities && this.props.activities.find(a => a.get("id") === activityId);
+    this.props.trackEvent("Portal-Dashboard", "LevelViewerToggleActivity", {label: activityId, parameters: {
+      show: this.props.currentActivity?.get("id") !== activityId,
+      activityName: activity && activity.get("name")
+    }});
   }
 
   private handleQuestionButtonClick = (questionId: string) => () => {
     this.props.toggleCurrentQuestion(questionId);
+
+    this.props.trackEvent("Portal-Dashboard", "LevelViewerToggleQuestion", {label: questionId, parameters: {
+      activityId: this.props.currentActivity && this.props.currentActivity.get("id"),
+      show: this.props.currentQuestion?.get("id") !== questionId
+    }});
   }
 
   private activityColorClass = (activityNumber: number) => {

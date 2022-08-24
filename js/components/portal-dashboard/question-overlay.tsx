@@ -29,7 +29,7 @@ interface IProps {
 
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
-    const { students, currentActivity, currentQuestion, isAnonymous, setCurrentStudent, currentStudentId, trackEvent } = this.props;
+    const { students, currentActivity, currentQuestion, isAnonymous, currentStudentId, trackEvent } = this.props;
     return (
       <div className={`${css.questionOverlay} ${(currentQuestion && currentActivity ? css.visible : "")}`} data-cy="question-overlay">
         { currentQuestion && this.renderQuestionDetails() }
@@ -39,7 +39,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
             students={students}
             isAnonymous={isAnonymous}
             currentQuestion={currentQuestion}
-            setCurrentStudent={setCurrentStudent}
+            setCurrentStudent={this.handleChangeStudent}
             currentStudentId={currentStudentId}
             trackEvent={trackEvent}
           />
@@ -49,7 +49,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
   }
 
   private renderQuestionDetails = () => {
-    const { currentQuestion, questions, sortedQuestionIds, toggleCurrentQuestion, setCurrentActivity, hasTeacherEdition, trackEvent } = this.props;
+    const { currentQuestion, questions, sortedQuestionIds, setCurrentActivity, hasTeacherEdition, trackEvent } = this.props;
     return (
       <React.Fragment>
         <div className={css.header} data-cy="question-overlay-header">
@@ -63,7 +63,7 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
           currentQuestion={currentQuestion}
           questions={questions}
           sortedQuestionIds={sortedQuestionIds}
-          toggleCurrentQuestion={toggleCurrentQuestion}
+          toggleCurrentQuestion={this.toggleCurrentQuestion}
           setCurrentActivity={setCurrentActivity}
           inOverlay={true}
           hasTeacherEdition={hasTeacherEdition}
@@ -73,9 +73,21 @@ export class QuestionOverlay extends React.PureComponent<IProps> {
     );
   }
 
+  private handleChangeStudent = (studentId: string) => {
+    this.props.setCurrentStudent(studentId);
+    this.props.trackEvent("Portal-Dashboard", "QuestionOverlayChangeStudent", {label: studentId});
+  }
+
+  private toggleCurrentQuestion = (questionId: string) => {
+    this.props.toggleCurrentQuestion(questionId);
+    this.props.trackEvent("Portal-Dashboard", "QuestionOverlayChangeQuestion", {label: questionId});
+  }
+
   private dismissCurrentQuestion = () => {
     if (this.props.currentQuestion) {
-      this.props.toggleCurrentQuestion(this.props.currentQuestion.get("id"));
+      const questionId = this.props.currentQuestion.get("id");
+      this.props.toggleCurrentQuestion(questionId);
+      this.props.trackEvent("Portal-Dashboard", "DismissQuestionOverlay", {label: questionId});
     }
   }
 

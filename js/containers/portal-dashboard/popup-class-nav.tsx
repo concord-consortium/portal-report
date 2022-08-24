@@ -80,6 +80,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
   private handleStudentSortSelect = (value: string) => () => {
     const { setStudentSort } = this.props;
     setStudentSort(value);
+    this.props.trackEvent("Portal-Dashboard", "StudentSortDropdownChange", {label: value});
   }
 
   private handleStudentFeedbackSortSelect = (value: string) => () => {
@@ -87,6 +88,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
     this.updateFeedbackSortIgnoreFlag();
     this.props.setFeedbackSortRefreshEnabled(false);
     setStudentFeedbackSort(value);
+    this.props.trackEvent("Portal-Dashboard", "StudentFeedbackSortDropdownChange", {label: value});
   }
 
   private renderSortMenu = () => {

@@ -125,7 +125,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const currentQuestionId = this.props.currentQuestion?.get("id");
     const currentStudentId = this.props.currentStudentId;
     const unselectStudent = currentActivityId === activityId && currentQuestionId === questionId && currentStudentId === studentId;
-    this.props.trackEvent("Portal-Dashboard", "SelectStudentAnswer", {parameters: {
+    this.props.trackEvent("Portal-Dashboard", "AnswersGridShowStudentAnswer", {parameters: {
       activityId, questionId, studentId: unselectStudent? null : studentId
     }});
     this.props.setCurrentActivity(activityId);

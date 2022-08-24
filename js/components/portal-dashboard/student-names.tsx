@@ -1,6 +1,7 @@
 import React from "react";
 import { getFormattedStudentName } from "../../util/student-utils";
 import { DashboardViewMode, ListViewMode } from "../../util/misc";
+import { TrackEventFunction } from "../../actions";
 
 import css from "../../../css/portal-dashboard/student-names.less";
 
@@ -11,6 +12,7 @@ interface IProps {
   setCurrentStudent: (studentId: string) => void;
   setDashboardViewMode: (mode: DashboardViewMode) => void;
   setListViewMode: (mode: ListViewMode) => void;
+  trackEvent: TrackEventFunction;
 }
 
 export class StudentNames extends React.PureComponent<IProps> {
@@ -42,5 +44,7 @@ export class StudentNames extends React.PureComponent<IProps> {
     this.props.setDashboardViewMode(mode);
     this.props.setListViewMode("Question");
     this.props.setCurrentStudent(currentStudentId);
+
+    this.props.trackEvent("Portal-Dashboard", "StudentListSetCurrentStudent", {label: currentStudentId});
   }
 }
