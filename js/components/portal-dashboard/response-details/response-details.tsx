@@ -257,9 +257,16 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
 
   private setShowSpotlightListDialog = (show: boolean) => {
     this.setState({ showSpotlightListDialog: show });
+    this.props.trackEvent("Portal-Dashboard", "ToggleSpotlightStudents", {label: show.toString(), parameters: {
+      show
+    }});
   }
+
   private setShowSpotlightDialog = (show: boolean) => {
     this.setState({ showSpotlightDialog: show });
+    this.props.trackEvent("Portal-Dashboard", "ToggleSpotlightStudentsInstructions", {label: show.toString(), parameters: {
+      show
+    }});
   }
 
   private toggleSelectedStudent = (studentId: string) => {
