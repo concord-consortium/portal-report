@@ -1,6 +1,10 @@
 import { preprocessResourceJSON } from "../../js/core/transform-json-response";
 import queryString from "query-string";
 
+jest.mock("../../js/api", () => ({
+  getPortalBaseUrl: () => "https://test-portal.concord.org"
+}));
+
 describe("preprocessResourceJSON helper", () => {
   const activityJSON = {
     id: 1,
@@ -100,7 +104,7 @@ describe("preprocessResourceJSON helper", () => {
     it("should have a teacherEdition url", () => {
       const resource = preprocessResourceJSON(activityJSON);
       //                 activity     section        page    question
-      expect(resource.children[0].children[0].children[0].children[0].questionTeacherEditionUrl).toBe("http://example.com/pages/1?mode=teacher-edition");
+      expect(resource.children[0].children[0].children[0].children[0].questionTeacherEditionUrl).toBe("http://example.com/pages/1?auth-domain=https%3A%2F%2Ftest-portal.concord.org&mode=teacher-edition");
     });
   });
 

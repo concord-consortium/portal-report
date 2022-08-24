@@ -118,7 +118,7 @@ export const initializeAuthorization = () => {
   return false;
 };
 
-const getPortalBaseUrl = () => {
+export const getPortalBaseUrl = () => {
   const portalUrl = urlParam("class") || urlParam("offering");
   if (!portalUrl) {
     return null;

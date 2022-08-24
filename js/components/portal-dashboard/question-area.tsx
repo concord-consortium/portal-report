@@ -37,11 +37,24 @@ export class QuestionArea extends React.PureComponent<IProps>{
             </span>
           </div>
           <div className={css.rightIcons}>
-            <a className={css.externalLinkButton} href={activityURL} target="_blank" data-cy="open-activity-button" onClick={() => trackEvent("Portal-Dashboard", "OpenExternalLink", {label: activityURL})}>
+            <a
+              className={css.externalLinkButton}
+              href={activityURL} target="_blank"
+              data-cy="open-activity-button"
+              title="Launch Activity"
+              onClick={() => trackEvent("Portal-Dashboard", "OpenExternalLink", {label: activityURL})}
+            >
               <LaunchIcon className={css.icon} />
             </a>
             {hasTeacherEdition &&
-              <a className={css.teacherEditionIcon} href={activityTeacherEditionURL} target="_blank" data-cy="open-teacher-edition-button" onClick={() => trackEvent("Portal-Dashboard", "OpenTeacherEdition", {label: `${activityURL}/?mode=teacher-edition`})}>
+              <a
+                className={css.teacherEditionIcon}
+                href={activityTeacherEditionURL}
+                target="_blank"
+                title="Launch Teacher Edition"
+                data-cy="open-teacher-edition-button"
+                onClick={() => trackEvent("Portal-Dashboard", "OpenTeacherEdition", {label: `${activityURL}/?mode=teacher-edition`})}
+              >
                 <div className={teacherEditionButtonClasses}>
                   <LaunchIcon className={css.icon} />
                 </div>
