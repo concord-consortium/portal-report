@@ -91,9 +91,10 @@ To deploy a production release:
 4. Login to https://learn.staging.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
 5. Run any QA and testing on staging release.
 6. Once testing is complete, login to https://learn.concord.org/ as an admin and under Admin > Site Admin Links > External Reports update the URL field of any External Reports that use the latest version of portal-report. Change the URL to the newly created release (e.g., https://portal-report.concord.org/version/vx.y.z/).
-7. Add the new released portal report version (https://portal-report.concord.org/version/vx.y.z/) to Auth Client > Portal Report SPA > Allowed redirect URIs
-8. Run any QA and testing on production release.
-9. Since the portal-report is also used in the Activity Player when "Show my work" is used in the AP, a new release of the portal report needs an update of its version in the AP and hence a release too. To do this, follow these steps:
+7. Add the new released portal report version (https://portal-report.concord.org/version/vx.y.z/) to Learn Portal (https://learn.concord.org) as an admin  under Admin > Site Admin Links > Auth Client > Portal Report SPA > Allowed redirect URIs
+8. Add the new released portal report version (https://portal-report.concord.org/version/vx.y.z/) to NGSA Portal (https://ngss-assessment.portal.concord.org/) as an admin  under Admin > Site Admin Links > Auth Client > Portal Report SPA > Allowed redirect URIs
+9. Run any QA and testing on production release.
+10. Since the portal-report is also used in the Activity Player when "Show my work" is used in the AP, a new release of the portal report needs an update of its version in the AP and hence a release too. To do this, follow these steps:
   - #### If you do not have activity player repo locally
   Clone activity player
   ```
