@@ -86,7 +86,8 @@
                   "question_number": 4,
                   "show_in_featured_question_report": true,
                   "type": "open_response",
-                  "required": true
+                  "required": true,
+                  "report_item_url": "https://models-resources.concord.org/question-interactives/open-response/report-item/"
                 },
                 {
                   "id": "multiple_choice_without_choices",

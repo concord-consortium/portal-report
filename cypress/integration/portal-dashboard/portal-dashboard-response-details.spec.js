@@ -155,6 +155,8 @@ context("Portal Dashboard Question Details Panel", () => {
     it('verify responses',()=>{
       cy.get('[data-cy="response-details-container"] [data-cy=question-navigator-next-button]').click().click().click().click().click();
       cy.get('[data-cy=student-response] [data-cy=student-answer] > div > div > a').should('have.attr','href');
+      cy.get('[data-cy=question-navigator-previous-button]').click().click().click().click().click();
+      cy.get('[data-cy=student-response]').eq(3).should("contain", "Play audio response");
     });
     describe("spotlight students",()=>{
       it("verify students with no answer cannot be selected",()=>{
