@@ -3,6 +3,11 @@ import { shallow } from "enzyme";
 import { Map } from "immutable";
 import { IframeAnswerReportItem } from "../../../js/components/report/iframe-answer-report-item";
 
+jest.mock("../../../js/components/report/iframe-answer-report-item-attachment", () => ({
+  IframeAnswerReportItemAttachment: () => {
+    return <div>MockIframeAnswerReportItemAttachment</div>;
+  }
+}));
 const renderLinkMock = jest.fn();
 
 const answerText = "testing 123";
@@ -31,7 +36,7 @@ const htmlItem = {
   type: "html"
 };
 
-const audioAttachmentAnswer = Map([
+const attachmentAnswer = Map([
   ["answer", answerText],
   ["answerText", answerText],
   ["attachments", {
@@ -40,7 +45,7 @@ const audioAttachmentAnswer = Map([
     }
   }]
 ]);
-const audioAttachmentItem = {
+const attachmentItem = {
   name: "test_attachment",
   type: "attachment"
 };
@@ -68,9 +73,9 @@ describe("<IframeAnswerReportItem />", () => {
     expect(wrapper.find("iframe")).toBeDefined();
     expect(wrapper.find("iframe").props().srcDoc).toEqual(answerHtml);
   });
-  it("should render a 'Play audio response' button for an audio attachment response", () => {
-    const wrapper = shallow(<IframeAnswerReportItem answer={audioAttachmentAnswer} item={audioAttachmentItem} answerText={answerText} renderLink={renderLinkMock} />);
-    expect(wrapper.html()).toEqual(expect.stringContaining("Play audio response"));
+  it("should render an attachment component for an item of type attachment", () => {
+    const wrapper = shallow(<IframeAnswerReportItem answer={attachmentAnswer} item={attachmentItem} answerText={answerText} renderLink={renderLinkMock} />);
+    expect(wrapper.html()).toEqual(expect.stringContaining("MockIframeAnswerReportItemAttachment"));
   });
   it("should call renderLinks for an item of type links", () => {
     shallow(<IframeAnswerReportItem answer={linksAnswer} item={linksItem} answerText={answerText} renderLink={renderLinkMock} />);
