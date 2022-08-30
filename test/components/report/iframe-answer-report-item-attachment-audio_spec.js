@@ -9,7 +9,7 @@ const pauseStub = jest.spyOn(window.HTMLMediaElement.prototype, "pause").mockImp
 const playStub = jest.spyOn(window.HTMLMediaElement.prototype, "play").mockImplementation(() => {});
 
 describe("<IframeAnswerReportItemAttachmentAudio />", () => {
-  it("should initially render a button to click for loading an audio attachment when no URL is prrovided", () => {
+  it("should initially render a button to click for loading an audio attachment when no URL is provided", () => {
     const screen = render(<IframeAnswerReportItemAttachmentAudio handleLoadAttachment={handleLoadAttachmentMock} loading={false} />);
     const playButton = screen.getByRole("button", { name: "Play audio response" });
     fireEvent.click(playButton);

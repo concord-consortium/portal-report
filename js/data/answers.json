@@ -202,6 +202,18 @@
   {
     "answer": "test required answer 2",
     "answer_text": "test required answer 2",
+    "attachments": [
+      {
+        "audio1661792880888.mp3": {
+          "contentType": "audio/mpeg",
+          "folder": {
+            "id": "I60EdKelEJQX55CgI6jF",
+            "ownerId": "https://learn-migrate.concord.org/dataservice/external_activity_data/e1eb24d6-60e5-483f-a117-87cfe919f91a"
+          },
+          "publicPath": "interactive-attachments/I60EdKelEJQX55CgI6jF/4f94f914-8dc2-4127-8a97-48c3c47bd69b/audio1661792880888.mp3"
+        }
+      }
+    ],
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_33",
     "question_id": "open_response_61",
