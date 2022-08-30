@@ -253,7 +253,13 @@ export default function report(state = new ReportState({}), action?: any) {
       return processReportItemRequests(state);
     case SET_REPORT_ITEM_ANSWER:
       const answer = getAnswer(state, action.questionId, action.reportItemAnswer.platformUserId);
-      const storageName = action.reportItemAnswer.itemsType === "compactAnswer" ? "reportItemAnswersCompact" : "reportItemAnswersFull";
+      let itemsType = action.reportItemAnswer.itemsType;
+      // Older report items may not set action.reportItemAnswer.itemsType. In those cases,
+      // we need to set itemsType to "fullAnswer".
+      if (!itemsType) {
+        itemsType = "fullAnswer";
+      }
+      const storageName = itemsType === "fullAnswer" ? "reportItemAnswersFull" : "reportItemAnswersCompact";
       const currentReportItemAnswer = (answer && state.getIn([storageName, answer.get("id")])) || null;
       const reportItemAnswerChanged = JSON.stringify(currentReportItemAnswer) !== JSON.stringify(action.reportItemAnswer);
       if (answer && reportItemAnswerChanged) {
