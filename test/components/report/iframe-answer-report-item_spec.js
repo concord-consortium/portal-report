@@ -46,7 +46,7 @@ const attachmentAnswer = Map([
   }]
 ]);
 const attachmentItem = {
-  name: "answerAttachment",
+  name: "test_attachment",
   type: "attachment"
 };
 
