@@ -59,49 +59,48 @@ export const getAnswerTrees = createSelector(
           const selectedChoices = answer?.answer?.choiceIds
             .map(id => choices?.[id] || Map({content: "[the selected choice has been deleted by question author]", correct: false, id: -1}));
           const selectedCorrectChoices = selectedChoices.filter(c => c?.correct);
-          answer = answer
-            .set("scored", question?.scored)
-            .set("selectedChoices", selectedChoices)
-            .set("correct", selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size);
+          answer = {...answer};
+          answer.scored = question?.scored;
+          answer.selectedChoices = selectedChoices;
+          answer.correct = selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size;
         }
-        return answer
-          .set("student", students?.[answer.get("platformUserId")]);
+        answer.student = students?.[answer?.platformUserId];
+        return answer;
       });
     }
 );
 
 export const getAnswersByQuestion = createSelector(
-  [ getAnswerTrees, getStudents, getQuestions],
-  (answers, students, questions) => {
-
-    // Use withMutations so this isn't creating a lot of new objects
-    const answerTreeResult = Map().withMutations(mutableTree => {
-      // Create tree like:
-      // { question1.id: {student1.id: answer1, student2.id: answer2, ...},
-      //   question2.id: {student3.id: answer3, student4.id: answer4, ...}
-      //   ... }
-      return answers.reduce((answerTree, answer) => {
-        const questionId = answer?.questionId;
-        let studentMap = answerTree?.[questionId] || Map();
-        studentMap = studentMap.set(answer?.platformUserId, answer);
-        return answerTree.set(questionId, studentMap);
-      }, mutableTree);
-    });
+  [ getAnswerTrees],
+  (answers) => {
+    // Create tree like:
+    // { question1.id: {student1.id: answer1, student2.id: answer2, ...},
+    //   question2.id: {student3.id: answer3, student4.id: answer4, ...}
+    //   ... }
+    const answerTreeResult = answers.reduce((answerTree, answer) => {
+      const questionId = answer?.questionId;
+      let studentMap = answerTree?.[questionId] || {};
+      studentMap = studentMap[answer?.platformUserId] = answer;
+      answerTree[questionId] = studentMap;
+      return answerTree;
+    }, {});
 
     return answerTreeResult;
   }
 );
 
 export const getQuestionTrees = createSelector(
-  [ getActivities, getSections, getPages, getQuestions, getShowFeaturedQuestionsOnly ],
-  ( activities, sections, pages, questions, showFeaturedQuestionsOnly) => {
-    return (questions || Immutable.fromJS({})).map(question =>
-      question
-        // This is only a temporal solution. Answers should no longer be added to a report tree.
-        // Components that need answer content should become containers and request answers from redux state.
-        .set("answers", Immutable.fromJS([]))
-        .set("visible", isQuestionVisible(question, showFeaturedQuestionsOnly))
-    );
+  [ getQuestions, getShowFeaturedQuestionsOnly ],
+  ( questions, showFeaturedQuestionsOnly) => {
+    return (questions || {}).map(question => {
+      // This is only a temporal solution. Answers should no longer be added to a report tree.
+      // Components that need answer content should become containers and request answers from redux state.
+      return {
+        ...question,
+        answers: [],
+        visible: isQuestionVisible(question, showFeaturedQuestionsOnly)
+      }
+    });
   },
 );
 
@@ -110,10 +109,12 @@ export const getPageTrees = createSelector(
   (pages, questionTrees) =>
     pages.map(page => {
       const mappedChildren = page?.children.map(key => questionTrees?.[key]);
-      return page
-        .set("children", mappedChildren)
+      return {
+        ...page,
+        children: mappedChildren,
         // Page is visible only if at least one question is visible.
-        .set("visible", !!mappedChildren.find(q => q?.visible));
+        visible: !!mappedChildren.find(q => q?.visible)
+      };
     })
 );
 
@@ -122,12 +123,13 @@ export const getSectionTrees = createSelector(
   (sections, pageTrees, hideSectionNames) =>
     sections.map(section => {
       const mappedChildren = section?.children.map(id => pageTrees?.[id.toString()]);
-      return section
-        .set("children", mappedChildren)
-        // Section is visible only if at least one page is visible.
-        .set("visible", !!mappedChildren.find(p => p?.visible))
+      return {
+        ...section,
+        children: mappedChildren,
+        visible: !!mappedChildren.find(p => p?.visible),
         // Hide section titles for external activities.
-        .set("nameHidden", hideSectionNames);
+        nameHidden: hideSectionNames
+      };
     }),
 );
 
@@ -139,13 +141,15 @@ export const getActivityTrees = createSelector(
       // Calculate additional properties, flattened pages and questions.
       const pages = mappedChildren.map(section => section?.children).flatten(1);
       const questions = pages.map(page => page?.children).flatten(1);
-      return activity
-        .set("children", mappedChildren)
-        .set("pages", pages)
-        .set("questions", questions)
+      return {
+        ...activity,
+        children: mappedChildren,
+        pages,
+        questions,
         // Activity is visible only if at least one section is visible.
-        .set("visible", !!mappedChildren.find(s => s?.visible));
-    }),
+        visible: !!mappedChildren.find(s => s?.visible)
+      };
+    })
 );
 
 export const getSequenceTree = createSelector(
@@ -154,8 +158,10 @@ export const getSequenceTree = createSelector(
     // There is always only one sequence.
     const sequence = sequences.values().next().value;
     const mappedChildren = sequence?.children.map(id => activityTrees?.[id.toString()]);
-    return sequence
-      .set("children", mappedChildren);
+    return {
+      ...sequence,
+      children: mappedChildren
+    }
   },
 );
 

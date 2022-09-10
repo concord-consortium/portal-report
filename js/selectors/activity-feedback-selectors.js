@@ -44,7 +44,10 @@ const newFeedback = (activityMap, studentMap, activityStarted) => {
 
 // Add the students realname to the student record.
 const addRealName = (student) => {
-  return student.set("realName", `${student?.firstName} ${student?.lastName}`);
+  return {
+    ...student,
+    realName: `${student?.firstName} ${student?.lastName}`
+  }
 };
 
 // return existing or now activityFeedback for a student
@@ -54,9 +57,11 @@ const activityFeedbackFor = (activity, student, feedbacks, progress) => {
   const found = feedbacks?.[key];
   const activityStarted = progress?.[student?.id]?.[activity?.id] > 0;
   if (found) {
-    return found
-      .set("student", student)
-      .set("activityStarted", activityStarted);
+    return {
+      ...found,
+      student,
+      activityStarted
+    };
   }
   return newFeedback(activity, student, activityStarted);
 };
@@ -253,16 +258,18 @@ export const makeGetQuestionAutoScores = () => {
  * @returns scores : IMap  ( {'<student-id>': score} )
  ******************************************************************************/
 export const getRubricScores = (rubric, feedbacks) => {
-  let scores = IMap({});
+  let scores = {};
   feedbacks.feedbacks.forEach(feedback => {
       const key = feedback?.platformStudentId;
       let score = null;
       if (feedback?.rubricFeedback) {
         const rubricFeedback = feedback?.rubricFeedback;
         score = rubricFeedback.map((v, k) => v?.score).reduce((p, n) => p + n);
-        scores.set(key, score);
       }
-      scores = scores.set(key, score);
+      scores = {
+        ...scores,
+        [key]: score
+      };
     });
   return scores;
 };
