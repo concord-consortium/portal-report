@@ -60,7 +60,7 @@ export default class ImageQuestionDetails extends PureComponent {
   renderImages() {
     return this.answersWithImage.map(a => {
       return renderImage(a.getIn(["answer", "imageUrl"]), a.getIn(["student", "name"]), a.getIn(["student", "id"]), a.getIn(["answer", "text"]));
-    }).toJS();
+    });
   }
 
   renderCarousel() {

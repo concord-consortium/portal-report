@@ -131,7 +131,7 @@ describe("report tree selectors", () => {
 
   describe("getAnswerTrees", () => {
     it("should return answers with students ids mapped to students", () => {
-      expect(getAnswerTrees(state({})).toJS()).toEqual(expectedAnswerTrees);
+      expect(getAnswerTrees(state({}))).toEqual(expectedAnswerTrees);
     });
   });
 
@@ -152,11 +152,11 @@ describe("report tree selectors", () => {
     });
 
     it("should not fail when there are no questions", () => {
-      expect(getQuestionTrees(state({}).deleteIn(["report", "questions"])).toJS()).toEqual({});
+      expect(getQuestionTrees(state({}).deleteIn(["report", "questions"]))).toEqual({});
     });
 
     it("should return questions with answers keys mapped to answers", () => {
-      expect(getQuestionTrees(state({})).toJS()).toEqual(expectedQuestionTrees({}));
+      expect(getQuestionTrees(state({}))).toEqual(expectedQuestionTrees({}));
     });
 
     describe("when there are some questions hidden by user", () => {
@@ -171,7 +171,7 @@ describe("report tree selectors", () => {
           const sections = {};
           const pages = {};
           const showFeaturedQuestionsOnly = false;
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly);
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(false);
         });
@@ -187,7 +187,7 @@ describe("report tree selectors", () => {
           const sections = {};
           const pages = {};
           const showFeaturedQuestionsOnly = false;
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly);
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(true);
         });
@@ -207,7 +207,7 @@ describe("report tree selectors", () => {
           const pages = {};
           const showFeaturedQuestionsOnly = true;
           // const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly);
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(true);
         });
@@ -225,7 +225,7 @@ describe("report tree selectors", () => {
           const pages = {};
           const showFeaturedQuestionsOnly = true;
           // const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, DASHBOARD, showFeaturedQuestionsOnly).toJS();
-          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
+          const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly);
           expect(result[1].visible).toBe(true);
           expect(result[2].visible).toBe(false);
         });
@@ -235,37 +235,37 @@ describe("report tree selectors", () => {
 
   describe("getPageTrees", () => {
     it("should return pages with question keys mapped to questions", () => {
-      expect(getPageTrees(state({})).toJS()).toEqual(expectedPageTrees({}));
+      expect(getPageTrees(state({}))).toEqual(expectedPageTrees({}));
     });
     it("should set visible property based on the children visibility", () => {
-      expect(getPageTrees(state({ questionVisible: false })).toJS()).toEqual(expectedPageTrees({ questionVisible: false }));
+      expect(getPageTrees(state({ questionVisible: false }))).toEqual(expectedPageTrees({ questionVisible: false }));
     });
   });
 
   describe("getSectionTrees", () => {
     it("should return sections with page ids mapped to pages", () => {
-      expect(getSectionTrees(state({})).toJS()).toEqual(expectedSectionTrees({}));
+      expect(getSectionTrees(state({}))).toEqual(expectedSectionTrees({}));
     });
     it("should set visible property based on the children visibility", () => {
-      expect(getSectionTrees(state({ questionVisible: false })).toJS()).toEqual(expectedSectionTrees({ questionVisible: false }));
+      expect(getSectionTrees(state({ questionVisible: false }))).toEqual(expectedSectionTrees({ questionVisible: false }));
     });
     it("should set nameHidden property based on the hideSectionNames prop", () => {
-      expect(getSectionTrees(state({ hideSectionNames: false })).toJS()).toEqual(expectedSectionTrees({ nameHidden: false }));
+      expect(getSectionTrees(state({ hideSectionNames: false }))).toEqual(expectedSectionTrees({ nameHidden: false }));
     });
   });
 
   describe("getActivityTrees", () => {
     it("should return activities with section ids mapped to sections", () => {
-      expect(getActivityTrees(state({})).toJS()).toEqual(expectedActivityTrees({}));
+      expect(getActivityTrees(state({}))).toEqual(expectedActivityTrees({}));
     });
     it("should set visible property based on the children visibility", () => {
-      expect(getActivityTrees(state({ questionVisible: false })).toJS()).toEqual(expectedActivityTrees({ questionVisible: false }));
+      expect(getActivityTrees(state({ questionVisible: false }))).toEqual(expectedActivityTrees({ questionVisible: false }));
     });
   });
 
   describe("getSequenceTrees", () => {
     it("should return sequence (only one!) with activity ids mapped to activities", () => {
-      expect(getSequenceTree(state({})).toJS()).toEqual(expectedSequenceTree({}));
+      expect(getSequenceTree(state({}))).toEqual(expectedSequenceTree({}));
     });
   });
 });

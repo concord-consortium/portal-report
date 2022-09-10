@@ -29,7 +29,7 @@ const isNumeric = obj => obj !== undefined && typeof (obj) === "number" && !isNa
 
 // If a student has no feedback yet, use this template:
 const newFeedback = (activityMap, studentMap, activityStarted) => {
-  const student = studentMap.toJS();
+  const student = studentMap;
   const newFeedbackRecord = {
     student,
     platformStudentId: student.id,
@@ -80,7 +80,7 @@ const getActivityFeedbacks = (state) => state.getIn(["feedback", "activityFeedba
 const getQuestionFeedbacks = (state) => state.getIn(["feedback", "questionFeedbacks"]);
 const getFeedbackSettings = (state) => state.getIn(["feedback", "settings"]);
 const getStudents = (state) => state.getIn(["report", "students"]);
-const getRubric = (state) => state.getIn(["feedback", "settings", "rubric"]) && state.getIn(["feedback", "settings", "rubric"]).toJS();
+const getRubric = (state) => state.getIn(["feedback", "settings", "rubric"]) && state.getIn(["feedback", "settings", "rubric"]);
 
 /*************************************************************************
  * Composite selectors (composed of other selectors).
@@ -165,14 +165,12 @@ export const getStudentFeedbacks = (activity, students, activityFeedbacks, progr
   const scores = reviewedFeedback
     .map(f => f.get("score"))
     .filter(x => x)
-    .toList()
-    .toJS();
+    .toList();
 
   const rubricFeedbacks = reviewedFeedback
     .map(f => f.get("rubricFeedback"))
     .filter(x => x)
-    .toList()
-    .toJS();
+    .toList();
 
   return {
     feedbacks,

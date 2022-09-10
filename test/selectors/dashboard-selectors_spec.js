@@ -48,7 +48,7 @@ describe("dashboard selectors", () => {
 
   describe("getStudentProgress", () => {
     it("should return hash with student progress", () => {
-      expect(getStudentProgress(state({})).toJS()).toEqual({
+      expect(getStudentProgress(state({}))).toEqual({
         "1": {
           a1: 1, // activity 1
           a2: 0.5 // activity 2 - only one submitted answer
@@ -67,7 +67,7 @@ describe("dashboard selectors", () => {
 
   describe("getStudentAverageProgress", () => {
     it("should return hash with student total progress", () => {
-      expect(getStudentAverageProgress(state({})).toJS()).toEqual({
+      expect(getStudentAverageProgress(state({}))).toEqual({
         "1": 0.75,
         "2": 0.75,
         "3": 0
@@ -78,21 +78,21 @@ describe("dashboard selectors", () => {
   describe("getSortedStudents", () => {
     describe("when sorting by name", () => {
       it("should return sorted list of students", () => {
-        expect(getSortedStudents(state({})).toJS()).toEqual( // Students sorted by name (last name first, ignoring capitalization)
+        expect(getSortedStudents(state({}))).toEqual( // Students sorted by name (last name first, ignoring capitalization)
         [ s3, s2, s1 ]);
       });
     });
 
     describe("when sorting by most progress", () => {
       it("should return sorted list of students", () => {
-        expect(getSortedStudents(state({sortBy: SORT_BY_MOST_PROGRESS})).toJS()).toEqual(// Students sorted by most progress (ties broken alphabetically)
+        expect(getSortedStudents(state({sortBy: SORT_BY_MOST_PROGRESS}))).toEqual(// Students sorted by most progress (ties broken alphabetically)
         [ s2, s1, s3 ]);
       });
     });
 
     describe("when sorting by least progress", () => {
       it("should return sorted list of students", () => {
-        expect(getSortedStudents(state({sortBy: SORT_BY_LEAST_PROGRESS})).toJS()).toEqual(// Students sorted by least progress (ties broken alphabetically)
+        expect(getSortedStudents(state({sortBy: SORT_BY_LEAST_PROGRESS}))).toEqual(// Students sorted by least progress (ties broken alphabetically)
         [ s3, s2, s1 ]);
       });
     });
@@ -121,7 +121,7 @@ describe("dashboard selectors", () => {
       describe("When Q1 is selected", () => {
         it("Should return the prompt for the first question ...", () => {
           const s = state({selectedQuestion: "open_response-1"});
-          const question = getSelectedQuestion(s).toJS();
+          const question = getSelectedQuestion(s);
           expect(question.prompt).toBe("prompt1");
         });
       });
@@ -129,7 +129,7 @@ describe("dashboard selectors", () => {
       describe("When Q2 is selected", () => {
         it("Should return the prompt for the second question ...", () => {
           const s = state({selectedQuestion: "open_response-2"});
-          const question = getSelectedQuestion(s).toJS();
+          const question = getSelectedQuestion(s);
           expect(question.prompt).toBe("prompt2");
         });
       });

@@ -29,14 +29,14 @@ function getChoicesStats(choices, answers, students) {
 export default class MultipleChoiceDetails extends PureComponent {
   get choices() {
     const choices = this.props.question.get("choices");
-    const choicesArray = choices ? choices.toJS() : [];
+    const choicesArray = choices ? choices : [];
     // Add fake, no-answer choice.
     choicesArray.push({id: -1, content: "No response", noResponseChoice: true});
     return choicesArray;
   }
 
   render() {
-    const stats = getChoicesStats(this.choices, this.props.answers.toJS(), this.props.students.toJS());
+    const stats = getChoicesStats(this.choices, this.props.answers, this.props.students);
     return (
       <table className="multiple-choice-details" data-cy="multiple-choice-details">
         <tbody>

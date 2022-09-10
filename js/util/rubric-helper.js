@@ -68,6 +68,6 @@ export class RubricHelper {
         label: record.get("label"),
         key: c.get("id"),
       };
-    }).toJS();
+    });
   }
 }

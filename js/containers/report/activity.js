@@ -62,7 +62,7 @@ class Activity extends PureComponent {
     const showText = feedbackSettings.get("textFeedbackEnabled");
     const scoreType = feedbackSettings.get("scoreType");
     const maxScore = scoreType === MANUAL_SCORE ? (feedbackSettings.get("maxScore") || MAX_SCORE_DEFAULT) : computedMaxScore;
-    const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores.toJS());
+    const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores);
     const showScore = scoreType !== "none";
     const useRubric = feedbackSettings.get("useRubric");
     const feedbackEnabled = showScore || showText || useRubric;
@@ -135,7 +135,7 @@ function makeMapStateToProps() {
     const rubric = state.getIn(["feedback", "settings", "rubric"]);
     return {
       scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, needsReviewCount, autoScores, computedMaxScore, feedbackSettings,
-      rubric: rubric && rubric.toJS()
+      rubric: rubric && rubric
     };
   };
 }

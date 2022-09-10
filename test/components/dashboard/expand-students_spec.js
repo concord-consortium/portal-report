@@ -21,7 +21,7 @@ describe("<ExpandStudents />", () => {
     button.simulate("click");
     expect(onClick.calledOnce).toEqual(true);
     const args = onClick.getCall(0).args;
-    expect(args[0].toJS()).toEqual([42]);
+    expect(args[0]).toEqual([42]);
     expect(args[1]).toBe(true);
     const trackEventArgs = trackEvent.getCall(0).args;
     expect(trackEventArgs[0]).toBe("Dashboard");
@@ -40,7 +40,7 @@ describe("<ExpandStudents />", () => {
     button.simulate("click");
     expect(onClick.calledOnce).toEqual(true);
     const args = onClick.getCall(0).args;
-    expect(args[0].toJS()).toEqual([42, 43]);
+    expect(args[0]).toEqual([42, 43]);
     expect(args[1]).toBe(false);
     expect(trackEvent.calledOnce).toEqual(true);
     const trackEventArgs = trackEvent.getCall(0).args;

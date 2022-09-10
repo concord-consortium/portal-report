@@ -60,7 +60,7 @@ export default class InteractiveIframe extends PureComponent {
   }
 
   handleGetAttachmentUrl = (request) => {
-    const answerMeta = this.props.answer.toJS();
+    const answerMeta = this.props.answer;
     return handleGetAttachmentUrl({ request, answerMeta })
       .then(response => {
         this.iframePhone.post("attachmentUrl", response);

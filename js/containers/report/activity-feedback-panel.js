@@ -239,7 +239,7 @@ function makeMapStateToProps() {
       feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),
-      rubric: rubric && rubric.toJS(),
+      rubric: rubric && rubric,
       activityIndex: ownProps.activity.get("activityIndex")
     };
   };

@@ -3,7 +3,7 @@ import * as types from "../../js/actions/dashboard";
 
 describe("dashboard reducer", () => {
   it("should return the initial state", () => {
-    expect(dashboardReducer(undefined, {}).toJS()).toEqual({
+    expect(dashboardReducer(undefined, {})).toEqual({
       sortBy: types.SORT_BY_NAME,
       expandedActivities: {},
       expandedQuestions: {},
@@ -25,14 +25,14 @@ describe("dashboard reducer", () => {
       activityId: 123,
       value: true
     });
-    expect(state1.get("expandedActivities").toJS()).toEqual({ 123: true });
+    expect(state1.get("expandedActivities")).toEqual({ 123: true });
 
     const state2 = dashboardReducer(state1, {
       type: types.SET_ACTIVITY_EXPANDED,
       activityId: 123,
       value: false
     });
-    expect(state2.get("expandedActivities").toJS()).toEqual({ 123: false });
+    expect(state2.get("expandedActivities")).toEqual({ 123: false });
   });
 
   it("should handle SET_STUDENT_EXPANDED", () => {
@@ -41,14 +41,14 @@ describe("dashboard reducer", () => {
       studentId: 123,
       value: true
     });
-    expect(state1.get("expandedStudents").toJS()).toEqual({ 123: true });
+    expect(state1.get("expandedStudents")).toEqual({ 123: true });
 
     const state2 = dashboardReducer(state1, {
       type: types.SET_STUDENT_EXPANDED,
       studentId: 123,
       value: false
     });
-    expect(state2.get("expandedStudents").toJS()).toEqual({ 123: false });
+    expect(state2.get("expandedStudents")).toEqual({ 123: false });
   });
 
   it("should handle SET_STUDENTS_EXPANDED", () => {
@@ -57,14 +57,14 @@ describe("dashboard reducer", () => {
       studentIds: [1, 2, 3],
       value: true
     });
-    expect(state1.get("expandedStudents").toJS()).toEqual({ 1: true, 2: true, 3: true });
+    expect(state1.get("expandedStudents")).toEqual({ 1: true, 2: true, 3: true });
 
     const state2 = dashboardReducer(state1, {
       type: types.SET_STUDENTS_EXPANDED,
       studentIds: [1, 2],
       value: false
     });
-    expect(state2.get("expandedStudents").toJS()).toEqual({ 1: false, 2: false, 3: true });
+    expect(state2.get("expandedStudents")).toEqual({ 1: false, 2: false, 3: true });
   });
 
   it("should handle SELECT_QUESTION", () => {
