@@ -10,7 +10,7 @@ const NOT_SELECTED_ICON = "icomoon-radio-unchecked";
 export class Choice extends PureComponent {
   get icon() {
     const { choice, selected, correctAnswerDefined } = this.props;
-    const isCorrect = choice.get("correct");
+    const isCorrect = choice?.correct;
     if (correctAnswerDefined && selected && isCorrect) {
       return CORRECT_ICON;
     } else if (correctAnswerDefined && selected && !isCorrect) {
@@ -23,7 +23,7 @@ export class Choice extends PureComponent {
 
   get contentStyling() {
     const { choice, selected, correctAnswerDefined } = this.props;
-    const isCorrect = choice.get("correct");
+    const isCorrect = choice?.correct;
     if (correctAnswerDefined && isCorrect) {
       return css.correct;
     } else if (correctAnswerDefined && selected && !isCorrect) {
@@ -37,7 +37,7 @@ export class Choice extends PureComponent {
 
   get label() {
     const { choice, selected } = this.props;
-    const isCorrect = choice.get("correct");
+    const isCorrect = choice?.correct;
     if (selected === true) {
       return "student's response";
     } else if (!selected && isCorrect === true) {
@@ -53,7 +53,7 @@ export class Choice extends PureComponent {
         <i className={this.icon} />
         <div className={css.choiceContent + " " + this.contentStyling}>
           <div className={css.choiceText}>
-            { choice.get("content") }
+            { choice?.content }
           </div>
           <div className={css.label}>
             { this.label }
@@ -68,11 +68,11 @@ export default class MultipleChoiceAnswer extends PureComponent {
   renderIcon() {
     const { answer, question } = this.props;
     let icon;
-    if (!question.get("scored")) {
+    if (!question?.scored) {
       // Undefined as there's no correct or incorrect choice defined.
       icon = SELECTED_ICON;
     } else {
-      icon = answer.get("correct") ? CORRECT_ICON : INCORRECT_ICON;
+      icon = answer?.correct ? CORRECT_ICON : INCORRECT_ICON;
     }
     return (
       <div className={css.icon} data-cy="multipleChoiceIcon">
@@ -83,14 +83,14 @@ export default class MultipleChoiceAnswer extends PureComponent {
 
   renderFullAnswer() {
     const { question, answer } = this.props;
-    const choices = question.get("choices") || [];
-    const studentChoices = answer.get("selectedChoices");
+    const choices = question?.choices || [];
+    const studentChoices = answer?.selectedChoices;
     return (
       <div data-cy="multiple-choice-answers">
         {
           choices.size > 0 ? choices.map(choice =>
-            <Choice key={choice.get("id")} choice={choice} correctAnswerDefined={question.get("scored")}
-              selected={studentChoices.some(studentChoice => studentChoice.get("id") === choice.get("id"))}
+            <Choice key={choice?.id} choice={choice} correctAnswerDefined={question?.scored}
+              selected={studentChoices.some(studentChoice => studentChoice?.id === choice?.id)}
             />
           ) : "Question doesn't have any choices"
         }

@@ -63,9 +63,9 @@ export default class FeedbackRow extends PureComponent {
 
   renderFeedbackSection() {
     const feedbackRecord = this.props.feedback;
-    const answerId = feedbackRecord.get("answerId");
-    const feedback = feedbackRecord.get("feedback");
-    const scoreString = feedbackRecord.get("score") || "0";
+    const answerId = feedbackRecord?.answerId;
+    const feedback = feedbackRecord?.feedback;
+    const scoreString = feedbackRecord?.score || "0";
     const complete = feedbackValidForAnswer(feedbackRecord, this.props.answer);
     const score = parseInt(scoreString, 10);
 
@@ -91,8 +91,8 @@ export default class FeedbackRow extends PureComponent {
 
   render() {
     const { answer, question } = this.props;
-    const answered = answer.get("answer");
-    const name = answer.get("student").get("realName");
+    const answered = answer?.answer;
+    const name = answer.get("student")?.realName;
 
     return (
       <div className="feedback-row">

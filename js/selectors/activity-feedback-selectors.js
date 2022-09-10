@@ -23,7 +23,7 @@ import {
 /*************************************************************************
  * Simple helper functions:
  *************************************************************************/
-const keyFor = (activity, student) => `${activity.get("id")}-${student.get("id")}`;
+const keyFor = (activity, student) => `${activity?.id}-${student?.id}`;
 
 const isNumeric = obj => obj !== undefined && typeof (obj) === "number" && !isNaN(obj);
 
@@ -35,7 +35,7 @@ const newFeedback = (activityMap, studentMap, activityStarted) => {
     platformStudentId: student.id,
     feedback: "",
     score: 0,
-    activityId: activityMap.get("id"),
+    activityId: activityMap?.id,
     hasBeenReviewed: false,
     activityStarted
   };
@@ -44,15 +44,15 @@ const newFeedback = (activityMap, studentMap, activityStarted) => {
 
 // Add the students realname to the student record.
 const addRealName = (student) => {
-  return student.set("realName", `${student.get("firstName")} ${student.get("lastName")}`);
+  return student.set("realName", `${student?.firstName} ${student?.lastName}`);
 };
 
 // return existing or now activityFeedback for a student
 // Includes merged student data
 const activityFeedbackFor = (activity, student, feedbacks, progress) => {
   const key = keyFor(activity, student);
-  const found = feedbacks.get(key);
-  const activityStarted = progress.getIn([student.get("id"), activity.get("id")]) > 0;
+  const found = feedbacks?.[key];
+  const activityStarted = progress.getIn([student?.id, activity?.id]) > 0;
   if (found) {
     return found
       .set("student", student)
@@ -66,15 +66,15 @@ const formatStudents = (students) => students
   .map(s => addRealName(s));
 
 const getActivitySettings = (feedbackSettings, activity) =>
-  feedbackSettings.getIn(["activitySettings", activity.get("id")]) || IMap({});
+  feedbackSettings.getIn(["activitySettings", activity?.id]) || IMap({});
 
 const getQuestionSettings = (feedbackSettings, question) =>
-  feedbackSettings.getIn(["questionSettings", question.get("id")]) || IMap({});
+  feedbackSettings.getIn(["questionSettings", question?.id]) || IMap({});
 
 /*************************************************************************
  * Simple selectors:
  *************************************************************************/
-const getReport = (state) => state.get("report");
+const getReport = (state) => state?.report;
 const getActivity = (state, props) => props.activity;
 const getActivityFeedbacks = (state) => state.getIn(["feedback", "activityFeedbacks"]);
 const getQuestionFeedbacks = (state) => state.getIn(["feedback", "questionFeedbacks"]);
@@ -96,7 +96,7 @@ const getRubric = (state) => state.getIn(["feedback", "settings", "rubric"]) && 
 const makeGetScoreType = () => createSelector(
   getActivity,
   getFeedbackSettings,
-  (activity, feedbackSettings) => getActivitySettings(feedbackSettings, activity).get("scoreType")
+  (activity, feedbackSettings) => getActivitySettings(feedbackSettings, activity)?.scoreType
 );
 
 /*******************************************************************************
@@ -155,20 +155,20 @@ IActivityFeedbacks {
 export const getStudentFeedbacks = (activity, students, activityFeedbacks, progress) => {
   students = formatStudents(students);
   const feedbacks = students.map(s => activityFeedbackFor(activity, s, activityFeedbacks, progress)).toList();
-  const feedbacksNotAnswered = feedbacks.filter(fb => !fb.get("activityStarted"));
-  const feedbacksNeedingReview = feedbacks.filter(fb => fb.get("activityStarted") && !fb.get("hasBeenReviewed"));
+  const feedbacksNotAnswered = feedbacks.filter(fb => !fb?.activityStarted);
+  const feedbacksNeedingReview = feedbacks.filter(fb => fb?.activityStarted && !fb?.hasBeenReviewed);
   const numFeedbacksNeedingReview = feedbacksNeedingReview.size;
 
   const reviewedFeedback = activityFeedbacks
-    .filter(f => f.get("hasBeenReviewed") === true);
+    .filter(f => f?.hasBeenReviewed === true);
 
   const scores = reviewedFeedback
-    .map(f => f.get("score"))
+    .map(f => f?.score)
     .filter(x => x)
     .toList();
 
   const rubricFeedbacks = reviewedFeedback
-    .map(f => f.get("rubricFeedback"))
+    .map(f => f?.rubricFeedback)
     .filter(x => x)
     .toList();
 
@@ -201,10 +201,10 @@ export const makeGetQuestions = () => createSelector(
   getReport,
   getActivity,
   (report, activity) => {
-    const sections = activity.get("children");
-    const pages = sections.flatMap(s => s.get("children"));
-    const questions = pages.flatMap(page => page.get("children"));
-    return questions.map((v, i) => report.getIn(["questions", v.get("id")]));
+    const sections = activity?.children;
+    const pages = sections.flatMap(s => s?.children);
+    const questions = pages.flatMap(page => page?.children);
+    return questions.map((v, i) => report.getIn(["questions", v?.id]));
   },
 );
 
@@ -219,21 +219,21 @@ export const makeGetQuestionAutoScores = () => {
     getFeedbackSettings,
     (report, questions, questionFeedbacks, feedbackSettings) => {
       const getFeedbackScore = (answer) => {
-        const feedback = questionFeedbacks.get(answer.get("id"));
+        const feedback = questionFeedbacks?.[answer.get("id")];
         if (!feedbackValidForAnswer(feedback, answer)) {
           return false;
         }
-        return feedback.get("score") || 0;
+        return feedback?.score || 0;
       };
 
       const scoredQuestionIds = questions
-        .filter(question => getQuestionSettings(feedbackSettings, question).get("scoreEnabled"))
-        .map(question => question.get("id"));
+        .filter(question => getQuestionSettings(feedbackSettings, question)?.scoreEnabled)
+        .map(question => question?.id);
 
-      const scores = report.get("answers")
+      const scores = report?.answers
         .toList()
-        .filter(answer => scoredQuestionIds.indexOf(answer.get("questionId")) !== -1)
-        .groupBy(answer => answer.get("platformUserId"))
+        .filter(answer => scoredQuestionIds.indexOf(answer?.questionId) !== -1)
+        .groupBy(answer => answer?.platformUserId)
         .map(studentAnswers => studentAnswers
           .map(studentAnswer => getFeedbackScore(studentAnswer))
           .filter(a => isNumeric(a))
@@ -255,11 +255,11 @@ export const makeGetQuestionAutoScores = () => {
 export const getRubricScores = (rubric, feedbacks) => {
   let scores = IMap({});
   feedbacks.feedbacks.forEach(feedback => {
-      const key = feedback.get("platformStudentId");
+      const key = feedback?.platformStudentId;
       let score = null;
-      if (feedback.get("rubricFeedback")) {
-        const rubricFeedback = feedback.get("rubricFeedback");
-        score = rubricFeedback.map((v, k) => v.get("score")).reduce((p, n) => p + n);
+      if (feedback?.rubricFeedback) {
+        const rubricFeedback = feedback?.rubricFeedback;
+        score = rubricFeedback.map((v, k) => v?.score).reduce((p, n) => p + n);
         scores.set(key, score);
       }
       scores = scores.set(key, score);
@@ -311,9 +311,9 @@ const makeGetAutoMaxScore = () => {
     getFeedbackSettings,
     (questions, feedbackSettings) => {
       return questions
-        .filter(question => getQuestionSettings(feedbackSettings, question).get("scoreEnabled"))
-        .map(question => isNumeric(getQuestionSettings(feedbackSettings, question).get("maxScore"))
-          ? getQuestionSettings(feedbackSettings, question).get("maxScore")
+        .filter(question => getQuestionSettings(feedbackSettings, question)?.scoreEnabled)
+        .map(question => isNumeric(getQuestionSettings(feedbackSettings, question)?.maxScore)
+          ? getQuestionSettings(feedbackSettings, question)?.maxScore
           : MAX_SCORE_DEFAULT)
         .reduce((total, score) => total + score, 0);
     },

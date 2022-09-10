@@ -48,7 +48,7 @@ class ReportApp extends PureComponent {
     let question = null;
     if (showCompare) {
       // All the answers belong to the same question, so we can pick any answer to find the question.
-      const questionId = compareViewAnswers.first().get("questionId");
+      const questionId = compareViewAnswers.first()?.questionId;
       question = report.getIn(["questions", questionId]);
     }
     return (
@@ -77,17 +77,17 @@ class ReportApp extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const data = state.get("data");
-  const error = data.get("error");
-  const reportState = state.get("report");
-  const compareViewAnswers = reportState && reportState.get("compareViewAnswers");
-  const dataDownloaded = !error && !data.get("isFetching");
+  const data = state?.data;
+  const error = data?.error;
+  const reportState = state?.report;
+  const compareViewAnswers = reportState && reportState?.compareViewAnswers;
+  const dataDownloaded = !error && !data?.isFetching;
   return {
     report: dataDownloaded && reportState,
     reportTree: dataDownloaded && getReportTree(state),
     sortedStudents: dataDownloaded && getSortedStudents(state),
     compareViewAnswers: compareViewAnswers && getCompareViewData(state),
-    isFetching: data.get("isFetching"),
+    isFetching: data?.isFetching,
     error,
   };
 }

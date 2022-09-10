@@ -28,9 +28,9 @@ export default class QuestionForClass extends PureComponent {
     const { answersVisible } = this.state;
     return (
       <div>
-        <div className={`question ${question.get("visible") ? "" : "hidden"}`}>
-          <div className="question-header" data-cy={"question-" + question.get("id")}>
-            <SelectionCheckbox selected={question.get("selected")} questionKey={question.get("id")} trackEvent={trackEvent} />
+        <div className={`question ${question?.visible ? "" : "hidden"}`}>
+          <div className="question-header" data-cy={"question-" + question?.id}>
+            <SelectionCheckbox selected={question?.selected} questionKey={question?.id} trackEvent={trackEvent} />
             <QuestionHeader question={question} url={url} />
             <a className="answers-toggle" onClick={this.toggleAnswersVisibility}>
               {answersVisible ? "Hide responses" : "Show responses"}

@@ -9,11 +9,11 @@ import css from "../../../css/dashboard/activity-answers.less";
 export class ActivityAnswers extends PureComponent {
   renderMultChoiceSummary() {
     const { activity, answers, student } = this.props;
-    const scoredQuestions = activity.get("questions").filter(q =>
-      q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
+    const scoredQuestions = activity?.questions.filter(q =>
+      q?.visible && q?.type === "multiple_choice" && q?.scored,
     );
     const questionsWithCorrectAnswer = scoredQuestions.filter(
-      question => answers.getIn([question.get("id"), student.get("id"), "correct"])
+      question => answers.getIn([question?.id, student?.id, "correct"])
     );
     return `${questionsWithCorrectAnswer.count()} / ${scoredQuestions.count()}`;
   }
@@ -23,7 +23,7 @@ export class ActivityAnswers extends PureComponent {
       student, activity, progress, expanded, showFullAnswers,
       width, multChoiceSummary, expandedQuestions,
     } = this.props;
-    const visibleQuestions = activity.get("questions", []).filter(q => q.get("visible"));
+    const visibleQuestions = (activity?.questions ?? []).filter(q => q?.visible);
     return (
       <div className={css.activityAnswers} style={{ minWidth: width, width }} data-cy="activityAnswers">
         {
@@ -31,13 +31,13 @@ export class ActivityAnswers extends PureComponent {
         }
         {
           expanded && visibleQuestions.map(question => {
-            const questionIsExpanded = expandedQuestions.get(question.get("id"));
+            const questionIsExpanded = expandedQuestions?.[question.get("id")];
             const showFullAnswer = showFullAnswers || questionIsExpanded;
             const anyStudentExpanded = this.props.anyStudentExpanded;
             const showWide = showFullAnswer || anyStudentExpanded;
             const className = css.answer + " " + (showWide ? css.fullAnswer : "");
             return (
-              <div key={question.get("id")} className={className}>
+              <div key={question?.id} className={className}>
                 <Answer question={question} student={student} showFullAnswer={showFullAnswer} />
               </div>
             );

@@ -5,7 +5,7 @@ export default class OpenResponseAnswer extends PureComponent {
     const { answer } = this.props;
     return (
       <div>
-        {answer.get("answer")}
+        {answer?.answer}
       </div>
     );
   }

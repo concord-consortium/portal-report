@@ -30,8 +30,7 @@ export const getSelectedQuestion = createSelector(
   [getQuestionTrees, getSeletedQuestionId],
   (questions, id) => {
     if (questions && id) {
-      return questions
-        .get(id.toString(), {});
+      return questions?.[id.toString()] ?? {};
     }
     return null;
   },
@@ -56,10 +55,10 @@ export const getSelectedQuestion = createSelector(
 
 function countCompletedAnswers(activityQuestions, answers, student) {
   return activityQuestions.reduce((count, question) => {
-    const answer = answers.getIn([question.get("id"), student.get("id")]);
+    const answer = answers.getIn([question?.id, student?.id]);
     if (answer &&
       // If question is required, its answer must be submitted.
-      (!question.get("required") || answer.get("submitted") === true)) {
+      (!question?.required || answer?.submitted === true)) {
       return count + 1;
     } else {
       return count;
@@ -73,7 +72,7 @@ export const getStudentProgress = createSelector(
   (students, activities, answers) => {
     return students.map(student =>
       activities.map(activity => {
-        const activityQuestions = activity.get("questions").filter(q => q.get("visible"));
+        const activityQuestions = activity?.questions.filter(q => q?.visible);
 
         return countCompletedAnswers(activityQuestions, answers, student) /
           activityQuestions.size;
@@ -87,7 +86,7 @@ export const getStudentAverageProgress = createSelector(
   [ getStudents, getStudentProgress ],
   (students, studentProgress) => {
     return students.map(student => {
-      const activitiesProgress = studentProgress.get(student.get("id")).toList();
+      const activitiesProgress = studentProgress?.[student.get("id")].toList();
       return activitiesProgress.reduce((sum, progress) => sum + progress) / activitiesProgress.size;
     });
   },
@@ -96,7 +95,7 @@ export const getStudentAverageProgress = createSelector(
 export const getCurrentActivity = createSelector(
   [ getActivities, getCurrentActivityId ],
   (activities, currentActivityId) => {
-    return activities.find(activity => activity.get("id") === currentActivityId);
+    return activities.find(activity => activity?.id === currentActivityId);
   }
 );
 
@@ -110,7 +109,7 @@ export const getFirstActivity = createSelector(
 export const getCurrentQuestion = createSelector(
   [ getQuestions, getCurrentQuestionId ],
   (questions, currentQuestionId) => {
-    return questions.find(activity => activity.get("id") === currentQuestionId);
+    return questions.find(activity => activity?.id === currentQuestionId);
   }
 );
 
@@ -133,8 +132,8 @@ export const getSortedStudents = createSelector(
       case SORT_BY_LEAST_PROGRESS:
       case SORT_BY_MOST_PROGRESS:
         return students.toList().sort((student1, student2) => {
-          const student1Progress = studentProgress.get(student1.get("id"));
-          const student2Progress = studentProgress.get(student2.get("id"));
+          const student1Progress = studentProgress?.[student1.get("id")];
+          const student2Progress = studentProgress?.[student2.get("id")];
           const progressComp = sortBy === SORT_BY_LEAST_PROGRESS
             ? student1Progress - student2Progress
             : student2Progress - student1Progress;
@@ -161,17 +160,17 @@ export const getActivityFeedbackSortedStudents = createSelector(
         );
       case SORT_BY_FEEDBACK_PROGRESS:
         return students.toList().sort((student1, student2) => {
-          const activityFeedbacks = feedback.get("activityFeedbacks");
-          const currentActivityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
-          const student1Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student1.get("id")
-                                                                          && f.get("activityId") === currentActivityId; });
-          const student2Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
-                                                                          && f.get("activityId") === currentActivityId; });
+          const activityFeedbacks = feedback?.activityFeedbacks;
+          const currentActivityId = currentActivity ? currentActivity?.id : firstActivity?.id;
+          const student1Feedback = activityFeedbacks.find(function(f) { return f?.platformStudentId === student1?.id
+                                                                          && f?.activityId === currentActivityId; });
+          const student2Feedback = activityFeedbacks.find(function(f) { return f?.platformStudentId === student2?.id
+                                                                          && f?.activityId === currentActivityId; });
           const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
           const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
 
-          const student1Progress = studentProgress.getIn([student1.get("id"), currentActivityId]);
-          const student2Progress = studentProgress.getIn([student2.get("id"), currentActivityId]);
+          const student1Progress = studentProgress.getIn([student1?.id, currentActivityId]);
+          const student2Progress = studentProgress.getIn([student2?.id, currentActivityId]);
 
           const student1SortGroup = student1Progress === 0 ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
           const student2SortGroup = student2Progress === 0 ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;
@@ -196,20 +195,20 @@ export const getQuestionFeedbackSortedStudents = createSelector(
       case SORT_BY_FEEDBACK_PROGRESS:
         // TODO: change to sort by question feedback
         return students.toList().sort((student1, student2) => {
-          const questionFeedbacks = feedback.get("questionFeedbacks");
+          const questionFeedbacks = feedback?.questionFeedbacks;
           const question = currentQuestion ? currentQuestion : firstQuestion;
-          const questionId = question.get("id");
-          const student1Feedback = questionFeedbacks.find(function(f) { return f.get("platformStudentId") === student1.get("id")
-                                                                          && f.get("questionId") === questionId; });
-          const student2Feedback = questionFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
-                                                                          && f.get("questionId") === questionId; });
+          const questionId = question?.id;
+          const student1Feedback = questionFeedbacks.find(function(f) { return f?.platformStudentId === student1?.id
+                                                                          && f?.questionId === questionId; });
+          const student2Feedback = questionFeedbacks.find(function(f) { return f?.platformStudentId === student2?.id
+                                                                          && f?.questionId === questionId; });
           const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
           const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
 
-          const student1Answer = answers.getIn([questionId, student1.get("id")]);
-          const student2Answer = answers.getIn([questionId, student2.get("id")]);
-          const student1Answered = student1Answer && (!question.get("required") || student1Answer.get("submitted"));
-          const student2Answered = student2Answer && (!question.get("required") || student2Answer.get("submitted"));
+          const student1Answer = answers.getIn([questionId, student1?.id]);
+          const student2Answer = answers.getIn([questionId, student2?.id]);
+          const student1Answered = student1Answer && (!question?.required || student1Answer?.submitted);
+          const student2Answered = student2Answer && (!question?.required || student2Answer?.submitted);
 
           const student1SortGroup = !student1Answered ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
           const student2SortGroup = !student2Answered ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;

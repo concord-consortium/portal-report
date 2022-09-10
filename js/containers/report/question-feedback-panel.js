@@ -60,17 +60,17 @@ class QuestionFeedbackPanel extends PureComponent {
   }
 
   enableText(event) {
-    this.props.updateQuestionFeedbackSettings(this.props.question.get("id"), { feedbackEnabled: event.target.checked });
+    this.props.updateQuestionFeedbackSettings(this.props.question?.id, { feedbackEnabled: event.target.checked });
   }
 
   enableScore(event) {
-    this.props.updateQuestionFeedbackSettings(this.props.question.get("id"), { scoreEnabled: event.target.checked });
+    this.props.updateQuestionFeedbackSettings(this.props.question?.id, { scoreEnabled: event.target.checked });
   }
 
   setMaxScore(value) {
     const {updateQuestionFeedbackSettings, question} = this.props;
     if (updateQuestionFeedbackSettings) {
-      updateQuestionFeedbackSettings(question.get("id"), { maxScore: value });
+      updateQuestionFeedbackSettings(question?.id, { maxScore: value });
     }
   }
 
@@ -103,16 +103,16 @@ class QuestionFeedbackPanel extends PureComponent {
   render() {
     const { question, answers, students } = this.props;
     const answerByStudentId = {};
-    answers.forEach(a => answerByStudentId[a.get("platformUserId")] = a);
-    const answersIncNoResponse = students.map(s => answerByStudentId[s.get("id")] || { student: s, questionType: "NoAnswer" });
+    answers.forEach(a => answerByStudentId[a?.platformUserId] = a);
+    const answersIncNoResponse = students.map(s => answerByStudentId[s?.id] || { student: s, questionType: "NoAnswer" });
     const showing = this.state.showFeedbackPanel;
-    const prompt = question.get("prompt");
-    const num = question.get("questionNumber");
+    const prompt = question?.prompt;
+    const num = question?.questionNumber;
     const needingFeedback = answers.filter(a => !this.answerIsMarkedComplete(a));
 
     const filteredAnswers = this.state.showOnlyNeedReview ? needingFeedback : answersIncNoResponse;
     const scores = answers.map( (a) => this.getFeedback(a))
-      .map(f => f.get("score"))
+      .map(f => f?.score)
       .filter(f => f != null)
       .toArray();
 
@@ -122,9 +122,9 @@ class QuestionFeedbackPanel extends PureComponent {
     let numFeedbackGiven = numAnswers - numNeedsFeedback;
 
     const questionSettings = this.getFeedbackSettings(question);
-    const scoreEnabled = questionSettings.get("scoreEnabled") || false;
-    const feedbackEnabled = questionSettings.get("feedbackEnabled") || false;
-    const maxScore = questionSettings.get("maxScore") || MAX_SCORE_DEFAULT;
+    const scoreEnabled = questionSettings?.scoreEnabled || false;
+    const feedbackEnabled = questionSettings?.feedbackEnabled || false;
+    const maxScore = questionSettings?.maxScore || MAX_SCORE_DEFAULT;
 
     const showGettingStarted = !scoreEnabled && !feedbackEnabled;
     const studentsPulldown = filteredAnswers.map((a) => {
@@ -201,7 +201,7 @@ class QuestionFeedbackPanel extends PureComponent {
                         answer={answer}
                         question={question}
                         ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
-                        key={answer.get("id")}
+                        key={answer?.id}
                         scoreEnabled={scoreEnabled}
                         feedbackEnabled={feedbackEnabled}
                         maxScore={maxScore}
@@ -220,24 +220,23 @@ class QuestionFeedbackPanel extends PureComponent {
           </div>
         </div>
       </div>
-
     );
   }
 
   getFeedbackSettings(question) {
-    return this.props.settings.getIn(["questionSettings", question.get("id")]) || Map({});
+    return this.props.settings.getIn(["questionSettings", question?.id]) || Map({});
   }
 
   getFeedback(answer) {
     const newFeedback = {
-      answerId: answer.get("id"),
+      answerId: answer?.id,
       feedback: "✖ No Feedback Yet",
       score: "0",
       hasBeenReviewedForAnswerHash: "",
-      classHash: answer.get("classHash"),
-      platformUserId: answer.get("platformUserId")
+      classHash: answer?.classHash,
+      platformUserId: answer?.platformUserId
     };
-    return this.props.questionFeedbacks.get(answer.get("id")) || newFeedback;
+    return this.props.questionFeedbacks?.[answer.get("id")] || newFeedback;
   }
 }
 

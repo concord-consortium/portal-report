@@ -25,14 +25,14 @@ describe("dashboard reducer", () => {
       activityId: 123,
       value: true
     });
-    expect(state1.get("expandedActivities")).toEqual({ 123: true });
+    expect(state1?.expandedActivities).toEqual({ 123: true });
 
     const state2 = dashboardReducer(state1, {
       type: types.SET_ACTIVITY_EXPANDED,
       activityId: 123,
       value: false
     });
-    expect(state2.get("expandedActivities")).toEqual({ 123: false });
+    expect(state2?.expandedActivities).toEqual({ 123: false });
   });
 
   it("should handle SET_STUDENT_EXPANDED", () => {
@@ -41,14 +41,14 @@ describe("dashboard reducer", () => {
       studentId: 123,
       value: true
     });
-    expect(state1.get("expandedStudents")).toEqual({ 123: true });
+    expect(state1?.expandedStudents).toEqual({ 123: true });
 
     const state2 = dashboardReducer(state1, {
       type: types.SET_STUDENT_EXPANDED,
       studentId: 123,
       value: false
     });
-    expect(state2.get("expandedStudents")).toEqual({ 123: false });
+    expect(state2?.expandedStudents).toEqual({ 123: false });
   });
 
   it("should handle SET_STUDENTS_EXPANDED", () => {
@@ -57,14 +57,14 @@ describe("dashboard reducer", () => {
       studentIds: [1, 2, 3],
       value: true
     });
-    expect(state1.get("expandedStudents")).toEqual({ 1: true, 2: true, 3: true });
+    expect(state1?.expandedStudents).toEqual({ 1: true, 2: true, 3: true });
 
     const state2 = dashboardReducer(state1, {
       type: types.SET_STUDENTS_EXPANDED,
       studentIds: [1, 2],
       value: false
     });
-    expect(state2.get("expandedStudents")).toEqual({ 1: false, 2: false, 3: true });
+    expect(state2?.expandedStudents).toEqual({ 1: false, 2: false, 3: true });
   });
 
   it("should handle SELECT_QUESTION", () => {
@@ -73,12 +73,12 @@ describe("dashboard reducer", () => {
       type: types.SELECT_QUESTION,
       value: someQuestion
     });
-    expect(state1.get("selectedQuestion")).toEqual(someQuestion);
+    expect(state1?.selectedQuestion).toEqual(someQuestion);
 
     const state2 = dashboardReducer(state1, {
       type: types.SELECT_QUESTION,
       value: null
     });
-    expect(state2.get("selectedQuestion")).toBe(null);
+    expect(state2?.selectedQuestion).toBe(null);
   });
 });

@@ -23,7 +23,7 @@ export class QuestionDetails extends PureComponent {
   render() {
     const { selectedQuestion, answerMap, answerList, students, onClose } = this.props;
     const { answersVisible } = this.state;
-    const prompt = selectedQuestion && selectedQuestion.get("prompt");
+    const prompt = selectedQuestion && selectedQuestion?.prompt;
     return (
       <Modal
         show={selectedQuestion !== null}
@@ -57,7 +57,7 @@ export class QuestionDetails extends PureComponent {
 function mapStateToProps(state, ownProps) {
   // Is there a better way to do this?
   const answerMap = ownProps.selectedQuestion ?
-    getAnswersByQuestion(state).get(ownProps.selectedQuestion.get("id")) || Map() :
+    getAnswersByQuestion(state)?.[ownProps.selectedQuestion.get("id")] || Map() :
     Map();
 
   return {

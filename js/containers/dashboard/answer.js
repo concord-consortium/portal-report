@@ -28,8 +28,8 @@ export class Answer extends PureComponent {
   render() {
     const { answer, showFullAnswer, question } = this.props;
     let AComponent = NoAnswer;
-    if (answer && (!question.get("required") || answer.get("submitted"))) {
-      AComponent = AnswerComponent[answer.get("questionType")] || GenericAnswer;
+    if (answer && (!question?.required || answer?.submitted)) {
+      AComponent = AnswerComponent[answer?.questionType] || GenericAnswer;
     }
     return (
       <AComponent answer={answer} showFullAnswer={showFullAnswer} question={question} />
@@ -46,7 +46,7 @@ Answer.defaultProps = {
 function mapStateToProps(state, ownProps) {
   return {
     answer: getAnswersByQuestion(state)
-      .getIn([ownProps.question.get("id"), ownProps.student.get("id")])
+      .getIn([ownProps.question?.id, ownProps.student?.id])
   };
 }
 

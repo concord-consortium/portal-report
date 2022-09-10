@@ -8,7 +8,7 @@ const QuestionComponent = {
 };
 
 export default ({question, answers, students}) => {
-  const QComponent = QuestionComponent[question.get("type")];
+  const QComponent = QuestionComponent[question?.type];
   if (!QComponent) {
     return <span />;
   }

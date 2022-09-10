@@ -25,13 +25,13 @@ class IframeStandaloneApp extends PureComponent {
     const { report, answers } = this.props;
     const iframeQuestionId = config("iframeQuestionId");
 
-    const question = report.get("questions").get(iframeQuestionId);
+    const question = report.get("questions")?.[iframeQuestionId];
 
     // check explicit studentId first for logged in users and then fall back to runKey for anonymous users
     const platformUserId = config("studentId") || config("runKey");
     const answer = answers.filter(a =>
-      a.get("questionId") === iframeQuestionId &&
-      a.get("platformUserId") === platformUserId
+      a?.questionId === iframeQuestionId &&
+      a?.platformUserId === platformUserId
     ).first();
 
     if (!answer) {
@@ -42,7 +42,7 @@ class IframeStandaloneApp extends PureComponent {
       return <DataFetchError error={{title: "Unable to fetch data", body: errorText}} />;
     }
 
-    const answerType = answer.get("type");
+    const answerType = answer?.type;
     if (answerType === "interactive_state" || answerType === "external_link") {
       // This will handle the main use case - rendering of the interactive iframe. Note that Answer component would
       // also handle it if we provided alwaysOpen=true, but it wouldn't try to make it full screen, and so on.
@@ -52,13 +52,13 @@ class IframeStandaloneApp extends PureComponent {
       // There are two supported answer types handled by iframe question: simple link or interactive state.
       if (answerType === "external_link") {
         // Answer field is just the reportable URL. We don't need any state.
-        url = answer.get("answer");
+        url = answer?.answer;
         state = null;
       } else if (answerType === "interactive_state") {
         // URL field is provided by question. Answer field is a state that will be passed
         // to the iframe using iframe-phone.
-        url = question.get("url");
-        const answerVal = answer.get("answer");
+        url = question?.url;
+        const answerVal = answer?.answer;
         state = typeof answerVal === "string" ? JSON.parse(answerVal) : answerVal;
         state.view = "standalone";
       }
@@ -87,14 +87,14 @@ class IframeStandaloneApp extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const data = state.get("data");
-  const error = data.get("error");
-  const reportState = state.get("report");
-  const dataDownloaded = !error && !data.get("isFetching");
+  const data = state?.data;
+  const error = data?.error;
+  const reportState = state?.report;
+  const dataDownloaded = !error && !data?.isFetching;
   return {
     report: dataDownloaded && reportState,
     answers: dataDownloaded && getAnswerTrees(state),
-    isFetching: data.get("isFetching"),
+    isFetching: data?.isFetching,
     error,
   };
 }

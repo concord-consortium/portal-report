@@ -8,16 +8,16 @@ import "../../../css/report/answers-table.less";
 
 class AnswersTable extends PureComponent {
   getFeedback(answer) {
-    return this.props.questionFeedbacks.get(answer.get("id"));
+    return this.props.questionFeedbacks?.[answer.get("id")];
   }
 
   getFeedbackSettings(question) {
-    return question && this.props.feedbackSettings.getIn(["questionSettings", question.get("id")]) || Map({});
+    return question && this.props.feedbackSettings.getIn(["questionSettings", question?.id]) || Map({});
   }
 
   getAnswerForStudent(student) {
     const { answerMap } = this.props;
-    const result = answerMap.get(student.get("id"));
+    const result = answerMap?.[student.get("id")];
     if (result) {
       return result;
     } else {
@@ -30,8 +30,8 @@ class AnswersTable extends PureComponent {
   render() {
     const {question, students, hidden, showCompare, anonymous} = this.props;
     const feedbackSettings = this.getFeedbackSettings(question);
-    const scoreEnabled = (!anonymous) && feedbackSettings.get("scoreEnabled") || false;
-    const feedbackEnabled = (!anonymous) && feedbackSettings.get("feedbackEnabled") || false;
+    const scoreEnabled = (!anonymous) && feedbackSettings?.scoreEnabled || false;
+    const feedbackEnabled = (!anonymous) && feedbackSettings?.feedbackEnabled || false;
     const feedbackTH = feedbackEnabled ? <th>Feedback</th> : null;
     const scoreTH = scoreEnabled ? <th>Score</th> : null;
     const selectTH = showCompare ? <th className="select-header">Select</th> : null;
@@ -50,16 +50,18 @@ class AnswersTable extends PureComponent {
             students.map(student => {
               const answer = this.getAnswerForStudent(student);
               const feedback = this.getFeedback(answer);
-              return (<AnswerRow
-                key={student.get("id")}
-                student={student}
-                answer={answer}
-                question={question}
-                feedback={feedback}
-                showFeedback={feedbackEnabled}
-                showScore={scoreEnabled}
-                showCompare={showCompare}
-              />);
+              return (
+                <AnswerRow
+                  key={student?.id}
+                  student={student}
+                  answer={answer}
+                  question={question}
+                  feedback={feedback}
+                  showFeedback={feedbackEnabled}
+                  showScore={scoreEnabled}
+                  showCompare={showCompare}
+                />
+              );
             })
           }
         </tbody>
@@ -69,9 +71,9 @@ class AnswersTable extends PureComponent {
 }
 
 function AnswerRow({student, answer, question, feedback, showScore, showFeedback, showCompare}) {
-  const hasAnswer = answer.get("questionType") !== "NoAnswer";
-  const score = feedback && feedback.get("score");
-  const textFeedback = feedback && feedback.get("feedback");
+  const hasAnswer = answer?.questionType !== "NoAnswer";
+  const score = feedback && feedback?.score;
+  const textFeedback = feedback && feedback?.feedback;
   const scoreTD = showScore ? <td className="score">{score}</td> : null;
   const feedbackTD = showFeedback ? <td className="feedback">{textFeedback}</td> : null;
   const compareDIV = hasAnswer && showCompare
@@ -83,7 +85,7 @@ function AnswerRow({student, answer, question, feedback, showScore, showFeedback
 
   return (
     <tr>
-      <td>{student.get("name")}</td>
+      <td>{student?.name}</td>
       <td> <Answer answer={answer} question={question} /> </td>
       {feedbackTD}
       {scoreTD}

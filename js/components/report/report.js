@@ -29,10 +29,10 @@ export default class Report extends PureComponent {
 
   componentDidMount() {
     const { report, reportTree } = this.props;
-    const nowShowing = report.get("nowShowing");
-    const student = report.get("students").length > 0 ? report.get("students").first().get("name") : "";
-    const title = nowShowing === "class" ? `Report for ${report.get("clazzName")}` : `Report for ${student}`;
-    document.title = `${reportTree.get("name")} ${title}`;
+    const nowShowing = report?.nowShowing;
+    const student = report?.students.length > 0 ? report?.students.first()?.name : "";
+    const title = nowShowing === "class" ? `Report for ${report?.clazzName}` : `Report for ${student}`;
+    document.title = `${reportTree?.name} ${title}`;
   }
 
   renderReportHeader(clazzName) {
@@ -50,11 +50,11 @@ export default class Report extends PureComponent {
 
   renderClassReport() {
     const { report, reportTree } = this.props;
-    const nowShowing = report.get("nowShowing");
+    const nowShowing = report?.nowShowing;
     const className = nowShowing === "class" ? "report-content" : "report-content hidden";
     return (
       <div className={className}>
-        {this.renderReportHeader(report.get("clazzName"))}
+        {this.renderReportHeader(report?.clazzName)}
         <Sequence sequence={reportTree} reportFor={"class"} />
       </div>
     );
@@ -62,13 +62,13 @@ export default class Report extends PureComponent {
 
   renderStudentReports() {
     const { report, reportTree, sortedStudents } = this.props;
-    if (report.get("nowShowing") !== "student") {
+    if (report?.nowShowing !== "student") {
       return null;
     }
-    const selectedStudentIds = report.get("selectedStudentIds");
+    const selectedStudentIds = report?.selectedStudentIds;
     let studentsToRender;
     if (selectedStudentIds) {
-      studentsToRender = selectedStudentIds.map(sId => report.get("students").get(sId)).filter(s => !!s);
+      studentsToRender = selectedStudentIds.map(sId => report.get("students")?.[sId]).filter(s => !!s);
       if (studentsToRender.size === 0) {
         return <div>Selected student doesn't exist</div>;
       }
@@ -76,8 +76,8 @@ export default class Report extends PureComponent {
       studentsToRender = sortedStudents;
     }
     return studentsToRender.map(s =>
-        <div key={s.get("id")} className="report-content">
-          {this.renderReportHeader(s.get("name"))}
+        <div key={s?.id} className="report-content">
+          {this.renderReportHeader(s?.name)}
           <Sequence sequence={reportTree} reportFor={s} />
         </div>
       );
@@ -109,9 +109,9 @@ export default class Report extends PureComponent {
 
   renderControls() {
     const { report } = this.props;
-    const isAnonymous = report.get("anonymous");
-    const hideControls = report.get("hideControls");
-    const anyQuestionSelected = report.get("questions").filter(question => question.get("selected") === true).size > 0;
+    const isAnonymous = report?.anonymous;
+    const hideControls = report?.hideControls;
+    const anyQuestionSelected = report?.questions.filter(question => question?.selected === true).size > 0;
     if (!hideControls) {
       return (
         <div className="controls">
@@ -129,13 +129,13 @@ export default class Report extends PureComponent {
   onShowSelectedClick = () => {
     const { reportTree, hideUnselectedQuestions, trackEvent } = this.props;
     hideUnselectedQuestions();
-    trackEvent("Report", "Show Selected Question(s)", {label: reportTree.get("name")});
+    trackEvent("Report", "Show Selected Question(s)", {label: reportTree?.name});
   }
 
   onShowUnselectedClick = () => {
     const { reportTree, showUnselectedQuestions, trackEvent } = this.props;
     showUnselectedQuestions();
-    trackEvent("Report", "Show All Questions", {label: reportTree.get("name")});
+    trackEvent("Report", "Show All Questions", {label: reportTree?.name});
   }
 
   onShowHideNamesClick = (isAnonymous) => {
@@ -148,7 +148,7 @@ export default class Report extends PureComponent {
   printStudentReports(studentStartIdx = 0, studentEndIdx = MAX_STUDENT_REPORTS) {
     // Change report style to "per student" style.
     const { reportTree, setNowShowing, trackEvent, sortedStudents } = this.props;
-    const studentSubset = sortedStudents.slice(studentStartIdx, studentEndIdx).map(s => s.get("id"));
+    const studentSubset = sortedStudents.slice(studentStartIdx, studentEndIdx).map(s => s?.id);
     setNowShowing("student", studentSubset);
     // setTimeout is necessary, as and re-render is async. Not the nicest way, but it's simple and self-contained.
     setTimeout(print, 100);
@@ -160,13 +160,13 @@ export default class Report extends PureComponent {
       // happens too early.
       setTimeout(() => { this.afterPrint(); }, 1);
     };
-    trackEvent("Report", "Print Student Reports", {label: reportTree.get("name")});
+    trackEvent("Report", "Print Student Reports", {label: reportTree?.name});
   }
 
   afterPrint() {
     // Go back to the default report style ("per class").
     const { setNowShowing, report } = this.props;
-    const type = report.get("type");
+    const type = report?.type;
     setNowShowing(type);
     window.onafterprint = undefined;
   }

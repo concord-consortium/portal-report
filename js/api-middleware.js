@@ -75,13 +75,13 @@ function callApi(type, data, state) {
       // Make sure firestore db is ready before fetching data
       return getFirestore().then(() => fetchPortalDataAndAuthFirestore());
     case API_UPDATE_REPORT_SETTINGS:
-      return updateReportSettings(data, state.get("report"));
+      return updateReportSettings(data, state?.report);
     case API_UPDATE_FEEDBACK_SETTINGS:
-      return updateFeedbackSettings(data, state.get("report"));
+      return updateFeedbackSettings(data, state?.report);
     case API_UPDATE_QUESTION_FEEDBACK:
-      return updateQuestionFeedbacks(data, state.get("report"));
+      return updateQuestionFeedbacks(data, state?.report);
     case API_UPDATE_ACTIVITY_FEEDBACK:
-      return updateActivityFeedbacks(data, state.get("report"));
+      return updateActivityFeedbacks(data, state?.report);
     case API_FETCH_RUBRIC:
       return fetchRubric(data);
   }

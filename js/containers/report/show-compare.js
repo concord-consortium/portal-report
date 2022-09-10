@@ -8,14 +8,14 @@ export class ShowCompareButton extends PureComponent {
 
   onCompareButtonClick = () => {
     const { reportTree, answer, onClick, trackEvent } = this.props;
-    trackEvent("Report", "Compare/Project", {label: reportTree.get("name")});
-    return onClick(answer.get("questionId"));
+    trackEvent("Report", "Compare/Project", {label: reportTree?.name});
+    return onClick(answer?.questionId);
   }
 
   render() {
     const { answer } = this.props;
     return (
-      <Button className="select-answer" onClick={this.onCompareButtonClick} disabled={!answer.get("selectedForCompare")}>
+      <Button className="select-answer" onClick={this.onCompareButtonClick} disabled={!answer?.selectedForCompare}>
         Compare/project
       </Button>
     );
@@ -23,9 +23,9 @@ export class ShowCompareButton extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const data = state.get("data");
-  const error = data.get("error");
-  const dataDownloaded = !error && !data.get("isFetching");
+  const data = state?.data;
+  const error = data?.error;
+  const dataDownloaded = !error && !data?.isFetching;
   return {
     reportTree: dataDownloaded && getReportTree(state),
   };

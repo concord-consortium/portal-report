@@ -6,14 +6,14 @@ import "../../../css/report/sequence.less";
 export default class Sequence extends PureComponent {
   render() {
     const { sequence, reportFor } = this.props;
-    const sequenceName = sequence.get("name");
+    const sequenceName = sequence?.name;
     return (
       <div>
         <Sticky top={40} className="sequence">
           <h2>{sequenceName}</h2>
         </Sticky>
         <div>
-          {sequence.get("children").map(a => <Activity key={a.get("id")} activity={a} reportFor={reportFor} sequenceName={sequenceName} />)}
+          {sequence?.children.map(a => <Activity key={a?.id} activity={a} reportFor={reportFor} sequenceName={sequenceName} />)}
         </div>
       </div>
     );

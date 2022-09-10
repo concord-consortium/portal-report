@@ -6,7 +6,7 @@ import css from "../../../css/dashboard/expand-students.less";
 class ExpandStudentsButton extends PureComponent {
   handleClick = () => {
     const { onSetStudentsExpanded, students, anyStudentsExpanded, trackEvent } = this.props;
-    onSetStudentsExpanded(students.map(student => student.get("id")), !anyStudentsExpanded);
+    onSetStudentsExpanded(students.map(student => student?.id), !anyStudentsExpanded);
     const trackAction = anyStudentsExpanded ? "Closed All Students" : "Opened All Students";
     trackEvent("Dashboard", trackAction);
   }

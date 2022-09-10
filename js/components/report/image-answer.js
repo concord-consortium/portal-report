@@ -14,7 +14,7 @@ export default class ImageAnswer extends PureComponent {
 
   render() {
     const { answer } = this.props;
-    const imgAnswer = answer.get("answer");
+    const imgAnswer = answer?.answer;
     if (!imgAnswer) {
       // There are broken answer documents that do not include an answer field
       // Don't crash, just provide a error message to the teacher
@@ -23,8 +23,8 @@ export default class ImageAnswer extends PureComponent {
     return (
       <div>
         <div className="image-answer">
-          <img src={imgAnswer.get("imageUrl")} onClick={() => this.setState({modalOpen: true})} data-cy="answer-image"/>
-          <div className="image-answer-note">{imgAnswer.get("note")}</div>
+          <img src={imgAnswer?.imageUrl} onClick={() => this.setState({modalOpen: true})} data-cy="answer-image"/>
+          <div className="image-answer-note">{imgAnswer?.note}</div>
         </div>
         <ImageAnswerModal answer={answer} show={this.state.modalOpen} onHide={() => this.setState({modalOpen: false})} />
       </div>

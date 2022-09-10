@@ -26,7 +26,7 @@ const isQuestionVisible = (question, featuredOnly) => {
   const viewType = getViewType();
   // Custom question filtering is currently supported only by regular, non-dashboard report.
   // There are no checkboxes and controls in dashboard.
-    if (viewType === FULL_REPORT && question.get("hiddenByUser")) {
+    if (viewType === FULL_REPORT && question?.hiddenByUser) {
     return false;
   }
   // Only dashboard is considered to be "featured question report". In the future, when there's a toggle
@@ -35,7 +35,7 @@ const isQuestionVisible = (question, featuredOnly) => {
   // (so the value is undefined or null), assume that the question is visible in the featured question report.
   // It's necessary so this report works before Portal (API) is updated to provide this flag. Later, it will be
   // less important. Additionally, for now we assume that the newer portal-dashboard follows the same logic.
-  if (((viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD)) && featuredOnly && question.get("showInFeaturedQuestionReport") === false) {
+  if (((viewType === DASHBOARD) || (viewType === PORTAL_DASHBOARD)) && featuredOnly && question?.showInFeaturedQuestionReport === false) {
     return false;
   }
   return true;
@@ -50,22 +50,22 @@ export const getAnswerTrees = createSelector(
       // Filter out answers that are not matching any students in the class. Class could have been updated.
       // Also, filter out answers that are not matching any question. It might happen if the activity gets updated and
       // some questions are deleted.
-      .filter(answer => students.has(answer.get("platformUserId")) && questions.has(answer.get("questionId")))
+      .filter(answer => students.has(answer?.platformUserId) && questions.has(answer?.questionId))
       .map(answer => {
-        if (answer.get("type") === "multiple_choice_answer") {
-          const question = questions.get(answer.get("questionId"));
+        if (answer?.type === "multiple_choice_answer") {
+          const question = questions?.[answer.get("questionId")];
           // `|| []` => in case question doesn't have choices.
-          const choices = Map((question.get("choices") || []).map(c => [c.get("id"), c]));
+          const choices = Map((question?.choices || []).map(c => [c?.id, c]));
           const selectedChoices = answer.getIn(["answer", "choiceIds"])
-            .map(id => choices.get(id) || Map({content: "[the selected choice has been deleted by question author]", correct: false, id: -1}));
-          const selectedCorrectChoices = selectedChoices.filter(c => c.get("correct"));
+            .map(id => choices?.[id] || Map({content: "[the selected choice has been deleted by question author]", correct: false, id: -1}));
+          const selectedCorrectChoices = selectedChoices.filter(c => c?.correct);
           answer = answer
-            .set("scored", question.get("scored"))
+            .set("scored", question?.scored)
             .set("selectedChoices", selectedChoices)
             .set("correct", selectedChoices.size > 0 && selectedChoices.size === selectedCorrectChoices.size);
         }
         return answer
-          .set("student", students.get(answer.get("platformUserId")));
+          .set("student", students?.[answer.get("platformUserId")]);
       });
     }
 );
@@ -81,9 +81,9 @@ export const getAnswersByQuestion = createSelector(
       //   question2.id: {student3.id: answer3, student4.id: answer4, ...}
       //   ... }
       return answers.reduce((answerTree, answer) => {
-        const questionId = answer.get("questionId");
-        let studentMap = answerTree.get(questionId) || Map();
-        studentMap = studentMap.set(answer.get("platformUserId"), answer);
+        const questionId = answer?.questionId;
+        let studentMap = answerTree?.[questionId] || Map();
+        studentMap = studentMap.set(answer?.platformUserId, answer);
         return answerTree.set(questionId, studentMap);
       }, mutableTree);
     });
@@ -109,11 +109,11 @@ export const getPageTrees = createSelector(
   [ getPages, getQuestionTrees ],
   (pages, questionTrees) =>
     pages.map(page => {
-      const mappedChildren = page.get("children").map(key => questionTrees.get(key));
+      const mappedChildren = page?.children.map(key => questionTrees?.[key]);
       return page
         .set("children", mappedChildren)
         // Page is visible only if at least one question is visible.
-        .set("visible", !!mappedChildren.find(q => q.get("visible")));
+        .set("visible", !!mappedChildren.find(q => q?.visible));
     })
 );
 
@@ -121,11 +121,11 @@ export const getSectionTrees = createSelector(
   [ getSections, getPageTrees, getHideSectionNames ],
   (sections, pageTrees, hideSectionNames) =>
     sections.map(section => {
-      const mappedChildren = section.get("children").map(id => pageTrees.get(id.toString()));
+      const mappedChildren = section?.children.map(id => pageTrees?.[id.toString()]);
       return section
         .set("children", mappedChildren)
         // Section is visible only if at least one page is visible.
-        .set("visible", !!mappedChildren.find(p => p.get("visible")))
+        .set("visible", !!mappedChildren.find(p => p?.visible))
         // Hide section titles for external activities.
         .set("nameHidden", hideSectionNames);
     }),
@@ -135,16 +135,16 @@ export const getActivityTrees = createSelector(
   [ getActivities, getSectionTrees ],
   (activities, sectionTrees) =>
     activities.map(activity => {
-      const mappedChildren = activity.get("children").map(id => sectionTrees.get(id.toString()));
+      const mappedChildren = activity?.children.map(id => sectionTrees?.[id.toString()]);
       // Calculate additional properties, flattened pages and questions.
-      const pages = mappedChildren.map(section => section.get("children")).flatten(1);
-      const questions = pages.map(page => page.get("children")).flatten(1);
+      const pages = mappedChildren.map(section => section?.children).flatten(1);
+      const questions = pages.map(page => page?.children).flatten(1);
       return activity
         .set("children", mappedChildren)
         .set("pages", pages)
         .set("questions", questions)
         // Activity is visible only if at least one section is visible.
-        .set("visible", !!mappedChildren.find(s => s.get("visible")));
+        .set("visible", !!mappedChildren.find(s => s?.visible));
     }),
 );
 
@@ -153,7 +153,7 @@ export const getSequenceTree = createSelector(
   (sequences, activityTrees) => {
     // There is always only one sequence.
     const sequence = sequences.values().next().value;
-    const mappedChildren = sequence.get("children").map(id => activityTrees.get(id.toString()));
+    const mappedChildren = sequence?.children.map(id => activityTrees?.[id.toString()]);
     return sequence
       .set("children", mappedChildren);
   },

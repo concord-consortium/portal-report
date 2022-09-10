@@ -18,7 +18,7 @@ export class Question extends PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  const answerMap = getAnswersByQuestion(state).get(ownProps.question.get("id")) || Map();
+  const answerMap = getAnswersByQuestion(state)?.[ownProps.question.get("id")] || Map();
   const students = getSortedStudents(state);
   return {
     answerMap,

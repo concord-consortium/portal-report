@@ -59,7 +59,7 @@ function checkActivityExpanded(dispatch, getState) {
   const expandedActivities = getState().getIn(["dashboard", "expandedActivities"]);
   if (!expandedActivities.includes(true)) {
     const firstActivity = getState().getIn(["report", "activities"]).first();
-    dispatch(setActivityExpanded(firstActivity.get("id"), true));
+    dispatch(setActivityExpanded(firstActivity?.id, true));
   }
 }
 

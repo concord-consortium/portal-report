@@ -10,9 +10,9 @@ export default class ActivityName extends PureComponent {
 
   onActivityNameClick() {
     const { activity, expanded, setActivityExpanded, trackEvent } = this.props;
-    setActivityExpanded(activity.get("id"), !expanded);
+    setActivityExpanded(activity?.id, !expanded);
     const trackAction = expanded ? "Collapsed Activity Column" : "Expanded Activity Column";
-    trackEvent("Dashboard", trackAction, {label: activity.get("name")});
+    trackEvent("Dashboard", trackAction, {label: activity?.name});
   }
 
   render() {
@@ -23,7 +23,7 @@ export default class ActivityName extends PureComponent {
            data-cy="activityName">
         <div className={css.content}>
           <div className={css.name}>
-            Act { num }: { activity.get("name") }
+            Act { num }: { activity?.name }
           </div>
           <div className={css.icon}>
             <i className={expanded ? "icomoon-shrink2" : "icomoon-enlarge2"} />

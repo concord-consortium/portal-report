@@ -19,33 +19,33 @@ export default class ActivityQuestions extends PureComponent {
       <div className={css.activityQuestions} style={{minWidth: width, width}}>
         <div className={css.content} data-cy="activityQuestions">
           {
-            expanded && activity.get("questions").filter(q => q.get("visible")).map(q => {
-              const questionIsExpanded = expandedQuestions.get(q.get("id").toString());
+            expanded && activity?.questions.filter(q => q?.visible).map(q => {
+              const questionIsExpanded = expandedQuestions?.[q?.id.toString()];
               const promptExpanded = !!(showFullPrompts || questionIsExpanded);
               const openQuestionDetails = (e) => {
                 // stop the click event from being handled by parent click handler
                 // which would cause the question collumn to collapse.
                 e.stopPropagation();
-                selectQuestion(q.get("id"));
+                selectQuestion(q?.id);
               };
               let trackAction = promptExpanded ? "Collapsed Question - " : "Expanded Question - ";
-              trackAction = trackAction + q.get("type");
-              const trackLabel = activity.get("name") + " - " + q.get("questionNumber") + ". " + striptags(q.get("prompt"));
+              trackAction = trackAction + q?.type;
+              const trackLabel = activity?.name + " - " + q?.questionNumber + ". " + striptags(q?.prompt);
               const parameters = {
                 promptExpanded,
-                questionType: q.get("type"),
-                activityName: activity.get("name"),
-                questionNumber: q.get("questionNumber"),
-                prompt: striptags(q.get("prompt"))
+                questionType: q?.type,
+                activityName: activity?.name,
+                questionNumber: q?.questionNumber,
+                prompt: striptags(q?.prompt)
               };
               if (promptExpanded) {
                 const headerClassName = `${css.questionPrompt} ${css.fullPrompt}`;
                 return (
                   <div
-                    key={q.get("id")}
+                    key={q?.id}
                     className={headerClassName}
                     onClick={() => {
-                      setQuestionExpanded(q.get("id"), false);
+                      setQuestionExpanded(q?.id, false);
                       trackEvent("Dashboard", trackAction, {label: trackLabel, parameters});
                     }}
                     data-cy="activityQuestionsText">
@@ -56,21 +56,21 @@ export default class ActivityQuestions extends PureComponent {
                       }}
                       className={css["icomoon-expander"]}
                       data-cy="expand-question-details" />
-                    Q{ q.get("questionNumber") }. { striptags(q.get("prompt")) }
+                    Q{ q?.questionNumber }. { striptags(q?.prompt) }
                   </div>
                 );
               } else {
                 const headerClassName = css.questionPrompt;
                 return (
                   <div
-                    key={q.get("id")}
+                    key={q?.id}
                     className={headerClassName}
                     onClick={() => {
-                      setQuestionExpanded(q.get("id"), true);
+                      setQuestionExpanded(q?.id, true);
                       trackEvent("Dashboard", trackAction, {label: trackLabel, parameters});
                     }}
                     data-cy="activity-question-toggle">
-                    Q{ q.get("questionNumber") }.
+                    Q{ q?.questionNumber }.
 
                   </div>
                 );

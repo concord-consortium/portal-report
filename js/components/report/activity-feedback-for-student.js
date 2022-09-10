@@ -15,7 +15,7 @@ export default class ActivityFeedbackForStudent extends PureComponent {
       autoScore,
     } = this.props;
     if (!feedbackEnabled) { return null; }
-    let feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
+    let feedback = feedbacks.find((f) => f?.platformStudentId === student?.id);
     if (feedback) {
       feedback = feedback;
     }

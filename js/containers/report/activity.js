@@ -38,7 +38,7 @@ class Activity extends PureComponent {
   }
 
   getFeedbackSettings(activity) {
-    return this.props.feedbackSettings.getIn(["activitySettings", activity.get("id")]) || Map({});
+    return this.props.feedbackSettings.getIn(["activitySettings", activity?.id]) || Map({});
   }
 
   render() {
@@ -58,23 +58,23 @@ class Activity extends PureComponent {
     const feedbackSettings = this.getFeedbackSettings(activity);
     const isClassReport = reportFor === "class";
     const isStudentReport = !isClassReport;
-    const activityName = activity.get("name");
-    const showText = feedbackSettings.get("textFeedbackEnabled");
-    const scoreType = feedbackSettings.get("scoreType");
-    const maxScore = scoreType === MANUAL_SCORE ? (feedbackSettings.get("maxScore") || MAX_SCORE_DEFAULT) : computedMaxScore;
+    const activityName = activity?.name;
+    const showText = feedbackSettings?.textFeedbackEnabled;
+    const scoreType = feedbackSettings?.scoreType;
+    const maxScore = scoreType === MANUAL_SCORE ? (feedbackSettings?.maxScore || MAX_SCORE_DEFAULT) : computedMaxScore;
     const summaryScores = scoreType === MANUAL_SCORE ? scores : Object.values(autoScores);
     const showScore = scoreType !== "none";
-    const useRubric = feedbackSettings.get("useRubric");
+    const useRubric = feedbackSettings?.useRubric;
     const feedbackEnabled = showScore || showText || useRubric;
     let autoScore = null;
 
     if (isStudentReport) {
-      const studentId = reportFor.get("id");
-      autoScore = isAutoScoring(scoreType) ? autoScores.get(studentId) : null;
+      const studentId = reportFor?.id;
+      autoScore = isAutoScoring(scoreType) ? autoScores?.[studentId] : null;
     }
 
     return (
-      <div className={`activity ${activity.get("visible") ? "" : "hidden"}`} data-cy= "activity">
+      <div className={`activity ${activity?.visible ? "" : "hidden"}`} data-cy= "activity">
         <Sticky top={60}>
           <h3>{activityName} </h3>
         </Sticky>
@@ -111,7 +111,7 @@ class Activity extends PureComponent {
             isClassReport && showFeedbackPanel &&
             <ActivityFeedbackPanel hide={this.hideFeedback} activity={activity} />
           }
-          { activity.get("children").map(s => <Section key={s.get("id")} section={s} reportFor={reportFor} />) }
+          { activity?.children.map(s => <Section key={s?.id} section={s} reportFor={reportFor} />) }
         </div>
       </div>
     );

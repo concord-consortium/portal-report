@@ -15,7 +15,7 @@ export default class OpenResponseAnswer extends PureComponent {
     const { answer } = this.props;
     return (
       <div data-cy="openResponseText">
-        { answer.get("answer") }
+        { answer?.answer }
       </div>
     );
   }

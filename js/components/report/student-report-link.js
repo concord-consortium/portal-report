@@ -4,8 +4,8 @@ import studentReporturl from "../../util/student-report-url";
 export default class StudentReportLink extends PureComponent {
   render() {
     const {student, started, activityIndex} = this.props;
-    const studentId = student.get("id");
-    const name = student.get("name");
+    const studentId = student?.id;
+    const name = student?.name;
     const link = studentReporturl(studentId, activityIndex);
 
     const linkToWork = (

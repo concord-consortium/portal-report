@@ -17,36 +17,36 @@ export class RubricHelper {
 
   criteriaLabel(viewer = "teacher") {
     const defaultKey = "criteriaLabel";
-    return this.rubric.get(keyForViewer(defaultKey, viewer)) || this.rubric.get(defaultKey);
+    return this.rubric?.[keyForViewer(defaultKey, viewer)] || this.rubric?.[defaultKey];
   }
 
   feedbackLabel(viewer = "teacher") {
     // Actually, there's no feedbackLabel for teachers. But let's keep this pattern in case we want to add
     // it later and display somewhere.
     const defaultKey = "feedbackLabel";
-    return this.rubric.get(keyForViewer(defaultKey, viewer)) || this.rubric.get(defaultKey);
+    return this.rubric?.[keyForViewer(defaultKey, viewer)] || this.rubric?.[defaultKey];
   }
 
   ratingForId(ratingID) {
-    return this.rubric.get("ratings").find(r => r.get("id") === ratingID);
+    return this.rubric?.ratings.find(r => r?.id === ratingID);
   }
 
   feedbackRatingFor(criteria = "teacher") {
-    const criteriaId = criteria.get("id");
-    const feedback = this.feedback.get(criteriaId) || NO_FEEDBACK;
-    const ratingId = feedback.get("id");
+    const criteriaId = criteria?.id;
+    const feedback = this.feedback?.[criteriaId] || NO_FEEDBACK;
+    const ratingId = feedback?.id;
     return this.ratingForId(ratingId);
   }
 
   criteriaDescription(criteria, viewer = "teacher") {
     const defaultKey = "description";
-    return criteria.get(keyForViewer(defaultKey, viewer)) || criteria.get(defaultKey);
+    return criteria?.[keyForViewer(defaultKey, viewer)] || criteria?.[defaultKey];
   }
 
   feedbackDescriptionForCriteria(criteria, viewer = "teacher") {
     const rating = this.feedbackRatingFor(criteria);
     if (!rating) { return null; }
-    const ratingId = rating.get("id");
+    const ratingId = rating?.id;
     const defaultKey = "ratingDescriptions";
     const viewerDescription = criteria.getIn([keyForViewer(defaultKey, viewer), ratingId], null);
     const defaultDescription = criteria.getIn([defaultKey, ratingId], null);
@@ -54,19 +54,19 @@ export class RubricHelper {
   }
 
   feedbackScoreForCriteria(criteria) {
-    return this.feedbackRatingFor(criteria).get("score");
+    return this.feedbackRatingFor(criteria)?.score;
   }
 
   allFeedback(viewer = "teacher") {
-    return this.rubric.get("criteria").map(c => {
+    return this.rubric?.criteria.map(c => {
       const record = this.feedbackRatingFor(c);
       if (!record) { return null; }
       return {
         description: this.criteriaDescription(c, viewer),
         ratingDescription: this.feedbackDescriptionForCriteria(c, viewer),
-        score: record.get("score"),
-        label: record.get("label"),
-        key: c.get("id"),
+        score: record?.score,
+        label: record?.label,
+        key: c?.id,
       };
     });
   }

@@ -55,7 +55,7 @@ class DashboardApp extends PureComponent {
 
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
-    const activityTrees = sequenceTree && sequenceTree.get("children");
+    const activityTrees = sequenceTree && sequenceTree?.children;
     return (
       <div className={css.dashboardApp}>
         <Header onHelpButtonClick={this.toggleHelpModal} background="#6fc6da" />
@@ -92,11 +92,11 @@ class DashboardApp extends PureComponent {
 }
 
 function mapStateToProps(state) {
-  const data = state.get("data");
-  const error = data.get("error");
-  const dataDownloaded = !error && !data.get("isFetching");
+  const data = state?.data;
+  const error = data?.error;
+  const dataDownloaded = !error && !data?.isFetching;
   return {
-    isFetching: data.get("isFetching"),
+    isFetching: data?.isFetching,
     error,
     clazzName: dataDownloaded && state.getIn(["report", "clazzName"]),
     students: dataDownloaded && getSortedStudents(state),

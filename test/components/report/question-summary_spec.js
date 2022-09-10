@@ -34,7 +34,7 @@ describe("<QuestionSummary />", () => {
   it("should have a summary of answered questions", () => {
     const { container, getByText } = render(
       <Provider store={mockStore({feedback: {questionFeedbacks: {}, settings: {}}})}>
-        <QuestionSummary question={question} answers={question.get("answers")} students={students} />
+        <QuestionSummary question={question} answers={question?.answers} students={students} />
       </Provider>
     );
     const statsElt = container.querySelector(".stats");

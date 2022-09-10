@@ -49,7 +49,7 @@ class ActivityFeedbackPanel extends PureComponent {
   }
 
   changeScoreType(newV) {
-    const activityId = this.props.activity.get("id").toString();
+    const activityId = this.props.activity?.id.toString();
     const newFlags = {
       scoreType: newV,
     };
@@ -78,7 +78,7 @@ class ActivityFeedbackPanel extends PureComponent {
   }
 
   getFeedbackSettings(activity) {
-    return this.props.settings.getIn(["activitySettings", activity.get("id")]) || Map({});
+    return this.props.settings.getIn(["activitySettings", activity?.id]) || Map({});
   }
 
   renderGettingStarted() {
@@ -106,13 +106,13 @@ class ActivityFeedbackPanel extends PureComponent {
       activityIndex
     } = this.props;
     const numNotAnswered = feedbacksNotAnswered.size;
-    const prompt = truncate(activity.get("name") || "", 200);
-    const activityId = activity.get("id");
+    const prompt = truncate(activity?.name || "", 200);
+    const activityId = activity?.id;
 
     const settings = this.getFeedbackSettings(activity);
-    const showText = settings.get("textFeedbackEnabled") || false;
-    const scoreType = settings.get("scoreType") || NO_SCORE;
-    const useRubric = settings.get("useRubric") || false;
+    const showText = settings?.textFeedbackEnabled || false;
+    const scoreType = settings?.scoreType || NO_SCORE;
+    const useRubric = settings?.useRubric || false;
     let maxScore;
     switch (scoreType) {
       case AUTOMATIC_SCORE:
@@ -120,7 +120,7 @@ class ActivityFeedbackPanel extends PureComponent {
         maxScore = computedMaxScore;
         break;
       default:
-        maxScore = settings.get("maxScore") || MAX_SCORE_DEFAULT;
+        maxScore = settings?.maxScore || MAX_SCORE_DEFAULT;
     }
 
     const filteredFeedbacks = this.state.showOnlyNeedReview ? feedbacksNeedingReview : feedbacks;
@@ -179,7 +179,7 @@ class ActivityFeedbackPanel extends PureComponent {
               <div className="feedback-for-students">
                 <TransitionGroup>
                   { filteredFeedbacks.map((studentActivityFeedback, i) => {
-                    const studentId = studentActivityFeedback.get("platformStudentId");
+                    const studentId = studentActivityFeedback?.platformStudentId;
                     return (
                       <CSSTransition
                         key={i}
@@ -194,7 +194,7 @@ class ActivityFeedbackPanel extends PureComponent {
                           studentId={studentId}
                           ref={(row) => { this.studentRowRefs[this.studentRowRef(i)] = row; }}
                           scoreType={scoreType}
-                          autoScore={autoScores.get(studentId)}
+                          autoScore={autoScores?.[studentId]}
                           feedbackEnabled={showText}
                           useRubric={useRubric}
                           rubric={rubric}
@@ -215,7 +215,6 @@ class ActivityFeedbackPanel extends PureComponent {
           </div>
         </div>
       </div>
-
     );
   }
 }
@@ -240,7 +239,7 @@ function makeMapStateToProps() {
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),
       rubric: rubric && rubric,
-      activityIndex: ownProps.activity.get("activityIndex")
+      activityIndex: ownProps.activity?.activityIndex
     };
   };
 }

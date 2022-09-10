@@ -54,7 +54,7 @@ export default class ImageQuestionDetails extends PureComponent {
   }
 
   get selectedAnswerProps() {
-    return this.answersWithImage.get(this.state.selectedAnswer);
+    return this.answersWithImage?.[this.state.selectedAnswer];
   }
 
   renderImages() {

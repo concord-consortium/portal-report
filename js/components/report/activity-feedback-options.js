@@ -19,7 +19,7 @@ export default class ActivityFeedbackOptions extends PureComponent {
 
   enableText(event) {
     const { activityIndex, updateActivityFeedbackSettings } = this.props;
-    const activityId = this.props.activity.get("id");
+    const activityId = this.props.activity?.id;
     updateActivityFeedbackSettings(
       activityId, activityIndex, {
         textFeedbackEnabled: event.target.checked,
@@ -28,7 +28,7 @@ export default class ActivityFeedbackOptions extends PureComponent {
 
   enableRubric(event) {
     const { activityIndex, updateActivityFeedbackSettings } = this.props;
-    const activityId = this.props.activity.get("id");
+    const activityId = this.props.activity?.id;
     updateActivityFeedbackSettings(
       activityId, activityIndex, {
         useRubric: event.target.checked,
@@ -37,7 +37,7 @@ export default class ActivityFeedbackOptions extends PureComponent {
 
   setMaxScore(value) {
     const { activityIndex, updateActivityFeedbackSettings } = this.props;
-    const activityId = this.props.activity.get("id");
+    const activityId = this.props.activity?.id;
     updateActivityFeedbackSettings(activityId, activityIndex, {
       maxScore: value,
     });
@@ -45,7 +45,7 @@ export default class ActivityFeedbackOptions extends PureComponent {
 
   changeScoreType(newV) {
     const { activityIndex, updateActivityFeedbackSettings } = this.props;
-    const activityId = this.props.activity.get("id").toString();
+    const activityId = this.props.activity?.id.toString();
     const newFlags = { scoreType: newV };
     if (newV !== NO_SCORE) {
       this.setState({lastScoreType: newV});

@@ -10,7 +10,7 @@ export default class StudentName extends PureComponent {
 
   onStudentNameClick() {
     const { student, studentExpanded, setStudentExpanded, trackEvent } = this.props;
-    setStudentExpanded(student.get("id"), !studentExpanded);
+    setStudentExpanded(student?.id, !studentExpanded);
     const trackAction = studentExpanded ? "Closed Student Row" : "Opened Student Row";
     trackEvent("Dashboard", trackAction);
   }
@@ -20,7 +20,7 @@ export default class StudentName extends PureComponent {
     return (
       <div className={css.studentName + " " + (expanded ? css.expanded : "")} onClick={this.onStudentNameClick} data-cy="studentName">
         <div className={css.content}>
-          { student.get("lastName") }, { student.get("firstName")}
+          { student?.lastName }, { student?.firstName}
         </div>
       </div>
     );

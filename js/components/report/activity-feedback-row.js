@@ -95,7 +95,7 @@ export default class ActivityFeedbackRow extends PureComponent {
       scoreType, autoScore, rubric
     } = this.props;
 
-    const activityFeedbackKey = studentFeedback.get("id");
+    const activityFeedbackKey = studentFeedback?.id;
     const scoreEnabled = scoreType !== "none";
     const automaticScoring = isAutoScoring(scoreType);
     const disableFeedback = complete;
@@ -145,9 +145,9 @@ export default class ActivityFeedbackRow extends PureComponent {
 
   render() {
     const { studentActivityFeedback, activityIndex } = this.props;
-    const student = studentActivityFeedback.get("student");
-    const name = student.get("realName");
-    const started = studentActivityFeedback.get("activityStarted");
+    const student = studentActivityFeedback?.student;
+    const name = student?.realName;
+    const started = studentActivityFeedback?.activityStarted;
     const noFeedbackSection =
       <p>
         This user hasn't finished yet.

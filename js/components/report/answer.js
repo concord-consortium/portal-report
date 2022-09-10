@@ -21,7 +21,7 @@ export default class Answer extends PureComponent {
       "NoAnswer": NoAnswer,
     };
 
-    return AnswerComponent[answer.get("questionType")];
+    return AnswerComponent[answer?.questionType];
   }
 
   render() {

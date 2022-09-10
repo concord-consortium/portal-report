@@ -7,11 +7,11 @@ import "../../../css/report/page.less";
 export default class Page extends PureComponent {
   render() {
     const { page, reportFor } = this.props;
-    const pageName = page.get("name");
+    const pageName = page?.name;
     const showLinks = reportFor === "class";
-    const previewUrl = showLinks ? page.get("previewUrl") : null;
+    const previewUrl = showLinks ? page?.previewUrl : null;
     return (
-      <div className={`page ${page.get("visible") ? "" : "hidden"}`}>
+      <div className={`page ${page?.visible ? "" : "hidden"}`}>
         <Sticky top={100}>
           <h4>
             <MaybeLink url={previewUrl}>
@@ -20,8 +20,8 @@ export default class Page extends PureComponent {
           </h4>
         </Sticky>
         <div>
-          {page.get("children").map((question) => {
-            return <Question key={question.get("id")} question={question} reportFor={reportFor} url={previewUrl} />;
+          {page?.children.map((question) => {
+            return <Question key={question?.id} question={question} reportFor={reportFor} url={previewUrl} />;
           })}
         </div>
       </div>

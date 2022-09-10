@@ -16,12 +16,12 @@ class Feedback extends PureComponent {
     if (!answer) {
       return null;
     }
-    return questionFeedbacks.get(answer.get("id"));
+    return questionFeedbacks?.[answer.get("id")];
   }
 
   render() {
     const { student, question, settings, answer } = this.props;
-    const questionSettings = settings.getIn(["questionSettings", question.get("id")]);
+    const questionSettings = settings.getIn(["questionSettings", question?.id]);
     if (!questionSettings) {
       return null;
     }
@@ -29,12 +29,12 @@ class Feedback extends PureComponent {
     if (!feedback) {
       return null;
     }
-    const showScore = questionSettings.get("scoreEnabled");
-    const showText = questionSettings.get("feedbackEnabled");
-    const maxScore = questionSettings.get("maxScore") || MAX_SCORE_DEFAULT;
+    const showScore = questionSettings?.scoreEnabled;
+    const showText = questionSettings?.feedbackEnabled;
+    const maxScore = questionSettings?.maxScore || MAX_SCORE_DEFAULT;
     const feedbackEnabled = showText || showScore;
-    const score = feedback && feedback.get("score");
-    const textFeedback = feedback && feedback.get("feedback");
+    const score = feedback && feedback?.score;
+    const textFeedback = feedback && feedback?.feedback;
     const hasBeenReviewed = feedback && feedbackValidForAnswer(feedback, answer);
     return (
       <FeedbackPanelForStudent
