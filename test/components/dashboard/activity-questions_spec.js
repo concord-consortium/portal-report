@@ -1,6 +1,5 @@
 import React from "react";
 import { shallow, mount } from "enzyme";
-import { fromJS } from "immutable";
 import ActivityQuestions from "../../../js/components/dashboard/activity-questions";
 
 describe("<ActivityQuestions />", () => {

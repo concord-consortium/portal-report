@@ -6,7 +6,6 @@ import AnswersTable from "../report/answers-table";
 import css from "../../../css/dashboard/question-details.less";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { Map } from "immutable";
 
 export class QuestionDetails extends PureComponent {
   constructor(props) {

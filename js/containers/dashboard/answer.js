@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { Map } from "immutable";
 import MultipleChoiceAnswer from "../../components/dashboard/multiple-choice-answer";
 import OpenResponseAnswer from "../../components/dashboard/open-response-answer";
 import { getAnswersByQuestion } from "../../selectors/report-tree";

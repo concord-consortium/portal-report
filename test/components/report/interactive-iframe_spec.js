@@ -3,7 +3,6 @@ import nock from "nock";
 import { shallow } from "enzyme";
 import InteractiveIframe from "../../../js/components/report/interactive-iframe";
 import iframePhone from "iframe-phone";
-import { Map } from "immutable";
 
 const mockAttachmentUrlResponse = { url: "test_attachment_url" };
 const mockHandleGetAttachmentUrl = jest.fn(() => Promise.resolve(mockAttachmentUrlResponse));

@@ -1,7 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
 import sinon from "sinon";
-import { fromJS } from "immutable";
 import ActivityName from "../../../js/components/dashboard/activity-name";
 
 describe("<ActivityName />", () => {

@@ -3,7 +3,6 @@ import { getActivityTrees, getQuestionTrees, getAnswersByQuestion } from "./repo
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS,
          SORT_BY_FEEDBACK_NAME, SORT_BY_FEEDBACK_PROGRESS } from "../actions/dashboard";
 import { compareStudentsByName } from "../util/misc";
-import { fromJS } from "immutable";
 
 const kSortGroupFirst = 1;
 const kSortGroupSecond = 2;

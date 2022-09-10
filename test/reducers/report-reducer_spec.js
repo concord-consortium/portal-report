@@ -1,7 +1,6 @@
 import { getReportItemAnswer, registerReportItem } from "../../js/actions";
 import report, {ReportState, getLoggingUserName} from "../../js/reducers/report-reducer";
 import iframePhone from "iframe-phone";
-import { fromJS } from "immutable";
 
 describe("report reducer", () => {
 

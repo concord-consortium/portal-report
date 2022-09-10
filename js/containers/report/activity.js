@@ -6,7 +6,6 @@ import FeedbackButton from "../../components/report/feedback-button";
 import ActivityFeedbackForStudent from "../../components/report/activity-feedback-for-student";
 import ActivityFeedbackPanel from "./activity-feedback-panel";
 import SummaryIndicator from "../../components/report/summary-indicator";
-import { Map } from "immutable";
 import {
   makeGetStudentFeedbacks,
   makeGetAutoScores,

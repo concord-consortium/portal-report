@@ -1,5 +1,4 @@
 import React from "react";
-import { fromJS } from "immutable";
 import Dashboard from "../../../js/components/dashboard/dashboard";
 import StudentName from "../../../js/components/dashboard/student-name";
 import ActivityName from "../../../js/components/dashboard/activity-name";

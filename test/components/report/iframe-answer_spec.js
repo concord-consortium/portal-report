@@ -1,6 +1,5 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { Map } from "immutable";
 import { IframeAnswer } from "../../../js/components/report/iframe-answer";
 
 const getReportItemAnswerMock = jest.fn();

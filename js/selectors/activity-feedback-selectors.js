@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { fromJS, Map as IMap } from "immutable";
 import { compareStudentsByName, feedbackValidForAnswer } from "../util/misc";
 import { getStudentProgress } from "./dashboard-selectors";
 import {

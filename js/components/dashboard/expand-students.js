@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { Map, List } from "immutable";
 import Button from "../common/button";
 
 import css from "../../../css/dashboard/expand-students.less";

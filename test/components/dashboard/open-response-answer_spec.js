@@ -1,6 +1,5 @@
 import React from "react";
 import { shallow, render } from "enzyme";
-import { fromJS } from "immutable";
 import OpenResponseAnswer from "../../../js/components/dashboard/open-response-answer";
 
 describe("<OpenResponseAnswer />", () => {

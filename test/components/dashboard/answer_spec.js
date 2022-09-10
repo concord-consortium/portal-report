@@ -1,5 +1,4 @@
 import React from "react";
-import { fromJS } from "immutable";
 import AnswerContainer, { Answer, NoAnswer, GenericAnswer } from "../../../js/containers/dashboard/answer";
 import { mountWithStore } from "../../setupTest";
 import OpenResponseAnswer from "../../../js/components/dashboard/open-response-answer";

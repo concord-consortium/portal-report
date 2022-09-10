@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
 import ReactDom from "react-dom";
-import { fromJS, Map } from "immutable";
 import Button from "../../components/common/button";
 import FeedbackFilter from "../../components/report/feedback-filter";
 import FeedbackOverview from "../../components/report/feedback-overview";

@@ -5,7 +5,6 @@ import QuestionForStudent from "../../components/report/question-for-student";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { getSortedStudents } from "../../selectors/report";
 import { connect } from "react-redux";
-import { Map } from "immutable";
 
 export class Question extends PureComponent {
   render() {

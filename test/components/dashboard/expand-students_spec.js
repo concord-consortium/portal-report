@@ -1,7 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
 import sinon from "sinon";
-import { fromJS } from "immutable";
 import ExpandStudents from "../../../js/components/dashboard/expand-students";
 
 describe("<ExpandStudents />", () => {

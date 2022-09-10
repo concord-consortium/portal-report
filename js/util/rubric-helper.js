@@ -1,5 +1,3 @@
-import { fromJS } from "immutable";
-
 const NO_FEEDBACK = fromJS({});
 
 // Some parts of Rubric are designed for student specifically.

@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import Immutable, { Map } from "immutable";
 import { getViewType, FULL_REPORT, DASHBOARD, PORTAL_DASHBOARD } from "../util/misc";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).

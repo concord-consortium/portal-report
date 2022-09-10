@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { Map } from "immutable";
 
 import css from "../../../css/dashboard/open-response-answer.less";
 

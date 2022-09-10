@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import { Set } from "immutable";
 import Answer from "./answer";
 import { CompareAnswerRmLinkContainer } from "../../containers/report/compare-answer";
 

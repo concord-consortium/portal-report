@@ -3,7 +3,6 @@ import Answer from "../../components/report/answer";
 import { CompareAnswerCheckboxContainer } from "./compare-answer";
 import ShowCompareContainer from "./show-compare";
 import { connect } from "react-redux";
-import { fromJS, Map } from "immutable";
 
 import "../../../css/report/answers-table.less";
 

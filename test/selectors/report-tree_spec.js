@@ -1,4 +1,3 @@
-import { fromJS } from "immutable";
 import getSequenceTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from "../../js/selectors/report-tree";
 
 describe("report tree selectors", () => {

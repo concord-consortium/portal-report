@@ -1,6 +1,5 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { Map } from "immutable";
 import { IframeAnswerReportItemAttachment } from "../../../js/components/report/iframe-answer-report-item-attachment";
 
 jest.mock("../../../js/components/report/iframe-answer-report-item-attachment-audio", () => ({

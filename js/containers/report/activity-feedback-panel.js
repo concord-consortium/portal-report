@@ -8,7 +8,6 @@ import ActivityFeedbackRow from "../../components/report/activity-feedback-row";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { connect } from "react-redux";
 import { updateActivityFeedback, updateActivityFeedbackSettings } from "../../actions/index";
-import { Map } from "immutable";
 
 import {
   makeGetStudentFeedbacks,

@@ -1,5 +1,4 @@
 import React from "react";
-import { fromJS } from "immutable";
 import AnswersTable from "../../../js/containers/report/answers-table";
 import { mountWithStore } from "../../setupTest";
 
