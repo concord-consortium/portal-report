@@ -219,7 +219,7 @@ describe("activity-feedback-selectors", () => {
     });
 
     it("Should return the score from the most recent rubric feedback", () => {
-      expect(scores?.1).toBe(2);
+      expect(scores?.[1]).toBe(2);
     });
   });
 });

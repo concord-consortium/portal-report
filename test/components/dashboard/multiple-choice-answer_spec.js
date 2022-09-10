@@ -50,9 +50,9 @@ describe("<MultipleChoiceAnswer />", () => {
       const question = { choices: [ { id: 1, content: "choice_1" }, { id: 2, content: "choice_2" } ] };
       const wrapper = shallow(<MultipleChoiceAnswer showFullAnswer question={question} answer={answer} />);
       expect(wrapper.find(Choice)).toHaveLength(2);
-      expect(wrapper.find(Choice).at(0).prop("choice")).toBe(question.get("choices")?.0);
+      expect(wrapper.find(Choice).at(0).prop("choice")).toBe(question.get("choices")?.[0]);
       expect(wrapper.find(Choice).at(0).prop("selected")).toBe(true);
-      expect(wrapper.find(Choice).at(1).prop("choice")).toBe(question.get("choices")?.1);
+      expect(wrapper.find(Choice).at(1).prop("choice")).toBe(question.get("choices")?.[1]);
       expect(wrapper.find(Choice).at(1).prop("selected")).toBe(false);
     });
   });

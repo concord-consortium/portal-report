@@ -13,7 +13,8 @@ describe("api helper", () => {
     const okResponse = { message: "OK" };
 
     beforeEach(() => {
-      nock("https://portal.com/")?./offerings/123.reply(200, okResponse);
+      nock("https://portal.com/")
+        .get("/offerings/123").reply(200, okResponse);
     });
 
     describe("when offering URL param is present", () => {
@@ -97,7 +98,8 @@ describe("api helper", () => {
 
       describe("when no resourceLinkId or targetUserId is included", () => {
         beforeEach(() => {
-          nock("https://portal.com/")?.[`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`]
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`)
             .reply(200, okResponse);
         });
 
@@ -111,7 +113,8 @@ describe("api helper", () => {
       });
       describe("when a resourceLinkId and targetUserId is included", () => {
         beforeEach(() => {
-          nock("https://portal.com/")?.[`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=abcde&target_user_id=fghijk`]
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=abcde&target_user_id=fghijk`)
             .reply(200, okResponse);
         });
 
@@ -136,12 +139,14 @@ describe("api helper", () => {
       beforeEach(() => {
         window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123&class=https://portal.com/classes/123");
 
-        nock("https://portal.com/")?./offerings/123
+        nock("https://portal.com/")
+          .get("/offerings/123")
           .reply(200, {
             id: resourceLinkId
           });
 
-        nock("https://portal.com/")?./classes/123
+        nock("https://portal.com/")
+          .get("/classes/123")
           .reply(200, {
             class_hash: classHash
           });
@@ -149,7 +154,8 @@ describe("api helper", () => {
 
       describe("when no resourceLinkId or targetUserId is included", () => {
         beforeEach(() => {
-          nock("https://portal.com/")?.[`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`]
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`)
             .reply(200, okResponse);
         });
 
@@ -163,7 +169,8 @@ describe("api helper", () => {
         beforeEach(() => {
           window.history.replaceState({}, "Test", "/?token=abc&offering=https://portal.com/offerings/123&class=https://portal.com/classes/123&studentId=fghijk");
 
-          nock("https://portal.com/")?.[`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=${resourceLinkId}&target_user_id=${studentId}`]
+          nock("https://portal.com/")
+            .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}&resource_link_id=${resourceLinkId}&target_user_id=${studentId}`)
             .reply(200, okResponse);
         });
 

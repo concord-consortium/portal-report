@@ -21,9 +21,11 @@ describe("<InteractiveIframe />", () => {
 
   beforeEach(() => {
     window.history.replaceState({}, "Test", "/?token=abcde&class=https://portal.com/classes/123");
-    nock("https://portal.com/")?./classes/123
+    nock("https://portal.com/")
+      .get("/classes/123")
       .reply(200, {class_hash: classHash});
-    nock("https://portal.com/")?.[`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`]
+    nock("https://portal.com/")
+      .get(`/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}`)
       .reply(200, firebaseJWTJson);
   });
 
