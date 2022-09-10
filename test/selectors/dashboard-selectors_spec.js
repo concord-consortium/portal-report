@@ -12,7 +12,7 @@ describe("dashboard selectors", () => {
   const s2 = { id: "2", firstName: "x", lastName: "AA" };
   const s3 = { id: "3", firstName: "Z", lastName: "a" };
 
-  const state = ({ sortBy = SORT_BY_NAME }) => fromJS({
+  const state = ({ sortBy = SORT_BY_NAME }) => ({
     report: {
       students: { "1": s1, "2": s2, "3": s3 },
       activities: {
@@ -40,6 +40,7 @@ describe("dashboard selectors", () => {
         ans5: { id: "ans5", questionId: "image_question-1", platformUserId: "1", type: "SomeAnswer" }
       }
     },
+
     dashboard: {
       sortBy
     }
@@ -97,7 +98,7 @@ describe("dashboard selectors", () => {
     });
 
     describe("getSelectedQuestion", () => {
-      const state = ({ selectedQuestion = null }) => fromJS({
+      const state = ({ selectedQuestion = null }) => ({
         report: {
           questions: {
             "open_response-1": { id: 1, type: "open_response", prompt: "prompt1" },
@@ -105,6 +106,7 @@ describe("dashboard selectors", () => {
           },
           activities: {}
         },
+
         dashboard: {
           selectedQuestion
         }

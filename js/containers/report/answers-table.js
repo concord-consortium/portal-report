@@ -21,9 +21,9 @@ class AnswersTable extends PureComponent {
     if (result) {
       return result;
     } else {
-      return fromJS({
+      return {
         questionType: "NoAnswer"
-      });
+      };
     }
   }
 
@@ -110,5 +110,5 @@ export default connect(mapStateToProps, mapDispatchToProps)(AnswersTable);
 
 AnswersTable.defaultProps = {
   showCompare: true,
-  answerMap: fromJS({})
+  answerMap: {}
 };

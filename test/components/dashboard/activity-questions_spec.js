@@ -5,11 +5,11 @@ import ActivityQuestions from "../../../js/components/dashboard/activity-questio
 describe("<ActivityQuestions />", () => {
   const prompt1 = "1st question prompt";
   const prompt2 = "2nd question prompt (not visible)";
-  const activity = fromJS({ questions: [
+  const activity = { questions: [
     { id: 1, visible: true, prompt: prompt1, questionNumber: "1", type: "multiple_choice" },
     { id: 2, visible: false, prompt: prompt2, questionNumber: "2", type: "multiple_choice" }
-  ]});
-  const expandedQuestions = fromJS({});
+  ]};
+  const expandedQuestions = {};
   describe("when activity is expanded", () => {
     describe("when questions are not expanded", () => {
       it("should render prompts of the visible questions", () => {
@@ -26,7 +26,7 @@ describe("<ActivityQuestions />", () => {
     });
     describe("when first question is expanded", () => {
       it("should render prompts of the visible questions", () => {
-        const expandedQuestions = fromJS({1: true});
+        const expandedQuestions = {1: true};
         const wrapper = shallow(
           <ActivityQuestions
             expanded
@@ -38,7 +38,7 @@ describe("<ActivityQuestions />", () => {
       });
 
       it("should render a clickable expansion box", () => {
-        const expandedQuestions = fromJS({1: true});
+        const expandedQuestions = {1: true};
         let clickCount = 0;
         const onClick = () => clickCount++;
         const wrapper = mount(

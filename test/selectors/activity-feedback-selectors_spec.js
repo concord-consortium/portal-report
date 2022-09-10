@@ -5,89 +5,83 @@ import {
 } from "../../js/selectors/activity-feedback-selectors";
 
 describe("activity-feedback-selectors", () => {
-  const students = fromJS(
-    [
-      {
-        lastName: "Paessel",
-        firstName: "Noah",
-        id: 1,
-        realName: "Noah Paessel"
-      },
-      {
-        lastName: "Ada",
-        firstName: "Noah",
-        id: 2,
-        realName: "Ada Paessel"
-      }
-    ]
-  );
-
-  const activity = fromJS(
+  const students = [
     {
+      lastName: "Paessel",
+      firstName: "Noah",
       id: 1,
-      activityFeedback: ["1-1", "1-2"],
-      scoreType: "manual"
-    }
-  );
-
-  const activityFeedbacks = fromJS(
-    {
-      "1-1": {
-        key: "1-1",
-        platformStudentId: 1,
-        learnerId: 201,
-        feedback: "good",
-        hasBeenReviewed: true,
-        rubricFeedback: {
-          C1: {
-            description: "Not meeting expected goals.",
-            id: "R1",
-            label: "Beginning",
-            score: 1
-          },
-          C2: {
-            description: "Not meeting expected goals.",
-            id: "R1",
-            label: "Beginning",
-            score: 1
-          }
-        },
-        score: 1
-
+      realName: "Noah Paessel"
     },
-      "1-2": {
-        key: "1-2",
-        platformStudentId: 2,
-        learnerId: 202,
-        feedback: "better",
-        hasBeenReviewed: true,
-        rubricFeedback: {
-          C1: {
-            description: "better",
-            id: "R1",
-            label: "better",
-            score: 2
-          },
-          C2: {
-            description: "better",
-            id: "R1",
-            label: "better",
-            score: 2
-          }
-        },
-        score: 2
-      }
+    {
+      lastName: "Ada",
+      firstName: "Noah",
+      id: 2,
+      realName: "Ada Paessel"
     }
-  );
+  ];
 
-  const progress = fromJS({
+  const activity = {
+    id: 1,
+    activityFeedback: ["1-1", "1-2"],
+    scoreType: "manual"
+  };
+
+  const activityFeedbacks = {
+    "1-1": {
+      key: "1-1",
+      platformStudentId: 1,
+      learnerId: 201,
+      feedback: "good",
+      hasBeenReviewed: true,
+      rubricFeedback: {
+        C1: {
+          description: "Not meeting expected goals.",
+          id: "R1",
+          label: "Beginning",
+          score: 1
+        },
+        C2: {
+          description: "Not meeting expected goals.",
+          id: "R1",
+          label: "Beginning",
+          score: 1
+        }
+      },
+      score: 1
+
+  },
+    "1-2": {
+      key: "1-2",
+      platformStudentId: 2,
+      learnerId: 202,
+      feedback: "better",
+      hasBeenReviewed: true,
+      rubricFeedback: {
+        C1: {
+          description: "better",
+          id: "R1",
+          label: "better",
+          score: 2
+        },
+        C2: {
+          description: "better",
+          id: "R1",
+          label: "better",
+          score: 2
+        }
+      },
+      score: 2
+    }
+  };
+
+  const progress = {
     "1": {
       "1": 0.5
     },
     "2": {
       "1": 0.5
     }
-  });
+  };
 
   describe("getStudentFeedbacks", () => {
     it("should be a function", () => {
@@ -125,8 +119,8 @@ describe("activity-feedback-selectors", () => {
 
   describe("getAutoscores", () => {
     let scoreType = "auto";
-    const rubricScores = fromJS({1: 10, 2: 20});
-    const questionAutoScores = fromJS({1: 1, 2: 2});
+    const rubricScores = {1: 10, 2: 20};
+    const questionAutoScores = {1: 1, 2: 2};
     let autoScores = null;
     describe("with auto scoreType", () => {
       beforeEach(() => {
@@ -194,7 +188,7 @@ describe("activity-feedback-selectors", () => {
       ]
     };
 
-    const feedbacks = {feedbacks: fromJS({
+    const feedbacks = {feedbacks: {
       "1-1": {
         key: "1-1",
         platformStudentId: 1,
@@ -216,7 +210,7 @@ describe("activity-feedback-selectors", () => {
           }
         }
       }
-    })};
+    }};
     // the collection of feedbacks …
     let scores = null;
 

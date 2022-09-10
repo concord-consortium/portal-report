@@ -37,7 +37,7 @@ describe("report reducer", () => {
       jest.clearAllMocks();
 
       state = new ReportState();
-      state = state.set("answers", fromJS([{ questionId, platformUserId, reportState: '{ "authoredState": "{}", "interactiveState": "{}" }' }]));
+      state = state.set("answers", [{ questionId, platformUserId, reportState: '{ "authoredState": "{}", "interactiveState": "{}" }' }]);
     });
 
     describe("when there's no report item metadata or it's empty", () => {

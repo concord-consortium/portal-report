@@ -104,7 +104,7 @@ class QuestionFeedbackPanel extends PureComponent {
     const { question, answers, students } = this.props;
     const answerByStudentId = {};
     answers.forEach(a => answerByStudentId[a.get("platformUserId")] = a);
-    const answersIncNoResponse = students.map(s => answerByStudentId[s.get("id")] || fromJS({ student: s, questionType: "NoAnswer" }));
+    const answersIncNoResponse = students.map(s => answerByStudentId[s.get("id")] || { student: s, questionType: "NoAnswer" });
     const showing = this.state.showFeedbackPanel;
     const prompt = question.get("prompt");
     const num = question.get("questionNumber");
@@ -229,14 +229,14 @@ class QuestionFeedbackPanel extends PureComponent {
   }
 
   getFeedback(answer) {
-    const newFeedback = fromJS({
+    const newFeedback = {
       answerId: answer.get("id"),
       feedback: "✖ No Feedback Yet",
       score: "0",
       hasBeenReviewedForAnswerHash: "",
       classHash: answer.get("classHash"),
       platformUserId: answer.get("platformUserId")
-    });
+    };
     return this.props.questionFeedbacks.get(answer.get("id")) || newFeedback;
   }
 }

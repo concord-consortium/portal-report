@@ -13,7 +13,7 @@ describe("<OpenResponseAnswer />", () => {
 
   describe("when showFullAnswer prop is true", () => {
     it("should render the full answer text only", () => {
-      const answer = fromJS({ answer: "answer-text" });
+      const answer = { answer: "answer-text" };
       const wrapper = shallow(<OpenResponseAnswer showFullAnswer={true} answer={answer} />);
       expect(wrapper.text()).toBe("answer-text");
       expect(wrapper.find(".icomoon-file-text")).toHaveLength(0);

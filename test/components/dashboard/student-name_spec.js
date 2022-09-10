@@ -7,7 +7,7 @@ describe("<StudentName />", () => {
   it("should render student name", () => {
     const lastName = "Doe";
     const firstName = "John";
-    const student = fromJS({ lastName, firstName });
+    const student = { lastName, firstName };
     const wrapper = shallow(<StudentName student={student} />);
     expect(wrapper.contains(lastName)).toBe(true);
     expect(wrapper.contains(firstName)).toBe(true);

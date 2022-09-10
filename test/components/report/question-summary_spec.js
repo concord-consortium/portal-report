@@ -8,15 +8,15 @@ const mockStore = configureStore();
 
 describe("<QuestionSummary />", () => {
   const prompt = "Why is the sky blue?";
-  const answers = fromJS([
+  const answers = [
     {type: "multiple_choice", answer: "test"},
     {type: "open_response", answer: "test"}
-  ]);
-  const students = fromJS({
+  ];
+  const students = {
     "test1@student": {},
     "test2@student": {},
     "test3@student": {}
-  });
+  };
   const question = Map({
     prompt,
     answers
@@ -24,7 +24,7 @@ describe("<QuestionSummary />", () => {
 
   it("should have the specified prompt", () => {
     const { getByText } = render(
-      <Provider store={mockStore(fromJS({feedback: {questionFeedbacks: {}, settings: {}}}))}>
+      <Provider store={mockStore({feedback: {questionFeedbacks: {}, settings: {}}})}>
         <QuestionSummary question={question} answers={List()} students={students} />
       </Provider>
     );
@@ -33,7 +33,7 @@ describe("<QuestionSummary />", () => {
 
   it("should have a summary of answered questions", () => {
     const { container, getByText } = render(
-      <Provider store={mockStore(fromJS({feedback: {questionFeedbacks: {}, settings: {}}}))}>
+      <Provider store={mockStore({feedback: {questionFeedbacks: {}, settings: {}}})}>
         <QuestionSummary question={question} answers={question.get("answers")} students={students} />
       </Provider>
     );

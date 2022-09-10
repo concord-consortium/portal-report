@@ -3,21 +3,21 @@ import AnswersTable from "../../../js/containers/report/answers-table";
 import { mountWithStore } from "../../setupTest";
 
 describe("<AnswersTable />", () => {
-  const question = fromJS({
+  const question = {
     id: "q1"
-  });
+  };
   const hidden = false;
   const showCompare = false;
-  const students = fromJS([
+  const students = [
     { id: 1, name: "John Doe" },
     { id: 2, name: "Test Student" }
-  ]);
-  const answers = fromJS({});
-  const state = fromJS({
+  ];
+  const answers = {};
+  const state = {
     report: {
       anonymous: false,
     },
-    feedback: fromJS({
+    feedback: {
       questionFeedbacks: {},
       settings: {
         questionSettings: {
@@ -27,8 +27,8 @@ describe("<AnswersTable />", () => {
           }
         }
       }
-    })
-  });
+    }
+  };
   const params = { answers, hidden, showCompare, question, students };
 
   it("should render student names", () => {

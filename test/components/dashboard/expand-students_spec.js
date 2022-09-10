@@ -10,8 +10,8 @@ describe("<ExpandStudents />", () => {
   });
 
   it("should open students if all are closed", () => {
-    const students = fromJS([{id: 42}]);
-    const expandedStudents = fromJS({42: false});
+    const students = [{id: 42}];
+    const expandedStudents = {42: false};
     const onClick = sinon.spy();
     const trackEvent = sinon.spy();
     const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />);
@@ -29,8 +29,8 @@ describe("<ExpandStudents />", () => {
   });
 
   it("should close students if any are open", () => {
-    const students = fromJS([{id: 42}, {id: 43}]);
-    const expandedStudents = fromJS({42: true, 43: false});
+    const students = [{id: 42}, {id: 43}];
+    const expandedStudents = {42: true, 43: false};
     const onClick = sinon.spy();
     const trackEvent = sinon.spy();
     const wrapper = mount(<ExpandStudents setStudentsExpanded={onClick} students={students} expandedStudents={expandedStudents} trackEvent={trackEvent} />);

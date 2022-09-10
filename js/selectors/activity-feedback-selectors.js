@@ -39,7 +39,7 @@ const newFeedback = (activityMap, studentMap, activityStarted) => {
     hasBeenReviewed: false,
     activityStarted
   };
-  return fromJS(newFeedbackRecord);
+  return newFeedbackRecord;
 };
 
 // Add the students realname to the student record.

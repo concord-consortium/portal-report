@@ -7,9 +7,9 @@ import { shallow } from "enzyme";
 
 describe("<AnswerContainer />", () => {
   it("should fetch correct Answer from store", () => {
-    const question = fromJS({ id: "q1" });
-    const student = fromJS({ id: "s1" });
-    const state = fromJS({
+    const question = { id: "q1" };
+    const student = { id: "s1" };
+    const state = {
       report: {
         answers: {
           a1: {
@@ -32,7 +32,7 @@ describe("<AnswerContainer />", () => {
           "s1": student
         }
       }
-    });
+    };
     const wrapper = mountWithStore(
       <AnswerContainer question={question} student={student} showFullAnswer={true} />,
       state
@@ -49,14 +49,14 @@ describe("<AnswerContainer />", () => {
 
 describe("<Answer />", () => {
   it("should render <NoAnswer> when answer is not submitted", () => {
-    const answer = fromJS({ submitted: false });
-    const question = fromJS({ required: true });
+    const answer = { submitted: false };
+    const question = { required: true };
     const wrapper = shallow(<Answer answer={answer} question={question} />);
     expect(wrapper.find(NoAnswer)).toHaveLength(1);
   });
 
   it("should render <GenericAnswer> when answer type is unknown", () => {
-    const answer = fromJS({ questionType: "UnknownType_123" });
+    const answer = { questionType: "UnknownType_123" };
     const wrapper = shallow(<Answer answer={answer} />);
     expect(wrapper.find(GenericAnswer)).toHaveLength(1);
   });
@@ -68,13 +68,13 @@ describe("<Answer />", () => {
   });
 
   it('should render <OpenResponse> when answer type is "open_response"', () => {
-    const answer = fromJS({ questionType: "open_response" });
+    const answer = { questionType: "open_response" };
     const wrapper = shallow(<Answer answer={answer} />);
     expect(wrapper.find(OpenResponseAnswer)).toHaveLength(1);
   });
 
   it('should render <MultipleChoiceAnswer> when answer type is "multiple_choice"', () => {
-    const answer = fromJS({ questionType: "multiple_choice" });
+    const answer = { questionType: "multiple_choice" };
     const wrapper = shallow(<Answer answer={answer} />);
     expect(wrapper.find(MultipleChoiceAnswer)).toHaveLength(1);
   });

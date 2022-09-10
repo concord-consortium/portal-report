@@ -14,7 +14,7 @@ describe("the rubric helper class", () => {
 
   describe("scoreFor", () => {
     it("should  return the correct scores", () => {
-      const criteria = fromJS(rubric.criteria[0]);
+      const criteria = rubric.criteria[0];
       expect(helper.feedbackScoreForCriteria(criteria)).toBe(3);
     });
   });
@@ -22,7 +22,7 @@ describe("the rubric helper class", () => {
   describe("descriptionFor", () => {
     describe("when there is no student description", () => {
       it("should always return the default description", () => {
-        const criteria = fromJS(rubric.criteria[0]);
+        const criteria = rubric.criteria[0];
         const expected = "Student makes a claim _supported_ by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.";
 
         const defaultDesc = helper.feedbackDescriptionForCriteria(criteria);
@@ -35,7 +35,7 @@ describe("the rubric helper class", () => {
 
     describe("when there is a student description", () => {
       it("should return the specific description for students when asked", () => {
-        const criteria = fromJS(rubric.criteria[1]);
+        const criteria = rubric.criteria[1];
 
         const defaultText = "Student provides reasoning that describes predator-prey OR mutually beneficial interactions between fire ants/ladybugs and fire ants/aphids, respectively.";
 

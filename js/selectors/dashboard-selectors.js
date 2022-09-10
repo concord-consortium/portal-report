@@ -31,7 +31,7 @@ export const getSelectedQuestion = createSelector(
   (questions, id) => {
     if (questions && id) {
       return questions
-        .get(id.toString(), fromJS({}));
+        .get(id.toString(), {});
     }
     return null;
   },

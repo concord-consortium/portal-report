@@ -1,4 +1,4 @@
-const NO_FEEDBACK = fromJS({});
+const NO_FEEDBACK = {};
 
 // Some parts of Rubric are designed for student specifically.
 // They use common suffix appended to the properties.
@@ -11,8 +11,8 @@ const keyForViewer = (defaultKey, viewer) => `${defaultKey}${VIEWER_SUFFIX[viewe
 
 export class RubricHelper {
   constructor(rubric, feedback) {
-    this.rubric = fromJS(rubric);
-    this.feedback = fromJS(feedback);
+    this.rubric = rubric;
+    this.feedback = feedback;
   }
 
   criteriaLabel(viewer = "teacher") {

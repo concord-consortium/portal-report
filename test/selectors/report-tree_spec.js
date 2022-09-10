@@ -1,7 +1,7 @@
 import getSequenceTree, { getAnswerTrees, getQuestionTrees, getPageTrees, getSectionTrees, getActivityTrees } from "../../js/selectors/report-tree";
 
 describe("report tree selectors", () => {
-  const state = ({ questionVisible = true, hideSectionNames = true }) => fromJS({
+  const state = ({ questionVisible = true, hideSectionNames = true }) => ({
     // Note that `questionVisible` parameter uses just one of the many ways to make question visible or not.
     // `getQuestionTrees` specs below test all these ways. This is used for tests that deal with the whole state.
     report: {
@@ -163,13 +163,13 @@ describe("report tree selectors", () => {
       describe("and full report view is used", () => {
         it('should set visibility based on "hiddenByUser" property', () => {
           setQueryParams(null);
-          const questions = fromJS({
+          const questions = {
             1: { hiddenByUser: false },
             2: { hiddenByUser: true }
-          });
-          const activities = fromJS({});
-          const sections = fromJS({});
-          const pages = fromJS({});
+          };
+          const activities = {};
+          const sections = {};
+          const pages = {};
           const showFeaturedQuestionsOnly = false;
           const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
@@ -179,13 +179,13 @@ describe("report tree selectors", () => {
       describe("and dashboard view is used", () => {
         it('should ignore "hiddenByUser" property', () => {
           setQueryParams("dashboard");
-          const questions = fromJS({
+          const questions = {
             1: { hiddenByUser: false },
             2: { hiddenByUser: true }
-          });
-          const activities = fromJS({});
-          const sections = fromJS({});
-          const pages = fromJS({});
+          };
+          const activities = {};
+          const sections = {};
+          const pages = {};
           const showFeaturedQuestionsOnly = false;
           const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
           expect(result[1].visible).toBe(true);
@@ -198,13 +198,13 @@ describe("report tree selectors", () => {
       describe("and the full report is used", () => {
         it('should ignore "showInFeaturedQuestionReport" property', () => {
           setQueryParams(null);
-          const questions = fromJS({
+          const questions = {
             1: { showInFeaturedQuestionReport: true },
             2: { showInFeaturedQuestionReport: false }
-          });
-          const activities = fromJS({});
-          const sections = fromJS({});
-          const pages = fromJS({});
+          };
+          const activities = {};
+          const sections = {};
+          const pages = {};
           const showFeaturedQuestionsOnly = true;
           // const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, FULL_REPORT, showFeaturedQuestionsOnly).toJS();
           const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();
@@ -216,13 +216,13 @@ describe("report tree selectors", () => {
       describe("and dashboard view is used", () => {
         it('should set visibility based on "showInFeaturedQuestionReport" property', () => {
           setQueryParams("dashboard");
-          const questions = fromJS({
+          const questions = {
             1: { showInFeaturedQuestionReport: true },
             2: { showInFeaturedQuestionReport: false }
-          });
-          const activities = fromJS({});
-          const sections = fromJS({});
-          const pages = fromJS({});
+          };
+          const activities = {};
+          const sections = {};
+          const pages = {};
           const showFeaturedQuestionsOnly = true;
           // const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, DASHBOARD, showFeaturedQuestionsOnly).toJS();
           const result = getQuestionTrees.resultFunc(activities, sections, pages, questions, showFeaturedQuestionsOnly).toJS();

@@ -33,5 +33,5 @@ export default class QuestionSummary extends PureComponent {
 
 QuestionSummary.defaultProps = {
   showFeedback: true,
-  answers: fromJS([])
+  answers: []
 };
