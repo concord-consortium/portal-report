@@ -18,7 +18,7 @@ const receiveRubric = (data) => {
 export function requestRubric(rubricUrl) {
   return (dispatch, getState) => {
     const state = getState();
-    const cachedRubric = state.getIn(["feedback", "settings", "rubric"]);
+    const cachedRubric = state?.feedback?.settings?.rubric;
     if (!cachedRubric) {
       dispatch({
         type: REQUEST_RUBRIC,

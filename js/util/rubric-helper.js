@@ -48,8 +48,8 @@ export class RubricHelper {
     if (!rating) { return null; }
     const ratingId = rating?.id;
     const defaultKey = "ratingDescriptions";
-    const viewerDescription = criteria.getIn([keyForViewer(defaultKey, viewer), ratingId], null);
-    const defaultDescription = criteria.getIn([defaultKey, ratingId], null);
+    const viewerDescription = criteria?.[keyForViewer(defaultKey, viewer)]?.[ratingId] ?? null;
+    const defaultDescription = criteria?.[defaultKey]?.[ratingId] ?? null;
     return viewerDescription || defaultDescription;
   }
 

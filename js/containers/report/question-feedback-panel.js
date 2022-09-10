@@ -129,8 +129,8 @@ class QuestionFeedbackPanel extends PureComponent {
     const showGettingStarted = !scoreEnabled && !feedbackEnabled;
     const studentsPulldown = filteredAnswers.map((a) => {
       return {
-        realName: a.getIn(["student", "realName"]),
-        id: a.getIn(["student", "id"]),
+        realName: a?.student?.realName,
+        id: a?.student?.id,
         answer: a,
       };
     });
@@ -224,7 +224,7 @@ class QuestionFeedbackPanel extends PureComponent {
   }
 
   getFeedbackSettings(question) {
-    return this.props.settings.getIn(["questionSettings", question?.id]) || Map({});
+    return this.props.settings?.questionSettings?.[question?.id] || Map({});
   }
 
   getFeedback(answer) {
@@ -242,8 +242,8 @@ class QuestionFeedbackPanel extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
-    settings: state.getIn(["feedback", "settings"])
+    questionFeedbacks: state?.feedback?.questionFeedbacks,
+    settings: state?.feedback?.settings
   };
 }
 

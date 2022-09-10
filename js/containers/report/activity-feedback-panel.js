@@ -78,7 +78,7 @@ class ActivityFeedbackPanel extends PureComponent {
   }
 
   getFeedbackSettings(activity) {
-    return this.props.settings.getIn(["activitySettings", activity?.id]) || Map({});
+    return this.props.settings?.activitySettings?.[activity?.id] || Map({});
   }
 
   renderGettingStarted() {
@@ -135,8 +135,8 @@ class ActivityFeedbackPanel extends PureComponent {
 
     const studentsPulldown = filteredFeedbacks.map((f) => {
       return {
-        realName: f.getIn(["student", "realName"]),
-        id: f.getIn(["student", "id"]),
+        realName: f?.student?.realName,
+        id: f?.student?.id,
         answer: f,
       };
     });
@@ -233,11 +233,11 @@ function makeMapStateToProps() {
     const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - feedbacksNotAnswered.size;
     const computedMaxScore = getMaxSCore(state, ownProps);
     const autoScores = getAutoscores(state, ownProps);
-    const rubric = state.getIn(["feedback", "settings", "rubric"]);
+    const rubric = state?.feedback?.settings?.rubric;
     return {
       feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
       feedbacksNotAnswered, computedMaxScore, autoScores,
-      settings: state.getIn(["feedback", "settings"]),
+      settings: state?.feedback?.settings,
       rubric: rubric && rubric,
       activityIndex: ownProps.activity?.activityIndex
     };

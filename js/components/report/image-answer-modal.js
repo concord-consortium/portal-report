@@ -24,17 +24,17 @@ export default class ImageAnswerModal extends PureComponent {
     if(!answer) {
       return null;
     } else {
-      if (!(answer.getIn(["answer", "imageUrl"]))) { return renderInvalidAnswer(answer, "response is missing answer field"); }
+      if (!(answer?.answer?.imageUrl)) { return renderInvalidAnswer(answer, "response is missing answer field"); }
     }
     return (
       <Modal show={show} onHide={onHide} animation={false}>
         <Modal.Header closeButton closeLabel="" />
         <Modal.Body>
-          <img src={answer.getIn(["answer", "imageUrl"])} style={{display: "block", margin: "0 auto"}} data-cy="image-answer-modal"/>
+          <img src={answer?.answer?.imageUrl} style={{display: "block", margin: "0 auto"}} data-cy="image-answer-modal"/>
         </Modal.Body>
         <Modal.Footer>
-          <div style={{fontWeight: "bold"}}>{answer.getIn(["student", "name"])}</div>
-          <div>{answer.getIn(["answer", "text"])}</div>
+          <div style={{fontWeight: "bold"}}>{answer?.student?.name}</div>
+          <div>{answer?.answer?.text}</div>
         </Modal.Footer>
       </Modal>
     );

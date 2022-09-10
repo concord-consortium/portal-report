@@ -4,7 +4,7 @@ import SelectionCheckBox from "../../components/report/selection-checkbox";
 
 const mapStateToProps = (state) => {
   return {
-    hideControls: state.getIn(["report", "hideControls"]),
+    hideControls: state?.report?.hideControls,
   };
 };
 

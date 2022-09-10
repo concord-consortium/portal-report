@@ -98,13 +98,13 @@ function mapStateToProps(state) {
   return {
     isFetching: data?.isFetching,
     error,
-    clazzName: dataDownloaded && state.getIn(["report", "clazzName"]),
+    clazzName: dataDownloaded && state?.report?.clazzName,
     students: dataDownloaded && getSortedStudents(state),
     sequenceTree: dataDownloaded && getSequenceTree(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
-    expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
-    expandedStudents: state.getIn(["dashboard", "expandedStudents"]),
-    expandedQuestions: state.getIn(["dashboard", "expandedQuestions"]),
+    expandedActivities: state?.dashboard?.expandedActivities,
+    expandedStudents: state?.dashboard?.expandedStudents,
+    expandedQuestions: state?.dashboard?.expandedQuestions,
     selectedQuestion: dataDownloaded && getSelectedQuestion(state),
   };
 }

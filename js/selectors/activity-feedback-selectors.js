@@ -52,7 +52,7 @@ const addRealName = (student) => {
 const activityFeedbackFor = (activity, student, feedbacks, progress) => {
   const key = keyFor(activity, student);
   const found = feedbacks?.[key];
-  const activityStarted = progress.getIn([student?.id, activity?.id]) > 0;
+  const activityStarted = progress?.[student?.id]?.[activity?.id] > 0;
   if (found) {
     return found
       .set("student", student)
@@ -66,21 +66,21 @@ const formatStudents = (students) => students
   .map(s => addRealName(s));
 
 const getActivitySettings = (feedbackSettings, activity) =>
-  feedbackSettings.getIn(["activitySettings", activity?.id]) || IMap({});
+  feedbackSettings?.activitySettings?.[activity?.id] || IMap({});
 
 const getQuestionSettings = (feedbackSettings, question) =>
-  feedbackSettings.getIn(["questionSettings", question?.id]) || IMap({});
+  feedbackSettings?.questionSettings?.[question?.id] || IMap({});
 
 /*************************************************************************
  * Simple selectors:
  *************************************************************************/
 const getReport = (state) => state?.report;
 const getActivity = (state, props) => props.activity;
-const getActivityFeedbacks = (state) => state.getIn(["feedback", "activityFeedbacks"]);
-const getQuestionFeedbacks = (state) => state.getIn(["feedback", "questionFeedbacks"]);
-const getFeedbackSettings = (state) => state.getIn(["feedback", "settings"]);
-const getStudents = (state) => state.getIn(["report", "students"]);
-const getRubric = (state) => state.getIn(["feedback", "settings", "rubric"]) && state.getIn(["feedback", "settings", "rubric"]);
+const getActivityFeedbacks = (state) => state?.feedback?.activityFeedbacks;
+const getQuestionFeedbacks = (state) => state?.feedback?.questionFeedbacks;
+const getFeedbackSettings = (state) => state?.feedback?.settings;
+const getStudents = (state) => state?.report?.students;
+const getRubric = (state) => state?.feedback?.settings?.rubric && state?.feedback?.settings?.rubric;
 
 /*************************************************************************
  * Composite selectors (composed of other selectors).
@@ -204,7 +204,7 @@ export const makeGetQuestions = () => createSelector(
     const sections = activity?.children;
     const pages = sections.flatMap(s => s?.children);
     const questions = pages.flatMap(page => page?.children);
-    return questions.map((v, i) => report.getIn(["questions", v?.id]));
+    return questions.map((v, i) => report?.questions?.[v?.id]);
   },
 );
 

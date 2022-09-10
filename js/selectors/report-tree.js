@@ -6,15 +6,15 @@ import { getViewType, FULL_REPORT, DASHBOARD, PORTAL_DASHBOARD } from "../util/m
 // It includes all the properties provided by API + calculates a few additional ones.
 
 // Inputs
-const getSequences = state => state.getIn(["report", "sequences"]);
-const getActivities = state => state.getIn(["report", "activities"]);
-const getPages = state => state.getIn(["report", "pages"]);
-const getSections = state => state.getIn(["report", "sections"]);
-const getQuestions = state => state.getIn(["report", "questions"]);
-const getAnswers = state => state.getIn(["report", "answers"]);
-const getStudents = state => state.getIn(["report", "students"]);
-const getHideSectionNames = state => state.getIn(["report", "hideSectionNames"]);
-const getShowFeaturedQuestionsOnly = state => state.getIn(["report", "showFeaturedQuestionsOnly"]);
+const getSequences = state => state?.report?.sequences;
+const getActivities = state => state?.report?.activities;
+const getPages = state => state?.report?.pages;
+const getSections = state => state?.report?.sections;
+const getQuestions = state => state?.report?.questions;
+const getAnswers = state => state?.report?.answers;
+const getStudents = state => state?.report?.students;
+const getHideSectionNames = state => state?.report?.hideSectionNames;
+const getShowFeaturedQuestionsOnly = state => state?.report?.showFeaturedQuestionsOnly;
 
 // Helpers
 // Why isn't this helper used by React components directly? So we don't have to care about view type here?
@@ -56,7 +56,7 @@ export const getAnswerTrees = createSelector(
           const question = questions?.[answer.get("questionId")];
           // `|| []` => in case question doesn't have choices.
           const choices = Map((question?.choices || []).map(c => [c?.id, c]));
-          const selectedChoices = answer.getIn(["answer", "choiceIds"])
+          const selectedChoices = answer?.answer?.choiceIds
             .map(id => choices?.[id] || Map({content: "[the selected choice has been deleted by question author]", correct: false, id: -1}));
           const selectedCorrectChoices = selectedChoices.filter(c => c?.correct);
           answer = answer

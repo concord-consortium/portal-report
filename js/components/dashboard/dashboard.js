@@ -210,7 +210,7 @@ export default class Dashboard extends PureComponent {
                             anyStudentExpanded={anyStudentExpanded}
                             expanded={expandedActivities?.[a.get("id")]}
                             showFullAnswers={expandedStudents?.[s.get("id")]}
-                            progress={studentProgress.getIn([s?.id, a?.id])}
+                            progress={studentProgress?.[s?.id]?.[a?.id]}
                             multChoiceSummary={this.shouldShowMultChoiceSummary(a)}
                             setQuestionExpanded={setQuestionExpanded}
                             expandedQuestions={expandedQuestions}

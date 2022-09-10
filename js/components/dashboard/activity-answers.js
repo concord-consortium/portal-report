@@ -13,7 +13,7 @@ export class ActivityAnswers extends PureComponent {
       q?.visible && q?.type === "multiple_choice" && q?.scored,
     );
     const questionsWithCorrectAnswer = scoredQuestions.filter(
-      question => answers.getIn([question?.id, student?.id, "correct"])
+      question => answers?.[question?.id]?.[student?.id]?.correct
     );
     return `${questionsWithCorrectAnswer.count()} / ${scoredQuestions.count()}`;
   }

@@ -45,8 +45,7 @@ Answer.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    answer: getAnswersByQuestion(state)
-      .getIn([ownProps.question?.id, ownProps.student?.id])
+    answer: getAnswersByQuestion(state)?.[ownProps.question?.id]?.[ownProps.student?.id]
   };
 }
 

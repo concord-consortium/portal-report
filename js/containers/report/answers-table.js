@@ -12,7 +12,7 @@ class AnswersTable extends PureComponent {
   }
 
   getFeedbackSettings(question) {
-    return question && this.props.feedbackSettings.getIn(["questionSettings", question?.id]) || Map({});
+    return question && this.props.feedbackSettings?.questionSettings?.[question?.id] || Map({});
   }
 
   getAnswerForStudent(student) {
@@ -98,9 +98,9 @@ function AnswerRow({student, answer, question, feedback, showScore, showFeedback
 
 function mapStateToProps(state, ownProps) {
   return {
-    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
-    feedbackSettings: state.getIn(["feedback", "settings"]),
-    anonymous: state.getIn(["report", "anonymous"]),
+    questionFeedbacks: state?.feedback?.questionFeedbacks,
+    feedbackSettings: state?.feedback?.settings,
+    anonymous: state?.report?.anonymous,
   };
 }
 

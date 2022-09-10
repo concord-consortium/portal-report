@@ -50,7 +50,7 @@ export default class ImageQuestionDetails extends PureComponent {
   // which then is !== null, so these invalid answers get included in this list
   get answersWithImage() {
     const { answers } = this.props;
-    return answers.filter(a => a.getIn(["answer", "imageUrl"]) !== null);
+    return answers.filter(a => a?.answer?.imageUrl !== null);
   }
 
   get selectedAnswerProps() {
@@ -59,7 +59,7 @@ export default class ImageQuestionDetails extends PureComponent {
 
   renderImages() {
     return this.answersWithImage.map(a => {
-      return renderImage(a.getIn(["answer", "imageUrl"]), a.getIn(["student", "name"]), a.getIn(["student", "id"]), a.getIn(["answer", "text"]));
+      return renderImage(a?.answer?.imageUrl, a?.student?.name, a?.student?.id, a?.answer?.text);
     });
   }
 

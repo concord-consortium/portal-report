@@ -21,7 +21,7 @@ class Feedback extends PureComponent {
 
   render() {
     const { student, question, settings, answer } = this.props;
-    const questionSettings = settings.getIn(["questionSettings", question?.id]);
+    const questionSettings = settings?.questionSettings?.[question?.id];
     if (!questionSettings) {
       return null;
     }
@@ -57,8 +57,8 @@ class Feedback extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    settings: state.getIn(["feedback", "settings"]),
-    questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"])
+    settings: state?.feedback?.settings,
+    questionFeedbacks: state?.feedback?.questionFeedbacks
   };
 }
 

@@ -34,7 +34,7 @@ export default class CompareView extends PureComponent {
           {answers.map(a =>
             <div className={this.answerClassName(a)} key={a?.id}>
               <div>
-                <strong>{a.getIn(["student", "name"])}</strong>
+                <strong>{a?.student?.name}</strong>
                 <div className="controls">
                   <CompareAnswerRmLinkContainer answer={a}>Remove</CompareAnswerRmLinkContainer>
                   {" | "}

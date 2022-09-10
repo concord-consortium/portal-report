@@ -49,7 +49,7 @@ class ReportApp extends PureComponent {
     if (showCompare) {
       // All the answers belong to the same question, so we can pick any answer to find the question.
       const questionId = compareViewAnswers.first()?.questionId;
-      question = report.getIn(["questions", questionId]);
+      question = report?.questions?.[questionId];
     }
     return (
       <Modal show={showCompare} bsStyle="compare-view" onHide={hideCompareView} animation={false}>

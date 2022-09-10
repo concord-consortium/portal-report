@@ -9,20 +9,20 @@ const kSortGroupSecond = 2;
 const kSortGroupThird = 3;
 
 // Inputs
-const getActivities = state => state.getIn(["report", "activities"]);
-export const getAnonymous = state => state.getIn(["report", "anonymous"]);
-const getCurrentActivityId = state => state.getIn(["dashboard", "currentActivityId"]);
-const getQuestions = state => state.getIn(["report", "questions"]);
-const getCurrentQuestionId = state => state.getIn(["dashboard", "currentQuestionId"]);
-export const getCurrentStudentId = state => state.getIn(["dashboard", "currentStudentId"]);
-const getStudents = state => state.getIn(["report", "students"]);
-const getFeedback = state => state.getIn(["feedback"]);
-export const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
-export const getDashboardFeedbackSortBy = state => state.getIn(["dashboard", "feedbackSortBy"]);
-const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
-export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
-export const getHideFeedbackBadges = state => state.getIn(["dashboard", "hideFeedbackBadges"]);
-export const getfeedbackSortRefreshEnabled = state => state.getIn(["dashboard", "feedbackSortRefreshEnabled"]);
+const getActivities = state => state?.report?.activities;
+export const getAnonymous = state => state?.report?.anonymous;
+const getCurrentActivityId = state => state?.dashboard?.currentActivityId;
+const getQuestions = state => state?.report?.questions;
+const getCurrentQuestionId = state => state?.dashboard?.currentQuestionId;
+export const getCurrentStudentId = state => state?.dashboard?.currentStudentId;
+const getStudents = state => state?.report?.students;
+const getFeedback = state => state?.feedback;
+export const getDashboardSortBy = state => state?.dashboard?.sortBy;
+export const getDashboardFeedbackSortBy = state => state?.dashboard?.feedbackSortBy;
+const getSeletedQuestionId = state => state?.dashboard?.selectedQuestion;
+export const getCompactReport = state => state?.dashboard?.compactReport;
+export const getHideFeedbackBadges = state => state?.dashboard?.hideFeedbackBadges;
+export const getfeedbackSortRefreshEnabled = state => state?.dashboard?.feedbackSortRefreshEnabled;
 
 // When a user selects a to display question details by
 // Clicking on the question column expand icon.
@@ -55,7 +55,7 @@ export const getSelectedQuestion = createSelector(
 
 function countCompletedAnswers(activityQuestions, answers, student) {
   return activityQuestions.reduce((count, question) => {
-    const answer = answers.getIn([question?.id, student?.id]);
+    const answer = answers?.[question?.id]?.[student?.id];
     if (answer &&
       // If question is required, its answer must be submitted.
       (!question?.required || answer?.submitted === true)) {
@@ -169,8 +169,8 @@ export const getActivityFeedbackSortedStudents = createSelector(
           const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
           const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
 
-          const student1Progress = studentProgress.getIn([student1?.id, currentActivityId]);
-          const student2Progress = studentProgress.getIn([student2?.id, currentActivityId]);
+          const student1Progress = studentProgress?.[student1?.id]?.[currentActivityId];
+          const student2Progress = studentProgress?.[student2?.id]?.[currentActivityId];
 
           const student1SortGroup = student1Progress === 0 ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
           const student2SortGroup = student2Progress === 0 ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;
@@ -205,8 +205,8 @@ export const getQuestionFeedbackSortedStudents = createSelector(
           const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
           const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
 
-          const student1Answer = answers.getIn([questionId, student1?.id]);
-          const student2Answer = answers.getIn([questionId, student2?.id]);
+          const student1Answer = answers?.[questionId]?.[student1?.id];
+          const student2Answer = answers?.[questionId]?.[student2?.id];
           const student1Answered = student1Answer && (!question?.required || student1Answer?.submitted);
           const student2Answered = student2Answer && (!question?.required || student2Answer?.submitted);
 

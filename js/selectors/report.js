@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { compareStudentsByName } from "../util/misc";
 
 // Inputs
-const getStudents = state => state.getIn(["report", "students"]);
+const getStudents = state => state?.report?.students;
 
 // Selectors
 export const getSortedStudents = createSelector(

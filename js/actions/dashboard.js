@@ -36,9 +36,9 @@ export function setActivityExpanded(activityId, value) {
     if (!value) {
       // When user collapses activity, check if anything else is expanded.
       // If not, collapse all the student rows too.
-      const expandedActivities = getState().getIn(["dashboard", "expandedActivities"]);
+      const expandedActivities = getState()?.dashboard?.expandedActivities;
       if (!expandedActivities.includes(true)) {
-        getState().getIn(["dashboard", "expandedStudents"]).forEach((expanded, studentId) =>
+        getState()?.dashboard?.expandedStudents.forEach((expanded, studentId) =>
           expanded && dispatch(setStudentExpanded(studentId, false)),
         );
       }
@@ -56,9 +56,9 @@ export function setQuestionExpanded(questionId, value) {
 }
 
 function checkActivityExpanded(dispatch, getState) {
-  const expandedActivities = getState().getIn(["dashboard", "expandedActivities"]);
+  const expandedActivities = getState()?.dashboard?.expandedActivities;
   if (!expandedActivities.includes(true)) {
-    const firstActivity = getState().getIn(["report", "activities"]).first();
+    const firstActivity = getState()?.report?.activities.first();
     dispatch(setActivityExpanded(firstActivity?.id, true));
   }
 }

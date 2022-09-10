@@ -38,7 +38,7 @@ class Activity extends PureComponent {
   }
 
   getFeedbackSettings(activity) {
-    return this.props.feedbackSettings.getIn(["activitySettings", activity?.id]) || Map({});
+    return this.props.feedbackSettings?.activitySettings?.[activity?.id] || Map({});
   }
 
   render() {
@@ -131,8 +131,8 @@ function makeMapStateToProps() {
       scores,
       rubricFeedbacks } = getFeedbacks(state, ownProps);
     const needsReviewCount = feedbacksNeedingReview.size;
-    const feedbackSettings = state.getIn(["feedback", "settings"]);
-    const rubric = state.getIn(["feedback", "settings", "rubric"]);
+    const feedbackSettings = state?.feedback?.settings;
+    const rubric = state?.feedback?.settings?.rubric;
     return {
       scores, rubricFeedbacks, feedbacks, feedbacksNeedingReview, needsReviewCount, autoScores, computedMaxScore, feedbackSettings,
       rubric: rubric && rubric
