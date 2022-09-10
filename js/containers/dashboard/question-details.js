@@ -8,7 +8,7 @@ import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 import { Map } from "immutable";
 
-export default class QuestionDetails extends PureComponent {
+export class QuestionDetails extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

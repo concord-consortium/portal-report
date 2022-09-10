@@ -7,7 +7,7 @@ import { getSortedStudents } from "../../selectors/report";
 import { connect } from "react-redux";
 import { Map } from "immutable";
 
-export default class Question extends PureComponent {
+export class Question extends PureComponent {
   render() {
     const { question, answerMap, answerList, students, reportFor, url, trackEvent } = this.props;
     if (reportFor === "class") {
