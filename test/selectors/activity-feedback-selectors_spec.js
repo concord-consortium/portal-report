@@ -103,10 +103,17 @@ describe("activity-feedback-selectors", () => {
       });
       describe("with one answer not reviewed", () => {
         beforeEach(() => {
+          const activityFeedbacksMod = {
+            ...activityFeedbacks,
+            ["1-2"]: {
+              ...activityFeedbacks["1-2"],
+              hasBeenReviewed: false
+            }
+          };
           studentFeedbacks = getStudentFeedbacks(
             activity,
             students,
-            activityFeedbacks.setIn(["1-2", "hasBeenReviewed"], false),
+            activityFeedbacksMod,
             progress
           );
         });
