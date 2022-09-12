@@ -14,10 +14,10 @@ export interface IFeedbackState {
 }
 
 const INITIAL_FEEDBACK_STATE = RecordFactory<IFeedbackState>({
-  settings: fromJS({}),
-  questionFeedbacks: fromJS({}),
-  activityFeedbacks: fromJS({}),
-  rubric: fromJS({})
+  settings: Map({}),
+  questionFeedbacks: Map({}),
+  activityFeedbacks: Map({}),
+  rubric: Map({})
 });
 
 export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackState {
@@ -33,19 +33,19 @@ export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackSt
 export default function feedback(state = new FeedbackState({}), action: any) {
   switch (action.type) {
     case RECEIVE_FEEDBACK_SETTINGS:
-      return state.set("settings", fromJS(action.response));
+      return state.set("settings", fromJS(action.response) as Map<any, any>);
     case RECEIVE_QUESTION_FEEDBACKS:
       const feedbacks = action.response.reduce((map: any, feedback: any) => {
         map[feedback.answerId] = feedback;
         return map;
       }, {});
-      return state.set("questionFeedbacks", fromJS(feedbacks));
+      return state.set("questionFeedbacks", fromJS(feedbacks) as Map<any, any>);
     case RECEIVE_ACTIVITY_FEEDBACKS:
       const actFeedbacks = action.response.reduce((map: any, feedback: any) => {
         map[`${feedback.activityId}-${feedback.platformStudentId}`] = feedback;
         return map;
       }, {});
-      return state.set("activityFeedbacks", fromJS(actFeedbacks));
+      return state.set("activityFeedbacks", fromJS(actFeedbacks) as Map<any, any>);
     default:
       return state;
   }

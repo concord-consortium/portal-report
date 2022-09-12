@@ -69,14 +69,14 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   nowShowing: "class",
   clazzName: "",
   clazzId: -1,
-  students: Immutable.fromJS([]),
-  answers: Immutable.fromJS([]),
-  sequences: Immutable.fromJS([]),
-  activities: Immutable.fromJS([]),
-  sections: Immutable.fromJS([]),
-  pages: Immutable.fromJS([]),
-  questions: Immutable.fromJS([]),
-  selectedStudentIds: Immutable.fromJS([]),
+  students: Map({}),
+  answers: Map({}),
+  sequences: Map({}),
+  activities: Map({}),
+  sections: Map({}),
+  pages: Map({}),
+  questions: Map({}),
+  selectedStudentIds: List([]),
   hideControls: false,
   hideSectionNames: false,
   userId: "",
@@ -145,16 +145,16 @@ export default function report(state = new ReportState({}), action?: any) {
   // Theoretically student can easily modify URL parameter to open report of the other student. But this report
   // will be always empty, as student-oriented report queries only student own answers (student user id is coming
   // from JWT info) and Firestore security rules also ensure that.
-  const { studentId } = queryString.parse(window.location.search);
-  const urlBasedStudentSelection = studentId ? Immutable.fromJS([ studentId ]) : null;
+  const studentId = queryString.parse(window.location.search).studentId as string | undefined;
+  const urlBasedStudentSelection: List<string> = studentId ? List([ studentId ]) : List();
   switch (action.type) {
     case SET_ANONYMOUS_VIEW:
       state = state
       .set("type", "student")
       .set("nowShowing", "student")
-      .set("selectedStudentIds", Immutable.fromJS([action.runKey]))
+      .set("selectedStudentIds", List([action.runKey]))
       .set("hideControls", true)
-      .set("students", Immutable.fromJS({[action.runKey]: {name: "Anonymous", id: action.runKey}}))
+      .set("students", Map({ [action.runKey]: Map({ name: "Anonymous", id: action.runKey }) }))
       .set("platformUserId", action.runKey);
       return state;
     case RECEIVE_PORTAL_DATA:
@@ -188,14 +188,14 @@ export default function report(state = new ReportState({}), action?: any) {
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);
       state = state
-        .set("sequences", Immutable.fromJS(data.entities.sequences))
-        .set("activities", Immutable.fromJS(data.entities.activities))
-        .set("sections", Immutable.fromJS(data.entities.sections))
-        .set("pages", Immutable.fromJS(data.entities.pages))
-        .set("questions", Immutable.fromJS(data.entities.questions));
+        .set("sequences", Immutable.fromJS(data.entities.sequences) as Map<any, any>)
+        .set("activities", Immutable.fromJS(data.entities.activities) as Map<any, any>)
+        .set("sections", Immutable.fromJS(data.entities.sections) as Map<any, any>)
+        .set("pages", Immutable.fromJS(data.entities.pages) as Map<any, any>)
+        .set("questions", Immutable.fromJS(data.entities.questions) as Map<any, any>);
       return state;
     case RECEIVE_ANSWERS:
-      return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)));
+      return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)) as Map<any, any>);
     case SET_NOW_SHOWING:
       return state
         .set("nowShowing", action.nowShowingValue)

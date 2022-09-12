@@ -72,8 +72,8 @@ export const getAnswerTrees = createSelector(
 );
 
 export const getAnswersByQuestion = createSelector(
-  [ getAnswerTrees, getStudents, getQuestions],
-  (answers, students, questions) => {
+  [ getAnswerTrees],
+  (answers) => {
 
     // Use withMutations so this isn't creating a lot of new objects
     const answerTreeResult = Map().withMutations(mutableTree => {

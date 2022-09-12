@@ -21,5 +21,5 @@ export interface StaticallyTypedRecord<T> extends Constructable<T> {
   toJS(): T;
 }
 
-export const RecordFactory = <T>(seed: T): new (...args: any[]) => StaticallyTypedRecord<T> =>
+export const RecordFactory = <T extends object>(seed: T): new (...args: any[]) => StaticallyTypedRecord<T> =>
   (Record(seed) as any) as new (...args: any[]) => StaticallyTypedRecord<T>;

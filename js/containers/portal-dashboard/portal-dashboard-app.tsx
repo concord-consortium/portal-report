@@ -1,5 +1,5 @@
 import React from "react";
-import { Map } from "immutable";
+import { List, Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getDashboardFeedbackSortBy,
@@ -108,7 +108,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
-    const activityTrees: Map<any, any> | false = sequenceTree && sequenceTree.get("children");
+    const activityTrees: List<any> | false = sequenceTree && sequenceTree.get("children");
     const rubric = feedback.get("rubric")?.toJS();
     let assignmentName: string;
 

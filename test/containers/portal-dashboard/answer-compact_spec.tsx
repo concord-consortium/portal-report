@@ -1,11 +1,11 @@
 import React from "react";
 import { render } from '@testing-library/react';
-import { fromJS, Map } from "immutable";
+import { Map } from "immutable";
 import { AnswerCompact } from "../../../js/containers/portal-dashboard/answer-compact";
 
 describe("<AnswerCompact />", () => {
-  const student = fromJS({ id: "s1" });
-  const answer = fromJS({
+  const student = Map({ id: "s1" });
+  const answer = Map({
     questionId: "q1",
     questionType: "open_response",
     answer: "answer foo bar",
@@ -13,7 +13,7 @@ describe("<AnswerCompact />", () => {
   });
 
   describe("when question specifies reportItemUrl", () => {
-    const question = fromJS({ id: "q1", reportItemUrl: "foobar.com" });
+    const question = Map({ id: "q1", reportItemUrl: "foobar.com" });
 
     it("should call getReportItemAnswer on initial mount and each time when answer is updated", () => {
       const getReportItemAnswer = jest.fn();
@@ -60,7 +60,7 @@ describe("<AnswerCompact />", () => {
   });
 
   describe("when question doesn't specify reportItemUrl", () => {
-    const question = fromJS({ id: "q1" });
+    const question = Map({ id: "q1" });
 
     it("should not call getReportItemAnswer", () => {
       const getReportItemAnswer = jest.fn();

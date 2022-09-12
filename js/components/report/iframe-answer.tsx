@@ -148,7 +148,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     // request the latest student report html
     if (hasReportItemUrl) {
       setTimeout(() => {
-        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]), "fullAnswer");
+        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "fullAnswer");
       }, 0);
     }
 

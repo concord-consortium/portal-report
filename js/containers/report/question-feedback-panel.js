@@ -115,7 +115,7 @@ class QuestionFeedbackPanel extends PureComponent {
     const scores = answers.map( (a) => this.getFeedback(a))
       .map(f => f.get("score"))
       .filter(f => f != null)
-      .toArray();
+      .toArray().map(kv => kv[1]);
 
     const numAnswers = answers.count();
     const numNoAnswers = students.count() - numAnswers;

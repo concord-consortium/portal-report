@@ -1,5 +1,5 @@
 import React from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import striptags from "striptags";
 import { renderHTML } from "../../../util/render-html";
@@ -9,7 +9,7 @@ import css from "../../../../css/portal-dashboard/response-details/popup-student
 import ReportItemIframe from "../report-item-iframe";
 
 interface IProps {
-  activities: Map<any, any>;
+  activities: List<any>;
   currentActivity: Map<string, any>;
   currentStudentId: string | null;
   students: Map<any, any>;

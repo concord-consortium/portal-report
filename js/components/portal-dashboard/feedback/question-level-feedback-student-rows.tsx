@@ -1,5 +1,5 @@
 import React from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { QuestionFeedbackTextarea } from "./question-feedback-textarea";
 import { feedbackValidForAnswer } from "../../../util/misc";
@@ -20,7 +20,7 @@ interface IProps {
   feedbacksNeedingReview: Map<any, any>;
   isAnonymous: boolean;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
-  students: Map<any, any>;
+  students: List<any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
 }
@@ -39,13 +39,13 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     return feedbackBadge;
   };
 
-  const feedbackRows = students.map ((student: Map<any, any>, index: number) => {
+  const feedbackRows = students.map ((student: Map<any, any>) => {
     const studentId = student.get("id");
     const currentQuestionId = currentQuestion.get("id");
     const formattedName = getFormattedStudentName(isAnonymous, student);
-    const answer = answers.getIn([currentQuestionId, studentId]);
+    const answer = answers.getIn([currentQuestionId, studentId]) as Map<any, any>;
     const answerId = answer?.get("id");
-    const feedbackData = feedbacks.getIn([answerId]);
+    const feedbackData = feedbacks.get(answerId);
     const feedback = feedbackData ? feedbackData.get("feedback") : "";
     const feedbackBadge = getFeedbackIcon(feedback, feedbackData, answer);
 
