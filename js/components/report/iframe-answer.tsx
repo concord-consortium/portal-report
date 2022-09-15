@@ -37,6 +37,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
       iframeVisible: false
     };
     this.toggleIframe = this.toggleIframe.bind(this);
+    this.renderLink = this.renderLink.bind(this);
   }
 
   toggleIframe() {
@@ -93,10 +94,10 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
       const toggleText = iframeVisible ? "Hide" : "View Work";
       const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
       return (
-        <React.Fragment>
+        <div>
           <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a> |{" "}
           <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>
-        </React.Fragment>
+        </div>
       );
     } else {
       return <a href={linkUrl} target="_blank" data-cy="externalIframe">View work in new tab {externalLinkIcon}</a>;
