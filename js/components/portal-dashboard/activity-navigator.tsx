@@ -1,12 +1,12 @@
 import React from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
 
 import css from "../../../css/portal-dashboard/activity-navigator.less";
 
 
 interface IProps {
-  activities: Map<any, any>;
+  activities: List<any>;
   currentActivity?: Map<string, any>;
   isSequence: boolean;
   setCurrentActivity: (activityId: string) => void;

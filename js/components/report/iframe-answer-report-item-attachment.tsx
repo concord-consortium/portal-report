@@ -27,7 +27,7 @@ export class IframeAnswerReportItemAttachment extends PureComponent<IProps, ISta
 
   UNSAFE_componentWillMount() {
     const { item, answer } = this.props;
-    const answerMeta = answer.toJS();
+    const answerMeta: any = answer.toJS();
     const attachment = answerMeta.attachments[item.name];
     const contentType = attachment.contentType;
     this.setState({contentType});

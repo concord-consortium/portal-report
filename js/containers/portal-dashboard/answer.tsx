@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
 import { AnswerProps, hasResponse } from "../../util/answer-utils";
@@ -79,7 +80,7 @@ class Answer extends React.PureComponent<AnswerProps> {
 function mapStateToProps(state: any, ownProps: any): Partial<AnswerProps> {
   return {
     answer: getAnswersByQuestion(state)
-      .getIn([ownProps.question.get("id"), ownProps.student.get("id")])
+      .getIn([ownProps.question.get("id"), ownProps.student.get("id")]) as Map<string, any>
   };
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import { connect } from "react-redux";
 import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../../actions/index";
 import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
@@ -24,7 +24,7 @@ interface IProps {
   questionFeedbacks: Map<any, any>;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
-  questionFeedbackStudents: Map<any, any>;
+  questionFeedbackStudents: List<any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
   trackEvent: TrackEventFunction;

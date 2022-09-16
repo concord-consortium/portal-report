@@ -30,7 +30,7 @@ export class AnswerCompact extends React.PureComponent<IProps> {
     const hasReportItemUrl = !!question?.get("reportItemUrl");
 
     if (hasReportItemUrl && answer) {
-      this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]), "compactAnswer");
+      this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "compactAnswer");
     }
   }
 
@@ -40,7 +40,7 @@ export class AnswerCompact extends React.PureComponent<IProps> {
     const answerChanged = JSON.stringify(prevProps.answer) !== JSON.stringify(answer);
 
     if (hasReportItemUrl && answer && answerChanged) {
-      this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]), "compactAnswer");
+      this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "compactAnswer");
     }
   }
 
@@ -94,7 +94,7 @@ export class AnswerCompact extends React.PureComponent<IProps> {
 }
 
 function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
-  const answer = getAnswersByQuestion(state).getIn([ownProps.question.get("id"), ownProps.student.get("id")]);
+  const answer = getAnswersByQuestion(state).getIn([ownProps.question.get("id"), ownProps.student.get("id")]) as Map<string, any>;
   return {
     answer,
     hideFeedbackBadges: getHideFeedbackBadges(state),

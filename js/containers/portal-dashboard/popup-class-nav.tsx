@@ -237,14 +237,14 @@ function mapStateToProps(state: any, ownProps?: any) {
       const questionId = currentQuestion.get("id");
       const questionFeedbacks = state.getIn(["feedback", "questionFeedbacks"]);
       const feedbacksGiven = [];
-      questionFeedbacks.toArray().forEach((feedback: any) => {
+      questionFeedbacks.toArray().map((kv: any) => kv[1]).forEach((feedback: any) => {
         if (feedback.get("questionId") === questionId && feedback.get("feedback")?.trim() !== "") {
           feedbacksGiven.push(feedback);
         }
       });
       const feedbackCount = feedbacksGiven.length || 0;
       const studentAnswers = [];
-      answers.toArray().forEach((item: any) => {
+      answers.toArray().map((kv: any) => kv[1]).forEach((item: any) => {
         item.forEach((ans: any) => {
           if (ans.get("questionId") === questionId) {
             studentAnswers.push(ans);

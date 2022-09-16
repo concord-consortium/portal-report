@@ -1,5 +1,5 @@
 import React from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import PopupClassNav from "../../../containers/portal-dashboard/popup-class-nav";
 import { QuestionNavigator } from "../question-navigator";
 import { PopupStudentResponseList } from "./popup-all-student-response-list";
@@ -13,9 +13,9 @@ import { StudentNavigator } from "../student-navigator";
 import { ActivityNavigator } from "../activity-navigator";
 import { DashboardViewMode, ListViewMode, FeedbackLevel } from "../../../util/misc";
 import { TrackEventFunction } from "../../../actions";
+import { PopupQuestionAnswerList } from "./popup-question-answer-list";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
-import { PopupQuestionAnswerList } from "./popup-question-answer-list";
 
 export interface SelectedStudent {
   id: string;
@@ -23,7 +23,7 @@ export interface SelectedStudent {
 }
 
 interface IProps {
-  activities: Map<any, any>;
+  activities: List<any>;
   anonymous: boolean;
   answers: Map<any, any>;
   currentActivity?: Map<string, any>;
@@ -80,7 +80,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const isSequence = activities.size > 1;
 
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
-    const currentActivityWithQuestions = activities.find(activity => activity.get("id") === activityId);
+    const currentActivityWithQuestions = activities.find((activity: any) => activity.get("id") === activityId);
     const firstQuestion = currentActivityWithQuestions.get("questions").first();
 
     let qCount = 0;

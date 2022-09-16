@@ -1,5 +1,5 @@
 import React from "react";
-import { Map } from "immutable";
+import { List, Map } from "immutable";
 import { ProgressLegendContainer } from "./legend-container";
 import { getQuestionIcon } from "../../util/question-utils";
 import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
@@ -19,7 +19,7 @@ const margin = 20;
 const getTotalQuestionsWidth = (numQuestions: number) => Math.max(0, numQuestions * (questionWidth + margin) - margin);
 
 interface IProps {
-  activities: Map<any, any>;
+  activities: List<any>;
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   hideFeedbackBadges: boolean;

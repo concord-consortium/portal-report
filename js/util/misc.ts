@@ -52,7 +52,7 @@ export const answerHash = (answer: Map<string, any>) => {
   return md5(answerContent);
 };
 
-export const feedbackValidForAnswer = (feedback: Map<string, any>, answer: Map<string, any>) => {
+export const feedbackValidForAnswer = (feedback?: Map<string, any>, answer?: Map<string, any>) => {
   if (!feedback || !answer) {
     return false;
   }

@@ -1,15 +1,14 @@
 import React from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
 import { TrackEventFunction } from "../../actions";
 import ActivityFeedbackGivenIcon from "../../../img/svg-icons/feedback-activity-badge-icon.svg";
-
-import css from "../../../css/portal-dashboard/student-answers.less";
 import { hasRubricFeedback } from "../../util/activity-feedback-helper";
 
+import css from "../../../css/portal-dashboard/student-answers.less";
 
 interface IProps {
-  activities: Map<any, any>;
+  activities: List<any>;
   activityFeedbacks: Map<any, any>;
   answers: Map<any, any>;
   currentActivity: Map<any, any> | undefined;
@@ -156,7 +155,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   private renderProgress = (activity: any, student: any) => {
     const { studentProgress, activityFeedbacks, rubric, hideFeedbackBadges  } = this.props;
     const numQuestions = activity.get("questions").size;
-    const progress = studentProgress.getIn([student.get("id"), activity.get("id")]);
+    const progress = studentProgress.getIn([student.get("id"), activity.get("id")]) as number;
     const activityStudentId = activity.get("id")+"-"+student.get("id");
     const activityStudentFeedback = activityFeedbacks.get(activityStudentId);
     const hasBeenReviewed = activityFeedbacks.size > 0

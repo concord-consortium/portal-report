@@ -1,5 +1,5 @@
 import React from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { QuestionFeedbackTextarea } from "./question-feedback-textarea";
 import { feedbackValidForAnswer } from "../../../util/misc";
@@ -18,7 +18,7 @@ interface IProps {
   currentStudentId: string | null;
   feedbacks: Map<any, any>;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
-  students: Map<any, any>;
+  students: List<any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
 }
@@ -27,7 +27,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
   const { answers, feedbacks, currentActivity, currentStudentId, setFeedbackSortRefreshEnabled, students, updateQuestionFeedback,
           trackEvent } = props;
 
-  const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer: Map<string, any>) => {
+  const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer?: Map<string, any>) => {
     let feedbackBadge = <AwaitingFeedbackQuestionBadgeIcon />;
     if (feedback !== "") {
       feedbackBadge = feedbackValidForAnswer(feedbackData, answer)
@@ -47,10 +47,10 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
 
     const currentQuestionId = question.get("id");
     const answer = currentStudentId
-                   ? answers.getIn([currentQuestionId, currentStudentId])
+                   ? answers.getIn([currentQuestionId, currentStudentId]) as Map<any, any>
                    : undefined;
     const answerId = answer?.get("id");
-    const feedbackData = answerId && feedbacks.getIn([answerId]);
+    const feedbackData = answerId && feedbacks.get(answerId);
     const feedback = feedbackData ? feedbackData.get("feedback") : "";
     const feedbackBadge = getFeedbackIcon(feedback, feedbackData, answer);
 
