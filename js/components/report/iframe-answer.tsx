@@ -41,7 +41,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   toggleIframe() {
-    this.setState({iframeVisible: !this.state.iframeVisible});
+    this.setState(prev => ({iframeVisible: !prev.iframeVisible}));
   }
 
   getLinkURL(answer: string) {
@@ -95,7 +95,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
       const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
       return (
         <div>
-          <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a> |{" "}
+          <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a> | {" "}
           <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>
         </div>
       );
@@ -209,6 +209,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
             answerText={answerText}
             renderLink={this.renderLink}
             answer={answer}
+            iframeVisible={item.type === "links" && this.state.iframeVisible}
           />
         ))}
         {this.shouldRenderIframe() && this.renderIframe()}
