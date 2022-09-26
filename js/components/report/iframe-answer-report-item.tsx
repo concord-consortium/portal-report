@@ -11,6 +11,7 @@ interface IProps {
   answer: Map<any, any>;
   item: IReportItemAnswerItem;
   answerText: any;
+  iframeVisible: boolean;
   renderLink: (options?: {hideViewInNewTab?: boolean; hideViewInline?: boolean}) => JSX.Element;
 }
 
@@ -43,7 +44,7 @@ export class IframeAnswerReportItem extends PureComponent<IProps, IState> {
                               : <div className="noWrittenResponse">
                                   <QOpenResponseIcon className="noResponseIcon" />No written response
                                 </div>;
-    return <div className="testing">{ writtenResponse }</div>;
+    return <div data-cy="answerText">{ writtenResponse }</div>;
   }
 
   render() {
