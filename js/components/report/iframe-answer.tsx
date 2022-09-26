@@ -41,8 +41,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   toggleIframe() {
-    const { iframeVisible } = this.state;
-    this.setState({iframeVisible: !iframeVisible});
+    this.setState(prev => ({iframeVisible: !prev.iframeVisible}));
   }
 
   getLinkURL(answer: string) {
