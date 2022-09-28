@@ -202,7 +202,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
             {maybeAnswerTextOrLinks}
           </div>
         )}
-        {reportItemAnswerItems.map((item, index) => (
+        {!alwaysOpen && reportItemAnswerItems.map((item, index) => (
           <IframeAnswerReportItem
             key={index}
             item={item}
