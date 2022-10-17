@@ -154,6 +154,21 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     }
 
     if (reportItemAnswer) {
+      const injectedStyleTag = `
+      <style>
+        body {
+          font-family: lato, arial, helvetica, sans-serif;
+        }
+        .tall {
+          display: ${displayTall ? "flex" : "none"};
+          flex-direction: column;
+        }
+        .wide {
+          display: ${displayTall ? "none" : "flex"};
+          flex-direction: row;
+        }
+      </style>
+      `;
       // handle interactives using the older api format and create a single html item
       if (reportItemAnswer.type === "html") {
         reportItemAnswerItems.push({
@@ -162,19 +177,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
           <!DOCTYPE html>
           <html>
           <head>
-            <style>
-              body {
-                font-family: lato, arial, helvetica, sans-serif;
-              }
-              .tall {
-                display: ${displayTall ? "flex" : "none"};
-                flex-direction: column;
-              }
-              .wide {
-                display: ${displayTall ? "none" : "flex"};
-                flex-direction: row;
-              }
-            </style>
+            ${injectedStyleTag}
           </head>
           <body>
             ${reportItemAnswer.html}
@@ -183,7 +186,15 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
         `});
       } else {
         // use the new api format which returns a list of items
-        reportItemAnswerItems = reportItemAnswer.items || [];
+        reportItemAnswerItems = (reportItemAnswer.items || []).map(item => {
+          if (item.type === "html") {
+            item.html = `
+            ${injectedStyleTag}
+            ${item.html}
+            `;
+          }
+          return item;
+        });
       }
     }
 
