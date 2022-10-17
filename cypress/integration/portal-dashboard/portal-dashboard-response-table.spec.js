@@ -75,7 +75,7 @@ context("Portal Dashboard Response Table",()=>{
 
     const activity1Table = [
     // P1                  | P2
-    // Q1, Q2, Q3, Q4, Q5, | Q6, Q7  
+    // Q1, Q2, Q3, Q4, Q5, | Q6, Q7
       [__, __, __, __, __,   __, __],
       [__, __, __, __, __,   __, __],
       [OR, __, __, __, __,   IQ, __],
