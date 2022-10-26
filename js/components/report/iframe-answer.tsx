@@ -44,31 +44,6 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     this.setState(prev => ({iframeVisible: !prev.iframeVisible}));
   }
 
-  getLinkURL(answer: string) {
-    /*
-    If the author initially sets the interactive to not have a report_url in LARA, then some student works on the interactive,
-    then the author sets the interactive to have a report_url in LARA, the portal will send down the full interactive state to the report.
-    Normally the portal will send down just the report URL as the learner state.
-
-    This problem goes back to LARA. When the interactive is configured as having a report_url, then LARA only sends the report_url
-    to the portal as its state. Otherwise LARA sends all of the interactive state. If the author switches the 'having a report_url'
-    configuration after some students have done work, LARA does update the saved work in the portal.
-
-    A possibly better fix is to have LARA send the updated work to the portal when this is configuration is changed.
-    But it seems wrong to have a little checkbox possibly trigger a massive amount of processing to go on in the background.
-    */
-    try {
-      const json = JSON.parse(answer);
-      const interactiveState = json.interactiveState ? JSON.parse(json.interactiveState) : null;
-      if (interactiveState && interactiveState.lara_options && interactiveState.lara_options.reporting_url) {
-        return interactiveState.lara_options.reporting_url;
-      }
-      return null;
-    } catch (e) {
-      return answer;
-    }
-  }
-
   /**
    * Adds a studentId and iframeQuestionId to the existing url
    */
@@ -88,19 +63,18 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
   renderLink(options?: {hideViewInNewTab?: boolean; hideViewInline?: boolean}) {
     const { answer, question } = this.props;
     const { iframeVisible } = this.state;
-    const linkUrl = this.getLinkURL(answer.get("answer"));
     const externalLinkIcon = <span className="pr-icon-external-link" />;
     if (question.get("displayInIframe")) {
       const toggleText = iframeVisible ? "Hide" : "View Work";
       const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
       return (
         <div>
-          <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a> | {" "}
-          <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>
+          {options?.hideViewInline ? <></> : <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a>}
+          {options?.hideViewInNewTab ? <></> : <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>}
         </div>
       );
     } else {
-      return <a href={linkUrl} target="_blank" data-cy="externalIframe">View work in new tab {externalLinkIcon}</a>;
+      return <></>;
     }
   }
 
