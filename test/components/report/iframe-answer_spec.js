@@ -10,9 +10,6 @@ const textAnswer = Map([
   ["answer", answerText],
   ["answerText", answerText]
 ]);
-const linkAnswer = Map([
-  ["answer", answerText]
-]);
 const question = Map([
   ["questionType", "open_response"]
 ]);
@@ -30,18 +27,5 @@ describe("<IframeAnswer />", () => {
       />
     );
     expect(wrapper.find(".iframe-answer-header").text()).toContain(answerText);
-  });
-  it("should render a link for an answer with no answerText", () => {
-    const wrapper = shallow(
-      <IframeAnswer
-        alwaysOpen={false}
-        answer={linkAnswer}
-        answerOrientation="wide"
-        getReportItemAnswer={getReportItemAnswerMock}
-        question={question}
-        responsive={true}
-      />
-    );
-    expect(wrapper.find(".iframe-answer-header").html()).toContain("View work in new tab");
   });
 });
