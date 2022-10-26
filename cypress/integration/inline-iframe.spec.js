@@ -39,16 +39,4 @@ context("Iframe questions test", () => {
       expect(link[0].href.indexOf("iframeQuestionId=mw_interactive_19&studentId=1")).to.be.above(-1);
     });
   });
-
-  it("shows the external links for an iframe with saved learner url", () => {
-    body.openAnswersForQuestion("question-mw_interactive_22");
-    cy.get(".iframe-answer").should("be.visible");
-    cy.get(".iframe-answer").should("contain", "View work in new tab");
-  });
-
-  it("has the correct url for the external link for a saved learner url", () => {
-    body.openAnswersForQuestion("question-mw_interactive_22");
-    cy.get(".iframe-answer a[data-cy=externalIframe]").first()
-      .should('have.attr', 'href', 'https://codap.concord.org/releases/staging/static/dg/en/cert/index.html#file=lara:eyJyZWNvcmRpZCI6MzM3MDQsImFjY2Vzc0tleXMiOnsicmVhZE9ubHkiOiJhMDFmNzAxZWY3MDQ3YjczNDllODRkMjdiZWMwYzk5YzliZjg5ODM2In19');
-  });
 });
