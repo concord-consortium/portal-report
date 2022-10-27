@@ -64,13 +64,15 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     const { answer, question } = this.props;
     const { iframeVisible } = this.state;
     const externalLinkIcon = <span className="pr-icon-external-link" />;
+    const renderBothLinks = !options?.hideViewInNewTab && !options?.hideViewInline;
     if (question.get("displayInIframe")) {
       const toggleText = iframeVisible ? "Hide" : "View Work";
       const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
       return (
         <div>
-          <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a> | {" "}
-          <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>
+          {!options?.hideViewInline && <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a>}
+          {renderBothLinks && ` | `}
+          {!options?.hideViewInNewTab && <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>}
         </div>
       );
     } else {
