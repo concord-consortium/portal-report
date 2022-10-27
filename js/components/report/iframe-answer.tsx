@@ -40,6 +40,16 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     this.renderLink = this.renderLink.bind(this);
   }
 
+  componentDidMount(): void {
+    const { answer, question } = this.props;
+    const hasReportItemUrl = !!question?.get("reportItemUrl");
+    if (hasReportItemUrl) {
+      setTimeout(() => {
+      this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "fullAnswer");
+      }, 0);
+    }
+  }
+
   toggleIframe() {
     this.setState(prev => ({iframeVisible: !prev.iframeVisible}));
   }
@@ -139,19 +149,11 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   render() {
-    const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
+    const { alwaysOpen, answer, responsive, reportItemAnswer, answerOrientation } = this.props;
     const answerText = answer.get("answerText");
     const questionType = answer.get("questionType");
-    const hasReportItemUrl = !!question?.get("reportItemUrl");
     const displayTall = answerOrientation === "tall";
     let reportItemAnswerItems: IReportItemAnswerItem[] = [];
-
-    // request the latest student report html
-    if (hasReportItemUrl) {
-      setTimeout(() => {
-        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "fullAnswer");
-      }, 0);
-    }
 
     if (reportItemAnswer) {
       const injectedStyleTag = `
