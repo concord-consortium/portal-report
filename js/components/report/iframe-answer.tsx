@@ -69,8 +69,8 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
       const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
       return (
         <div>
-          {options?.hideViewInline ? <></> : <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a>}
-          {options?.hideViewInNewTab ? <></> : <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>}
+          <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a> | {" "}
+          <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>
         </div>
       );
     } else {
