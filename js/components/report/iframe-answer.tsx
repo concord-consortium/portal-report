@@ -164,10 +164,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
         // use the new api format which returns a list of items
         reportItemAnswerItems = (reportItemAnswer.items || []).map(item => {
           if (item.type === "html") {
-            item.html = `
-            ${injectedStyleTag}
-            ${item.html}
-            `;
+            return {...item, html: `${injectedStyleTag} ${item.html}`};
           }
           return item;
         });
