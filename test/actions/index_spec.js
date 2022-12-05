@@ -38,14 +38,14 @@ describe("actions/index", () => {
     });
 
     it("handles production portal logging", () => {
-      const prodLogManagerUrl = "//cc-log-manager.herokuapp.com/api/logs";
+      const prodLogManagerUrl = "//logger.concord.org/logs";
       expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://learn.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
       expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://itsi.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
       expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://ngsa.portal.concord.org"}).logManagerUrl).toBe(prodLogManagerUrl);
     });
 
     it("handles staging/development portal logging", () => {
-      const stagingLogManagerUrl = "//cc-log-manager-dev.herokuapp.com/api/logs";
+      const stagingLogManagerUrl = "//logger.concordqa.org/logs";
       expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://learn.staging.concord.org"}).logManagerUrl).toBe(stagingLogManagerUrl);
       expect(setLoggingVars("http://example.com/activities/1", {classInfo, platformId: "https://app.rigse.docker"}).logManagerUrl).toBe(stagingLogManagerUrl);
     });
