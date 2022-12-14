@@ -568,7 +568,7 @@ export function saveRubric(rubricContent: any) {
 }
 
 // default logging to staging, this is updated after receiving the portal info
-let logManagerUrl = "//logger.concordqa.org/logs";
+let logManagerUrl = "https://logger.concordqa.org/logs";
 let loggingActivity = "n/a";
 let loggingContextId = "n/a";
 let loggingClassId = 0;
@@ -589,8 +589,8 @@ export function setLoggingVars(resourceUrl: string, rawPortalData: IPortalRawDat
 
     // use production log manager on production portals
     logManagerUrl = /(learn|portal)\.concord\.org/.test(rawPortalData.platformId)
-      ? "//logger.concord.org/logs"
-      : "//logger.concordqa.org/logs";
+      ? "https://logger.concord.org/logs"
+      : "https://logger.concordqa.org/logs";
   }
 
   // return these values for tests
