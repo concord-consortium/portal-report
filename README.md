@@ -55,19 +55,33 @@ Integration (Cypress) tests can be run from the command line with `npm run cypre
 
 ## Deployment
 
-#### Github Pages:
-You can build a simple github page deployment by following these steps:
-1. prepare the destination directory: `rm -rf ./dist`
-1. clone the gh-pages branch to dist: `git clone -b gh-pages git@github.com:concord-consortium/portal-report.git dist`
-1. build: `webpack`
-1. add the files and commit: `cd dist; git add .; git commit -m "gh-pages build"`
-1. push the changes to github: `git push`
+Deployments are based on the contents of the /dist folder and are built automatically by GitHub Actions for each branch and tag pushed to GitHub.
 
-#### Travis S3 Deployment:
-Travis automatically builds and deploys branches and tags. A simple `git push` initiates a deployment of the current branch to amazon S3. Once completed the build will be available at `http://portal-report.concord.org/branch/<branchname>/`.  The production branch deploys to [http://portal-report.concord.org/](http://portal-report.concord.org/)
+Branches are deployed to `https://portal-report.concord.org/branch/<name>/`.
 
-#### Manual S3 Deployment
-If you want to do a manual deployment, put your S3 credentials in `.env` and copy `s3_deploy.sh` to a local git-ignored script. Fill in missing ENV vars, and then run that script.
+Tags are deployed to `https://portal-report.concord.org/version/<name>/`
+
+You can view the status of all the branch and tag deploys [here](https://github.com/concord-consortium/portal-report/actions).
+
+The production release is available at `https://portal-report.concord.org`.
+
+Production releases are done using a manual GitHub Actions workflow. You specify which tag you want to release to production and the workflow copies that tag's `index-top.html` to `https://portal-report.concord.org/index.html`.
+
+See the CLUE [docs/deploy.md](https://github.com/concord-consortium/collaborative-learning/blob/master/docs/deploy.md) for more details (it uses the same process).
+
+To deploy a production release:
+
+1. Update the version number in `package.json` and `package-lock.json`
+    - `npm version --no-git-tag-version [patch|minor|major]`
+1. Verify that everything builds correctly
+    - `npm run lint && npm run build && npm run test`
+1. Create `release-<version>` branch and commit changes, push to GitHub, create PR and merge
+1. Test the master build at: https://portal-report.concord.org/index-master.html
+1. Push a version tag to GitHub and/or use https://github.com/concord-consortium/portal-report/releases to create a new GitHub release
+1. Stage the release by running the [Release Staging Workflow](https://github.com/concord-consortium/portal-report/actions/workflows/release-staging.yml) and entering the version tag you just pushed.
+1. Test the staged release at https://portal-report.concord.org/index-staging.html
+1. Update production by running the [Release Workflow](https://github.com/concord-consortium/portal-report/actions/workflows/release-production.yml) and entering the release version tag.
+
 
 #### Library
 
