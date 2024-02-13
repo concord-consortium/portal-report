@@ -64,7 +64,7 @@
     "report-dir": "coverage-cypress"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.12.6",
+    "@cypress/code-coverage": "^3.12.22",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@mermaid-js/mermaid-cli": "^8.8.4",
     "@svgr/webpack": "^5.4.0",
