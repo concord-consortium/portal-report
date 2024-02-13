@@ -1,11 +1,14 @@
 context("Portal Dashboard Feedback Panel", () => {
-  before(() => {
+
+  function beforeTest() {
     cy.visit("/?portal-dashboard");
     cy.get('[data-cy=navigation-select]').click();
     cy.get('[data-cy="list-item-feedback-report"]').should('be.visible').click();
-  });
+  }
+  
   context('Feedback Info Area', ()=>{
     it('verify feedback info area is visible and contains the expected elements', ()=>{
+      beforeTest();
       cy.get('[data-cy=feedback-info]').should('be.visible');
       cy.get('[data-cy=activity-level-feedback-button]').should('be.visible');
       cy.get('[data-cy=question-level-feedback-button]').should('be.visible');
@@ -16,6 +19,7 @@ context("Portal Dashboard Feedback Panel", () => {
   context('Feedback Level', () => {
     describe('verify feedback level toggles switch views', () => {
       it('show activity-level feedback', () => {
+        beforeTest();
         cy.get('[data-cy=activity-level-feedback-button]').should('be.visible').click();
         cy.get('[data-cy=list-by-questions-toggle]').should('be.disabled');
         cy.get('[data-cy=feedback-note-toggle-button]').should('be.visible').click();
@@ -32,6 +36,7 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=student-answer]').should('not.exist');
       });
       it("show question-level feedback", () => {
+        beforeTest();
         cy.get('[data-cy=question-level-feedback-button]').scrollIntoView().should('be.visible').click();
         cy.get('[data-cy=list-by-questions-toggle]').should('not.be.disabled');
         cy.get('[data-cy=feedback-note-toggle-button]').should('be.visible').click();
@@ -62,6 +67,7 @@ context("Portal Dashboard Feedback Panel", () => {
   });
   context('Class Nav Area', ()=>{
     it('verify class nav area is visible and contains the expected elements', ()=>{
+      beforeTest();
       cy.get('[data-cy=class-nav]').should('be.visible');
       cy.get('[data-cy="num-Awaiting feedback"]').should('be.visible');
       cy.get('[data-cy=item-number').should('contain', '3');
@@ -71,6 +77,7 @@ context("Portal Dashboard Feedback Panel", () => {
   context('View List By', () => {
     describe('verify list by toggles switch views', () => {
       it('list by question', () => {
+        beforeTest();
         cy.get('[data-cy=list-by-questions-toggle]').should('be.visible').click();
         cy.get('[data-cy=question-row] [data-cy=question-wrapper] [data-cy=feedback-badge]').should('be.visible');
         cy.get('[data-cy=student-answer]').first().should('contain', "No response");
@@ -78,8 +85,8 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=next-student-button]').click().click();
         cy.get('[data-cy=student-answer]').first().should('contain', "test answer 2");
         cy.get('[data-cy=feedback-container]').first().should('not.be.empty');
-      });
-      it("list by students", () => {
+      
+        cy.log("list by students");
         cy.get('[data-cy=list-by-student-toggle]').should('be.visible').click();
         cy.get('[data-cy=feedbackRow] [data-cy=feedback-badge]').should('be.visible');
       });
@@ -88,6 +95,7 @@ context("Portal Dashboard Feedback Panel", () => {
   context('Feedback Rows', () => {
     describe('verify activity-level feedback appear and accept input', () => {
       it('shows feedback textareas for students who have started an activity', () => {
+        beforeTest();
         cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=feedback-container]')
           .first()
@@ -109,11 +117,11 @@ context("Portal Dashboard Feedback Panel", () => {
           .eq(2)
           .children('[data-cy=feedback-textarea]')
           .should('contain', 'This is activity-level feedback.');
-      });
-      it('shows rubric feedback area', () => {
+      
+        cy.log("shows rubric feedback area");
         cy.get('[data-cy=rubric-table]').should('be.visible');
-      });
-      it('rubric feedback can be given', () => {
+      
+        cy.log("rubric feedback can be given");
         cy.get('[data-cy=rating-radio-button]').eq(0).click();
         cy.get('[data-cy=rating-radio-button] div').eq(0)
           .should('have.css', 'background-color')
@@ -121,8 +129,8 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
           .should('have.attr', 'fill')
           .and('include', '#4EA15A');
-      });
-      it('rubric feedback can be deselected', () => {
+      
+        cy.log("rubric feedback can be deselected");
         cy.get('[data-cy=rating-radio-button]').eq(0).click();
         cy.get('[data-cy=rating-radio-button] div').eq(0)
           .should('have.css', 'background-color')
@@ -134,6 +142,7 @@ context("Portal Dashboard Feedback Panel", () => {
     });
     describe('verify question-level feedback textareas appear and accept input', () => {
       it('shows feedback textareas for students who have answered a question', () => {
+        beforeTest();
         cy.get('[data-cy=question-level-feedback-button]').click();
         cy.get('[data-cy=student-answer]').first().should('contain', "No response");
         cy.get('[data-cy=feedback-badge]')
@@ -162,9 +171,11 @@ context("Portal Dashboard Feedback Panel", () => {
           .eq(2)
           .children('[data-cy=feedback-textarea]')
           .should('contain', 'This is question-level feedback entered while viewing list by student.');
-      });
-      it('shows feedback textareas for a question that has been answered by a student', () => {
+
+        cy.log("shows feedback textareas for a question that has been answered by a student");
         cy.get('[data-cy=list-by-questions-toggle]').click();
+        cy.get('[data-cy=next-student-button]').click();
+        cy.get('[data-cy=next-student-button]').click();
         cy.get('[data-cy=next-student-button]').click();
         cy.get('[data-cy=student-response]').first().should('contain', "test answer 1");
         cy.get('[data-cy=feedback-badge]')
@@ -199,8 +210,8 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=navigation-select]').click();
         cy.get('[data-cy="list-item-feedback-report"]').click();
         cy.get('[data-cy=activity-navigator]').should('not.exist');
-      });
-      it('exists but does not include title when viewing activity-level feedback', ()=>{
+      
+        cy.log("exists but does not include title when viewing activity-level feedback");
         cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=activity-title]').should('be.empty');
       });

@@ -1,14 +1,13 @@
 context("Portal Dashboard Response Table",()=>{
-  before(()=>{
+  beforeEach(()=>{
       cy.visit("/?portal-dashboard");
   });
 
   it('verify we have the right number of student rows',()=>{
     cy.get('[data-cy=student-answers-row]').should('be.visible');
     cy.get('[data-cy=student-answers-row]').should('have.length', 6);
-  });
-
-  it('verify we display the correct student progress',()=>{
+  
+    cy.log("verify we display the correct student progress");
     cy.get('[data-cy=student-answers-row]')
       .eq(2)
       .should("contain", "2/7")
@@ -134,8 +133,8 @@ context("Feedback badges in response table", () => {
 
   it("Activity feedback badge appears in response table when there is feedback given", () => {
     cy.get("[data-cy=activity-feedback-badge]").should("be.visible");
-  });
-  it("Question feedback badge appears in response table when there is feedback given", () => {
+  
+    cy.log("Question feedback badge appears in response table when there is feedback given");
     cy.get("[data-cy=collapsed-activity-button]").eq(0).click();
     cy.get("[data-cy=question-feedback-badge]").should("be.visible");
   });
