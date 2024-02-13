@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { FeedbackNoteToggle } from "../../../components/portal-dashboard/feedback/feedback-note-toggle";
 import { FeedbackLegend } from "../../../components/portal-dashboard/feedback/feedback-legend";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 
@@ -14,7 +13,7 @@ interface IProps {
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const { feedbackLevel, listViewMode, setFeedbackLevel } = props;
+  const { feedbackLevel, listViewMode, setFeedbackLevel, rubric } = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -44,8 +43,7 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
           </button>
         </div>
       </div>
-      <FeedbackNoteToggle feedbackLevel={feedbackLevel} />
-      <FeedbackLegend feedbackLevel={feedbackLevel} />
+      <FeedbackLegend feedbackLevel={feedbackLevel} rubric={rubric} />
     </div>
   );
 

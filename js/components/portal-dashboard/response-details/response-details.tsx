@@ -48,6 +48,7 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   viewMode: DashboardViewMode;
   trackEvent: TrackEventFunction;
+  rubric: any;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -71,7 +72,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter } = this.props;
+      feedbackSortByMethod, setStudentFeebackFilter, rubric } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, feedbackLevel } = this.state;
 
@@ -153,6 +154,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 feedbackLevel={feedbackLevel}
                 setFeedbackLevel={this.setFeedbackLevel}
                 listViewMode={listViewMode}
+                rubric={rubric}
               />
             </div>
           }

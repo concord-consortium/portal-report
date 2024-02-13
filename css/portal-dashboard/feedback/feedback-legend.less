@@ -1,9 +1,14 @@
 .feedbackBadgeLegend {
   margin: 20px;
 
-  .feedbackBadgeLegend__heading {
-    font-size: 16px;
-    margin-bottom: 10px;
+  .feedbackBadgeLegend__heading_container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+
+    .feedbackBadgeLegend__heading {
+      font-size: 16px;
+    }
   }
 
   .feedbackBadgeLegend__list {
@@ -23,6 +28,47 @@
     }
     dd {
       flex: 1 1 321px;
+    }
+  }
+
+  .feedbackBadgeLegend__rubric {
+    margin-top: 10px;
+    font-weight: normal;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .feedbackBadgeLegend__rubric_settings {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+
+    .feedbackBadgeLegend__rubric_score {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      gap: 10px;
+
+      .feedbackBadgeLegend__rubric_score_avg {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: end;
+
+        .feedbackBadgeLegend__rubric_score_avg_value {
+          margin-left: 5px;
+        }
+      }
+
+      .feedbackBadgeLegend__rubric_summary {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: end;
+
+        .feedbackBadgeLegend__rubric_summary_icon {
+          margin-left: 5px;
+        }
+      }
+
     }
   }
 }

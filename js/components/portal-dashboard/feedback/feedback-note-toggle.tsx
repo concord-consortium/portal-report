@@ -20,12 +20,12 @@ export const FeedbackNoteToggle: React.FC<IProps> = (props) => {
   };
 
   const noteLabel = props.feedbackLevel === "Activity" ? "activity-level" : "question-level";
+  const title = `Note on ${noteLabel} feedback`;
   const buttonClass = buttonActive ? `${css.feedbackNoteToggleButton} ${css.active}` : css.feedbackNoteToggleButton;
 
   return (
     <div className={css.feedbackNoteToggle} data-cy="feedback-note-toggle">
-      <button className={buttonClass} onClick={handleShowModal(true)} data-cy="feedback-note-toggle-button" />
-      <div>Note on {noteLabel} feedback</div>
+      <button className={buttonClass} onClick={handleShowModal(true)} data-cy="feedback-note-toggle-button" title={title} />
       <FeedbackNoteModal
         backdrop={false}
         feedbackLevel={feedbackLevel}
