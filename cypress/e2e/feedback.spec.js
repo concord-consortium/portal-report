@@ -19,7 +19,8 @@ describe("Provide Feedback", function() {
       win.firebase = firebase;
     });
 
-    cy.server();
+    // cy.server() was removed in Cypress version 12.0.0
+    // cy.server();
 
     // Return the fake report data
     // cy.route({
@@ -36,11 +37,13 @@ describe("Provide Feedback", function() {
     // });
 
     // On first load portal-report does a PUT request to save some report settings
-    cy.route({
-      method: "PUT",
-      url: "/",
-      response: {}
-    }).as("putReportSettings");
+
+    //cy.route() was removed in Cypress version 12.0.0
+    // cy.route({
+    //   method: "PUT",
+    //   url: "/",
+    //   response: {}
+    // }).as("putReportSettings");
 
     cy.visit("/?token=12345&enableFirestorePersistence=true&clearFirestorePersistence=true");
   });
