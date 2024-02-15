@@ -66,8 +66,10 @@ const hslToRGB = (h: number, s: number, l: number): string => {
   return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
 };
 
-const startColorHSL = hexToHSL('#316639'); // Dark green
-const endColorHSL = hexToHSL('#bddfc2'); // Light green
+const startColorRGB = "#316639";
+const endColorRGB = "#bddfc2";
+const startColorHSL = hexToHSL(startColorRGB);
+const endColorHSL = hexToHSL(endColorRGB);
 
 // Main function to get RGB color based on value within min and max range
 export const getFeedbackColor = ({rubric, score}: {rubric: Rubric; score: number}): string => {
@@ -78,6 +80,9 @@ export const getFeedbackColor = ({rubric, score}: {rubric: Rubric; score: number
   }, {min: Infinity, max: -Infinity});
 
   const range = max - min;
+  if (range <= 0) {
+    return startColorRGB;
+  }
   const scale = (score - min) / range;
 
   // Interpolate HSL values
