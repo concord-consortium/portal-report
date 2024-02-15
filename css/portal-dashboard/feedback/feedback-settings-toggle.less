@@ -1,13 +1,13 @@
 @import "../variables";
 
-.feedbackNoteToggle {
+.feedbackSettingsToggle {
   align-items: center;
   display: flex;
   flex-flow: row;
   font-weight: normal;
   margin: 0;
 
-  .feedbackNoteToggleButton {
+  .feedbackSettingsToggleButton {
     border: solid 1px @cc-charcoal-light1;
     border-radius: 3px;
     cursor: pointer;
@@ -35,11 +35,18 @@
       display: block;
       height: 24px;
       left: 2px;
-      -webkit-mask-image: url("../../../img/svg-icons/sticky-note-icon.svg");
-      mask-image: url("../../../img/svg-icons/sticky-note-icon.svg");
+      -webkit-mask-image: url("../../../img/svg-icons/score-settings-icon.svg");
+      mask-image: url("../../../img/svg-icons/score-settings-icon.svg");
       position: absolute;
       top: 2px;
       width: 24px;
     }
+  }
+
+  .feedbackSettingsLabel {
+    font-weight: bold;
+  }
+  .feedbackSettingsValue {
+    margin-left: 5px;
   }
 }

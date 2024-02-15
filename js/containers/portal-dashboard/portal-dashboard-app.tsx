@@ -234,6 +234,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   toggleCurrentQuestion={toggleCurrentQuestion}
                   trackEvent={trackEvent}
                   viewMode={viewMode}
+                  rubric={rubric}
                 />
             </div>
           )
