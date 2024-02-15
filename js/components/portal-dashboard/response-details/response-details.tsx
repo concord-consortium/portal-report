@@ -14,6 +14,7 @@ import { ActivityNavigator } from "../activity-navigator";
 import { DashboardViewMode, ListViewMode, FeedbackLevel } from "../../../util/misc";
 import { TrackEventFunction } from "../../../actions";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
+import { Rubric } from "../feedback/rubric-utils";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -48,7 +49,7 @@ interface IProps {
   toggleCurrentQuestion: (questionId: string) => void;
   viewMode: DashboardViewMode;
   trackEvent: TrackEventFunction;
-  rubric: any;
+  rubric: Rubric;
 }
 interface IState {
   selectedStudents: SelectedStudent[];

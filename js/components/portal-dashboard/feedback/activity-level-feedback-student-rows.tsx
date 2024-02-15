@@ -8,6 +8,7 @@ import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feed
 import { SORT_BY_FEEDBACK_PROGRESS } from "../../../actions/dashboard";
 import { TrackEventFunction } from "../../../actions";
 import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
+import { Rubric } from "./rubric-utils";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -18,7 +19,7 @@ interface IProps {
   feedbacksNeedingReview: Map<any, any>;
   feedbackSortByMethod: string;
   isAnonymous: boolean;
-  rubric: any;
+  rubric: Rubric;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   students: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
