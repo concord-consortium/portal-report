@@ -7,6 +7,7 @@ import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
 import { getActivityFeedbackSortedStudents } from "../../../selectors/dashboard-selectors";
 import { ActivityLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/activity-level-feedback-student-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
+import { Rubric } from "../../../components/portal-dashboard/feedback/rubric-utils";
 
 interface IProps {
   activity: Map<any, any>;
@@ -22,7 +23,7 @@ interface IProps {
   listViewMode: ListViewMode;
   numFeedbacksGivenReview: number;
   numFeedbacksNeedingReview: number;
-  rubric: any;
+  rubric: Rubric;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
   activityFeedbackStudents: Map<any, any>;

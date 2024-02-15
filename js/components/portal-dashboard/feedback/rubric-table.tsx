@@ -3,11 +3,12 @@ import { Map } from "immutable";
 import Markdown from "markdown-to-jsx";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
 import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
+import { Rubric, getFeedbackColor } from "./rubric-utils";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-table.less";
 
 interface IProps {
-  rubric: any;
+  rubric: Rubric;
   student: Map<any,any>;
   rubricFeedback: any;
   activityId: string;
@@ -37,7 +38,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderColumnHeaders = (rubric: any) => {
+  private renderColumnHeaders = (rubric: Rubric) => {
     const { referenceURL } = rubric;
     return (
       <div className={css.columnHeaders}>
@@ -84,9 +85,10 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
       null;
     const isApplicableRating = crit.nonApplicableRatings === undefined ||
       crit.nonApplicableRatings.indexOf(ratingId) < 0;
+    const style: React.CSSProperties = selected ? {backgroundColor: getFeedbackColor({rubric: this.props.rubric, score: rubricFeedback[critId].score})} : {};
 
     return (
-      <div className={css.rubricScoreBox} key={radioButtonKey}>
+      <div className={css.rubricScoreBox} style={style} key={radioButtonKey}>
         <div className={css.rubricButton} title={(isApplicableRating) ? ratingDescription : "Not Applicable"}>
           { !isApplicableRating
             ? <span className={css.noRating}>N/A</span>
@@ -111,6 +113,10 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
       const newSelection: any = {};
       const rating = rubric.ratings.find((r: any) => r.id === ratingId);
       const criteria = rubric.criteria.find((c: any) => c.id === critId);
+      if ((rating === undefined) || (criteria === undefined)) {
+        return;
+      }
+
       const score = rating.score;
       const label = rating.label;
       const studentId = student.get("id");

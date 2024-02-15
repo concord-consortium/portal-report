@@ -4,6 +4,7 @@ import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
 import { TrackEventFunction } from "../../actions";
 import ActivityFeedbackGivenIcon from "../../../img/svg-icons/feedback-activity-badge-icon.svg";
 import { hasRubricFeedback } from "../../util/activity-feedback-helper";
+import { Rubric } from "./feedback/rubric-utils";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
 
@@ -18,7 +19,7 @@ interface IProps {
   hideFeedbackBadges: boolean;
   isCompact: boolean;
   questionFeedbacks?: Map<any, any>;
-  rubric: any;
+  rubric: Rubric;
   students: Map<any, any>;
   studentProgress: Map<any, any>;
   setCurrentActivity: (activityId: string) => void;

@@ -5,19 +5,20 @@ import {
   RECEIVE_ACTIVITY_FEEDBACKS
 } from "../actions";
 import { RecordFactory } from "../util/record-factory";
+import { Rubric } from "../components/portal-dashboard/feedback/rubric-utils";
 
 export interface IFeedbackState {
   settings: Map<any, any>;
   questionFeedbacks: Map<any, any>;
   activityFeedbacks: Map<any, any>;
-  rubric: any;
+  rubric: Rubric;
 }
 
 const INITIAL_FEEDBACK_STATE = RecordFactory<IFeedbackState>({
   settings: Map({}),
   questionFeedbacks: Map({}),
   activityFeedbacks: Map({}),
-  rubric: Map({})
+  rubric: Map({}) as any,
 });
 
 export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackState {
@@ -27,7 +28,7 @@ export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackSt
   settings: Map<any, any>;
   questionFeedbacks: Map<any, any>;
   activityFeedbacks: Map<any, any>;
-  rubric: any;
+  rubric: Rubric;
 }
 
 export default function feedback(state = new FeedbackState({}), action: any) {
