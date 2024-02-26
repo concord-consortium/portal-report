@@ -20,6 +20,8 @@ interface IState {
 }
 
 export class IframeAnswerReportItem extends PureComponent<IProps, IState> {
+  resizeObserver: ResizeObserver;
+
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -32,9 +34,22 @@ export class IframeAnswerReportItem extends PureComponent<IProps, IState> {
     const contentDocument = e.target.contentDocument;
     const body = contentDocument.body;
     const html = contentDocument.documentElement;
-    const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
 
-    this.setState({height});
+    this.resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      const height = Math.ceil(Math.max(entries[0].contentRect.height,
+        body.clientHeight, body.scrollHeight, body.offsetHeight,
+        html.clientHeight, html.scrollHeight, html.offsetHeight
+      ));
+      this.setState({height});
+    });
+
+    this.resizeObserver.observe(contentDocument.body);
+  }
+
+  componentWillUnmount(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   renderAnswerText() {
