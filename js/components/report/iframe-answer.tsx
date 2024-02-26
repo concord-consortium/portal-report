@@ -173,7 +173,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
 
     // if there are no report answer items, show the answer text or the links to view the interactive
     let maybeAnswerTextOrLinks: JSX.Element | false = false;
-    if (reportItemAnswerItems.length === 0) {
+    if (!hasReportItemUrl) {
       maybeAnswerTextOrLinks = answerText
         ? <div data-cy="answerText">{ renderHTML(answerText) }</div>
         : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded, fill in the blank, and open response questions have answerTexts */
