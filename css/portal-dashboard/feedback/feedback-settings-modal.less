@@ -19,7 +19,7 @@
       font-weight: bold;
       height: 24px;
       line-height: 1.4;
-      margin: 20px 20px 15px;
+      margin: 20px 20px 0;
       padding-left: 29px;
       position: relative;
       text-align: left;
@@ -40,37 +40,75 @@
   }
 
   .lightboxBody {
-    padding: 0 0 40px;
-    position: relative;
 
     .contentArea {
-      padding: 0 20px 20px;
+      padding: 0 20px 10px 20px;
 
-      p {
-        margin-bottom: 10px;
+      .modalOption {
+        margin: 20px 0 10px 0;
+
+        &:first-of-type {
+          margin-top: 10px;
+        }
+
+        .modalOptionInfo {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          margin: 10px;
+        }
+
+        .maxScore {
+          display: flex;
+          align-items: center;
+          text-align: right;
+
+          &.disabled {
+            opacity: 0.35;
+          }
+
+          &>div {
+            white-space: nowrap;
+            font-weight: bold;
+          }
+
+          input {
+            width: 35px;
+            margin-left: 5px;
+            padding: 5px 3px;
+            border: solid 1.5px @cc-charcoal-light1;
+            border-radius: 4px;
+            font-family: lato, arial, helvetica, sans-serif;
+            font-size: 16px;
+          }
+        }
       }
     }
-    .closeButton {
-      background-color:white;
-      border: solid 1.5px @cc-charcoal-light1;
-      border-radius: 4px;
-      bottom: 20px;
-      color: @cc-charcoal;
-      cursor: pointer;
-      font-weight: bold;
-      margin: 0;
-      padding: 5px 10px 6px;
-      position: absolute;
-      right: 20px;
-      text-align: center;
+    .buttonContainer {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
 
-      &:hover {
-        background: @feedback-green-light4;
-      }
-      &:active {
-        background: @feedback-green;
-        border-color: @feedback-green;
-        color: white;
+      .closeButton {
+        background-color:white;
+        border: solid 1.5px @cc-charcoal-light1;
+        border-radius: 4px;
+        color: @cc-charcoal;
+        cursor: pointer;
+        font-weight: bold;
+        display: inline-block;
+        padding: 5px 10px 6px;
+        text-align: center;
+
+        &:hover {
+          background: @feedback-green-light4;
+        }
+        &:active {
+          background: @feedback-green;
+          border-color: @feedback-green;
+          color: white;
+        }
       }
     }
   }
