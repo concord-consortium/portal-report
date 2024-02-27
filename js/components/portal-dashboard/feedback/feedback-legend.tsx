@@ -1,4 +1,5 @@
 import React from "react";
+import { Map } from "immutable";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
@@ -12,11 +13,11 @@ import css from "../../../../css/portal-dashboard/feedback/feedback-legend.less"
 
 interface IProps {
   feedbackLevel: FeedbackLevel;
-  rubric?: any;
+  activity: Map<any, any>;
 }
 
 export const FeedbackLegend: React.FC<IProps> = (props) => {
-  const { feedbackLevel, rubric } = props;
+  const { feedbackLevel, activity } = props;
   const awaitingFeedbackIcon = feedbackLevel === "Activity"
                                ? <AwaitingFeedbackActivityBadgeIcon />
                                : <AwaitingFeedbackQuestionBadgeIcon />;
@@ -43,10 +44,10 @@ export const FeedbackLegend: React.FC<IProps> = (props) => {
           </React.Fragment>
         }
       </dl>
-      {feedbackLevel === "Activity" && rubric &&
+      {feedbackLevel === "Activity" &&
         <div className={css.feedbackBadgeLegend__rubric}>
           <div className={css.feedbackBadgeLegend__rubric_settings}>
-            <FeedbackSettingsToggle />
+            <FeedbackSettingsToggle activity={activity} />
           </div>
           <div className={css.feedbackBadgeLegend__rubric_score}>
             <div className={css.feedbackBadgeLegend__rubric_score_avg}>

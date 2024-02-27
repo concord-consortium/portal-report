@@ -1,12 +1,13 @@
 import React, { PureComponent } from "react";
+import type { ScoreType } from "../../../util/scoring";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-settings-modal-button.less";
 
 interface IProps {
   selected: boolean;
   label: string;
-  value: number;
-  onClick: (newValue: number) => void;
+  value: ScoreType;
+  onClick: (newValue: ScoreType) => void;
   children?: React.ReactNode;
 }
 
