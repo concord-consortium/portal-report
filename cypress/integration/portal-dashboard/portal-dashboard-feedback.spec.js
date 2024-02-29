@@ -198,6 +198,7 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.visit("/?portal-dashboard&resourceType=activity");
         cy.get('[data-cy=navigation-select]').click();
         cy.get('[data-cy="list-item-feedback-report"]').click();
+        cy.get('[data-cy=question-level-feedback-button]').should('be.visible').click();
         cy.get('[data-cy=activity-navigator]').should('not.exist');
       });
       it('exists but does not include title when viewing activity-level feedback', ()=>{

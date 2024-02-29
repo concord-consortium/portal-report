@@ -37,6 +37,7 @@ context("Portal Dashboard Student Sort",() =>{
     it('verify we sort by awaiting feedback',()=>{
       cy.get('[data-cy=navigation-select]').click();
       cy.get('[data-cy="list-item-feedback-report"]').should('be.visible').click();
+      cy.get('[data-cy=question-level-feedback-button]').should('be.visible').click();
       cy.get('[data-cy=sort-feedback]').click();
       cy.get('[data-cy="list-item-awaiting-feedback"]').should('be.visible').click();
       // TODO: The order below will need to be changed once sorting by awaiting feedback works

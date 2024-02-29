@@ -125,6 +125,7 @@ context("Feedback badges in response table", () => {
     cy.visit("/?portal-dashboard&enableFirestorePersistence=true&clearFirestorePersistence=true");
     cy.get("[data-cy=navigation-select]").click();
     cy.get("[data-cy=list-item-feedback-report]").click();
+    cy.get('[data-cy=question-level-feedback-button]').should('be.visible').click();
     cy.get("[data-cy=feedback-textarea]").eq(0).click().type("Good job!");
     cy.get("[data-cy=activity-level-feedback-button]").click();
     cy.get("[data-cy=feedback-textarea]").eq(0).click().type("Good job!");
