@@ -65,7 +65,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
       selectedStudents: [],
       showSpotlightDialog: false,
       showSpotlightListDialog: false,
-      feedbackLevel: "Question"
+      feedbackLevel: "Activity"
     };
   }
 
@@ -136,8 +136,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   currentStudentId={currentStudentId}
                   nameFirst={false}
                 />
-              : feedbackLevel === "Question" &&
-                <QuestionNavigator
+              : <QuestionNavigator
                   currentQuestion={currentQuestion || firstQuestion}
                   questions={questions}
                   sortedQuestionIds={sortedQuestionIds}
