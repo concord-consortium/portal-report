@@ -16,7 +16,9 @@ interface GetScoringSettingsOptions {
   hasScoredQuestions?: boolean;
 }
 
-export const getScoringSettingsInState = (state: any, activityId: any) => (state.getIn(["feedback", "settings", "activitySettings", activityId]) || Map({})).toJS();
+export const getScoringSettingsInState = (state: any, activityId: any) => {
+  return (state.getIn(["feedback", "settings", "activitySettings", activityId]) || Map({})).toJS();
+};
 
 export const getScoringSettings = (initialSettings?: ScoringSettings, options?: GetScoringSettingsOptions): ScoringSettings => {
   const hasRubric = !!options?.rubric;
@@ -39,8 +41,8 @@ export const getScoringSettings = (initialSettings?: ScoringSettings, options?: 
 };
 
 export const getScoredQuestions = (activity: any): List<any> => {
-  return activity.get("questions").filter((q: any) =>
+  return activity.get("questions")?.filter((q: any) =>
     q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
-  );
+  ) ?? List();
 };
 

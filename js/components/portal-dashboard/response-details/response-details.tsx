@@ -53,7 +53,7 @@ interface IProps {
   rubric: Rubric;
   feedbackLevel: FeedbackLevel;
   setFeedbackLevel: (feedbackLevel: FeedbackLevel) => void;
-  scoringSettings?: ScoringSettings;
+  scoringSettings: ScoringSettings;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -200,6 +200,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   feedbackSortByMethod={feedbackSortByMethod}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
+                  scoringSettings={scoringSettings}
                 />
               </div>
         }

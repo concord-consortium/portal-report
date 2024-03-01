@@ -97,7 +97,7 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=feedback-badge]')
           .first()
           .should('be.empty');
-        cy.get('[data-cy=feedback-container]')
+        cy.get('[data-cy=feedback-text-and-score]')
           .eq(2)
           .children('[data-cy=feedback-textarea]')
           .should('be.visible')
@@ -105,7 +105,7 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.wait(2100);
         cy.get('[data-cy=question-level-feedback-button]').click();
         cy.get('[data-cy=activity-level-feedback-button]').click();
-        cy.get('[data-cy=feedback-container]')
+        cy.get('[data-cy=feedback-text-and-score]')
           .eq(2)
           .children('[data-cy=feedback-textarea]')
           .should('contain', 'This is activity-level feedback.');

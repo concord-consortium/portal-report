@@ -1,15 +1,17 @@
 import React, { useState }  from "react";
 import { Map } from "immutable";
 import FeedbackSettingsModal from "./feedback-settings-modal";
+import { ScoringSettings } from "../../../util/scoring";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-settings-toggle.less";
 
 interface IProps {
   activity: Map<any, any>;
+  scoringSettings: ScoringSettings;
 }
 
 export const FeedbackSettingsToggle: React.FC<IProps> = (props) => {
-  const { activity } = props;
+  const { activity, scoringSettings } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
 
@@ -30,6 +32,7 @@ export const FeedbackSettingsToggle: React.FC<IProps> = (props) => {
         backdrop={false}
         onHide={handleShowModal(false)}
         show={true}
+        scoringSettings={scoringSettings}
       />}
     </div>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { ActivityFeedbackTextarea } from "./activity-feedback-textarea";
+import { ActivityFeedbackScore } from "./activity-feedback-score";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import { RubricTableContainer } from "./rubric-table";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
@@ -9,6 +10,7 @@ import { SORT_BY_FEEDBACK_PROGRESS } from "../../../actions/dashboard";
 import { TrackEventFunction } from "../../../actions";
 import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 import { Rubric } from "./rubric-utils";
+import { ScoringSettings } from "../../../util/scoring";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -24,11 +26,12 @@ interface IProps {
   students: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
+  scoringSettings: ScoringSettings;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { activityId, activityIndex, feedbacks, feedbackSortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
-    students, trackEvent, updateActivityFeedback } = props;
+    students, trackEvent, updateActivityFeedback, scoringSettings } = props;
   const displayedFeedbacks = feedbackSortByMethod !== SORT_BY_FEEDBACK_PROGRESS
     ? feedbacks
     : students.map((student: any) => {
@@ -41,6 +44,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const formattedName = getFormattedStudentName(isAnonymous, student);
     const activityStarted = feedbackData.get("activityStarted");
     const feedback = feedbackData.get("feedback");
+    const score = feedbackData.get("score");
     const hasRubric = rubric;
     const { rubricFeedback } = feedbackData.toJS();
     const hasFeedbacks = feedback || (hasRubric && hasRubricFeedback(rubric, rubricFeedback));
@@ -68,17 +72,32 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               updateActivityFeedback={updateActivityFeedback}
             />
           }
-          <ActivityFeedbackTextarea
-            activityId={activityId}
-            activityIndex={activityIndex}
-            activityStarted={activityStarted}
-            feedback={feedback}
-            key={activityId + studentId + "-textarea"}
-            studentId={studentId}
-            setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
-            updateActivityFeedback={updateActivityFeedback}
-            trackEvent={trackEvent}
-          />
+          <div className={css.textAndScore} data-cy="feedback-text-and-score">
+            <ActivityFeedbackTextarea
+              activityId={activityId}
+              activityIndex={activityIndex}
+              activityStarted={activityStarted}
+              feedback={feedback}
+              key={activityId + studentId + "-textarea"}
+              studentId={studentId}
+              setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
+              updateActivityFeedback={updateActivityFeedback}
+              trackEvent={trackEvent}
+            />
+            <ActivityFeedbackScore
+              activityId={activityId}
+              activityIndex={activityIndex}
+              activityStarted={activityStarted}
+              score={score}
+              key={activityId + studentId + "-score"}
+              studentId={studentId}
+              setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
+              updateActivityFeedback={updateActivityFeedback}
+              trackEvent={trackEvent}
+              className={css.score}
+              scoringSettings={scoringSettings}
+            />
+          </div>
         </div>
       </div>
     );

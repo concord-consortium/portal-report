@@ -24,7 +24,7 @@ interface IProps {
   rubric: Rubric;
   students: Map<any, any>;
   studentProgress: Map<any, any>;
-  scoringSettings?: ScoringSettings;
+  scoringSettings: ScoringSettings;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
@@ -139,7 +139,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   private renderScore = (activity: any, student: any) => {
     const { answers, scoringSettings } = this.props;
 
-    if (scoringSettings?.scoreType !== AUTOMATIC_SCORE) {
+    if (scoringSettings.scoreType !== AUTOMATIC_SCORE) {
       return null;
     }
 
