@@ -19,7 +19,7 @@ import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStude
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
-import { ColorTheme, DashboardViewMode, ListViewMode } from "../../util/misc";
+import { ColorTheme, DashboardViewMode, FeedbackLevel, ListViewMode } from "../../util/misc";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -71,6 +71,7 @@ interface IState {
   scrollLeft: number;
   viewMode: DashboardViewMode;
   listViewMode: ListViewMode;
+  feedbackLevel: FeedbackLevel;
 }
 
 class PortalDashboardApp extends React.PureComponent<IProps, IState> {
@@ -81,6 +82,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       scrollLeft: 0,
       viewMode: "ProgressDashboard",
       listViewMode: "Student",
+      feedbackLevel: "Activity"
     };
   }
 
@@ -104,7 +106,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
       setStudentFeedbackSort} = this.props;
-    const { initialLoading, viewMode, listViewMode } = this.state;
+    const { initialLoading, viewMode, listViewMode, feedbackLevel } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -235,6 +237,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   trackEvent={trackEvent}
                   viewMode={viewMode}
                   rubric={rubric}
+                  feedbackLevel={feedbackLevel}
+                  setFeedbackLevel={this.setFeedbackLevel}
                 />
             </div>
           )
@@ -280,6 +284,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     if (element && element.scrollLeft != null) {
       this.setState({ scrollLeft: -1 * element.scrollLeft });
     }
+  }
+
+  private setFeedbackLevel = (feedbackLevel: FeedbackLevel) => {
+    this.setState({ feedbackLevel });
   }
 }
 

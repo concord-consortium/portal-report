@@ -50,12 +50,13 @@ interface IProps {
   viewMode: DashboardViewMode;
   trackEvent: TrackEventFunction;
   rubric: Rubric;
+  feedbackLevel: FeedbackLevel;
+  setFeedbackLevel: (feedbackLevel: FeedbackLevel) => void;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
   showSpotlightDialog: boolean;
   showSpotlightListDialog: boolean;
-  feedbackLevel: FeedbackLevel;
 }
 
 export class ResponseDetails extends React.PureComponent<IProps, IState> {
@@ -64,8 +65,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     this.state = {
       selectedStudents: [],
       showSpotlightDialog: false,
-      showSpotlightListDialog: false,
-      feedbackLevel: "Activity"
+      showSpotlightListDialog: false
     };
   }
 
@@ -73,9 +73,9 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter } = this.props;
+      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel } = this.props;
 
-    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog, feedbackLevel } = this.state;
+    const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
     const firstActivity = activities.first();
     const currentStudentIndex = students.findIndex((s: any) => s.get("id") === currentStudentId);
@@ -153,7 +153,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
               <FeedbackInfo
                 activity={currentActivityWithQuestions}
                 feedbackLevel={feedbackLevel}
-                setFeedbackLevel={this.setFeedbackLevel}
+                setFeedbackLevel={this.props.setFeedbackLevel}
                 listViewMode={listViewMode}
               />
             </div>
@@ -285,7 +285,4 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     this.props.trackEvent("Portal-Dashboard", "SelectStudentResponse", {parameters: {selectedStudents: updatedSelectedStudents.map(s => s.id)}});
   }
 
-  private setFeedbackLevel = (feedbackLevel: FeedbackLevel) => {
-    this.setState({ feedbackLevel });
-  }
 }
