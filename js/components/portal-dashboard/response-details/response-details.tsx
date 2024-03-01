@@ -15,6 +15,7 @@ import { DashboardViewMode, ListViewMode, FeedbackLevel } from "../../../util/mi
 import { TrackEventFunction } from "../../../actions";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
 import { Rubric } from "../feedback/rubric-utils";
+import { ScoringSettings } from "../../../util/scoring";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -52,6 +53,7 @@ interface IProps {
   rubric: Rubric;
   feedbackLevel: FeedbackLevel;
   setFeedbackLevel: (feedbackLevel: FeedbackLevel) => void;
+  scoringSettings?: ScoringSettings;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -73,7 +75,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel } = this.props;
+      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
@@ -155,6 +157,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 feedbackLevel={feedbackLevel}
                 setFeedbackLevel={this.props.setFeedbackLevel}
                 listViewMode={listViewMode}
+                scoringSettings={scoringSettings}
               />
             </div>
           }

@@ -1,4 +1,4 @@
-import { List } from "immutable";
+import { List, Map } from "immutable";
 import { Rubric } from "../components/portal-dashboard/feedback/rubric-utils";
 import { RUBRIC_SCORE, NO_SCORE, AUTOMATIC_SCORE, MANUAL_SCORE } from "./scoring-constants";
 
@@ -15,6 +15,8 @@ interface GetScoringSettingsOptions {
   rubric?: Rubric;
   hasScoredQuestions?: boolean;
 }
+
+export const getScoringSettingsInState = (state: any, activityId: any) => (state.getIn(["feedback", "settings", "activitySettings", activityId]) || Map({})).toJS();
 
 export const getScoringSettings = (initialSettings?: ScoringSettings, options?: GetScoringSettingsOptions): ScoringSettings => {
   const hasRubric = !!options?.rubric;

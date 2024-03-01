@@ -1,8 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Map } from "immutable";
 import { FeedbackLegend } from "../../../components/portal-dashboard/feedback/feedback-legend";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
+import { ScoringSettings } from "../../../util/scoring";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-info.less";
 
@@ -11,10 +11,11 @@ interface IProps {
   listViewMode: ListViewMode;
   setFeedbackLevel: (value: string) => void;
   activity: Map<any, any>;
+  scoringSettings?: ScoringSettings;
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const {activity, feedbackLevel, listViewMode, setFeedbackLevel } = props;
+  const {activity, feedbackLevel, listViewMode, setFeedbackLevel, scoringSettings } = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -44,19 +45,9 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
           </button>
         </div>
       </div>
-      <FeedbackLegend feedbackLevel={feedbackLevel} activity={activity} />
+      <FeedbackLegend feedbackLevel={feedbackLevel} activity={activity} scoringSettings={scoringSettings} />
     </div>
   );
 
 };
 
-function mapStateToProps() {
-  return (state: any, ownProps: any) => {
-    const rubric = state.getIn(["feedback", "settings", "rubric"]);
-    return {
-      rubric: rubric && rubric.toJS()
-    };
-  };
-}
-
-export default connect(mapStateToProps)(FeedbackInfo);
