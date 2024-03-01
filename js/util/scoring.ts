@@ -1,3 +1,4 @@
+import { List } from "immutable";
 import { Rubric } from "../components/portal-dashboard/feedback/rubric-utils";
 import { RUBRIC_SCORE, NO_SCORE, AUTOMATIC_SCORE, MANUAL_SCORE } from "./scoring-constants";
 
@@ -10,8 +11,14 @@ export interface ScoringSettings {
   maxScore: number;
 }
 
-export const getScoringSettings = (initialSettings?: ScoringSettings, options?: { rubric?: Rubric }): ScoringSettings => {
+interface GetScoringSettingsOptions {
+  rubric?: Rubric;
+  hasScoredQuestions?: boolean;
+}
+
+export const getScoringSettings = (initialSettings?: ScoringSettings, options?: GetScoringSettingsOptions): ScoringSettings => {
   const hasRubric = !!options?.rubric;
+  const hasScoredQuestions = !!options?.hasScoredQuestions;
   const defaultScoreType = hasRubric ? RUBRIC_SCORE : NO_SCORE;
 
   const settings: ScoringSettings = {
@@ -22,6 +29,16 @@ export const getScoringSettings = (initialSettings?: ScoringSettings, options?: 
   if (settings.scoreType === RUBRIC_SCORE && !hasRubric) {
     settings.scoreType = NO_SCORE;
   }
+  if (settings.scoreType === AUTOMATIC_SCORE && !hasScoredQuestions) {
+    settings.scoreType = defaultScoreType;
+  }
 
   return settings;
 };
+
+export const getScoredQuestions = (activity: any): List<any> => {
+  return activity.get("questions").filter((q: any) =>
+    q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
+  );
+};
+
