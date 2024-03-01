@@ -13,10 +13,6 @@ let accessToken: string | null = null;
 
 const FAKE_FIRESTORE_JWT = "fake firestore JWT";
 
-export const FEEDBACK_NO_SCORE = 0;
-export const FEEDBACK_MANUAL_SCORE = 1;
-export const FEEDBACK_RUBRIC_SCORE = 2;
-
 export interface ILTIPartial {
   platformId: string;      // portal
   platformUserId: string;

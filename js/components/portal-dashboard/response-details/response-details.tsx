@@ -73,7 +73,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter, rubric, feedbackLevel } = this.props;
+      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
@@ -151,10 +151,10 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
           { viewMode === "FeedbackReport" &&
             <div className={css.feedbackInfo} data-cy="feedback-info">
               <FeedbackInfo
+                activity={currentActivityWithQuestions}
                 feedbackLevel={feedbackLevel}
                 setFeedbackLevel={this.props.setFeedbackLevel}
                 listViewMode={listViewMode}
-                rubric={rubric}
               />
             </div>
           }
