@@ -6,8 +6,8 @@ import { FeedbackSettingsModalButton } from "./feedback-settings-modal-button";
 import { Rubric } from "./rubric-utils";
 import { updateActivityFeedbackSettings } from "../../../actions";
 import { connect } from "react-redux";
-import { MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE } from "../../../util/scoring-constants";
-import { ScoreType, getScoringSettings } from "../../../util/scoring";
+import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE } from "../../../util/scoring-constants";
+import { ScoreType, ScoringSettings, getScoredQuestions, getScoringSettings } from "../../../util/scoring";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-settings-modal.less";
 
@@ -17,7 +17,7 @@ interface IProps {
   activity: Map<any, any>;
   activityIndex: number;
   activityId: string;
-  feedbackSettings: Map<any, any>;
+  scoringSettings: ScoringSettings;
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
   rubric?: Rubric;
 }
@@ -37,6 +37,7 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
     const { scoreType, maxScore } = this.state;
     const { show, rubric } = this.props;
     const maxScoreDisabled = scoreType !== MANUAL_SCORE;
+    const hasScoredQuestions = getScoredQuestions(this.props.activity).size > 0;
 
     return (
       <Modal animation={false} centered dialogClassName={css.lightbox} onHide={this.handleCancel} show={show} data-cy="feedback-settings-modal">
@@ -76,6 +77,16 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
                 </div>
               </div>
             )}
+            {hasScoredQuestions && (
+              <div className={css.modalOption} data-cy="feedback-settings-modal-option">
+                <FeedbackSettingsModalButton selected={scoreType === AUTOMATIC_SCORE} value={AUTOMATIC_SCORE} onClick={this.handleScoreTypeChange} label="Use score from autoscored multiple-choice questions" alignTop={true} />
+                <div className={css.modalOptionInfo}>
+                  <p>
+                  All activities within this assignment will receive a score based on the total score of autoscored multiple-choice questions.
+                  </p>
+                </div>
+              </div>
+            )}
             <div className={css.buttonContainer}>
               <div className={css.closeButton} onClick={this.handleCancel} data-cy="feedback-settings-modal-close-button">
                 Cancel
@@ -91,8 +102,10 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
   }
 
   private getSettings = () => {
-    const settings = this.props.feedbackSettings.toJS() as any;
-    return getScoringSettings(settings, {rubric: this.props.rubric});
+    return getScoringSettings(this.props.scoringSettings, {
+      rubric: this.props.rubric,
+      hasScoredQuestions: getScoredQuestions(this.props.activity).size > 0,
+    });
   }
 
   private handleScoreTypeChange = (scoreType: ScoreType) => {
@@ -131,10 +144,10 @@ function mapStateToProps() {
   return (state: any, ownProps: any) => {
     const rubric = state.getIn(["feedback", "settings", "rubric"]);
     const activityId = ownProps.activity.get("id");
-    const feedbackSettings = state.getIn(["feedback", "settings", "activitySettings", activityId]) || Map({});
+    const scoringSettings = (state.getIn(["feedback", "settings", "activitySettings", activityId]) || Map({})).toJS();
 
     return {
-      feedbackSettings,
+      scoringSettings,
       rubric: rubric && rubric.toJS(),
       activityId,
       activityIndex: ownProps.activity.get("activityIndex"),

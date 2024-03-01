@@ -5,6 +5,7 @@ import { TrackEventFunction } from "../../actions";
 import ActivityFeedbackGivenIcon from "../../../img/svg-icons/feedback-activity-badge-icon.svg";
 import { hasRubricFeedback } from "../../util/activity-feedback-helper";
 import { Rubric } from "./feedback/rubric-utils";
+import { getScoredQuestions } from "../../util/scoring";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
 
@@ -135,9 +136,7 @@ export class StudentAnswers extends React.PureComponent<IProps> {
 
   private renderScore = (activity: any, student: any) => {
     const { answers } = this.props;
-    const scoredQuestions = activity.get("questions").filter((q: any) =>
-      q.get("visible") && q.get("type") === "multiple_choice" && q.get("scored"),
-    );
+    const scoredQuestions = getScoredQuestions(activity);
     const questionsWithCorrectAnswer = scoredQuestions.filter(
       (question: any) => answers.getIn([question.get("id"), student.get("id"), "correct"])
     );
