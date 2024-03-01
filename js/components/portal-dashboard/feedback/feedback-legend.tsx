@@ -8,12 +8,15 @@ import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-fe
 import { FeedbackLevel } from "../../../util/misc";
 import { FeedbackNoteToggle } from "./feedback-note-toggle";
 import { FeedbackSettingsToggle } from "./feedback-settings-toggle";
+import { ScoringSettings } from "../../../util/scoring";
+import { NO_SCORE } from "../../../util/scoring-constants";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-legend.less";
 
 interface IProps {
   feedbackLevel: FeedbackLevel;
   activity: Map<any, any>;
+  scoringSettings?: ScoringSettings;
 }
 
 export const FeedbackLegend: React.FC<IProps> = (props) => {
@@ -25,6 +28,7 @@ export const FeedbackLegend: React.FC<IProps> = (props) => {
                             ? <GivenFeedbackActivityBadgeIcon />
                             : <GivenFeedbackQuestionBadgeIcon />;
   const updateFeedbackIcon = <UpdateFeedbackQuestionBadgeIcon />;
+  const showAvgScore = props.scoringSettings?.scoreType !== NO_SCORE;
 
   return (
     <aside className={css.feedbackBadgeLegend} data-cy="feedback-badge-legend">
@@ -50,10 +54,10 @@ export const FeedbackLegend: React.FC<IProps> = (props) => {
             <FeedbackSettingsToggle activity={activity} />
           </div>
           <div className={css.feedbackBadgeLegend__rubric_score}>
-            <div className={css.feedbackBadgeLegend__rubric_score_avg}>
+            {showAvgScore && <div className={css.feedbackBadgeLegend__rubric_score_avg}>
               Avg. Score:
               <div className={css.feedbackBadgeLegend__rubric_score_avg_value}>TBD</div>
-            </div>
+            </div>}
             <div className={css.feedbackBadgeLegend__rubric_summary}>
               Summary:
               <div className={css.feedbackBadgeLegend__rubric_summary_icon}>

@@ -20,6 +20,7 @@ import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
 import { ColorTheme, DashboardViewMode, FeedbackLevel, ListViewMode } from "../../util/misc";
+import { ScoringSettings, getScoringSettingsInState } from "../../util/scoring";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -49,6 +50,7 @@ interface IProps {
   studentProgress: Map<any, any>;
   students: any;
   sortedQuestionIds?: string[];
+  scoringSettings?: ScoringSettings;
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
@@ -105,7 +107,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       error, feedback, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
-      setStudentFeedbackSort} = this.props;
+      setStudentFeedbackSort, scoringSettings } = this.props;
     const { initialLoading, viewMode, listViewMode, feedbackLevel } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
@@ -190,6 +192,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   students={students}
                   studentProgress={studentProgress}
                   trackEvent={trackEvent}
+                  scoringSettings={scoringSettings}
                 />
               </div>
               <QuestionOverlay
@@ -239,6 +242,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   rubric={rubric}
                   feedbackLevel={feedbackLevel}
                   setFeedbackLevel={this.setFeedbackLevel}
+                  scoringSettings={scoringSettings}
                 />
             </div>
           )
@@ -299,6 +303,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const dataDownloaded = !error && !data.get("isFetching");
   const questions = dataDownloaded ? state.getIn(["report", "questions"]) : undefined;
   const activities = dataDownloaded ? state.getIn(["report", "activities"]) : undefined;
+  const currentActivity = getCurrentActivity(state);
 
   let sortedQuestionIds;
   if (questions && activities) {
@@ -321,7 +326,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     answers,
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     compactReport: getCompactReport(state),
-    currentActivity: getCurrentActivity(state),
+    currentActivity,
     currentQuestion: getCurrentQuestion(state),
     currentStudentId: getCurrentStudentId(state),
     error,
@@ -340,6 +345,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
+    scoringSettings: currentActivity && getScoringSettingsInState(state, currentActivity.get("id"))
   };
 }
 
