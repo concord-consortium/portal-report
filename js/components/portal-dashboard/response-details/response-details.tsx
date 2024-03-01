@@ -136,7 +136,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   currentStudentId={currentStudentId}
                   nameFirst={false}
                 />
-              : <QuestionNavigator
+              : ((feedbackLevel === "Question" && viewMode === "FeedbackReport") || (viewMode === "ResponseDetails")) && <QuestionNavigator
                   currentQuestion={currentQuestion || firstQuestion}
                   questions={questions}
                   sortedQuestionIds={sortedQuestionIds}
