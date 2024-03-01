@@ -162,6 +162,13 @@ Additional, useful resources:
 
 Note that conventions in the dashboard part of the code base are somewhat different than in the report part.
 
+### Development/Debug Query Params
+
+The following query params can be used during development or when debugging issues:
+
+- `debug:disableRubric` - when set to `true` (`?debug:disableRubric=true`) the rubric defined for the offering is not loaded.  This is useful when using the baked in demo data which does have a rubric defined to develope/debug the dashboard behavior when a rubric is not defined.
+
+
 ## License
 
 [MIT](https://github.com/concord-consortium/grasp-seasons/blob/master/LICENSE)

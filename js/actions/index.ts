@@ -29,6 +29,7 @@ import { urlParam, getViewType, IFRAME_STANDALONE } from "../util/misc";
 import queryString from "query-string";
 import { v4 as uuid } from "uuid";
 import { IReportItemAnswer, IReportItemHandlerMetadata, ReportItemsType } from "@concord-consortium/interactive-api-host";
+import { disableRubric } from "../util/debug-flags";
 
 export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
@@ -274,7 +275,7 @@ function watchFireStoreReportSettings(db: firebase.firestore.Firestore, rawPorta
 
 function watchFirestoreFeedbackSettings(db: firebase.firestore.Firestore, rawPortalData: IPortalRawData, dispatch: Dispatch) {
   const path = feedbackSettingsFirestorePath(rawPortalData.sourceKey);
-  const rubricUrl = rawPortalData.offering.rubric_url;
+  let rubricUrl: string|null = rawPortalData.offering.rubric_url;
   let rubricRequested = false;
   const query = db.collection(path)
     .where("contextId", "==", rawPortalData.contextId)
@@ -283,6 +284,11 @@ function watchFirestoreFeedbackSettings(db: firebase.firestore.Firestore, rawPor
 
   addSnapshotDispatchListener(query, RECEIVE_FEEDBACK_SETTINGS, dispatch,
     snapshot => snapshot.docs[0].data());
+
+  // see the readme for how disableRubric is set with a query param for development/debugging
+  if (disableRubric) {
+    rubricUrl = null;
+  }
 
   // Unlike the listener added above, this should be called even if snapshot is empty
   // (no feedback settings saved yet).
