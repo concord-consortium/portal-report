@@ -1,8 +1,9 @@
 import React from "react";
 import { Map } from "immutable";
-import { FeedbackLegend } from "../../../components/portal-dashboard/feedback/feedback-legend";
+import FeedbackLegend from "../../../components/portal-dashboard/feedback/feedback-legend";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 import { ScoringSettings } from "../../../util/scoring";
+import { Rubric } from "../../../components/portal-dashboard/feedback/rubric-utils";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-info.less";
 
@@ -12,10 +13,11 @@ interface IProps {
   setFeedbackLevel: (value: string) => void;
   activity: Map<any, any>;
   scoringSettings: ScoringSettings;
+  rubric: Rubric;
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const {activity, feedbackLevel, listViewMode, setFeedbackLevel, scoringSettings } = props;
+  const {activity, feedbackLevel, listViewMode, setFeedbackLevel, scoringSettings, rubric } = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -45,7 +47,7 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
           </button>
         </div>
       </div>
-      <FeedbackLegend feedbackLevel={feedbackLevel} activity={activity} scoringSettings={scoringSettings} />
+      <FeedbackLegend feedbackLevel={feedbackLevel} activity={activity} scoringSettings={scoringSettings} rubric={rubric} />
     </div>
   );
 

@@ -26,7 +26,7 @@ export const FeedbackSettingsToggle: React.FC<IProps> = (props) => {
   return (
     <div className={css.feedbackSettingsToggle} data-cy="feedback-settings-toggle">
       <button className={buttonClass} onClick={handleShowModal(true)} data-cy="feedback-settings-toggle-button" title={title} />
-      <div className={css.feedbackSettingsLabel}>Activity Score:</div> <div className={css.feedbackSettingsValue}>TDB</div>
+      <div className={css.feedbackSettingsLabel}>Activity Score:</div> <div className={css.feedbackSettingsValue}>{scoringSettings.scoreType}</div>
       {modalOpen && <FeedbackSettingsModal
         activity={activity}
         backdrop={false}
