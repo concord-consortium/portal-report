@@ -134,9 +134,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       setAnonymous(value);
     };
 
-    // eslint-disable-next-line no-console
-    console.log("SCORING SETTINGS", {scoringSettings});
-
     return (
       <div className={css.portalDashboardApp}>
 
