@@ -75,7 +75,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings } = this.props;
+      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings, setFeedbackLevel } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
@@ -116,6 +116,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             studentCount={studentCount}
             trackEvent={trackEvent}
             viewMode={viewMode}
+            setFeedbackLevel={setFeedbackLevel}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             { isSequence || feedbackLevel === "Activity"

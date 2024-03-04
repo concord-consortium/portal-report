@@ -45,6 +45,7 @@ interface IProps {
   studentCount: number;
   trackEvent: TrackEventFunction;
   viewMode: DashboardViewMode;
+  setFeedbackLevel: (feedbackLevel: FeedbackLevel) => void;
 }
 
 class PopupClassNav extends React.PureComponent<IProps>{
@@ -161,16 +162,26 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   private renderViewListOptions() {
-    const { feedbackLevel, listViewMode, setListViewMode, viewMode } = this.props;
+    const { feedbackLevel, listViewMode, setListViewMode, viewMode, setFeedbackLevel } = this.props;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${listViewMode==="Student" ? css.selected : ""}`;
     const disableListByQuestions = feedbackLevel === "Activity" && viewMode === "FeedbackReport" ? true : false;
     const listByQuestionsClasses = `${css.toggle} ${css.listByQuestions} ${listViewMode==="Question" ? css.selected : ""}  ${disableListByQuestions ? css.disabled : ""}`;
+
+    const handleClick = (value: ListViewMode) => {
+      setListViewMode(value);
+
+      // we also set the feedback level here to avoid have a disabled feedback level option displayed in the feedback page
+      if (viewMode === "ResponseDetails" && value === "Question") {
+        setFeedbackLevel("Question");
+      }
+    };
+
     return (
       <div className={`${css.viewListOption} ${css.columnHeader}`}>View list by:
-        <button className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={() => setListViewMode("Student")}>
+        <button className={listByStudentClasses} data-cy="list-by-student-toggle" onClick={() => handleClick("Student")}>
           <StudentViewIcon className={css.optionIcon} />
         </button>
-        <button className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={() => setListViewMode("Question")} disabled={disableListByQuestions}>
+        <button className={listByQuestionsClasses} data-cy="list-by-questions-toggle" onClick={() => handleClick("Question")} disabled={disableListByQuestions}>
           <QuestionViewIcon className={css.optionIcon} />
         </button>
       </div>
