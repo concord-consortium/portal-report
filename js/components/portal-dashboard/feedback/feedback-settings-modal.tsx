@@ -34,8 +34,6 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
     super(props);
     this.initialSettings = props.scoringSettings;
     this.state = {...props.scoringSettings};
-    // eslint-disable-next-line no-debugger
-    debugger;
   }
 
   render() {

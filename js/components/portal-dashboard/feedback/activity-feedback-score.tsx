@@ -3,7 +3,7 @@ import { throttle } from "lodash";
 import { TrackEventFunction } from "../../../actions";
 import { ScoreInput } from "./score-input";
 import { ScoringSettings } from "../../../util/scoring";
-import { MANUAL_SCORE, NO_SCORE } from "../../../util/scoring-constants";
+import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE } from "../../../util/scoring-constants";
 
 interface IProps {
   activityId: string | null;
@@ -44,7 +44,7 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateScoreLogged = useCallback((score: number) => updateScore(score, true), []);
 
-  if (!activityStarted || scoreType === NO_SCORE) {
+  if (!activityStarted || scoreType === NO_SCORE || scoreType === AUTOMATIC_SCORE) {
     return null;
   }
 
@@ -63,12 +63,12 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
     );
   }
 
-  // const displayScore = score; // TBD: get autoscore
+  const displayScore = "TBD"; // TBD: compute this in PT #187021252
 
   return (
     <div>
       <div>Score</div>
-      <div style={{fontWeight: "bold"}}>TBD</div>
+      <div style={{marginTop: 5}}>{displayScore}</div>
     </div>
   );
 

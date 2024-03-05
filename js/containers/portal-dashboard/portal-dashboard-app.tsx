@@ -305,8 +305,9 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const activities = dataDownloaded ? state.getIn(["report", "activities"]) : undefined;
   const currentActivity = getCurrentActivity(state);
   const scoredActivityId = currentActivity?.get("id") ?? activities?.first()?.get("id");
-  const scoredActivity = activities?.find((activity: any) => activity.get("id") === scoredActivityId);
-
+  const sequenceTree = dataDownloaded && getSequenceTree(state);
+  const activityTrees = sequenceTree && sequenceTree.get("children");
+  const scoredActivity = activityTrees && activityTrees.find((activity: any) => activity.get("id") === scoredActivityId);
   const initialScoringSettings = scoredActivityId && getScoringSettingsInState(state, scoredActivityId);
   const rubric = state.getIn(["feedback", "settings"]).get("rubric");
   const scoringSettings = getScoringSettings(initialScoringSettings, {
@@ -347,7 +348,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
     questions,
     report: dataDownloaded && reportState,
-    sequenceTree: dataDownloaded && getSequenceTree(state),
+    sequenceTree,
     hideFeedbackBadges: getHideFeedbackBadges(state),
     sortByMethod: getDashboardSortBy(state),
     sortedQuestionIds,
