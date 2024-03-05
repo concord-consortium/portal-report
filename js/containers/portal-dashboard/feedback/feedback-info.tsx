@@ -11,7 +11,7 @@ interface IProps {
   listViewMode: ListViewMode;
   setFeedbackLevel: (value: string) => void;
   activity: Map<any, any>;
-  scoringSettings?: ScoringSettings;
+  scoringSettings: ScoringSettings;
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {

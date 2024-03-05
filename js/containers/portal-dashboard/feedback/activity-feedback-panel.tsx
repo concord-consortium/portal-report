@@ -8,6 +8,7 @@ import { getActivityFeedbackSortedStudents } from "../../../selectors/dashboard-
 import { ActivityLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/activity-level-feedback-student-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 import { Rubric } from "../../../components/portal-dashboard/feedback/rubric-utils";
+import { ScoringSettings } from "../../../util/scoring";
 
 interface IProps {
   activity: Map<any, any>;
@@ -27,6 +28,7 @@ interface IProps {
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
   activityFeedbackStudents: Map<any, any>;
+  scoringSettings: ScoringSettings;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
@@ -50,7 +52,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
 
   render() {
     const { activity, activityIndex, feedbacks, feedbacksNeedingReview, feedbackSortByMethod, isAnonymous, rubric,
-            updateActivityFeedback, trackEvent, activityFeedbackStudents } = this.props;
+            updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -67,6 +69,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           students={activityFeedbackStudents}
           updateActivityFeedback={updateActivityFeedback}
           trackEvent={trackEvent}
+          scoringSettings={scoringSettings}
         />
       </div>
     );

@@ -20,7 +20,7 @@ import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
 import { ColorTheme, DashboardViewMode, FeedbackLevel, ListViewMode } from "../../util/misc";
-import { ScoringSettings, getScoringSettingsInState } from "../../util/scoring";
+import { ScoringSettings, getScoredQuestions, getScoringSettings, getScoringSettingsInState } from "../../util/scoring";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -50,7 +50,7 @@ interface IProps {
   studentProgress: Map<any, any>;
   students: any;
   sortedQuestionIds?: string[];
-  scoringSettings?: ScoringSettings;
+  scoringSettings: ScoringSettings;
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
@@ -304,6 +304,16 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const questions = dataDownloaded ? state.getIn(["report", "questions"]) : undefined;
   const activities = dataDownloaded ? state.getIn(["report", "activities"]) : undefined;
   const currentActivity = getCurrentActivity(state);
+  const scoredActivityId = currentActivity?.get("id") ?? activities?.first()?.get("id");
+  const sequenceTree = dataDownloaded && getSequenceTree(state);
+  const activityTrees = sequenceTree && sequenceTree.get("children");
+  const scoredActivity = activityTrees && activityTrees.find((activity: any) => activity.get("id") === scoredActivityId);
+  const initialScoringSettings = scoredActivityId && getScoringSettingsInState(state, scoredActivityId);
+  const rubric = state.getIn(["feedback", "settings"]).get("rubric");
+  const scoringSettings = getScoringSettings(initialScoringSettings, {
+    rubric: rubric?.toJS(),
+    hasScoredQuestions: scoredActivity ? getScoredQuestions(scoredActivity).size > 0 : false,
+  });
 
   let sortedQuestionIds;
   if (questions && activities) {
@@ -338,14 +348,14 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
     questions,
     report: dataDownloaded && reportState,
-    sequenceTree: dataDownloaded && getSequenceTree(state),
+    sequenceTree,
     hideFeedbackBadges: getHideFeedbackBadges(state),
     sortByMethod: getDashboardSortBy(state),
     sortedQuestionIds,
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
-    scoringSettings: currentActivity && getScoringSettingsInState(state, currentActivity.get("id"))
+    scoringSettings
   };
 }
 

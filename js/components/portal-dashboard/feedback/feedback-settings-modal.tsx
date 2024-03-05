@@ -1,13 +1,13 @@
 import React, { PureComponent } from "react";
 import { Modal } from "react-bootstrap";
-import classNames from "classnames";
 import { Map } from "immutable";
 import { FeedbackSettingsModalButton } from "./feedback-settings-modal-button";
 import { Rubric } from "./rubric-utils";
 import { updateActivityFeedbackSettings } from "../../../actions";
 import { connect } from "react-redux";
 import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE } from "../../../util/scoring-constants";
-import { ScoreType, ScoringSettings, getScoredQuestions, getScoringSettings } from "../../../util/scoring";
+import { ScoreType, ScoringSettings, getScoredQuestions } from "../../../util/scoring";
+import { ScoreInput } from "./score-input";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-settings-modal.less";
 
@@ -28,9 +28,12 @@ interface IState {
 }
 
 class FeedbackSettingsModal extends PureComponent<IProps, IState> {
+  private initialSettings: IState;
+
   constructor(props: IProps) {
     super(props);
-    this.state = this.getSettings();
+    this.initialSettings = props.scoringSettings;
+    this.state = {...props.scoringSettings};
   }
 
   render() {
@@ -53,10 +56,9 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
             </div>
             <div className={css.modalOption} data-cy="feedback-settings-modal-option">
               <FeedbackSettingsModalButton selected={scoreType === MANUAL_SCORE} value={MANUAL_SCORE} onClick={this.handleScoreTypeChange} label="Manual score">
-                <div className={classNames(css.maxScore, {[css.disabled]: maxScoreDisabled})}>
+                <ScoreInput score={maxScore} minScore={1} disabled={maxScoreDisabled} className={css.maxScore} onChange={this.handleMaxScoreChange}>
                   <div>Max score</div>
-                  <input type="number" disabled={maxScoreDisabled} value={maxScore} onChange={this.handleMaxScoreChange} min={1} />
-                </div>
+                </ScoreInput>
               </FeedbackSettingsModalButton>
               <div className={css.modalOptionInfo}>
                 <p>
@@ -101,27 +103,17 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
     );
   }
 
-  private getSettings = () => {
-    return getScoringSettings(this.props.scoringSettings, {
-      rubric: this.props.rubric,
-      hasScoredQuestions: getScoredQuestions(this.props.activity).size > 0,
-    });
-  }
-
   private handleScoreTypeChange = (scoreType: ScoreType) => {
     this.setState({ scoreType });
   }
 
-  private handleMaxScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const maxScore = parseInt(e.target.value, 10);
-    if (maxScore > 0) {
-      this.setState({ maxScore });
-    }
+  private handleMaxScoreChange = (maxScore: number) => {
+    this.setState({ maxScore });
   }
 
   private handleCancel = () => {
     // restore initial settings
-    this.setState(this.getSettings());
+    this.setState(this.initialSettings);
     this.close();
   }
 
@@ -144,10 +136,8 @@ function mapStateToProps() {
   return (state: any, ownProps: any) => {
     const rubric = state.getIn(["feedback", "settings", "rubric"]);
     const activityId = ownProps.activity.get("id");
-    const scoringSettings = (state.getIn(["feedback", "settings", "activitySettings", activityId]) || Map({})).toJS();
 
     return {
-      scoringSettings,
       rubric: rubric && rubric.toJS(),
       activityId,
       activityIndex: ownProps.activity.get("activityIndex"),
