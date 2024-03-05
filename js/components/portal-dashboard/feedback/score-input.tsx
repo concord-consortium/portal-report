@@ -13,6 +13,8 @@ interface IProps {
   onBlur?: (score: number) => void;
 }
 
+const maxScore = 999;
+
 export class ScoreInput extends PureComponent<IProps> {
 
   render() {
@@ -21,7 +23,7 @@ export class ScoreInput extends PureComponent<IProps> {
     return (
       <div className={classNames(css.scoreInput, className, {[css.disabled]: disabled})}>
         {children}
-        <input type="number" disabled={disabled} value={score} min={minScore} onChange={this.handleChange} onKeyDown={this.handleKeyDown} onBlur={this.handleBlur} />
+        <input type="number" disabled={disabled} value={score} min={minScore} max={maxScore} onChange={this.handleChange} onKeyDown={this.handleKeyDown} onBlur={this.handleBlur} />
       </div>
     );
   }
@@ -35,7 +37,7 @@ export class ScoreInput extends PureComponent<IProps> {
   private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {minScore, onChange} = this.props;
     const score = parseInt(e.target.value, 10);
-    if (score >= minScore) {
+    if ((score >= minScore) && (score <= maxScore)) {
       onChange(score);
     }
   }

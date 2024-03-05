@@ -4,6 +4,9 @@ import { TrackEventFunction } from "../../../actions";
 import { ScoreInput } from "./score-input";
 import { ScoringSettings } from "../../../util/scoring";
 import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE } from "../../../util/scoring-constants";
+import { Rubric } from "./rubric-utils";
+
+import css from "../../../../css/portal-dashboard/feedback/activity-feedback-score.less";
 
 interface IProps {
   activityId: string | null;
@@ -14,12 +17,13 @@ interface IProps {
   studentId: string;
   updateActivityFeedback?: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
-  className: string;
   scoringSettings: ScoringSettings;
+  rubricFeedback: any;
+  rubric: Rubric;
 }
 
 export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, activityStarted, score, studentId, updateActivityFeedback, trackEvent, className, scoringSettings } = props;
+  const { activityId, activityIndex, activityStarted, score, studentId, updateActivityFeedback, trackEvent, scoringSettings, rubricFeedback, rubric } = props;
   const scoreType = scoringSettings.scoreType ?? NO_SCORE;
   const [ scoreChanged, setScoreChanged ] = useState(false);
 
@@ -54,21 +58,28 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
         score={score}
         minScore={0}
         disabled={false}
-        className={className}
+        className={css.activityFeedbackScore}
         onChange={handleScoreChange}
         onBlur={scoreChanged ? updateScoreLogged : undefined}
       >
-        <div>Score</div>
+        <div className={css.scoreLabel}>Score</div>
       </ScoreInput>
     );
   }
 
-  const displayScore = "TBD"; // TBD: compute this in PT #187021252
+  let displayScore = "N/A";
+  if (rubricFeedback) {
+    const scoredValues = Object.values(rubricFeedback).filter((v: any) => v.score > 0);
+    if (scoredValues.length === rubric.criteria.length) {
+      const totalScore = scoredValues.reduce((acc, cur: any) => acc + cur.score, 0);
+      displayScore = String(totalScore);
+    }
+  }
 
   return (
-    <div>
-      <div>Score</div>
-      <div style={{marginTop: 5}}>{displayScore}</div>
+    <div className={css.activityFeedbackScore}>
+      <div className={css.scoreLabel}>Score</div>
+      <div>{displayScore}</div>
     </div>
   );
 

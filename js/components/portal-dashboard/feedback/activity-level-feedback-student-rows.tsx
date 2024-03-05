@@ -70,6 +70,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               rubricFeedback={rubricFeedback}
               setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
               updateActivityFeedback={updateActivityFeedback}
+              scoringSettings={scoringSettings}
             />
           }
           <div className={css.textAndScore} data-cy="feedback-text-and-score">
@@ -94,8 +95,9 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
               updateActivityFeedback={updateActivityFeedback}
               trackEvent={trackEvent}
-              className={css.score}
               scoringSettings={scoringSettings}
+              rubricFeedback={rubricFeedback}
+              rubric={rubric}
             />
           </div>
         </div>
