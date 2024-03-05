@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { Modal } from "react-bootstrap";
 import { Map } from "immutable";
+import classNames from "classnames";
 import { FeedbackSettingsModalButton } from "./feedback-settings-modal-button";
 import { Rubric } from "./rubric-utils";
 import { updateActivityFeedbackSettings } from "../../../actions";
@@ -93,7 +94,7 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
               <div className={css.closeButton} onClick={this.handleCancel} data-cy="feedback-settings-modal-close-button">
                 Cancel
               </div>
-              <div className={css.closeButton} onClick={this.handleSave} data-cy="feedback-settings-modal-close-button">
+              <div className={classNames(css.closeButton, {[css.disabled]: this.saveDisabled})} onClick={this.handleSave} data-cy="feedback-settings-modal-close-button">
                 Save
               </div>
             </div>
@@ -120,8 +121,14 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
   private handleSave = () => {
     const {scoreType, maxScore} = this.state;
     const {updateActivityFeedbackSettings, activityId, activityIndex} = this.props;
-    updateActivityFeedbackSettings(activityId, activityIndex, { scoreType, maxScore });
-    this.close();
+    if (!this.saveDisabled) {
+      const updates: any = { scoreType };
+      if (maxScore !== undefined) {
+        updates.maxScore = maxScore;
+      }
+      updateActivityFeedbackSettings(activityId, activityIndex, updates);
+      this.close();
+    }
   }
 
   private close = () => {
@@ -129,6 +136,11 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
     if (show) {
       onHide(show);
     }
+  }
+
+  private get saveDisabled() {
+    const { scoreType, maxScore } = this.state;
+    return scoreType === MANUAL_SCORE && (maxScore === undefined || maxScore < 1);
   }
 }
 

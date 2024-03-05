@@ -27,12 +27,12 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
   const scoreType = scoringSettings.scoreType ?? NO_SCORE;
   const [ scoreChanged, setScoreChanged ] = useState(false);
 
-  const handleScoreChange = (newScore: number) => {
+  const handleScoreChange = (newScore?: number) => {
     setScoreChanged(true);
     updateScoreThrottledAndNotLogged(newScore);
   };
 
-  const updateScore = (score: number, logUpdate?: boolean) => {
+  const updateScore = (score?: number, logUpdate?: boolean) => {
     if (activityId && studentId && updateActivityFeedback) {
       if (logUpdate) {
         trackEvent("Portal-Dashboard", "AddActivityLevelScore", { label: `${score}`, parameters: { activityId, studentId }});
@@ -43,10 +43,10 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateScoreThrottledAndNotLogged = useCallback(throttle((score: number) => updateScore(score, false), 2000), []);
+  const updateScoreThrottledAndNotLogged = useCallback(throttle((score?: number) => updateScore(score, false), 2000), []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateScoreLogged = useCallback((score: number) => updateScore(score, true), []);
+  const updateScoreLogged = useCallback((score?: number) => updateScore(score, true), []);
 
   if (!activityStarted || scoreType === NO_SCORE || scoreType === AUTOMATIC_SCORE) {
     return null;

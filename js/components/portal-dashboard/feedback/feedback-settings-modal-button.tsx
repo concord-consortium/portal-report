@@ -20,14 +20,18 @@ export class FeedbackSettingsModalButton extends PureComponent<IProps> {
 
   render() {
     return (
-      <div className={classNames(css.feedbackSettingsModalButton, {[css.alignTop]: this.props.alignTop})}>
-        <div className={css.modalButton}>
-          <button className={css.outerCircle} data-cy="feedback-settings-radio-button" onClick={this.handleOnClick}>
-            <div className={`${css.innerCircle} ${this.props.selected ? css.selected : ""}`}></div>
-          </button>
+      <div className={css.feedbackSettingsModalButton}>
+        <div className={classNames(css.modalButtonAndLabel, {[css.alignTop]: this.props.alignTop})}>
+          <div className={css.modalButton}>
+            <button className={css.outerCircle} data-cy="feedback-settings-radio-button" onClick={this.handleOnClick}>
+              <div className={`${css.innerCircle} ${this.props.selected ? css.selected : ""}`}></div>
+            </button>
+          </div>
+          <div className={css.modalButtonLabel}>{this.props.label}</div>
         </div>
-        <div className={css.modalButtonLabel}>{this.props.label}</div>
-        {this.props.children}
+        <div>
+          {this.props.children}
+        </div>
       </div>
     );
   }

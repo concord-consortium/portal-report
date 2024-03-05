@@ -6,12 +6,20 @@
   }
 
   input {
-    width: 45px;
+    width: 50px;
     margin-left: 5px;
     padding: 5px 3px;
     border: solid 1.5px @cc-charcoal-light1;
-    border-radius: 4px;
+    border-radius: 8px;
     font-family: lato, arial, helvetica, sans-serif;
     font-size: 16px;
+    text-align: right;
+
+    &::-webkit-inner-spin-button {
+      margin-left: 5px;
+    }
+    &::-webkit-outer-spin-button {
+      margin-left: 5px;
+    }
   }
 }
