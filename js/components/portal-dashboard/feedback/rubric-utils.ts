@@ -73,6 +73,13 @@ const endColorHSL = hexToHSL(endColorRGB);
 
 // Main function to get RGB color based on value within min and max range
 export const getFeedbackColor = ({rubric, score}: {rubric: Rubric; score: number}): string => {
+  const [h, s, l] = getFeedbackHSL({rubric, score});
+
+  // Convert HSL back to RGB
+  return hslToRGB(h, s, l);
+};
+
+const getFeedbackHSL = ({rubric, score}: {rubric: Rubric; score: number}): [number, number, number] => {
   const {min, max} = rubric.ratings.reduce((acc, rating) => {
     acc.min = Math.min(acc.min, rating.score);
     acc.max = Math.max(acc.max, rating.score);
@@ -81,7 +88,7 @@ export const getFeedbackColor = ({rubric, score}: {rubric: Rubric; score: number
 
   const range = max - min;
   if (range <= 0) {
-    return startColorRGB;
+    return startColorHSL;
   }
   const scale = (score - min) / range;
 
@@ -90,8 +97,13 @@ export const getFeedbackColor = ({rubric, score}: {rubric: Rubric; score: number
   const s = startColorHSL[1] + (endColorHSL[1] - startColorHSL[1]) * scale;
   const l = startColorHSL[2] + (endColorHSL[2] - startColorHSL[2]) * scale;
 
-  // Convert HSL back to RGB
-  return hslToRGB(h, s, l);
+  return [h, s, l];
 };
 
+export const getFeedbackTextColor = ({rubric, score}: {rubric: Rubric; score: number}): string => {
+  const [h, s, l] = getFeedbackHSL({rubric, score});
+
+  const highContrastLightness = l > 50 ? 0 : 100;
+  return hslToRGB(h, s, highContrastLightness);
+};
 
