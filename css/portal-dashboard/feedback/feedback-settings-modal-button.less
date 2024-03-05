@@ -3,60 +3,67 @@
 .feedbackSettingsModalButton {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
 
-  &.alignTop {
-    align-items: start;
-  }
+  .modalButtonAndLabel {
 
-  .modalButton {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
+    gap: 10px;
 
-    &:hover .outerCircle {
-      background-color: white;
-
-      &:hover .innerCircle {
-        background-color: @feedback-green-light3B;
-      }
-    }
-    &:active .outerCircle {
-      background-color: @feedback-green;
-
-      &:active .innerCircle {
-        background-color: white;
-      }
+    &.alignTop {
+      align-items: start;
     }
 
-    .outerCircle {
+    .modalButton {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 20px;
       height: 20px;
-      border-radius: 50%;
-      border: solid 1.5px @cc-charcoal-light1;
-      background-color: white;
       cursor: pointer;
 
-      .innerCircle {
-        width: 12px;
-        height: 12px;
+      &:hover .outerCircle {
         background-color: white;
-        border-radius: 50%;
 
-        &.selected {
-          background-color: @feedback-green;
+        &:hover .innerCircle {
+          background-color: @feedback-green-light3B;
+        }
+      }
+      &:active .outerCircle {
+        background-color: @feedback-green;
+
+        &:active .innerCircle {
+          background-color: white;
+        }
+      }
+
+      .outerCircle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: solid 1.5px @cc-charcoal-light1;
+        background-color: white;
+        cursor: pointer;
+
+        .innerCircle {
+          width: 12px;
+          height: 12px;
+          background-color: white;
+          border-radius: 50%;
+
+          &.selected {
+            background-color: @feedback-green;
+          }
         }
       }
     }
-  }
 
-  .modalButtonLabel {
-    font-weight: bold;
+    .modalButtonLabel {
+      font-weight: bold;
+    }
   }
 }

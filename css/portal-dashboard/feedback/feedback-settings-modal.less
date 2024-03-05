@@ -7,7 +7,7 @@
   height: auto;
   left: 405px;
   top: 135px;
-  width: 330px;
+  width: 335px;
 
   .lightboxHeader {
     border-radius: 8px 8px 0 0;
@@ -86,6 +86,11 @@
         display: inline-block;
         padding: 5px 10px 6px;
         text-align: center;
+
+        &.disabled {
+          cursor: not-allowed;
+          opacity: 0.35;
+        }
 
         &:hover {
           background: @feedback-green-light4;

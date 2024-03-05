@@ -4,13 +4,13 @@ import classNames from "classnames";
 import css from "../../../../css/portal-dashboard/feedback/score-input.less";
 
 interface IProps {
-  score: number;
+  score?: number;
   minScore: number;
   disabled: boolean;
   className?: string;
   children?: React.ReactNode;
-  onChange: (score: number) => void;
-  onBlur?: (score: number) => void;
+  onChange: (score?: number) => void;
+  onBlur?: (score?: number) => void;
 }
 
 const maxScore = 999;
@@ -18,7 +18,8 @@ const maxScore = 999;
 export class ScoreInput extends PureComponent<IProps> {
 
   render() {
-    const { score, minScore, disabled, className, children } = this.props;
+    const { minScore, disabled, className, children } = this.props;
+    const score = this.props.score ?? "";
 
     return (
       <div className={classNames(css.scoreInput, className, {[css.disabled]: disabled})}>
@@ -36,9 +37,14 @@ export class ScoreInput extends PureComponent<IProps> {
 
   private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {minScore, onChange} = this.props;
-    const score = parseInt(e.target.value, 10);
-    if ((score >= minScore) && (score <= maxScore)) {
-      onChange(score);
+    const value = e.target.value.trim();
+    if (value.length === 0) {
+      onChange();
+    } else {
+      const score = parseInt(e.target.value, 10);
+      if ((score >= minScore) && (score <= maxScore)) {
+        onChange(score);
+      }
     }
   }
 
