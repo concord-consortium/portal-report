@@ -4,6 +4,8 @@ import Markdown from "markdown-to-jsx";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
 import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 import { Rubric, getFeedbackColor } from "./rubric-utils";
+import { ScoringSettings } from "../../../util/scoring";
+import { RUBRIC_SCORE } from "../../../util/scoring-constants";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-table.less";
 
@@ -15,15 +17,16 @@ interface IProps {
   activityIndex: number;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
+  scoringSettings: ScoringSettings;
 }
 export class RubricTableContainer extends React.PureComponent<IProps> {
   render() {
-    const { rubric } = this.props;
+    const { rubric, scoringSettings } = this.props;
     const { criteria } = rubric;
 
     return (
       <div className={css.rubricContainer} data-cy="rubric-table">
-        {this.renderColumnHeaders(rubric)}
+        {this.renderColumnHeaders(rubric, scoringSettings)}
         <div className={css.rubricTable}>
           {criteria.map((crit: any) =>
             <div className={css.rubricTableRow} key={crit.id} id={crit.id}>
@@ -38,8 +41,9 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     );
   }
 
-  private renderColumnHeaders = (rubric: Rubric) => {
+  private renderColumnHeaders = (rubric: Rubric, scoringSettings: ScoringSettings) => {
     const { referenceURL } = rubric;
+    const showScore = scoringSettings.scoreType === RUBRIC_SCORE;
     return (
       <div className={css.columnHeaders}>
         <div className={css.rubricDescriptionHeader}>
@@ -54,7 +58,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
         {rubric.ratings.map((rating: any) =>
           <div className={css.rubricScoreHeader} key={rating.id}>
             <div className={css.rubricScoreLevel}>{rating.label}</div>
-            {rubric.scoreUsingPoints && <div className={css.rubricScoreNumber}>({rating.score})</div>}
+            {rubric.scoreUsingPoints && showScore && <div className={css.rubricScoreNumber}>({rating.score})</div>}
           </div>
         )}
       </div>
