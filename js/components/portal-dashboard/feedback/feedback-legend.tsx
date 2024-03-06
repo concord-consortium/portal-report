@@ -61,7 +61,7 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
       {feedbackLevel === "Activity" &&
         <div className={css.feedbackBadgeLegend__rubric}>
           <div className={css.feedbackBadgeLegend__rubric_settings}>
-            <FeedbackSettingsToggle activity={activity} scoringSettings={scoringSettings} />
+            <FeedbackSettingsToggle activity={activity} scoringSettings={scoringSettings} feedbacks={feedbacks} />
           </div>
           <div className={css.feedbackBadgeLegend__rubric_score}>
             {showAvgScore && <div className={css.feedbackBadgeLegend__rubric_score_avg}>
