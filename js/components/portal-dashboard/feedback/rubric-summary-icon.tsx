@@ -1,9 +1,9 @@
 import React, { useMemo, useState }  from "react";
+import classNames from "classnames";
 import { Rubric, getFeedbackColor } from "./rubric-utils";
+import { RubricSummaryModal } from "./rubric-summary-modal";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-summary-icon.less";
-import classNames from "classnames";
-import { RubricSummaryModal } from "./rubric-summary-modal";
 
 interface IProps {
   rubric: Rubric;

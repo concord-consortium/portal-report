@@ -17,7 +17,6 @@ interface IProps {
 export class RubricSummaryModal extends PureComponent<IProps> {
 
   render() {
-    // const { rubric, criteriaCounts } = this.props;
 
     return (
       <Modal animation={false} centered dialogClassName={css.lightbox} onHide={this.handleClose} show={true} data-cy="rubric-summary-modal">
