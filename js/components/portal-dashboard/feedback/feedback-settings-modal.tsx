@@ -75,7 +75,7 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
                 <FeedbackSettingsModalButton selected={scoreType === RUBRIC_SCORE} value={RUBRIC_SCORE} onClick={this.handleScoreTypeChange} label="Use score from rubric" />
                 <div className={css.modalOptionInfo}>
                   <p>
-                    All activities within this assignment will receive a score based on the activity-level rubric scores you’ve entered.
+                    All activities within this assignment will receive a score based on the activity-level rubric scores you’ve selected.
                   </p>
                 </div>
               </div>
