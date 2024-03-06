@@ -57,7 +57,7 @@ export const computeAvgScore = (scoringSettings: ScoringSettings, rubric: Rubric
       const rubricScores = getRubricScores(rubric, feedbacks);
       const {totalScore, scoredQuestions} = rubricScores.reduce((acc, cur) => {
         let {totalScore, scoredQuestions} = acc;
-        if (cur !== null) {
+        if (cur) {
           totalScore += cur;
           scoredQuestions++;
         }
