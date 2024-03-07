@@ -58,6 +58,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
     return (
       <div>
         <ActivityLevelFeedbackStudentRows
+          activity={activity}
           activityId={currentActivityId}
           activityIndex={activityIndex}
           feedbacks={feedbacks}

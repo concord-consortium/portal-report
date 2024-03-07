@@ -11,10 +11,12 @@ import { TrackEventFunction } from "../../../actions";
 import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 import { Rubric } from "./rubric-utils";
 import { ScoringSettings } from "../../../util/scoring";
+import { ShowStudentAnswers } from "./show-student-answers";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
 interface IProps {
+  activity: Map<any, any>;
   activityId: string;
   activityIndex: number;
   feedbacks: Map<any, any>;
@@ -31,7 +33,7 @@ interface IProps {
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { activityId, activityIndex, feedbacks, feedbackSortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
-    students, trackEvent, updateActivityFeedback, scoringSettings } = props;
+    students, trackEvent, updateActivityFeedback, scoringSettings, activity } = props;
   const displayedFeedbacks = feedbackSortByMethod !== SORT_BY_FEEDBACK_PROGRESS
     ? feedbacks
     : students.map((student: any) => {
@@ -100,6 +102,11 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               rubric={rubric}
             />
           </div>
+          <ShowStudentAnswers
+            student={student}
+            activity={activity}
+            activityStarted={activityStarted}
+          />
         </div>
       </div>
     );
