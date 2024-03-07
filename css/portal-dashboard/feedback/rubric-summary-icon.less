@@ -1,0 +1,34 @@
+@import "../variables";
+
+.rubricSummaryIcon {
+
+  .rubricSummaryIconRows {
+    border: solid 1.5px @cc-charcoal-light1;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .rubricSummaryIconRow {
+      display: flex;
+      background-color: #d8d8d8;
+      overflow: hidden;
+      border-bottom: solid 1px @cc-charcoal-light1;
+
+      &:last-of-type {
+        border-bottom: initial;
+      }
+    }
+
+    &:hover {
+      box-shadow:0 0 0 3px #BDDFC2;
+    }
+
+    &.active {
+      box-shadow:0 0 0 3px @feedback-green;
+      border: solid 1.5px #fff;
+
+      .rubricSummaryIconRow {
+        border-bottom: solid 1px #fff;
+      }
+    }
+  }
+}

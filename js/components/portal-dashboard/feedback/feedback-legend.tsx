@@ -13,6 +13,7 @@ import { ScoringSettings, computeAvgScore } from "../../../util/scoring";
 import { MANUAL_SCORE, RUBRIC_SCORE } from "../../../util/scoring-constants";
 import { Rubric } from "./rubric-utils";
 import { makeGetStudentFeedbacks } from "../../../selectors/activity-feedback-selectors";
+import { RubricSummaryIcon } from "./rubric-summary-icon";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-legend.less";
 
@@ -23,10 +24,11 @@ interface IProps {
   rubric: Rubric;
   avgScore: number;
   avgScoreMax: number;
+  feedbacks: any;
 }
 
 const FeedbackLegend: React.FC<IProps> = (props) => {
-  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax } = props;
+  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax, rubric, feedbacks } = props;
   const { scoreType } = scoringSettings;
   const awaitingFeedbackIcon = feedbackLevel === "Activity"
                                ? <AwaitingFeedbackActivityBadgeIcon />
@@ -66,12 +68,10 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
               Avg. Score:
               <div className={css.feedbackBadgeLegend__rubric_score_avg_value}>{formattedAvgScore} / {avgScoreMax}</div>
             </div>}
-            <div className={css.feedbackBadgeLegend__rubric_summary}>
-              Summary:
-              <div className={css.feedbackBadgeLegend__rubric_summary_icon}>
-                TBD
-              </div>
-            </div>
+            {rubric && <div className={css.feedbackBadgeLegend__rubric_summary}>
+              Rubric Summary:
+              <RubricSummaryIcon rubric={rubric} feedbacks={feedbacks} />
+            </div>}
           </div>
         </div>
       }
@@ -86,7 +86,7 @@ function mapStateToProps() {
     const {avgScoreMax, avgScore} = computeAvgScore(ownProps.scoringSettings, ownProps.rubric, feedbacks);
 
     return {
-      avgScoreMax, avgScore
+      avgScoreMax, avgScore, feedbacks
     };
   };
 }

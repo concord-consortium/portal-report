@@ -1,0 +1,92 @@
+@import "../variables";
+
+.lightbox {
+  background-color: white;
+  border-radius: 8px !important;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.35);
+  height: auto;
+  left: 50px;
+  top: 135px;
+  width: 777px;
+
+  .lightboxHeader {
+    border-radius: 8px 8px 0 0;
+    overflow: auto;
+    padding: 0;
+
+    .title {
+      color: @feedback-green;
+      font-weight: bold;
+      height: 24px;
+      line-height: 1.4;
+      margin: 20px 20px 0;
+      position: relative;
+      text-align: center;
+    }
+  }
+
+  .lightboxBody {
+
+    .contentArea {
+      padding: 0 20px 10px 20px;
+
+      .modalOption {
+        margin: 15px 0 10px 0;
+
+        &:first-of-type {
+          margin-top: 10px;
+        }
+
+        .modalOptionInfo {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          margin: 10px;
+        }
+
+        .maxScore {
+          display: flex;
+          align-items: center;
+          text-align: right;
+
+          &>div {
+            white-space: nowrap;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    .buttonContainer {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+
+      .closeButton {
+        background-color:white;
+        border: solid 1.5px @cc-charcoal-light1;
+        border-radius: 4px;
+        color: @cc-charcoal;
+        cursor: pointer;
+        font-weight: bold;
+        display: inline-block;
+        padding: 5px 10px 6px;
+        text-align: center;
+
+        &.disabled {
+          cursor: not-allowed;
+          opacity: 0.35;
+        }
+
+        &:hover {
+          background: @feedback-green-light4;
+        }
+        &:active {
+          background: @feedback-green;
+          border-color: @feedback-green;
+          color: white;
+        }
+      }
+    }
+  }
+}
