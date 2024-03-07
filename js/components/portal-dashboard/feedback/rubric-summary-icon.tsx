@@ -75,7 +75,7 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
           return (
             <div className={css.rubricSummaryIconRow} key={id} style={rowStyle}>
               {rubric.ratings.map(rating => {
-                const percentage = (ratings[rating.id] / numStudents) * 100;
+                const percentage = numStudents > 0 ? (ratings[rating.id] / numStudents) * 100 : 0;
                 const title = `${Math.round(percentage)}% ${rating.label} - click for details`;
                 const ratingStyle: React.CSSProperties = {
                   height: rowHeight,
