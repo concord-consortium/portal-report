@@ -1,0 +1,104 @@
+@import "../variables";
+
+.showStudentAnswers {
+  margin-top: 10px;
+
+  .showToggle {
+    font-family: lato;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 9px 7px 35px;
+    border-radius: 8px;
+    border: solid 1.5px @cc-charcoal-light1;
+    background-color: @feedback-green-light5;
+    position: relative;
+    cursor: pointer;
+
+    &.showing {
+      color: #fff;
+      background-color: @feedback-green;
+
+      &:before {
+        background-color: #bddfc2;
+        transform: rotate(180deg);
+      }
+      &:hover::before {
+        background-color: @feedback-green-light5;
+      }
+    }
+
+    &:hover {
+      background-color: #bddfc2;
+      border: solid 1.5px #fff;
+      box-shadow:0 0 0 2px @feedback-green-light4;
+    }
+
+    &:before {
+      background-color: @feedback-green;
+      content: "";
+      display: block;
+      height: 24px;
+      left: 2px;
+      -webkit-mask-image: url("../../../img/svg-icons/expand-more-icon.svg");
+      mask-image: url("../../../img/svg-icons/expand-more-icon.svg");
+      position: absolute;
+      top: 2px;
+      width: 24px;
+    }
+  }
+
+  .answers {
+    border-radius: 8px;
+    border: solid 1.5px @cc-charcoal-light1;
+    margin-top: -16px;
+    overflow: hidden;
+
+    .row {
+      background-color: #fff;
+      display: flex;
+      flex-direction: row;
+      font-weight: 400;
+      min-height: 55px;
+
+      &:first-child {
+        padding-top: 10px;
+      }
+
+      &:nth-child(even) {
+        .questionWrapper {
+          background-color: @cc-teal-light6;
+        }
+        .studentResponse {
+          background-color: @cc-teal-light6;
+        }
+      }
+
+      .questionWrapper {
+        border-bottom: 1.5px solid @cc-charcoal-light2;
+        display: flex;
+        flex-direction: row;
+        flex-shrink: 0;
+        font-weight: normal;
+        margin-right: 3px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        width: 240px;
+
+        .questionName {
+          justify-content: center;
+          margin: 2.5px 20px 0 10px;
+        }
+      }
+
+      .studentResponse {
+        background-color: #fff;
+        border-bottom: 1.5px solid @cc-charcoal-light2;
+        flex: 1 1 50%;
+        font-weight: normal;
+        margin-right: 3px;
+        min-width: 349px;
+        padding: 15px 20px;
+      }
+    }
+  }
+}
