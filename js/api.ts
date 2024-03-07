@@ -404,10 +404,38 @@ export function updateActivityFeedbacks(data: any, reportState: IStateReportPart
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.
-const rubricUrlCache: any = {};
+// const rubricUrlCache: any = {};
+
+import rubricJson from "../public/sample-rubric.json";
+import { Rubric } from "./components/portal-dashboard/feedback/rubric-utils";
 
 export function fetchRubric(rubricUrl: string) {
   return new Promise((resolve, reject) => {
+    const rubric: Rubric = rubricJson as Rubric;
+    const params = new URLSearchParams(window.location.search);
+    let numExtraCriteria = parseInt(params.get("numExtraCriteria") ?? "0", 10);
+    if (isNaN(numExtraCriteria)) {
+      numExtraCriteria = 0;
+    }
+
+    let startId = rubric.criteria.length + 1;
+    for (let i = 0; i < numExtraCriteria; i++) {
+      const id = `C${startId++}`;
+      rubric.criteria.push({
+        id,
+        description: `Criteria ${id}`,
+        ratingDescriptions: {
+          "R1": `${id}-R1 rating description`,
+          "R2": `${id}-R2 rating description`,
+          "R3": `${id}-R3 rating description`
+        },
+        nonApplicableRatings: [],
+      });
+    }
+
+    resolve({rubricUrl, rubric});
+
+    /*
     if (!rubricUrlCache[rubricUrl]) {
       fetch(rubricUrl)
         .then(checkStatus)
@@ -424,6 +452,7 @@ export function fetchRubric(rubricUrl: string) {
       // Cache available, resolve promise immediately and return cached value.
       resolve({rubricUrl, rubric: rubricUrlCache[rubricUrl]});
     }
+    */
   });
 }
 
