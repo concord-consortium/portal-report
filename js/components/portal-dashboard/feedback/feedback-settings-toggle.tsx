@@ -8,10 +8,11 @@ import css from "../../../../css/portal-dashboard/feedback/feedback-settings-tog
 interface IProps {
   activity: Map<any, any>;
   scoringSettings: ScoringSettings;
+  feedbacks: any;
 }
 
 export const FeedbackSettingsToggle: React.FC<IProps> = (props) => {
-  const { activity, scoringSettings } = props;
+  const { activity, scoringSettings, feedbacks } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
 
@@ -33,6 +34,7 @@ export const FeedbackSettingsToggle: React.FC<IProps> = (props) => {
         onHide={handleShowModal(false)}
         show={true}
         scoringSettings={scoringSettings}
+        feedbacks={feedbacks}
       />}
     </div>
   );
