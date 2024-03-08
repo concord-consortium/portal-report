@@ -35,7 +35,7 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
   const updateScore = (score?: number, logUpdate?: boolean) => {
     if (activityId && studentId && updateActivityFeedback) {
       if (logUpdate) {
-        trackEvent("Portal-Dashboard", "AddActivityLevelScore", { label: `${score}`, parameters: { activityId, studentId }});
+        trackEvent("Portal-Dashboard", "SetActivityManualScore", { label: score?.toString(), parameters: { activityId, studentId }});
       }
       props.setFeedbackSortRefreshEnabled(true);
       updateActivityFeedback(activityId, activityIndex, studentId, {score, hasBeenReviewed: true});

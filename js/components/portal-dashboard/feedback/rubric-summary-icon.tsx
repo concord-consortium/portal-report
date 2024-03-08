@@ -2,12 +2,15 @@ import React, { useMemo, useState }  from "react";
 import classNames from "classnames";
 import { Rubric, getFeedbackColor } from "./rubric-utils";
 import { RubricSummaryModal } from "./rubric-summary-modal";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-summary-icon.less";
 
 interface IProps {
   rubric: Rubric;
   feedbacks: any;
+  activityId: string;
+  trackEvent: TrackEventFunction;
 }
 
 type RatingsCounts = Record<string, number>;
@@ -27,10 +30,15 @@ const maxIconHeight = Math.round(iconWidth / 1.66); // keep rectangular
 const defaultIconRowHeight = 18;
 
 export const RubricSummaryIcon: React.FC<IProps> = (props) => {
-  const { rubric, feedbacks: { rubricFeedbacks } } = props;
+  const { rubric, feedbacks: { rubricFeedbacks }, activityId, trackEvent } = props;
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleToggleModal = () => setModalOpen(prev => !prev);
+  const handleToggleModal = () => setModalOpen(prev => {
+    if (!prev) {
+      trackEvent("Portal-Dashboard", "OpenRubricSummaryDetails", {label: activityId});
+    }
+    return !prev;
+  });
 
   const { hasRubricFeedback, criteriaCounts } = useMemo(() => {
     const criteriaCounts: ICriteriaCount[] = [];

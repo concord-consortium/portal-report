@@ -2,6 +2,7 @@ import React, { useState }  from "react";
 import { Map } from "immutable";
 import FeedbackSettingsModal from "./feedback-settings-modal";
 import { ScoringSettings } from "../../../util/scoring";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-settings-toggle.less";
 
@@ -9,14 +10,18 @@ interface IProps {
   activity: Map<any, any>;
   scoringSettings: ScoringSettings;
   feedbacks: any;
+  trackEvent: TrackEventFunction;
 }
 
 export const FeedbackSettingsToggle: React.FC<IProps> = (props) => {
-  const { activity, scoringSettings, feedbacks } = props;
+  const { activity, scoringSettings, feedbacks, trackEvent } = props;
   const [modalOpen, setModalOpen] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
 
   const handleShowModal = (show: boolean) => () => {
+    if (show) {
+      trackEvent("Portal-Dashboard", "OpenActivityScoreSettings", {label: activity.get("id")});
+    }
     setButtonActive(!buttonActive);
     setModalOpen(show);
   };
@@ -35,6 +40,7 @@ export const FeedbackSettingsToggle: React.FC<IProps> = (props) => {
         show={true}
         scoringSettings={scoringSettings}
         feedbacks={feedbacks}
+        trackEvent={trackEvent}
       />}
     </div>
   );

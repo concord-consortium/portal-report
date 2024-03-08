@@ -160,6 +160,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 listViewMode={listViewMode}
                 scoringSettings={scoringSettings}
                 rubric={rubric}
+                trackEvent={trackEvent}
               />
             </div>
           }

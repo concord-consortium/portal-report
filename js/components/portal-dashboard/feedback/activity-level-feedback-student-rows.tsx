@@ -106,6 +106,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             student={student}
             activity={activity}
             activityStarted={activityStarted}
+            trackEvent={trackEvent}
           />
         </div>
       </div>
