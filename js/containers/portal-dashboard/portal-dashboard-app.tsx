@@ -21,6 +21,8 @@ import { QuestionOverlay } from "../../components/portal-dashboard/question-over
 import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
 import { ColorTheme, DashboardViewMode, FeedbackLevel, ListViewMode } from "../../util/misc";
 import { ScoringSettings, getScoredQuestions, getScoringSettings, getScoringSettingsInState } from "../../util/scoring";
+import { computeRubricMaxScore } from "../../selectors/activity-feedback-selectors";
+import { Rubric } from "../../components/portal-dashboard/feedback/rubric-utils";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -66,6 +68,8 @@ interface IProps {
   trackEvent: TrackEventFunction;
   userName: string;
   viewMode: DashboardViewMode;
+  rubric: Rubric;
+  rubricMaxScore: number;
 }
 
 interface IState {
@@ -104,16 +108,15 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   render() {
     const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId,
-      error, feedback, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
+      error, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
-      setStudentFeedbackSort, scoringSettings } = this.props;
+      setStudentFeedbackSort, scoringSettings, rubric, rubricMaxScore } = this.props;
     const { initialLoading, viewMode, listViewMode, feedbackLevel } = this.state;
     const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees: List<any> | false = sequenceTree && sequenceTree.get("children");
-    const rubric = feedback.get("rubric")?.toJS();
     let assignmentName: string;
 
     if (sequenceTree && sequenceTree.get("name") !== "") {
@@ -162,6 +165,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   toggleCurrentActivity={toggleCurrentActivity}
                   toggleCurrentQuestion={toggleCurrentQuestion}
                   trackEvent={trackEvent}
+                  scoringSettings={scoringSettings}
+                  jumpToActivityFeedback={this.handleJumpToActivityFeedback}
                 />
               </div>
               <div className={css.progressTable} onScroll={this.handleScroll} data-cy="progress-table">
@@ -193,6 +198,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   studentProgress={studentProgress}
                   trackEvent={trackEvent}
                   scoringSettings={scoringSettings}
+                  rubricMaxScore={rubricMaxScore}
                 />
               </div>
               <QuestionOverlay
@@ -293,6 +299,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   private setFeedbackLevel = (feedbackLevel: FeedbackLevel) => {
     this.setState({ feedbackLevel });
   }
+
+  private handleJumpToActivityFeedback = () => {
+    this.setState({ viewMode: "FeedbackReport", feedbackLevel: "Activity"});
+  }
 }
 
 function mapStateToProps(state: RootState): Partial<IProps> {
@@ -309,9 +319,9 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const activityTrees = sequenceTree && sequenceTree.get("children");
   const scoredActivity = activityTrees && activityTrees.find((activity: any) => activity.get("id") === scoredActivityId);
   const initialScoringSettings = scoredActivityId && getScoringSettingsInState(state, scoredActivityId);
-  const rubric = state.getIn(["feedback", "settings"]).get("rubric");
+  const rubric = state.getIn(["feedback", "settings"]).get("rubric")?.toJS();
   const scoringSettings = getScoringSettings(initialScoringSettings, {
-    rubric: rubric?.toJS(),
+    rubric,
     hasScoredQuestions: scoredActivity ? getScoredQuestions(scoredActivity).size > 0 : false,
   });
 
@@ -355,7 +365,9 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     students: dataDownloaded && getSortedStudents(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
-    scoringSettings
+    scoringSettings,
+    rubric,
+    rubricMaxScore: computeRubricMaxScore(rubric)
   };
 }
 

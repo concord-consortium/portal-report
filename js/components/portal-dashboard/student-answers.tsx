@@ -5,10 +5,11 @@ import { TrackEventFunction } from "../../actions";
 import ActivityFeedbackGivenIcon from "../../../img/svg-icons/feedback-activity-badge-icon.svg";
 import { hasRubricFeedback } from "../../util/activity-feedback-helper";
 import { Rubric } from "./feedback/rubric-utils";
-import { ScoringSettings, getScoredQuestions } from "../../util/scoring";
-import { AUTOMATIC_SCORE } from "../../util/scoring-constants";
+import { ScoreType, ScoringSettings, getRubricDisplayScore, getScoredQuestions } from "../../util/scoring";
+import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE } from "../../util/scoring-constants";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
+import classNames from "classnames";
 
 interface IProps {
   activities: List<any>;
@@ -25,6 +26,7 @@ interface IProps {
   students: Map<any, any>;
   studentProgress: Map<any, any>;
   scoringSettings: ScoringSettings;
+  rubricMaxScore: number;
   setCurrentActivity: (activityId: string) => void;
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
@@ -137,11 +139,39 @@ export class StudentAnswers extends React.PureComponent<IProps> {
   }
 
   private renderScore = (activity: any, student: any) => {
-    const { answers, scoringSettings } = this.props;
+    const { scoringSettings: { scoreType }, studentProgress } = this.props;
+    const started = studentProgress.getIn([student.get("id"), activity.get("id")]) as number > 0;
+    let score = "N/A";
+    let scoreClass = "";
 
-    if (scoringSettings.scoreType !== AUTOMATIC_SCORE) {
-      return null;
+    switch (scoreType) {
+      case NO_SCORE:
+        // use defaults
+        break;
+
+      case AUTOMATIC_SCORE:
+        const autoScore = this.getAutoScore(activity, student);
+        score = autoScore.score;
+        scoreClass = autoScore.scoreClass;
+        break;
+
+      case MANUAL_SCORE:
+      case RUBRIC_SCORE:
+        score = this.getFeedbackScore(activity, student, scoreType);
+        break;
     }
+
+    return (
+      <div className={css.scoreHolder}>
+        <div className={classNames(css.score, scoreClass, {[css.started]: started})}>
+          {score}
+        </div>
+      </div>
+    );
+  }
+
+  private getAutoScore = (activity: any, student: any) => {
+    const { answers } = this.props;
 
     const scoredQuestions = getScoredQuestions(activity);
     const questionsWithCorrectAnswer = scoredQuestions.filter(
@@ -150,13 +180,23 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const correctQuestionCount = questionsWithCorrectAnswer.count();
     const scoredQuestionCount = scoredQuestions.count();
     const scoreClass = correctQuestionCount === scoredQuestionCount && scoredQuestionCount > 0 ? css.perfect : "";
-    return (
-      <div className={css.scoreHolder}>
-        <div className={`${css.score} ${scoreClass}`}>
-          {`${correctQuestionCount}/${scoredQuestionCount}`}
-        </div>
-      </div>
-    );
+
+    return {score: `${correctQuestionCount}/${scoredQuestionCount}`, scoreClass};
+  }
+
+  private getFeedbackScore = (activity: any, student: any, scoreType: ScoreType) => {
+    const { activityFeedbacks, scoringSettings: { maxScore }, rubricMaxScore, rubric } = this.props;
+    const activityStudentId = activity.get("id")+"-"+student.get("id");
+    const activityStudentFeedback = activityFeedbacks.get(activityStudentId);
+
+    if (scoreType === RUBRIC_SCORE) {
+      const rubricFeedback = activityFeedbacks.size > 0 && activityStudentFeedback?.get("rubricFeedback")?.toJS();
+      return getRubricDisplayScore(rubric, rubricFeedback, rubricMaxScore);
+    }
+
+    // else manual score...
+    const score = activityStudentFeedback?.get("score") ?? 0;
+    return `${score}/${maxScore}`;
   }
 
   private renderProgress = (activity: any, student: any) => {

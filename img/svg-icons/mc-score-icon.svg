@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>D392D256-0AEB-40B1-9554-8FEC43C30DE6</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Progress-Dashboard-with-Score-Settings" transform="translate(-107, -1110)">
+            <g id="Button-States-60x80-with-Icons" transform="translate(27, 855)">
+                <g id="Select" transform="translate(0, 210)">
+                    <g id="MC-Score-Button" transform="translate(65, 0)">
+                        <g id="Group-5" transform="translate(9, 10)">
+                            <g id="MC-Score-Icon" transform="translate(6, 35)">
+                                <g id="q-mc-scored-correct" transform="translate(3, 3)">
+                                    <circle id="Oval" fill="#FFFFFF" cx="12" cy="12" r="12"></circle>
+                                    <circle id="Oval" fill="#19E549" cx="12" cy="12" r="10"></circle>
+                                    <polygon id="Path" fill="#FFFFFF" fill-rule="nonzero" points="16.5325 6.65 9.9175 13.265 7.4675 10.815 5 13.2825 9.9175 18.2 19 9.1175"></polygon>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

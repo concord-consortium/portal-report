@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { throttle } from "lodash";
 import { TrackEventFunction } from "../../../actions";
 import { ScoreInput } from "./score-input";
-import { ScoringSettings } from "../../../util/scoring";
+import { ScoringSettings, getRubricDisplayScore } from "../../../util/scoring";
 import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE } from "../../../util/scoring-constants";
 import { Rubric } from "./rubric-utils";
 
@@ -67,14 +67,7 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
     );
   }
 
-  let displayScore = "N/A";
-  if (rubricFeedback) {
-    const scoredValues = Object.values(rubricFeedback).filter((v: any) => v.score > 0);
-    if (scoredValues.length === rubric.criteria.length) {
-      const totalScore = scoredValues.reduce((acc, cur: any) => acc + cur.score, 0);
-      displayScore = String(totalScore);
-    }
-  }
+  const displayScore = getRubricDisplayScore(rubric, rubricFeedback);
 
   return (
     <div className={css.activityFeedbackScore}>
@@ -84,3 +77,4 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
   );
 
 };
+

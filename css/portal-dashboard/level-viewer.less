@@ -281,19 +281,24 @@
             }
           }
           &.score {
-            pointer-events: none;
+            width: 60px;
+            height: 80px;
+            margin-top: -20px;
+            text-align: center;
+
+            &:active, &.active {
+              .icon {
+                path {
+                  fill: #fff;
+                }
+              }
+            }
           }
 
           .icon {
             width: 30px;
             height: 30px;
-            pointer-events: none;
             fill: @cc-teal;
-
-            &.score {
-              width: 24px;
-              height: 24px;
-            }
           }
         }
       }
