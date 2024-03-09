@@ -14,6 +14,7 @@ import { MANUAL_SCORE, RUBRIC_SCORE } from "../../../util/scoring-constants";
 import { Rubric } from "./rubric-utils";
 import { makeGetStudentFeedbacks } from "../../../selectors/activity-feedback-selectors";
 import { RubricSummaryIcon } from "./rubric-summary-icon";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-legend.less";
 
@@ -25,10 +26,11 @@ interface IProps {
   avgScore: number;
   avgScoreMax: number;
   feedbacks: any;
+  trackEvent: TrackEventFunction;
 }
 
 const FeedbackLegend: React.FC<IProps> = (props) => {
-  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax, rubric, feedbacks } = props;
+  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax, rubric, feedbacks, trackEvent } = props;
   const { scoreType } = scoringSettings;
   const awaitingFeedbackIcon = feedbackLevel === "Activity"
                                ? <AwaitingFeedbackActivityBadgeIcon />
@@ -61,7 +63,7 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
       {feedbackLevel === "Activity" &&
         <div className={css.feedbackBadgeLegend__rubric}>
           <div className={css.feedbackBadgeLegend__rubric_settings}>
-            <FeedbackSettingsToggle activity={activity} scoringSettings={scoringSettings} feedbacks={feedbacks} />
+            <FeedbackSettingsToggle activity={activity} scoringSettings={scoringSettings} feedbacks={feedbacks} trackEvent={trackEvent} />
           </div>
           <div className={css.feedbackBadgeLegend__rubric_score}>
             {showAvgScore && <div className={css.feedbackBadgeLegend__rubric_score_avg}>
@@ -70,7 +72,7 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
             </div>}
             {rubric && <div className={css.feedbackBadgeLegend__rubric_summary}>
               Rubric Summary:
-              <RubricSummaryIcon rubric={rubric} feedbacks={feedbacks} />
+              <RubricSummaryIcon rubric={rubric} feedbacks={feedbacks} activityId={activity.get("id")} trackEvent={trackEvent} />
             </div>}
           </div>
         </div>

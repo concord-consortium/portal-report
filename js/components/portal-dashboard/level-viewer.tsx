@@ -253,6 +253,8 @@ export class LevelViewer extends React.PureComponent<IProps> {
   }
 
   private handleScoreBoxClicked = () => {
+    const activityId = this.props.currentActivity && this.props.currentActivity.get("id");
+    this.props.trackEvent("Portal-Dashboard", "ClickScoreDashboard", {label: activityId});
     this.props.jumpToActivityFeedback();
   }
 }

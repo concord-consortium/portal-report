@@ -4,7 +4,7 @@ import { Map } from "immutable";
 import classNames from "classnames";
 import { FeedbackSettingsModalButton } from "./feedback-settings-modal-button";
 import { Rubric } from "./rubric-utils";
-import { updateActivityFeedbackSettings } from "../../../actions";
+import { TrackEventFunction, updateActivityFeedbackSettings } from "../../../actions";
 import { connect } from "react-redux";
 import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE } from "../../../util/scoring-constants";
 import { ScoreType, ScoringSettings, getScoredQuestions } from "../../../util/scoring";
@@ -22,6 +22,7 @@ interface IProps {
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
   rubric?: Rubric;
   feedbacks: any;
+  trackEvent: TrackEventFunction;
 }
 
 interface IState {
@@ -176,6 +177,7 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
 
         updates.maxScore = maxScore;
       }
+      this.props.trackEvent("Portal-Dashboard", "SetActivityScoreSetting", {label: activityId, parameters: {...updates}});
       updateActivityFeedbackSettings(activityId, activityIndex, updates);
       this.setState({ confirmMaxScore: false });
       this.close();

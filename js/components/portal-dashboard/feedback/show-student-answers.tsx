@@ -4,6 +4,7 @@ import striptags from "striptags";
 import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { renderHTML } from "../../../util/render-html";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/show-student-answers.less";
 
@@ -11,17 +12,22 @@ interface IProps {
   activityStarted: boolean;
   activity: Map<string, any>;
   student: any;
+  trackEvent: TrackEventFunction;
 }
 
 export const ShowStudentAnswers: React.FC<IProps> = (props) => {
-  const {activityStarted, activity, student} = props;
+  const {activityStarted, activity, student, trackEvent} = props;
   const [showing, setShowing] = useState(false);
 
   if (!activityStarted) {
     return null;
   }
 
-  const handleToggleShowing = () => setShowing(prev => !prev);
+  const handleToggleShowing = () => setShowing(prev => {
+    const next = !prev;
+    trackEvent("Portal-Dashboard", "ShowStudentResponses", {label: next.toString(), parameters: {activityId: activity.get("id"), studentId: student.get("id")}});
+    return next;
+  });
 
   const renderStudentAnswers = () => {
     const questions = activity.get("questions");

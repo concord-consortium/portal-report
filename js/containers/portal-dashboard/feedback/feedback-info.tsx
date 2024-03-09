@@ -4,6 +4,7 @@ import FeedbackLegend from "../../../components/portal-dashboard/feedback/feedba
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 import { ScoringSettings } from "../../../util/scoring";
 import { Rubric } from "../../../components/portal-dashboard/feedback/rubric-utils";
+import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-info.less";
 
@@ -14,10 +15,11 @@ interface IProps {
   activity: Map<any, any>;
   scoringSettings: ScoringSettings;
   rubric: Rubric;
+  trackEvent: TrackEventFunction;
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const {activity, feedbackLevel, listViewMode, setFeedbackLevel, scoringSettings, rubric } = props;
+  const {activity, feedbackLevel, listViewMode, setFeedbackLevel, scoringSettings, rubric, trackEvent } = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -47,7 +49,7 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
           </button>
         </div>
       </div>
-      <FeedbackLegend feedbackLevel={feedbackLevel} activity={activity} scoringSettings={scoringSettings} rubric={rubric} />
+      <FeedbackLegend feedbackLevel={feedbackLevel} activity={activity} scoringSettings={scoringSettings} rubric={rubric} trackEvent={trackEvent} />
     </div>
   );
 
