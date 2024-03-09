@@ -1,12 +1,17 @@
-import React from "react";
+import React, { FunctionComponent, SVGProps } from "react";
 import { List, Map } from "immutable";
 import { ProgressLegendContainer } from "./legend-container";
 import { getQuestionIcon } from "../../util/question-utils";
-import CorrectIcon from "../../../img/svg-icons/q-mc-scored-correct-icon.svg";
+import MCScoreIcon from "../../../img/svg-icons/mc-score-icon.svg";
+import ManualScoreIcon from "../../../img/svg-icons/manual-score-icon.svg";
+import NoScoreIcon from "../../../img/svg-icons/no-score-icon.svg";
+import RubricScoreIcon from "../../../img/svg-icons/rubric-score-icon.svg";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
 import LinesEllipsis from "react-lines-ellipsis";
 import ReportItemIframe from "./report-item-iframe";
 import { TrackEventFunction } from "../../actions";
+import { ScoreType, ScoringSettings } from "../../util/scoring";
+import { MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE, AUTOMATIC_SCORE } from "../../util/scoring-constants";
 
 import css from "../../../css/portal-dashboard/level-viewer.less";
 
@@ -18,6 +23,19 @@ const questionWidth = 50;
 const margin = 20;
 const getTotalQuestionsWidth = (numQuestions: number) => Math.max(0, numQuestions * (questionWidth + margin) - margin);
 
+export const scoreTypeLabels: Record<ScoreType, React.ReactNode> = {
+  [MANUAL_SCORE]: <>Manual<br/>Score</>,
+  [NO_SCORE]: <>No<br/>Score</>,
+  [RUBRIC_SCORE]: <>Rubric<br/>Score</>,
+  [AUTOMATIC_SCORE]: <>MC Qs<br/>Score</>
+};
+export const scoreTypeIcons: Record<ScoreType, FunctionComponent<SVGProps<SVGSVGElement>>> = {
+  [MANUAL_SCORE]: ManualScoreIcon,
+  [NO_SCORE]: NoScoreIcon,
+  [RUBRIC_SCORE]: RubricScoreIcon,
+  [AUTOMATIC_SCORE]: MCScoreIcon
+};
+
 interface IProps {
   activities: List<any>;
   currentActivity?: Map<string, any>;
@@ -28,6 +46,8 @@ interface IProps {
   toggleCurrentActivity: (activityId: string) => void;
   toggleCurrentQuestion: (questionId: string) => void;
   trackEvent: TrackEventFunction;
+  scoringSettings: ScoringSettings;
+  jumpToActivityFeedback: () => void;
 }
 
 export class LevelViewer extends React.PureComponent<IProps> {
@@ -186,17 +206,20 @@ export class LevelViewer extends React.PureComponent<IProps> {
   }
 
   private renderScoreBox = () => {
+    const {scoringSettings: { scoreType }} = this.props;
+    const Icon = scoreTypeIcons[scoreType];
+
     return (
       <div className={css.pageWrapper}>
         <div className={css.page + " " + css.noBorder}>
         </div>
         <div className={css.questionsContainer}>
-          <div className={`${css.question} ${css.score}`} data-cy="activity-score">
-            <div>
-                Score
+          <div className={`${css.question} ${css.score}`} data-cy="activity-score" onClick={this.handleScoreBoxClicked}>
+            <div className={css.label}>
+              {scoreTypeLabels[scoreType]}
             </div>
             <div className={css.pagesContainer}>
-              <CorrectIcon className={`${css.icon} ${css.score}`} />
+              <Icon className={`${css.icon} ${css.score}`} />
             </div>
           </div>
         </div>
@@ -227,5 +250,9 @@ export class LevelViewer extends React.PureComponent<IProps> {
   private activityColorClass = (activityNumber: number) => {
     const colorNum = activityNumber % kMaxActivityColors;
     return colorNum < activityColorClasses.length ? activityColorClasses[colorNum] : "";
+  }
+
+  private handleScoreBoxClicked = () => {
+    this.props.jumpToActivityFeedback();
   }
 }

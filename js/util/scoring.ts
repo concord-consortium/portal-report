@@ -24,7 +24,7 @@ export const getScoringSettingsInState = (state: any, activityId: any) => {
 export const getScoringSettings = (initialSettings?: ScoringSettings, options?: GetScoringSettingsOptions): ScoringSettings => {
   const hasRubric = !!options?.rubric;
   const hasScoredQuestions = !!options?.hasScoredQuestions;
-  const defaultScoreType = hasRubric ? RUBRIC_SCORE : NO_SCORE;
+  const defaultScoreType = hasRubric ? RUBRIC_SCORE : (hasScoredQuestions ? AUTOMATIC_SCORE : NO_SCORE);
 
   const settings: ScoringSettings = {
     scoreType: initialSettings?.scoreType ?? defaultScoreType,
@@ -82,3 +82,22 @@ export const computeAvgScore = (scoringSettings: ScoringSettings, rubric: Rubric
 
   return {avgScore, avgScoreMax};
 };
+
+export const getRubricDisplayScore = (rubric: Rubric, rubricFeedback: any, maxScore?: number) => {
+  let displayScore = "N/A";
+
+  if (rubricFeedback) {
+    const scoredValues = Object.values(rubricFeedback).filter((v: any) => v.score > 0);
+    if (scoredValues.length === rubric.criteria.length) {
+      const totalScore = scoredValues.reduce((acc, cur: any) => acc + cur.score, 0);
+      displayScore = String(totalScore);
+    }
+  }
+
+  if (displayScore !== "N/A" && maxScore !== undefined) {
+    return `${displayScore}/${maxScore}`;
+  }
+
+  return displayScore;
+};
+
