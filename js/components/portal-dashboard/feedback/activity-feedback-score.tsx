@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import { throttle } from "lodash";
 import { TrackEventFunction } from "../../../actions";
 import { ScoreInput } from "./score-input";
 import { ScoringSettings, getRubricDisplayScore } from "../../../util/scoring";
@@ -29,7 +28,7 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
 
   const handleScoreChange = (newScore?: number) => {
     setScoreChanged(true);
-    updateScoreThrottledAndNotLogged(newScore);
+    updateScore(newScore, false);
   };
 
   const updateScore = (score?: number, logUpdate?: boolean) => {
@@ -41,9 +40,6 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
       updateActivityFeedback(activityId, activityIndex, studentId, {score, hasBeenReviewed: true});
     }
   };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateScoreThrottledAndNotLogged = useCallback(throttle((score?: number) => updateScore(score, false), 2000), []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updateScoreLogged = useCallback((score?: number) => updateScore(score, true), []);
