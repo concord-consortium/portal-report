@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import Markdown from "markdown-to-jsx";
+import ReactTooltip from "react-tooltip";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
 import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 import { Rubric, getFeedbackColor } from "./rubric-utils";
@@ -90,15 +91,17 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
     const isApplicableRating = crit.nonApplicableRatings === undefined ||
       crit.nonApplicableRatings.indexOf(ratingId) < 0;
     const style: React.CSSProperties = selected ? {backgroundColor: getFeedbackColor({rubric: this.props.rubric, score: rubricFeedback[critId].score})} : {};
+    const key = `${critId}-${ratingId}`;
 
     return (
       <div className={css.rubricScoreBox} style={style} key={radioButtonKey}>
-        <div className={css.rubricButton} title={(isApplicableRating) ? ratingDescription : "Not Applicable"}>
+        <div className={css.rubricButton} title={isApplicableRating ? undefined : "Not Applicable"} data-tip data-for={key}>
           { !isApplicableRating
             ? <span className={css.noRating}>N/A</span>
             : this.renderButton(critId, selected, ratingId, buttonIndex)
           }
         </div>
+        {isApplicableRating && <ReactTooltip id={key} place="left" type="dark" delayShow={500}><Markdown>{ratingDescription}</Markdown></ReactTooltip>}
       </div>
     );
   }
