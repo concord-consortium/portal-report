@@ -72,7 +72,7 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
             </div>}
             {rubric && <div className={css.feedbackBadgeLegend__rubric_summary}>
               Rubric Summary:
-              <RubricSummaryIcon rubric={rubric} feedbacks={feedbacks} activityId={activity.get("id")} trackEvent={trackEvent} />
+              <RubricSummaryIcon rubric={rubric} scoringSettings={scoringSettings} feedbacks={feedbacks} activityId={activity.get("id")} trackEvent={trackEvent} />
             </div>}
           </div>
         </div>

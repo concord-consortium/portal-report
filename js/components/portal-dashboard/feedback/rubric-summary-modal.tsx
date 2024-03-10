@@ -4,6 +4,8 @@ import Markdown from "markdown-to-jsx";
 import { Rubric, RubricCriterion, RubricRating, getFeedbackColor, getFeedbackTextColor } from "./rubric-utils";
 import { ICriteriaCount } from "./rubric-summary-icon";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
+import { ScoringSettings } from "../../../util/scoring";
+import { RUBRIC_SCORE } from "../../../util/scoring-constants";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-summary-modal.less";
 import tableCss from "../../../../css/portal-dashboard/feedback/rubric-table.less";
@@ -12,6 +14,7 @@ interface IProps {
   onClose: () => void;
   rubric: Rubric;
   criteriaCounts: ICriteriaCount[];
+  scoringSettings: ScoringSettings;
 }
 
 export class RubricSummaryModal extends PureComponent<IProps> {
@@ -62,6 +65,7 @@ export class RubricSummaryModal extends PureComponent<IProps> {
 
   private renderColumnHeaders = (rubric: Rubric) => {
     const { referenceURL } = rubric;
+    const showScore = this.props.scoringSettings.scoreType === RUBRIC_SCORE;
     return (
       <div className={tableCss.columnHeaders}>
         <div className={tableCss.rubricDescriptionHeader}>
@@ -76,7 +80,7 @@ export class RubricSummaryModal extends PureComponent<IProps> {
         {rubric.ratings.map((rating: any) =>
           <div className={tableCss.rubricScoreHeader} key={rating.id}>
             <div className={tableCss.rubricScoreLevel}>{rating.label}</div>
-            {rubric.scoreUsingPoints && <div className={tableCss.rubricScoreNumber}>({rating.score})</div>}
+            {rubric.scoreUsingPoints && showScore && <div className={tableCss.rubricScoreNumber}>({rating.score})</div>}
           </div>
         )}
       </div>

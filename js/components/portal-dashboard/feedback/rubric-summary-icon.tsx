@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { Rubric, getFeedbackColor } from "./rubric-utils";
 import { RubricSummaryModal } from "./rubric-summary-modal";
 import { TrackEventFunction } from "../../../actions";
+import { ScoringSettings } from "../../../util/scoring";
 
 import css from "../../../../css/portal-dashboard/feedback/rubric-summary-icon.less";
 
@@ -10,6 +11,7 @@ interface IProps {
   rubric: Rubric;
   feedbacks: any;
   activityId: string;
+  scoringSettings: ScoringSettings;
   trackEvent: TrackEventFunction;
 }
 
@@ -30,7 +32,7 @@ const maxIconHeight = Math.round(iconWidth / 1.66); // keep rectangular
 const defaultIconRowHeight = 18;
 
 export const RubricSummaryIcon: React.FC<IProps> = (props) => {
-  const { rubric, feedbacks: { rubricFeedbacks }, activityId, trackEvent } = props;
+  const { rubric, feedbacks: { rubricFeedbacks }, activityId, scoringSettings, trackEvent } = props;
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleToggleModal = () => setModalOpen(prev => {
@@ -42,7 +44,19 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
 
   const { hasRubricFeedback, criteriaCounts } = useMemo(() => {
     const criteriaCounts: ICriteriaCount[] = [];
-    const hasRubricFeedback = rubricFeedbacks.length > 0;
+    const numCompletedRubrics = rubricFeedbacks.reduce((acc: number, cur: PartialRubricFeedback) => {
+      const numNonZeroScores = Object.values(cur).reduce((acc2, cur2) => {
+        if (cur2.score > 0) {
+          acc2++;
+        }
+        return acc2;
+      }, 0);
+      if (numNonZeroScores >= rubric.criteria.length) {
+        acc++;
+      }
+      return acc;
+    }, 0);
+    const hasRubricFeedback = numCompletedRubrics > 0;
 
     if (hasRubricFeedback) {
       const ratingsCounts = rubric.ratings.reduce<RatingsCounts>((acc, cur) => {
@@ -104,7 +118,8 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
       <div
         className={css.rubricSummaryIcon}
         data-cy="rubric-summary-icon"
-        onClick={handleToggleModal}
+        onClick={hasRubricFeedback ? handleToggleModal : undefined}
+        style={{cursor: hasRubricFeedback ? "pointer" : "initial"}}
       >
         {hasRubricFeedback ? renderIcon() : <>N/A</>}
       </div>
@@ -112,6 +127,7 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
         onClose={handleToggleModal}
         rubric={rubric}
         criteriaCounts={criteriaCounts}
+        scoringSettings={scoringSettings}
       />}
     </>
   );
