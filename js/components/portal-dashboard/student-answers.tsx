@@ -195,8 +195,8 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     }
 
     // else manual score...
-    const score = activityStudentFeedback?.get("score") ?? 0;
-    return `${score}/${maxScore}`;
+    const score = activityStudentFeedback?.get("score");
+    return score === undefined ? "N/A" : `${score}/${maxScore}`;
   }
 
   private renderProgress = (activity: any, student: any) => {

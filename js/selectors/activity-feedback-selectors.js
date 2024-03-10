@@ -35,7 +35,7 @@ const newFeedback = (activityMap, studentMap, activityStarted) => {
     student,
     platformStudentId: student.id,
     feedback: "",
-    score: 0,
+    score: undefined, // to start with blank score inputs
     activityId: activityMap.get("id"),
     hasBeenReviewed: false,
     activityStarted
