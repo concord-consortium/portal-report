@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import * as firebase from "firebase";
 import { TrackEventFunction } from "../../../actions";
 import { ScoreInput } from "./score-input";
 import { ScoringSettings, getRubricDisplayScore } from "../../../util/scoring";
@@ -37,6 +38,13 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
         trackEvent("Portal-Dashboard", "SetActivityManualScore", { label: score?.toString(), parameters: { activityId, studentId }});
       }
       props.setFeedbackSortRefreshEnabled(true);
+
+      // delete the score if it is cleared in the input - a value of undefined
+      // would be removed before it is commited to Firestore
+      if (score === undefined) {
+        score = firebase.firestore.FieldValue.delete() as any;
+      }
+
       updateActivityFeedback(activityId, activityIndex, studentId, {score, hasBeenReviewed: true});
     }
   };
