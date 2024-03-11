@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useRef } from "react";
 import * as firebase from "firebase";
 import { TrackEventFunction } from "../../../actions";
 import { ScoreInput } from "./score-input";
@@ -23,34 +23,31 @@ interface IProps {
 }
 
 export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, activityStarted, score, studentId, updateActivityFeedback, trackEvent, scoringSettings, rubricFeedback, rubric } = props;
+  const { activityId, activityIndex, activityStarted, score, studentId, updateActivityFeedback, trackEvent, scoringSettings, rubricFeedback, rubric, setFeedbackSortRefreshEnabled } = props;
   const scoreType = scoringSettings.scoreType ?? NO_SCORE;
-  const [ scoreChanged, setScoreChanged ] = useState(false);
+  const loggedScore = useRef<number|undefined>(score);
 
-  const handleScoreChange = (newScore?: number) => {
-    setScoreChanged(true);
-    updateScore(newScore, false);
-  };
-
-  const updateScore = (score?: number, logUpdate?: boolean) => {
+  const handleChange = (newScore?: number) => {
     if (activityId && studentId && updateActivityFeedback) {
-      if (logUpdate) {
-        trackEvent("Portal-Dashboard", "SetActivityManualScore", { label: score?.toString(), parameters: { activityId, studentId }});
-      }
-      props.setFeedbackSortRefreshEnabled(true);
+      setFeedbackSortRefreshEnabled(true);
 
       // delete the score if it is cleared in the input - a value of undefined
       // would be removed before it is commited to Firestore
-      if (score === undefined) {
-        score = firebase.firestore.FieldValue.delete() as any;
+      if (newScore === undefined) {
+        newScore = firebase.firestore.FieldValue.delete() as any;
       }
 
-      updateActivityFeedback(activityId, activityIndex, studentId, {score, hasBeenReviewed: true});
+      updateActivityFeedback(activityId, activityIndex, studentId, {score: newScore, hasBeenReviewed: true});
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateScoreLogged = useCallback((score?: number) => updateScore(score, true), []);
+  const handleBlur = (currentScore?: number) => {
+    if (loggedScore.current !== currentScore) {
+      const label = currentScore?.toString() ?? "";
+      trackEvent("Portal-Dashboard", "SetActivityManualScore", { label, parameters: { activityId, studentId }, logEmptyLabel: true});
+      loggedScore.current = currentScore;
+    }
+  };
 
   if (!activityStarted || scoreType === NO_SCORE || scoreType === AUTOMATIC_SCORE) {
     return null;
@@ -63,8 +60,8 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
         minScore={0}
         disabled={false}
         className={css.activityFeedbackScore}
-        onChange={handleScoreChange}
-        onBlur={scoreChanged ? updateScoreLogged : undefined}
+        onChange={handleChange}
+        onBlur={handleBlur}
       >
         <div className={css.scoreLabel}>Score</div>
       </ScoreInput>
