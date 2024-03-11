@@ -58,7 +58,7 @@ export const UNREGISTER_REPORT_ITEM = "UNREGISTER_REPORT_ITEM";
 export const GET_REPORT_ITEM_ANSWER = "GET_REPORT_ITEM_ANSWER";
 export const SET_REPORT_ITEM_ANSWER = "SET_STUDENT_HTML";
 
-export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean};
+export type TrackEventFunctionOptions = {label?: string; parameters?: any; skipGTag?: boolean; logEmptyLabel?: boolean};
 export type TrackEventCategory = "Dashboard" | "Portal-Dashboard" | "Report";
 export type TrackEventFunction = (category: TrackEventCategory, action: string, options?: TrackEventFunctionOptions) => any;
 
@@ -665,8 +665,8 @@ export function trackEvent(category: TrackEventCategory, action: string, options
         event_value: options?.label,
       };
 
-      // log nothing for empty event labels
-      if (logMessage.event_value === "") {
+      // log nothing for empty event labels unless logEmptyLabel option is enabled
+      if (logMessage.event_value === "" && !options?.logEmptyLabel) {
         logMessage.event_value = undefined;
       }
 
