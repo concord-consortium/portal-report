@@ -301,7 +301,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   private handleJumpToActivityFeedback = () => {
-    this.setState({ viewMode: "FeedbackReport", feedbackLevel: "Activity"});
+    this.setState({ viewMode: "FeedbackReport", feedbackLevel: "Activity", listViewMode: "Student"});
   }
 }
 
