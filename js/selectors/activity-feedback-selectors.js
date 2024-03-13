@@ -160,16 +160,13 @@ export const getStudentFeedbacks = (activity, students, activityFeedbacks, progr
   const feedbacksNeedingReview = feedbacks.filter(fb => fb.get("activityStarted") && !fb.get("hasBeenReviewed"));
   const numFeedbacksNeedingReview = feedbacksNeedingReview.size;
 
-  const reviewedFeedback = activityFeedbacks
-    .filter(f => f.get("hasBeenReviewed") === true);
-
-  const scores = reviewedFeedback
+  const scores = activityFeedbacks
     .map(f => f.get("score"))
     .filter(x => x)
     .toList()
     .toJS();
 
-  const rubricFeedbacks = reviewedFeedback
+  const rubricFeedbacks = activityFeedbacks
     .map(f => f.get("rubricFeedback"))
     .filter(x => x)
     .toList()

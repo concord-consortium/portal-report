@@ -3,7 +3,6 @@ import { Map } from "immutable";
 import Markdown from "markdown-to-jsx";
 import ReactTooltip from "react-tooltip";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
-import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 import { Rubric, getFeedbackColor } from "./rubric-utils";
 import { ScoringSettings } from "../../../util/scoring";
 import { RUBRIC_SCORE } from "../../../util/scoring-constants";
@@ -153,11 +152,10 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
   }
 
   private rubricChange = (rubricFeedback: any, studentId: string) => {
-    const { rubric, activityId, activityIndex, updateActivityFeedback } = this.props;
-    const hasBeenReviewed = hasRubricFeedback(rubric, rubricFeedback);
+    const { activityId, activityIndex, updateActivityFeedback } = this.props;
 
     if (activityId && studentId) {
-      updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback, hasBeenReviewed });
+      updateActivityFeedback(activityId, activityIndex, studentId, { rubricFeedback });
     }
   };
 }
