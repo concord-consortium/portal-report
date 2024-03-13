@@ -37,7 +37,7 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
         newScore = firebase.firestore.FieldValue.delete() as any;
       }
 
-      updateActivityFeedback(activityId, activityIndex, studentId, {score: newScore, hasBeenReviewed: true});
+      updateActivityFeedback(activityId, activityIndex, studentId, {score: newScore });
     }
   };
 

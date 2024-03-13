@@ -1,7 +1,7 @@
 import { List, Map } from "immutable";
 import { Rubric } from "../components/portal-dashboard/feedback/rubric-utils";
 import { RUBRIC_SCORE, NO_SCORE, AUTOMATIC_SCORE, MANUAL_SCORE } from "./scoring-constants";
-import { computeRubricMaxScore, getRubricScores } from "../selectors/activity-feedback-selectors";
+import { computeRubricMaxScore } from "../selectors/activity-feedback-selectors";
 
 // the scoring constants are defined in a JavaScript file so we create the sum type here
 const scoreTypes = [MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE, AUTOMATIC_SCORE] as const;
@@ -54,7 +54,7 @@ export const computeAvgScore = (scoringSettings: ScoringSettings, rubric: Rubric
 
   switch (scoreType) {
     case RUBRIC_SCORE:
-      const rubricScores = getRubricScores(rubric, feedbacks);
+      const rubricScores = getCompletedRubricScores(rubric, feedbacks);
       const {totalScore, scoredQuestions} = rubricScores.reduce((acc, cur) => {
         let {totalScore, scoredQuestions} = acc;
         if (cur) {
@@ -81,6 +81,23 @@ export const computeAvgScore = (scoringSettings: ScoringSettings, rubric: Rubric
   }
 
   return {avgScore, avgScoreMax};
+};
+
+export const getCompletedRubricScores = (rubric: Rubric, feedbacks: any) => {
+  let scores: Map<any, any> = Map({});
+  const numCriteria = rubric.criteria.length;
+  feedbacks.feedbacks.forEach((feedback: any) => {
+    const key = feedback.get("platformStudentId");
+    const rubricFeedback = feedback.get("rubricFeedback");
+    let score = null;
+    const nonZeroScores = rubricFeedback?.map((v: any, k: any) => v.get("score")).filter((n: number) => n > 0);
+    if (nonZeroScores?.size === numCriteria) {
+      score = nonZeroScores.reduce((p: number, n: number) => p + n);
+      scores.set(key, score);
+    }
+    scores = scores.set(key, score);
+  });
+  return scores;
 };
 
 export const getRubricDisplayScore = (rubric: Rubric, rubricFeedback: any, maxScore?: number) => {

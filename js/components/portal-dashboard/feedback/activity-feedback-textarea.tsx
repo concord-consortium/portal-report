@@ -36,12 +36,11 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
 
   const updateFeedback = (logUpdate: boolean) => {
     if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined) {
-      const hasBeenReviewed = textareaRef.current.value !== "" ? true : false;
       if (logUpdate) {
         trackEvent("Portal-Dashboard", "AddActivityLevelFeedback", { label: feedback, parameters: { activityId, studentId }});
       }
       props.setFeedbackSortRefreshEnabled(true);
-      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value, hasBeenReviewed});
+      updateActivityFeedback(activityId, activityIndex, studentId, {feedback: textareaRef.current?.value});
     }
   };
 

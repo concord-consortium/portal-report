@@ -49,7 +49,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const score = feedbackData.get("score");
     const hasRubric = rubric;
     const { rubricFeedback } = feedbackData.toJS();
-    const hasFeedbacks = feedback || (hasRubric && hasRubricFeedback(rubric, rubricFeedback));
+    const hasFeedbacks = feedback || (hasRubric && hasRubricFeedback(rubric, rubricFeedback)) || score !== undefined;
     const feedbackBadge = hasFeedbacks ? <GivenFeedbackActivityBadgeIcon /> : <AwaitingFeedbackActivityBadgeIcon />;
 
     return (

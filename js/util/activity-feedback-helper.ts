@@ -17,7 +17,7 @@ export function hasRubricFeedback(rubric: any, rubricFeedback: any) {
   let numFeedback = 0;
   rubric.criteria.forEach((crit: any) => {
     if (rubricFeedback && rubricFeedback[crit.id]) {
-      if (rubricFeedback[crit.id].id !== "") {
+      if (rubricFeedback[crit.id].score > 0 && rubricFeedback[crit.id].id !== "") {
         numFeedback++;
       }
     }

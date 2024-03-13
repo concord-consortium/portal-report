@@ -57,7 +57,9 @@ describe("Provide Feedback", function() {
       cy.get("[data-cy=feedbackBox]").clear().type(" Your work was great!").blur();
       cy.get(".feedback-complete input").check();
     });
-    feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
+    // the hasBeenReviewed flag use to filter to get this count is not updated yet so this test is invalid
+    // this report is no longer used so this was just commented out
+    // feedback.getScoredStudentsCount().should("be.visible").and("contain", "1");
   });
 
   it("Shows dialog when clicked", function() {

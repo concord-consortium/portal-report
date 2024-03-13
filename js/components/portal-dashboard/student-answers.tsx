@@ -213,8 +213,9 @@ export class StudentAnswers extends React.PureComponent<IProps> {
                                           : progress > 0 ? css.progress : "";
     const rubricFeedback = activityFeedbacks.size > 0 && activityStudentFeedback?.get("rubricFeedback")?.toJS();
     const rubricFeedbackGiven = rubric && hasRubricFeedback(rubric, rubricFeedback);
-    const hasFeedbacks = (activityFeedbacks.size > 0 && activityStudentFeedback)
-                         && (activityStudentFeedback.get("feedback") !== "" || rubricFeedbackGiven);
+    const textFeedbackGiven = (activityStudentFeedback?.get("feedback") ?? "") !== "";
+    const scoreFeedbackGiven = activityStudentFeedback?.get("score") !== undefined;
+    const hasFeedbacks = activityFeedbacks.size > 0 && (textFeedbackGiven || rubricFeedbackGiven || scoreFeedbackGiven);
 
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>
