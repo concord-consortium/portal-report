@@ -170,7 +170,7 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
         const scoresAboveMax = feedbacks.scores.reduce((acc: boolean, cur: number) => {
           return acc || cur > maxScore;
         }, false);
-        if (scoresAboveMax && !confirmMaxScore) {
+        if (scoresAboveMax && (scoreType === MANUAL_SCORE) && !confirmMaxScore) {
           this.setState({ confirmMaxScore: true });
           return;
         }

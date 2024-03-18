@@ -44,13 +44,16 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
 
   const { hasRubricFeedback, criteriaCounts } = useMemo(() => {
     const criteriaCounts: ICriteriaCount[] = [];
-    const numCompletedRubrics = rubricFeedbacks.reduce((acc: number, cur: PartialRubricFeedback) => {
-      const numNonZeroScores = Object.values(cur).reduce((acc2, cur2) => {
-        if (cur2.score > 0) {
-          acc2++;
+    const getNumNonZeroScores = (rubricFeedback: PartialRubricFeedback) => {
+      return Object.values(rubricFeedback).reduce((acc, cur) => {
+        if (cur.score > 0) {
+          acc++;
         }
-        return acc2;
+        return acc;
       }, 0);
+    };
+    const numCompletedRubrics = rubricFeedbacks.reduce((acc: number, cur: PartialRubricFeedback) => {
+      const numNonZeroScores = getNumNonZeroScores(cur);
       if (numNonZeroScores >= rubric.criteria.length) {
         acc++;
       }
@@ -73,10 +76,13 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
         criteriaCounts.push(criteriaCount);
 
         rubricFeedbacks.forEach((rubricFeedback: PartialRubricFeedback) => {
-          const criteriaFeedback = rubricFeedback[criteria.id];
-          if (criteriaFeedback?.score > 0) {
-            criteriaCount.numStudents++;
-            criteriaCount.ratings[criteriaFeedback.id]++;
+          const numNonZeroScores = getNumNonZeroScores(rubricFeedback);
+          if (numNonZeroScores >= rubric.criteria.length) {
+            const criteriaFeedback = rubricFeedback[criteria.id];
+            if (criteriaFeedback?.score > 0) {
+              criteriaCount.numStudents++;
+              criteriaCount.ratings[criteriaFeedback.id]++;
+            }
           }
         });
       });
