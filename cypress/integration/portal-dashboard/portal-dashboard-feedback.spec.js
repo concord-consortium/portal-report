@@ -116,8 +116,17 @@ context("Portal Dashboard Feedback Panel", () => {
       it('rubric feedback can be given', () => {
         cy.get('[data-cy=rating-radio-button]').eq(0).click();
         cy.get('[data-cy=rating-radio-button] div').eq(0)
+        .should('have.css', 'background-color')
+        .and('eq', 'rgb(78, 161, 90)');
+        // selecting only 1 of the 2 criteria does not trigger feedback complete
+        cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
+          .should('have.attr', 'fill')
+          .and('not.include', '#4EA15A');
+        cy.get('[data-cy=rating-radio-button]').eq(2).click();
+        cy.get('[data-cy=rating-radio-button] div').eq(2)
           .should('have.css', 'background-color')
           .and('eq', 'rgb(78, 161, 90)');
+        // selecting both criteria does trigger feedback complete
         cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
           .should('have.attr', 'fill')
           .and('include', '#4EA15A');
@@ -129,7 +138,7 @@ context("Portal Dashboard Feedback Panel", () => {
           .and('eq', 'rgb(255, 255, 255)');
         cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
           .should('have.attr', 'fill')
-          .and('include', '#4EA15A'); //Still green because it has text feedback
+          .and('not.include', '#4EA15A');
       });
     });
     describe('verify question-level feedback textareas appear and accept input', () => {

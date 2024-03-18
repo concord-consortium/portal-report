@@ -32,7 +32,7 @@ const maxIconHeight = Math.round(iconWidth / 1.66); // keep rectangular
 const defaultIconRowHeight = 18;
 
 export const RubricSummaryIcon: React.FC<IProps> = (props) => {
-  const { rubric, feedbacks: { rubricFeedbacks }, activityId, scoringSettings, trackEvent } = props;
+  const { rubric, feedbacks, activityId, scoringSettings, trackEvent } = props;
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleToggleModal = () => setModalOpen(prev => {
@@ -52,6 +52,11 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
         return acc;
       }, 0);
     };
+    const rubricFeedbacks = feedbacks.feedbacks
+      .filter((f: any) => f.has("rubricFeedback"))
+      .map((f: any) => f.get("rubricFeedback"))
+      .toJS();
+
     const numCompletedRubrics = rubricFeedbacks.reduce((acc: number, cur: PartialRubricFeedback) => {
       const numNonZeroScores = getNumNonZeroScores(cur);
       if (numNonZeroScores >= rubric.criteria.length) {
@@ -89,7 +94,7 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
     }
 
     return { hasRubricFeedback, criteriaCounts };
-  }, [rubricFeedbacks, rubric]);
+  }, [feedbacks, rubric]);
 
   const renderIcon = () => {
     const rowHeight = Math.min(Math.round(maxIconHeight / criteriaCounts.length), defaultIconRowHeight);

@@ -3,9 +3,8 @@ import { Map, List } from "immutable";
 import AnswerCompact from "../../containers/portal-dashboard/answer-compact";
 import { TrackEventFunction } from "../../actions";
 import ActivityFeedbackGivenIcon from "../../../img/svg-icons/feedback-activity-badge-icon.svg";
-import { hasRubricFeedback } from "../../util/activity-feedback-helper";
 import { Rubric } from "./feedback/rubric-utils";
-import { ScoreType, ScoringSettings, getRubricDisplayScore, getScoredQuestions } from "../../util/scoring";
+import { ScoreType, ScoringSettings, getRubricDisplayScore, getScoredQuestions, hasFeedbackGivenScoreType } from "../../util/scoring";
 import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE } from "../../util/scoring-constants";
 
 import css from "../../../css/portal-dashboard/student-answers.less";
@@ -212,10 +211,13 @@ export class StudentAnswers extends React.PureComponent<IProps> {
     const progressClass = !hideFeedbackBadges && hasBeenReviewed ? css.reviewed
                                           : progress > 0 ? css.progress : "";
     const rubricFeedback = activityFeedbacks.size > 0 && activityStudentFeedback?.get("rubricFeedback")?.toJS();
-    const rubricFeedbackGiven = rubric && hasRubricFeedback(rubric, rubricFeedback);
-    const textFeedbackGiven = (activityStudentFeedback?.get("feedback") ?? "") !== "";
-    const scoreFeedbackGiven = activityStudentFeedback?.get("score") !== undefined;
-    const hasFeedbacks = activityFeedbacks.size > 0 && (textFeedbackGiven || rubricFeedbackGiven || scoreFeedbackGiven);
+    const hasFeedbacks = hasFeedbackGivenScoreType({
+      scoreType: this.props.scoringSettings.scoreType,
+      textFeedback: activityStudentFeedback?.get("feedback"),
+      scoreFeedback: activityStudentFeedback?.get("score"),
+      rubric,
+      rubricFeedback
+    });
 
     return (
       <div className={`${css.activityProgress} ${progressClass}`} key={activity.get("id")}>

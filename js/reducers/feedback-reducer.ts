@@ -7,8 +7,7 @@ import {
 } from "../actions";
 import { RecordFactory } from "../util/record-factory";
 import { normalizeResourceJSON } from "../core/transform-json-response";
-import { getScoringSettings } from "../util/scoring";
-import { MANUAL_SCORE, RUBRIC_SCORE } from "../util/scoring-constants";
+import { getScoringSettings, hasFeedbackGivenScoreType } from "../util/scoring";
 import { Rubric } from "../components/portal-dashboard/feedback/rubric-utils";
 
 export interface IFeedbackState {
@@ -37,10 +36,25 @@ export class FeedbackState extends INITIAL_FEEDBACK_STATE implements IFeedbackSt
 
 export default function feedback(state = new FeedbackState({}), action: any) {
   let hasScoredQuestions: any;
+  let actFeedbacks: any;
 
   switch (action.type) {
     case RECEIVE_FEEDBACK_SETTINGS:
-      return state.set("settings", fromJS(action.response) as Map<any, any>);
+      const settingsMap = fromJS(action.response) as Map<any, any>;
+      hasScoredQuestions = state.get("hasScoredQuestions");
+      const activityFeedbacks = state.get("activityFeedbacks");
+      if (activityFeedbacks.size > 0 && hasScoredQuestions !== undefined) {
+        // score type may have changed so all feedback needs to be re-evaluated to see if it has been reviewed
+        actFeedbacks = updateHashBeenReviewed({
+          activityFeedbackValues: activityFeedbacks.toList().toJS(),
+          settings: action.response,
+          hasScoredQuestions: hasScoredQuestions.toJS()
+        });
+        return state
+          .set("activityFeedbacks", fromJS(actFeedbacks) as Map<any, any>)
+          .set("settings", settingsMap);
+      }
+      return state.set("settings", settingsMap);
     case RECEIVE_QUESTION_FEEDBACKS:
       const feedbacks = action.response.reduce((map: any, feedback: any) => {
         map[feedback.answerId] = feedback;
@@ -61,18 +75,29 @@ export default function feedback(state = new FeedbackState({}), action: any) {
     case RECEIVE_ACTIVITY_FEEDBACKS:
       const settings: any = state.get("settings")?.toJS();
       hasScoredQuestions = state.get("hasScoredQuestions")?.toJS();
-      const actFeedbacks = action.response.reduce((map: any, feedback: any) => {
-        if (feedback.activityId) {
-          feedback.hasBeenReviewed = computeHasBeenReviewed({feedback, settings, hasScoredQuestions});
-        }
-        map[`${feedback.activityId}-${feedback.platformStudentId}`] = feedback;
-        return map;
-      }, {});
+      actFeedbacks = updateHashBeenReviewed({
+        activityFeedbackValues: action.response,
+        settings,
+        hasScoredQuestions
+      });
       return state.set("activityFeedbacks", fromJS(actFeedbacks) as Map<any, any>);
     default:
       return state;
   }
 }
+
+export const updateHashBeenReviewed = (params: {activityFeedbackValues: any; settings: any; hasScoredQuestions: any}) => {
+  const {activityFeedbackValues, settings, hasScoredQuestions} = params;
+
+  const result = activityFeedbackValues.reduce((map: any, feedback: any) => {
+    if (feedback.activityId) {
+      feedback.hasBeenReviewed = computeHasBeenReviewed({feedback, settings, hasScoredQuestions});
+    }
+    map[`${feedback.activityId}-${feedback.platformStudentId}`] = feedback;
+    return map;
+  }, {});
+  return result;
+};
 
 export const computeHasBeenReviewed = (params: {feedback: any; settings: any; hasScoredQuestions: any}) => {
   const {feedback, settings, hasScoredQuestions} = params;
@@ -84,24 +109,13 @@ export const computeHasBeenReviewed = (params: {feedback: any; settings: any; ha
     hasScoredQuestions: hasScoredQuestions?.[feedback.activityId],
   }).scoreType;
 
-  const hasScore = !isNaN(parseInt(feedback.score, 10));
-  const hasText = (feedback.feedback ?? "").length > 0;
+  const result = hasFeedbackGivenScoreType({
+    scoreType,
+    textFeedback: feedback.feedback,
+    scoreFeedback: feedback.score,
+    rubric,
+    rubricFeedback: feedback.rubricFeedback
+  });
 
-  let hasFilledRubric = false;
-  const rubricFeedback = feedback.rubricFeedback;
-  if (rubric && rubricFeedback) {
-    const scoredValues = Object.values(rubricFeedback).filter((v: any) => v.score > 0);
-    hasFilledRubric = scoredValues.length === rubric.criteria.length;
-  }
-
-  switch (scoreType) {
-    case MANUAL_SCORE:
-      return hasScore;
-
-    case RUBRIC_SCORE:
-      return hasFilledRubric;
-
-    default:
-      return hasText || hasFilledRubric;
-  }
+  return result;
 };
