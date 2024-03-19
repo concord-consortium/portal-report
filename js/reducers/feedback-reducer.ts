@@ -45,7 +45,7 @@ export default function feedback(state = new FeedbackState({}), action: any) {
       const activityFeedbacks = state.get("activityFeedbacks");
       if (activityFeedbacks.size > 0 && hasScoredQuestions !== undefined) {
         // score type may have changed so all feedback needs to be re-evaluated to see if it has been reviewed
-        actFeedbacks = updateHashBeenReviewed({
+        actFeedbacks = updateHasBeenReviewed({
           activityFeedbackValues: activityFeedbacks.toList().toJS(),
           settings: action.response,
           hasScoredQuestions: hasScoredQuestions.toJS()
@@ -75,7 +75,7 @@ export default function feedback(state = new FeedbackState({}), action: any) {
     case RECEIVE_ACTIVITY_FEEDBACKS:
       const settings: any = state.get("settings")?.toJS();
       hasScoredQuestions = state.get("hasScoredQuestions")?.toJS();
-      actFeedbacks = updateHashBeenReviewed({
+      actFeedbacks = updateHasBeenReviewed({
         activityFeedbackValues: action.response,
         settings,
         hasScoredQuestions
@@ -86,7 +86,7 @@ export default function feedback(state = new FeedbackState({}), action: any) {
   }
 }
 
-export const updateHashBeenReviewed = (params: {activityFeedbackValues: any; settings: any; hasScoredQuestions: any}) => {
+export const updateHasBeenReviewed = (params: {activityFeedbackValues: any; settings: any; hasScoredQuestions: any}) => {
   const {activityFeedbackValues, settings, hasScoredQuestions} = params;
 
   const result = activityFeedbackValues.reduce((map: any, feedback: any) => {
