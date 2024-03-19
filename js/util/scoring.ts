@@ -118,3 +118,26 @@ export const getRubricDisplayScore = (rubric: Rubric, rubricFeedback: any, maxSc
   return displayScore;
 };
 
+export const hasFeedbackGivenScoreType = (options: {scoreType: ScoreType; textFeedback?: string; scoreFeedback?: number; rubric?: Rubric; rubricFeedback: any }) => {
+  const {scoreType, textFeedback, scoreFeedback, rubric, rubricFeedback } = options;
+
+  const hasScore = scoreFeedback !== undefined;
+  const hasText = (textFeedback ?? "").length > 0;
+
+  let hasFilledRubric = false;
+  if (rubric && rubricFeedback) {
+    const scoredValues = Object.values(rubricFeedback).filter((v: any) => v.score > 0);
+    hasFilledRubric = scoredValues.length === rubric.criteria.length;
+  }
+
+  switch (scoreType) {
+    case MANUAL_SCORE:
+      return hasScore;
+
+    case RUBRIC_SCORE:
+      return hasFilledRubric;
+
+    default:
+      return hasText || hasFilledRubric;
+  }
+};

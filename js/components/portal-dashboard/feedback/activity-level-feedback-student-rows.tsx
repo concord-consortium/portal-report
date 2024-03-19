@@ -8,9 +8,8 @@ import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaitin
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
 import { SORT_BY_FEEDBACK_PROGRESS } from "../../../actions/dashboard";
 import { TrackEventFunction } from "../../../actions";
-import { hasRubricFeedback } from "../../../util/activity-feedback-helper";
 import { Rubric } from "./rubric-utils";
-import { ScoringSettings } from "../../../util/scoring";
+import { ScoringSettings, hasFeedbackGivenScoreType } from "../../../util/scoring";
 import { ShowStudentAnswers } from "./show-student-answers";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
@@ -49,7 +48,14 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const score = feedbackData.get("score");
     const hasRubric = rubric;
     const { rubricFeedback } = feedbackData.toJS();
-    const hasFeedbacks = feedback || (hasRubric && hasRubricFeedback(rubric, rubricFeedback)) || score !== undefined;
+    const hasFeedbacks = hasFeedbackGivenScoreType({
+      scoreType: scoringSettings.scoreType,
+      textFeedback: feedbackData.get("feedback"),
+      scoreFeedback: feedbackData.get("score"),
+      rubric,
+      rubricFeedback
+    });
+
     const feedbackBadge = hasFeedbacks ? <GivenFeedbackActivityBadgeIcon /> : <AwaitingFeedbackActivityBadgeIcon />;
 
     return (
