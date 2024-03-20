@@ -7,7 +7,7 @@ import { Rubric } from "./rubric-utils";
 import { TrackEventFunction, updateActivityFeedbackSettings } from "../../../actions";
 import { connect } from "react-redux";
 import { AUTOMATIC_SCORE, MANUAL_SCORE, NO_SCORE, RUBRIC_SCORE } from "../../../util/scoring-constants";
-import { ScoreType, ScoringSettings, getScoredQuestions } from "../../../util/scoring";
+import { ScoreType, ScoringSettings, getCurrentScores, getScoredQuestions } from "../../../util/scoring";
 import { ScoreInput } from "./score-input";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-settings-modal.less";
@@ -167,7 +167,8 @@ class FeedbackSettingsModal extends PureComponent<IProps, IState> {
       const updates: any = { scoreType };
       if (maxScore !== undefined) {
         // check if scores above max score and confirm if they are
-        const scoresAboveMax = feedbacks.scores.reduce((acc: boolean, cur: number) => {
+        const scores = getCurrentScores(feedbacks);
+        const scoresAboveMax = scores.reduce((acc: boolean, cur: number) => {
           return acc || cur > maxScore;
         }, false);
         if (scoresAboveMax && (scoreType === MANUAL_SCORE) && !confirmMaxScore) {

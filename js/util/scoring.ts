@@ -71,7 +71,7 @@ export const computeAvgScore = (scoringSettings: ScoringSettings, rubric: Rubric
       break;
 
     case MANUAL_SCORE:
-      const manualScores = feedbacks.scores;
+      const manualScores = getCurrentScores(feedbacks);
       if (manualScores.length > 0) {
         const totalScore = manualScores.reduce((acc: number, cur: number) => acc + cur, 0);
         avgScore = totalScore / manualScores.length;
@@ -81,6 +81,16 @@ export const computeAvgScore = (scoringSettings: ScoringSettings, rubric: Rubric
   }
 
   return {avgScore, avgScoreMax};
+};
+
+export const getCurrentScores = (feedbacks: any) => {
+  return feedbacks.feedbacks.reduce((acc: any, cur: any) => {
+    const score = cur.get("score");
+    if (score !== undefined) {
+      acc.push(score);
+    }
+    return acc;
+  }, []);
 };
 
 export const getCompletedRubricScores = (rubric: Rubric, feedbacks: any) => {
