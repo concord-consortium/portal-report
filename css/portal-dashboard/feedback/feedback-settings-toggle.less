@@ -20,6 +20,13 @@
     &:hover {
       background-color: @feedback-green-light3;
     }
+    &.notClickable:hover, &.notClickable:active {
+      background-color: initial !important;
+      cursor: initial;
+      &:before {
+        background-color: @feedback-green !important;
+      }
+    }
 
     &:active, &.active {
       background-color: @feedback-green;

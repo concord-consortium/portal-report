@@ -3,7 +3,7 @@ import { List, Map } from "immutable";
 import { connect } from "react-redux";
 import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getDashboardFeedbackSortBy,
-         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges
+         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getIsResearcher
        } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
@@ -70,6 +70,7 @@ interface IProps {
   viewMode: DashboardViewMode;
   rubric: Rubric;
   rubricMaxScore: number;
+  isResearcher: boolean;
 }
 
 interface IState {
@@ -108,12 +109,11 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   render() {
     const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId,
-      error, report, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
+      error, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
-      setStudentFeedbackSort, scoringSettings, rubric, rubricMaxScore } = this.props;
+      setStudentFeedbackSort, scoringSettings, rubric, rubricMaxScore, isResearcher } = this.props;
     const { initialLoading, viewMode, listViewMode, feedbackLevel } = this.state;
-    const isAnonymous = report ? report.get("anonymous") : true;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
     const activityTrees: List<any> | false = sequenceTree && sequenceTree.get("children");
@@ -154,6 +154,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   studentCount={students.size}
                   trackEvent={trackEvent}
                   viewMode={viewMode}
+                  isResearcher={isResearcher}
                 />
                 <LevelViewer
                   activities={activityTrees}
@@ -172,7 +173,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
               <div className={css.progressTable} onScroll={this.handleScroll} data-cy="progress-table">
                 <StudentNames
                   students={students}
-                  isAnonymous={isAnonymous}
+                  isAnonymous={anonymous}
                   isCompact={compactReport}
                   setCurrentStudent={setCurrentStudent}
                   setDashboardViewMode={this.setDashboardViewMode}
@@ -206,7 +207,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 currentQuestion={currentQuestion}
                 currentStudentId={currentStudentId}
                 setDashboardViewMode={this.setDashboardViewMode}
-                isAnonymous={isAnonymous}
+                isAnonymous={anonymous}
                 questions={questions}
                 setCurrentActivity={setCurrentActivity}
                 setCurrentStudent={setCurrentStudent}
@@ -228,7 +229,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   currentStudentId={currentStudentId}
                   feedbackSortByMethod={feedbackSortByMethod}
                   hasTeacherEdition={hasTeacherEdition}
-                  isAnonymous={isAnonymous}
+                  isAnonymous={anonymous}
                   listViewMode={listViewMode}
                   questions={questions}
                   setAnonymous={trackSetAnonymous}
@@ -249,6 +250,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   feedbackLevel={feedbackLevel}
                   setFeedbackLevel={this.setFeedbackLevel}
                   scoringSettings={scoringSettings}
+                  isResearcher={isResearcher}
                 />
             </div>
           )
@@ -325,6 +327,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     hasScoredQuestions: scoredActivity ? getScoredQuestions(scoredActivity).size > 0 : false,
   });
 
+
   let sortedQuestionIds;
   if (questions && activities) {
     sortedQuestionIds = questions.keySeq().toArray().sort((q1Id: string, q2Id: string) => {
@@ -340,9 +343,12 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     });
   }
 
+  const isResearcher = getIsResearcher(state);
+
   return {
     activityFeedbacks: state.getIn(["feedback", "activityFeedbacks"]),
-    anonymous: getAnonymous(state),
+    anonymous: getAnonymous(state) || isResearcher,
+    isResearcher,
     answers,
     clazzName: dataDownloaded ? state.getIn(["report", "clazzName"]) : undefined,
     compactReport: getCompactReport(state),

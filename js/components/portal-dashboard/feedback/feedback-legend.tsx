@@ -27,10 +27,11 @@ interface IProps {
   avgScoreMax: number;
   feedbacks: any;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 
 const FeedbackLegend: React.FC<IProps> = (props) => {
-  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax, rubric, feedbacks, trackEvent } = props;
+  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax, rubric, feedbacks, trackEvent, isResearcher } = props;
   const { scoreType } = scoringSettings;
   const awaitingFeedbackIcon = feedbackLevel === "Activity"
                                ? <AwaitingFeedbackActivityBadgeIcon />
@@ -63,7 +64,7 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
       {feedbackLevel === "Activity" &&
         <div className={css.feedbackBadgeLegend__rubric}>
           <div className={css.feedbackBadgeLegend__rubric_settings}>
-            <FeedbackSettingsToggle activity={activity} scoringSettings={scoringSettings} feedbacks={feedbacks} trackEvent={trackEvent} />
+            <FeedbackSettingsToggle activity={activity} scoringSettings={scoringSettings} feedbacks={feedbacks} trackEvent={trackEvent} isResearcher={isResearcher} />
           </div>
           <div className={css.feedbackBadgeLegend__rubric_score}>
             {showAvgScore && <div className={css.feedbackBadgeLegend__rubric_score_avg}>

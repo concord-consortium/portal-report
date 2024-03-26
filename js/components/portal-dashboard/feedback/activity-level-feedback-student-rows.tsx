@@ -28,11 +28,12 @@ interface IProps {
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
   scoringSettings: ScoringSettings;
+  isResearcher: boolean;
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { activityId, activityIndex, feedbacks, feedbackSortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
-    students, trackEvent, updateActivityFeedback, scoringSettings, activity } = props;
+    students, trackEvent, updateActivityFeedback, scoringSettings, activity, isResearcher } = props;
   const displayedFeedbacks = feedbackSortByMethod !== SORT_BY_FEEDBACK_PROGRESS
     ? feedbacks
     : students.map((student: any) => {
@@ -92,6 +93,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
               updateActivityFeedback={updateActivityFeedback}
               trackEvent={trackEvent}
+              isResearcher={isResearcher}
             />
             <ActivityFeedbackScore
               activityId={activityId}
@@ -106,6 +108,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               scoringSettings={scoringSettings}
               rubricFeedback={rubricFeedback}
               rubric={rubric}
+              isResearcher={isResearcher}
             />
           </div>
           <ShowStudentAnswers

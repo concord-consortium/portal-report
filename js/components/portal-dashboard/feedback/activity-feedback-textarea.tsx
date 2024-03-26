@@ -11,10 +11,11 @@ interface IProps {
   studentId: string;
   updateActivityFeedback?: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 
 export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, activityStarted, feedback, studentId, updateActivityFeedback, trackEvent } = props;
+  const { activityId, activityIndex, activityStarted, feedback, studentId, updateActivityFeedback, trackEvent, isResearcher } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -35,7 +36,7 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
   };
 
   const updateFeedback = (logUpdate: boolean) => {
-    if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined) {
+    if (activityId && studentId && updateActivityFeedback && textareaRef.current?.value !== undefined && !isResearcher) {
       if (logUpdate) {
         trackEvent("Portal-Dashboard", "AddActivityLevelFeedback", { label: feedback, parameters: { activityId, studentId }});
       }
@@ -57,9 +58,10 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
         defaultValue={feedback}
         onBlur={feedbackChanged ? updateFeedbackLogged : undefined}
         onChange={handleActivityFeedbackChange}
-        placeholder="Enter feedback"
+        placeholder={isResearcher ? "" : "Enter feedback"}
         ref={textareaRef}
         style={{ height: height + "px" }}
+        disabled={isResearcher}
       />
     );
   }

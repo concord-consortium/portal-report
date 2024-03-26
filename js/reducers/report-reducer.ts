@@ -50,6 +50,7 @@ export interface IReportState {
   platformUserId: string;
   platformUserName: string;
   loggingUserName: string;
+  userType: IPortalData["userType"];
   contextId: string;
   resourceLinkId: string;
   platformId: string;
@@ -83,6 +84,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   platformUserId: "",
   platformUserName:"",
   loggingUserName:"",
+  userType: "" as any,
   contextId: "",
   resourceLinkId: "",
   platformId: "",
@@ -120,6 +122,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   platformUserId: string;
   platformUserName: string;
   loggingUserName: string;
+  userType: IPortalData["userType"];
   contextId: string;
   resourceLinkId: string;
   platformId: string;
@@ -162,8 +165,8 @@ export default function report(state = new ReportState({}), action?: any) {
 
       let type: ReportType = "student";
       let hideControls = true;
-      if (!studentId && data.userType === "teacher") {
-        // Ensure that Portal data also indicates that the user is a teacher. Otherwise, student could just
+      if (!studentId && (data.userType === "teacher" || data.userType === "researcher")) {
+        // Ensure that Portal data also indicates that the user is a teacher or researcher. Otherwise, student could just
         // remove "studentId" URL parameter to see the full class report.
         type = "class";
         hideControls = false;
@@ -179,6 +182,7 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("platformUserId", data.platformUserId)
         .set("platformUserName",data.offering.teacher)
         .set("loggingUserName", getLoggingUserName(data))
+        .set("userType", data.userType)
         .set("contextId", data.contextId)
         .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId)

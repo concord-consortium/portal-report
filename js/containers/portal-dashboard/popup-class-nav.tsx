@@ -46,6 +46,7 @@ interface IProps {
   trackEvent: TrackEventFunction;
   viewMode: DashboardViewMode;
   setFeedbackLevel: (feedbackLevel: FeedbackLevel) => void;
+  isResearcher: boolean;
 }
 
 class PopupClassNav extends React.PureComponent<IProps>{
@@ -55,7 +56,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
   render() {
     const { anonymous, feedbackSortByMethod, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous,
-            viewMode } = this.props;
+            viewMode, isResearcher } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
                      : listViewMode === "Question" ? questionCount : studentCount;
@@ -67,7 +68,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
       <div className={`${css.popupClassNav} ${css.column}`}>
         {this.renderViewListOptions()}
         <div className={`${cssClassNav.classNav} ${css.popupClassNavControllers}`} data-cy="class-nav">
-          <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
+          {!isResearcher && <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />}
           <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
           {this.renderSortMenu()}
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
