@@ -23,10 +23,11 @@ interface IProps {
   students: List<any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 
 export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, students, activityId, updateQuestionFeedback, trackEvent } = props;
+  const { answers, currentQuestion, feedbacks, isAnonymous, students, activityId, updateQuestionFeedback, trackEvent, isResearcher } = props;
 
   const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer: Map<string, any>) => {
     let feedbackBadge = <AwaitingFeedbackQuestionBadgeIcon />;
@@ -75,6 +76,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               setFeedbackSortRefreshEnabled={props.setFeedbackSortRefreshEnabled}
               updateQuestionFeedback={updateQuestionFeedback}
               trackEvent={trackEvent}
+              isResearcher={isResearcher}
             />
           }
         </div>

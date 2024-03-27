@@ -33,6 +33,7 @@ interface IProps {
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 
 class ActivityFeedbackPanel extends React.PureComponent<IProps> {
@@ -52,7 +53,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
 
   render() {
     const { activity, activityIndex, feedbacks, feedbacksNeedingReview, feedbackSortByMethod, isAnonymous, rubric,
-            updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings } = this.props;
+            updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings, isResearcher } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -71,6 +72,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           updateActivityFeedback={updateActivityFeedback}
           trackEvent={trackEvent}
           scoringSettings={scoringSettings}
+          isResearcher={isResearcher}
         />
       </div>
     );

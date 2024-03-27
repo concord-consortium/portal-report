@@ -20,10 +20,11 @@ interface IProps {
   scoringSettings: ScoringSettings;
   rubricFeedback: any;
   rubric: Rubric;
+  isResearcher: boolean;
 }
 
 export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, activityStarted, score, studentId, updateActivityFeedback, trackEvent, scoringSettings, rubricFeedback, rubric, setFeedbackSortRefreshEnabled } = props;
+  const { activityId, activityIndex, activityStarted, score, studentId, updateActivityFeedback, trackEvent, scoringSettings, rubricFeedback, rubric, setFeedbackSortRefreshEnabled, isResearcher } = props;
   const scoreType = scoringSettings.scoreType ?? NO_SCORE;
   const loggedScore = useRef<number|undefined>(score);
 
@@ -53,22 +54,26 @@ export const ActivityFeedbackScore: React.FC<IProps> = (props) => {
     return null;
   }
 
-  if (scoreType === MANUAL_SCORE) {
-    return (
-      <ScoreInput
-        score={score}
-        minScore={0}
-        disabled={false}
-        className={css.activityFeedbackScore}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      >
-        <div className={css.scoreLabel}>Score</div>
-      </ScoreInput>
-    );
-  }
+  let displayScore = getRubricDisplayScore(rubric, rubricFeedback);
 
-  const displayScore = getRubricDisplayScore(rubric, rubricFeedback);
+  if (scoreType === MANUAL_SCORE) {
+    if (isResearcher) {
+      displayScore = `${score ?? "N/A"}`;
+    } else {
+      return (
+        <ScoreInput
+          score={score}
+          minScore={0}
+          disabled={false}
+          className={css.activityFeedbackScore}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        >
+          <div className={css.scoreLabel}>Score</div>
+        </ScoreInput>
+      );
+    }
+  }
 
   return (
     <div className={css.activityFeedbackScore}>

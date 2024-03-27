@@ -11,6 +11,7 @@ const kSortGroupThird = 3;
 
 // Inputs
 const getActivities = state => state.getIn(["report", "activities"]);
+export const getIsResearcher = state => state.getIn(["report", "userType"]) === "researcher";
 export const getAnonymous = state => state.getIn(["report", "anonymous"]);
 const getCurrentActivityId = state => state.getIn(["dashboard", "currentActivityId"]);
 const getQuestions = state => state.getIn(["report", "questions"]);

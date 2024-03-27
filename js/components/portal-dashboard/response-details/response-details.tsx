@@ -54,6 +54,7 @@ interface IProps {
   feedbackLevel: FeedbackLevel;
   setFeedbackLevel: (feedbackLevel: FeedbackLevel) => void;
   scoringSettings: ScoringSettings;
+  isResearcher: boolean;
 }
 interface IState {
   selectedStudents: SelectedStudent[];
@@ -75,7 +76,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings, setFeedbackLevel, rubric } = this.props;
+      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings, setFeedbackLevel, rubric, isResearcher } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
@@ -117,6 +118,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             trackEvent={trackEvent}
             viewMode={viewMode}
             setFeedbackLevel={setFeedbackLevel}
+            isResearcher={isResearcher}
           />
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             { isSequence || feedbackLevel === "Activity"
@@ -161,6 +163,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 scoringSettings={scoringSettings}
                 rubric={rubric}
                 trackEvent={trackEvent}
+                isResearcher={isResearcher}
               />
             </div>
           }
@@ -193,6 +196,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
                   feedbackLevel={feedbackLevel}
+                  isResearcher={isResearcher}
                 />
               </div>
             : <div className={css.feedbackRowsContainer} data-cy="activity-feedback-panel">
@@ -204,6 +208,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
                   scoringSettings={scoringSettings}
+                  isResearcher={isResearcher}
                 />
               </div>
         }
@@ -222,6 +227,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 setAnonymous={setAnonymous}
                 students={students}
                 trackEvent={trackEvent}
+                isResearcher={isResearcher}
               />
             </CSSTransition>
           }

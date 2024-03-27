@@ -35,6 +35,7 @@ interface IProps {
   setAnonymous: (value: boolean) => void;
   students: Map<any, any>;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   render() {
@@ -71,7 +72,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
   }
 
   private renderColumnHeaders = () => {
-    const { anonymous, setAnonymous, currentQuestion } = this.props;
+    const { anonymous, setAnonymous, currentQuestion, isResearcher } = this.props;
     const type = currentQuestion?.get("type");
     const QuestionIcon = getQuestionIcon(currentQuestion);
     const typeText = type?.replace(/_/gm, ' ');
@@ -82,7 +83,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     return (
       <div className={css.spotlightColumnHeaders} data-cy="select-students-header">
         <div className={css.anonymizeContainer}>
-          <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
+        {!isResearcher && <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />}
         </div>
         <div className={css.questionPrompt} data-cy="question-prompt">
           <QuestionIcon className={`${css.icon} ${css.questionTypeIcon}`} />

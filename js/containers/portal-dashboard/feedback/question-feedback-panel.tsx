@@ -28,6 +28,7 @@ interface IProps {
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   updateQuestionFeedbackSettings: (embeddableKey: string, feedbackFlags: any) => void;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 
 class QuestionFeedbackPanel extends React.PureComponent<IProps> {
@@ -47,7 +48,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 
   render() {
     const { activity, activityIndex, answers, currentQuestion, currentStudentId, feedbacksNeedingReview,
-            isAnonymous, listViewMode, questionFeedbacks, questionFeedbackStudents, trackEvent } = this.props;
+            isAnonymous, listViewMode, questionFeedbacks, questionFeedbackStudents, trackEvent, isResearcher } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -65,6 +66,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               students={questionFeedbackStudents}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
               trackEvent={trackEvent}
+              isResearcher={isResearcher}
             />
           : <FeedbackQuestionRows
               answers={answers}
@@ -75,6 +77,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               students={questionFeedbackStudents}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
               trackEvent={trackEvent}
+              isResearcher={isResearcher}
             />
         }
       </div>

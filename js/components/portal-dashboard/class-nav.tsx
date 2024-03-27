@@ -19,16 +19,17 @@ interface IProps {
   studentCount: number;
   viewMode: DashboardViewMode;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 
 export class ClassNav extends React.PureComponent<IProps> {
   render() {
-    const { anonymous, setAnonymous, studentCount } = this.props;
+    const { anonymous, setAnonymous, studentCount, isResearcher } = this.props;
 
     return (
       <div className={css.classNav} data-cy="class-nav">
         { this.renderClassSelect() }
-        <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />
+        {!isResearcher && <AnonymizeStudents anonymous={anonymous} setAnonymous={setAnonymous} />}
         <CountContainer numItems={studentCount} containerLabel={"Class"} containerLabelType={"students"} />
         { this.renderStudentSort() }
       </div>

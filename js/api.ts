@@ -42,7 +42,7 @@ export interface IPortalRawData extends ILTIPartial{
     name: string;
     students: IStudentRawData[];
   };
-  userType: "teacher" | "learner";
+  userType: "teacher" | "learner" | "researcher";
   sourceKey: string;
   userId: string;
 }
@@ -135,9 +135,10 @@ export const getPortalFirebaseJWTUrl = (classHash: string, resourceLinkId: strin
   if (!baseUrl) {
     return null;
   }
+  const researcher = urlParam("researcher") === "true";
   const resourceLinkParam = resourceLinkId ? `&resource_link_id=${resourceLinkId}` : "";
   const targetUserParam = targetUserId ? `&target_user_id=${targetUserId}` : "";
-  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}${resourceLinkParam}${targetUserParam}`;
+  return `${baseUrl}/api/v1/jwt/firebase?firebase_app=${firebaseApp}&class_hash=${classHash}${resourceLinkParam}${targetUserParam}${researcher ? "&researcher=true" : ""}`;
 };
 
 export function getAuthHeader() {

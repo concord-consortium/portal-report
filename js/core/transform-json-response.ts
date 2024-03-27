@@ -64,7 +64,7 @@ export interface IPortalData {
     classHash: string;
     students: IStudentData[];
   };
-  userType: "teacher" | "learner";
+  userType: "teacher" | "learner" | "researcher";
   platformUserId: string;
   contextId: string;
   platformId: string;

@@ -14,10 +14,11 @@ interface IProps {
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
+  isResearcher: boolean;
 }
 
 export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { answer, answerId, feedback, studentId, questionId, activityId, updateQuestionFeedback, trackEvent } = props;
+  const { answer, answerId, feedback, studentId, questionId, activityId, updateQuestionFeedback, trackEvent, isResearcher } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -31,6 +32,9 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
   const [ feedbackChanged, setFeedbackChanged ] = useState(false);
 
   const handleQuestionFeedbackChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
+    if (isResearcher) {
+      return;
+    }
     const target = event.currentTarget as HTMLTextAreaElement;
     setHeight(target.scrollHeight);
     setFeedbackChanged(true);
@@ -39,7 +43,7 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
 
   const updateFeedback = (logUpdate: boolean) => {
     const feedback = textareaRef.current?.value;
-    if (answerId && feedback !== undefined) {
+    if (answerId && feedback !== undefined && !isResearcher) {
       if (logUpdate) {
         trackEvent("Portal-Dashboard", "AddQuestionLevelFeedback", { label: feedback, parameters: { activityId, studentId, questionId, answerId }});
       }
@@ -58,11 +62,12 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
     <textarea
       ref={textareaRef}
       defaultValue={feedback}
-      placeholder="Enter feedback"
+      placeholder={isResearcher ? "" : "Enter feedback"}
       onChange={handleQuestionFeedbackChange}
       style={{ height: height + "px" }}
       data-cy="feedback-textarea"
       onBlur={feedbackChanged ? updateFeedbackLogged : undefined}
+      disabled={isResearcher}
     />
   );
 };
