@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { fromJS, Map as IMap } from "immutable";
-import { compareStudentsByName, feedbackValidForAnswer } from "../util/misc";
+import { compareStudentsOrTeachersByName, feedbackValidForAnswer } from "../util/misc";
 import { getStudentProgress } from "./dashboard-selectors";
 import {
   AUTOMATIC_SCORE,
@@ -63,7 +63,7 @@ const activityFeedbackFor = (activity, student, feedbacks, progress) => {
 };
 
 const formatStudents = (students) => students
-  .sort((student1, student2) => compareStudentsByName(student1, student2))
+  .sort((student1, student2) => compareStudentsOrTeachersByName(student1, student2))
   .map(s => addRealName(s));
 
 const getActivitySettings = (feedbackSettings, activity) =>
