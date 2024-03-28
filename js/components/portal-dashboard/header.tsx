@@ -1,4 +1,5 @@
 import React from "react";
+import { Map, List } from "immutable";
 
 import ccLogoSrc from "../../../img/cc-logo.png";
 import { HeaderMenuContainer } from "./header-menu";
@@ -10,6 +11,7 @@ import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
 import { ColorTheme, DashboardViewMode } from "../../util/misc";
 import { TrackEventFunction } from "../../actions";
+import { ITeacherData } from "../../core/transform-json-response";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -22,34 +24,46 @@ interface IProps {
   setDashboardViewMode: (mode: DashboardViewMode) => void;
   viewMode: DashboardViewMode;
   colorTheme?: ColorTheme;
+  isResearcher: boolean;
+  clazzName: string;
+  teachers?: List<Map<string, ITeacherData>>;
 }
 
 export class Header extends React.PureComponent<IProps> {
   render() {
-    const { colorTheme, userName, setCompact, setHideFeedbackBadges, trackEvent } = this.props;
+    const { colorTheme, userName, setCompact, setHideFeedbackBadges, trackEvent, isResearcher, clazzName, teachers } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
+    const teacherNames = teachers && teachers.map((teacher: any) => teacher.get("name")).join(", ");
+
     return (
-      <div className={`${css.dashboardHeader} ${colorClass}`} data-cy="dashboard-header">
-        <div className={css.appInfo}>
-          <img src={ccLogoSrc} className={css.logo} data-cy="header-logo"/>
-          {this.renderNavigationSelect()}
-        </div>
-        <div className={css.headerCenter}>
-          <div className={css.assignmentTitle}>
-            Assignment:
+      <>
+        <div className={`${css.dashboardHeader} ${colorClass}`} data-cy="dashboard-header">
+          <div className={css.appInfo}>
+            <img src={ccLogoSrc} className={css.logo} data-cy="header-logo"/>
+            {this.renderNavigationSelect()}
           </div>
-          {this.renderAssignmentSelect()}
+          <div className={css.headerCenter}>
+            <div className={css.assignmentTitle}>
+              Assignment:
+            </div>
+            {this.renderAssignmentSelect()}
+          </div>
+          <div className={css.headerRight}>
+            <AccountOwnerDiv userName={userName} colorTheme={colorTheme} />
+            <HeaderMenuContainer
+              setCompact={setCompact}
+              setHideFeedbackBadges={setHideFeedbackBadges}
+              colorTheme={colorTheme}
+              trackEvent={trackEvent}
+            />
+          </div>
         </div>
-        <div className={css.headerRight}>
-          <AccountOwnerDiv userName={userName} colorTheme={colorTheme} />
-          <HeaderMenuContainer
-            setCompact={setCompact}
-            setHideFeedbackBadges={setHideFeedbackBadges}
-            colorTheme={colorTheme}
-            trackEvent={trackEvent}
-          />
-        </div>
-      </div>
+        {isResearcher &&
+          <div className={css.researcherHeader}>
+            <strong>Researcher View</strong> for {clazzName}{teacherNames && ` / ${teacherNames}`}
+          </div>
+        }
+      </>
     );
   }
 

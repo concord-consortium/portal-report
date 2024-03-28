@@ -63,6 +63,7 @@ export interface IPortalData {
     name: string;
     classHash: string;
     students: IStudentData[];
+    teachers: ITeacherData[];
   };
   userType: "teacher" | "learner" | "researcher";
   platformUserId: string;
@@ -74,6 +75,13 @@ export interface IPortalData {
 export interface IStudentData {
   name: string;
   realName: string;
+  firstName: string;
+  lastName: string;
+  id: string;
+  userId: number;
+}
+export interface ITeacherData {
+  name: string;
   firstName: string;
   lastName: string;
   id: string;
@@ -209,6 +217,10 @@ export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalDat
     student.name = `${student.firstName} ${student.lastName}`;
     // Provide additional property in student hash, it's useful for anonymization.
     student.realName = student.name;
+  });
+  camelizedJson.classInfo.teachers.forEach(teacher => {
+    teacher.id = teacher.userId.toString();
+    teacher.name = `${teacher.firstName} ${teacher.lastName}`;
   });
   return camelizedJson;
 }

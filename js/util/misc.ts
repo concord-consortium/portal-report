@@ -14,14 +14,14 @@ export const parseUrl = (url: string) => {
 };
 
 // A comparison function to sort students by last and then first name
-export const compareStudentsByName = (student1: Map<string, any>, student2: Map<string, any>) => {
-  const lastNameCompare = student1.get("lastName").toLocaleLowerCase().localeCompare(
-    student2.get("lastName").toLocaleLowerCase(),
+export const compareStudentsOrTeachersByName = (studentOrTeacher1: Map<string, any>, studentOrTeacher2: Map<string, any>) => {
+  const lastNameCompare = studentOrTeacher1.get("lastName").toLocaleLowerCase().localeCompare(
+    studentOrTeacher2.get("lastName").toLocaleLowerCase(),
   );
   if (lastNameCompare !== 0) {
     return lastNameCompare;
   } else {
-    return student1.get("firstName").localeCompare(student2.get("firstName"));
+    return studentOrTeacher1.get("firstName").localeCompare(studentOrTeacher2.get("firstName"));
   }
 };
 
