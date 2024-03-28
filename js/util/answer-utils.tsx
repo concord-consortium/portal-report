@@ -1,3 +1,4 @@
+import React from "react";
 import { Map } from "immutable";
 import QFillInTheBlankCompletedIcon from "../../img/svg-icons/q-fill-in-the-blank-completed-icon.svg";
 import QImageCompletedIcon from "../../img/svg-icons/q-image-completed-icon.svg";
@@ -13,7 +14,7 @@ import QMCScoredCorrectIcon from "../../img/svg-icons/q-mc-scored-correct-icon.s
 import QMCScoredIncorrectIcon from "../../img/svg-icons/q-mc-scored-incorrect-icon.svg";
 import QOpenResponseCompletedIcon from "../../img/svg-icons/q-open-response-completed-icon.svg";
 import { TrackEventFunction } from "../actions";
-import React from "react";
+import { feedbackValidForAnswer } from "./misc";
 
 export interface AnswerType {
   name: string;
@@ -33,6 +34,8 @@ export interface AnswerProps {
   trackEvent: TrackEventFunction;
   answerOrientation: "tall" | "wide";
 }
+
+export type AnswerBadge = "audioAttachment" | "questionFeedback" | "feedbackAnswerUpdated";
 
 export const AnswerTypes: AnswerType[] = [
   {
@@ -128,6 +131,34 @@ export const getAnswerIconId = (answerType: any) => {
   const searchRegExp = / /g;
   const iconId = answerType ? answerType.name.toLowerCase().replace(searchRegExp, "-") : "";
   return iconId;
+};
+
+export const getAnswerBadges = (answer: Map<string, any>, feedback: Map<string, any>): AnswerBadge[] => {
+  const badges: Set<AnswerBadge> = new Set();
+  const type = answer && answer.get("questionType");
+  const attachments = answer && answer.get("attachments");
+
+  if (feedback && feedback.get("feedback") !== "") {
+    if (feedbackValidForAnswer(feedback, answer)) {
+      badges.add("questionFeedback");
+    } else {
+      badges.add("feedbackAnswerUpdated");
+    }
+  }
+
+  switch (type) {
+    case "open_response":
+      if (attachments) {
+        attachments.forEach((attachment: any) => {
+          if (attachment.get("contentType")?.startsWith?.("audio/")) {
+            badges.add("audioAttachment");
+          }
+        }, false);
+      }
+      break;
+  }
+
+  return Array.from(badges);
 };
 
 export const renderInvalidAnswer = (answer: any, errorMessage = "unknown") => {
