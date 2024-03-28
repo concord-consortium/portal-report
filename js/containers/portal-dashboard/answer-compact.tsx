@@ -2,16 +2,16 @@ import React from "react";
 import { Map } from "immutable";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { connect } from "react-redux";
-import { getAnswerType, getAnswerIconId, AnswerProps, hasResponse } from "../../util/answer-utils";
-import { feedbackValidForAnswer } from "../../util/misc";
+import { getAnswerType, getAnswerIconId, AnswerProps, hasResponse, getAnswerBadges } from "../../util/answer-utils";
 import { getHideFeedbackBadges } from "../../selectors/dashboard-selectors";
 import QuestionFeedbackBadge from "../../../img/svg-icons/feedback-question-badge-icon.svg";
 import FeedbackAnswerUpdatedBadge from "../../../img/svg-icons/feedback-answer-updated-badge-icon.svg";
+import AudioRecordingBadge from "../../../img/svg-icons/audio-recording-badge-icon.svg";
 import { IReportItemAnswer, IReportItemAnswerItemScore, ReportItemsType } from "@concord-consortium/interactive-api-host";
 import { getReportItemAnswer } from "../../actions";
+import { ScoreIcon } from "../../components/portal-dashboard/score-icon";
 
 import css from "../../../css/portal-dashboard/answer-compact.less";
-import { ScoreIcon } from "../../components/portal-dashboard/score-icon";
 
 interface IProps extends AnswerProps {
   hideFeedbackBadges: boolean;
@@ -48,6 +48,7 @@ export class AnswerCompact extends React.PureComponent<IProps> {
     const { answer, question, feedback, hideFeedbackBadges, reportItemAnswer } = this.props;
     const answerType = getAnswerType(answer, question);
     const iconId = getAnswerIconId(answerType);
+    const answerBadges = getAnswerBadges(answer, feedback);
 
     // Early versions of reportItemAnswer did not have items.
     // We believe that all report item interactives have been updated so
@@ -61,11 +62,22 @@ export class AnswerCompact extends React.PureComponent<IProps> {
           ? this.renderAnswer(answerType?.icon, iconId)
           : this.renderNoAnswer()
         }
-        {(feedback && feedback.get("feedback") !== "" && !hideFeedbackBadges &&
-          (feedbackValidForAnswer(feedback, answer)
-           ? <QuestionFeedbackBadge className={css.feedbackBadge} data-cy="question-feedback-badge" />
-           : <FeedbackAnswerUpdatedBadge className={css.feedbackBadge} data-cy="answer-updated-feedback-badge" />)
-        )}
+        {answerBadges.map(answerBadge => {
+          switch (answerBadge) {
+            case "audioAttachment":
+              return <AudioRecordingBadge className={css.audioAttachmentBadge} data-cy="answer-audio-attachment-badge" />;
+            case "questionFeedback":
+              if (!hideFeedbackBadges) {
+                return <QuestionFeedbackBadge className={css.feedbackBadge} data-cy="question-feedback-badge" />;
+              }
+              break;
+            case "feedbackAnswerUpdated":
+              if (!hideFeedbackBadges) {
+                return <FeedbackAnswerUpdatedBadge className={css.feedbackBadge} data-cy="answer-updated-feedback-badge" />;
+              }
+              break;
+          }
+        })}
         {
           scoreItem &&
           <div className={css.scoreContainer}><ScoreIcon score={scoreItem.score} maxScore={scoreItem.maxScore} /></div>
