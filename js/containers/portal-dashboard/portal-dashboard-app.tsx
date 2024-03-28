@@ -23,6 +23,7 @@ import { ColorTheme, DashboardViewMode, FeedbackLevel, ListViewMode } from "../.
 import { ScoringSettings, getScoredQuestions, getScoringSettings, getScoringSettingsInState } from "../../util/scoring";
 import { computeRubricMaxScore } from "../../selectors/activity-feedback-selectors";
 import { Rubric } from "../../components/portal-dashboard/feedback/rubric-utils";
+import { getSortedTeachers } from "../../selectors/report";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -51,6 +52,7 @@ interface IProps {
   studentCount: number;
   studentProgress: Map<any, any>;
   students: any;
+  teachers: any;
   sortedQuestionIds?: string[];
   scoringSettings: ScoringSettings;
   // from mapDispatchToProps
@@ -262,7 +264,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode) => {
-    const { sequenceTree, userName, setCompactReport, setHideFeedbackBadges, trackEvent } = this.props;
+    const { sequenceTree, userName, setCompactReport, setHideFeedbackBadges, trackEvent, isResearcher, clazzName, teachers } = this.props;
     const { viewMode} = this.state;
     const color: ColorTheme = headerViewMode === "ProgressDashboard"
       ? "progress"
@@ -279,6 +281,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           setDashboardViewMode={this.setDashboardViewMode}
           viewMode={viewMode}
           colorTheme={color}
+          isResearcher={isResearcher}
+          clazzName={clazzName}
+          teachers={teachers}
         />
     );
   }
@@ -369,6 +374,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     sortByMethod: getDashboardSortBy(state),
     sortedQuestionIds,
     students: dataDownloaded && getSortedStudents(state),
+    teachers: dataDownloaded && getSortedTeachers(state),
     studentProgress: dataDownloaded && getStudentProgress(state),
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
     scoringSettings,

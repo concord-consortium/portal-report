@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { getActivityTrees, getQuestionTrees, getAnswersByQuestion } from "./report-tree";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS,
          SORT_BY_FEEDBACK_NAME, SORT_BY_FEEDBACK_PROGRESS } from "../actions/dashboard";
-import { compareStudentsByName } from "../util/misc";
+import { compareStudentsOrTeachersByName } from "../util/misc";
 import { fromJS } from "immutable";
 
 const kSortGroupFirst = 1;
@@ -130,7 +130,7 @@ export const getSortedStudents = createSelector(
     switch (sortBy) {
       case SORT_BY_NAME:
         return students.toList().sort((student1, student2) =>
-          compareStudentsByName(student1, student2),
+          compareStudentsOrTeachersByName(student1, student2),
         );
       case SORT_BY_LEAST_PROGRESS:
       case SORT_BY_MOST_PROGRESS:
@@ -143,7 +143,7 @@ export const getSortedStudents = createSelector(
           if (progressComp !== 0) {
             return progressComp;
           } else {
-            return compareStudentsByName(student1, student2);
+            return compareStudentsOrTeachersByName(student1, student2);
           }
         });
       default:
@@ -159,7 +159,7 @@ export const getActivityFeedbackSortedStudents = createSelector(
     switch (feedbackSortBy) {
       case SORT_BY_FEEDBACK_NAME:
         return students.toList().sort((student1, student2) =>
-          compareStudentsByName(student1, student2),
+          compareStudentsOrTeachersByName(student1, student2),
         );
       case SORT_BY_FEEDBACK_PROGRESS:
         return students.toList().sort((student1, student2) => {
@@ -193,7 +193,7 @@ export const getQuestionFeedbackSortedStudents = createSelector(
     switch (feedbackSortBy) {
       case SORT_BY_FEEDBACK_NAME:
         return students.toList().sort((student1, student2) =>
-          compareStudentsByName(student1, student2),
+          compareStudentsOrTeachersByName(student1, student2),
         );
       case SORT_BY_FEEDBACK_PROGRESS:
         // TODO: change to sort by question feedback
