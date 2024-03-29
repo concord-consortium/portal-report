@@ -33,12 +33,5 @@
       "first_name": "Jerome",
       "last_name": "Wu"
     }
-  ],
-  "teachers": [
-    {
-      "user_id": 100,
-      "first_name": "Kristen",
-      "last_name": "Teachername"
-    }
   ]
 }
