@@ -1,6 +1,7 @@
 import React from "react";
 import { List, Map } from "immutable";
 import { connect } from "react-redux";
+import classNames from "classnames";
 import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getDashboardFeedbackSortBy,
          getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getIsResearcher
@@ -219,7 +220,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                 trackEvent={trackEvent}
               />
             </div>
-            : <div className={css.responseDetails} data-cy="response-details-container">
+            : <div className={classNames(css.responseDetails, {[css.isResearcher]: isResearcher})} data-cy="response-details-container">
                 <ResponseDetails
                   activities={activityTrees}
                   anonymous={anonymous}
