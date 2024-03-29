@@ -37,7 +37,6 @@ export interface IReportState {
   clazzName: string;
   clazzId: number;
   students: Map<any, any>;
-  teachers: Map<any, any>;
   answers: Map<any, any>;
   sequences: Map<any, any>;
   activities: Map<any, any>;
@@ -72,7 +71,6 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   clazzName: "",
   clazzId: -1,
   students: Map({}),
-  teachers: Map({}),
   answers: Map({}),
   sequences: Map({}),
   activities: Map({}),
@@ -111,7 +109,6 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   clazzName: string;
   clazzId: number;
   students: Map<any, any>;
-  teachers: Map<any, any>;
   answers: Map<any, any>;
   sequences: Map<any, any>;
   activities: Map<any, any>;
@@ -182,7 +179,6 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("clazzName", data.classInfo.name)
         .set("clazzId", data.classInfo.id)
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
-        .set("teachers", Map(data.classInfo.teachers.map(teacher => [teacher.id, Map(teacher)])))
         .set("platformUserId", data.platformUserId)
         .set("platformUserName",data.offering.teacher)
         .set("loggingUserName", getLoggingUserName(data))

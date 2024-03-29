@@ -1,5 +1,4 @@
 import React from "react";
-import { Map, List } from "immutable";
 
 import ccLogoSrc from "../../../img/cc-logo.png";
 import { HeaderMenuContainer } from "./header-menu";
@@ -11,7 +10,6 @@ import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
 import { ColorTheme, DashboardViewMode } from "../../util/misc";
 import { TrackEventFunction } from "../../actions";
-import { ITeacherData } from "../../core/transform-json-response";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -26,14 +24,12 @@ interface IProps {
   colorTheme?: ColorTheme;
   isResearcher: boolean;
   clazzName: string;
-  teachers?: List<Map<string, ITeacherData>>;
 }
 
 export class Header extends React.PureComponent<IProps> {
   render() {
-    const { colorTheme, userName, setCompact, setHideFeedbackBadges, trackEvent, isResearcher, clazzName, teachers } = this.props;
+    const { colorTheme, userName, setCompact, setHideFeedbackBadges, trackEvent, isResearcher, clazzName } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
-    const teacherNames = teachers && teachers.map((teacher: any) => teacher.get("name")).join(", ");
 
     return (
       <>
@@ -60,7 +56,7 @@ export class Header extends React.PureComponent<IProps> {
         </div>
         {isResearcher &&
           <div className={css.researcherHeader}>
-            <strong>Researcher View</strong> for {clazzName}{teacherNames && ` / ${teacherNames}`}
+            <strong>Researcher View</strong> for {clazzName}
           </div>
         }
       </>

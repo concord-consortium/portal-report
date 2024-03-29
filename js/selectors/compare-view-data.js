@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { getAnswerTrees } from "./report-tree";
-import { compareStudentsOrTeachersByName } from "../util/misc";
+import { compareStudentsByName } from "../util/misc";
 
 // Inputs
 const getCompareViewAnswers = state => state.get("report").get("compareViewAnswers");
@@ -11,7 +11,7 @@ const getCompareViewData = createSelector(
   (compareViewAnswers, answerTrees) =>
     compareViewAnswers
       .map(id => answerTrees.get(id))
-      .sort((ans1, ans2) => compareStudentsOrTeachersByName(ans1.get("student"), ans2.get("student")))
+      .sort((ans1, ans2) => compareStudentsByName(ans1.get("student"), ans2.get("student")))
 );
 
 export default getCompareViewData;
