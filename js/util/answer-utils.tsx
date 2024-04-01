@@ -136,7 +136,6 @@ export const getAnswerIconId = (answerType: any) => {
 export const getAnswerBadges = (answer: Map<string, any>, feedback: Map<string, any>): AnswerBadge[] => {
   const badges: Set<AnswerBadge> = new Set();
   const type = answer && answer.get("questionType");
-  const attachments = answer && answer.get("attachments");
 
   if (feedback && feedback.get("feedback") !== "") {
     if (feedbackValidForAnswer(feedback, answer)) {
@@ -146,16 +145,18 @@ export const getAnswerBadges = (answer: Map<string, any>, feedback: Map<string, 
     }
   }
 
-  switch (type) {
-    case "open_response":
-      if (attachments) {
-        attachments.forEach((attachment: any) => {
-          if (attachment.get("contentType")?.startsWith?.("audio/")) {
-            badges.add("audioAttachment");
-          }
-        }, false);
-      }
-      break;
+  if (type === "open_response") {
+    let interactiveState: any;
+    try {
+      const reportState = JSON.parse(answer && answer.get("reportState"));
+      interactiveState = JSON.parse(reportState?.interactiveState);
+    } catch (e) {
+      interactiveState = undefined;
+    }
+
+    if (interactiveState?.audioFile) {
+      badges.add("audioAttachment");
+    }
   }
 
   return Array.from(badges);
