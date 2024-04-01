@@ -62,18 +62,19 @@ export class AnswerCompact extends React.PureComponent<IProps> {
           ? this.renderAnswer(answerType?.icon, iconId)
           : this.renderNoAnswer()
         }
-        {answerBadges.map(answerBadge => {
+        {answerBadges.map((answerBadge, index) => {
+          const key = `${answerBadge}-${index}`;
           switch (answerBadge) {
             case "audioAttachment":
-              return <AudioRecordingBadge className={css.audioAttachmentBadge} data-cy="answer-audio-attachment-badge" />;
+              return <AudioRecordingBadge key={key} className={css.audioAttachmentBadge} data-cy="answer-audio-attachment-badge" />;
             case "questionFeedback":
               if (!hideFeedbackBadges) {
-                return <QuestionFeedbackBadge className={css.feedbackBadge} data-cy="question-feedback-badge" />;
+                return <QuestionFeedbackBadge key={key} className={css.feedbackBadge} data-cy="question-feedback-badge" />;
               }
               break;
             case "feedbackAnswerUpdated":
               if (!hideFeedbackBadges) {
-                return <FeedbackAnswerUpdatedBadge className={css.feedbackBadge} data-cy="answer-updated-feedback-badge" />;
+                return <FeedbackAnswerUpdatedBadge key={key} className={css.feedbackBadge} data-cy="answer-updated-feedback-badge" />;
               }
               break;
           }
