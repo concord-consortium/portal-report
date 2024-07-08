@@ -64,7 +64,7 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
   const imgWidth = aspectRatio > 0 ? (constrainX ? containerWidth : containerHeight / aspectRatio) : 0;
   const imgHeight = aspectRatio > 0 ? (constrainX ? containerWidth / aspectRatio : containerHeight) : 0;
 
-  if (!imgAnswer) {
+  if (!imgAnswer || typeof imgAnswer.get !== "function") {
     // There are broken answer documents that do not include an answer field
     // Don't crash, just provide a error message to the teacher
     // This needs to happen after all of the useState calls otherwise React will get
