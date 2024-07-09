@@ -107,9 +107,11 @@ export const FULL_REPORT = "fullReport";
 export const DASHBOARD = "dashboard";
 export const PORTAL_DASHBOARD = "portalDashboard";
 export const IFRAME_STANDALONE = "iframeStandalone";
+export const GLOSSARY_AUDIO = "glossaryAudio";
 
 export function getViewType () {
   return config("iframeQuestionId") ? IFRAME_STANDALONE :
          configBool("portal-dashboard") ? PORTAL_DASHBOARD :
-         configBool("dashboard") ? DASHBOARD : FULL_REPORT;
+         configBool("dashboard") ? DASHBOARD :
+         configBool("glossary-audio") ? GLOSSARY_AUDIO : FULL_REPORT;
 }

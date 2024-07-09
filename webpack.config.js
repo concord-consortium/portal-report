@@ -77,7 +77,7 @@ module.exports = (env, argv) => {
           ]
         },
         {
-          test: /css[\\\/](portal-dashboard|dashboard)[\\\/].*\.less$/,
+          test: /css[\\\/](portal-dashboard|dashboard|glossary-audio)[\\\/].*\.less$/,
           use: [
             'style-loader',
             {
