@@ -260,10 +260,10 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.selectActivityScoreSettingsOption("Manual");
       score.getSaveButton().click();
       score.getActivityFeedbackScore().eq(0).find('input').click().type(50);
-      score.getActivityFeedbackScore().eq(1).find('input').click(); 
+      score.getActivityFeedbackScore().eq(1).find('input').click();
       cy.get('[data-cy=feedback-settings-toggle-button]').click();
       score.getSaveButton().click();
-      score.getNewMaxScoreDialog().should("exist"); 
+      score.getNewMaxScoreDialog().should("exist");
       score.getNewMaxScoreDialog().find('[data-cy=feedback-settings-modal-header]').should("contain", "Activity Score Settings");
       score.getNewMaxScoreDialog().find('[data-cy=feedback-settings-modal-content-area]')
       .should("contain", "Some of the current student scores will be above the new max score of 10.");
@@ -345,7 +345,7 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[data-cy=item-number]').should("contain", "4");
       cy.get('[data-cy=feedback-textarea]').eq(0).click().type("Feedback");
       cy.get('[data-cy=feedback-badge] circle').eq(0).invoke("attr", "fill").should("contain", "#FFF");
-      cy.get('[data-cy=item-number]').should("contain", "4");   
+      cy.get('[data-cy=item-number]').should("contain", "4");
       score.selectRubricScore(1, 1, 1);
       score.selectRubricScore(1, 2, 1);
       cy.get('[data-cy=feedback-badge] circle').eq(0).invoke("attr", "fill").should("contain", "#4EA15A");
@@ -371,12 +371,12 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[data-cy=item-number]').should("contain", "4");
       score.getActivityFeedbackScore().eq(2).find('input').click().type(10);
       cy.get('[data-cy=feedback-badge] circle').eq(2).invoke("attr", "fill").should("contain", "#4EA15A");
-      cy.get('[data-cy=item-number]').should("contain", "3");     
+      cy.get('[data-cy=item-number]').should("contain", "3");
     });
     it('verify previous activity info is not displayed in the activity level feedback',()=>{
       score.selectRubricScore(1, 1, 1);
       score.selectRubricScore(1, 2, 1);
-      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "6 / 6");   
+      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "6 / 6");
       cy.get('[data-cy=activity-navigator-next-button] [class^=activity-navigator--icon--]').click();
       cy.get('[data-cy=activity-title]').should("contain", "Activity #2");
       cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "0 / 6");
@@ -392,7 +392,7 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.getContinueButton().click();
       cy.get('[data-cy=activity-navigator-previous-button] [class^=activity-navigator--icon--]').click();
       cy.get('[data-cy=activity-title]').should("contain", "Activity #1");
-      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "6 / 6"); 
+      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "6 / 6");
       cy.get('[data-cy=feedback-settings-toggle-button]').click();
       score.selectActivityScoreSettingsOption("Manual");
       score.getSaveButton().click();

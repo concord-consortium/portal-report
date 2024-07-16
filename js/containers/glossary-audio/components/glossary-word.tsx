@@ -1,31 +1,27 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { CurrentWord } from "../glossary-audio-app";
 
 import css from "../../../../css/glossary-audio/glossary-word.less";
+import GlossaryWordButton from "./glossary-word-button";
 
 type Props = {
   word: string;
+  numAudioRecordings: number;
   currentWord?: CurrentWord;
-  onClick: (word: string) => void;
+  onClick: (word: string, index: number) => void;
 }
 
-function GlossaryWord({word, currentWord, onClick}: Props) {
-  const handleClick = () => onClick(word);
+function GlossaryWord({word, numAudioRecordings, currentWord, onClick}: Props) {
 
-  const isPlaying = useMemo(() => currentWord && currentWord.word === word && currentWord.playing, [currentWord, word]);
-
-  const renderPlayStop = () => {
-    const className = `${css.button} ${isPlaying ? css.playing : ""}`;
-    if (isPlaying) {
-      return <button className={className} onClick={handleClick}>Stop</button>;
-    }
-    return <button className={className} onClick={handleClick}>Play</button>;
-  };
+  const buttons: React.ReactElement[] = [];
+  for (let i = 0; i < numAudioRecordings; i++) {
+    buttons.push(<GlossaryWordButton key={`${i}-${word}`} word={word} index={i} currentWord={currentWord} onClick={onClick} />);
+  }
 
   return (
     <tr>
       <td><span className={css.word}>{word}</span></td>
-      <td>{renderPlayStop()}</td>
+      <td>{buttons}</td>
     </tr>
   );
 }

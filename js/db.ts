@@ -2,7 +2,7 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import { urlParam } from "./util/misc";
 
-interface IConfig {
+export interface IConfig {
   apiKey: string;
   authDomain: string;
   databaseURL: string;
@@ -10,6 +10,7 @@ interface IConfig {
   storageBucket: string;
   messagingSenderId: string;
   appId: string;
+  measurementId?: string;
 }
 interface IConfigs {
   [index: string]: IConfig;
