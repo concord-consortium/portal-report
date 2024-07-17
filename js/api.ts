@@ -442,7 +442,7 @@ export class APIError extends Error{
   }
 }
 
-function checkStatus(response: Response) {
+export function checkStatus(response: Response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   } else {

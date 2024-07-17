@@ -16,13 +16,13 @@ class ActivityScore {
   }
   getCancelButton() {
     return cy.get('[data-cy=feedback-settings-modal-close-button]').eq(0);
-  }  
+  }
   getSaveButton() {
     return cy.get('[data-cy=feedback-settings-modal-close-button]').eq(1);
   }
   getActivityFeedbackScore() {
     return cy.get('[class*=activity-feedback-score--activityFeedbackScore--]');
-  } 
+  }
   verifyScoreNotDisplayedInRubricScoreHeader() {
     cy.get('[class^=rubric-table--rubricScoreHeader--]').eq(0).should("not.contain", "3");
     cy.get('[class^=rubric-table--rubricScoreHeader--]').eq(1).should("not.contain", "2");
