@@ -8,6 +8,7 @@ export type GlossaryAudioPortalParams = {
   pluginDataKey: string;
   portalUrl: string;
   studentId: string;
+  userId: string;
   classId: string;
   offeringId: string;
 }
@@ -20,10 +21,11 @@ export const useGlossaryAudioParams = (): GlossaryAudioParams => {
   const portalUrl = params.get("portalUrl") ?? undefined;
   const pluginDataKey = params.get("pluginDataKey") ?? undefined;
   const studentId = params.get("studentId") ?? undefined;
+  const userId = params.get("userId") ?? undefined;
   const classId = params.get("classId") ?? undefined;
   const offeringId = params.get("offeringId") ?? undefined;
-  if (sourceKey !== undefined && portalUrl !== undefined && pluginDataKey !== undefined && studentId !== undefined && classId !== undefined && offeringId !== undefined) {
-    return {demo: false, sourceKey, portalUrl, pluginDataKey, studentId, classId, offeringId};
+  if (sourceKey !== undefined && portalUrl !== undefined && pluginDataKey !== undefined && studentId !== undefined && userId !== undefined && classId !== undefined && offeringId !== undefined) {
+    return {demo: false, sourceKey, portalUrl, pluginDataKey, studentId, userId, classId, offeringId};
   }
   return { demo: true };
 };
