@@ -125,8 +125,8 @@ const getClassInfo = async ({portalUrl, classId}: GlossaryAudioPortalParams): Pr
   return await resp.json();
 };
 
-const getFirebaseJWT = async ({portalUrl, offeringId, studentId}: GlossaryAudioPortalParams, firebaseAppName: string, classHash: string) => {
-  const url = `${portalUrl}/api/v1/jwt/firebase?firebase_app=${firebaseAppName}&class_hash=${classHash}&resource_link_id=${offeringId}&target_user_id=${studentId}`;
+const getFirebaseJWT = async ({portalUrl, offeringId, userId}: GlossaryAudioPortalParams, firebaseAppName: string, classHash: string) => {
+  const url = `${portalUrl}/api/v1/jwt/firebase?firebase_app=${firebaseAppName}&class_hash=${classHash}&resource_link_id=${offeringId}&target_user_id=${userId}`;
   const resp = await fetch(url, {headers: {Authorization: getAuthHeader()}});
   checkStatus(resp);
   return await resp.json();
