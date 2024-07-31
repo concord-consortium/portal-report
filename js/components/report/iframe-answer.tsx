@@ -21,6 +21,7 @@ interface IProps {
   question: Map<any, any>;
   responsive: boolean;
   alwaysOpen: boolean;
+  compareView: boolean;
   getReportItemAnswer: (questionId: string, studentId: string, itemsType: ReportItemsType) => void;
   reportItemAnswer?: IInterimReportItemAnswer;
   answerOrientation: "wide" | "tall";
@@ -104,18 +105,18 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   shouldRenderIframe() {
-    const { question, alwaysOpen } = this.props;
+    const { question, alwaysOpen, compareView } = this.props;
     const { iframeVisible } = this.state;
 
     if (question.get("displayInIframe")) {
-      return iframeVisible || alwaysOpen;
+      return iframeVisible || alwaysOpen || compareView;
     } else {
       return false;
     }
   }
 
   render() {
-    const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
+    const { alwaysOpen, compareView, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
     const answerText = answer.get("answerText");
     const questionType = answer.get("questionType");
     const hasReportItemUrl = !!question?.get("reportItemUrl");
@@ -186,7 +187,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
             {maybeAnswerTextOrLinks}
           </div>
         )}
-        {reportItemAnswerItems.map((item, index) => (
+        {!compareView && reportItemAnswerItems.map((item, index) => (
           <IframeAnswerReportItem
             key={index}
             item={item}
