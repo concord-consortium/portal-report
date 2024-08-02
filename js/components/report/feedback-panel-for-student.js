@@ -35,6 +35,11 @@ export default class FeedbackPanelForStudent extends PureComponent {
 
   render() {
     const { textFeedback, score, rubric, rubricFeedback, hasBeenReviewed } = this.props;
+
+    if (rubric && rubric.hideRubricFromStudentsInStudentReport) {
+      return null;
+    }
+
     const hasFeedback = textFeedback || score || rubricFeedback;
     const showFeedback = (hasFeedback && hasBeenReviewed);
 
