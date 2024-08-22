@@ -9,6 +9,7 @@ import { RecordFactory } from "../util/record-factory";
 import { normalizeResourceJSON } from "../core/transform-json-response";
 import { getScoringSettings, hasFeedbackGivenScoreType } from "../util/scoring";
 import { Rubric } from "../components/portal-dashboard/feedback/rubric-utils";
+import migrate from "../core/rubric-migrations";
 
 export interface IFeedbackState {
   settings: Map<any, any>;
@@ -40,6 +41,9 @@ export default function feedback(state = new FeedbackState({}), action: any) {
 
   switch (action.type) {
     case RECEIVE_FEEDBACK_SETTINGS:
+      if (action.response.rubric) {
+        action.response.rubric = migrate(action.response.rubric);
+      }
       const settingsMap = fromJS(action.response) as Map<any, any>;
       hasScoredQuestions = state.get("hasScoredQuestions");
       const activityFeedbacks = state.get("activityFeedbacks");

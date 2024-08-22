@@ -2,6 +2,7 @@
   "activity_url": "http://fake.authoring.system/sequences/1",
   "id": 1,
   "rubric_url": "sample-rubric.json",
+  "rubric_doc_url": "https://example.com/sample-rubric-doc-url",
   "teacher": "Kristen Teachername",
   "has_teacher_edition": true
 }

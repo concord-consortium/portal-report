@@ -25,6 +25,7 @@ interface IProps {
   numFeedbacksGivenReview: number;
   numFeedbacksNeedingReview: number;
   rubric: Rubric;
+  rubricDocUrl: string;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   settings: any;
   activityFeedbackStudents: Map<any, any>;
@@ -53,7 +54,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
 
   render() {
     const { activity, activityIndex, feedbacks, feedbacksNeedingReview, feedbackSortByMethod, isAnonymous, rubric,
-            updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings, isResearcher } = this.props;
+            updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings, isResearcher, rubricDocUrl } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -67,6 +68,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           feedbackSortByMethod={feedbackSortByMethod}
           isAnonymous={isAnonymous}
           rubric={rubric}
+          rubricDocUrl={rubricDocUrl}
           setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
           students={activityFeedbackStudents}
           updateActivityFeedback={updateActivityFeedback}
@@ -110,6 +112,7 @@ function mapStateToProps() {
       feedbacksNotAnswered, computedMaxScore, autoScores,
       settings: state.getIn(["feedback", "settings"]),
       rubric: rubric && rubric.toJS(),
+      rubricDocUrl: state.getIn(["report", "rubricDocUrl"]),
       activityIndex: ownProps.activity.get("activityIndex"),
     };
   };

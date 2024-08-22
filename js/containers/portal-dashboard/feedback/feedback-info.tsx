@@ -15,12 +15,13 @@ interface IProps {
   activity: Map<any, any>;
   scoringSettings: ScoringSettings;
   rubric: Rubric;
+  rubricDocUrl: string;
   trackEvent: TrackEventFunction;
   isResearcher: boolean;
 }
 
 export const FeedbackInfo: React.FC<IProps> = (props) => {
-  const {activity, feedbackLevel, listViewMode, setFeedbackLevel, scoringSettings, rubric, trackEvent, isResearcher } = props;
+  const {activity, feedbackLevel, listViewMode, setFeedbackLevel, scoringSettings, rubric, rubricDocUrl, trackEvent, isResearcher } = props;
 
   const handleActivityButtonClick = () => {
     setFeedbackLevel("Activity");
@@ -55,6 +56,7 @@ export const FeedbackInfo: React.FC<IProps> = (props) => {
         activity={activity}
         scoringSettings={scoringSettings}
         rubric={rubric}
+        rubricDocUrl={rubricDocUrl}
         trackEvent={trackEvent}
         isResearcher={isResearcher}
       />

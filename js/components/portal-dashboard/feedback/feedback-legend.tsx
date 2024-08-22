@@ -23,6 +23,7 @@ interface IProps {
   activity: Map<any, any>;
   scoringSettings: ScoringSettings;
   rubric: Rubric;
+  rubricDocUrl: string;
   avgScore: number;
   avgScoreMax: number;
   feedbacks: any;
@@ -31,7 +32,7 @@ interface IProps {
 }
 
 const FeedbackLegend: React.FC<IProps> = (props) => {
-  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax, rubric, feedbacks, trackEvent, isResearcher } = props;
+  const { feedbackLevel, activity, scoringSettings, avgScore, avgScoreMax, rubric, rubricDocUrl, feedbacks, trackEvent, isResearcher } = props;
   const { scoreType } = scoringSettings;
   const awaitingFeedbackIcon = feedbackLevel === "Activity"
                                ? <AwaitingFeedbackActivityBadgeIcon />
@@ -73,7 +74,7 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
             </div>}
             {rubric && <div className={css.feedbackBadgeLegend__rubric_summary}>
               Rubric Summary:
-              <RubricSummaryIcon rubric={rubric} scoringSettings={scoringSettings} feedbacks={feedbacks} activityId={activity.get("id")} trackEvent={trackEvent} />
+              <RubricSummaryIcon rubric={rubric} rubricDocUrl={rubricDocUrl} scoringSettings={scoringSettings} feedbacks={feedbacks} activityId={activity.get("id")} trackEvent={trackEvent} />
             </div>}
           </div>
         </div>

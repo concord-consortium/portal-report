@@ -5,7 +5,15 @@ function setVersionNumber(rubric, versionString) {
 }
 
 function expandNonApplicableRatings(rubric) {
-  const {ratings, criteria} = rubric;
+  let {criteria} = rubric;
+  const {ratings, criteriaGroups} = rubric;
+
+  if (criteriaGroups) {
+    criteria = criteriaGroups.reduce((acc, cur) => {
+      return acc.concat(cur.criteria);
+    }, []);
+  }
+
   criteria.forEach(c => {
     c.nonApplicableRatings = c.nonApplicableRatings
       ? c.nonApplicableRatings
@@ -20,6 +28,30 @@ function expandNonApplicableRatings(rubric) {
   });
 }
 
+function createCriteriaGroups(rubric) {
+  const {criteria, criteriaGroups} = rubric;
+
+  if (criteriaGroups) {
+    return;
+  }
+
+  rubric.criteriaGroups = [{
+    label: "",
+    labelForStudent: "",
+    criteria
+  }];
+
+  criteria.forEach(c => {
+    c.iconUrl = "";
+  });
+
+  rubric.hideRubricFromStudentsInStudentReport = false;
+
+  delete rubric.criteria;
+  delete rubric.referenceURL;
+  delete rubric.scoreUsingPoints;
+}
+
 const migrations = [
   { version: "1.0.0",
     migrations: [],
@@ -28,6 +60,12 @@ const migrations = [
     version: "1.1.0",
     migrations: [
       expandNonApplicableRatings,
+    ],
+  },
+  {
+    version: "1.2.0",
+    migrations: [
+      createCriteriaGroups,
     ],
   },
 ];

@@ -2,13 +2,12 @@
   border-collapse: collapse;
   color: #777;
 
-  td, th {
-    padding: 5px;
-    border: 1px solid #888;
+  table, th, td {
+    border: 1px solid #333;
   }
 
-  td {
-    width: 50%;
+  th, td {
+    padding: 5px;
   }
 
   th {
@@ -16,16 +15,33 @@
     color: #888;
   }
 
-  .rating-label {
-    text-transform: uppercase;
+  td {
+    vertical-align: top;
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      li {
+        margin-left: 20px;
+        list-style-type: disc;
+      }
+    }
+
+    p {
+      padding: 5px;
+    }
+
+    ul, ol {
+      padding-left: 2em;
+    }
   }
 
-  p {
-    padding: 5px;
-  }
-
-  ul, ol {
-    padding-left: 2em;
+  td.groupLabel {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
   }
 }
 

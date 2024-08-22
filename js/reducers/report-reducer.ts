@@ -63,6 +63,7 @@ export interface IReportState {
   reportItemAnswersFull: Map<string, IReportItemAnswer>;
   reportItemAnswersCompact: Map<string, IReportItemAnswer>;
   reportItemMetadata: Map<string, IReportItemHandlerMetadata>;
+  rubricDocUrl: string;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -96,6 +97,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   reportItemAnswersFull: Map(),
   reportItemAnswersCompact: Map(),
   reportItemMetadata: Map(),
+  rubricDocUrl: "",
 });
 
 const reportItemIFramePhones: Record<string, any> = {};
@@ -134,6 +136,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   reportItemAnswersFull: Map<string, IReportItemAnswer>;
   reportItemAnswersCompact: Map<string, IReportItemAnswer>;
   reportItemMetadata: Map<string, IReportItemHandlerMetadata>;
+  rubricDocUrl: string;
 }
 
 // this exists to handle older interactives until they are updated to use the new report item api
@@ -187,7 +190,8 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("resourceLinkId", data.offering.id.toString())
         .set("platformId", data.platformId)
         .set("sourceKey", data.sourceKey)
-        .set("hasTeacherEdition", data.offering.hasTeacherEdition);
+        .set("hasTeacherEdition", data.offering.hasTeacherEdition)
+        .set("rubricDocUrl", data.offering.rubricDocUrl ?? "");
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);

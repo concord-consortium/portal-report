@@ -13,6 +13,7 @@ import tableCss from "../../../../css/portal-dashboard/feedback/rubric-table.les
 interface IProps {
   onClose: () => void;
   rubric: Rubric;
+  rubricDocUrl: string;
   criteriaCounts: ICriteriaCount[];
   scoringSettings: ScoringSettings;
 }
@@ -43,44 +44,52 @@ export class RubricSummaryModal extends PureComponent<IProps> {
   }
 
   private renderTable() {
-    const { rubric } = this.props;
-    const { criteria } = rubric;
+    const { rubric, rubricDocUrl } = this.props;
+    const { criteriaGroups } = rubric;
 
     return (
       <div className={tableCss.rubricContainer} data-cy="rubric-table">
-        {this.renderColumnHeaders(rubric)}
+        {this.renderColumnHeaders(rubric, rubricDocUrl)}
         <div className={tableCss.rubricTable}>
-          {criteria.map(crit =>
-            <div className={tableCss.rubricTableRow} key={crit.id} id={crit.id}>
-              <div className={tableCss.rubricDescription}>
-                <Markdown>{crit.description}</Markdown>
+          {criteriaGroups.map((criteriaGroup, index) => (
+            <div className={tableCss.rubricTableGroup} key={index}>
+              {criteriaGroup.label.length > 0 && <div className={tableCss.rubricTableGroupLabel}>{criteriaGroup.label}</div>}
+              <div className={tableCss.rubricTableRows}>
+                {criteriaGroup.criteria.map(criterion =>
+                  <div className={tableCss.rubricTableRow} key={criterion.id} id={criterion.id}>
+                    <div className={tableCss.rubricDescription}>
+                      <Markdown>{criterion.description}</Markdown>
+                    </div>
+                    {this.renderRatings(criterion)}
+                  </div>
+                )}
               </div>
-              {this.renderRatings(crit)}
             </div>
-          )}
+          ))}
         </div>
       </div>
     );
   }
 
-  private renderColumnHeaders = (rubric: Rubric) => {
-    const { referenceURL } = rubric;
+  private renderColumnHeaders = (rubric: Rubric, rubricDocUrl: string) => {
+    const hasRubricDocUrl = rubricDocUrl.trim().length > 0;
+
     const showScore = this.props.scoringSettings.scoreType === RUBRIC_SCORE;
     return (
       <div className={tableCss.columnHeaders}>
         <div className={tableCss.rubricDescriptionHeader}>
-          <div className={tableCss.scoringGuideArea}>
-            <a className={tableCss.launchButton} href={referenceURL} target="_blank" data-cy="scoring-guide-launch-icon">
+          {hasRubricDocUrl && <div className={tableCss.scoringGuideArea}>
+            <a className={tableCss.launchButton} href={rubricDocUrl} target="_blank" data-cy="scoring-guide-launch-icon">
               <LaunchIcon className={tableCss.icon} />
             </a>
             Scoring Guide
-          </div>
+          </div>}
           <div className={tableCss.rubricDescriptionTitle}>{rubric.criteriaLabel}</div>
         </div>
         {rubric.ratings.map((rating: any) =>
           <div className={tableCss.rubricScoreHeader} key={rating.id}>
             <div className={tableCss.rubricScoreLevel}>{rating.label}</div>
-            {rubric.scoreUsingPoints && showScore && <div className={tableCss.rubricScoreNumber}>({rating.score})</div>}
+            {showScore && <div className={tableCss.rubricScoreNumber}>({rating.score})</div>}
           </div>
         )}
       </div>
@@ -97,12 +106,12 @@ export class RubricSummaryModal extends PureComponent<IProps> {
     );
   }
 
-  private renderRating = (crit: RubricCriterion, rating: RubricRating) => {
-    const critId = crit.id;
+  private renderRating = (criterion: RubricCriterion, rating: RubricRating) => {
+    const critId = criterion.id;
     const ratingId = rating.id;
     const key = `${critId}-${ratingId}`;
-    const ratingDescription = crit.ratingDescriptions?.[ratingId];
-    const isApplicableRating = crit.nonApplicableRatings === undefined || crit.nonApplicableRatings.indexOf(ratingId) < 0;
+    const ratingDescription = criterion.ratingDescriptions?.[ratingId];
+    const isApplicableRating = criterion.nonApplicableRatings === undefined || criterion.nonApplicableRatings.indexOf(ratingId) < 0;
     const style: React.CSSProperties = {
       color: getFeedbackTextColor({rubric: this.props.rubric, score: rating.score}),
       backgroundColor: getFeedbackColor({rubric: this.props.rubric, score: rating.score})

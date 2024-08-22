@@ -15,6 +15,7 @@
         "score_type": "manual",
         "use_rubric": true,
         "rubric_url": "sample-rubric.json",
+        "rubric_doc_url": "https://example.com/sample-rubric-doc-url",
         "max_score": 10,
         "activity_feedback":[
           {
