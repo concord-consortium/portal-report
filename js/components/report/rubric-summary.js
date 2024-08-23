@@ -53,9 +53,12 @@ export default class RubricSummary extends PureComponent {
   }
   getRowMaps() {
     const {rubric, rubricFeedbacks} = this.props;
-    const { criteria, ratings } = rubric;
-    return criteria.map((crit) => {
-      const cid = crit.id;
+    const { criteriaGroups, ratings } = rubric;
+    const criteria = criteriaGroups.reduce((acc, cur) => {
+      return acc.concat(cur.criteria);
+    }, []);
+    return criteria.map((criterion) => {
+      const cid = criterion.id;
       const rowMap = ratings.map((r, i) => {
         const rid = r.id;
         return rubricFeedbacks.reduce((p, c) => {

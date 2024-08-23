@@ -1,31 +1,44 @@
-export type RubricCriterion = {
+export interface RubricCriteriaGroup {
+  label: string;
+  labelForStudent: string;
+  criteria: RubricCriterion[];
+}
+
+export interface RubricCriterion {
   id: string;
   description: string;
+  descriptionForStudent: string;
   nonApplicableRatings: string[];
   ratingDescriptions: Record<string, string>;
-};
+  ratingDescriptionsForStudent: Record<string, string>;
+  iconUrl: string;
+}
 
-export type RubricRating = {
+export interface RubricRating {
   id: string;
   label: string;
   score: number;
-};
+}
 
-export type Rubric = {
+export interface RubricV110 {
   id: string;
-  version: string;
+  version: "1.0.0" | "1.1.0";
   versionNumber: string;
   updatedMsUTC: number;
   originUrl: string;
-  referenceURL: string;
   showRatingDescriptions: boolean;
-  scoreUsingPoints: boolean;
+  hideRubricFromStudentsInStudentReport: boolean;
   criteriaLabel: string;
   criteriaLabelForStudent: string;
   feedbackLabelForStudent: string;
   criteria: RubricCriterion[];
   ratings: RubricRating[];
 }
+
+export type Rubric = Omit<RubricV110, "version" | "criteria"> & {
+  version: "1.2.0";
+  criteriaGroups: RubricCriteriaGroup[];
+};
 
 // Utility function to convert hex color to HSL
 const hexToHSL = (hex: string): [number, number, number] => {

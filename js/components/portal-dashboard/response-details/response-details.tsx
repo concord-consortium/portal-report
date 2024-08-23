@@ -51,6 +51,7 @@ interface IProps {
   viewMode: DashboardViewMode;
   trackEvent: TrackEventFunction;
   rubric: Rubric;
+  rubricDocUrl: string;
   feedbackLevel: FeedbackLevel;
   setFeedbackLevel: (feedbackLevel: FeedbackLevel) => void;
   scoringSettings: ScoringSettings;
@@ -76,7 +77,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings, setFeedbackLevel, rubric, isResearcher } = this.props;
+      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings, setFeedbackLevel, rubric, rubricDocUrl, isResearcher } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
@@ -162,6 +163,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                 listViewMode={listViewMode}
                 scoringSettings={scoringSettings}
                 rubric={rubric}
+                rubricDocUrl={rubricDocUrl}
                 trackEvent={trackEvent}
                 isResearcher={isResearcher}
               />

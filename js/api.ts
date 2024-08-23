@@ -7,6 +7,7 @@ import fakeClassData from "./data/small-class-data.json";
 import { parseUrl, validFsId, urlParam, urlHashParam } from "./util/misc";
 import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
 import { getFirebaseAppName, signInWithToken } from "./db";
+import migrate from "./core/rubric-migrations";
 
 const PORTAL_AUTH_PATH = "/auth/oauth_authorize";
 let accessToken: string | null = null;
@@ -414,6 +415,7 @@ export function fetchRubric(rubricUrl: string) {
         .then(checkStatus)
         .then(response => response.json())
         .then(newRubric => {
+          newRubric = migrate(newRubric);
           rubricUrlCache[rubricUrl] = newRubric;
           resolve({ url: rubricUrl, rubric: newRubric });
         })

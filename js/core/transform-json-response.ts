@@ -57,6 +57,7 @@ export interface IPortalData {
     id: number;
     teacher: string;
     hasTeacherEdition: boolean;
+    rubricDocUrl: string;
   };
   classInfo: {
     id: number;

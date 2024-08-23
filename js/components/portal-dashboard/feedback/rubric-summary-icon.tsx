@@ -9,6 +9,7 @@ import css from "../../../../css/portal-dashboard/feedback/rubric-summary-icon.l
 
 interface IProps {
   rubric: Rubric;
+  rubricDocUrl: string;
   feedbacks: any;
   activityId: string;
   scoringSettings: ScoringSettings;
@@ -32,7 +33,7 @@ const maxIconHeight = Math.round(iconWidth / 1.66); // keep rectangular
 const defaultIconRowHeight = 18;
 
 export const RubricSummaryIcon: React.FC<IProps> = (props) => {
-  const { rubric, feedbacks, activityId, scoringSettings, trackEvent } = props;
+  const { rubric, rubricDocUrl, feedbacks, activityId, scoringSettings, trackEvent } = props;
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleToggleModal = () => setModalOpen(prev => {
@@ -57,9 +58,13 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
       .map((f: any) => f.get("rubricFeedback"))
       .toJS();
 
+    const numCriteria = rubric.criteriaGroups.reduce((acc, cur) => {
+      return acc + cur.criteria.length;
+    }, 0);
+
     const numCompletedRubrics = rubricFeedbacks.reduce((acc: number, cur: PartialRubricFeedback) => {
       const numNonZeroScores = getNumNonZeroScores(cur);
-      if (numNonZeroScores >= rubric.criteria.length) {
+      if (numNonZeroScores >= numCriteria) {
         acc++;
       }
       return acc;
@@ -72,23 +77,25 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
         return acc;
       }, {});
 
-      rubric.criteria.forEach(criteria => {
-        const criteriaCount: ICriteriaCount = {
-          id: criteria.id,
-          numStudents: 0,
-          ratings: {...ratingsCounts},
-        };
-        criteriaCounts.push(criteriaCount);
+      rubric.criteriaGroups.forEach(criteriaGroup => {
+        criteriaGroup.criteria.forEach(criteria => {
+          const criteriaCount: ICriteriaCount = {
+            id: criteria.id,
+            numStudents: 0,
+            ratings: {...ratingsCounts},
+          };
+          criteriaCounts.push(criteriaCount);
 
-        rubricFeedbacks.forEach((rubricFeedback: PartialRubricFeedback) => {
-          const numNonZeroScores = getNumNonZeroScores(rubricFeedback);
-          if (numNonZeroScores >= rubric.criteria.length) {
-            const criteriaFeedback = rubricFeedback[criteria.id];
-            if (criteriaFeedback?.score > 0) {
-              criteriaCount.numStudents++;
-              criteriaCount.ratings[criteriaFeedback.id]++;
+          rubricFeedbacks.forEach((rubricFeedback: PartialRubricFeedback) => {
+            const numNonZeroScores = getNumNonZeroScores(rubricFeedback);
+            if (numNonZeroScores >= numCriteria) {
+              const criteriaFeedback = rubricFeedback[criteria.id];
+              if (criteriaFeedback?.score > 0) {
+                criteriaCount.numStudents++;
+                criteriaCount.ratings[criteriaFeedback.id]++;
+              }
             }
-          }
+          });
         });
       });
     }
@@ -137,6 +144,7 @@ export const RubricSummaryIcon: React.FC<IProps> = (props) => {
       {modalOpen && <RubricSummaryModal
         onClose={handleToggleModal}
         rubric={rubric}
+        rubricDocUrl={rubricDocUrl}
         criteriaCounts={criteriaCounts}
         scoringSettings={scoringSettings}
       />}

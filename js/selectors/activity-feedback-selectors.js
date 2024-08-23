@@ -325,7 +325,7 @@ const maxReducer = (prev, current) => current > prev ? current : prev;
 // exported so we can use it in the scoring library
 export const computeRubricMaxScore = (rubric) => {
   if (!rubric) { return 0; }
-  const criteria = rubric.criteria;
+  const criteria = rubric.criteriaGroups.reduce((acc, cur) => acc.concat(cur.criteria), []);
   const ratings = rubric.ratings;
   const numCrit = (criteria && criteria.length) || 0;
   const maxScore = ratings.map((r, i) => r.score || i).reduce(maxReducer, 0);

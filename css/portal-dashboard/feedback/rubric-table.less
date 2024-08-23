@@ -83,76 +83,111 @@
 
   .rubricTable {
 
-    .rubricTableRow {
-      display: flex;
-      border-top: solid 1.5px @cc-charcoal-light1;
+    code {
+      font-family: monospace;
+    }
 
-      .rubricDescription {
-        padding: 5px 10px;
-        font-weight: normal;
-        flex: auto;
-          li {
-          margin-left: 20px;
-          list-style-type: disc;
-        }
+    .rubricTableGroup {
+      display: flex;
+      border-top: solid 1.5px #979797;
+
+      .rubricTableGroupLabel {
+        writing-mode: vertical-rl;
+        padding: 20px 40px;
+        border-left: solid 1.5px #979797;  // left is really right due to rotation
+        transform: rotate(180deg);
+        text-align: center;
+        font-weight: bold;
       }
 
-      .ratingsGroup{
+      .rubricTableRows {
         display: flex;
-        min-height: 45px;
+        flex-direction: column;
+        flex: 1;
 
-        .rubricScoreBox {
+        .rubricTableRow {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 92px;
-          flex-grow: 0;
-          flex-shrink: 0;
-          border-left: solid 1.5px @cc-charcoal-light1;
+          border-top: solid 1.5px @cc-charcoal-light1;
+          flex: 1;
+          align-items: stretch;
 
-          .rubricButton{
+          &:first-child {
+            border: none;
+          }
+
+          .rubricDescription {
+            padding: 5px 10px;
+            font-weight: normal;
+            flex: auto;
+
+            img {
+              padding-right: 10px;
+            }
+
+            li {
+              margin-left: 20px;
+              list-style-type: disc;
+            }
+          }
+
+          .ratingsGroup{
             display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            margin: 5px;
-            cursor: pointer;
+            min-height: 45px;
 
-            &:hover .outerCircle {
-              background-color: white;
-
-              &:hover .innerCircle {
-                background-color: @feedback-green-light3B;
-              }
-            }
-            &:active .outerCircle {
-              background-color: @feedback-green;
-
-              &:active .innerCircle {
-                background-color: white;
-              }
-            }
-
-            .outerCircle {
+            .rubricScoreBox {
               display: flex;
               align-items: center;
               justify-content: center;
-              width: 20px;
-              height: 20px;
-              border-radius: 50%;
-              border: solid 1.5px @cc-charcoal-light1;
-              background-color: white;
-              cursor: pointer;
+              width: 92px;
+              flex-grow: 0;
+              flex-shrink: 0;
+              border-left: solid 1.5px @cc-charcoal-light1;
 
-              .innerCircle {
-                width: 12px;
-                height: 12px;
-                background-color: white;
-                border-radius: 50%;
+              .rubricButton{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 30px;
+                height: 30px;
+                margin: 5px;
+                cursor: pointer;
 
-                &.selected {
+                &:hover .outerCircle {
+                  background-color: white;
+
+                  &:hover .innerCircle {
+                    background-color: @feedback-green-light3B;
+                  }
+                }
+                &:active .outerCircle {
                   background-color: @feedback-green;
+
+                  &:active .innerCircle {
+                    background-color: white;
+                  }
+                }
+
+                .outerCircle {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 50%;
+                  border: solid 1.5px @cc-charcoal-light1;
+                  background-color: white;
+                  cursor: pointer;
+
+                  .innerCircle {
+                    width: 12px;
+                    height: 12px;
+                    background-color: white;
+                    border-radius: 50%;
+
+                    &.selected {
+                      background-color: @feedback-green;
+                    }
+                  }
                 }
               }
             }

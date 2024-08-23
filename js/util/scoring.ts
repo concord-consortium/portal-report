@@ -93,9 +93,15 @@ export const getCurrentScores = (feedbacks: any) => {
   }, []);
 };
 
+export const getNumCriteria = (rubric: Rubric) => {
+  return rubric.criteriaGroups.reduce((acc, cur) => {
+    return acc + cur.criteria.length;
+  }, 0);
+};
+
 export const getCompletedRubricScores = (rubric: Rubric, feedbacks: any) => {
   let scores: Map<any, any> = Map({});
-  const numCriteria = rubric.criteria.length;
+  const numCriteria = getNumCriteria(rubric);
   feedbacks.feedbacks.forEach((feedback: any) => {
     const key = feedback.get("platformStudentId");
     const rubricFeedback = feedback.get("rubricFeedback");
@@ -115,7 +121,7 @@ export const getRubricDisplayScore = (rubric: Rubric, rubricFeedback: any, maxSc
 
   if (rubricFeedback) {
     const scoredValues = Object.values(rubricFeedback).filter((v: any) => v.score > 0);
-    if (scoredValues.length === rubric.criteria.length) {
+    if (scoredValues.length === getNumCriteria(rubric)) {
       const totalScore = scoredValues.reduce((acc, cur: any) => acc + cur.score, 0);
       displayScore = String(totalScore);
     }
@@ -137,7 +143,7 @@ export const hasFeedbackGivenScoreType = (options: {scoreType: ScoreType; textFe
   let hasFilledRubric = false;
   if (rubric && rubricFeedback) {
     const scoredValues = Object.values(rubricFeedback).filter((v: any) => v.score > 0);
-    hasFilledRubric = scoredValues.length === rubric.criteria.length;
+    hasFilledRubric = scoredValues.length === getNumCriteria(rubric);
   }
 
   switch (scoreType) {

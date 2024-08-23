@@ -22,9 +22,19 @@ describe("the migrating rubric", () => {
     });
 
     describe("the current rubric json should include values for all ratings", () => {
-      const na = migrated.criteria[0].nonApplicableRatings;
+      const na = migrated.criteriaGroups[0].criteria[0].nonApplicableRatings;
       const expectedLength = rubric.ratings.length;
       expect(na.length).toEqual(expectedLength);
+    });
+  });
+
+  describe("criteriaGroups", () => {
+
+    describe("the migration should create criteria groups", () => {
+      expect(rubric.criteriaGroups).toBe(undefined);
+      expect(migrated.criteriaGroups.length).toBe(1);
+      expect(migrated.criteriaGroups[0].criteria.length).toBe(rubric.criteria.length);
+      expect(migrated.criteria).toBe(undefined);
     });
   });
 });

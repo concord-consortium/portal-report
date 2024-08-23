@@ -70,6 +70,7 @@ interface IProps {
   userName: string;
   viewMode: DashboardViewMode;
   rubric: Rubric;
+  rubricDocUrl: string;
   rubricMaxScore: number;
   isResearcher: boolean;
 }
@@ -113,7 +114,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       error, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
-      setStudentFeedbackSort, scoringSettings, rubric, rubricMaxScore, isResearcher } = this.props;
+      setStudentFeedbackSort, scoringSettings, rubric, rubricDocUrl, rubricMaxScore, isResearcher } = this.props;
     const { initialLoading, viewMode, listViewMode, feedbackLevel } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -248,6 +249,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   trackEvent={trackEvent}
                   viewMode={viewMode}
                   rubric={rubric}
+                  rubricDocUrl={rubricDocUrl}
                   feedbackLevel={feedbackLevel}
                   setFeedbackLevel={this.setFeedbackLevel}
                   scoringSettings={scoringSettings}
@@ -325,6 +327,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
   const scoredActivity = activityTrees && activityTrees.find((activity: any) => activity.get("id") === scoredActivityId);
   const initialScoringSettings = scoredActivityId && getScoringSettingsInState(state, scoredActivityId);
   const rubric = state.getIn(["feedback", "settings"]).get("rubric")?.toJS();
+  const rubricDocUrl = state.getIn(["report", "rubricDocUrl"]);
   const scoringSettings = getScoringSettings(initialScoringSettings, {
     rubric,
     hasScoredQuestions: scoredActivity ? getScoredQuestions(scoredActivity).size > 0 : false,
@@ -376,6 +379,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     userName: dataDownloaded ? state.getIn(["report", "platformUserName"]) : undefined,
     scoringSettings,
     rubric,
+    rubricDocUrl,
     rubricMaxScore: computeRubricMaxScore(rubric)
   };
 }

@@ -1,6 +1,6 @@
 import { fromJS } from "immutable";
 
-const NO_FEEDBACK = fromJS({});
+export const NO_FEEDBACK = fromJS({});
 
 // Some parts of Rubric are designed for student specifically.
 // They use common suffix appended to the properties.

@@ -15,14 +15,15 @@ export default class RubricBox extends PureComponent {
     const { rubric, rubricChange, rubricFeedback } = this.props;
     const change = {};
     const rating = rubric.ratings.find((r) => r.id === ratingId);
-    const criteria = rubric.criteria.find((c) => c.id === critId);
+    const criteria = rubric.criteriaGroups.reduce((acc, cur) => acc.concat(cur.criteria), []);
+    const criterion = criteria.find((c) => c.id === critId);
     const score = rating.score;
     const label = rating.label;
     change[critId] = {
       id: ratingId,
       score,
       label,
-      description: criteria.ratingDescriptions[ratingId],
+      description: criterion.ratingDescriptions[ratingId],
     };
     const newFeedback = Object.assign({}, rubricFeedback, change);
     rubricChange(newFeedback);
@@ -103,7 +104,8 @@ export default class RubricBox extends PureComponent {
 
     if (!rubric) { return null; }
     const linkLabel = "Scoring Guide";
-    const { ratings, criteria, referenceURL } = rubric;
+    const { ratings, criteriaGroups, referenceURL } = rubric;
+    const criteria = criteriaGroups.reduce((acc, cur) => acc.concat(cur.criteria), []);
     // learnerID indicates we are displaying a user (not a summary)
     const isSummaryView = !learnerId;
     const referenceLink = referenceURL

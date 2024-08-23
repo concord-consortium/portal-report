@@ -23,6 +23,7 @@ interface IProps {
   feedbackSortByMethod: string;
   isAnonymous: boolean;
   rubric: Rubric;
+  rubricDocUrl: string;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   students: Map<any, any>;
   updateActivityFeedback: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
@@ -33,7 +34,7 @@ interface IProps {
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
   const { activityId, activityIndex, feedbacks, feedbackSortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
-    students, trackEvent, updateActivityFeedback, scoringSettings, activity, isResearcher } = props;
+    students, trackEvent, updateActivityFeedback, scoringSettings, activity, isResearcher, rubricDocUrl } = props;
   const displayedFeedbacks = feedbackSortByMethod !== SORT_BY_FEEDBACK_PROGRESS
     ? feedbacks
     : students.map((student: any) => {
@@ -75,6 +76,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               activityId={activityId}
               activityIndex={activityIndex}
               rubric={rubric}
+              rubricDocUrl={rubricDocUrl}
               student={student}
               rubricFeedback={rubricFeedback}
               setFeedbackSortRefreshEnabled={setFeedbackSortRefreshEnabled}
