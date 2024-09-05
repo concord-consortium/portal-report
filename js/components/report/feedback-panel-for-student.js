@@ -35,12 +35,9 @@ export default class FeedbackPanelForStudent extends PureComponent {
 
   render() {
     const { textFeedback, score, rubric, rubricFeedback, hasBeenReviewed } = this.props;
+    const showRubric = rubric && rubricFeedback && !rubric.hideRubricFromStudentsInStudentReport;
 
-    if (rubric && rubric.hideRubricFromStudentsInStudentReport) {
-      return null;
-    }
-
-    const hasFeedback = textFeedback || score || rubricFeedback;
+    const hasFeedback = textFeedback || score || showRubric;
     const showFeedback = (hasFeedback && hasBeenReviewed);
 
     let feedbackDiv =
@@ -53,7 +50,7 @@ export default class FeedbackPanelForStudent extends PureComponent {
         <div className="act-feedback-panel">
           <div className="heading">Teacher Feedback:</div>
           {
-            rubric && rubricFeedback &&
+            showRubric &&
             <RubricBoxForStudent
               rubric={rubric}
               rubricFeedback={rubricFeedback}
