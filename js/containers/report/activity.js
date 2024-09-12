@@ -98,6 +98,7 @@ class Activity extends PureComponent {
               student={reportFor}
               feedbacks={feedbacks}
               showScore={showScore}
+              scoreType={scoreType}
               maxScore={maxScore}
               showText={showText}
               useRubric={useRubric}
