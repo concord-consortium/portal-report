@@ -58,6 +58,7 @@ export class RubricSummaryModal extends PureComponent<IProps> {
                 {criteriaGroup.criteria.map(criterion =>
                   <div className={tableCss.rubricTableRow} key={criterion.id} id={criterion.id}>
                     <div className={tableCss.rubricDescription}>
+                      {criterion.iconUrl && <img src={criterion.iconUrl} title={criterion.iconPhrase} />}
                       <Markdown>{criterion.description}</Markdown>
                     </div>
                     {this.renderRatings(criterion)}
