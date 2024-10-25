@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import RubricBox from "../report/rubric-box";
 import FeedbackPanelForStudent from "../report/feedback-panel-for-student";
 import SummaryIndicator from "../report/summary-indicator";
-import sampleRubric from "../../../public/sample-rubric";
+import sampleRubric from "../../../public/sample-v1-rubric";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RubricForm from "./rubric-form";
 import S3Upload from "./s3-upload";

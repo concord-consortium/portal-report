@@ -1,5 +1,5 @@
 import migrate, {LastVersion} from "../../js/core/rubric-migrations";
-import rubric from "../../public/sample-rubric";
+import rubric from "../../public/sample-v1-rubric";
 
 describe("the migrating rubric", () => {
   const originalVersion = "1.0.0";
@@ -35,6 +35,18 @@ describe("the migrating rubric", () => {
       expect(migrated.criteriaGroups.length).toBe(1);
       expect(migrated.criteriaGroups[0].criteria.length).toBe(rubric.criteria.length);
       expect(migrated.criteria).toBe(undefined);
+    });
+
+    describe("it should set the default icon prompt to the empty string", () => {
+      migrated.criteriaGroups.forEach(criteriaGroup => {
+        criteriaGroup.criteria.forEach(criteria => {
+          expect(criteria.iconPhrase).toBe("");
+        });
+      });
+    });
+
+    describe("it should set the default tag summary display to none", () => {
+      expect(migrated.tagSummaryDisplay).toBe("none");
     });
   });
 });

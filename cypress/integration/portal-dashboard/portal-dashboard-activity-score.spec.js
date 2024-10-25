@@ -22,7 +22,7 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score--']").should("exist");
       cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']")
       .should("contain", "Avg. Score:")
-      .should("contain", "0 / 6");
+      .should("contain", "0 / 12");
       cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_summary']")
       .should("contain", "Rubric Summary:")
       .should("contain", "N/A");
@@ -139,16 +139,20 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.verifyScoreDisplayedInRubricScoreHeader();
       cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']")
       .should("contain", "Avg. Score:")
-      .should("contain", "0 / 6");
+      .should("contain", "0 / 12");
       cy.get('[data-cy=rubric-summary-icon]').should("contain", "N/A");
       cy.get('[class^=rubric-summary-icon--rubricSummaryIconRows--]').should("not.exist");
       score.getActivityFeedbackScore().eq(0).find('[class*=activity-feedback-score--scoreLabel--]').should("contain", "Score");
       score.getActivityFeedbackScore().eq(0).should("contain", "N/A");
       score.selectRubricScore(1, 1, 1);
       score.selectRubricScore(1, 2, 2);
+      score.selectRubricScore(1, 3, 1);
+      score.selectRubricScore(1, 4, 2);
       score.selectRubricScore(2, 1, 2);
       score.selectRubricScore(2, 2, 1);
-      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "4.5 / 6");
+      score.selectRubricScore(2, 3, 2);
+      score.selectRubricScore(2, 4, 1);
+      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "9.5 / 12");
       cy.get('[class^=rubric-summary-icon--rubricSummaryIconRows--]').should("exist");
       cy.get('[data-cy=navigation-select]').click();
       cy.get('[data-cy="list-item-progress-dashboard"]').should('be.visible').click();
@@ -156,8 +160,8 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[data-cy="activity-score"]')
       .should("contain", "Rubric")
       .should("contain", "Score");
-      cy.get('[class*=student-answers--score--]').eq(2).should("contain", "5/6");
-      cy.get('[class*=student-answers--score--]').eq(3).should("contain", "4/6");
+      cy.get('[class*=student-answers--score--]').eq(2).should("contain", "10/12");
+      cy.get('[class*=student-answers--score--]').eq(3).should("contain", "9/12");
       cy.get('[class*=student-answers--score--]').eq(4).should("contain", "N/A");
       cy.get('[data-cy="activity-score"]').eq(0).click();
       cy.get('[data-cy=activity-level-feedback-button]').invoke("attr", "class").should("contain", "active");
@@ -206,11 +210,13 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.selectRubricScore(1, 1, 1);
       score.getRubricSummaryIcon().find('[class^=rubric-summary-icon--rubricSummaryIconRows--]').should("not.exist");
       score.selectRubricScore(1, 2, 1);
+      score.selectRubricScore(1, 3, 1);
+      score.selectRubricScore(1, 4, 1);
       score.getActivityFeedbackScore().eq(0).should("not.contain", "N/A");
       score.getRubricSummaryIcon().find('[class^=rubric-summary-icon--rubricSummaryIconRows--]').should("exist");
-      score.verifyRubricSummaryIcon("Proficient", "height: 18px; width: 100%; background-color: rgb(189, 223, 194);");
+      score.verifyRubricSummaryIcon("Proficient", "height: 12px; width: 100%; background-color: rgb(189, 223, 194);");
       score.selectRubricScore(2, 1, 2);
-      score.verifyRubricSummaryIcon("Proficient", "height: 18px; width: 100%; background-color: rgb(189, 223, 194);");
+      score.verifyRubricSummaryIcon("Proficient", "height: 12px; width: 100%; background-color: rgb(189, 223, 194);");
       score.getRubricSummaryIcon().click();
       score.getRubricSummaryDetailsDialog().should("exist");
       score.getRubricSummaryDetailsDialog().find('[data-cy=rubric-summary-modal-header]').should("contain", "Rubric Summary Details");
@@ -218,8 +224,10 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.verifyRubricSummaryDetailsDialog("Beginning", "0%");
       score.getRubricSummaryDetailsDialogCloseButton().click();
       score.selectRubricScore(2, 2, 3);
-      score.verifyRubricSummaryIcon("Proficient", "height: 18px; width: 50%; background-color: rgb(189, 223, 194);");
-      score.verifyRubricSummaryIcon("Beginning", "height: 18px; width: 50%; background-color: rgb(49, 102, 57);");
+      score.selectRubricScore(2, 3, 3);
+      score.selectRubricScore(2, 4, 3);
+      score.verifyRubricSummaryIcon("Proficient", "height: 12px; width: 50%; background-color: rgb(189, 223, 194);");
+      score.verifyRubricSummaryIcon("Beginning", "height: 12px; width: 50%; background-color: rgb(49, 102, 57);");
       score.getRubricSummaryIcon().click();
       score.getRubricSummaryDetailsDialog().should("exist");
       score.verifyRubricSummaryDetailsDialog("Proficient", "50%");
@@ -229,6 +237,8 @@ context("Portal Dashboard Anonymous Mode",() =>{
     it('verify score display in rubric summary details',()=>{
       score.selectRubricScore(1, 1, 1);
       score.selectRubricScore(1, 2, 1);
+      score.selectRubricScore(1, 3, 1);
+      score.selectRubricScore(1, 4, 1);
       score.getRubricSummaryIcon().click();
       score.getRubricSummaryDetailsDialog().should("exist");
       score.verifyScoreDisplayedInRubricSummaryDetailsDialogHeader();
@@ -320,6 +330,8 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[data-cy=item-number]').should("contain", "4");
       score.selectRubricScore(1, 1, 1);
       score.selectRubricScore(1, 2, 1);
+      score.selectRubricScore(1, 3, 1);
+      score.selectRubricScore(1, 4, 1);
       cy.get('[data-cy=feedback-badge] circle').eq(0).invoke("attr", "fill").should("contain", "#4EA15A");
       cy.get('[data-cy=item-number]').should("contain", "3");
       cy.get('[data-cy=feedback-badge] circle').eq(1).invoke("attr", "fill").should("contain", "#FFF");
@@ -333,6 +345,8 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[data-cy=item-number]').should("contain", "2");
       score.selectRubricScore(3, 1, 1);
       score.selectRubricScore(3, 2, 1);
+      score.selectRubricScore(3, 3, 1);
+      score.selectRubricScore(3, 4, 1);
       cy.get('[data-cy=feedback-badge] circle').eq(2).invoke("attr", "fill").should("contain", "#4EA15A");
       cy.get('[data-cy=item-number]').should("contain", "1");
       cy.get('[data-cy=feedback-badge] circle').eq(3).invoke("attr", "fill").should("contain", "#FFF");
@@ -348,11 +362,15 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[data-cy=item-number]').should("contain", "4");
       score.selectRubricScore(1, 1, 1);
       score.selectRubricScore(1, 2, 1);
+      score.selectRubricScore(1, 3, 1);
+      score.selectRubricScore(1, 4, 1);
       cy.get('[data-cy=feedback-badge] circle').eq(0).invoke("attr", "fill").should("contain", "#4EA15A");
       cy.get('[data-cy=item-number]').should("contain", "3");
       cy.get('[data-cy=feedback-badge] circle').eq(1).invoke("attr", "fill").should("contain", "#FFF");
       score.selectRubricScore(2, 1, 1);
       score.selectRubricScore(2, 2, 1);
+      score.selectRubricScore(2, 3, 1);
+      score.selectRubricScore(2, 4, 1);
       cy.get('[data-cy=feedback-badge] circle').eq(1).invoke("attr", "fill").should("contain", "#4EA15A");
       cy.get('[data-cy=item-number]').should("contain", "2");
       cy.get('[data-cy=feedback-settings-toggle-button]').click();
@@ -364,6 +382,8 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[data-cy=item-number]').should("contain", "4");
       score.selectRubricScore(3, 1, 1);
       score.selectRubricScore(3, 2, 1);
+      score.selectRubricScore(3, 3, 1);
+      score.selectRubricScore(3, 4, 1);
       cy.get('[data-cy=feedback-badge] circle').eq(2).invoke("attr", "fill").should("contain", "#FFF");
       cy.get('[data-cy=item-number]').should("contain", "4");
       cy.get('[data-cy=feedback-textarea]').eq(2).click().type("Feedback");
@@ -376,10 +396,12 @@ context("Portal Dashboard Anonymous Mode",() =>{
     it('verify previous activity info is not displayed in the activity level feedback',()=>{
       score.selectRubricScore(1, 1, 1);
       score.selectRubricScore(1, 2, 1);
-      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "6 / 6");
+      score.selectRubricScore(1, 3, 1);
+      score.selectRubricScore(1, 4, 1);
+      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "12 / 12");
       cy.get('[data-cy=activity-navigator-next-button] [class^=activity-navigator--icon--]').click();
       cy.get('[data-cy=activity-title]').should("contain", "Activity #2");
-      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "0 / 6");
+      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "0 / 12");
       cy.get('[data-cy=feedback-settings-toggle-button]').click();
       score.selectActivityScoreSettingsOption("Manual");
       score.getSaveButton().click();
@@ -392,7 +414,7 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.getContinueButton().click();
       cy.get('[data-cy=activity-navigator-previous-button] [class^=activity-navigator--icon--]').click();
       cy.get('[data-cy=activity-title]').should("contain", "Activity #1");
-      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "6 / 6");
+      cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "12 / 12");
       cy.get('[data-cy=feedback-settings-toggle-button]').click();
       score.selectActivityScoreSettingsOption("Manual");
       score.getSaveButton().click();

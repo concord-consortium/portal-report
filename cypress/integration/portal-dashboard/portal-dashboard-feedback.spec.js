@@ -118,7 +118,7 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=rating-radio-button] div').eq(0)
         .should('have.css', 'background-color')
         .and('eq', 'rgb(78, 161, 90)');
-        // selecting only 1 of the 2 criteria does not trigger feedback complete
+        // selecting only 1 of the 4 criteria does not trigger feedback complete
         cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
           .should('have.attr', 'fill')
           .and('not.include', '#4EA15A');
@@ -126,7 +126,10 @@ context("Portal Dashboard Feedback Panel", () => {
         cy.get('[data-cy=rating-radio-button] div').eq(2)
           .should('have.css', 'background-color')
           .and('eq', 'rgb(78, 161, 90)');
-        // selecting both criteria does trigger feedback complete
+        // select all the other feedback
+        cy.get('[data-cy=rating-radio-button]').eq(5).click();
+        cy.get('[data-cy=rating-radio-button]').eq(8).click();
+        // selecting all criteria does trigger feedback complete
         cy.get('[data-cy=feedback-badge]').eq(2).find('circle')
           .should('have.attr', 'fill')
           .and('include', '#4EA15A');
