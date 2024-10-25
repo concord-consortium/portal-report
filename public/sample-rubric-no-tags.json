@@ -1,0 +1,106 @@
+{
+    "id": "",
+    "version": "1.2.0",
+    "versionNumber": "",
+    "updatedMsUTC": 0,
+    "originUrl": "",
+    "showRatingDescriptions": false,
+    "hideRubricFromStudentsInStudentReport": false,
+    "criteriaLabel": "Aspects of Proficiency",
+    "criteriaLabelForStudent": "Your answer should",
+    "feedbackLabelForStudent": "Feedback",
+    "criteriaGroups": [
+        {
+            "label": "Group 1",
+            "labelForStudent": "",
+            "criteria": [
+                {
+                    "id": "0_C1",
+                    "description": "Make a claim, _**supported by evidence**_ that indicates that when the population of one organism changes, the pattern of impact on other organisms is based on the types of interactions between the organisms.",
+                    "descriptionForStudent": "",
+                    "nonApplicableRatings": [
+                        "R2"
+                    ],
+                    "ratingDescriptions": {
+                        "R1": "Student makes a claim _supported_ by evidence that indicates the pattern of impact on both ladybugs and aphids when the population of fire ants changes.",
+                        "R2": "Student makes a claim **supported** by evidence that indicates the pattern of impact on either ladybugs or aphids when the population of fire ants changes.",
+                        "R3": "Student makes a claim _**not supported**_ by evidence or does not make a claim that indicates the pattern of  impact on EITHER ladybugs or aphids when the population of fire ants changes."
+                    },
+                    "ratingDescriptionsForStudent": {},
+                    "iconUrl": "",
+                    "iconPhrase": ""
+                },
+                {
+                    "id": "0_C2",
+                    "description": "Provide reasoning:\n\n* by stating that interactions between organisms (i.e., competitive and predator-prey)\n\n\n* and how they are distinguished by patterns in data.",
+                    "descriptionForStudent": "Student specific C2 criteria description",
+                    "nonApplicableRatings": [],
+                    "ratingDescriptions": {
+                        "R1": "Student provides reasoning that describes  predator-prey AND mutually beneficial interactions between fire ants/ladybugs and fire ants/aphids, respectively.",
+                        "R2": "Student provides reasoning that describes predator-prey OR mutually beneficial interactions between fire ants/ladybugs and fire ants/aphids, respectively.",
+                        "R3": "Student does not provide reasoning that describes predator-prey OR mutually beneficial  interactions between fire ants/ladybugs and fire ants/aphids, respectively."
+                    },
+                    "ratingDescriptionsForStudent": {
+                        "R1": "Student Specific: R1",
+                        "R2": "Student Specific: R2",
+                        "R3": "Specific: R3"
+                    },
+                    "iconUrl": "",
+                    "iconPhrase": ""
+                }
+            ]
+        },
+        {
+            "label": "Group 2",
+            "labelForStudent": "",
+            "criteria": [
+                {
+                    "id": "1_C1",
+                    "description": "C1 Teacher Description here...",
+                    "descriptionForStudent": "",
+                    "nonApplicableRatings": [],
+                    "ratingDescriptions": {
+                        "R1": "R1 description here",
+                        "R2": "R2 description here",
+                        "R3": "R3 description here"
+                    },
+                    "ratingDescriptionsForStudent": {},
+                    "iconUrl": "",
+                    "iconPhrase": ""
+                },
+                {
+                    "id": "1_C2",
+                    "description": "C2 Teacher Description here...",
+                    "descriptionForStudent": "",
+                    "nonApplicableRatings": [],
+                    "ratingDescriptions": {
+                        "R1": "R1 description here",
+                        "R2": "R2 description here",
+                        "R3": "R3 description here"
+                    },
+                    "ratingDescriptionsForStudent": {},
+                    "iconUrl": "",
+                    "iconPhrase": ""
+                }
+            ]
+        }
+    ],
+    "ratings": [
+        {
+            "id": "R1",
+            "label": "Proficient",
+            "score": 3
+        },
+        {
+            "id": "R2",
+            "label": "Developing",
+            "score": 2
+        },
+        {
+            "id": "R3",
+            "label": "Beginning",
+            "score": 1
+        }
+    ],
+    "tagSummaryDisplay": "none"
+}

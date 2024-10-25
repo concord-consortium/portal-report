@@ -171,6 +171,8 @@ The following query params can be used during development or when debugging issu
 - `debug:rubricSummaryTableOverride` - overrides the rubric summary table option for the loaded rubric.  Possible values are:
   `none`, `above`, `below`, and `onlySummary`.  Useful for testing the placement of the summary table without having to create multiple rubrics.
 
+- `debug:rubricUrlOverride` - overrides the rubric url specified in the activity json or saved in the offering data.  This can either be one of the built-in rubrics in the `public` folder or a full url.  Example built-in rubrics include: `sample-rubric-no-tags.json`, `sample-rubric-all-dci-na.json`, and `sample-v1-rubric.json`.  Useful for testing rubric features during development.
+
 ## License
 
 [MIT](https://github.com/concord-consortium/grasp-seasons/blob/master/LICENSE)

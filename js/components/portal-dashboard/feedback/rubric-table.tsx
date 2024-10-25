@@ -2,6 +2,7 @@ import React from "react";
 import { Map } from "immutable";
 import Markdown from "markdown-to-jsx";
 import ReactTooltip from "react-tooltip";
+import classNames from "classnames";
 import LaunchIcon from "../../../../img/svg-icons/launch-icon.svg";
 import { Rubric, RubricCriterion, RubricRating, getFeedbackColor } from "./rubric-utils";
 import { ScoringSettings } from "../../../util/scoring";
@@ -36,7 +37,7 @@ export class RubricTableContainer extends React.PureComponent<IProps> {
               <div className={css.rubricTableRows}>
                 {criteriaGroup.criteria.map(criterion =>
                   <div className={css.rubricTableRow} key={criterion.id} id={criterion.id}>
-                    <div className={css.rubricDescription}>
+                    <div className={classNames(css.rubricDescription, css.separateImage)}>
                       {criterion.iconUrl && <img src={criterion.iconUrl} />}
                       <Markdown>{criterion.description}</Markdown>
                     </div>

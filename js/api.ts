@@ -8,6 +8,7 @@ import { parseUrl, validFsId, urlParam, urlHashParam } from "./util/misc";
 import { getActivityStudentFeedbackKey } from "./util/activity-feedback-helper";
 import { getFirebaseAppName, signInWithToken } from "./db";
 import migrate from "./core/rubric-migrations";
+import { rubricUrlOverride } from "./util/debug-flags";
 
 const PORTAL_AUTH_PATH = "/auth/oauth_authorize";
 let accessToken: string | null = null;
@@ -409,6 +410,9 @@ export function updateActivityFeedbacks(data: any, reportState: IStateReportPart
 const rubricUrlCache: any = {};
 
 export function fetchRubric(rubricUrl: string) {
+  // check for override
+  rubricUrl = rubricUrlOverride ?? rubricUrl;
+
   return new Promise((resolve, reject) => {
     if (!rubricUrlCache[rubricUrl]) {
       fetch(rubricUrl)
