@@ -31,7 +31,7 @@ export class RubricSummaryModal extends PureComponent<IProps> {
         </Modal.Header>
         <Modal.Body className={css.lightboxBody}>
           <div className={css.contentArea} data-cy="rubric-summary-modal-content-area">
-            {this.renderTable()}
+            {this.renderContents()}
             <div className={css.buttonContainer}>
               <div className={css.closeButton} onClick={this.handleClose} data-cy="rubric-summary-modal-close-button">
                 Close
@@ -41,6 +41,24 @@ export class RubricSummaryModal extends PureComponent<IProps> {
         </Modal.Body>
       </Modal>
     );
+  }
+
+  private renderContents() {
+    switch (this.props.rubric.tagSummaryDisplay) {
+      case "above":
+        return <>{this.renderTagSummary()}{this.renderTable()}</>;
+      case "below":
+        return <>{this.renderTable()}{this.renderTagSummary()}</>;
+      case "onlySummary":
+        return this.renderTagSummary();
+      case "none":
+      default:
+        return this.renderTable();
+    }
+  }
+
+  private renderTagSummary() {
+    return <div>TAG SUMMARY HERE</div>;
   }
 
   private renderTable() {
