@@ -1,6 +1,6 @@
 import { fromJS } from "immutable";
 import { RubricHelper } from "../../js/util/rubric-helper";
-import rubric from "../../public/sample-rubric";
+import rubric from "../../public/sample-v1-rubric";
 import feedback from "../../public/sample-rubric-feedback";
 
 describe("the rubric helper class", () => {

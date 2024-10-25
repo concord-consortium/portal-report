@@ -168,6 +168,8 @@ The following query params can be used during development or when debugging issu
 
 - `debug:disableRubric` - when set to `true` (`?debug:disableRubric=true`) the rubric defined for the offering is not loaded.  This is useful when using the baked in demo data which does have a rubric defined to develope/debug the dashboard behavior when a rubric is not defined.
 
+- `debug:rubricSummaryTableOverride` - overrides the rubric summary table option for the loaded rubric.  Possible values are:
+  `none`, `above`, `below`, and `onlySummary`.  Useful for testing the placement of the summary table without having to create multiple rubrics.
 
 ## License
 

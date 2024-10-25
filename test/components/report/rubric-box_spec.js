@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "enzyme";
 import RubricBox from "../../../js/components/report/rubric-box";
-import sampleRubric from "../../../public/sample-rubric";
+import sampleRubric from "../../../public/sample-v1-rubric";
 import migrate from "../../../js/core/rubric-migrations";
 
 const migratedRubric = migrate(sampleRubric);

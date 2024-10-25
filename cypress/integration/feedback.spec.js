@@ -1,6 +1,6 @@
 import React from "react";
 // import fakeData from "../../js/data/report.json";
-import sampleRubric from "../../public/sample-rubric";
+import sampleRubric from "../../public/sample-v1-rubric";
 import Feedback from "../support/elements/portal-report/feedback";
 import * as firebase from "firebase";
 

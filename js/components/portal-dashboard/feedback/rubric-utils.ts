@@ -12,6 +12,7 @@ export interface RubricCriterion {
   ratingDescriptions: Record<string, string>;
   ratingDescriptionsForStudent: Record<string, string>;
   iconUrl: string;
+  iconPhrase: string;
 }
 
 export interface RubricRating {
@@ -35,9 +36,13 @@ export interface RubricV110 {
   ratings: RubricRating[];
 }
 
+export const tagSummaryDisplayValues = ["none", "above", "below", "onlySummary"] as const;
+export type TagSummaryDisplay = typeof tagSummaryDisplayValues[number];
+
 export type Rubric = Omit<RubricV110, "version" | "criteria"> & {
   version: "1.2.0";
   criteriaGroups: RubricCriteriaGroup[];
+  tagSummaryDisplay: TagSummaryDisplay;
 };
 
 // Utility function to convert hex color to HSL
