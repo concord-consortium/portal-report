@@ -1,8 +1,7 @@
 import semver from "semver";
-import queryString from "query-string";
+import {rubricSummaryTableOverride} from "../util/debug-flags";
 
 function getSummaryTableOverride(currentValue) {
-  const rubricSummaryTableOverride = queryString.parse(window.location.search)['debug:rubricSummaryTableOverride'];
   return rubricSummaryTableOverride ?? currentValue;
 }
 
@@ -58,14 +57,6 @@ function createCriteriaGroups(rubric) {
   delete rubric.scoreUsingPoints;
 }
 
-function fixUndefinedIconPhrase(rubric) {
-  rubric.criteriaGroups.forEach(criteriaGroup => {
-    criteriaGroup.criteria.forEach(criteria => {
-      criteria.iconPhrase = criteria.iconPhrase ?? "";
-    });
-  });
-}
-
 const migrations = [
   { version: "1.0.0",
     migrations: [],
@@ -80,7 +71,6 @@ const migrations = [
     version: "1.2.0",
     migrations: [
       createCriteriaGroups,
-      fixUndefinedIconPhrase,
     ],
   },
 ];
@@ -112,6 +102,13 @@ export default function migrate(rubric) {
       runMigration(rubric, m);
     }
   }
+
+  // the iconPhrase was added in version 1.2.0 without a version bump
+  rubric.criteriaGroups.forEach(criteriaGroup => {
+    criteriaGroup.criteria.forEach(criteria => {
+      criteria.iconPhrase = criteria.iconPhrase ?? "";
+    });
+  });
 
   // allow the user to set the summary table option via a query parameter
   rubric.tagSummaryDisplay = getSummaryTableOverride(rubric.tagSummaryDisplay) ?? "none";
