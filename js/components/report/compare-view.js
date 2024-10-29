@@ -43,7 +43,7 @@ export default class CompareView extends PureComponent {
                 </div>
               </div>
               <div className="answer">
-                <Answer question={question} answer={a} alwaysOpen />
+                <Answer question={question} answer={a} compareView />
               </div>
             </div>,
           )}

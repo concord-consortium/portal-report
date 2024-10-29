@@ -25,7 +25,7 @@ export default class Answer extends PureComponent {
   }
 
   render() {
-    const { question, answer, alwaysOpen, answerOrientation, reportItemAnswer } = this.props;
+    const { question, answer, alwaysOpen, compareView, answerOrientation, reportItemAnswer } = this.props;
     if (typeof answer === "undefined") {
       // TODO:  This should be set, but in the case of sequences
       // it seems its not. TBD later.
@@ -42,6 +42,7 @@ export default class Answer extends PureComponent {
         <AComponent
           answer={answer}
           alwaysOpen={alwaysOpen}
+          compareView={compareView}
           question={question}
           answerOrientation={answerOrientation}
           reportItemAnswer={reportItemAnswer}
