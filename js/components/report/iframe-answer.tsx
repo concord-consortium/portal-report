@@ -28,13 +28,15 @@ interface IProps {
 
 interface IState {
   iframeVisible: boolean;
+  loadingReportItemAnswer: boolean;
 }
 
 export class IframeAnswer extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      iframeVisible: false
+      iframeVisible: false,
+      loadingReportItemAnswer: !!props.question?.get("reportItemUrl"),
     };
     this.toggleIframe = this.toggleIframe.bind(this);
     this.renderLink = this.renderLink.bind(this);
@@ -179,6 +181,9 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
         : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded, fill in the blank, and open response questions have answerTexts */
     }
 
+    // show a loading indicator while the report item answer is loading (otherwise the answer looks blank)
+    const showLoading = this.state.loadingReportItemAnswer && !reportItemAnswer;
+
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""} ${questionType === "iframe_interactive" ? "scaled" : ""}`} data-cy="iframe-answer">
         {maybeAnswerTextOrLinks && (
@@ -186,6 +191,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
             {maybeAnswerTextOrLinks}
           </div>
         )}
+        {showLoading && "Loading..."}
         {reportItemAnswerItems.map((item, index) => (
           <IframeAnswerReportItem
             key={index}
