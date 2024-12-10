@@ -11,6 +11,7 @@ import { TrackEventFunction } from "../../../actions";
 import { Rubric } from "./rubric-utils";
 import { ScoringSettings, hasFeedbackGivenScoreType } from "../../../util/scoring";
 import { ShowStudentAnswers } from "./show-student-answers";
+import ReportItemIframe from "../report-item-iframe";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -41,6 +42,17 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
       const feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
       return feedback;
     });
+
+  // pre-load all the report item iframes as a hidden iframe so the ShowStudentAnswers component
+  // has access to the report item answers when it is toggled open
+  const reportItemIframes: JSX.Element[] = (activity.get("questions") || []).reduce((acc: JSX.Element[], question: Map<any, any>) => {
+    const hasReportItemUrl = !!question?.get("reportItemUrl");
+    if (hasReportItemUrl) {
+      acc.push(<ReportItemIframe key={question.get("id")} question={question} view={"hidden"} />);
+    }
+    return acc;
+  }, []);
+
   const feedbackRows = displayedFeedbacks.map((feedbackData: Map<any, any>) => {
     const student = feedbackData.get("student");
     const studentId = student.get("id");
@@ -126,6 +138,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
 
   return (
     <div className={css.feedbackRows}>
+      {reportItemIframes}
       {feedbackRows}
     </div>
   );
