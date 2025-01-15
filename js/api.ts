@@ -380,9 +380,21 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
   // contextId is used by security rules.
   feedback.contextId = contextId;
   const path = reportQuestionFeedbacksFireStorePath(reportState.sourceKey, answerId);
-  return firebase.firestore()
-      .doc(path)
-      .set(feedback, {merge: true});
+  const docRef = firebase.firestore().doc(path);
+  return firebase.firestore().runTransaction(async (transaction) => {
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+    feedback.updatedAt = timestamp;
+    try {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) {
+        feedback.createdAt = timestamp;
+      }
+    } catch (error) {
+      console.warn("Document does not exist or read was denied.");
+      feedback.createdAt = timestamp;
+    }
+    transaction.set(docRef, feedback, { merge: true });
+  });
 }
 
 // The updateActivityFeedbacks API middleware calls out to the FireStore API.
@@ -401,9 +413,21 @@ export function updateActivityFeedbacks(data: any, reportState: IStateReportPart
   feedback.platformStudentId = platformStudentId;
   feedback.contextId = contextId;
   const path = reportActivityFeedbacksFireStorePath(reportState.sourceKey, activityStudentKey);
-  return firebase.firestore()
-      .doc(path)
-      .set(feedback, {merge: true});
+  const docRef = firebase.firestore().doc(path);
+  return firebase.firestore().runTransaction(async (transaction) => {
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+    feedback.updatedAt = timestamp;
+    try {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) {
+        feedback.createdAt = timestamp;
+      }
+    } catch (error) {
+      console.warn("Document does not exist or read was denied.");
+      feedback.createdAt = timestamp;
+    }
+    transaction.set(docRef, feedback, { merge: true });
+  });
 }
 
 // The api-middleware calls this function when we need to load rubric in from a rubricUrl.
