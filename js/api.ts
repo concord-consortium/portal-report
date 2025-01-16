@@ -377,6 +377,7 @@ export function updateQuestionFeedbacks(data: any, reportState: IStateReportPart
   feedback.questionId = answers[answerId].questionId;
   feedback.platformTeacherId = platformUserId;
   feedback.platformStudentId = answers[answerId].platformUserId;
+  feedback.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
   // contextId is used by security rules.
   feedback.contextId = contextId;
   const path = reportQuestionFeedbacksFireStorePath(reportState.sourceKey, answerId);
@@ -399,6 +400,7 @@ export function updateActivityFeedbacks(data: any, reportState: IStateReportPart
   feedback.activityId = activityId;
   feedback.platformTeacherId = platformUserId;
   feedback.platformStudentId = platformStudentId;
+  feedback.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
   feedback.contextId = contextId;
   const path = reportActivityFeedbacksFireStorePath(reportState.sourceKey, activityStudentKey);
   return firebase.firestore()
