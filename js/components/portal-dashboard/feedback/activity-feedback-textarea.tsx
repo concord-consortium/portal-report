@@ -12,10 +12,12 @@ interface IProps {
   updateActivityFeedback?: (activityId: string, activityIndex: number, platformStudentId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
   isResearcher: boolean;
+  feedbackTimestamp?: string;
 }
 
 export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, activityStarted, feedback, studentId, updateActivityFeedback, trackEvent, isResearcher } = props;
+  const { activityId, activityIndex, activityStarted, feedback, studentId, updateActivityFeedback, trackEvent,
+          isResearcher, feedbackTimestamp } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -61,6 +63,7 @@ export const ActivityFeedbackTextarea: React.FC<IProps> = (props) => {
         placeholder={isResearcher ? "" : "Enter feedback"}
         ref={textareaRef}
         style={{ height: height + "px" }}
+        title={feedbackTimestamp && `Feedback updated ${feedbackTimestamp}`}
         disabled={isResearcher}
       />
     );

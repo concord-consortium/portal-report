@@ -15,10 +15,12 @@ interface IProps {
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
   trackEvent: TrackEventFunction;
   isResearcher: boolean;
+  feedbackTimestamp?: string;
 }
 
 export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
-  const { answer, answerId, feedback, studentId, questionId, activityId, updateQuestionFeedback, trackEvent, isResearcher } = props;
+  const { answer, answerId, feedback, studentId, questionId, activityId, updateQuestionFeedback, trackEvent,
+          isResearcher, feedbackTimestamp } = props;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [ height, setHeight ] = useState(0);
@@ -68,6 +70,7 @@ export const QuestionFeedbackTextarea: React.FC<IProps> = (props) => {
       data-cy="feedback-textarea"
       onBlur={feedbackChanged ? updateFeedbackLogged : undefined}
       disabled={isResearcher}
+      title={feedbackTimestamp && `Feedback updated ${feedbackTimestamp}`}
     />
   );
 };
