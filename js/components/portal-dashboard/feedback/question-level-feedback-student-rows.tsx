@@ -49,6 +49,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const feedbackData = feedbacks.get(answerId);
     const feedback = feedbackData ? feedbackData.get("feedback") : "";
     const feedbackBadge = getFeedbackIcon(feedback, feedbackData, answer);
+    const feedbackTimestamp = feedbackData?.get("updatedAt")?.toDate().toLocaleString() || undefined;
 
     return (
       <div key={currentQuestionId + studentId} className={css.feedbackRowsRow} data-cy="feedbackRow">
@@ -77,6 +78,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               updateQuestionFeedback={updateQuestionFeedback}
               trackEvent={trackEvent}
               isResearcher={isResearcher}
+              feedbackTimestamp={feedbackTimestamp}
             />
           }
         </div>

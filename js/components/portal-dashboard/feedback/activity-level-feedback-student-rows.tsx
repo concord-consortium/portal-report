@@ -59,6 +59,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const formattedName = getFormattedStudentName(isAnonymous, student);
     const activityStarted = feedbackData.get("activityStarted");
     const feedback = feedbackData.get("feedback");
+    const feedbackTimestamp = feedbackData?.get("updatedAt")?.toDate().toLocaleString() || undefined;
     const score = feedbackData.get("score");
     const hasRubric = rubric;
     const { rubricFeedback } = feedbackData.toJS();
@@ -108,6 +109,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
               updateActivityFeedback={updateActivityFeedback}
               trackEvent={trackEvent}
               isResearcher={isResearcher}
+              feedbackTimestamp={feedbackTimestamp}
             />
             <ActivityFeedbackScore
               activityId={activityId}
