@@ -81,7 +81,10 @@ export const getSourceKey = (url: string): string => {
 };
 
 export const ensureScheme = (url: string|null) => {
-  if (!url?.startsWith("http")) {
+  if (url === null) {
+    return null;
+  }
+  if (!url.startsWith("http")) {
     return `https://${url}`;
   }
   return url;
