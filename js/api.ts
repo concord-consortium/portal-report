@@ -81,7 +81,7 @@ export const getSourceKey = (url: string): string => {
 };
 
 export const ensureScheme = (url: string|null) => {
-  if (url === null) {
+  if (url == null) {
     return null;
   }
   if (!url.startsWith("http")) {
