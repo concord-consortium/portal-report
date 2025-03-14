@@ -90,7 +90,8 @@ export const authorizeInPortal = (portalUrl: string, oauthClientName: string, st
     state
   });
   // Redirect
-  window.location.assign(portalAuth.token.getUri());
+  const redirectUri = `${window.location.protocol}//${portalAuth.token.getUri()}`;
+  window.location.assign(redirectUri);
 };
 
 // Returns true if it is redirecting
