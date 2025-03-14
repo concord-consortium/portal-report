@@ -89,8 +89,12 @@ export const authorizeInPortal = (portalUrl: string, oauthClientName: string, st
     authorizationUri: `${portalUrl}${PORTAL_AUTH_PATH}`,
     state
   });
-  // Redirect
-  window.location.assign(portalAuth.token.getUri());
+  // Redirect, and ensure it starts the the scheme
+  let redirectUri = portalAuth.token.getUri();
+  if (!redirectUri.startsWith("http")) {
+    redirectUri = `${window.location.protocol}//${redirectUri}`;
+  }
+  window.location.assign(redirectUri);
 };
 
 // Returns true if it is redirecting
