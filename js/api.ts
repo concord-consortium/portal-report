@@ -80,6 +80,13 @@ export const getSourceKey = (url: string): string => {
   return sourceKeyParam || makeSourceKey(url);
 };
 
+export const ensureScheme = (url: string|null) => {
+  if (!url?.startsWith("http")) {
+    return `https://${url}`;
+  }
+  return url;
+};
+
 // FIXME: If the user isn't logged in, and then they log in with a user that
 // isn't the student being reported on then just a blank screen is shown
 export const authorizeInPortal = (portalUrl: string, oauthClientName: string, state: string) => {
@@ -89,12 +96,7 @@ export const authorizeInPortal = (portalUrl: string, oauthClientName: string, st
     authorizationUri: `${portalUrl}${PORTAL_AUTH_PATH}`,
     state
   });
-  // Redirect, and ensure it starts the the scheme
-  let redirectUri = portalAuth.token.getUri();
-  if (!redirectUri.startsWith("http")) {
-    redirectUri = `${window.location.protocol}//${redirectUri}`;
-  }
-  window.location.assign(redirectUri);
+  window.location.assign(portalAuth.token.getUri());
 };
 
 // Returns true if it is redirecting
@@ -107,7 +109,7 @@ export const initializeAuthorization = () => {
     window.history.pushState(null, "Portal Report", savedParamString);
   }
   else {
-    const authDomain = urlParam("auth-domain");
+    const authDomain = ensureScheme(urlParam("auth-domain"));
     // Portal has to have AuthClient configured with this clientId.
     // The AuthClient has to have:
     // - redirect URLs of each branch being tested
@@ -125,7 +127,7 @@ export const initializeAuthorization = () => {
 };
 
 export const getPortalBaseUrl = () => {
-  const portalUrl = urlParam("class") || urlParam("offering");
+  const portalUrl = ensureScheme(urlParam("class") || urlParam("offering"));
   if (!portalUrl) {
     return null;
   }
@@ -158,7 +160,7 @@ export function getAuthHeader() {
 }
 
 export function fetchOfferingData() {
-  const offeringUrl = urlParam("offering");
+  const offeringUrl = ensureScheme(urlParam("offering"));
   if (offeringUrl) {
     return fetch(offeringUrl, {headers: {Authorization: getAuthHeader()}})
       .then(checkStatus)
@@ -169,7 +171,7 @@ export function fetchOfferingData() {
 }
 
 export function fetchClassData() {
-  const classInfoUrl = urlParam("class");
+  const classInfoUrl = ensureScheme(urlParam("class"));
   if (classInfoUrl) {
     return fetch(classInfoUrl, {headers: {Authorization: getAuthHeader()}})
       .then(checkStatus)
