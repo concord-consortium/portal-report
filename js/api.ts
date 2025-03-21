@@ -84,10 +84,15 @@ export const ensureScheme = (url: string|null) => {
   if (url == null) {
     return null;
   }
-  if (!url.startsWith("http")) {
-    return `https://${url}`;
+
+  url = url.trim();
+  if (url.startsWith("http")) {
+    return url;
   }
-  return url;
+
+  const scheme = /^([/]+)?localhost/.test(url) ? "http:" : "https:";
+  const doubleSlash = url.startsWith("//") ? "" : "//";
+  return `${scheme}${doubleSlash}${url}`;
 };
 
 // FIXME: If the user isn't logged in, and then they log in with a user that
