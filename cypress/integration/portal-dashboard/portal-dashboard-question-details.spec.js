@@ -6,7 +6,6 @@ context("Portal Dashboard Question Details Panel", () => {
   describe('opening and closing the question details panel', () => {
     it('verify we can click to open a question and see the question tab expanded', () => {
       cy.get('[data-cy=question-overlay-header]').should('not.exist');
-      cy.get('[data-cy=collapsed-activity-button]').first().click();
       cy.get('[data-cy=activity-question-button]').first().click();
       cy.get('[data-cy=question-overlay-header]').should('be.visible');
       cy.get('[data-cy=question-overlay]').should("contain", "Question #1");
