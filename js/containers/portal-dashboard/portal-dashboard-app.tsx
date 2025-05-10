@@ -103,9 +103,17 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   componentDidUpdate(prevProps: IProps) {
     const { initialLoading } = this.state;
-    const { isFetching } = this.props;
+    const { isFetching, sequenceTree, setCurrentActivity } = this.props;
+
     if (initialLoading && !isFetching && prevProps.isFetching) {
       this.setState({ initialLoading: false });
+
+      // Set the first activity as the current activity after initial data load.
+      const activityTrees = sequenceTree?.get("children");
+      if (activityTrees?.size > 0) {
+        const firstActivity = activityTrees.first();
+        setCurrentActivity(firstActivity.get("id"));
+      }
     }
   }
 
