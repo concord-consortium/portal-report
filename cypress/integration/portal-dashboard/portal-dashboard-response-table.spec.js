@@ -136,10 +136,12 @@ context("Feedback badges in response table", () => {
 
   it("Activity feedback badge appears in response table when there is feedback given", () => {
     cy.get("[data-cy=collapsed-activity-button]").eq(0).click();
+    cy.wait(500);
     cy.get("[data-cy=activity-feedback-badge]").should("be.visible");
   });
   it("Question feedback badge appears in response table when there is feedback given", () => {
     cy.get("[data-cy=collapsed-activity-button]").eq(0).click();
+    cy.wait(500);
     cy.get("[data-cy=question-feedback-badge]").should("be.visible");
   });
 });

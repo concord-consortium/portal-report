@@ -98,7 +98,7 @@ export const getStudentAverageProgress = createSelector(
 export const getCurrentActivity = createSelector(
   [ getActivities, getCurrentActivityId ],
   (activities, currentActivityId) => {
-    return activities.find(activity => activity.get("id") === currentActivityId) || activities.first();
+    return activities.find(activity => activity.get("id") === currentActivityId);
   }
 );
 
