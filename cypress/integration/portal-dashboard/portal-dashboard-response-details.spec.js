@@ -4,7 +4,6 @@ context("Portal Dashboard Question Details Panel", () => {
   });
   context('All Responses Header', () => {
     it('verify popup opens from question overlay', () => {
-      cy.get('[data-cy=collapsed-activity-button]').first().click();
       cy.get('[data-cy=activity-question-button]').first().click();
       cy.get('[data-cy=question-overlay-header]').should('be.visible');
       cy.get('[data-cy=view-all-student-responses-button]').should('be.visible').click();
@@ -88,7 +87,6 @@ context("Portal Dashboard Question Details Panel", () => {
     before( function() {
       // Start from a known location
       cy.visit("/?portal-dashboard");
-      cy.get('[data-cy=collapsed-activity-button]').first().click();
       cy.get('[data-cy=activity-question-button]').eq(3).click();
       cy.get('[data-cy=question-overlay] [data-cy=question-overlay-title]').invoke('text').as('questionOverlayTitle');
       cy.get('[data-cy=question-overlay] [data-cy=question-title]').invoke('text').as('questionTitle');
@@ -118,7 +116,7 @@ context("Portal Dashboard Question Details Panel", () => {
       before( function() {
         // Start from a known location
         cy.visit("/?portal-dashboard");
-        cy.get('[data-cy=collapsed-activity-button]').eq(1).click();
+        cy.get('[data-cy=collapsed-activity-button]').first().click();
         // open sidebar focused on the first question
         cy.get('[data-cy=activity-question-button]').first().click();
         // go into response details
@@ -138,7 +136,6 @@ context("Portal Dashboard Question Details Panel", () => {
     before( function() {
       // Start from a known location
       cy.visit("/?portal-dashboard");
-      cy.get('[data-cy=collapsed-activity-button]').first().click();
       // open sidebar focused on the 4th question
       cy.get('[data-cy=activity-question-button]').eq(3).click();
       // go into response details

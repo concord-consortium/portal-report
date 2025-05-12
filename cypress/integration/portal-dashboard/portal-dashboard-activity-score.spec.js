@@ -65,7 +65,6 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.verifyScoreNotDisplayedInRubricScoreHeader();
       cy.get('[data-cy=navigation-select]').click();
       cy.get('[data-cy="list-item-progress-dashboard"]').should('be.visible').click();
-      cy.get('[data-cy="collapsed-activity-button"]').find('[class^=level-viewer--activityInnerButton--]').eq(0).click();
       cy.get('[data-cy="activity-score"]')
       .should("contain", "No")
       .should("contain", "Score");
@@ -109,7 +108,6 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get("[class^='feedback-legend--feedbackBadgeLegend__rubric_score_avg--']").should("contain", "7.5 / 10");
       cy.get('[data-cy=navigation-select]').click();
       cy.get('[data-cy="list-item-progress-dashboard"]').should('be.visible').click();
-      cy.get('[data-cy="collapsed-activity-button"]').find('[class^=level-viewer--activityInnerButton--]').eq(0).click();
       cy.get('[data-cy="activity-score"]')
       .should("contain", "Manual")
       .should("contain", "Score");
@@ -156,7 +154,6 @@ context("Portal Dashboard Anonymous Mode",() =>{
       cy.get('[class^=rubric-summary-icon--rubricSummaryIconRows--]').should("exist");
       cy.get('[data-cy=navigation-select]').click();
       cy.get('[data-cy="list-item-progress-dashboard"]').should('be.visible').click();
-      cy.get('[data-cy="collapsed-activity-button"]').find('[class^=level-viewer--activityInnerButton--]').eq(0).click();
       cy.get('[data-cy="activity-score"]')
       .should("contain", "Rubric")
       .should("contain", "Score");
@@ -187,7 +184,6 @@ context("Portal Dashboard Anonymous Mode",() =>{
       score.verifyScoreNotDisplayedInRubricScoreHeader();
       cy.get('[data-cy=navigation-select]').click();
       cy.get('[data-cy="list-item-progress-dashboard"]').should('be.visible').click();
-      cy.get('[data-cy="collapsed-activity-button"]').find('[class^=level-viewer--activityInnerButton--]').eq(0).click();
       cy.get('[data-cy="activity-score"]')
       .should("contain", "MC Qs")
       .should("contain", "Score");

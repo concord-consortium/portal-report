@@ -5,8 +5,6 @@ context("Portal Dashboard Content Scrolling",() =>{
 
   it('verify we scroll and display proper content',()=>{
     cy.viewport(750, 750);
-    cy.get('[data-cy=collapsed-activity-button]').first().click();
-    cy.wait(1000);
 
     cy.get('[data-cy=progress-table]').scrollTo('right');
 
