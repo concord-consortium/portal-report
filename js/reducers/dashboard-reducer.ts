@@ -8,12 +8,19 @@ import {
   SELECT_QUESTION,
   SORT_BY_MOST_PROGRESS,
   SORT_BY_LEAST_PROGRESS,
-  SORT_BY_FEEDBACK_NAME,
   SORT_BY_FEEDBACK_PROGRESS,
 } from "../actions/dashboard";
 
-type SortType = typeof SORT_BY_NAME | typeof SORT_BY_MOST_PROGRESS | typeof SORT_BY_LEAST_PROGRESS;
-type FeedbackSortType = typeof SORT_BY_FEEDBACK_NAME | typeof SORT_BY_FEEDBACK_PROGRESS;
+export type SortOption = typeof SORT_BY_NAME
+  | typeof SORT_BY_MOST_PROGRESS
+  | typeof SORT_BY_LEAST_PROGRESS
+  | typeof SORT_BY_FEEDBACK_PROGRESS;
+
+export const SORT_OPTIONS_CONFIG = {
+  default: [SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS],
+  feedback: [SORT_BY_NAME, SORT_BY_FEEDBACK_PROGRESS, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS],
+  question: [SORT_BY_NAME]
+} as const;
 
 export interface IDashboardState {
   // Old dashboard props
@@ -22,13 +29,12 @@ export interface IDashboardState {
   expandedQuestions: Map<any, any>;
   selectedQuestion: Map<any, any> | null;
   // New/common dashboard props
-  sortBy: SortType;
+  sortBy: SortOption;
   currentActivityId: string | null;
   currentQuestionId: string | null;
   currentStudentId: string | null;
   compactReport: boolean;
   hideFeedbackBadges: boolean;
-  feedbackSortBy: FeedbackSortType;
   feedbackSortRefreshEnabled: boolean;
 }
 
@@ -43,7 +49,6 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   currentStudentId: null,
   compactReport: false,
   hideFeedbackBadges: false,
-  feedbackSortBy: SORT_BY_FEEDBACK_NAME,
   feedbackSortRefreshEnabled: false,
 });
 
@@ -51,7 +56,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   constructor(config: Partial<IDashboardState>) {
     super(config);
   }
-  sortBy: SortType;
+  sortBy: SortOption;
   expandedActivities: Map<any, any>;
   expandedStudents: Map<any, any>;
   expandedQuestions: Map<any, any>;
@@ -61,7 +66,6 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   currentStudentId: string | null;
   compactReport: boolean;
   hideFeedbackBadges: boolean;
-  feedbackSortBy: FeedbackSortType;
   feedbackSortRefreshEnabled: boolean;
 }
 
@@ -81,7 +85,7 @@ export default function dashboard(state = new DashboardState({}), action: any) {
     case SET_STUDENT_SORT:
       return state.set("sortBy", action.value);
     case SET_STUDENT_FEEDBACK_SORT:
-      return state.set("feedbackSortBy", action.value);
+      return state.set("sortBy", action.value);
     case SELECT_QUESTION:
       return state.set("selectedQuestion", action.value);
     case SET_CURRENT_ACTIVITY:

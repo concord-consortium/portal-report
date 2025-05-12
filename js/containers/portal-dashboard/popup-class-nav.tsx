@@ -2,13 +2,14 @@ import React from "react";
 import { Map } from "immutable";
 import { connect } from "react-redux";
 import { AnonymizeStudents } from "../../components/portal-dashboard/anonymize-students";
-import { CustomSelect, SelectItem } from "../../components/portal-dashboard/custom-select";
+import { CustomSelect } from "../../components/portal-dashboard/custom-select";
 import { DashboardViewMode, FeedbackLevel, ListViewMode } from "../../util/misc";
 import { makeGetStudentFeedbacks } from "../../selectors/activity-feedback-selectors";
 import { getfeedbackSortRefreshEnabled } from "../../selectors/dashboard-selectors";
 import { CountContainer } from "../../components/portal-dashboard/count-container";
-import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK_NAME,
-         SORT_BY_FEEDBACK_PROGRESS, setFeedbackSortRefreshEnabled } from "../../actions/dashboard";
+import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS, SORT_BY_FEEDBACK_PROGRESS,
+         setFeedbackSortRefreshEnabled, setStudentFeedbackSort, setStudentSort } from "../../actions/dashboard";
+import { SortOption, SORT_OPTIONS_CONFIG } from "../../reducers/dashboard-reducer";
 import SortIcon from "../../../img/svg-icons/sort-icon.svg";
 import StudentViewIcon from "../../../img/svg-icons/student-view-icon.svg";
 import QuestionViewIcon from "../../../img/svg-icons/question-view-icon.svg";
@@ -25,7 +26,7 @@ interface IProps {
   answers: Map<any, any>;
   currentQuestion: Map<any, any> | undefined;
   feedbackLevel: FeedbackLevel;
-  feedbackSortByMethod: string;
+  sortByMethod: SortOption;
   feedbackSortRefreshEnabled: boolean;
   activityFeedbacks: Map<any, any>;
   questionFeedbacks: Map<any, any>;
@@ -39,9 +40,8 @@ interface IProps {
   setAnonymous: (value: boolean) => void;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   setListViewMode: (value: ListViewMode) => void;
-  setStudentFeedbackSort: (value: string) => void;
-  setStudentSort: (value: string) => void;
-  sortByMethod: string;
+  setStudentSort: (value: SortOption) => void;
+  setStudentFeedbackSort: (value: SortOption) => void;
   studentCount: number;
   trackEvent: TrackEventFunction;
   viewMode: DashboardViewMode;
@@ -55,7 +55,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
   }
 
   render() {
-    const { anonymous, feedbackSortByMethod, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous,
+    const { anonymous, sortByMethod, listViewMode, numFeedbacksNeedingReview, questionCount, studentCount, setAnonymous,
             viewMode, isResearcher } = this.props;
     const numItems = viewMode === "FeedbackReport"
                      ? numFeedbacksNeedingReview
@@ -72,36 +72,66 @@ class PopupClassNav extends React.PureComponent<IProps>{
           <CountContainer numItems={numItems} containerLabel={containerLabel} containerLabelType={containerLabelType} />
           {this.renderSortMenu()}
           {listViewMode === "Student" && viewMode === "ResponseDetails" && this.renderSpotlightToggle()}
-          {viewMode === "FeedbackReport" && listViewMode === "Student" && feedbackSortByMethod === SORT_BY_FEEDBACK_PROGRESS &&
+          {viewMode === "FeedbackReport" && listViewMode === "Student" && sortByMethod === SORT_BY_FEEDBACK_PROGRESS &&
            this.renderRefreshButton()}
         </div>
       </div>
     );
   }
 
-  private handleStudentSortSelect = (value: string) => () => {
-    const { setStudentSort } = this.props;
-    setStudentSort(value);
-    this.props.trackEvent("Portal-Dashboard", "StudentSortDropdownChange", {label: value});
+  private sortLabel = (value: SortOption): string => {
+    switch (value) {
+      case SORT_BY_NAME:
+        return "Student Name";
+      case SORT_BY_MOST_PROGRESS:
+        return "Most Progress";
+      case SORT_BY_LEAST_PROGRESS:
+        return "Least Progress";
+      case SORT_BY_FEEDBACK_PROGRESS:
+        return "Awaiting Feedback";
+      default:
+        return value;
+    }
   }
 
-  private handleStudentFeedbackSortSelect = (value: string) => () => {
-    const { setStudentFeedbackSort } = this.props;
-    this.updateFeedbackSortIgnoreFlag();
-    this.props.setFeedbackSortRefreshEnabled(false);
-    setStudentFeedbackSort(value);
-    this.props.trackEvent("Portal-Dashboard", "StudentFeedbackSortDropdownChange", {label: value});
+  private handleSortSelect = (value: SortOption) => () => {
+    const { setFeedbackSortRefreshEnabled, setStudentSort, setStudentFeedbackSort, trackEvent, viewMode } = this.props;
+    let eventLabel = "StudentSortDropdownChange";
+
+    if (viewMode === "FeedbackReport") {
+      this.updateFeedbackSortIgnoreFlag();
+      setFeedbackSortRefreshEnabled(false);
+      eventLabel = "StudentFeedbackSortDropdownChange";
+      setStudentFeedbackSort(value);
+    } else {
+      setStudentSort(value);
+    }
+    trackEvent("Portal-Dashboard", eventLabel, {label: value});
   }
 
   private renderSortMenu = () => {
-    const { viewMode, listViewMode } = this.props;
+    const { listViewMode, sortByMethod, trackEvent, viewMode } = this.props;
+    const sortOptions = SORT_OPTIONS_CONFIG[viewMode === "FeedbackReport" ? "feedback" : listViewMode === "Question" ? "question" : "default"];
+
     if (listViewMode === "Question") {
       return this.renderQuestionFilter();
     }
-    if (viewMode === "FeedbackReport") {
-      return this.renderFeedbackFilter();
-    }
-    return this.renderStudentFilter();
+
+    return (
+      <div className={cssClassNav.itemSort}>
+        <CustomSelect
+          items={sortOptions.map(option => ({
+            value: option,
+            label: this.sortLabel(option),
+            onSelect: this.handleSortSelect(option)
+          }))}
+          value={sortByMethod}
+          trackEvent={trackEvent}
+          HeaderIcon={SortIcon}
+          dataCy={`sort-${viewMode.toLowerCase()}`}
+          />
+      </div>
+    );
   }
 
   private renderQuestionFilter = () => {
@@ -120,47 +150,47 @@ class PopupClassNav extends React.PureComponent<IProps>{
     );
   }
 
-  private renderStudentFilter = () => {
-    const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name",
-                                   onSelect: this.handleStudentSortSelect(SORT_BY_NAME) },
-                                 { value: SORT_BY_MOST_PROGRESS, label: "Most Progress",
-                                   onSelect: this.handleStudentSortSelect(SORT_BY_MOST_PROGRESS) },
-                                 { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress",
-                                   onSelect: this.handleStudentSortSelect(SORT_BY_LEAST_PROGRESS) }];
-    const { sortByMethod, trackEvent } = this.props;
-    return (
-      <div className={cssClassNav.itemSort}>
-        <CustomSelect
-          dataCy={"sort-students"}
-          HeaderIcon={SortIcon}
-          items={items}
-          trackEvent={trackEvent}
-          value={sortByMethod}
-          key={"student-sort"}
-        />
-      </div>
-    );
-  }
+  // private renderStudentFilter = () => {
+  //   const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name",
+  //                                  onSelect: this.handleStudentSortSelect(SORT_BY_NAME) },
+  //                                { value: SORT_BY_MOST_PROGRESS, label: "Most Progress",
+  //                                  onSelect: this.handleStudentSortSelect(SORT_BY_MOST_PROGRESS) },
+  //                                { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress",
+  //                                  onSelect: this.handleStudentSortSelect(SORT_BY_LEAST_PROGRESS) }];
+  //   const { sortByMethod, trackEvent } = this.props;
+  //   return (
+  //     <div className={cssClassNav.itemSort}>
+  //       <CustomSelect
+  //         dataCy={"sort-students"}
+  //         HeaderIcon={SortIcon}
+  //         items={items}
+  //         trackEvent={trackEvent}
+  //         value={sortByMethod}
+  //         key={"student-sort"}
+  //       />
+  //     </div>
+  //   );
+  // }
 
-  private renderFeedbackFilter = () => {
-    const items: SelectItem[] = [{ value: SORT_BY_FEEDBACK_NAME, label: "Student Name",
-                                   onSelect: this.handleStudentFeedbackSortSelect(SORT_BY_FEEDBACK_NAME) },
-                                 { value: SORT_BY_FEEDBACK_PROGRESS, label: "Awaiting Feedback",
-                                   onSelect: this.handleStudentFeedbackSortSelect(SORT_BY_FEEDBACK_PROGRESS) }];
-    const { feedbackSortByMethod, trackEvent } = this.props;
-    return (
-      <div className={cssClassNav.itemSort}>
-        <CustomSelect
-          dataCy={"sort-feedback"}
-          HeaderIcon={SortIcon}
-          items={items}
-          trackEvent={trackEvent}
-          value={feedbackSortByMethod}
-          key={"feedback-sort"}
-        />
-      </div>
-    );
-  }
+  // private renderFeedbackFilter = () => {
+  //   const items: SelectItem[] = [{ value: SORT_BY_FEEDBACK_NAME, label: "Student Name",
+  //                                  onSelect: this.handleStudentFeedbackSortSelect(SORT_BY_FEEDBACK_NAME) },
+  //                                { value: SORT_BY_FEEDBACK_PROGRESS, label: "Awaiting Feedback",
+  //                                  onSelect: this.handleStudentFeedbackSortSelect(SORT_BY_FEEDBACK_PROGRESS) }];
+  //   const { feedbackSortByMethod, trackEvent } = this.props;
+  //   return (
+  //     <div className={cssClassNav.itemSort}>
+  //       <CustomSelect
+  //         dataCy={"sort-feedback"}
+  //         HeaderIcon={SortIcon}
+  //         items={items}
+  //         trackEvent={trackEvent}
+  //         value={feedbackSortByMethod}
+  //         key={"feedback-sort"}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   private renderViewListOptions() {
     const { feedbackLevel, listViewMode, setListViewMode, viewMode, setFeedbackLevel } = this.props;
@@ -201,7 +231,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
     );
   }
 
-  private handleRefeshSelect = () => {
+  private handleRefreshSelect = () => {
     this.updateFeedbackSortIgnoreFlag();
     this.props.setFeedbackSortRefreshEnabled(false);
   }
@@ -230,7 +260,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
     return (
       <div
         className={`${css.refreshSortContainer} ${!feedbackSortRefreshEnabled ? css.disabled : ""}`}
-        onClick={this.handleRefeshSelect}
+        onClick={this.handleRefreshSelect}
       >
         <button className={css.refreshButton}>
           <RefreshIcon className={css.refreshIcon}/>
@@ -242,7 +272,7 @@ class PopupClassNav extends React.PureComponent<IProps>{
 
 }
 
-function mapStateToProps(state: any, ownProps?: any) {
+function mapStateToProps() {
   return (state: any, ownProps: any) => {
     const { answers, currentQuestion, feedbackLevel } = ownProps;
     if (feedbackLevel === "Question") {
@@ -288,6 +318,8 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     setFeedbackSortRefreshEnabled: (value) => dispatch(setFeedbackSortRefreshEnabled(value)),
     updateActivityFeedback: (activityId, activityIndex, platformStudentId, feedback) => dispatch(updateActivityFeedback(activityId, activityIndex, platformStudentId, feedback)),
     updateQuestionFeedback: (answerId, feedback) => dispatch(updateQuestionFeedback(answerId, feedback)),
+    setStudentFeedbackSort: (value) => dispatch(setStudentFeedbackSort(value)),
+    setStudentSort: (value) => dispatch(setStudentSort(value)),
   };
 };
 

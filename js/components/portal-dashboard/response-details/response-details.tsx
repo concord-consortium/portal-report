@@ -16,6 +16,7 @@ import { TrackEventFunction } from "../../../actions";
 import { PopupQuestionAnswerList } from "./popup-question-answer-list";
 import { Rubric } from "../feedback/rubric-utils";
 import { ScoringSettings } from "../../../util/scoring";
+import { SortOption } from "../../../reducers/dashboard-reducer";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -31,7 +32,6 @@ interface IProps {
   currentActivity?: Map<string, any>;
   currentQuestion?: Map<string, any>;
   currentStudentId: string | null;
-  feedbackSortByMethod: string;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
   listViewMode: ListViewMode;
@@ -41,9 +41,9 @@ interface IProps {
   setCurrentQuestion: (questionId: string) => void;
   setCurrentStudent: (studentId: string | null) => void;
   setListViewMode: (mode: ListViewMode) => void;
-  setStudentFeebackFilter: (value: string) => void;
+  setStudentFeedbackSort: (value: string) => void;
   setStudentFilter: (value: string) => void;
-  sortByMethod: string;
+  sortByMethod: SortOption;
   sortedQuestionIds?: string[];
   studentCount: number;
   students: any;
@@ -77,7 +77,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackSortByMethod, setStudentFeebackFilter, feedbackLevel, scoringSettings, setFeedbackLevel, rubric, rubricDocUrl, isResearcher } = this.props;
+      feedbackLevel, scoringSettings, setFeedbackLevel, rubric, rubricDocUrl, isResearcher } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
@@ -105,14 +105,12 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             answers={answers}
             currentQuestion={currentQuestion || firstQuestion}
             feedbackLevel={feedbackLevel}
-            feedbackSortByMethod={feedbackSortByMethod}
             isSpotlightOn={selectedStudents.length > 0}
             listViewMode={listViewMode}
             onShowDialog={selectedStudents.length > 0 ? this.setShowSpotlightListDialog : this.setShowSpotlightDialog}
             questionCount={qCount}
             setAnonymous={setAnonymous}
             setListViewMode={setListViewMode}
-            setStudentFeedbackSort={setStudentFeebackFilter}
             setStudentSort={setStudentFilter}
             sortByMethod={sortByMethod}
             studentCount={studentCount}
@@ -206,7 +204,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   activity={currentActivityWithQuestions}
                   activities={activities}
                   currentStudentId={currentStudentId}
-                  feedbackSortByMethod={feedbackSortByMethod}
+                  sortByMethod={sortByMethod}
                   isAnonymous={isAnonymous}
                   listViewMode={listViewMode}
                   scoringSettings={scoringSettings}
