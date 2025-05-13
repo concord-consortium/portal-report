@@ -150,48 +150,6 @@ class PopupClassNav extends React.PureComponent<IProps>{
     );
   }
 
-  // private renderStudentFilter = () => {
-  //   const items: SelectItem[] = [{ value: SORT_BY_NAME, label: "Student Name",
-  //                                  onSelect: this.handleStudentSortSelect(SORT_BY_NAME) },
-  //                                { value: SORT_BY_MOST_PROGRESS, label: "Most Progress",
-  //                                  onSelect: this.handleStudentSortSelect(SORT_BY_MOST_PROGRESS) },
-  //                                { value: SORT_BY_LEAST_PROGRESS, label: "Least Progress",
-  //                                  onSelect: this.handleStudentSortSelect(SORT_BY_LEAST_PROGRESS) }];
-  //   const { sortByMethod, trackEvent } = this.props;
-  //   return (
-  //     <div className={cssClassNav.itemSort}>
-  //       <CustomSelect
-  //         dataCy={"sort-students"}
-  //         HeaderIcon={SortIcon}
-  //         items={items}
-  //         trackEvent={trackEvent}
-  //         value={sortByMethod}
-  //         key={"student-sort"}
-  //       />
-  //     </div>
-  //   );
-  // }
-
-  // private renderFeedbackFilter = () => {
-  //   const items: SelectItem[] = [{ value: SORT_BY_FEEDBACK_NAME, label: "Student Name",
-  //                                  onSelect: this.handleStudentFeedbackSortSelect(SORT_BY_FEEDBACK_NAME) },
-  //                                { value: SORT_BY_FEEDBACK_PROGRESS, label: "Awaiting Feedback",
-  //                                  onSelect: this.handleStudentFeedbackSortSelect(SORT_BY_FEEDBACK_PROGRESS) }];
-  //   const { feedbackSortByMethod, trackEvent } = this.props;
-  //   return (
-  //     <div className={cssClassNav.itemSort}>
-  //       <CustomSelect
-  //         dataCy={"sort-feedback"}
-  //         HeaderIcon={SortIcon}
-  //         items={items}
-  //         trackEvent={trackEvent}
-  //         value={feedbackSortByMethod}
-  //         key={"feedback-sort"}
-  //       />
-  //     </div>
-  //   );
-  // }
-
   private renderViewListOptions() {
     const { feedbackLevel, listViewMode, setListViewMode, viewMode, setFeedbackLevel } = this.props;
     const listByStudentClasses = `${css.toggle} ${css.listByStudents} ${listViewMode==="Student" ? css.selected : ""}`;
