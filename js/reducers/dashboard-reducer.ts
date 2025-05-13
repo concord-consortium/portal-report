@@ -83,9 +83,11 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       });
       return state;
     case SET_STUDENT_SORT:
-      return state.set("sortBy", action.value);
+      const validSort = SORT_OPTIONS_CONFIG.default.indexOf(action.value) !== -1 ? action.value : SORT_BY_NAME;
+      return state.set("sortBy", validSort);
     case SET_STUDENT_FEEDBACK_SORT:
-      return state.set("sortBy", action.value);
+     const validFeedbackSort = SORT_OPTIONS_CONFIG.feedback.indexOf(action.value) !== -1 ? action.value : SORT_BY_NAME;
+      return state.set("sortBy", validFeedbackSort);
     case SELECT_QUESTION:
       return state.set("selectedQuestion", action.value);
     case SET_CURRENT_ACTIVITY:
