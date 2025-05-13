@@ -16,7 +16,7 @@ export type SortOption = typeof SORT_BY_NAME
   | typeof SORT_BY_LEAST_PROGRESS
   | typeof SORT_BY_FEEDBACK_PROGRESS;
 
-export const SORT_OPTIONS_CONFIG = {
+export const SORT_OPTIONS_CONFIG: Record<"default" | "question" | "feedback", ReadonlyArray<SortOption>> = {
   default: [SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS],
   feedback: [SORT_BY_NAME, SORT_BY_FEEDBACK_PROGRESS, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS],
   question: [SORT_BY_NAME]
