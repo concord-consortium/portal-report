@@ -3,7 +3,7 @@ import { Map, List } from "immutable";
 import { connect } from "react-redux";
 import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateQuestionFeedback, updateQuestionFeedbackSettings } from "../../../actions/index";
 import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
-import { getQuestionFeedbackSortedStudents } from "../../../selectors/dashboard-selectors";
+import { getSortedStudents } from "../../../selectors/dashboard-selectors";
 import { QuestionLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/question-level-feedback-student-rows";
 import { FeedbackQuestionRows } from "../../../components/portal-dashboard/feedback/feedback-question-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
@@ -97,7 +97,7 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
 
 function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
   return {
-    questionFeedbackStudents: getQuestionFeedbackSortedStudents(state),
+    questionFeedbackStudents: getSortedStudents(state),
     questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
     settings: state.getIn(["feedback", "settings"])
   };

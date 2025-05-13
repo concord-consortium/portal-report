@@ -12,6 +12,7 @@ import { Rubric } from "./rubric-utils";
 import { ScoringSettings, hasFeedbackGivenScoreType } from "../../../util/scoring";
 import { ShowStudentAnswers } from "./show-student-answers";
 import ReportItemIframe from "../report-item-iframe";
+import { SortOption } from "../../../reducers/dashboard-reducer";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
 
@@ -21,7 +22,7 @@ interface IProps {
   activityIndex: number;
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
-  feedbackSortByMethod: string;
+  sortByMethod: SortOption;
   isAnonymous: boolean;
   rubric: Rubric;
   rubricDocUrl: string;
@@ -34,9 +35,9 @@ interface IProps {
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, feedbackSortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
+  const { activityId, activityIndex, feedbacks, sortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
     students, trackEvent, updateActivityFeedback, scoringSettings, activity, isResearcher, rubricDocUrl } = props;
-  const displayedFeedbacks = feedbackSortByMethod !== SORT_BY_FEEDBACK_PROGRESS
+  const displayedFeedbacks = sortByMethod !== SORT_BY_FEEDBACK_PROGRESS
     ? feedbacks
     : students.map((student: any) => {
       const feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
@@ -53,10 +54,10 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     return acc;
   }, []);
 
-  const feedbackRows = displayedFeedbacks.map((feedbackData: Map<any, any>) => {
-    const student = feedbackData.get("student");
+  const feedbackRows = students.map((student: Map<any, any>) => {
     const studentId = student.get("id");
     const formattedName = getFormattedStudentName(isAnonymous, student);
+    const feedbackData = displayedFeedbacks.find((f) => f.get("platformStudentId") === studentId);
     const activityStarted = feedbackData.get("activityStarted");
     const feedback = feedbackData.get("feedback");
     const feedbackTimestamp = feedbackData?.get("updatedAt")?.toDate().toLocaleString() || undefined;

@@ -4,11 +4,19 @@ import { connect } from "react-redux";
 import { trackEvent, TrackEventCategory, TrackEventFunction, TrackEventFunctionOptions, updateActivityFeedback, updateActivityFeedbackSettings } from "../../../actions/index";
 import { makeGetStudentFeedbacks, makeGetAutoScores, makeGetComputedMaxScore } from "../../../selectors/activity-feedback-selectors";
 import { setFeedbackSortRefreshEnabled } from "../../../actions/dashboard";
-import { getActivityFeedbackSortedStudents } from "../../../selectors/dashboard-selectors";
+import {
+  getDashboardSortBy,
+  getSortedStudents,
+  getStudentProgress,
+  getCurrentActivity,
+  getFirstActivity,
+  getCompactReport,
+} from "../../../selectors/dashboard-selectors";
 import { ActivityLevelFeedbackStudentRows } from "../../../components/portal-dashboard/feedback/activity-level-feedback-student-rows";
 import { FeedbackLevel, ListViewMode } from "../../../util/misc";
 import { Rubric } from "../../../components/portal-dashboard/feedback/rubric-utils";
 import { ScoringSettings } from "../../../util/scoring";
+import { SortOption } from "../../../reducers/dashboard-reducer";
 
 interface IProps {
   activity: Map<any, any>;
@@ -19,7 +27,7 @@ interface IProps {
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
   feedbacksNotAnswered: number;
-  feedbackSortByMethod: string;
+  sortByMethod: SortOption;
   isAnonymous: boolean;
   listViewMode: ListViewMode;
   numFeedbacksGivenReview: number;
@@ -35,6 +43,14 @@ interface IProps {
   updateActivityFeedbackSettings: (activityId: string, activityIndex: number, feedbackFlags: any) => void;
   trackEvent: TrackEventFunction;
   isResearcher: boolean;
+  students: any;
+  sortBy: any;
+  sortedStudents: any;
+  studentProgress: any;
+  currentActivity: any;
+  firstActivity: any;
+  feedback: any;
+  compactReport: any;
 }
 
 class ActivityFeedbackPanel extends React.PureComponent<IProps> {
@@ -53,7 +69,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, feedbackSortByMethod, isAnonymous, rubric,
+    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, sortByMethod, isAnonymous, rubric,
             updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings, isResearcher, rubricDocUrl } = this.props;
     const currentActivityId = activity?.get("id");
 
@@ -65,7 +81,7 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           activityIndex={activityIndex}
           feedbacks={feedbacks}
           feedbacksNeedingReview={feedbacksNeedingReview}
-          feedbackSortByMethod={feedbackSortByMethod}
+          sortByMethod={sortByMethod}
           isAnonymous={isAnonymous}
           rubric={rubric}
           rubricDocUrl={rubricDocUrl}
@@ -91,32 +107,46 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 }
 
-function mapStateToProps() {
-  return (state: any, ownProps: any) => {
-    const getFeedbacks: any = makeGetStudentFeedbacks();
-    const getMaxScore: any = makeGetComputedMaxScore();
-    const getAutoscores: any = makeGetAutoScores();
-    const {
-      feedbacks,
-      feedbacksNeedingReview,
-      numFeedbacksNeedingReview,
-      feedbacksNotAnswered,
-    } = getFeedbacks(state, ownProps);
-    const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - feedbacksNotAnswered.size;
-    const computedMaxScore = getMaxScore(state, ownProps);
-    const autoScores = getAutoscores(state, ownProps);
-    const rubric = state.getIn(["feedback", "settings", "rubric"]);
-    return {
-      activityFeedbackStudents: getActivityFeedbackSortedStudents(state),
-      feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
-      feedbacksNotAnswered, computedMaxScore, autoScores,
-      settings: state.getIn(["feedback", "settings"]),
-      rubric: rubric && rubric.toJS(),
-      rubricDocUrl: state.getIn(["report", "rubricDocUrl"]),
-      activityIndex: ownProps.activity.get("activityIndex"),
-    };
+const mapStateToProps = (state: any, ownProps: any) => {
+  const sortBy = getDashboardSortBy(state);
+  const sortedStudents = getSortedStudents(state);
+  const studentProgress = getStudentProgress(state);
+  const currentActivity = getCurrentActivity(state);
+  const firstActivity = getFirstActivity(state);
+  const feedback = state.getIn(["feedback"]);
+  const compactReport = getCompactReport(state);
+
+  const getFeedbacks: any = makeGetStudentFeedbacks();
+  const getMaxScore: any = makeGetComputedMaxScore();
+  const getAutoscores: any = makeGetAutoScores();
+  const {
+    feedbacks,
+    feedbacksNeedingReview,
+    numFeedbacksNeedingReview,
+    feedbacksNotAnswered,
+  } = getFeedbacks(state, ownProps);
+  const numFeedbacksGivenReview = feedbacks.size - numFeedbacksNeedingReview - feedbacksNotAnswered.size;
+  const computedMaxScore = getMaxScore(state, ownProps);
+  const autoScores = getAutoscores(state, ownProps);
+  const rubric = state.getIn(["feedback", "settings", "rubric"]);
+  return {
+    students: sortedStudents,
+    sortBy,
+    sortedStudents,
+    studentProgress,
+    currentActivity,
+    firstActivity,
+    feedback,
+    compactReport,
+    activityFeedbackStudents: sortedStudents,
+    feedbacks, feedbacksNeedingReview, numFeedbacksNeedingReview, numFeedbacksGivenReview,
+    feedbacksNotAnswered, computedMaxScore, autoScores,
+    settings: state.getIn(["feedback", "settings"]),
+    rubric: rubric && rubric.toJS(),
+    rubricDocUrl: state.getIn(["report", "rubricDocUrl"]),
+    activityIndex: ownProps.activity.get("activityIndex"),
   };
-}
+};
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {

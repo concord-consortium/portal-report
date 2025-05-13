@@ -3,8 +3,8 @@ import { List, Map } from "immutable";
 import { connect } from "react-redux";
 import classNames from "classnames";
 import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
-import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getDashboardFeedbackSortBy,
-         getStudentProgress, getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getIsResearcher
+import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getStudentProgress,
+         getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getIsResearcher
        } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
@@ -24,6 +24,7 @@ import { ColorTheme, DashboardViewMode, FeedbackLevel, ListViewMode } from "../.
 import { ScoringSettings, getScoredQuestions, getScoringSettings, getScoringSettingsInState } from "../../util/scoring";
 import { computeRubricMaxScore } from "../../selectors/activity-feedback-selectors";
 import { Rubric } from "../../components/portal-dashboard/feedback/rubric-utils";
+import { SortOption } from "../../reducers/dashboard-reducer";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -47,7 +48,7 @@ interface IProps {
   report: any;
   sequenceTree: Map<any, any>;
   hideFeedbackBadges: boolean;
-  sortByMethod: string;
+  sortByMethod: SortOption;
   feedbackSortByMethod: string;
   studentCount: number;
   studentProgress: Map<any, any>;
@@ -121,8 +122,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     const { activityFeedbacks, anonymous, answers, clazzName, compactReport, currentActivity, currentQuestion, currentStudentId,
       error, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
-      toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, feedbackSortByMethod,
-      setStudentFeedbackSort, scoringSettings, rubric, rubricDocUrl, rubricMaxScore, isResearcher } = this.props;
+      toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, setStudentFeedbackSort,
+      scoringSettings, rubric, rubricDocUrl, rubricMaxScore, isResearcher } = this.props;
     const { initialLoading, viewMode, listViewMode, feedbackLevel } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -150,7 +151,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     return (
       <div className={css.portalDashboardApp}>
 
-        {this.renderHeader(assignmentName, viewMode )}
+        {this.renderHeader(assignmentName, viewMode, setStudentSort)}
         {activityTrees &&
           ( viewMode === "ProgressDashboard"
             ? <div>
@@ -237,7 +238,6 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   currentActivity={currentActivity}
                   currentQuestion={currentQuestion}
                   currentStudentId={currentStudentId}
-                  feedbackSortByMethod={feedbackSortByMethod}
                   hasTeacherEdition={hasTeacherEdition}
                   isAnonymous={anonymous}
                   listViewMode={listViewMode}
@@ -247,7 +247,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   setCurrentQuestion={setCurrentQuestion}
                   setCurrentStudent={setCurrentStudent}
                   setListViewMode={this.setListViewMode}
-                  setStudentFeebackFilter={setStudentFeedbackSort}
+                  setStudentFeedbackSort={setStudentFeedbackSort}
                   setStudentFilter={setStudentSort}
                   sortByMethod={sortByMethod}
                   sortedQuestionIds={sortedQuestionIds}
@@ -272,8 +272,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode) => {
-    const { sequenceTree, userName, setCompactReport, setHideFeedbackBadges, trackEvent, isResearcher, clazzName } = this.props;
+  private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode, setStudentSort: (value: string) => void) => {
+    const { sequenceTree, userName, setCompactReport, setHideFeedbackBadges, trackEvent, isResearcher, clazzName, sortByMethod } = this.props;
     const { viewMode} = this.state;
     const color: ColorTheme = headerViewMode === "ProgressDashboard"
       ? "progress"
@@ -292,6 +292,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           colorTheme={color}
           isResearcher={isResearcher}
           clazzName={clazzName}
+          setStudentSort={setStudentSort}
+          sortByMethod={sortByMethod}
         />
     );
   }
@@ -372,7 +374,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     error,
     expandedActivities: state.getIn(["dashboard", "expandedActivities"]),
     feedback: state.getIn(["feedback", "settings"]),
-    feedbackSortByMethod: getDashboardFeedbackSortBy(state),
+    feedbackSortByMethod: getDashboardSortBy(state),
     hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
     isFetching: data.get("isFetching"),
     questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),

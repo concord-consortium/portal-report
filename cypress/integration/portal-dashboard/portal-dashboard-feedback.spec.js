@@ -65,7 +65,7 @@ context("Portal Dashboard Feedback Panel", () => {
       cy.get('[data-cy=class-nav]').should('be.visible');
       cy.get('[data-cy="num-Awaiting feedback"]').should('be.visible');
       cy.get('[data-cy=item-number').should('contain', '3');
-      cy.get('[data-cy=sort-feedback]').should('be.visible');
+      cy.get('[data-cy=sort-feedbackreport]').should('be.visible');
     });
   });
   context('View List By', () => {
@@ -82,6 +82,57 @@ context("Portal Dashboard Feedback Panel", () => {
       it("list by students", () => {
         cy.get('[data-cy=list-by-student-toggle]').should('be.visible').click();
         cy.get('[data-cy=feedbackRow] [data-cy=feedback-badge]').should('be.visible');
+      });
+    });
+  });
+  context('Sort By', () => {
+    describe('verify sort by toggle menu adjusts order of feedback rows', () => {
+       it('is set to sort by Student Name by default', () => {
+         cy.get('[data-cy=sort-feedbackreport]').should('be.visible').and('contain', 'Student Name');
+         cy.get('[data-cy=student-name]').first().should('contain', 'Armstrong, Jenna');
+         cy.get('[data-cy=student-name]').last().should('contain', 'Wu, Jerome');
+       });
+       it('can sort feedback rows by Awaiting Feedback', () => {
+        cy.get('[data-cy=sort-feedbackreport]').click();
+        cy.get('[data-cy=list-item-awaiting-feedback]').should('be.visible').and('contain', 'Awaiting Feedback');
+        cy.get('[data-cy=list-item-awaiting-feedback]').click();
+        cy.get('[data-cy=student-name]').first().should('contain', 'Jenkins, John');
+        cy.get('[data-cy=feedback-container').first()
+          .find('textarea[data-cy=feedback-textarea]')
+          .should('have.attr', 'placeholder', 'Enter feedback');
+        cy.get('[data-cy=student-name]').last().should('contain', 'Crosby, Kate');
+        cy.get('[data-cy=feedback-container]').last()
+          .find('textarea[data-cy=feedback-textarea]')
+          .should('not.exist');
+       });
+       it('can sort feedback rows by Least Progress', () => {
+        cy.get('[data-cy=sort-feedbackreport]').click();
+        cy.get('[data-cy=list-item-least-progress]').should('be.visible').and('contain', 'Least Progress');
+        cy.get('[data-cy=list-item-least-progress]').click();
+        cy.get('[data-cy=student-name]').first().should('contain', 'Crosby, Kate');
+        cy.get('[data-cy=student-answer]').first().should('contain', 'No response');
+        cy.get('[data-cy=student-name]').last().should('contain', 'Jenkins, John');
+        cy.get('[data-cy=feedback-container').last()
+          .find('textarea[data-cy=feedback-textarea]')
+          .should('have.attr', 'placeholder', 'Enter feedback');
+       });
+       it('can sort feedback rows by Most Progress', () => {
+        cy.get('[data-cy=sort-feedbackreport]').click();
+        cy.get('[data-cy=list-item-most-progress]').should('be.visible').and('contain', 'Most Progress');
+        cy.get('[data-cy=list-item-most-progress]').click();
+        cy.get('[data-cy=student-name]').first().should('contain', 'Jenkins, John');
+        cy.get('[data-cy=feedback-container').first()
+          .find('textarea[data-cy=feedback-textarea]')
+          .should('have.attr', 'placeholder', 'Enter feedback');
+        cy.get('[data-cy=student-name]').last().should('contain', 'Crosby, Kate');
+        cy.get('[data-cy=student-answer]').last().should('contain', 'No response');
+       });
+       it('can sort by Student Name again', () => {
+        cy.get('[data-cy=sort-feedbackreport]').click();
+        cy.get('[data-cy=list-item-student-name]').should('be.visible').and('contain', 'Student Name');
+        cy.get('[data-cy=list-item-student-name]').click();
+        cy.get('[data-cy=student-name]').first().should('contain', 'Armstrong, Jenna');
+        cy.get('[data-cy=student-name]').last().should('contain', 'Wu, Jerome');
       });
     });
   });

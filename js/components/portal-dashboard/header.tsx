@@ -10,6 +10,8 @@ import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
 import { ColorTheme, DashboardViewMode } from "../../util/misc";
 import { TrackEventFunction } from "../../actions";
+import { SORT_BY_NAME } from "../../actions/dashboard";
+import { SORT_OPTIONS_CONFIG, SortOption } from "../../reducers/dashboard-reducer";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -24,6 +26,8 @@ interface IProps {
   colorTheme?: ColorTheme;
   isResearcher: boolean;
   clazzName: string;
+  setStudentSort: (sort: SortOption) => void;
+  sortByMethod: SortOption;
 }
 
 export class Header extends React.PureComponent<IProps> {
@@ -64,6 +68,13 @@ export class Header extends React.PureComponent<IProps> {
   }
 
   private changeViewMode = (mode: DashboardViewMode) => () => {
+    const { setStudentSort, sortByMethod } = this.props;
+    const validSortOptions = SORT_OPTIONS_CONFIG[mode === "FeedbackReport" ? "feedback" : "default"];
+
+    if (validSortOptions.indexOf(sortByMethod) === -1) {
+      setStudentSort(SORT_BY_NAME);
+    }
+
     this.props.setDashboardViewMode(mode);
     this.props.trackEvent("Portal-Dashboard", "DashboardViewModeDropdownChange", {label: mode});
   }

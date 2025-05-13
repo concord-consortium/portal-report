@@ -1,13 +1,9 @@
 import { createSelector } from "reselect";
+import { fromJS } from "immutable";
 import { getActivityTrees, getQuestionTrees, getAnswersByQuestion } from "./report-tree";
 import { SORT_BY_NAME, SORT_BY_MOST_PROGRESS, SORT_BY_LEAST_PROGRESS,
-         SORT_BY_FEEDBACK_NAME, SORT_BY_FEEDBACK_PROGRESS } from "../actions/dashboard";
-import { compareStudentsByName } from "../util/misc";
-import { fromJS } from "immutable";
-
-const kSortGroupFirst = 1;
-const kSortGroupSecond = 2;
-const kSortGroupThird = 3;
+         SORT_BY_FEEDBACK_PROGRESS } from "../actions/dashboard";
+import { sortByName, sortByProgress, sortByActivityFeedbackProgress, sortByQuestionFeedbackProgress } from "../util/sort-utils";
 
 // Inputs
 const getActivities = state => state.getIn(["report", "activities"]);
@@ -20,7 +16,7 @@ export const getCurrentStudentId = state => state.getIn(["dashboard", "currentSt
 const getStudents = state => state.getIn(["report", "students"]);
 const getFeedback = state => state.getIn(["feedback"]);
 export const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
-export const getDashboardFeedbackSortBy = state => state.getIn(["dashboard", "feedbackSortBy"]);
+export const getDashboardFeedbackSortBy = state => getDashboardSortBy(state);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
 export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
 export const getHideFeedbackBadges = state => state.getIn(["dashboard", "hideFeedbackBadges"]);
@@ -125,102 +121,21 @@ export const getFirstQuestion = createSelector(
 
 // Returns sorted students
 export const getSortedStudents = createSelector(
-  [ getStudents, getDashboardSortBy, getStudentAverageProgress ],
-  (students, sortBy, studentProgress) => {
+  [ getStudents, getDashboardSortBy, getStudentAverageProgress, getFeedback, getStudentProgress, getCurrentActivity, getFirstActivity, getCurrentQuestion, getFirstQuestion, getAnswersByQuestion ],
+  (students, sortBy, studentProgress, feedback, studentProgressByActivity, currentActivity, firstActivity, currentQuestion, firstQuestion, answers) => {
     switch (sortBy) {
       case SORT_BY_NAME:
-        return students.toList().sort((student1, student2) =>
-          compareStudentsByName(student1, student2),
-        );
+        return sortByName(students);
+      case SORT_BY_FEEDBACK_PROGRESS:
+        const isQuestionLevelFeedback = !!currentQuestion;
+        return isQuestionLevelFeedback
+          ? sortByQuestionFeedbackProgress(students, feedback, currentQuestion, firstQuestion, answers)
+          : sortByActivityFeedbackProgress(students, feedback, studentProgressByActivity, currentActivity, firstActivity);
       case SORT_BY_LEAST_PROGRESS:
       case SORT_BY_MOST_PROGRESS:
-        return students.toList().sort((student1, student2) => {
-          const student1Progress = studentProgress.get(student1.get("id"));
-          const student2Progress = studentProgress.get(student2.get("id"));
-          const progressComp = sortBy === SORT_BY_LEAST_PROGRESS
-            ? student1Progress - student2Progress
-            : student2Progress - student1Progress;
-          if (progressComp !== 0) {
-            return progressComp;
-          } else {
-            return compareStudentsByName(student1, student2);
-          }
-        });
+        return sortByProgress(students, studentProgress, sortBy);
       default:
         return students.toList();
     }
   },
 );
-
-// Returns sorted students in activity feedback view
-export const getActivityFeedbackSortedStudents = createSelector(
-  [ getStudents, getDashboardFeedbackSortBy, getFeedback, getStudentProgress, getCurrentActivity, getFirstActivity ],
-  (students, feedbackSortBy, feedback, studentProgress, currentActivity, firstActivity) => {
-    switch (feedbackSortBy) {
-      case SORT_BY_FEEDBACK_NAME:
-        return students.toList().sort((student1, student2) =>
-          compareStudentsByName(student1, student2),
-        );
-      case SORT_BY_FEEDBACK_PROGRESS:
-        return students.toList().sort((student1, student2) => {
-          const activityFeedbacks = feedback.get("activityFeedbacks");
-          const currentActivityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
-          const student1Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student1.get("id")
-                                                                          && f.get("activityId") === currentActivityId; });
-          const student2Feedback = activityFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
-                                                                          && f.get("activityId") === currentActivityId; });
-          const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
-          const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
-
-          const student1Progress = studentProgress.getIn([student1.get("id"), currentActivityId]);
-          const student2Progress = studentProgress.getIn([student2.get("id"), currentActivityId]);
-
-          const student1SortGroup = student1Progress === 0 ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
-          const student2SortGroup = student2Progress === 0 ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;
-          const feedbackComp = student1SortGroup === student2SortGroup ? 0 : student1SortGroup > student2SortGroup ? 1 : -1;
-          return feedbackComp;
-        });
-      default:
-        return students.toList();
-    }
-  },
-);
-
-// Returns sorted students in question feedback view
-export const getQuestionFeedbackSortedStudents = createSelector(
-  [ getStudents, getDashboardFeedbackSortBy, getFeedback, getCurrentQuestion, getFirstQuestion, getAnswersByQuestion ],
-  (students, feedbackSortBy, feedback, currentQuestion, firstQuestion, answers ) => {
-    switch (feedbackSortBy) {
-      case SORT_BY_FEEDBACK_NAME:
-        return students.toList().sort((student1, student2) =>
-          compareStudentsByName(student1, student2),
-        );
-      case SORT_BY_FEEDBACK_PROGRESS:
-        // TODO: change to sort by question feedback
-        return students.toList().sort((student1, student2) => {
-          const questionFeedbacks = feedback.get("questionFeedbacks");
-          const question = currentQuestion ? currentQuestion : firstQuestion;
-          const questionId = question.get("id");
-          const student1Feedback = questionFeedbacks.find(function(f) { return f.get("platformStudentId") === student1.get("id")
-                                                                          && f.get("questionId") === questionId; });
-          const student2Feedback = questionFeedbacks.find(function(f) { return f.get("platformStudentId") === student2.get("id")
-                                                                          && f.get("questionId") === questionId; });
-          const student1HasFeedback = !!student1Feedback?.get("existingFeedbackSinceLastSort");
-          const student2HasFeedback = !!student2Feedback?.get("existingFeedbackSinceLastSort");
-
-          const student1Answer = answers.getIn([questionId, student1.get("id")]);
-          const student2Answer = answers.getIn([questionId, student2.get("id")]);
-          const student1Answered = student1Answer && (!question.get("required") || student1Answer.get("submitted"));
-          const student2Answered = student2Answer && (!question.get("required") || student2Answer.get("submitted"));
-
-          const student1SortGroup = !student1Answered ? kSortGroupThird : student1HasFeedback ? kSortGroupSecond : kSortGroupFirst;
-          const student2SortGroup = !student2Answered ? kSortGroupThird : student2HasFeedback ? kSortGroupSecond : kSortGroupFirst;
-          const feedbackComp = student1SortGroup === student2SortGroup ? 0 : student1SortGroup > student2SortGroup ? 1 : -1;
-          return feedbackComp;
-        });
-      default:
-        return students.toList();
-    }
-  },
-);
-
