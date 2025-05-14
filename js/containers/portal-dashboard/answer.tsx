@@ -11,8 +11,12 @@ import IframeAnswer from "../../components/report/iframe-answer";
 
 import css from "../../../css/portal-dashboard/answer.less";
 
-class Answer extends React.PureComponent<AnswerProps> {
-  constructor(props: AnswerProps) {
+interface ExtendedAnswerProps extends AnswerProps {
+  inQuestionDetailsPanel?: boolean;
+}
+
+class Answer extends React.PureComponent<ExtendedAnswerProps> {
+  constructor(props: ExtendedAnswerProps) {
     super(props);
   }
 
@@ -32,8 +36,34 @@ class Answer extends React.PureComponent<AnswerProps> {
     return AComponent;
   }
 
+  // In the Question Details panel, we render the full set of choices available for a
+  // multiple-choice question, even if the student hasn't selected any of them.
+  renderNoMCAnswerForQuestionDetails = () => {
+    const { inQuestionDetailsPanel, question } = this.props;
+    const noResponseAnswer = Map({
+      id: "noResponse",
+      content: "No response",
+      correct: false,
+      selected: false
+    });
+
+    return (
+      <MultipleChoiceAnswer
+        answer={noResponseAnswer}
+        inQuestionDetailsPanel={inQuestionDetailsPanel}
+        question={question}
+        showFullAnswer={true}
+      />
+    );
+  }
+
   renderNoAnswer = () => {
-    const { question } = this.props;
+    const { question, inQuestionDetailsPanel } = this.props;
+
+    if (question.get("type") === "multiple_choice" && inQuestionDetailsPanel) {
+      return this.renderNoMCAnswerForQuestionDetails();
+    }
+
     const QuestionIcon = getQuestionIcon(question);
     return (
       <div className={css.noAnswer}>
@@ -44,7 +74,7 @@ class Answer extends React.PureComponent<AnswerProps> {
   }
 
   renderAnswer = () => {
-    const { answer, question, responsive, studentName, trackEvent, answerOrientation } = this.props;
+    const { answer, question, responsive, studentName, trackEvent, answerOrientation, inQuestionDetailsPanel } = this.props;
     const AComponent = this.getAnswerComponent();
     if (!AComponent) {
       return (
@@ -61,6 +91,7 @@ class Answer extends React.PureComponent<AnswerProps> {
           studentName={studentName}
           trackEvent={trackEvent}
           answerOrientation={answerOrientation}
+          inQuestionDetailsPanel={inQuestionDetailsPanel}
         />
       );
     }

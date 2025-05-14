@@ -1,0 +1,44 @@
+@import "./variables";
+
+.choiceStats {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 187px;
+
+  .choiceGraph {
+    background: white;
+    border: solid 1.5px @cc-charcoal-light1;
+    border-radius: 3px;
+    box-sizing: border-box;
+    height: 16px;
+    margin-top: 1px; // This shouldn't be needed, but the graph won't quite center align without it.
+    overflow: hidden;
+    width: 40px;
+
+    .choiceGraphBar {
+      background: @cc-orange;
+      height: 100%;
+      width: 0%;
+
+      &.correct {
+        background: #2da343;
+      }
+      &.incorrect {
+        background: #f00;
+      }
+      &.noResponse {
+        background: @cc-charcoal-light1;
+      }
+    }
+  }
+
+  .choiceCount {
+    text-align: center;
+    width: 40px;
+  }
+  .choicePercent {
+    text-align: right;
+    width: 40px;
+  }
+}
