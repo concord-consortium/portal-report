@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
-import { Map } from "immutable";
-import Choice from "./choice";
+import { Map, List } from "immutable";
+import MultipleChoiceChoices from "./multiple-choice-choices";
 
 import css from "../../../css/portal-dashboard/multiple-choice-answer.less";
 
@@ -9,14 +9,22 @@ const INCORRECT_ICON = "icomoon-cross " + css.incorrect;
 const SELECTED_ICON = "icomoon-checkmark2";
 
 interface IProps {
-  answer: Map<any, any>;
-  question: Map<any, any>;
-  showFullAnswer: boolean;
+  // For individual student response
+  answer?: Map<string, any>;
+  showFullAnswer?: boolean;
+  // For aggregate class response
+  answers?: Map<string, any>;
+  students?: Map<string, any>;
+  // Common
+  inQuestionDetailsPanel?: boolean;
+  question: Map<string, any>;
 }
 
 export default class MultipleChoiceAnswer extends PureComponent<IProps> {
   renderIcon() {
     const { answer, question } = this.props;
+    if (!answer) return null;
+
     const icon = !question.get("scored") // Undefined as there's no correct or incorrect choice defined.
                   ? SELECTED_ICON
                   : answer.get("correct") ? CORRECT_ICON : INCORRECT_ICON;
@@ -29,24 +37,50 @@ export default class MultipleChoiceAnswer extends PureComponent<IProps> {
   }
 
   renderFullAnswer() {
-    const { question, answer } = this.props;
-    const choices = question.get("choices") || [];
-    const studentChoices = answer.get("selectedChoices");
-    return (
-      <div data-cy="multiple-choice-answers">
-        {
-          choices.size > 0 ? choices.map((choice: any) =>
-            <Choice key={choice.get("id")} choice={choice} correctAnswerDefined={question.get("scored")}
-              selected={studentChoices.some((studentChoice: any) => studentChoice.get("id") === choice.get("id"))}
-            />
-          )  : "Question doesn't have any choices"
-        }
-      </div>
-    );
+    const { question, answer, answers, students, inQuestionDetailsPanel } = this.props;
+    const choices = question.get("choices") || List();
+
+    // Aggregated class responses
+    if (answers && students) {
+      return (
+        <MultipleChoiceChoices
+          answers={answers}
+          choices={choices}
+          inQuestionDetailsPanel={inQuestionDetailsPanel}
+          question={question}
+          showStats={true}
+          students={students}
+        />
+      );
+    }
+
+    // Individual student response
+    if (answer) {
+      return (
+        <MultipleChoiceChoices
+          choices={choices}
+          inQuestionDetailsPanel={inQuestionDetailsPanel}
+          question={question}
+          studentAnswer={answer}
+          showStats={false}
+        />
+      );
+    }
+
+    return null;
   }
 
   render() {
-    const { showFullAnswer } = this.props;
+    const { showFullAnswer = true, answers, students } = this.props;
+
+    if (answers && students) {
+      return (
+        <div className={css.multipleChoiceAnswer}>
+          {this.renderFullAnswer()}
+        </div>
+      );
+    }
+
     return (
       <div className={css.multipleChoiceAnswer}>
         { showFullAnswer ? this.renderFullAnswer() : this.renderIcon() }

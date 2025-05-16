@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { QuestionNavigator } from "./question-navigator";
-// Removed for MVP: import { ClassResponse } from "./overlay-class-response";
+import ClassResponse from "./overlay-class-response";
 import { StudentResponse } from "./overlay-student-response";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import QuestionPopoutIcon from "../../../img/svg-icons/question-popout-icon.svg";
@@ -30,10 +30,19 @@ interface IProps {
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
     const { students, currentActivity, currentQuestion, isAnonymous, currentStudentId, trackEvent } = this.props;
+    // For now, we only show the Class Response section for multiple choice questions
+    const showClassResponse = currentQuestion?.get("type") === "multiple_choice";
+
     return (
       <div className={`${css.questionOverlay} ${(currentQuestion && currentActivity ? css.visible : "")}`} data-cy="question-overlay">
         { currentQuestion && this.renderQuestionDetails() }
-        {/* Removed for MVP: { currentQuestion && <ClassResponse currentQuestion={currentQuestion}/> } */}
+        { showClassResponse &&
+          <ClassResponse
+            currentQuestion={currentQuestion}
+            students={students}
+            trackEvent={() => null}
+          />
+        }
         { currentQuestion &&
           <StudentResponse
             students={students}
