@@ -38,7 +38,7 @@ function buildClassChoiceData(
 
   if (inQuestionDetailsPanel) {
     // Add a "No response" item
-    const noResponseCount = students.size - answerCount;
+    const noResponseCount = Math.max(0, students.size - answerCount);
     choiceData = [...choiceData, Map({
       choice: Map({ id: "noResponse", content: "No response" }),
       count: noResponseCount,
