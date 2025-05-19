@@ -19,6 +19,7 @@ interface IState {
 
 interface IProps {
   setCompact?: (value: boolean) => void;
+  setHideLastRun?: (value: boolean) => void;
   setHideFeedbackBadges?: (value: boolean) => void;
   colorTheme?: ColorTheme;
   trackEvent: TrackEventFunction;
@@ -108,12 +109,18 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
       this.props.setCompact?.(value);
       trackEvent("Portal-Dashboard", "CompactStudentList", {label: value.toString()});
     };
+    const setHideLastRun = (value: boolean) => {
+      this.props.setHideLastRun?.(value);
+      trackEvent("Portal-Dashboard", "HideLastRunColumn", {label: value.toString()});
+    };
     const setHideFeedbackBadges = (value: boolean) => {
       this.props.setHideFeedbackBadges?.(value);
       trackEvent("Portal-Dashboard", "HideFeedbackBadges", {label: value.toString()});
     };
     this.props.setCompact && itemsWithState.push(
       { name: "Compact student list", onSelect: setCompact, dataCy: "compact-menu-item" });
+    this.props.setHideLastRun && itemsWithState.push(
+      { name: "Hide Last Run column", onSelect: setHideLastRun, dataCy: "last-run-menu-item" });
     this.props.setHideFeedbackBadges && itemsWithState.push(
       { name: "Hide feedback badges", onSelect: setHideFeedbackBadges, dataCy: "feedback-menu-item" });
     return (

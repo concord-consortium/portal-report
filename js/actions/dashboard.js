@@ -22,6 +22,7 @@ export const SELECT_QUESTION = "SELECT_QUESTION";
 
 export const SET_COMPACT_REPORT = "SET_COMPACT_REPORT";
 export const SET_HIDE_FEEDBACK_BADGES = "SET_HIDE_FEEDBACK_BADGES";
+export const SET_HIDE_LAST_RUN = "SET_HIDE_LAST_RUN";
 export const SET_FEEDBACK_SORT_REFRESH_ENABLED = "SET_FEEDBACK_SORT_REFRESH_ENABLED";
 
 export const TRACK_EVENT = "TRACK_EVENT";
@@ -151,6 +152,13 @@ export function setCompactReport(isCompact) {
   return {
     type: SET_COMPACT_REPORT,
     value: isCompact,
+  };
+}
+
+export function setHideLastRun(hideLastRun) {
+  return {
+    type: SET_HIDE_LAST_RUN,
+    value: hideLastRun,
   };
 }
 

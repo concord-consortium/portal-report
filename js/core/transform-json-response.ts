@@ -77,6 +77,7 @@ export interface IStudentData {
   realName: string;
   firstName: string;
   lastName: string;
+  lastRun: string | null;
   id: string;
   userId: number;
 }

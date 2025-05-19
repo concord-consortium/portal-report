@@ -1,14 +1,15 @@
 @import "../variables";
 
 .column {
-  margin-right: 3px;
   float: left;
 }
 
 .popupClassNav {
-  width: 240px;
-  font-weight: normal;
   background-color: @cc-teal-light6;
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  width: 240px;
 
   .icon {
     width: 20px;
@@ -87,8 +88,7 @@
     }
   }
   .popupClassNavControllers {
-    height: 200px;
-    padding-top: 10px;
+    padding: 10px 0 15px;
 
     .spotlightToggle {
       display: flex;

@@ -1,0 +1,33 @@
+@import "./variables";
+
+.timestamp {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  height: calc(44px - 10px);
+  justify-content: center;
+  padding: 5px 10px;
+  width: 62px;
+
+  &.borders {
+    border-right: solid 3px white;
+    border-bottom: solid 1px @cc-charcoal-light2;
+    border-left: solid 3px white;
+    height: calc(100% - 42px);
+    justify-content: flex-start;
+    margin: -1px 0 0 -3px;
+    padding: 21px 10px;
+    width: 62px;
+  }
+
+  &.compact {
+    height: 22px;
+  }
+
+  div {
+    &.visuallyHidden {
+      display: none;
+    }
+  }
+}

@@ -14,6 +14,7 @@ describe("dashboard reducer", () => {
       currentStudentId: null,
       compactReport: false,
       hideFeedbackBadges: false,
+      hideLastRun: false,
       feedbackSortRefreshEnabled: false,
     });
   });
