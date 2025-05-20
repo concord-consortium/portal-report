@@ -30,6 +30,22 @@ context("Portal Dashboard Header", () => {
         });
       });
     });
+    describe("Show/hide Last Run column", () => {
+      it("verify we can hide Last Run column", () => {
+        cy.get("[data-cy=last-run-header]").should("be.visible");
+        cy.get("[data-cy=last-run-row]").should("be.visible").and("have.length", 6);
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").should("be.visible").click();
+        cy.get("[data-cy=last-run-header]").should("not.exist");
+        cy.get("[data-cy=last-run-row]").should("not.exist");
+      });
+      it("verify we can show Last Run column", () => {
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").should("be.visible").click();
+        cy.get("[data-cy=last-run-header]").should("be.visible");
+        cy.get("[data-cy=last-run-row]").should("be.visible").and("have.length", 6);
+      });
+    });
     describe("Hide Feedback Badges setting", () => {
       it("verify badge legends are grayed out when menu item is checked", () => {
         cy.get("[data-cy=header-menu]").click();

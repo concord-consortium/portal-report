@@ -9,6 +9,7 @@ import {
   SORT_BY_MOST_PROGRESS,
   SORT_BY_LEAST_PROGRESS,
   SORT_BY_FEEDBACK_PROGRESS,
+  SET_HIDE_LAST_RUN,
 } from "../actions/dashboard";
 
 export type SortOption = typeof SORT_BY_NAME
@@ -35,6 +36,7 @@ export interface IDashboardState {
   currentStudentId: string | null;
   compactReport: boolean;
   hideFeedbackBadges: boolean;
+  hideLastRun: boolean;
   feedbackSortRefreshEnabled: boolean;
 }
 
@@ -49,6 +51,7 @@ const INITIAL_DASHBOARD_STATE = RecordFactory<IDashboardState>({
   currentStudentId: null,
   compactReport: false,
   hideFeedbackBadges: false,
+  hideLastRun: false,
   feedbackSortRefreshEnabled: false,
 });
 
@@ -66,6 +69,7 @@ export class DashboardState extends INITIAL_DASHBOARD_STATE implements IDashboar
   currentStudentId: string | null;
   compactReport: boolean;
   hideFeedbackBadges: boolean;
+  hideLastRun: boolean;
   feedbackSortRefreshEnabled: boolean;
 }
 
@@ -112,6 +116,8 @@ export default function dashboard(state = new DashboardState({}), action: any) {
       return state.set("compactReport", action.value);
     case SET_HIDE_FEEDBACK_BADGES:
       return state.set("hideFeedbackBadges", action.value);
+    case SET_HIDE_LAST_RUN:
+      return state.set("hideLastRun", action.value);
     case SET_FEEDBACK_SORT_REFRESH_ENABLED:
       return state.set("feedbackSortRefreshEnabled", action.value);
     default:

@@ -52,6 +52,7 @@ export interface IPortalRawData extends ILTIPartial{
 export interface IStudentRawData {
   first_name: string;
   last_name: string;
+  last_run: string | null;
   user_id: string;
 }
 
@@ -240,6 +241,26 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
+
+    // Since the students' last_run timestamp is only available in the offering data, we merge the last_run
+    // field into the class data for streamlined access.
+    const lastRunMap: Record<string, string | null> = {};
+    if (offeringData.students) {
+      offeringData.students.forEach((student: any) => {
+        if (student.user_id && student.last_run !== undefined) {
+          lastRunMap[student.user_id] = student.last_run;
+        }
+      });
+    }
+
+    if (classData.students) {
+      classData.students.forEach((student: any) => {
+        if (student.user_id && lastRunMap[student.user_id] !== undefined) {
+          student.last_run = lastRunMap[student.user_id];
+        }
+      });
+    }
+
     const resourceLinkId = offeringData.id.toString();
     const studentId = urlParam("studentId");
     // only pass resourceLinkId if there is a studentId
