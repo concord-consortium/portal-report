@@ -19,6 +19,7 @@ interface IProps {
   userName: string;
   assignmentName: string;
   setCompact?: (value: boolean) => void;
+  setHideLastRun?: (value: boolean) => void;
   setHideFeedbackBadges?: (value: boolean) => void;
   trackEvent: TrackEventFunction;
   setDashboardViewMode: (mode: DashboardViewMode) => void;
@@ -32,7 +33,8 @@ interface IProps {
 
 export class Header extends React.PureComponent<IProps> {
   render() {
-    const { colorTheme, userName, setCompact, setHideFeedbackBadges, trackEvent, isResearcher, clazzName } = this.props;
+    const { colorTheme, userName, setCompact, setHideLastRun, setHideFeedbackBadges, trackEvent,
+            isResearcher, clazzName } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
 
     return (
@@ -52,6 +54,7 @@ export class Header extends React.PureComponent<IProps> {
             <AccountOwnerDiv userName={userName} colorTheme={colorTheme} />
             <HeaderMenuContainer
               setCompact={setCompact}
+              setHideLastRun={setHideLastRun}
               setHideFeedbackBadges={setHideFeedbackBadges}
               colorTheme={colorTheme}
               trackEvent={trackEvent}

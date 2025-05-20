@@ -19,6 +19,7 @@ export const getDashboardSortBy = state => state.getIn(["dashboard", "sortBy"]);
 export const getDashboardFeedbackSortBy = state => getDashboardSortBy(state);
 const getSeletedQuestionId = state => state.getIn(["dashboard", "selectedQuestion"]);
 export const getCompactReport = state => state.getIn(["dashboard", "compactReport"]);
+export const getHideLastRun = state => state.getIn(["dashboard", "hideLastRun"]);
 export const getHideFeedbackBadges = state => state.getIn(["dashboard", "hideFeedbackBadges"]);
 export const getfeedbackSortRefreshEnabled = state => state.getIn(["dashboard", "feedbackSortRefreshEnabled"]);
 

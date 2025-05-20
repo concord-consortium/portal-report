@@ -26,6 +26,45 @@ context("Portal Dashboard Response Table",()=>{
       .find('[data-cy=NotStarted]').should('be.visible');
   });
 
+  it('verify last run timestamps are listed',()=>{
+    cy.get('[data-cy=last-run-header]').should('be.visible');
+    cy.get('[data-cy=last-run-header]').should('contain', 'Last Run');
+    cy.get('[data-cy=last-run-row]').eq(0).should('be.visible').and('contain', 'N/A');
+    cy.get('[data-cy=last-run-row]').eq(1).should('be.visible').and('contain', 'N/A');
+    cy.get('[data-cy=last-run-row]')
+      .eq(2)
+      .should('be.visible')
+      .invoke('text')
+      .should(text => {
+        expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+        expect(text).to.match(/\d{1,2}:\d{2}/); // time
+      });
+    cy.get('[data-cy=last-run-row]')
+      .eq(3)
+      .should('be.visible')
+      .invoke('text')
+      .should(text => {
+        expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+        expect(text).to.match(/\d{1,2}:\d{2}/); // time
+      });
+    cy.get('[data-cy=last-run-row]')
+      .eq(4)
+      .should('be.visible')
+      .invoke('text')
+      .should(text => {
+        expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+        expect(text).to.match(/\d{1,2}:\d{2}/); // time
+      });
+    cy.get('[data-cy=last-run-row]')
+      .eq(5)
+      .should('be.visible')
+      .invoke('text')
+      .should(text => {
+        expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+        expect(text).to.match(/\d{1,2}:\d{2}/); // time
+      });
+  });
+
   function aType(name) {
     // TODO: Figure out how to import AnswerTypes so we can do the following:
     // const foundType = AnswerTypes.find(at => at.name === name);

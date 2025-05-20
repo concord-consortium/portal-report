@@ -4,13 +4,18 @@ import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
 import { SelectedStudent } from "./response-details";
 import { TrackEventFunction } from "../../../actions";
+import { LastRunRow } from "../last-run-row";
 
 import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
+// Import shared styles for visual consistency of "Last Run" column.
+import lastRunCss from "../../../../css/portal-dashboard/last-run-column.less";
 
 interface IProps {
   answers: Map<any, any>;
   currentQuestion?: Map<string, any>;
+  hideLastRun: boolean;
   isAnonymous: boolean;
+  isCompact: boolean;
   onStudentSelect: (studentId: string) => void;
   selectedStudents: SelectedStudent[];
   students: Map<any, any>;
@@ -19,7 +24,9 @@ interface IProps {
 
 export class PopupStudentResponseList extends React.PureComponent<IProps> {
   render() {
-    const { answers, students, isAnonymous, currentQuestion, selectedStudents, trackEvent } = this.props;
+    const { answers, hideLastRun, isCompact, students, isAnonymous, currentQuestion, selectedStudents, trackEvent } = this.props;
+    const compactClass = isCompact ? lastRunCss.compact : "";
+
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
         { students?.map((student: Map<any, any>, i: number) => {
@@ -30,6 +37,11 @@ export class PopupStudentResponseList extends React.PureComponent<IProps> {
           return (
             <div className={css.listRow} key={`student ${i}`} data-cy="student-row">
               {this.renderStudentNameWrapper(student.get("id"), formattedName, isSelected, spotlightAllowed)}
+              {!hideLastRun &&
+                <div className={`${lastRunCss.lastRunColumn} ${compactClass}`} data-cy="last-run-column">
+                  <LastRunRow lastRun={student.get("lastRun")} showBorders={true} />
+                </div>
+              }
               <div className={`${css.studentResponse} ${isSelected ? css.selected : ""}`} data-cy="student-response">
                 <Answer
                   question={currentQuestion}

@@ -149,6 +149,44 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=student-name]').eq(4).should("contain", "Ross, John");
       cy.get('[data-cy=student-name]').eq(5).should("contain", "Wu, Jerome");
     });
+    it('verify last run timestamps are listed',()=>{
+      cy.get('[data-cy=last-run-header]').should('be.visible');
+      cy.get('[data-cy=last-run-header]').should('contain', 'Last Run');
+      cy.get('[data-cy=last-run-row]').eq(0).should('be.visible').and('contain', 'N/A');
+      cy.get('[data-cy=last-run-row]').eq(1).should('be.visible').and('contain', 'N/A');
+      cy.get('[data-cy=last-run-row]')
+        .eq(2)
+        .should('be.visible')
+        .invoke('text')
+        .should(text => {
+          expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+          expect(text).to.match(/\d{1,2}:\d{2}/); // time
+        });
+      cy.get('[data-cy=last-run-row]')
+        .eq(3)
+        .should('be.visible')
+        .invoke('text')
+        .should(text => {
+          expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+          expect(text).to.match(/\d{1,2}:\d{2}/); // time
+        });
+      cy.get('[data-cy=last-run-row]')
+        .eq(4)
+        .should('be.visible')
+        .invoke('text')
+        .should(text => {
+          expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+          expect(text).to.match(/\d{1,2}:\d{2}/); // time
+        });
+      cy.get('[data-cy=last-run-row]')
+        .eq(5)
+        .should('be.visible')
+        .invoke('text')
+        .should(text => {
+          expect(text).to.match(/\d{2}\/\d{2}\/\d{2}/); // date
+          expect(text).to.match(/\d{1,2}:\d{2}/); // time
+        });
+    });
     it('verify responses',()=>{
       cy.get('[data-cy="response-details-container"] [data-cy=question-navigator-next-button]').click().click().click().click().click();
       // cy.get('[data-cy=student-response] [data-cy=student-answer] > div > div > a').should('have.attr','href');

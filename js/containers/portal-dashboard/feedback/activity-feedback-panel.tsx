@@ -28,7 +28,9 @@ interface IProps {
   feedbacksNeedingReview: Map<any, any>;
   feedbacksNotAnswered: number;
   sortByMethod: SortOption;
+  hideLastRun: boolean;
   isAnonymous: boolean;
+  isCompact: boolean;
   listViewMode: ListViewMode;
   numFeedbacksGivenReview: number;
   numFeedbacksNeedingReview: number;
@@ -69,8 +71,8 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, sortByMethod, isAnonymous, rubric,
-            updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings, isResearcher, rubricDocUrl } = this.props;
+    const { activity, activityIndex, feedbacks, feedbacksNeedingReview, sortByMethod, hideLastRun, isAnonymous, isCompact,
+            rubric, updateActivityFeedback, trackEvent, activityFeedbackStudents, scoringSettings, isResearcher, rubricDocUrl } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -82,7 +84,9 @@ class ActivityFeedbackPanel extends React.PureComponent<IProps> {
           feedbacks={feedbacks}
           feedbacksNeedingReview={feedbacksNeedingReview}
           sortByMethod={sortByMethod}
+          hideLastRun={hideLastRun}
           isAnonymous={isAnonymous}
+          isCompact={isCompact}
           rubric={rubric}
           rubricDocUrl={rubricDocUrl}
           setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}

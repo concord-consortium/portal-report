@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import classNames from "classnames";
 import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, TrackEventFunctionOptions, TrackEventCategory, setExtraEventLoggingParameters } from "../../actions/index";
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getStudentProgress,
-         getCompactReport, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getIsResearcher
+         getCompactReport, getHideLastRun, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getIsResearcher
        } from "../../selectors/dashboard-selectors";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
@@ -16,7 +16,7 @@ import DataFetchError from "../../components/report/data-fetch-error";
 import { getSequenceTree, getAnswersByQuestion } from "../../selectors/report-tree";
 import { IResponse } from "../../api";
 import { setStudentSort, setCurrentActivity, setCurrentQuestion, setCurrentStudent, setStudentFeedbackSort,
-         toggleCurrentActivity, toggleCurrentQuestion, setCompactReport, setHideFeedbackBadges } from "../../actions/dashboard";
+         toggleCurrentActivity, toggleCurrentQuestion, setCompactReport, setHideLastRun, setHideFeedbackBadges } from "../../actions/dashboard";
 import { RootState } from "../../reducers";
 import { QuestionOverlay } from "../../components/portal-dashboard/question-overlay";
 import { ResponseDetails } from "../../components/portal-dashboard/response-details/response-details";
@@ -25,6 +25,8 @@ import { ScoringSettings, getScoredQuestions, getScoringSettings, getScoringSett
 import { computeRubricMaxScore } from "../../selectors/activity-feedback-selectors";
 import { Rubric } from "../../components/portal-dashboard/feedback/rubric-utils";
 import { SortOption } from "../../reducers/dashboard-reducer";
+import { LastRunColumn } from "../../components/portal-dashboard/last-run-column";
+import { LastRunHeader } from "../../components/portal-dashboard/last-run-header";
 
 import css from "../../../css/portal-dashboard/portal-dashboard-app.less";
 
@@ -48,6 +50,7 @@ interface IProps {
   report: any;
   sequenceTree: Map<any, any>;
   hideFeedbackBadges: boolean;
+  hideLastRun: boolean;
   sortByMethod: SortOption;
   feedbackSortByMethod: string;
   studentCount: number;
@@ -59,6 +62,7 @@ interface IProps {
   fetchAndObserveData: () => void;
   setAnonymous: (value: boolean) => void;
   setCompactReport: (value: boolean) => void;
+  setHideLastRun: (value: boolean) => void;
   setHideFeedbackBadges: (value: boolean) => void;
   setStudentSort: (value: string) => void;
   setStudentFeedbackSort: (value: string) => void;
@@ -123,7 +127,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       error, sequenceTree, setAnonymous, setStudentSort, studentProgress, students, sortedQuestionIds, questions,
       expandedActivities, setCurrentActivity, setCurrentQuestion, setCurrentStudent, sortByMethod, toggleCurrentActivity,
       toggleCurrentQuestion, trackEvent, hasTeacherEdition, questionFeedbacks, hideFeedbackBadges, setStudentFeedbackSort,
-      scoringSettings, rubric, rubricDocUrl, rubricMaxScore, isResearcher } = this.props;
+      scoringSettings, rubric, rubricDocUrl, rubricMaxScore, isResearcher, hideLastRun } = this.props;
     const { initialLoading, viewMode, listViewMode, feedbackLevel } = this.state;
     // In order to list the activities in the correct order,
     // they must be obtained via the child reference in the sequenceTree …
@@ -167,6 +171,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   viewMode={viewMode}
                   isResearcher={isResearcher}
                 />
+                {!hideLastRun && <LastRunHeader showVisualExtension={true} />}
                 <LevelViewer
                   activities={activityTrees}
                   currentActivity={currentActivity}
@@ -191,6 +196,13 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   setListViewMode={this.setListViewMode}
                   trackEvent={trackEvent}
                 />
+                {!hideLastRun &&
+                  <LastRunColumn
+                    isAnonymous={anonymous}
+                    isCompact={compactReport}
+                    students={students}
+                  />
+                }
                 <StudentAnswers
                   activities={activityTrees}
                   activityFeedbacks={activityFeedbacks}
@@ -235,10 +247,12 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
                   activities={activityTrees}
                   anonymous={anonymous}
                   answers={answers}
+                  compactReport={compactReport}
                   currentActivity={currentActivity}
                   currentQuestion={currentQuestion}
                   currentStudentId={currentStudentId}
                   hasTeacherEdition={hasTeacherEdition}
+                  hideLastRun={hideLastRun}
                   isAnonymous={anonymous}
                   listViewMode={listViewMode}
                   questions={questions}
@@ -273,7 +287,8 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
   }
 
   private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode, setStudentSort: (value: string) => void) => {
-    const { sequenceTree, userName, setCompactReport, setHideFeedbackBadges, trackEvent, isResearcher, clazzName, sortByMethod } = this.props;
+    const { sequenceTree, userName, setCompactReport, setHideLastRun, setHideFeedbackBadges, trackEvent, isResearcher,
+            clazzName, sortByMethod } = this.props;
     const { viewMode} = this.state;
     const color: ColorTheme = headerViewMode === "ProgressDashboard"
       ? "progress"
@@ -284,6 +299,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
         <Header
           userName={userName}
           setCompact={headerViewMode === "ProgressDashboard" ? setCompactReport : undefined}
+          setHideLastRun={setHideLastRun}
           setHideFeedbackBadges={headerViewMode === "ProgressDashboard" ? setHideFeedbackBadges : undefined}
           assignmentName={assignmentName}
           trackEvent={trackEvent}
@@ -376,6 +392,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
     feedback: state.getIn(["feedback", "settings"]),
     feedbackSortByMethod: getDashboardSortBy(state),
     hasTeacherEdition: dataDownloaded ? state.getIn(["report", "hasTeacherEdition"]) : undefined,
+    hideLastRun: getHideLastRun(state),
     isFetching: data.get("isFetching"),
     questionFeedbacks: state.getIn(["feedback", "questionFeedbacks"]),
     questions,
@@ -399,6 +416,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
+    setHideLastRun: (value: boolean) => dispatch(setHideLastRun(value)),
     setHideFeedbackBadges: (value: boolean) => dispatch(setHideFeedbackBadges(value)),
     setStudentSort: (value: string) => dispatch(setStudentSort(value)),
     setStudentFeedbackSort: (value: string) => dispatch(setStudentFeedbackSort(value)),

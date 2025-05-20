@@ -13,8 +13,11 @@ import { ScoringSettings, hasFeedbackGivenScoreType } from "../../../util/scorin
 import { ShowStudentAnswers } from "./show-student-answers";
 import ReportItemIframe from "../report-item-iframe";
 import { SortOption } from "../../../reducers/dashboard-reducer";
+import { LastRunRow } from "../last-run-row";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
+// Import shared styles for visual consistency of "Last Run" column.
+import lastRunCss from "../../../../css/portal-dashboard/last-run-column.less";
 
 interface IProps {
   activity: Map<any, any>;
@@ -23,7 +26,9 @@ interface IProps {
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
   sortByMethod: SortOption;
+  hideLastRun: boolean;
   isAnonymous: boolean;
+  isCompact: boolean;
   rubric: Rubric;
   rubricDocUrl: string;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
@@ -35,14 +40,16 @@ interface IProps {
 }
 
 export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { activityId, activityIndex, feedbacks, sortByMethod, isAnonymous, rubric, setFeedbackSortRefreshEnabled,
-    students, trackEvent, updateActivityFeedback, scoringSettings, activity, isResearcher, rubricDocUrl } = props;
+  const { activityId, activityIndex, feedbacks, sortByMethod, hideLastRun, isAnonymous, isCompact, rubric,
+    setFeedbackSortRefreshEnabled, students, trackEvent, updateActivityFeedback, scoringSettings, activity,
+    isResearcher, rubricDocUrl } = props;
   const displayedFeedbacks = sortByMethod !== SORT_BY_FEEDBACK_PROGRESS
     ? feedbacks
     : students.map((student: any) => {
       const feedback = feedbacks.find((f) => f.get("platformStudentId") === student.get("id"));
       return feedback;
     });
+  const compactClass = isCompact ? lastRunCss.compact : "";
 
   // pre-load all the report item iframes as a hidden iframe so the ShowStudentAnswers component
   // has access to the report item answers when it is toggled open
@@ -84,6 +91,11 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             {formattedName}
           </div>
         </div>
+        {!hideLastRun &&
+          <div className={`${lastRunCss.lastRunColumn} ${compactClass}`} data-cy="last-run-column">
+            <LastRunRow lastRun={student.get("lastRun")} showBorders={true} />
+          </div>
+        }
         <div className={css.feedback} data-cy="feedback-container">
           {activityStarted && hasRubric &&
             <RubricTableContainer

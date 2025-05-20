@@ -121,17 +121,55 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get("[data-cy=collapsed-activity-button]").click();
     });
   });
-  // Removed for MVP:
-  describe.skip('Class Response Area', () => {
-    it('verify class response area is visible', () => {
+  describe('Class Response Area', () => {
+    it('verify class response area is visible for multiple choice questions', () => {
+      cy.get('[data-cy=student-answers-row]').eq(0).find('[data-cy=student-answer]').eq(1).click();
       cy.get('[data-cy=overlay-class-response-area]').should('be.visible');
+
+      // Check first multiple-choice (non-scored) question
+      const expectedChoices = ['a', 'b', 'c', 'No response'];
+      const expectedCounts = ['0', '2', '0', '4'];
+      const expectedPercents = ['0%', '33.3%', '0%', '66.7%'];
+
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-text]')
+        .should('have.length', expectedChoices.length)
+        .each(($el, index) => {
+          cy.wrap($el).should('have.text', expectedChoices[index]);
+        });
+
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-count]')
+        .should('have.length', expectedCounts.length)
+        .each(($el, index) => {
+          cy.wrap($el).should('have.text', expectedCounts[index]);
+        });
+
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-percent]')
+        .should('have.length', expectedPercents.length)
+        .each(($el, index) => {
+          cy.wrap($el).should('have.text', expectedPercents[index]);
+        });
+
+      // Check second multiple-choice (scored) question
+      cy.get('[data-cy=student-answers-row]').eq(0).find('[data-cy=student-answer]').eq(2).click();
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-text]').eq(0).should('have.text', 'a (correct)');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-count]').eq(0).should('have.text', '1');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-percent]').eq(0).should('have.text', '16.7%');
+
+      // Check third multiple-choice (no choices) question
+      cy.get('[data-cy=student-answers-row]').eq(0).find('[data-cy=student-answer]').eq(4).click();
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-text]').should('not.exist');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-count]').should('not.exist');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-choice-percent]').should('not.exist');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-answers]')
+        .should('have.text', 'Question doesn\'t have any choices');
     });
     it('verify show/hide button behaves correctly', () => {
       cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
-      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('not.exist');
-      cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('not.be.visible');
       cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-title]').should('be.visible');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
       cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('be.visible');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-title]').should('be.visible');
     });
   });
   describe('Student Response area', () => {

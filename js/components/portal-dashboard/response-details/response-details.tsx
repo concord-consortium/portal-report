@@ -17,6 +17,7 @@ import { PopupQuestionAnswerList } from "./popup-question-answer-list";
 import { Rubric } from "../feedback/rubric-utils";
 import { ScoringSettings } from "../../../util/scoring";
 import { SortOption } from "../../../reducers/dashboard-reducer";
+import { LastRunHeader } from "../last-run-header";
 
 import css from "../../../../css/portal-dashboard/response-details/response-details.less";
 
@@ -34,6 +35,8 @@ interface IProps {
   currentStudentId: string | null;
   hasTeacherEdition: boolean;
   isAnonymous: boolean;
+  compactReport: boolean;
+  hideLastRun: boolean;
   listViewMode: ListViewMode;
   questions?: Map<string, any>;
   setAnonymous: (value: boolean) => void;
@@ -77,7 +80,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const { activities, anonymous, answers, currentActivity, currentStudentId, currentQuestion, hasTeacherEdition, isAnonymous,
       listViewMode, questions, setAnonymous, setCurrentActivity, setCurrentQuestion, setListViewMode,
       setStudentFilter, sortByMethod, sortedQuestionIds, studentCount, students, trackEvent, viewMode,
-      feedbackLevel, scoringSettings, setFeedbackLevel, rubric, rubricDocUrl, isResearcher } = this.props;
+      feedbackLevel, scoringSettings, setFeedbackLevel, rubric, rubricDocUrl, isResearcher, compactReport, hideLastRun } = this.props;
 
     const { selectedStudents, showSpotlightDialog, showSpotlightListDialog } = this.state;
 
@@ -88,6 +91,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
     const activityId = currentActivity ? currentActivity.get("id") : firstActivity.get("id");
     const currentActivityWithQuestions = activities.find((activity: any) => activity.get("id") === activityId);
     const firstQuestion = currentActivityWithQuestions.get("questions").first();
+    const showLastRunColumn = !hideLastRun && listViewMode !== "Question";
 
     let qCount = 0;
     activities.toArray().forEach((activity: Map<any, any>) => {
@@ -119,6 +123,7 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             setFeedbackLevel={setFeedbackLevel}
             isResearcher={isResearcher}
           />
+          {showLastRunColumn && <LastRunHeader />}
           <div className={`${css.responsePanel}`} data-cy="response-panel">
             { isSequence || feedbackLevel === "Activity"
               ? <ActivityNavigator
@@ -180,7 +185,9 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
             : <PopupStudentResponseList
                 answers={answers}
                 currentQuestion={currentQuestion || firstQuestion}
+                hideLastRun={hideLastRun}
                 isAnonymous={isAnonymous}
+                isCompact={compactReport}
                 onStudentSelect={this.toggleSelectedStudent}
                 selectedStudents={selectedStudents}
                 students={students}
@@ -206,6 +213,8 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   currentStudentId={currentStudentId}
                   sortByMethod={sortByMethod}
                   isAnonymous={isAnonymous}
+                  isCompact={compactReport}
+                  hideLastRun={hideLastRun}
                   listViewMode={listViewMode}
                   scoringSettings={scoringSettings}
                   isResearcher={isResearcher}
