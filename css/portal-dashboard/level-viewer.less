@@ -32,8 +32,8 @@
 
     .animateLevelButton {
       position: relative;
-      width: 120px;
-      flex: 0 0 120px;
+      width: 125px;
+      flex: 0 0 125px;
       margin-left: @margin;
       transition: all 0.5s ease;
 
@@ -72,7 +72,26 @@
         }
 
         .activityImage {
+          border-bottom-right-radius: 4px;
           height: 50%;
+          margin: 0 4px 4px;
+          position: relative;
+
+          svg {
+            bottom: 2px;
+            height: 24px;
+            left: auto;
+            position: absolute;
+            right: 0;
+            transform: rotate(-90deg);
+            transition: .5s;
+            top: auto;
+            width: 24px;
+
+            path {
+              fill: white;
+            }
+          }
         }
 
         &:hover {
@@ -81,21 +100,25 @@
         &:active {
           color: white;
           background-color: @cc-teal-dark1;
+
+          svg {
+            transform: rotate(90deg);
+          }
         }
       }
 
       .activityImage {
         &.firstColor {
-          background-color: @activity-blue;
+          background-color: @activity-green;
         }
         &.secondColor {
-          background-color: @activity-yellow;
+          background-color: @activity-blue;
         }
         &.thirdColor {
-          background-color: @activity-red;
+          background-color: @activity-orange;
         }
         &.fourthColor {
-          background-color: @activity-green;
+          background-color: @activity-red;
         }
         &.fifthColor {
           background-color: @activity-purple;
@@ -103,12 +126,13 @@
       }
 
       .externalLink {
+        animation: revealFromBottomLeft 0.5s ease;
         position: absolute;
-        right: 0;
+        left: 0;
         bottom: 38px;
         width: 38px;
         height: 38px;
-        border-radius: 13px 0 0 0;
+        border-radius: 0 13px 0 0;
         background-color: white;
 
         .externalLinkButton {
@@ -116,10 +140,10 @@
           justify-content: center;
           align-items: center;
           margin-top: 5px;
-          margin-left: 5px;
+          margin-right: 5px;
           width: 30px;
           height: 30px;
-          border-radius: 8px 0;
+          border-radius: 0 8px;
           border: solid 1.5px @cc-charcoal-light1;
           background-color: @cc-teal-light6;
           cursor: pointer;
@@ -183,8 +207,28 @@
         }
 
         .activityImage {
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+          height: calc(100% - 4px);
+          margin: 2px 0 2px 2.5px;
+          position: relative;
           width: 60px;
-          height: 100%;
+
+          svg {
+            bottom: 0;
+            height: 24px;
+            left: auto;
+            position: absolute;
+            right: 0;
+            transform: rotate(90deg);
+            transition: .5s;
+            top: auto;
+            width: 24px;
+
+            path {
+              fill: white;
+            }
+          }
         }
 
         .activityTitle {
@@ -203,6 +247,10 @@
 
           .activityTitle {
             color: white;
+          }
+
+          svg {
+            transform: rotate(-90deg);
           }
         }
       }
@@ -303,5 +351,18 @@
         }
       }
     }
+  }
+}
+
+@keyframes revealFromBottomLeft {
+  from {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: bottom left;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: bottom left;
   }
 }

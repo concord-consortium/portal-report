@@ -7,6 +7,7 @@ import ManualScoreIcon from "../../../img/svg-icons/manual-score-icon.svg";
 import NoScoreIcon from "../../../img/svg-icons/no-score-icon.svg";
 import RubricScoreIcon from "../../../img/svg-icons/rubric-score-icon.svg";
 import LaunchIcon from "../../../img/svg-icons/launch-icon.svg";
+import ExpandIcon from "../../../img/svg-icons/expand-more-icon.svg";
 import LinesEllipsis from "react-lines-ellipsis";
 import ReportItemIframe from "./report-item-iframe";
 import { TrackEventFunction } from "../../actions";
@@ -84,13 +85,15 @@ export class LevelViewer extends React.PureComponent<IProps> {
           <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
             <div className={css.activityTitle} title={`${idx + 1} ${activity.get("name")}`}>
               <LinesEllipsis
-                text={`${idx + 1} ${activity.get("name")}`}
+                text={`${idx + 1}: ${activity.get("name")}`}
                 maxLine="3"
                 ellipsis="..."
                 basedOn="letters"
               />
             </div>
-            <div className={`${css.activityImage} ${this.activityColorClass(idx)}`} />
+            <div className={`${css.activityImage} ${this.activityColorClass(idx)}`}>
+              <ExpandIcon />
+            </div>
           </div>
           <div className={css.externalLink}>
             <a className={css.externalLinkButton} data-cy="external-link-button"
@@ -148,7 +151,9 @@ export class LevelViewer extends React.PureComponent<IProps> {
           data-cy="expanded-activity-button">
         <div className={`${css.activityButton} ${css.expanded}`}
             onClick={this.handleActivityButtonClick(activity.get("id"))}>
-          <div className={`${css.activityImage} ${this.activityColorClass(idx)}`} />
+          <div className={`${css.activityImage} ${this.activityColorClass(idx)}`}>
+            <ExpandIcon />
+          </div>
           <div className={css.activityTitle}>
             Activity {idx + 1}: {activity.get("name")}
           </div>
