@@ -30,7 +30,7 @@ interface IProps {
 export class QuestionOverlay extends React.PureComponent<IProps> {
   render() {
     const { students, currentActivity, currentQuestion, isAnonymous, currentStudentId, trackEvent } = this.props;
-    // For now, we only show the Class Response section for multiple choice questions
+    // For now, we only show the Class Summary section for multiple choice questions
     const showClassResponse = currentQuestion?.get("type") === "multiple_choice";
 
     return (
