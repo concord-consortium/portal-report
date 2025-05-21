@@ -121,7 +121,7 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get("[data-cy=collapsed-activity-button]").click();
     });
   });
-  describe('Class Response Area', () => {
+  describe('Class Summary Area', () => {
     it('verify class response area is visible for multiple choice questions', () => {
       cy.get('[data-cy=student-answers-row]').eq(0).find('[data-cy=student-answer]').eq(1).click();
       cy.get('[data-cy=overlay-class-response-area]').should('be.visible');

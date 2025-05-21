@@ -34,7 +34,7 @@ export class ClassResponse extends React.PureComponent<IProps, IState> {
     return (
       <div className={css.classResponse} data-cy="overlay-class-response-area">
         <div className={css.responseHeader}>
-          <div className={css.title} data-cy="class-response-title">Class Response</div>
+          <div className={css.title} data-cy="class-response-title">Class Summary</div>
           <div className={css.showHideButton} onClick={this.handleChevronClick} data-cy="show-hide-class-response-button">
             <ArrowIcon className={chevronClass} />
           </div>
