@@ -16,7 +16,7 @@ context("Portal Dashboard Feedback Panel", () => {
   context('Feedback Level', () => {
     describe('verify feedback level toggles switch views', () => {
       it('show activity-level feedback', () => {
-        cy.get('[data-cy=activity-level-feedback-button]').should('be.visible').click();
+        cy.get('[data-cy=activity-level-feedback-button]').should('be.visible').should('not.be.disabled').click();
         cy.get('[data-cy=list-by-questions-toggle]').should('be.disabled');
         cy.get('[data-cy=feedback-note-toggle-button]').should('be.visible').click();
         cy.get('[data-cy=feedback-note-modal]')
@@ -139,7 +139,7 @@ context("Portal Dashboard Feedback Panel", () => {
   context('Feedback Rows', () => {
     describe('verify activity-level feedback appear and accept input', () => {
       it('shows feedback textareas for students who have started an activity', () => {
-        cy.get('[data-cy=activity-level-feedback-button]').click({force: true});
+        cy.get('[data-cy=activity-level-feedback-button]').click();
         cy.get('[data-cy=feedback-container]')
           .first()
           .should('contain', "This student hasn't started yet.")
@@ -272,11 +272,12 @@ context("Portal Dashboard Feedback Panel", () => {
       });
     });
 
-    it('displays "No feedback yet" when a student has no feedback', () => {
+    it('displays "This student hasn\'t started yet" message for students who haven\'t started the activity', () => {
       // Then try to access the activity-level feedback, using force: true since it might be disabled
       cy.get('[data-cy=activity-level-feedback-button]')
         .should('be.visible')
-        .click({force: true});
+        .should('not.be.disabled')
+        .click();
       
       cy.get('[data-cy=feedback-container]')
         .first()
