@@ -16,7 +16,7 @@ context("Portal Dashboard Feedback Panel", () => {
   context('Feedback Level', () => {
     describe('verify feedback level toggles switch views', () => {
       it('show activity-level feedback', () => {
-        cy.get('[data-cy=activity-level-feedback-button]').should('be.visible').click();
+        cy.get('[data-cy=activity-level-feedback-button]').should('be.visible').should('not.be.disabled').click();
         cy.get('[data-cy=list-by-questions-toggle]').should('be.disabled');
         cy.get('[data-cy=feedback-note-toggle-button]').should('be.visible').click();
         cy.get('[data-cy=feedback-note-modal]')
@@ -253,6 +253,43 @@ context("Portal Dashboard Feedback Panel", () => {
           .children('[data-cy=feedback-textarea]')
           .should('contain', 'This is question-level feedback entered when viewing list by question.');
       });
+    });
+  });
+  context('API Validation', () => {
+    beforeEach(() => {
+      cy.visit("/?portal-dashboard");
+      cy.get('[data-cy=navigation-select]').click();
+      cy.get('[data-cy="list-item-feedback-report"]').should('be.visible').click();
+      // Mock Firestore
+      cy.window().then((win) => {
+        win.firebase = {
+          firestore: () => ({
+            doc: () => ({
+              set: cy.stub().resolves()
+            })
+          })
+        };
+      });
+    });
+
+    it('displays "This student hasn\'t started yet" message for students who haven\'t started the activity', () => {
+      // Then try to access the activity-level feedback, using force: true since it might be disabled
+      cy.get('[data-cy=activity-level-feedback-button]')
+        .should('be.visible')
+        .should('not.be.disabled')
+        .click();
+      
+      cy.get('[data-cy=feedback-container]')
+        .first()
+        .should('contain', "This student hasn't started yet.")
+        .children('[data-cy=feedback-textarea]')
+        .should('not.exist');
+      cy.get('[data-cy=feedback-badge]')
+        .first()
+        .should('be.empty');
+      cy.get('[data-cy=feedback-text-and-score]')
+        .first()
+        .should('contain', "This student hasn't started yet.");
     });
   });
   context('Standalone Activity', () => {
