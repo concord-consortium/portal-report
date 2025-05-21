@@ -45,6 +45,36 @@ context("Portal Dashboard Header", () => {
         cy.get("[data-cy=last-run-header]").should("be.visible");
         cy.get("[data-cy=last-run-row]").should("be.visible").and("have.length", 6);
       });
+      it("verify 'Hide Last Run column' option's selected state is maintained across all views", () => {
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").should("be.visible").click();
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=navigation-select]").click();
+        cy.get("[data-cy=list-item-response-details]").click();
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=navigation-select]").click();
+        cy.get("[data-cy=list-item-feedback-report]").click();
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=navigation-select]").click();
+        cy.get("[data-cy=list-item-progress-dashboard]").click();
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=last-run-menu-item]").click();
+        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("not.match", /header--selected--/);
+        cy.get("[data-cy=navigation-select]").click();
+        cy.get("[data-cy=list-item-response-details]").click();
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("not.match", /header--selected--/);
+        cy.get("[data-cy=navigation-select]").click();
+        cy.get("[data-cy=list-item-feedback-report]").click();
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("not.match", /header--selected--/);
+        cy.get("[data-cy=navigation-select]").click();
+        cy.get("[data-cy=list-item-progress-dashboard]").click();
+      });
     });
     describe("Hide Feedback Badges setting", () => {
       it("verify badge legends are grayed out when menu item is checked", () => {
