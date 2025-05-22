@@ -288,7 +288,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode, setStudentSort: (value: string) => void) => {
     const { sequenceTree, userName, setCompactReport, setHideLastRun, setHideFeedbackBadges, trackEvent, isResearcher,
-            clazzName, sortByMethod } = this.props;
+            clazzName, sortByMethod, compactReport, hideLastRun, hideFeedbackBadges } = this.props;
     const { viewMode} = this.state;
     const color: ColorTheme = headerViewMode === "ProgressDashboard"
       ? "progress"
@@ -310,6 +310,9 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           clazzName={clazzName}
           setStudentSort={setStudentSort}
           sortByMethod={sortByMethod}
+          compactStudentList={compactReport}
+          hideLastRun={hideLastRun}
+          hideFeedbackBadges={hideFeedbackBadges}
         />
     );
   }

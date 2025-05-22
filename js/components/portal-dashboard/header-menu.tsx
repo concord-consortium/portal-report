@@ -23,12 +23,16 @@ interface IProps {
   setHideFeedbackBadges?: (value: boolean) => void;
   colorTheme?: ColorTheme;
   trackEvent: TrackEventFunction;
+  compactStudentList?: boolean;
+  hideLastRun?: boolean;
+  hideFeedbackBadges?: boolean;
 }
 
 export interface MenuItemWithState {
   name: string;
   onSelect: (selected: boolean) => void;
   dataCy: string;
+  selected: boolean;
 }
 
 interface MenuItemWithIcon {
@@ -118,11 +122,11 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
       trackEvent("Portal-Dashboard", "HideFeedbackBadges", {label: value.toString()});
     };
     this.props.setCompact && itemsWithState.push(
-      { name: "Compact student list", onSelect: setCompact, dataCy: "compact-menu-item" });
+      { name: "Compact student list", onSelect: setCompact, dataCy: "compact-menu-item", selected: !!this.props.compactStudentList });
     this.props.setHideLastRun && itemsWithState.push(
-      { name: "Hide Last Run column", onSelect: setHideLastRun, dataCy: "last-run-menu-item" });
+      { name: "Hide Last Run column", onSelect: setHideLastRun, dataCy: "last-run-menu-item", selected: !!this.props.hideLastRun });
     this.props.setHideFeedbackBadges && itemsWithState.push(
-      { name: "Hide feedback badges", onSelect: setHideFeedbackBadges, dataCy: "feedback-menu-item" });
+      { name: "Hide feedback badges", onSelect: setHideFeedbackBadges, dataCy: "feedback-menu-item", selected: !!this.props.hideFeedbackBadges });
     return (
       <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list">
         <div className={css.topMenu}>

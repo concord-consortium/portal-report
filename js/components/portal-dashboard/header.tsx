@@ -29,12 +29,15 @@ interface IProps {
   clazzName: string;
   setStudentSort: (sort: SortOption) => void;
   sortByMethod: SortOption;
+  compactStudentList?: boolean;
+  hideLastRun?: boolean;
+  hideFeedbackBadges?: boolean;
 }
 
 export class Header extends React.PureComponent<IProps> {
   render() {
     const { colorTheme, userName, setCompact, setHideLastRun, setHideFeedbackBadges, trackEvent,
-            isResearcher, clazzName } = this.props;
+            isResearcher, clazzName, compactStudentList, hideLastRun, hideFeedbackBadges } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
 
     return (
@@ -58,6 +61,9 @@ export class Header extends React.PureComponent<IProps> {
               setHideFeedbackBadges={setHideFeedbackBadges}
               colorTheme={colorTheme}
               trackEvent={trackEvent}
+              compactStudentList={compactStudentList}
+              hideLastRun={hideLastRun}
+              hideFeedbackBadges={hideFeedbackBadges}
             />
           </div>
         </div>
