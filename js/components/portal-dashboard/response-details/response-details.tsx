@@ -200,7 +200,9 @@ export class ResponseDetails extends React.PureComponent<IProps, IState> {
                   answers={answers}
                   currentQuestion={currentQuestion || firstQuestion}
                   currentStudentId={currentStudentId}
+                  hideLastRun={hideLastRun}
                   isAnonymous={isAnonymous}
+                  isCompact={compactReport}
                   listViewMode={listViewMode}
                   feedbackLevel={feedbackLevel}
                   isResearcher={isResearcher}
