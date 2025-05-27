@@ -19,7 +19,9 @@ interface IProps {
   feedbacks: Map<any, any>;
   feedbackLevel: FeedbackLevel;
   feedbacksNeedingReview: Map<any, any>;
+  hideLastRun: boolean;
   isAnonymous: boolean;
+  isCompact: boolean;
   listViewMode: ListViewMode;
   questionFeedbacks: Map<any, any>;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
@@ -47,8 +49,8 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
   }
 
   render() {
-    const { activity, activityIndex, answers, currentQuestion, currentStudentId, feedbacksNeedingReview,
-            isAnonymous, listViewMode, questionFeedbacks, questionFeedbackStudents, trackEvent, isResearcher } = this.props;
+    const { activity, activityIndex, answers, currentQuestion, currentStudentId, feedbacksNeedingReview, hideLastRun,
+      isAnonymous, isCompact, listViewMode, questionFeedbacks, questionFeedbackStudents, trackEvent, isResearcher } = this.props;
     const currentActivityId = activity?.get("id");
 
     return (
@@ -61,7 +63,9 @@ class QuestionFeedbackPanel extends React.PureComponent<IProps> {
               currentQuestion={currentQuestion}
               feedbacks={questionFeedbacks}
               feedbacksNeedingReview={feedbacksNeedingReview}
+              hideLastRun={hideLastRun}
               isAnonymous={isAnonymous}
+              isCompact={isCompact}
               setFeedbackSortRefreshEnabled={this.props.setFeedbackSortRefreshEnabled}
               students={questionFeedbackStudents}
               updateQuestionFeedback={this.props.updateQuestionFeedback}
