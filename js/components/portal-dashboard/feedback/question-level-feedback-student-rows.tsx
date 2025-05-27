@@ -8,8 +8,11 @@ import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaitin
 import GivenFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
 import { TrackEventFunction } from "../../../actions";
+import { LastRunRow } from "../last-run-row";
 
 import css from "../../../../css/portal-dashboard/feedback/feedback-rows.less";
+// Import shared styles for visual consistency of "Last Run" column.
+import lastRunCss from "../../../../css/portal-dashboard/last-run-column.less";
 
 interface IProps {
   activityId: string | null;
@@ -18,7 +21,9 @@ interface IProps {
   currentQuestion: Map<any, any>;
   feedbacks: Map<any, any>;
   feedbacksNeedingReview: Map<any, any>;
+  hideLastRun: boolean;
   isAnonymous: boolean;
+  isCompact: boolean;
   setFeedbackSortRefreshEnabled: (value: boolean) => void;
   students: List<any>;
   updateQuestionFeedback: (answerId: string, feedback: any) => void;
@@ -27,7 +32,8 @@ interface IProps {
 }
 
 export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
-  const { answers, currentQuestion, feedbacks, isAnonymous, students, activityId, updateQuestionFeedback, trackEvent, isResearcher } = props;
+  const { answers, currentQuestion, feedbacks, hideLastRun, isAnonymous, isCompact, students, activityId, updateQuestionFeedback,
+          trackEvent, isResearcher } = props;
 
   const getFeedbackIcon = (feedback: string, feedbackData: Map<string, any>, answer: Map<string, any>) => {
     let feedbackBadge = <AwaitingFeedbackQuestionBadgeIcon />;
@@ -50,6 +56,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
     const feedback = feedbackData ? feedbackData.get("feedback") : "";
     const feedbackBadge = getFeedbackIcon(feedback, feedbackData, answer);
     const feedbackTimestamp = feedbackData?.get("updatedAt")?.toDate().toLocaleString() || undefined;
+    const compactClass = isCompact ? lastRunCss.compact : "";
 
     return (
       <div key={currentQuestionId + studentId} className={css.feedbackRowsRow} data-cy="feedbackRow">
@@ -61,6 +68,11 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             {formattedName}
           </div>
         </div>
+        {!hideLastRun &&
+          <div className={`${lastRunCss.lastRunColumn} ${compactClass}`} data-cy="last-run-column">
+            <LastRunRow lastRun={student.get("lastRun")} showBorders={true} />
+          </div>
+        }
         <div className={css.studentResponse}>
           <Answer question={currentQuestion} student={student} responsive={false} studentName={formattedName} />
         </div>
