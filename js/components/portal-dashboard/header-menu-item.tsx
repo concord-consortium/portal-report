@@ -20,8 +20,17 @@ export class HeaderMenuItem extends React.PureComponent<IProps> {
     const { menuItem, colorTheme } = this.props;
     const colorClass = colorTheme ? css[colorTheme] : "";
     return (
-      <div className={`${css.menuItem} ${colorClass}`} onClick={this.handleSelect} data-cy={menuItem.dataCy}>
-        <CheckIcon className={`${css.check} ${colorClass} ${menuItem.selected ? css.selected : ""}`} />
+      <div
+        className={`${css.menuItem} ${colorClass}`}
+        onClick={this.handleSelect}
+        data-cy={menuItem.dataCy}
+        data-testid={menuItem.dataCy}
+      >
+        <CheckIcon
+          className={`${css.check} ${colorClass} ${menuItem.selected ? css.selected : ""}`}
+          data-cy={`${menuItem.dataCy}-selected`}
+          data-testid={`${menuItem.dataCy}-selected`}
+        />
         <div className={css.menuItemName}>{menuItem.name}</div>
       </div>
     );

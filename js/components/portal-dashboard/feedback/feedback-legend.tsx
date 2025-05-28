@@ -68,11 +68,11 @@ const FeedbackLegend: React.FC<IProps> = (props) => {
             <FeedbackSettingsToggle activity={activity} scoringSettings={scoringSettings} feedbacks={feedbacks} trackEvent={trackEvent} isResearcher={isResearcher} />
           </div>
           <div className={css.feedbackBadgeLegend__rubric_score}>
-            {showAvgScore && <div className={css.feedbackBadgeLegend__rubric_score_avg}>
+            {showAvgScore && <div className={css.feedbackBadgeLegend__rubric_score_avg} data-testid="rubric-score-avg">
               Avg. Score:
-              <div className={css.feedbackBadgeLegend__rubric_score_avg_value}>{formattedAvgScore} / {avgScoreMax}</div>
+              <div className={css.feedbackBadgeLegend__rubric_score_avg_value} data-testid="rubric-score-avg-value">{formattedAvgScore} / {avgScoreMax}</div>
             </div>}
-            {rubric && <div className={css.feedbackBadgeLegend__rubric_summary}>
+            {rubric && <div className={css.feedbackBadgeLegend__rubric_summary} data-testid="rubric-summary">
               Rubric Summary:
               <RubricSummaryIcon rubric={rubric} rubricDocUrl={rubricDocUrl} scoringSettings={scoringSettings} feedbacks={feedbacks} activityId={activity.get("id")} trackEvent={trackEvent} />
             </div>}
