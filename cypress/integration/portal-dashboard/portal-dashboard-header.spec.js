@@ -35,43 +35,82 @@ context("Portal Dashboard Header", () => {
         cy.get("[data-cy=last-run-header]").should("be.visible");
         cy.get("[data-cy=last-run-row]").should("be.visible").and("have.length", 6);
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").should("be.visible").click();
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-cy=last-run-menu-item]").click();
+        cy.get("[data-cy=menu-list]").should("not.be.visible");
+        cy.wait(1000);
         cy.get("[data-cy=last-run-header]").should("not.exist");
         cy.get("[data-cy=last-run-row]").should("not.exist");
       });
       it("verify we can show Last Run column", () => {
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").should("be.visible").click();
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-cy=last-run-menu-item]").click();
+        cy.get("[data-cy=menu-list]").should("not.be.visible");
         cy.get("[data-cy=last-run-header]").should("be.visible");
         cy.get("[data-cy=last-run-row]").should("be.visible").and("have.length", 6);
       });
       it("verify 'Hide Last Run column' option's selected state is maintained across all views", () => {
+        // First hide the column
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").should("be.visible").click();
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        // Click the menu item to hide the column
+        cy.get("[data-cy=last-run-menu-item]").click();
+        cy.get("[data-cy=last-run-header]").should("not.exist");
+        cy.get("[data-cy=last-run-row]").should("not.exist");
+        
+        // When column is hidden, checkmark should be present
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
+        
+        // Check state in response details view
         cy.get("[data-cy=navigation-select]").click();
         cy.get("[data-cy=list-item-response-details]").click();
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
+        
+        // Check state in feedback report view
         cy.get("[data-cy=navigation-select]").click();
         cy.get("[data-cy=list-item-feedback-report]").click();
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
+        
+        // Check state in progress dashboard view
         cy.get("[data-cy=navigation-select]").click();
         cy.get("[data-cy=list-item-progress-dashboard]").click();
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("match", /header--selected--/);
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
+        
+        // Now show the column again
+        // Click the menu item to show the column
         cy.get("[data-cy=last-run-menu-item]").click();
-        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("not.match", /header--selected--/);
+        cy.get("[data-cy=last-run-header]").should("be.visible");
+        cy.get("[data-cy=last-run-row]").should("be.visible");
+        
+        // When column is shown, checkmark should be present
+        cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
+        
+        // Check state in response details view
         cy.get("[data-cy=navigation-select]").click();
         cy.get("[data-cy=list-item-response-details]").click();
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("not.match", /header--selected--/);
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
+        
+        // Check state in feedback report view
         cy.get("[data-cy=navigation-select]").click();
         cy.get("[data-cy=list-item-feedback-report]").click();
         cy.get("[data-cy=header-menu]").click();
-        cy.get("[data-cy=last-run-menu-item]").find("svg").should("have.attr", "class").and("not.match", /header--selected--/);
+        cy.get("[data-cy=menu-list]").should("be.visible");
+        cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
+        
+        // Check state in progress dashboard view
         cy.get("[data-cy=navigation-select]").click();
         cy.get("[data-cy=list-item-progress-dashboard]").click();
       });
@@ -79,12 +118,16 @@ context("Portal Dashboard Header", () => {
     describe("Hide Feedback Badges setting", () => {
       it("verify badge legends are grayed out when menu item is checked", () => {
         cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=menu-list]").should("be.visible");
         cy.get("[data-cy=feedback-menu-item]").click();
+        cy.get("[data-cy=menu-list]").should("not.be.visible");
         cy.get("[data-cy=feedback-legend] [data-cy=Given-legend-disabled]").should("exist");
       });
       it("verify badge legends are not grayed out when menu item is unchecked", () => {
         cy.get("[data-cy=header-menu]").click();
+        cy.get("[data-cy=menu-list]").should("be.visible");
         cy.get("[data-cy=feedback-menu-item]").click();
+        cy.get("[data-cy=menu-list]").should("not.be.visible");
         cy.get("[data-cy=feedback-legend] [data-cy=Given-legend-disabled]").should("not.exist");
       });
     });

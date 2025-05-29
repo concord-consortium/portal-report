@@ -278,7 +278,7 @@ context("Portal Dashboard Feedback Panel", () => {
         .should('be.visible')
         .should('not.be.disabled')
         .click();
-      
+
       cy.get('[data-cy=feedback-container]')
         .first()
         .should('contain', "This student hasn't started yet.")
