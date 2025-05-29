@@ -54,9 +54,8 @@ context("Portal Dashboard Header", () => {
         // First hide the column
         cy.get("[data-cy=header-menu]").click();
         cy.get("[data-cy=menu-list]").should("be.visible");
-        // Using force: true because the menu item might be covered by other elements or have pointer-events disabled
-        cy.get("[data-cy=last-run-menu-item]").click({ force: true });
-        // Wait for the state to update and the column to be hidden
+        // Click the menu item to hide the column
+        cy.get("[data-cy=last-run-menu-item]").click();
         cy.get("[data-cy=last-run-header]").should("not.exist");
         cy.get("[data-cy=last-run-row]").should("not.exist");
         
@@ -87,9 +86,8 @@ context("Portal Dashboard Header", () => {
         cy.get("[data-testid=last-run-menu-item-selected]").should("exist");
         
         // Now show the column again
-        // Using force: true because the menu item might be covered by other elements or have pointer-events disabled
-        cy.get("[data-cy=last-run-menu-item]").click({ force: true });
-        // Wait for the state to update and the column to be shown
+        // Click the menu item to show the column
+        cy.get("[data-cy=last-run-menu-item]").click();
         cy.get("[data-cy=last-run-header]").should("be.visible");
         cy.get("[data-cy=last-run-row]").should("be.visible");
         
