@@ -6,7 +6,8 @@ import {
   normalizeResourceJSON,
   preprocessPortalDataJSON,
   preprocessAnswersJSON,
-  IPortalData
+  IPortalData,
+  preprocessInteractiveStateHistoriesJSON
 } from "../core/transform-json-response";
 import {
   SET_ANONYMOUS_VIEW,
@@ -20,6 +21,7 @@ import {
   SHOW_COMPARE_VIEW,
   HIDE_COMPARE_VIEW,
   RECEIVE_ANSWERS,
+  RECEIVE_INTERACTIVE_STATE_HISTORIES,
   REGISTER_REPORT_ITEM,
   UNREGISTER_REPORT_ITEM,
   SET_REPORT_ITEM_ANSWER,
@@ -38,6 +40,7 @@ export interface IReportState {
   clazzId: number;
   students: Map<any, any>;
   answers: Map<any, any>;
+  interactiveStateHistories: Map<any, any>;
   sequences: Map<any, any>;
   activities: Map<any, any>;
   sections: Map<any, any>;
@@ -73,6 +76,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   clazzId: -1,
   students: Map({}),
   answers: Map({}),
+  interactiveStateHistories: Map({}),
   sequences: Map({}),
   activities: Map({}),
   sections: Map({}),
@@ -112,6 +116,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   clazzId: number;
   students: Map<any, any>;
   answers: Map<any, any>;
+  interactiveStateHistories: Map<any, any>;
   sequences: Map<any, any>;
   activities: Map<any, any>;
   sections: Map<any, any>;
@@ -204,6 +209,8 @@ export default function report(state = new ReportState({}), action?: any) {
       return state;
     case RECEIVE_ANSWERS:
       return state.set("answers", Immutable.fromJS(preprocessAnswersJSON(action.response)) as Map<any, any>);
+    case RECEIVE_INTERACTIVE_STATE_HISTORIES:
+      return state.set("interactiveStateHistories", Immutable.fromJS(preprocessInteractiveStateHistoriesJSON(action.response)) as Map<any, any>);
     case SET_NOW_SHOWING:
       return state
         .set("nowShowing", action.nowShowingValue)
@@ -254,13 +261,13 @@ export default function report(state = new ReportState({}), action?: any) {
       return state;
     case GET_REPORT_ITEM_ANSWER:
       reportItemAnswerRequests.push({
-        questionId: action.questionId,
-        platformUserId: action.platformUserId,
+        answer: action.answer,
         itemsType: action.itemsType
       });
       return processReportItemRequests(state);
     case SET_REPORT_ITEM_ANSWER:
-      const answer = getAnswer(state, action.questionId, action.reportItemAnswer.platformUserId);
+      const answerId = questionIdToAnswerId[action.answer];
+      delete questionIdToAnswerId[action.answer];
       let storageName: keyof IReportState;
       if (action.reportItemAnswer.itemsType === "compactAnswer") {
         storageName = "reportItemAnswersCompact";
@@ -270,10 +277,10 @@ export default function report(state = new ReportState({}), action?: any) {
         // Old interactives might not send back itemsType. Storage name should default to "reportItemAnswersFull".
         storageName = "reportItemAnswersFull";
       }
-      const currentReportItemAnswer = (answer && state.getIn([storageName, answer.get("id")])) || null;
+      const currentReportItemAnswer = (answerId && state.getIn([storageName, answerId])) || null;
       const reportItemAnswerChanged = JSON.stringify(currentReportItemAnswer) !== JSON.stringify(action.reportItemAnswer);
-      if (answer && reportItemAnswerChanged) {
-        return state.setIn([storageName, answer.get("id")], action.reportItemAnswer);
+      if (answerId && reportItemAnswerChanged) {
+        return state.setIn([storageName, answerId], action.reportItemAnswer);
       } else {
         return state;
       }
@@ -283,58 +290,57 @@ export default function report(state = new ReportState({}), action?: any) {
   }
 }
 
-let reportItemAnswerRequests: Array<{questionId: string; platformUserId: string; itemsType?: "fullAnswer" | "compactAnswer"}> = [];
-
-function getAnswer(state: ReportState, questionId: string, platformUserId: string) {
-  return state.answers.find(a => {
-    return a.get("questionId") === questionId && a.get("platformUserId") === platformUserId;
-  });
-}
+const questionIdToAnswerId: Record<string, any> = {};
+let reportItemAnswerRequests: Array<{answer: Map<string, any>; itemsType?: "fullAnswer" | "compactAnswer"}> = [];
 
 function processReportItemRequests(state: ReportState) {
   // use filter to remove requests that have iframe phones registered, regardless of the existence of an answer
-  reportItemAnswerRequests = reportItemAnswerRequests.filter(({questionId, platformUserId, itemsType}) => {
+  reportItemAnswerRequests = reportItemAnswerRequests.filter(({answer, itemsType}) => {
+    const questionId = answer.get("questionId");
+    const platformUserId = answer.get("platformUserId");
     const iframePhone = reportItemIFramePhones[questionId];
     const reportItemMetadata = state.get("reportItemMetadata").get(questionId);
-    if (iframePhone) {
+    if (iframePhone && answer) {
       // Interactive has to send report item metadata with `compactAnswerReportItemsAvailable=true` so the requests for
       // compact answer are issued. Otherwise, they're ignored for performance reasons (old interactives might not
       // handle report item type and render all the report items in response to this request).
       if (itemsType === "compactAnswer" && !reportItemMetadata?.compactAnswerReportItemsAvailable) {
         return false; // request processed, can be removed from array
       }
-      const answer = getAnswer(state, questionId, platformUserId);
-      if (answer) {
-        let interactiveState: any = null;
-        let authoredState: any = null;
-        let reportState: any = answer.get("reportState");
-        try {
-          reportState = JSON.parse(reportState);
-          interactiveState = reportState.interactiveState;
-          authoredState = reportState.authoredState;
-        } catch {
-          console.error("Unable to JSON parse reportState, sending null for interactiveState and authoredState.  Unparseable reportState:", reportState);
-        }
-        try {
-          interactiveState = JSON.parse(interactiveState);
-        } catch {
-          console.error("Unable to JSON parse interactiveState in answer, sending interactiveState as null.  Unparseable interactiveState:", interactiveState);
-        }
-        try {
-          authoredState = JSON.parse(authoredState);
-        } catch {
-          console.error("Unable to JSON parse authoredState in answer, sending authoredState as null.  Unparseable authoredState:", authoredState);
-        }
-        const request: Omit<IInterimGetReportItemAnswer, "requestId"> = {
-          version: "2.1.0",
-          type: "html",
-          platformUserId,
-          interactiveState,
-          authoredState,
-          itemsType: itemsType || "fullAnswer"
-        };
-        iframePhone.post("getReportItemAnswer", request);
+      let interactiveState: any = null;
+      let authoredState: any = null;
+      let reportState: any = answer.get("reportState");
+      try {
+        reportState = JSON.parse(reportState);
+        interactiveState = reportState.interactiveState;
+        authoredState = reportState.authoredState;
+      } catch {
+        console.error("Unable to JSON parse reportState, sending null for interactiveState and authoredState.  Unparseable reportState:", reportState);
       }
+      try {
+        interactiveState = JSON.parse(interactiveState);
+      } catch {
+        console.error("Unable to JSON parse interactiveState in answer, sending interactiveState as null.  Unparseable interactiveState:", interactiveState);
+      }
+      try {
+        authoredState = JSON.parse(authoredState);
+      } catch {
+        console.error("Unable to JSON parse authoredState in answer, sending authoredState as null.  Unparseable authoredState:", authoredState);
+      }
+      const request: Omit<IInterimGetReportItemAnswer, "requestId"> = {
+        version: "2.1.0",
+        type: "html",
+        platformUserId,
+        interactiveState,
+        authoredState,
+        itemsType: itemsType || "fullAnswer"
+      };
+
+      // save the answer id so we can retrieve it when the report item posts it back - we probably should have provided
+      // an opaque data field for this purpose in the request that would be returned with the answer
+      questionIdToAnswerId[questionId] = answer.get("id");
+
+      iframePhone.post("getReportItemAnswer", request);
       return false; // request processed, can be removed from array
     }
     return true; // iframe not available, request not processed, needs to stay in the array

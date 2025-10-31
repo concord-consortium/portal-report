@@ -1,7 +1,7 @@
 import { getReportItemAnswer, registerReportItem } from "../../js/actions";
 import report, {ReportState, getLoggingUserName} from "../../js/reducers/report-reducer";
 import iframePhone from "iframe-phone";
-import { fromJS } from "immutable";
+import { Map, fromJS } from "immutable";
 
 describe("report reducer", () => {
 
@@ -30,6 +30,7 @@ describe("report reducer", () => {
 
   describe("getReportItemAnswer", () => {
     let state;
+    const answer = Map({ questionId: "123", platformUserId: "user1", reportState: '{ "authoredState": "{}", "interactiveState": "{}" }' });
     const questionId = "123";
     const platformUserId = "user1";
     const phone = new iframePhone.ParentEndpoint();
@@ -47,12 +48,12 @@ describe("report reducer", () => {
       });
 
       it("skips `getReportItemAnswer` iframe phone requests when the itemsType is `compactAnswer`", () => {
-        report(state, getReportItemAnswer(questionId, platformUserId, "compactAnswer"));
+        report(state, getReportItemAnswer(answer, "compactAnswer"));
         expect(phone.post).not.toHaveBeenCalled();
       });
 
       it("sends `getReportItemAnswer` iframe phone request when the itemsType is `fullAnswer`", () => {
-        report(state, getReportItemAnswer(questionId, platformUserId, "fullAnswer"));
+        report(state, getReportItemAnswer(answer, "fullAnswer"));
         expect(phone.post).toHaveBeenCalledTimes(1);
         expect(phone.post).toHaveBeenCalledWith("getReportItemAnswer", expect.objectContaining({
           platformUserId, authoredState: {}, interactiveState: {}, itemsType: "fullAnswer"
@@ -60,7 +61,7 @@ describe("report reducer", () => {
       });
 
       it("sends `getReportItemAnswer` iframe phone request when the itemsType is not provided (as it defaults to `fullAnswer`)", () => {
-        report(state, getReportItemAnswer(questionId, platformUserId));
+        report(state, getReportItemAnswer(answer));
         expect(phone.post).toHaveBeenCalledTimes(1);
         expect(phone.post).toHaveBeenCalledWith("getReportItemAnswer", expect.objectContaining({
           platformUserId, authoredState: {}, interactiveState: {}, itemsType: "fullAnswer"
@@ -74,7 +75,7 @@ describe("report reducer", () => {
       });
 
       it("sends `getReportItemAnswer` iframe phone requests when the itemsType is `compactAnswer`", () => {
-        report(state, getReportItemAnswer(questionId, platformUserId, "compactAnswer"));
+        report(state, getReportItemAnswer(answer, "compactAnswer"));
         expect(phone.post).toHaveBeenCalledTimes(1);
 
         expect(phone.post).toHaveBeenCalledWith("getReportItemAnswer", expect.objectContaining({
@@ -83,7 +84,7 @@ describe("report reducer", () => {
       });
 
       it("sends `getReportItemAnswer` iframe phone request when the itemsType is `fullAnswer`", () => {
-        report(state, getReportItemAnswer(questionId, platformUserId, "fullAnswer"));
+        report(state, getReportItemAnswer(answer, "fullAnswer"));
         expect(phone.post).toHaveBeenCalledTimes(1);
         expect(phone.post).toHaveBeenCalledWith("getReportItemAnswer", expect.objectContaining({
           platformUserId, authoredState: {}, interactiveState: {}, itemsType: "fullAnswer"

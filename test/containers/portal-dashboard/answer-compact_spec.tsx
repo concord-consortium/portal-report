@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from '@testing-library/react';
-import { Map } from "immutable";
+import { Map, List } from "immutable";
 import { AnswerCompact } from "../../../js/containers/portal-dashboard/answer-compact";
 
 describe("<AnswerCompact />", () => {
@@ -11,6 +11,7 @@ describe("<AnswerCompact />", () => {
     answer: "answer foo bar",
     platformUserId: "s1"
   });
+  const interactiveStateHistory: List<Map<string, any>> = List();
 
   describe("when question specifies reportItemUrl", () => {
     const question = Map({ id: "q1", reportItemUrl: "foobar.com" });
@@ -27,6 +28,7 @@ describe("<AnswerCompact />", () => {
         feedback={Map()}
         trackEvent={jest.fn()}
         answerOrientation="wide"
+        interactiveStateHistory={interactiveStateHistory}
       />);
       expect(getReportItemAnswer).toHaveBeenCalledTimes(1);
 
@@ -39,6 +41,7 @@ describe("<AnswerCompact />", () => {
         feedback={Map()}
         trackEvent={jest.fn()}
         answerOrientation="wide"
+        interactiveStateHistory={interactiveStateHistory}
       />);
       // Nothing has changed, getReportItemAnswer should not be called again.
       expect(getReportItemAnswer).toHaveBeenCalledTimes(1);
@@ -53,6 +56,7 @@ describe("<AnswerCompact />", () => {
         feedback={Map()}
         trackEvent={jest.fn()}
         answerOrientation="wide"
+        interactiveStateHistory={interactiveStateHistory}
       />);
       // Answer has been updated, getReportItemAnswer should be called again.
       expect(getReportItemAnswer).toHaveBeenCalledTimes(2);
@@ -74,6 +78,7 @@ describe("<AnswerCompact />", () => {
         feedback={Map()}
         trackEvent={jest.fn()}
         answerOrientation="wide"
+        interactiveStateHistory={interactiveStateHistory}
       />);
       expect(getReportItemAnswer).not.toHaveBeenCalled();
 
@@ -87,6 +92,7 @@ describe("<AnswerCompact />", () => {
         feedback={Map()}
         trackEvent={jest.fn()}
         answerOrientation="wide"
+        interactiveStateHistory={interactiveStateHistory}
       />);
       expect(getReportItemAnswer).not.toHaveBeenCalled();
     });

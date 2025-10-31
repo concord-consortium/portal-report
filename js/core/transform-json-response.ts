@@ -213,3 +213,7 @@ export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalDat
   });
   return camelizedJson;
 }
+
+export function preprocessInteractiveStateHistoriesJSON(historiesJSON: any): any {
+  return camelizeKeys(historiesJSON);
+}

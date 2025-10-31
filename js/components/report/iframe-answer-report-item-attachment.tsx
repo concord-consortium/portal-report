@@ -25,11 +25,19 @@ export class IframeAnswerReportItemAttachment extends PureComponent<IProps, ISta
     this.handleLoadAttachment = this.handleLoadAttachment.bind(this);
   }
 
-  UNSAFE_componentWillMount() {
-    const { item, answer } = this.props;
+  UNSAFE_componentWillMount(): void {
+    this.updateContentType(this.props);
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
+    this.updateContentType(nextProps);
+  }
+
+  updateContentType(props: IProps) {
+    const { item, answer } = props;
     const answerMeta: any = answer.toJS();
-    const attachment = answerMeta.attachments[item.name];
-    const contentType = attachment.contentType;
+    const attachment = answerMeta.attachments?.[item.name];
+    const contentType = attachment?.contentType;
     this.setState({contentType});
     // Do not load audio files by default because there may be a lot of them and we want to
     // minimize page load time.

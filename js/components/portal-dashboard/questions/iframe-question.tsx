@@ -1,9 +1,9 @@
 import React from "react";
 import { Map } from "immutable";
 import { renderHTML } from "../../../util/render-html";
+import ReportItemIframe from "../report-item-iframe";
 
 import css from "../../../../css/portal-dashboard/questions/multiple-choice-question.less";
-import ReportItemIframe from "../report-item-iframe";
 
 interface IProps {
   question?: Map<string, any>;

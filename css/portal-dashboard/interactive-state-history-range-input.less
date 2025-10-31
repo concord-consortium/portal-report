@@ -1,0 +1,116 @@
+@import "./variables";
+
+@track-orange: #d86600;
+
+.rangeContainer {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid @cc-orange-light1;
+  background-color: @cc-orange-light4;
+  font-family: lato, arial, helvetica, sans-serif;
+  font-family: Lato;
+  font-size: 16px;
+  width: 100%;
+  margin: 20px auto;
+  position: relative;
+  user-select: none;
+}
+
+.rangeIcon {
+  width: 36px;
+  height: 38px;
+  border: 2px solid white;
+  padding: 2px 1px 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rangeSliderWrap {
+  flex-grow: 1;
+  position: relative;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  margin: 0 22px;
+}
+
+// hidden input element
+.rangeInput {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  opacity: 0; // hide the default slider appearance
+  cursor: grab;
+
+  // use the sibling selector (~) to target the thumb when the input is hovered/active
+  &:hover ~ .rangeThumb {
+    background-color: @cc-orange-light3;
+  }
+  &:active ~ .rangeThumb {
+    cursor: grabbing;
+    background-color: @cc-orange;
+    border-color: white;
+  }
+}
+
+.rangeTrackBar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  background-color: @track-orange;
+}
+
+.rangeProgressBar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  background-color: @track-orange;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.rangeMarker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: solid 2px #fff;
+  background-color: @cc-orange;
+  z-index: 1;
+  pointer-events: none; // so the slider can be clicked/dragged
+}
+
+.rangeThumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: white;
+  border: 2px solid @cc-orange;
+  z-index: 3;
+  pointer-events: none;
+  transition: left 0.15s ease-out; // smooth movement when snapping
+}
+
+.rangeDatetime {
+  text-align: center;
+  color: @cc-charcoal;
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+  padding-right: 9px;
+}
