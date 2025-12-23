@@ -34,10 +34,10 @@ interface IProps {
 
 interface IState {
   iframeVisible: boolean;
-  loadingReportItemAnswer: boolean;
   answerState: any;
   error: string|null;
   answerStateVersion: number;
+  reportItemAnswerItems: IReportItemAnswerItem[];
 }
 
 export class IframeAnswer extends PureComponent<IProps, IState> {
@@ -45,13 +45,19 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     super(props);
     this.state = {
       iframeVisible: false,
-      loadingReportItemAnswer: !!props.question?.get("reportItemUrl"),
       answerState: this.props.answer.get("answer"),
       error: null,
-      answerStateVersion: 0
+      answerStateVersion: 0,
+      reportItemAnswerItems: []
     };
     this.toggleIframe = this.toggleIframe.bind(this);
     this.renderLink = this.renderLink.bind(this);
+    this.maybeFetchReportItemAnswer = this.maybeFetchReportItemAnswer.bind(this);
+    this.updateReportItemAnswerItems = this.updateReportItemAnswerItems.bind(this);
+
+    requestAnimationFrame(() => {
+      this.maybeFetchReportItemAnswer(this.props);
+    });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
@@ -73,10 +79,80 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
         });
       }
     }
+
+    const questionOrAnswerChanged = nextProps.question !== this.props.question || nextProps.answer !== this.props.answer;
+    const reportItemAnswerChanged = nextProps.reportItemAnswer !== this.props.reportItemAnswer;
+
+    if (questionOrAnswerChanged) {
+      this.maybeFetchReportItemAnswer(nextProps);
+    }
+
+    if (questionOrAnswerChanged || reportItemAnswerChanged) {
+      this.updateReportItemAnswerItems(nextProps);
+    }
   }
 
   toggleIframe() {
     this.setState(prev => ({iframeVisible: !prev.iframeVisible}));
+  }
+
+  maybeFetchReportItemAnswer(props: IProps) {
+    const { answer, question } = props;
+    const hasReportItemUrl = !!question?.get("reportItemUrl");
+
+    if (hasReportItemUrl) {
+      this.props.getReportItemAnswer(answer, "fullAnswer");
+    }
+  }
+
+  updateReportItemAnswerItems(props: IProps) {
+    const { reportItemAnswer, answerOrientation } = props;
+    const displayTall = answerOrientation === "tall";
+    let reportItemAnswerItems: IReportItemAnswerItem[] = [];
+
+    if (reportItemAnswer) {
+      const injectedStyleTag = `
+      <style>
+        body {
+          font-family: lato, arial, helvetica, sans-serif;
+        }
+        .tall {
+          display: ${displayTall ? "flex" : "none"};
+          flex-direction: column;
+        }
+        .wide {
+          display: ${displayTall ? "none" : "flex"};
+          flex-direction: row;
+        }
+      </style>
+      `;
+      // handle interactives using the older api format and create a single html item
+      if (reportItemAnswer.type === "html") {
+        reportItemAnswerItems.push({
+          type: "html",
+          html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            ${injectedStyleTag}
+          </head>
+          <body>
+            ${reportItemAnswer.html}
+          </body>
+          </html>
+        `});
+      } else {
+        // use the new api format which returns a list of items
+        reportItemAnswerItems = (reportItemAnswer.items || []).map(item => {
+          if (item.type === "html") {
+            return {...item, html: `${injectedStyleTag} ${item.html}`};
+          }
+          return item;
+        });
+      }
+    }
+
+    this.setState({reportItemAnswerItems});
   }
 
   /**
@@ -157,62 +233,12 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   render() {
-    const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation,
-      interactiveStateHistory, interactiveStateHistoryId, setInteractiveStateHistoryId } = this.props;
+    const { alwaysOpen, answer, responsive, question, interactiveStateHistory, interactiveStateHistoryId, setInteractiveStateHistoryId } = this.props;
+    const { reportItemAnswerItems } = this.state;
     const answerText = answer.get("answerText");
     const questionType = answer.get("questionType");
     const hasReportItemUrl = !!question?.get("reportItemUrl");
-    const displayTall = answerOrientation === "tall";
-    let reportItemAnswerItems: IReportItemAnswerItem[] = [];
-
-    // request the latest student report html
-    if (hasReportItemUrl) {
-      setTimeout(() => {
-        this.props.getReportItemAnswer(answer, "fullAnswer");
-      }, 0);
-    }
-
-    if (reportItemAnswer) {
-      const injectedStyleTag = `
-      <style>
-        body {
-          font-family: lato, arial, helvetica, sans-serif;
-        }
-        .tall {
-          display: ${displayTall ? "flex" : "none"};
-          flex-direction: column;
-        }
-        .wide {
-          display: ${displayTall ? "none" : "flex"};
-          flex-direction: row;
-        }
-      </style>
-      `;
-      // handle interactives using the older api format and create a single html item
-      if (reportItemAnswer.type === "html") {
-        reportItemAnswerItems.push({
-          type: "html",
-          html: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            ${injectedStyleTag}
-          </head>
-          <body>
-            ${reportItemAnswer.html}
-          </body>
-          </html>
-        `});
-      } else {
-        // use the new api format which returns a list of items
-        reportItemAnswerItems = (reportItemAnswer.items || []).map(item => {
-          if (item.type === "html") {
-            return {...item, html: `${injectedStyleTag} ${item.html}`};
-          }
-          return item;
-        });
-      }
-    }
+    const key = question.get("id");
 
     // if there are no report answer items, show the answer text or the links to view the interactive
     let maybeAnswerTextOrLinks: JSX.Element | false = false;
@@ -222,9 +248,6 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
         : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded, fill in the blank, and open response questions have answerTexts */
     }
 
-    // show a loading indicator while the report item answer is loading (otherwise the answer looks blank)
-    const showLoading = this.state.loadingReportItemAnswer && !reportItemAnswer;
-
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""} ${questionType === "iframe_interactive" ? "scaled" : ""}`} data-cy="iframe-answer">
         {maybeAnswerTextOrLinks && (
@@ -232,10 +255,9 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
             {maybeAnswerTextOrLinks}
           </div>
         )}
-        {showLoading && "Loading..."}
         {answer && reportItemAnswerItems.map((item, index) => (
           <IframeAnswerReportItem
-            key={`${question.get("id")}-${index}${interactiveStateHistoryId ? `-${interactiveStateHistoryId}` : ""}`}
+            key={`${key}-${index}${interactiveStateHistoryId ? `-${interactiveStateHistoryId}` : ""}`}
             item={item}
             answerText={answerText}
             renderLink={this.renderLink}

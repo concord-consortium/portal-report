@@ -277,13 +277,7 @@ export default function report(state = new ReportState({}), action?: any) {
         // Old interactives might not send back itemsType. Storage name should default to "reportItemAnswersFull".
         storageName = "reportItemAnswersFull";
       }
-      const currentReportItemAnswer = (answerId && state.getIn([storageName, answerId])) || null;
-      const reportItemAnswerChanged = JSON.stringify(currentReportItemAnswer) !== JSON.stringify(action.reportItemAnswer);
-      if (answerId && reportItemAnswerChanged) {
-        return state.setIn([storageName, answerId], action.reportItemAnswer);
-      } else {
-        return state;
-      }
+      return state.setIn([storageName, answerId], action.reportItemAnswer);
 
     default:
       return state;
