@@ -1,6 +1,8 @@
 import React from "react";
 import classNames from "classnames";
 
+import { localDateTime } from "../../util/datetime";
+
 import css from "../../../css/portal-dashboard/last-run-row.less";
 
 interface IProps {
@@ -12,18 +14,9 @@ interface IProps {
 
 export const LastRunRow: React.FC<IProps> = ({ backgroundClass, isCompact, lastRun, showBorders }: IProps) => {
   const lastRunDate = lastRun ? new Date(lastRun) : null;
-  const localDate = lastRunDate?.toLocaleString(undefined, {
-    year: "2-digit",
-    month: "2-digit",
-    day: "2-digit"
-  });
-  const localTime = lastRunDate?.toLocaleTimeString(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true
-  });
+  const {date, time} = localDateTime(lastRunDate);
   const lastRunDisplayValue = lastRunDate
-    ? <><div>{localDate}</div><div className={isCompact ? css.visuallyHidden : ""}>{localTime}</div></>
+    ? <><div>{date}</div><div className={isCompact ? css.visuallyHidden : ""}>{time}</div></>
     : "N/A";
 
   const compactClass = isCompact ? css.compact : "";

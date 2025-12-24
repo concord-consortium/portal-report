@@ -16,7 +16,7 @@ import css from "../../../css/portal-dashboard/answer-compact.less";
 interface IProps extends AnswerProps {
   hideFeedbackBadges: boolean;
   feedback: Map<string, any>;
-  getReportItemAnswer: (questionId: string, studentId: string, itemsType: ReportItemsType) => void;
+  getReportItemAnswer: (answer: Map<string, any>, itemsType: ReportItemsType) => void;
   reportItemAnswer?: IReportItemAnswer;
 }
 
@@ -30,7 +30,7 @@ export class AnswerCompact extends React.PureComponent<IProps> {
     const hasReportItemUrl = !!question?.get("reportItemUrl");
 
     if (hasReportItemUrl && answer) {
-      this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "compactAnswer");
+      this.props.getReportItemAnswer(answer, "compactAnswer");
     }
   }
 
@@ -40,7 +40,7 @@ export class AnswerCompact extends React.PureComponent<IProps> {
     const answerChanged = JSON.stringify(prevProps.answer) !== JSON.stringify(answer);
 
     if (hasReportItemUrl && answer && answerChanged) {
-      this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "compactAnswer");
+      this.props.getReportItemAnswer(answer, "compactAnswer");
     }
   }
 
@@ -117,7 +117,7 @@ function mapStateToProps(state: any, ownProps: any): Partial<IProps> {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
-    getReportItemAnswer: (questionId: string, studentId: string, itemsType: ReportItemsType) => dispatch(getReportItemAnswer(questionId, studentId, itemsType)),
+    getReportItemAnswer: (answer: Map<string, any>, itemsType: ReportItemsType) => dispatch(getReportItemAnswer(answer, itemsType)),
   };
 };
 

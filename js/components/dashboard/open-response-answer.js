@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
-import { Map } from "immutable";
+import { Map, List } from "immutable";
+
+import { InteractiveStateHistoryRangeInput } from "../portal-dashboard/interactive-state-history-range-input";
 
 import css from "../../../css/dashboard/open-response-answer.less";
 
@@ -13,10 +15,18 @@ export default class OpenResponseAnswer extends PureComponent {
   }
 
   renderFullAnswer() {
-    const { answer } = this.props;
+    const { answer, interactiveStateHistory, interactiveStateHistoryId, setInteractiveStateHistoryId } = this.props;
     return (
       <div data-cy="openResponseText">
         { answer.get("answer") }
+        {interactiveStateHistory && setInteractiveStateHistoryId &&
+          <InteractiveStateHistoryRangeInput
+            answer={answer}
+            interactiveStateHistory={interactiveStateHistory}
+            interactiveStateHistoryId={interactiveStateHistoryId}
+            setInteractiveStateHistoryId={setInteractiveStateHistoryId}
+          />
+        }
       </div>
     );
   }
@@ -34,4 +44,7 @@ export default class OpenResponseAnswer extends PureComponent {
 OpenResponseAnswer.defaultProps = {
   answer: Map(),
   showFullAnswer: false,
+  interactiveStateHistory: List(),
+  interactiveStateId: undefined,
+  setInteractiveStateId: () => {},
 };

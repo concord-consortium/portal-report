@@ -1,12 +1,14 @@
 import React, { PureComponent } from "react";
 import queryString from "query-string";
 import { connect } from "react-redux";
-import { Map } from "immutable";
+import { List, Map } from "immutable";
 import { IReportItemAnswer, IReportItemAnswerItem, ReportItemsType } from "@concord-consortium/interactive-api-host";
 import { renderHTML } from "../../util/render-html";
 import InteractiveIframe from "./interactive-iframe";
 import { getReportItemAnswer } from "../../actions";
 import { IframeAnswerReportItem } from "./iframe-answer-report-item";
+import { InteractiveStateHistoryRangeInput } from "../portal-dashboard/interactive-state-history-range-input";
+import { interactiveStateHistoryCache } from "../../util/interactive-state-history-cache";
 
 import "../../../css/report/iframe-answer.less";
 
@@ -21,14 +23,21 @@ interface IProps {
   question: Map<any, any>;
   responsive: boolean;
   alwaysOpen: boolean;
-  getReportItemAnswer: (questionId: string, studentId: string, itemsType: ReportItemsType) => void;
+  getReportItemAnswer: (answer: Map<string, any>, itemsType: ReportItemsType) => void;
   reportItemAnswer?: IInterimReportItemAnswer;
   answerOrientation: "wide" | "tall";
+  interactiveStateHistory: List<Map<string, any>>;
+  interactiveStateHistoryId?: string;
+  setInteractiveStateHistoryId: (newId?: string) => void;
+  sourceKey: string;
 }
 
 interface IState {
   iframeVisible: boolean;
-  loadingReportItemAnswer: boolean;
+  answerState: any;
+  error: string|null;
+  answerStateVersion: number;
+  reportItemAnswerItems: IReportItemAnswerItem[];
 }
 
 export class IframeAnswer extends PureComponent<IProps, IState> {
@@ -36,100 +45,70 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     super(props);
     this.state = {
       iframeVisible: false,
-      loadingReportItemAnswer: !!props.question?.get("reportItemUrl"),
+      answerState: this.props.answer.get("answer"),
+      error: null,
+      answerStateVersion: 0,
+      reportItemAnswerItems: []
     };
     this.toggleIframe = this.toggleIframe.bind(this);
     this.renderLink = this.renderLink.bind(this);
+    this.maybeFetchReportItemAnswer = this.maybeFetchReportItemAnswer.bind(this);
+    this.updateReportItemAnswerItems = this.updateReportItemAnswerItems.bind(this);
+
+    requestAnimationFrame(() => {
+      this.maybeFetchReportItemAnswer(this.props);
+    });
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
+    const {answer, sourceKey, interactiveStateHistoryId} = this.props;
+    if (answer.get("type") === "interactive_state") {
+      if (interactiveStateHistoryId) {
+        interactiveStateHistoryCache.get(sourceKey, interactiveStateHistoryId, (error, cachedAnswer) => {
+          if (error) {
+            this.setState({error});
+          } else {
+            this.setState(prev => {
+              return {answerState: cachedAnswer.answer, error: null, answerStateVersion: prev.answerStateVersion + 1};
+            });
+          }
+        });
+      } else {
+        this.setState(prev => {
+          return {answerState: answer.get("answer"), error: null, answerStateVersion: prev.answerStateVersion + 1};
+        });
+      }
+    }
+
+    const questionOrAnswerChanged = nextProps.question !== this.props.question || nextProps.answer !== this.props.answer;
+    const reportItemAnswerChanged = nextProps.reportItemAnswer !== this.props.reportItemAnswer;
+
+    if (questionOrAnswerChanged) {
+      this.maybeFetchReportItemAnswer(nextProps);
+    }
+
+    if (questionOrAnswerChanged || reportItemAnswerChanged) {
+      this.updateReportItemAnswerItems(nextProps);
+    }
   }
 
   toggleIframe() {
     this.setState(prev => ({iframeVisible: !prev.iframeVisible}));
   }
 
-  /**
-   * Adds a studentId and iframeQuestionId to the existing url
-   */
-  getStandaloneLinkUrl(question: Map<any, any>, answer: Map<any, any>) {
-    const baseUrl = `${window.location.origin}${window.location.pathname}`;
-    const params = queryString.parse(window.location.search);
-    params.studentId = answer.get("platformUserId");
-    params.iframeQuestionId = question.get("id");
-    // Need to get the auth-domain from the class url
-    const clazz = Array.isArray(params.class) ? params.class[0] : params.class;
-    const authDomain = clazz?.split("/api")[0];
-    authDomain && (params["auth-domain"] = authDomain);
-    const newSearch = queryString.stringify(params);
-    return `${baseUrl}?${newSearch}`;
-  }
-
-  renderLink(options?: {hideViewInNewTab?: boolean; hideViewInline?: boolean}) {
-    const { answer, question } = this.props;
-    const { iframeVisible } = this.state;
-    const externalLinkIcon = <span className="pr-icon-external-link" />;
-    const renderBothLinks = !options?.hideViewInNewTab && !options?.hideViewInline;
-    if (question.get("displayInIframe")) {
-      const toggleText = iframeVisible ? "Hide" : "View Work";
-      const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
-      return (
-        <div>
-          {!options?.hideViewInline && <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a>}
-          {renderBothLinks && ` | `}
-          {!options?.hideViewInNewTab && <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>}
-        </div>
-      );
-    } else {
-      return <></>;
-    }
-  }
-
-  renderIframe() {
-    const { answer, question, responsive } = this.props;
-    let url;
-    let state;
-    // There are two supported answer types handled by iframe question: simple link or interactive state.
-    if (answer.get("type") === "external_link") {
-      // Answer field is just the reportable URL. We don't need any state.
-      url = answer.get("answer");
-      state = null;
-    } else if (answer.get("type") === "interactive_state") {
-      // URL field is provided by question. Answer field is a state that will be passed
-      // to the iframe using iframe-phone.
-      url = question.get("url");
-      state = answer.get("answer");
-    }
-
-    return (
-      <div className={`iframe-answer-content ${responsive ? "responsive" : ""}`}>
-        <InteractiveIframe src={url} state={state} answer={answer} width={question.get("width")} height={question.get("height")} />
-      </div>
-    );
-  }
-
-  shouldRenderIframe() {
-    const { question, alwaysOpen } = this.props;
-    const { iframeVisible } = this.state;
-
-    if (question.get("displayInIframe")) {
-      return iframeVisible || alwaysOpen;
-    } else {
-      return false;
-    }
-  }
-
-  render() {
-    const { alwaysOpen, answer, responsive, question, reportItemAnswer, answerOrientation } = this.props;
-    const answerText = answer.get("answerText");
-    const questionType = answer.get("questionType");
+  maybeFetchReportItemAnswer(props: IProps) {
+    const { answer, question } = props;
     const hasReportItemUrl = !!question?.get("reportItemUrl");
+
+    if (hasReportItemUrl) {
+      this.props.getReportItemAnswer(answer, "fullAnswer");
+    }
+  }
+
+  updateReportItemAnswerItems(props: IProps) {
+    const { reportItemAnswer, answerOrientation } = props;
     const displayTall = answerOrientation === "tall";
     let reportItemAnswerItems: IReportItemAnswerItem[] = [];
-
-    // request the latest student report html
-    if (hasReportItemUrl) {
-      setTimeout(() => {
-        this.props.getReportItemAnswer(question.get("id"), answer.getIn(["student", "id"]) as string, "fullAnswer");
-      }, 0);
-    }
 
     if (reportItemAnswer) {
       const injectedStyleTag = `
@@ -173,6 +152,94 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
       }
     }
 
+    this.setState({reportItemAnswerItems});
+  }
+
+  /**
+   * Adds a studentId and iframeQuestionId to the existing url
+   */
+  getStandaloneLinkUrl(question: Map<any, any>, answer: Map<any, any>) {
+    const { interactiveStateHistoryId } = this.props;
+    const baseUrl = `${window.location.origin}${window.location.pathname}`;
+    const params = queryString.parse(window.location.search);
+    params.studentId = answer.get("platformUserId");
+    params.iframeQuestionId = question.get("id");
+    // Need to get the auth-domain from the class url
+    const clazz = Array.isArray(params.class) ? params.class[0] : params.class;
+    const authDomain = clazz?.split("/api")[0];
+    authDomain && (params["auth-domain"] = authDomain);
+    if (interactiveStateHistoryId) {
+      params.interactiveStateHistoryId = interactiveStateHistoryId;
+    }
+    const newSearch = queryString.stringify(params);
+    return `${baseUrl}?${newSearch}`;
+  }
+
+  renderLink(options?: {hideViewInNewTab?: boolean; hideViewInline?: boolean}) {
+    const { answer, question } = this.props;
+    const { iframeVisible } = this.state;
+    const externalLinkIcon = <span className="pr-icon-external-link" />;
+    const renderBothLinks = !options?.hideViewInNewTab && !options?.hideViewInline;
+    if (question.get("displayInIframe")) {
+      const toggleText = iframeVisible ? "Hide" : "View Work";
+      const standaloneLinkUrl = this.getStandaloneLinkUrl(question, answer);
+      return (
+        <div>
+          {!options?.hideViewInline && <a onClick={this.toggleIframe} target="_blank" data-cy="toggleIframe">{toggleText}</a>}
+          {renderBothLinks && ` | `}
+          {!options?.hideViewInNewTab && <a href={standaloneLinkUrl} target="_blank" data-cy="standaloneIframe">Open in new tab {externalLinkIcon}</a>}
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  }
+
+  renderIframe() {
+    const { answer, question, responsive } = this.props;
+    let url;
+    let state;
+    let key;
+    // There are two supported answer types handled by iframe question: simple link or interactive state.
+    if (answer.get("type") === "external_link") {
+      // Answer field is just the reportable URL. We don't need any state.
+      url = answer.get("answer");
+      state = null;
+      key = url;
+    } else if (answer.get("type") === "interactive_state") {
+      // URL field is provided by question. Answer field is a state that will be passed
+      // to the iframe using iframe-phone.
+      url = question.get("url");
+      state = this.state.answerState;
+      key = `${url}-${this.state.answerStateVersion}`;
+    }
+
+    return (
+      <div className={`iframe-answer-content ${responsive ? "responsive" : ""}`}>
+        <InteractiveIframe key={key} src={url} state={state} answer={answer} width={question.get("width")} height={question.get("height")} />
+      </div>
+    );
+  }
+
+  shouldRenderIframe() {
+    const { question, alwaysOpen } = this.props;
+    const { iframeVisible } = this.state;
+
+    if (question.get("displayInIframe")) {
+      return iframeVisible || alwaysOpen;
+    } else {
+      return false;
+    }
+  }
+
+  render() {
+    const { alwaysOpen, answer, responsive, question, interactiveStateHistory, interactiveStateHistoryId, setInteractiveStateHistoryId } = this.props;
+    const { reportItemAnswerItems } = this.state;
+    const answerText = answer.get("answerText");
+    const questionType = answer.get("questionType");
+    const hasReportItemUrl = !!question?.get("reportItemUrl");
+    const key = question.get("id");
+
     // if there are no report answer items, show the answer text or the links to view the interactive
     let maybeAnswerTextOrLinks: JSX.Element | false = false;
     if (!hasReportItemUrl) {
@@ -181,9 +248,6 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
         : !alwaysOpen && this.renderLink(); /* This assumes only scaffolded, fill in the blank, and open response questions have answerTexts */
     }
 
-    // show a loading indicator while the report item answer is loading (otherwise the answer looks blank)
-    const showLoading = this.state.loadingReportItemAnswer && !reportItemAnswer;
-
     return (
       <div className={`iframe-answer ${responsive ? "responsive" : ""} ${questionType === "iframe_interactive" ? "scaled" : ""}`} data-cy="iframe-answer">
         {maybeAnswerTextOrLinks && (
@@ -191,10 +255,9 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
             {maybeAnswerTextOrLinks}
           </div>
         )}
-        {showLoading && "Loading..."}
-        {reportItemAnswerItems.map((item, index) => (
+        {answer && reportItemAnswerItems.map((item, index) => (
           <IframeAnswerReportItem
-            key={index}
+            key={`${key}-${index}${interactiveStateHistoryId ? `-${interactiveStateHistoryId}` : ""}`}
             item={item}
             answerText={answerText}
             renderLink={this.renderLink}
@@ -203,6 +266,12 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
           />
         ))}
         {this.shouldRenderIframe() && this.renderIframe()}
+        <InteractiveStateHistoryRangeInput
+          answer={answer}
+          interactiveStateHistory={interactiveStateHistory}
+          interactiveStateHistoryId={interactiveStateHistoryId}
+          setInteractiveStateHistoryId={setInteractiveStateHistoryId}
+        />
       </div>
     );
   }
@@ -218,7 +287,7 @@ function mapStateToProps() {
 
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
-    getReportItemAnswer: (questionId: string, studentId: string, itemsType: ReportItemsType) => dispatch(getReportItemAnswer(questionId, studentId, itemsType)),
+    getReportItemAnswer: (answer: Map<string, any>, itemsType: ReportItemsType) => dispatch(getReportItemAnswer(answer, itemsType)),
   };
 };
 

@@ -2,6 +2,8 @@ import React, { PureComponent } from "react";
 import iframePhone from "iframe-phone";
 import { handleGetAttachmentUrl, IAttachmentUrlRequest, IReportItemAnswer, IReportItemHandlerMetadata, IReportItemInitInteractive } from "@concord-consortium/interactive-api-host";
 import { connect } from "react-redux";
+import { Map } from "immutable";
+
 import { getSortedStudents } from "../../selectors/report";
 import { RootState } from "../../reducers";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
@@ -16,7 +18,7 @@ interface IProps {
   answersByQuestion: any;
   registerReportItem: (questionId: string, iframePhone: any, metadata: IReportItemHandlerMetadata) => void;
   unregisterReportItem: (questionId: string) => void;
-  setReportItemAnswer: (questionId: string, reportItemAnswer: IReportItemAnswer) => void;
+  setReportItemAnswer: (answer: Map<string, any>, reportItemAnswer: IReportItemAnswer) => void;
 }
 
 interface IState {
@@ -83,7 +85,7 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
     const answers = this.props.answersByQuestion.get(questionId);
 
     // construct a map of user id to answer present
-    const userHasAnswers = answers?.reduce((acc: Record<string, boolean>, answer: any) => {
+    const userHasAnswers = answers?.reduce((acc: Record<string, boolean>, answer: Map<string, any>) => {
       acc[answer.get("platformUserId")] = true;
       return acc;
     }, {});
@@ -166,7 +168,7 @@ const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     registerReportItem: (questionId: string, iframePhone: any, reportItemMetadata: IReportItemHandlerMetadata) => dispatch(registerReportItem(questionId, iframePhone, reportItemMetadata)),
     unregisterReportItem: (questionId: string) => dispatch(unregisterReportItem(questionId)),
-    setReportItemAnswer: (questionId: string, reportItemAnswer: IReportItemAnswer) => dispatch(setReportItemAnswer(questionId, reportItemAnswer)),
+    setReportItemAnswer: (answer: Map<string, any>, reportItemAnswer: IReportItemAnswer) => dispatch(setReportItemAnswer(answer, reportItemAnswer)),
   };
 };
 

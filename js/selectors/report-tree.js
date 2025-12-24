@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import Immutable, { Map } from "immutable";
+import Immutable, { Map, List } from "immutable";
 import { getViewType, FULL_REPORT, DASHBOARD, PORTAL_DASHBOARD } from "../util/misc";
 
 // `getSequenceTree` generates tree that is consumed by React components from reportState (ImmutableJS Map).
@@ -16,6 +16,7 @@ const getAnswers = state => state.getIn(["report", "answers"]);
 const getStudents = state => state.getIn(["report", "students"]);
 const getHideSectionNames = state => state.getIn(["report", "hideSectionNames"]);
 const getShowFeaturedQuestionsOnly = state => state.getIn(["report", "showFeaturedQuestionsOnly"]);
+const getInteractiveStateHistories = state => state.getIn(["report", "interactiveStateHistories"]);
 
 // Helpers
 // Why isn't this helper used by React components directly? So we don't have to care about view type here?
@@ -71,6 +72,20 @@ export const getAnswerTrees = createSelector(
     }
 );
 
+export const getInteractiveStateHistoryTree = createSelector(
+  [ getInteractiveStateHistories, getStudents, getQuestions],
+  (interactiveStateHistories, students, questions) => {
+
+  return interactiveStateHistories
+      .filter(ish => students.has(ish.get("platformUserId")) && questions.has(ish.get("questionId")))
+      .map(ish => {
+        return ish
+          .set("student", students.get(ish.get("platformUserId")));
+      });
+    }
+);
+
+
 export const getAnswersByQuestion = createSelector(
   [ getAnswerTrees],
   (answers) => {
@@ -90,6 +105,28 @@ export const getAnswersByQuestion = createSelector(
     });
 
     return answerTreeResult;
+  }
+);
+
+export const getInteractiveStateHistoriesByQuestion = createSelector(
+  [ getInteractiveStateHistoryTree],
+  (interactiveStateHistories) => {
+
+    // Use withMutations so this isn't creating a lot of new objects
+    const interactiveStateHistoryTreeResult = Map().withMutations(mutableTree => {
+      // Create tree like:
+      // { question1.id: {student1.id: [<ish1>, <ish2>], student2.id: [<ish3>], ...},
+      //   question2.id: {student3.id: [<ish4>], student4.id: [<ish5>], ...}
+      //   ... }
+      return interactiveStateHistories.reduce((ishTree, ish) => {
+        const questionId = ish.get("questionId");
+        let studentMap = ishTree.get(questionId) || Map();
+        studentMap = studentMap.set(ish.get("platformUserId"), (studentMap.get(ish.get("platformUserId")) || List()).push(ish));
+        return ishTree.set(questionId, studentMap);
+      }, mutableTree);
+    });
+
+    return interactiveStateHistoryTreeResult;
   }
 );
 

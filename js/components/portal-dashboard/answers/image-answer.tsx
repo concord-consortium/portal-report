@@ -4,9 +4,10 @@ import { MagnifyIcon } from "./magnify-icon";
 import useResizeObserver from "@react-hook/resize-observer";
 import { TrackEventFunction } from "../../../actions";
 import { renderInvalidAnswer } from "../../../util/answer-utils";
-import { Map } from "immutable";
+import { List, Map } from "immutable";
 
 import css from "../../../../css/portal-dashboard/answers/image-answer.less";
+import { InteractiveStateHistoryRangeInput } from "../interactive-state-history-range-input";
 
 interface IProps {
   answer: Map<any, any>;
@@ -14,13 +15,16 @@ interface IProps {
   question?: Map<string, any>;
   studentName: string;
   trackEvent: TrackEventFunction;
+  interactiveStateHistory: List<Map<string, any>>;
+  interactiveStateHistoryId?: string;
+  setInteractiveStateHistoryId: (newId?: string) => void;
 }
 
 const kStaticHeight = 250;
 const kStaticWidth = 250;
 
 export const ImageAnswer: React.FC<IProps> = (props) => {
-  const { answer, responsive, question, studentName, trackEvent } = props;
+  const { answer, responsive, question, studentName, trackEvent, interactiveStateHistory, interactiveStateHistoryId, setInteractiveStateHistoryId } = props;
   const imgAnswer = answer.get("answer");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -82,6 +86,12 @@ export const ImageAnswer: React.FC<IProps> = (props) => {
           </div>
         </div>
         <div className={css.imageAnswerNote}>{imgAnswer.get("text")}</div>
+        <InteractiveStateHistoryRangeInput
+          answer={imgAnswer}
+          interactiveStateHistory={interactiveStateHistory}
+          interactiveStateHistoryId={interactiveStateHistoryId}
+          setInteractiveStateHistoryId={setInteractiveStateHistoryId}
+        />
       </div>
       <AnswerModal answer={answer} show={modalOpen} onHide={handleShowModal(false)} question={question} studentName={studentName}/>
     </React.Fragment>

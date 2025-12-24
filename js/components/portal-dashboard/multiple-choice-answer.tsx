@@ -3,6 +3,7 @@ import { Map, List } from "immutable";
 import MultipleChoiceChoices from "./multiple-choice-choices";
 
 import css from "../../../css/portal-dashboard/multiple-choice-answer.less";
+import { InteractiveStateHistoryRangeInput } from "./interactive-state-history-range-input";
 
 const CORRECT_ICON = "icomoon-checkmark " + css.correct;
 const INCORRECT_ICON = "icomoon-cross " + css.incorrect;
@@ -18,6 +19,9 @@ interface IProps {
   // Common
   inQuestionDetailsPanel?: boolean;
   question: Map<string, any>;
+  interactiveStateHistory?: List<Map<string, any>>;
+  interactiveStateHistoryId?: string;
+  setInteractiveStateHistoryId?: (newId?: string) => void;
 }
 
 export default class MultipleChoiceAnswer extends PureComponent<IProps> {
@@ -37,7 +41,7 @@ export default class MultipleChoiceAnswer extends PureComponent<IProps> {
   }
 
   renderFullAnswer() {
-    const { question, answer, answers, students, inQuestionDetailsPanel } = this.props;
+    const { question, answer, answers, students, inQuestionDetailsPanel, interactiveStateHistory, interactiveStateHistoryId, setInteractiveStateHistoryId } = this.props;
     const choices = question.get("choices") || List();
 
     // Aggregated class responses
@@ -57,13 +61,23 @@ export default class MultipleChoiceAnswer extends PureComponent<IProps> {
     // Individual student response
     if (answer) {
       return (
-        <MultipleChoiceChoices
-          choices={choices}
-          inQuestionDetailsPanel={inQuestionDetailsPanel}
-          question={question}
-          studentAnswer={answer}
-          showStats={false}
-        />
+        <div>
+          <MultipleChoiceChoices
+            choices={choices}
+            inQuestionDetailsPanel={inQuestionDetailsPanel}
+            question={question}
+            studentAnswer={answer}
+            showStats={false}
+          />
+          {interactiveStateHistory && setInteractiveStateHistoryId &&
+            <InteractiveStateHistoryRangeInput
+              answer={answer}
+              interactiveStateHistory={interactiveStateHistory}
+              interactiveStateHistoryId={interactiveStateHistoryId}
+              setInteractiveStateHistoryId={setInteractiveStateHistoryId}
+            />
+          }
+        </div>
       );
     }
 

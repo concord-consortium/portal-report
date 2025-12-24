@@ -4,6 +4,8 @@ import fakeActivityStructure from "../data/activity-structure.json";
 import fakeAnswers from "../data/answers.json";
 import fakeActivityAnswers from "../data/activity-answers.json";
 import { AnyAction, Dispatch } from "redux";
+import { Map } from "immutable";
+
 import {
   IPortalRawData,
   IResponse,
@@ -35,6 +37,7 @@ export const SET_ANONYMOUS_VIEW = "SET_ANONYMOUS_VIEW";
 export const REQUEST_PORTAL_DATA = "REQUEST_PORTAL_DATA";
 export const RECEIVE_RESOURCE_STRUCTURE = "RECEIVE_RESOURCE_STRUCTURE";
 export const RECEIVE_ANSWERS = "RECEIVE_ANSWERS";
+export const RECEIVE_INTERACTIVE_STATE_HISTORIES = "RECEIVE_INTERACTIVE_STATE_HISTORIES";
 export const RECEIVE_PORTAL_DATA = "RECEIVE_PORTAL_DATA";
 export const RECEIVE_USER_SETTINGS = "RECEIVE_USER_SETTINGS";
 export const RECEIVE_QUESTION_FEEDBACKS = "RECEIVE_QUESTION_FEEDBACKS";
@@ -104,6 +107,7 @@ export function fetchAndObserveData() {
           });
         }
         watchAnonymousAnswers(db, answersSourceKey, runKeyValue, dispatch);
+        watchAnonymousInteractiveStateHistories(db, answersSourceKey, runKeyValue, dispatch);
       });
     };
   } else {
@@ -146,6 +150,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
         type: RECEIVE_ANSWERS,
         response: fakeActivityAnswers,
       });
+      // TODO: dispatch fake interactive state histories
     } else {
       dispatch({
         type: RECEIVE_RESOURCE_STRUCTURE,
@@ -155,6 +160,7 @@ function _receivePortalData(db: firebase.firestore.Firestore,
         type: RECEIVE_ANSWERS,
         response: fakeAnswers,
       });
+      // TODO: dispatch fake interactive state histories
     }
   } else {
     watchResourceStructure(db, source, resourceUrl, dispatch);
@@ -163,6 +169,10 @@ function _receivePortalData(db: firebase.firestore.Firestore,
     const answersSourceKey = urlParam("answersSourceKey") || source;
     watchCollection(db, `sources/${answersSourceKey}/answers`, RECEIVE_ANSWERS,
       rawPortalData, dispatch);
+
+    // watch the interactive state history (metadata, not full state)
+    watchCollection(db, `sources/${answersSourceKey}/interactive_state_histories`, RECEIVE_INTERACTIVE_STATE_HISTORIES,
+      rawPortalData, dispatch, (query) => query.orderBy("created_at", "asc"));
   }
 
   if (rawPortalData.userType === "teacher") {
@@ -304,7 +314,7 @@ interface IStringMap {
   [key: string]: string;
 }
 
-// Ugh the feedback system uses diffent keys than the answer system
+// Ugh the feedback system uses different keys than the answer system
 // export this function so we can test it
 export function correctKey(keyName: string, receiveMsg: string) {
   const feedbackKeys: IStringMap = {
@@ -320,13 +330,14 @@ export function correctKey(keyName: string, receiveMsg: string) {
     case RECEIVE_ACTIVITY_FEEDBACKS:
       return feedbackKeys[keyName];
     case RECEIVE_ANSWERS:
+    case RECEIVE_INTERACTIVE_STATE_HISTORIES:
     default:
       return keyName;
   }
 }
 
 function watchCollection(db: firebase.firestore.Firestore, path: string, receiveMsg: string,
-  rawPortalData: IPortalRawData, dispatch: Dispatch) {
+  rawPortalData: IPortalRawData, dispatch: Dispatch, filterQuery?: (query: firebase.firestore.Query) => firebase.firestore.Query) {
   let query = db.collection(path)
     .where(correctKey("platform_id", receiveMsg), "==", rawPortalData.platformId)
     .where(correctKey("resource_link_id", receiveMsg), "==", rawPortalData.resourceLinkId);
@@ -357,6 +368,10 @@ function watchCollection(db: firebase.firestore.Firestore, path: string, receive
     }
   }
 
+  if (filterQuery) {
+    query = filterQuery(query);
+  }
+
   addSnapshotDispatchListener(query, receiveMsg, dispatch,
     snapshot => snapshot.docs.map(doc => doc.data()));
 }
@@ -368,6 +383,16 @@ function watchAnonymousAnswers(db: firebase.firestore.Firestore, source: string,
     .where("run_key", "==", runKey);
 
   addSnapshotDispatchListener(query, RECEIVE_ANSWERS, dispatch,
+    snapshot => snapshot.docs.map(doc => doc.data()));
+}
+
+function watchAnonymousInteractiveStateHistories(db: firebase.firestore.Firestore, source: string, runKey: string, dispatch: Dispatch) {
+  // Setup Firebase observer. It will fire each time the interactive state history is updated.
+  const path = `sources/${source}/interactive_state_histories`;
+  const query = db.collection(path)
+    .where("run_key", "==", runKey);
+
+  addSnapshotDispatchListener(query, RECEIVE_INTERACTIVE_STATE_HISTORIES, dispatch,
     snapshot => snapshot.docs.map(doc => doc.data()));
 }
 
@@ -701,19 +726,18 @@ export function unregisterReportItem(questionId: string) {
   };
 }
 
-export function getReportItemAnswer(questionId: string, platformUserId: string, itemsType: ReportItemsType) {
+export function getReportItemAnswer(answer: Map<string, any>, itemsType: ReportItemsType) {
   return {
     type: GET_REPORT_ITEM_ANSWER,
-    questionId,
-    platformUserId,
+    answer,
     itemsType
   };
 }
 
-export function setReportItemAnswer(questionId: string, reportItemAnswer: IReportItemAnswer) {
+export function setReportItemAnswer(answer: Map<string, any>, reportItemAnswer: IReportItemAnswer) {
   return {
     type: SET_REPORT_ITEM_ANSWER,
-    questionId,
+    answer,
     reportItemAnswer
   };
 }
