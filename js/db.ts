@@ -48,10 +48,14 @@ export function initializeDB() {
   firestoreDBPromise = createDB();
 }
 
-async function createDB() {
+export function getAppConfig(): IConfig {
   const name = getFirebaseAppName();
-
   const config = configurations[name];
+  return config;
+}
+
+async function createDB() {
+  const config = getAppConfig();
   firebase.initializeApp(config);
 
   // The following flags are useful for tests. It makes it possible to clear the persistence

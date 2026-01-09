@@ -67,6 +67,7 @@ export interface IReportState {
   reportItemAnswersCompact: Map<string, IReportItemAnswer>;
   reportItemMetadata: Map<string, IReportItemHandlerMetadata>;
   rubricDocUrl: string;
+  rawFirestoreJWT: string;
 }
 
 const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
@@ -102,6 +103,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   reportItemAnswersCompact: Map(),
   reportItemMetadata: Map(),
   rubricDocUrl: "",
+  rawFirestoreJWT: "",
 });
 
 const reportItemIFramePhones: Record<string, any> = {};
@@ -142,6 +144,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   reportItemAnswersCompact: Map<string, IReportItemAnswer>;
   reportItemMetadata: Map<string, IReportItemHandlerMetadata>;
   rubricDocUrl: string;
+  rawFirestoreJWT: string;
 }
 
 // this exists to handle older interactives until they are updated to use the new report item api
@@ -196,7 +199,8 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("platformId", data.platformId)
         .set("sourceKey", data.sourceKey)
         .set("hasTeacherEdition", data.offering.hasTeacherEdition)
-        .set("rubricDocUrl", data.offering.rubricDocUrl ?? "");
+        .set("rubricDocUrl", data.offering.rubricDocUrl ?? "")
+        .set("rawFirestoreJWT", data.rawFirestoreJWT);
       return state;
     case RECEIVE_RESOURCE_STRUCTURE:
       data = normalizeResourceJSON(action.response);

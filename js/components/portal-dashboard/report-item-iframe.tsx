@@ -8,6 +8,7 @@ import { getSortedStudents } from "../../selectors/report";
 import { RootState } from "../../reducers";
 import { getAnswersByQuestion } from "../../selectors/report-tree";
 import { registerReportItem, unregisterReportItem, setReportItemAnswer } from "../../actions";
+import { getObjectStorageConfig } from "../../util/object-storage-config";
 
 import css from "../../../css/portal-dashboard/report-item-iframe.less";
 
@@ -16,6 +17,7 @@ interface IProps {
   view: "singleAnswer" | "multipleAnswer" | "hidden";
   users: any;
   answersByQuestion: any;
+  reportState: any;
   registerReportItem: (questionId: string, iframePhone: any, metadata: IReportItemHandlerMetadata) => void;
   unregisterReportItem: (questionId: string) => void;
   setReportItemAnswer: (answer: Map<string, any>, reportItemAnswer: IReportItemAnswer) => void;
@@ -66,6 +68,7 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
         interactiveItemId: questionId,
         view: this.props.view,
         users,
+        objectStorageConfig: getObjectStorageConfig(this.props.reportState, this.props.question)
       };
       this.iframePhone.post("initInteractive", initMessage);
     };
@@ -156,11 +159,13 @@ class ReportItemIframe extends PureComponent<IProps, IState> {
 function mapStateToProps(state: RootState): Partial<IProps> {
   const data = state.get("data");
   const error = data.get("error");
+  const reportState = state.get("report");
   const dataDownloaded = !error && !data.get("isFetching");
 
   return {
     users: dataDownloaded && getSortedStudents(state),
-    answersByQuestion: dataDownloaded && getAnswersByQuestion(state)
+    answersByQuestion: dataDownloaded && getAnswersByQuestion(state),
+    reportState
   };
 }
 

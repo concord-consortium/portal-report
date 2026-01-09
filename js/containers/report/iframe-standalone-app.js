@@ -10,6 +10,7 @@ import { getAnswerTrees, getInteractiveStateHistoryTree } from "../../selectors/
 import config from "../../config";
 import { interactiveStateHistoryCache } from "../../util/interactive-state-history-cache";
 import { InteractiveStateHistoryRangeInput } from "../../components/portal-dashboard/interactive-state-history-range-input";
+import { getObjectStorageConfig } from "../../util/object-storage-config";
 
 import "../../../css/report/report-app.less";
 import "../../../css/report/iframe-standalone-app.less";
@@ -179,6 +180,7 @@ class IframeStandaloneApp extends PureComponent {
         const answerVal = answer.get("answer");
         state = typeof answerVal === "string" ? JSON.parse(answerVal) : answerVal;
         state.view = "standalone";
+        state.objectStorageConfig = getObjectStorageConfig(report, question);
       }
 
       return (

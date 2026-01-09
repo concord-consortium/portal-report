@@ -47,6 +47,7 @@ export interface IPortalRawData extends ILTIPartial{
   userType: "teacher" | "learner" | "researcher";
   sourceKey: string;
   userId: string;
+  rawFirestoreJWT: string;
 }
 
 export interface IStudentRawData {
@@ -288,7 +289,8 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           platformUserId: verifiedFirebaseJWT.claims.platform_user_id.toString(),
           contextId: classData.class_hash,
           sourceKey: getSourceKey(offeringData.activity_url),
-          userId: verifiedFirebaseJWT.claims.user_id
+          userId: verifiedFirebaseJWT.claims.user_id,
+          rawFirestoreJWT
           })
         );
       } else {
@@ -305,7 +307,8 @@ export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
           // so the sourceKey will be based on the fake offeringData
           // and this offering data has a hostname of 'fake.authoring.system'
           sourceKey: getSourceKey(offeringData.activity_url),
-          userId: fakeUserId()
+          userId: fakeUserId(),
+          rawFirestoreJWT
         };
       }
     });
