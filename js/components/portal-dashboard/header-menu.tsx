@@ -50,7 +50,7 @@ const items: MenuItemWithIcon[] = [
     MenuItemIcon: HelpIcon,
     name: "Help",
     dataCy: "help-menu-item",
-    onSelect: () => {window.open("https://docs.google.com/document/d/1C_6hiZzdSF_p6edhJeY_q_SvulFEPlawo7OKSaF7E88/edit?usp=sharing");},
+    onSelect: () => {window.open("https://learn.concord.org/teacher-guide");},
     logEvent: {
       action: "OpenHelp"
     }
