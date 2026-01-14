@@ -70,6 +70,7 @@ export interface IPortalData {
   contextId: string;
   platformId: string;
   sourceKey: string;
+  rawFirestoreJWT: string;
 }
 
 export interface IStudentData {
