@@ -270,8 +270,7 @@ export default function report(state = new ReportState({}), action?: any) {
       });
       return processReportItemRequests(state);
     case SET_REPORT_ITEM_ANSWER:
-      const answerId = questionIdToAnswerId[action.answer];
-      delete questionIdToAnswerId[action.answer];
+      const answer = getAnswer(state, action.answer, action.reportItemAnswer.platformUserId);
       let storageName: keyof IReportState;
       if (action.reportItemAnswer.itemsType === "compactAnswer") {
         storageName = "reportItemAnswersCompact";
@@ -281,15 +280,23 @@ export default function report(state = new ReportState({}), action?: any) {
         // Old interactives might not send back itemsType. Storage name should default to "reportItemAnswersFull".
         storageName = "reportItemAnswersFull";
       }
-      return state.setIn([storageName, answerId], action.reportItemAnswer);
+      if (answer) {
+        return state.setIn([storageName, answer.get("id")], action.reportItemAnswer);
+      }
+      return state;
 
     default:
       return state;
   }
 }
 
-const questionIdToAnswerId: Record<string, any> = {};
 let reportItemAnswerRequests: Array<{answer: Map<string, any>; itemsType?: "fullAnswer" | "compactAnswer"}> = [];
+
+function getAnswer(state: ReportState, questionId: string, platformUserId: string) {
+  return state.answers.find(a => {
+    return a.get("questionId") === questionId && a.get("platformUserId") === platformUserId;
+  });
+}
 
 function processReportItemRequests(state: ReportState) {
   // use filter to remove requests that have iframe phones registered, regardless of the existence of an answer
@@ -333,10 +340,6 @@ function processReportItemRequests(state: ReportState) {
         authoredState,
         itemsType: itemsType || "fullAnswer"
       };
-
-      // save the answer id so we can retrieve it when the report item posts it back - we probably should have provided
-      // an opaque data field for this purpose in the request that would be returned with the answer
-      questionIdToAnswerId[questionId] = answer.get("id");
 
       iframePhone.post("getReportItemAnswer", request);
       return false; // request processed, can be removed from array

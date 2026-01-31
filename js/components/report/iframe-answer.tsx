@@ -57,6 +57,10 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
 
     requestAnimationFrame(() => {
       this.maybeFetchReportItemAnswer(this.props);
+      // Process reportItemAnswer if already available on mount (fixes CLASSDASH-110)
+      if (this.props.reportItemAnswer) {
+        this.updateReportItemAnswerItems(this.props);
+      }
     });
   }
 
