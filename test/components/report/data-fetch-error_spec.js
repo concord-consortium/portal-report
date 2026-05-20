@@ -29,6 +29,32 @@ describe("<DataFetchError />", () => {
     });
   });
 
+  describe("when the error has a userMessage", () => {
+    beforeEach(() => {
+      dataFetchError = mount(<DataFetchError
+        error={{
+          title: "This report isn't available yet",
+          userMessage: "We couldn't load the Class Dashboard for this activity.",
+          url: "http://example.com/activities/123",
+          status: 404,
+          statusText: "Resource structure not found"
+        }}
+      />);
+    });
+
+    it("should render the teacher-friendly message", () => {
+      expect(dataFetchError.text())
+        .toEqual(expect.stringContaining("We couldn't load the Class Dashboard for this activity."));
+    });
+
+    it("should render the technical details block", () => {
+      const text = dataFetchError.text();
+      expect(text).toEqual(expect.stringContaining("URL: http://example.com/activities/123"));
+      expect(text).toEqual(expect.stringContaining("Status: 404"));
+      expect(text).toEqual(expect.stringContaining("Resource structure not found"));
+    });
+  });
+
   // <div>URL: {error.url}</div>
   // <div>Status: {error.status}</div>
   // <div>Status text: {error.statusText}</div>

@@ -259,6 +259,9 @@ function watchResourceStructure(db: firebase.firestore.Firestore,
   // Setup Firebase observer. It will fire each time the resource structure is updated.
   const query = db.collection(`sources/${source}/resources`)
     .where("url", "==", resourceUrl);
+  // onSnapshot can fire more than once (e.g. a cached snapshot followed by the
+  // server snapshot), so only surface the missing-structure error once.
+  let resourceStructureMissingReported = false;
   addSnapshotDispatchListener(query, RECEIVE_RESOURCE_STRUCTURE, dispatch,
     snapshot => snapshot.docs[0].data(),
     // If the resource structure document is missing, the snapshot is empty, so
@@ -266,6 +269,10 @@ function watchResourceStructure(db: firebase.firestore.Firestore,
     // stuck on the loading spinner forever with no feedback. Surface an error
     // instead so DataFetchError is shown. See CLASSDASH-112.
     () => {
+      if (resourceStructureMissingReported) {
+        return;
+      }
+      resourceStructureMissingReported = true;
       // Technical detail for developers; the teacher sees `userMessage` instead.
       const technicalDetail =
         `Resource structure not found in Firebase app "${getFirebaseAppName()}" at ` +

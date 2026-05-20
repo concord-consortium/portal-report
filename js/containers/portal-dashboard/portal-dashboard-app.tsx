@@ -48,7 +48,9 @@ interface IProps {
   questions?: Map<string, any>;
   questionFeedbacks: Map<any, any>;
   report: any;
-  sequenceTree: Map<any, any>;
+  // `false` when the data failed to load - see mapStateToProps. Typing it
+  // honestly makes TypeScript enforce the guards before Immutable calls.
+  sequenceTree: Map<any, any> | false;
   hideFeedbackBadges: boolean;
   hideLastRun: boolean;
   sortByMethod: SortOption;
