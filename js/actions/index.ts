@@ -286,8 +286,8 @@ function watchResourceStructure(db: firebase.firestore.Firestore,
         title: "This report isn't available yet",
         userMessage: "We couldn't load the Class Dashboard for this activity because the activity " +
           "hasn't finished publishing to the reporting system. This can happen when an activity was " +
-          "only recently created or changed. Please try again later, and let Concord Consortium know " +
-          "if the problem continues."
+          "only recently created or changed. Please try again later. If the problem continues, " +
+          "contact help@concord.org."
       }));
     });
 }
