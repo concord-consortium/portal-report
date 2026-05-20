@@ -114,8 +114,10 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
       this.setState({ initialLoading: false });
 
       // Set the first activity as the current activity after initial data load.
-      const activityTrees = sequenceTree?.get("children");
-      if (activityTrees?.size > 0) {
+      // sequenceTree is `false` (not undefined) when data failed to load, so it
+      // can't be guarded with `?.` - that would call `.get` on the boolean.
+      const activityTrees = sequenceTree && sequenceTree.get("children");
+      if (activityTrees && activityTrees.size > 0) {
         const firstActivity = activityTrees.first();
         setCurrentActivity(firstActivity.get("id"));
       }

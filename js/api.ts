@@ -61,6 +61,11 @@ export interface IResponse {
   url?: string;
   status: number;
   statusText: string;
+  // Optional fields rendered by the DataFetchError component. `title` is the
+  // heading; `userMessage` is a friendly explanation shown to teachers, with the
+  // technical `statusText` displayed below it in smaller print.
+  title?: string;
+  userMessage?: string;
 }
 
 export interface IFirebaseJWT {

@@ -73,7 +73,25 @@ export default class DataFetchError extends PureComponent {
     );
   }
 
+  // A friendly explanation for the user, with the technical details shown
+  // below it in smaller print.
+  renderUserMessage(error) {
+    return (
+      <div>
+        <div className="user-message">{error.userMessage}</div>
+        <div className="error-details">
+          {error.url && <div>URL: {error.url}</div>}
+          <div>Status: {error.status}</div>
+          <div>Details: {error.statusText}</div>
+        </div>
+      </div>
+    );
+  }
+
   renderError(error) {
+    if (error.userMessage) {
+      return this.renderUserMessage(error);
+    }
     if (this.state.errorBodyText) {
       return this.renderGenericMessage(this.state.errorBodyText);
     }
