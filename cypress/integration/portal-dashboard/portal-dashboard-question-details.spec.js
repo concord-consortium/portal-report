@@ -163,6 +163,24 @@ context("Portal Dashboard Question Details Panel", () => {
       cy.get('[data-cy=overlay-class-response-area] [data-cy=multiple-choice-answers]')
         .should('have.text', 'Question doesn\'t have any choices');
     });
+    it('renders multi-answer icons when question has top-level multiple_answers (CLASSDASH-114)', () => {
+      // multiple_choice_22 (Q3) has top-level multiple_answers:true in the fixture.
+      cy.get('[data-cy="activity-question-button"]').eq(2).click();
+      cy.get('[data-cy=question-overlay]').should('contain', 'Question #3');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multi-answer-choice-icon]')
+        .should('have.length.greaterThan', 0);
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=single-answer-choice-icon]')
+        .should('not.exist');
+    });
+    it('falls back to authored_state.multipleAnswers when no top-level field (CLASSDASH-114)', () => {
+      // multiple_choice_19 (Q2) has authored_state.multipleAnswers:true but no top-level field.
+      cy.get('[data-cy="activity-question-button"]').eq(1).click();
+      cy.get('[data-cy=question-overlay]').should('contain', 'Question #2');
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=multi-answer-choice-icon]')
+        .should('have.length.greaterThan', 0);
+      cy.get('[data-cy=overlay-class-response-area] [data-cy=single-answer-choice-icon]')
+        .should('not.exist');
+    });
     it('verify show/hide button behaves correctly', () => {
       cy.get('[data-cy=overlay-class-response-area] [data-cy=show-hide-class-response-button]').should('be.visible').click();
       cy.get('[data-cy=overlay-class-response-area] [data-cy=class-response-content]').should('not.be.visible');
