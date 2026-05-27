@@ -54,7 +54,10 @@
                   "prompt": "<p>Multiple choice question prompt (no correct answer defined)</p>",
                   "question_number": 2,
                   "show_in_featured_question_report": true,
-                  "type": "multiple_choice"
+                  "type": "multiple_choice",
+                  "authored_state": {
+                    "multipleAnswers": true
+                  }
                 },
                 {
                   "choices": [
@@ -78,7 +81,8 @@
                   "prompt": "<p>Multiple choice prompt (correct answer defined)</p>",
                   "question_number": 3,
                   "show_in_featured_question_report": true,
-                  "type": "multiple_choice"
+                  "type": "multiple_choice",
+                  "multiple_answers": true
                 },
                 {
                   "id": "open_response_61",

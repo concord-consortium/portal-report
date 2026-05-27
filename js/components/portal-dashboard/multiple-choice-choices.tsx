@@ -98,7 +98,7 @@ const MultipleChoiceChoices: React.FC<IProps> = (props) => {
   const {answers, choices: _choices, inQuestionDetailsPanel, question, showStats = false, studentAnswer, students } = props;
   const choices = List(_choices || question.get("choices") || []) as List<Map<string, any>>;
   const choiceData = buildChoiceData(choices, answers, students, studentAnswer, inQuestionDetailsPanel);
-  const multipleAnswer = question?.get("authoredState")?.get("multipleAnswers");
+  const multipleAnswer = question?.get("multipleAnswers") ?? question?.get("authoredState")?.get("multipleAnswers");
   const correctAnswerDefined = question.get("scored");
 
   return (

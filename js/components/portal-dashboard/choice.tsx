@@ -94,7 +94,7 @@ const Choice: React.FC<IProps> = (props) => {
   return (
     <div className={css.choice}>
       <div className={css.choiceDetails}>
-        <div className={css.choiceIcon} data-cy="multiple-choice-choice-icon">
+        <div className={css.choiceIcon} data-cy={multipleAnswer ? "multi-answer-choice-icon" : "single-answer-choice-icon"}>
           {icon}
         </div>
         <div className={css.choiceContent}>

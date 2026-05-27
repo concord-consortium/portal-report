@@ -130,7 +130,7 @@
                   "question_number": 6,
                   "show_in_featured_question_report": true,
                   "type": "multiple_choice",
-                  "multi_answer": true
+                  "multiple_answers": true
                 }
           ]
         },
