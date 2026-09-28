@@ -1,6 +1,6 @@
 import nock from "nock";
 import { fetchOfferingData, getPortalFirebaseJWTUrl, fetchFirestoreJWT,
-  initializeAuthorization, getAuthHeader, fetchFirestoreJWTWithDefaultParams } from "../js/api";
+  initializeAuthorization, getAuthHeader, fetchFirestoreJWTWithDefaultParams, mergeOfferingStudentData } from "../js/api";
 import queryString from "query-string";
 
 describe("api helper", () => {
@@ -281,6 +281,42 @@ describe("api helper", () => {
         initializeAuthorization();
         expect(window.location.assign).toHaveBeenCalledTimes(0);
       });
+    });
+  });
+
+  describe("mergeOfferingStudentData", () => {
+    it("copies last_run and username onto the matching class students", () => {
+      const offeringData = { students: [
+        { user_id: 1, last_run: "2025-05-10T10:03:00Z", username: "jjenkins" },
+        { user_id: 2, last_run: null, username: "jarmstrong" }
+      ]};
+      const classData = { students: [{ user_id: 1, first_name: "John" }, { user_id: 2, first_name: "Jenna" }] };
+      mergeOfferingStudentData(offeringData, classData);
+      expect(classData.students).toEqual([
+        { user_id: 1, first_name: "John", last_run: "2025-05-10T10:03:00Z", username: "jjenkins" },
+        { user_id: 2, first_name: "Jenna", last_run: null, username: "jarmstrong" }
+      ]);
+    });
+
+    it("leaves class students without an offering student alone", () => {
+      const offeringData = { students: [{ user_id: 1, last_run: null, username: "jjenkins" }] };
+      const classData = { students: [{ user_id: 3, first_name: "Amy" }] };
+      mergeOfferingStudentData(offeringData, classData);
+      expect(classData.students).toEqual([{ user_id: 3, first_name: "Amy" }]);
+    });
+
+    it("tolerates missing students arrays", () => {
+      const classData = { students: [{ user_id: 1 }] };
+      expect(() => mergeOfferingStudentData({}, classData)).not.toThrow();
+      expect(() => mergeOfferingStudentData({ students: [{ user_id: 1, username: "a" }] }, {})).not.toThrow();
+      expect(classData.students).toEqual([{ user_id: 1 }]);
+    });
+
+    it("doesn't overwrite a field the offering omits", () => {
+      const offeringData = { students: [{ user_id: 1, username: "jjenkins" }] };
+      const classData = { students: [{ user_id: 1, last_run: "2025-05-10T10:03:00Z" }] };
+      mergeOfferingStudentData(offeringData, classData);
+      expect(classData.students).toEqual([{ user_id: 1, last_run: "2025-05-10T10:03:00Z", username: "jjenkins" }]);
     });
   });
 });
