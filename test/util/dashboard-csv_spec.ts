@@ -23,7 +23,7 @@ const questions: Record<string, any> = {
   image_question_1: { type: "image_question", questionNumber: 6, drawingPrompt: "<p>Draw it</p>", prompt: "Explain" },
   mw_interactive_hidden: { type: "iframe_interactive", questionNumber: 7, prompt: "Hidden", showInFeaturedQuestionReport: false },
   // Activity 2
-  mw_interactive_1: { type: "iframe_interactive", questionNumber: 1, prompt: "The [blank-1] ran" },
+  mw_interactive_1: { type: "iframe_interactive", questionNumber: 1, prompt: "The [blank-1] ran or [blank-2](verb) walked" },
   mw_interactive_2: { type: "iframe_interactive", questionNumber: 2, prompt: "No text" },
   mw_interactive_3: { type: "iframe_interactive", questionNumber: 3, prompt: "Empty" },
   mw_interactive_4: { type: "iframe_interactive", questionNumber: 4, prompt: "Link" },
@@ -149,7 +149,7 @@ describe("dashboard CSV", () => {
         "Q6: Draw it Explain",
         "Q6: Draw it Explain",
         "Q8: Record and type",
-        "Q1: The __________ ran",
+        "Q1: The __________ ran or __________(verb) walked",
         "Q2: No text",
         "Q3: Empty",
         "Q4: Link",

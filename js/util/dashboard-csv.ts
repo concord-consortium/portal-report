@@ -19,7 +19,8 @@ interface IAnswerColumn {
   cell: AnswerCell;
 }
 
-const BLANK_MARKER = /\[([^)]+)\]/g;          // the same pattern the dashboard's prompts use
+// A fill-in-the-blank marker such as [blank-1].
+const BLANK_MARKER = /\[[^\]]+\]/g;
 
 const safely = (fn: AnswerCell): AnswerCell => (answer, question, student) => {
   try {

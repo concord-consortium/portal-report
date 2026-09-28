@@ -225,6 +225,7 @@ Where the code departs from the implementation plan.
 
 - **An open response whose `answer` is an empty string falls through to `answerText` and the audio check.** The planned `typeof value === "string"` check returned `""` for a student who recorded audio and left the text empty, so the audio link never appeared.
 - **`choiceCell` uses each selected choice's `content` as is.** The plan kept its own copy of the deleted-choice placeholder and matched on id `-1`. `getAnswerTrees` already puts the placeholder text in the deleted choice's `content`, so the CSV now uses that one definition and can't drift from the dashboard.
+- **Fill-in-the-blank markers are matched with `/\[[^\]]+\]/g`**, not the dashboard's `/\[([^)]+)\]/g`. The dashboard's pattern stops at `)` rather than `]`, so two markers with no parenthetical label between them, as in `Choose [blank-a] or [blank-b]`, became one blank and lost the text between them. Found in the PR's Copilot review. The dashboard's own copies of the pattern (`iframe-question.tsx`, `popup-question-answer-list.tsx`, `show-student-answers.tsx`, `feedback-question-rows.tsx`) are unchanged.
 - **`getAnswerBadges` lost its unused `type` variable** once the audio check moved into `hasAudioResponse`.
 - **The tests build the rows in `beforeAll`**, after `?portal-dashboard` is pushed into the URL. Built at `describe` time, the rows were computed before the URL changed and the hidden question was included.
 
