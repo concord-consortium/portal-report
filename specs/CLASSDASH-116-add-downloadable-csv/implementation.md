@@ -811,6 +811,12 @@ Where the code departs from the plan above.
 - **`.menuItem` keeps its existing `width: 210px` and white background** rather than the planned `width: 100%; background: none`. The list is also 210px wide and white, so the result is the same, and the toggle items that share the class are unchanged.
 - **`.menuItem` resets `font` before setting `font-size`**, since the `font: inherit` shorthand would otherwise reset the 16px size.
 
+### Header button
+
+- **The base `.downloadButton` rule has its own hover (`@cc-teal-light4`) and pressed (`@cc-teal`) backgrounds**, as the view dropdown's base rule does, so a `Header` rendered without a `colorTheme` still shows hover feedback and a readable pressed label. The theme classes override them as planned.
+- **Checked in Chromium against the demo data:** the button measures 168px wide. It shows at 1336px and wider and hides at 1334px and narrower, the same going up and down in 2px steps, so it doesn't flip back and forth. The Assignment selector and the teacher's name move continuously across the switch and don't move when the hidden button is removed at 1150px. The name stays one line (32px tall) at every width from 1100px to 1600px. A keyboard-only download from the narrow window's menu worked and returned focus to the toggle.
+- **The `Header` test mocks `img/cc-logo.png` with a proxy.** Images and styles both map to `identity-obj-proxy` in Jest, which throws when React converts the logo's `src` to a string. The mock returns a file name for `src` and each class name as itself. jsdom measures every element as 0 wide, so the tests stub `getBoundingClientRect` for the case where the button fits and use the unstubbed layout for the case where it doesn't.
+
 ### Review findings not applied
 
 - **Step 5, "delete the commented-out Print item and its import":** not applied. The plan says the Print block stays commented as it is, and removing a planned-for-later item is outside this story. The block went back to its original untyped form, so it no longer looks like a ready-to-use `MenuItemWithIcon`.

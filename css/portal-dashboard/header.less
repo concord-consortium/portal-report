@@ -57,6 +57,94 @@
     align-items: center;
     flex: 1;
     justify-content: flex-end;
+    // The download button mustn't raise this group's minimum width, which would move the Assignment selector.
+    min-width: 0;
+  }
+
+  .downloadButton {
+    display: flex;
+    flex: none;
+    align-items: center;
+    box-sizing: border-box;
+    height: 30px;
+    margin: 0 12px;
+    padding: 5px 10px 5px 5px;
+    border: solid 1.5px @cc-charcoal-light1;
+    border-radius: 4px;
+    background-color: @cc-teal-light6;
+    color: @cc-charcoal;
+    font: inherit;
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid @cc-charcoal;
+      outline-offset: 2px;
+    }
+    &:hover {
+      background-color: @cc-teal-light4;
+    }
+    &:active {
+      background-color: @cc-teal;
+      color: white;
+      border-color: white;
+      .downloadButtonIcon {
+        fill: white;
+      }
+    }
+    &.progress {
+      background-color: @cc-teal-light6;
+      &:hover {
+        background-color: @cc-teal-light4;
+      }
+      &:active {
+        background-color: @cc-teal;
+      }
+    }
+    &.response {
+      background-color: @cc-orange-light4B;
+      &:hover {
+        background-color: @cc-orange-light3;
+      }
+      &:active {
+        background-color: @cc-orange;
+      }
+    }
+    &.feedback {
+      background-color: @feedback-green-light4B;
+      &:hover {
+        background-color: @feedback-green-light3B;
+      }
+      &:active {
+        background-color: @feedback-green;
+      }
+    }
+  }
+
+  .downloadButtonIcon {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    fill: @cc-teal;
+    &.progress {
+      fill: @cc-teal;
+    }
+    &.response {
+      fill: @cc-orange;
+    }
+    &.feedback {
+      fill: @feedback-green;
+    }
+  }
+
+  // Kept in the layout's measurements but out of the way, the tab order and the accessibility tree.
+  .downloadButtonHidden {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .icon {
@@ -143,6 +231,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    // Keeps the name at its natural width, so a button that doesn't fit shows up as overlap, not a squeezed name.
+    flex-shrink: 0;
     margin: 0 12px 0 12px;
   }
 
