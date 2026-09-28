@@ -804,7 +804,16 @@ Where the code departs from the plan above.
 
 - **The download test checks the byte order mark in the Blob's raw bytes** (`EF BB BF`, read with `readAsArrayBuffer`). `FileReader.readAsText` decodes the text and drops the mark, so the planned check on the decoded text's first character failed even though the file had it.
 
+### Hamburger menu
+
+- **Escape closes the menu** (see the RESOLVED question on Escape below), with a test.
+- **The commented-out Print item stays as the same commented-out object literal**, now on its own since the static `items` array it sat in is gone.
+- **`.menuItem` keeps its existing `width: 210px` and white background** rather than the planned `width: 100%; background: none`. The list is also 210px wide and white, so the result is the same, and the toggle items that share the class are unchanged.
+- **`.menuItem` resets `font` before setting `font-size`**, since the `font: inherit` shorthand would otherwise reset the 16px size.
+
 ### Review findings not applied
+
+- **Step 5, "delete the commented-out Print item and its import":** not applied. The plan says the Print block stays commented as it is, and removing a planned-for-later item is outside this story. The block went back to its original untyped form, so it no longer looks like a ready-to-use `MenuItemWithIcon`.
 
 - **Step 2, "return a managed open response's plain-text `answerText` without `htmlToText`":** not applied. The dashboard renders a managed open response's `answerText` as HTML (`renderHTML` in `iframe-answer.tsx`), so converting it with `htmlToText` gives the text the teacher sees. The truncation that prompted the suggestion (a bare `<` in student text) is fixed in `htmlToText` itself.
 
@@ -836,6 +845,14 @@ Where the code departs from the plan above.
 - B) Replace the `div` with a `button`
 
 **Decision**: A. Existing tests and the outside-click handling keep working unchanged. Keyboard activation of the inner button fires a `click` that bubbles to the `div`'s handler.
+
+### RESOLVED: Judgment call: should Escape close the hamburger menu?
+**Context**: The plan makes the menu reachable from the keyboard: the toggle is a button, and the items are focusable while it's open. It doesn't say how a keyboard user closes it other than activating the toggle or an item. The ARIA menu button pattern closes a menu on Escape.
+**Options considered**:
+- A) Escape closes the open menu and, when focus was inside the list, returns focus to the toggle
+- B) No Escape handling, as planned
+
+**Decision**: A, decided during implementation. It's a few lines on the menu's existing container, reuses the focus-return logic the plan already adds, and a keyboard user who opens the menu by mistake expects Escape to close it. It changes nothing for mouse users.
 
 ## Self-Review
 
