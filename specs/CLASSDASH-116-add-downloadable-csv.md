@@ -1,31 +1,12 @@
 # Add a Downloadable CSV to the Class Dashboard
 
 **Jira**: https://concord-consortium.atlassian.net/browse/CLASSDASH-116
-**Repo**: https://github.com/concord-consortium/portal-report
-**Status**: **In Development**
-**Implementation Spec**: [implementation.md](implementation.md)
+
+**Status**: **Closed**
 
 ## Overview
 
 Teachers can download their class's answers for the current assignment as a CSV file from the class dashboard. The file follows the researcher "student answers" report, trimmed to the columns a teacher needs.
-
-## Project Owner Overview
-
-Teachers can see their students' answers in the class dashboard, but they can't take the data with them. Only researchers can get a spreadsheet of answers, through report-service's student answers report, and that report is full of research identifiers teachers don't need. This story adds a "Download as CSV" control to the dashboard so a teacher can save a copy of every student's answers for the activity or sequence they're viewing and open it in a spreadsheet for grading, record keeping or sharing with colleagues.
-
-The column list comes from Trudi Lord's markup of a real student answers export (linked below). She kept the student, class and progress columns and the answers, and removed the research IDs and teacher contact information. The download is the same whichever of the three dashboard views the teacher is in. Researchers who view the dashboard can download it too, always anonymized.
-
-## Background
-
-The ticket asks for a "Download as CSV" button in the class dashboard header when the window is wide enough, and a hamburger menu item when it isn't. Trudi's comment on the ticket describes the flow: a teacher opens the dashboard of any activity or sequence, clicks the download control, and gets "a copy of their students' responses, which would be mostly like the current researcher student answers report". This ticket was cloned from REPORT-157 and is charged to GRANT-36.
-
-Trudi marked up an export of the student answers report ([Current Report-student-answers-run-2360](https://docs.google.com/spreadsheets/d/16x0T6WfFqYMbDpetEw-NS_6H4mLaXcFaE4pY2KMaFBg/edit?gid=2003151950#gid=2003151950)). She shaded 15 columns red and 5 orange. Her ticket comment (https://concord-consortium.atlassian.net/browse/CLASSDASH-116?focusedCommentId=42634) asks to remove both: the red columns (IDs, research metadata and teacher contact details), and the orange ones, which she took to be Firebase links for voice responses and "super confusing for teachers". The orange columns are 5 of the sheet's 54 `_url` columns, all alike, so this spec leaves out every `_url` column. They actually link to portal-report's single-answer view, not to voice recordings. An audio-only answer still gets that link in its own answer column, since it's the only way to reach the recording. She asks to keep the 10 `_image_url` columns that link to snapshot images, which teachers can also see in the dashboard, and to drop the `res_1_` column prefix, since a report has only one resource.
-
-The student answers report is generated in report-service as an Athena SQL query over the portal's learner data and the Firestore answers, and returned as Athena's CSV output. None of that code runs in the browser, so this spec defines the format directly. It keeps the report's column names and overall shape (a header row, a "Prompt" row, a "Correct answer" row, then one row per student) so the two stay recognizable to anyone who has seen both. It departs from the report where a teacher is better served: progress matches what the dashboard shows, interactive answers are readable text rather than raw JSON, and a sequence's activities are labeled.
-
-The dashboard already loads everything the answer columns need: the class roster, the activity or sequence structure with its questions and prompts, and every student's answers. The portal APIs it calls also return each student's username and the class's teachers, which the dashboard currently discards. No portal API returns the school's name, so the CSV leaves out the `school` column Trudi kept.
-
-The Zeplin mockup shows the control on all three dashboard views, with the icon in each view's color. The CSV has the same content from every view; Trudi and the designer, Michael Tirenin, confirmed it's one report, not a different one per view.
 
 ## Requirements
 
@@ -219,12 +200,68 @@ The student answers report is built in `report-service/server/lib/report_server/
 - A pre-test/post-test comparison report (Trudi's comment: "we don't have to worry about that now").
 - Any column or summary for Hazbot's thoughts (Trudi's comment: a possible future option, "not for this story").
 
-## Open Questions
+## Not Yet Implemented
 
-<!-- Requirements-focused questions only (scope, acceptance criteria, business rules).
-     Implementation questions go in implementation.md. -->
+- Manual QA in Excel and Numbers — no Excel or Numbers was available while implementing. The Google Sheets and single-activity checks passed (see As Built). Download the file from the dev server's demo data (`?portal-dashboard`) and check, in Excel (Windows or macOS) and Numbers:
+  - it opens by double-click with no import dialog questions about encoding
+  - `Café ✓` and the "Cupcake ipsum" text show correctly, not as `CafÃ©`
+  - Student 6's (Jerome Wu's) open response is in one cell, on two lines, with its quotes and commas
+  - Student 5's (Kate Crosby's) image note shows `=1+1 isn't a formula` as text, not `2` or an error
+  - `Last Run` values show as dates and times, and sort in time order
+  - `Progress (%)` values are numbers (they right-align and can be summed)
+  - the Prompt row's long prompts are complete, not cut off
+- Answer link from a real portal launch — no staging portal launch was available while implementing. From a file downloaded through a staging launch, an interactive's link should open the single-question view after signing in to the portal, and the link should have no `token`.
 
-### RESOLVED: Should the CSV differ depending on the dashboard view?
+## As Built
+
+Where the code departs from the implementation plan.
+
+### CSV text helpers
+
+- **`htmlToText` escapes a bare `<` before `striptags`.** `striptags` treats any `<` as the start of a tag, so student text such as `I <3 science` or `2<5` lost everything after the `<`. A `<` that isn't followed by a letter, `/`, `!` or `?` (so can't start a tag, comment or doctype) is replaced with `&lt;` first, and `DOMParser` decodes it back. Text such as `a<b then c>d` is still read as a tag, as a browser would read it.
+- **The `formatCsvDateTime` test builds its input from a local-time `Date`** instead of setting `process.env.TZ`. Node picked up only the first `TZ` change in a Jest worker, so a test that switched zones was unreliable. A timestamp made with `new Date(2025, 4, 10, 6, 3, 45).toISOString()` must format as `2025-05-10 06:03` in any zone, which checks the UTC-to-local conversion without depending on the machine's zone.
+
+### Dashboard CSV rows
+
+- **An open response whose `answer` is an empty string falls through to `answerText` and the audio check.** The planned `typeof value === "string"` check returned `""` for a student who recorded audio and left the text empty, so the audio link never appeared.
+- **`choiceCell` uses each selected choice's `content` as is.** The plan kept its own copy of the deleted-choice placeholder and matched on id `-1`. `getAnswerTrees` already puts the placeholder text in the deleted choice's `content`, so the CSV now uses that one definition and can't drift from the dashboard.
+- **`getAnswerBadges` lost its unused `type` variable** once the audio check moved into `hasAudioResponse`.
+- **The tests build the rows in `beforeAll`**, after `?portal-dashboard` is pushed into the URL. Built at `describe` time, the rows were computed before the URL changed and the hidden question was included.
+
+### Saving the file
+
+- **The download test checks the byte order mark in the Blob's raw bytes** (`EF BB BF`, read with `readAsArrayBuffer`). `FileReader.readAsText` decodes the text and drops the mark, so the planned check on the decoded text's first character failed even though the file had it.
+
+### Hamburger menu
+
+- **Escape closes the menu** (see the RESOLVED question on Escape below), with a test.
+- **The commented-out Print item stays as the same commented-out object literal**, now on its own since the static `items` array it sat in is gone.
+- **`.menuItem` keeps its existing `width: 210px` and white background** rather than the planned `width: 100%; background: none`. The list is also 210px wide and white, so the result is the same, and the toggle items that share the class are unchanged.
+- **`.menuItem` resets `font` before setting `font-size`**, since the `font: inherit` shorthand would otherwise reset the 16px size.
+
+### Header button
+
+- **The base `.downloadButton` rule has its own hover (`@cc-teal-light4`) and pressed (`@cc-teal`) backgrounds**, as the view dropdown's base rule does, so a `Header` rendered without a `colorTheme` still shows hover feedback and a readable pressed label. The theme classes override them as planned.
+- **Checked in Chromium against the demo data:** the button measures 168px wide. It shows at 1336px and wider and hides at 1334px and narrower, the same going up and down in 2px steps, so it doesn't flip back and forth. The Assignment selector and the teacher's name move continuously across the switch and don't move when the hidden button is removed at 1150px. The name stays one line (32px tall) at every width from 1100px to 1600px. A keyboard-only download from the narrow window's menu worked and returned focus to the toggle.
+- **The `Header` test mocks `img/cc-logo.png` with a proxy.** Images and styles both map to `identity-obj-proxy` in Jest, which throws when React converts the logo's `src` to a string. The mock returns a file name for `src` and each class name as itself. jsdom measures every element as 0 wide, so the tests stub `getBoundingClientRect` for the case where the button fits and use the unstubbed layout for the case where it doesn't.
+
+### Cypress and manual QA
+
+- **The answer link is visited at the end of the header-button download test**, not in a test of its own. Cypress clears aliases between tests, so a later test can't read a link saved with `.as()`. The wide-window tests reload the dashboard in `beforeEach` as a result.
+- **The keyboard check also ran for real in Chromium** (Playwright, outside the Cypress spec): Enter on the menu toggle opened the menu, Tab reached "Download as CSV", Enter saved the file, and focus returned to the toggle.
+- **The new `require("fs")` in `cypress/plugins/index.js` has an `eslint-disable-next-line`** for `@typescript-eslint/no-var-requires`, since the plugins file runs in Node as CommonJS. The existing code-coverage `require` in the same file already fails that rule on `master` and is left alone.
+- **Cypress was run against a dev server on port 8081** (`--config baseUrl=http://localhost:8081`), because another project's dev server was using 8080.
+- **Manual QA status:** the single-activity row of the checklist passed (`?portal-dashboard&resourceType=activity` downloads with `Activity 1` answer headers throughout). The demo sequence's file also parsed back correctly with Python's `csv` module, with a byte order mark, CRLF line endings and 22 answer columns for 19 questions. The Google Sheets rows passed: the demo sequence's file, with the edge-case answers, was uploaded to Google Drive and converted to a Sheet, then exported back as CSV and compared cell by cell. All 279 cells matched except the expected ones. Sheets used the formula guard's `'` as its text marker, so `=1+1 isn't a formula` is stored as text, not calculated. It read `Last Run` as a date-time and exports it as `2025-05-10 6:01`. The byte order mark didn't end up in cell A1, and `Café ✓`, the quotes, the commas and the line break came through intact. The Excel and Numbers rows and the staging-link row are still to do: no Excel, Numbers or staging portal launch was available while implementing.
+
+### Review findings not applied
+
+- **Step 5, "delete the commented-out Print item and its import":** not applied. The plan says the Print block stays commented as it is, and removing a planned-for-later item is outside this story. The block went back to its original untyped form, so it no longer looks like a ready-to-use `MenuItemWithIcon`.
+
+- **Step 2, "return a managed open response's plain-text `answerText` without `htmlToText`":** not applied. The dashboard renders a managed open response's `answerText` as HTML (`renderHTML` in `iframe-answer.tsx`), so converting it with `htmlToText` gives the text the teacher sees. The truncation that prompted the suggestion (a bare `<` in student text) is fixed in `htmlToText` itself.
+
+## Decisions
+
+### Should the CSV differ depending on the dashboard view?
 **Context**: The Zeplin mockup shows the control on all three views with the icon in each view's color, which could mean each view exports something different.
 **Options considered**:
 - A) The same answers CSV from every view
@@ -233,7 +270,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A, decided by Doug and confirmed on Slack. Michael Tirenin (the designer): "I'd think the same, but @trudi should answer this one." Trudi: "Agree! Same, same, please!" The icon color is the header's normal per-view theming.
 
-### RESOLVED: What does Trudi's red shading mean?
+---
+
+### What does Trudi's red shading mean?
 **Context**: The markup has no legend or comments.
 **Options considered**:
 - A) Red means "remove this column"
@@ -241,7 +280,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A, confirmed by Trudi's ticket comment: "I suggest we remove the columns highlighted in red."
 
-### RESOLVED: Judgment call: which students get a row?
+---
+
+### Which students get a row?
 **Context**: The report-service report only has rows for learners who started the assignment. The dashboard lists the whole class roster.
 **Options considered**:
 - A) Every student in the class roster, with empty answers for students who haven't started
@@ -249,7 +290,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. It matches what the teacher sees in the dashboard, and a teacher using the file for record keeping needs to see who hasn't started.
 
-### RESOLVED: Judgment call: should the file be built in the browser or by report-service?
+---
+
+### Should the file be built in the browser or by report-service?
 **Context**: The existing report is an Athena query that runs as a background job for researchers. The dashboard already has the roster, structure and answers loaded.
 **Options considered**:
 - A) Build the CSV in the browser from the data the dashboard has already loaded
@@ -257,7 +300,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. The download is immediate, needs no new server permissions for teachers, and exactly matches what the teacher sees. The trade-off is that the format is maintained separately from report-service's. The dashboard opens as a top-level page, so a browser download works.
 
-### RESOLVED: Where do `username` and `teacher_names` come from?
+---
+
+### Where do `username` and `teacher_names` come from?
 **Context**: Trudi's markup keeps these columns, and the dashboard doesn't store them.
 **Options considered**:
 - A) Keep the fields the dashboard already receives from the portal and currently discards
@@ -266,7 +311,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. Checked in `rigse`: the offering API that `js/api.ts` already calls returns each student's `username`, and the class API it already calls returns the class's `teachers` with names. No portal change is needed. The offering API sends the real username even for anonymized sessions, so the CSV blanks it when names are anonymized. The `school` column is the one field no API returns, and it is split out below.
 
-### RESOLVED: Keep the `school` column, even though no portal API provides it?
+---
+
+### Keep the `school` column, even though no portal API provides it?
 **Context**: Trudi's markup keeps `school`, but neither the class API nor the offering API returns the school's name (the class API returns only the school's state). Filling it in needs a portal API change in `rigse` (adding the school name to the class API response), a second repo and deploy for this story. A teacher's download covers one class, so every row would hold the same school.
 **Options considered**:
 - A) Drop the `school` column
@@ -275,7 +322,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A, decided by Doug. The teacher knows their school, the value would be the same in every row, and filling it in would add a portal change and deploy to this story. This is final; it doesn't need Trudi's confirmation.
 
-### RESOLVED: What should happen to the `_url` answer columns?
+---
+
+### What should happen to the `_url` answer columns?
 **Context**: Trudi shaded 5 of the 64 `_url` columns orange: the first five in the sheet, and otherwise the same as the rest. Each `_url` links to portal-report's single-question view of a student's answer. A teacher could open it, but the teacher already has the dashboard, and the link needs the portal's authentication parameters, which a CSV shared outside the portal won't carry. The spec currently leaves `_url` out.
 **Options considered**:
 - A) Remove all `_url` columns (the orange marks were the start of removing them)
@@ -284,7 +333,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A, decided by Doug and matching Trudi's ticket comment, which asks to remove the orange columns because they'd be confusing for teachers. She thought they were Firebase links for voice responses; they're links to portal-report's single-answer view, so the reply to her should say so. The teacher already has the dashboard for viewing an answer, and the links don't open outside the portal. The snapshot `_image_url` columns she asked to keep are a different kind of column and stay.
 
-### RESOLVED: How should percent complete and the answer counts be calculated?
+---
+
+### How should percent complete and the answer counts be calculated?
 **Context**: report-service counts every stored answer, including blank open-response placeholders and unsubmitted answers to required questions. The dashboard's progress counts only visible questions, and a required question only once it's submitted.
 **Options considered**:
 - A) Match the dashboard's progress calculation
@@ -292,7 +343,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. The teacher compares the file with the dashboard, not with the researcher report, and a CSV that disagrees with the dashboard would look wrong. The dashboard's calculation (`countCompletedAnswers`, behind `getStudentProgress`) also counts only the questions the teacher sees, and a required answer only once it's submitted.
 
-### RESOLVED: Should the column headers stay research-style or be teacher-friendly?
+---
+
+### Should the column headers stay research-style or be teacher-friendly?
 **Context**: report-service's headers are IDs like `res_1_managed_interactive_369376_text`, with a readable prompt only in the second row.
 **Options considered**:
 - A) Keep report-service's column names and the Prompt row
@@ -302,7 +355,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: C, decided by Doug. Trudi's ticket comment says she doesn't love the `res_1_blahblah` headings and isn't sure there's a good generic way to rename them. The dashboard's labels are that generic way, and they match what the teacher sees on screen. The Prompt row keeps the full question text below each header.
 
-### RESOLVED: How should a sequence's activities be told apart?
+---
+
+### How should a sequence's activities be told apart?
 **Context**: Question numbers restart at 1 in each activity. report-service puts every activity under `res_1` with nothing marking the boundaries.
 **Options considered**:
 - A) Same as report-service (no marker)
@@ -311,7 +366,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: B. It makes every question unambiguous without changing the file's row layout, which C would, and follows the column-naming decision above. A single activity uses `Activity 1`, so the format is the same for activities and sequences.
 
-### RESOLVED: Should multiple choice answers be marked correct or wrong?
+---
+
+### Should multiple choice answers be marked correct or wrong?
 **Context**: report-service meant to append " (correct)" or " (wrong)" to scored MC answers, but a bug keeps the markers out. They aren't in Trudi's sample.
 **Options considered**:
 - A) Append " (correct)" or " (wrong)" when the question has correct choices
@@ -319,7 +376,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: B. It matches the sample Trudi marked up, and the Correct answer row already gives the correct choices for comparison. Markers would be an easy follow-up if teachers ask for them.
 
-### RESOLVED: Should the "Anonymize students" toggle apply to the CSV?
+---
+
+### Should the "Anonymize students" toggle apply to the CSV?
 **Context**: With the toggle on, the dashboard shows "Student 1", "Student 2" and so on.
 **Options considered**:
 - A) The CSV follows the toggle
@@ -328,7 +387,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. The download matches what's on screen, and a teacher who has anonymized the class (for example to share results) won't be surprised by a file of real names. When anonymized, `username` is blank too, since the portal sends the real login regardless.
 
-### RESOLVED: Can researchers download the CSV?
+---
+
+### Can researchers download the CSV?
 **Context**: Researchers open the dashboard too, and always see anonymized names. They already get the student answers report from report-service.
 **Options considered**:
 - A) Teachers only; hide the control for researchers
@@ -336,7 +397,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: B, decided by Doug. The ticket is "for teachers" but doesn't exclude researchers, who use the same dashboard. Their download is always anonymized, the same as the dashboard they see, and `Username` is blank. The answer links carry student user IDs but only open for people with access to the class.
 
-### RESOLVED: What goes in the columns for interactives and other non-standard questions?
+---
+
+### What goes in the columns for interactives and other non-standard questions?
 **Context**: report-service puts the raw answer JSON in a `_json` column. Raw JSON means nothing to a teacher. In the demo data only 9 of the 32 interactive answers provide a readable `answerText`.
 **Options considered**:
 - A) The raw JSON, as in report-service
@@ -347,7 +410,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: E, decided by Doug. Most interactives don't provide readable text: the Activity Player only records `answer_text` for a plain interactive when the interactive puts `answerText` in its own state (`activity-player/src/utilities/embeddable-utils.ts`). For those, the link is the only way for a teacher to see what the student did, and it opens the answer as the dashboard shows it. Text is used when it exists, because it's more useful to read than a link. A would put unreadable JSON in a teacher's file, and B would make answered and unanswered students look the same.
 
-### RESOLVED: What goes in an audio-only open response's cell?
+---
+
+### What goes in an audio-only open response's cell?
 **Context**: An audio-only open response has no text. report-service always links open responses to the single-question view for this reason. The earlier draft showed `(audio response)`, which told the teacher a recording existed but gave no way to hear it from the file.
 **Options considered**:
 - A) The link to the single-question view, in place of `(audio response)`
@@ -356,7 +421,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A, decided by Doug. It's the only way to reach the recording from the file, and it follows the same rule as interactives: text when there is some, otherwise the link. Trudi asked to remove the open-response link columns; this brings the link back only where an answer has no text, inside the answer's own column, and the reply to her should mention it. Answers with both text and audio show only the text.
 
-### RESOLVED: Should questions hidden from the dashboard be included?
+---
+
+### Should questions hidden from the dashboard be included?
 **Context**: The dashboard hides questions not marked to show in the featured question report. The report-service report includes every question.
 **Options considered**:
 - A) Only the questions the dashboard shows
@@ -364,7 +431,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. The CSV should match the dashboard the teacher downloaded it from, including the question and answer counts. None of the demo questions are hidden, so this only matters for real content that hides questions.
 
-### RESOLVED: How should the student rows be ordered?
+---
+
+### How should the student rows be ordered?
 **Context**: The dashboard can sort students by name, by progress or by feedback.
 **Options considered**:
 - A) Last name, then first name, always
@@ -372,7 +441,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. A file used for record keeping should come out in the same order every time, and a spreadsheet can re-sort it. This is the dashboard's own name sort (`compareStudentsByName`).
 
-### RESOLVED: What are the file name and the last run date format?
+---
+
+### What are the file name and the last run date format?
 **Context**: The file name should tell a teacher which class and assignment it holds. report-service's `last_run` is ISO-8601 with no time zone, while the dashboard shows the teacher's local date and time.
 **Options considered**:
 - A) `<class name> - <assignment name> - <YYYY-MM-DD>.csv`, and last run in the teacher's local time as `YYYY-MM-DD HH:MM`
@@ -380,7 +451,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. Local time matches what the dashboard's Last Run column shows, and `YYYY-MM-DD HH:MM` sorts correctly and is recognized as a date by Excel and Google Sheets.
 
-### RESOLVED: Does the file need a byte order mark, given most teachers use Macs?
+---
+
+### Does the file need a byte order mark, given most teachers use Macs?
 **Context**: report-service's CSVs have no byte order mark: Athena reports are Athena's own output served from S3, and portal reports are streamed without one, and no one has reported an encoding problem with them. Their users are mostly researchers who open the files in Google Sheets, R or Python, and their columns are mostly IDs, numbers and English prompts. Teachers are more likely to double-click the file into Excel, and student answers are free text with accents, curly quotes and emoji. Excel, on Mac as well as Windows, reads a CSV without a byte order mark in a legacy encoding when it's opened by double-click, so non-ASCII text is garbled (`Café` as `CafÃ©`). Numbers and Google Sheets detect UTF-8 either way and ignore the mark.
 **Options considered**:
 - A) Keep the byte order mark
@@ -388,7 +461,9 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A, decided by Doug. It costs nothing in Numbers and Google Sheets and keeps Excel from garbling non-ASCII answers. The manual QA checklist's Excel row confirms it on a Mac.
 
-### RESOLVED: When exactly is the window "too narrow" for the button?
+---
+
+### When exactly is the window "too narrow" for the button?
 **Context**: Zeplin shows the two layouts but no breakpoint, and the header has a fixed `min-width` of 1100px.
 **Options considered**:
 - A) Switch to the menu item whenever the header can't fit the button without overlap or truncation
@@ -396,53 +471,143 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. Measured in the running dashboard, the free space between the Assignment selector and the teacher's name depends on the window width and the length of the teacher's name. With the demo name the ~165px button fits at 1366px but not at 1300px, and a longer name needs a wider window, so a fixed breakpoint would overlap long names or hide the button needlessly for short ones.
 
-## Self-Review
+---
 
-Roles: Senior Engineer, Security Engineer, WCAG Accessibility Expert, QA Engineer and Teacher. Each finding below was checked against the code or the running dashboard before being recorded. Concerns that didn't survive the check aren't listed.
+### Prompt text rules didn't match how the dashboard shows prompts
+**Context**: Image questions can put their prompt in `drawingPrompt` (two of the three demo image questions do), and the dashboard's answer view shows the drawing prompt followed by the prompt. `striptags` removes tags but leaves entities such as `&nbsp;`, which would reach the CSV. (Found in the requirements self-review.)
 
-### Senior Engineer
-
-#### RESOLVED: Prompt text rules didn't match how the dashboard shows prompts
-Image questions can put their prompt in `drawingPrompt` (two of the three demo image questions do), and the dashboard's answer view shows the drawing prompt followed by the prompt. `striptags` removes tags but leaves entities such as `&nbsp;`, which would reach the CSV. **Fix:** the Prompt row requirement now includes the drawing prompt, decodes entities, repeats the prompt in each of a question's columns, and keeps the question number when there is no prompt.
+**Decision**: The Prompt row requirement now includes the drawing prompt, decodes entities, repeats the prompt in each of a question's columns, and keeps the question number when there is no prompt.
 
 ---
 
-#### RESOLVED: The spec didn't say what "the answers" are while answers are still arriving
-Answers come from a live Firestore listener, so the store changes after the first render and keeps changing as students work. **Fix:** the control is available once the dashboard has loaded, and the file is defined as a snapshot of the answers the dashboard has at the moment of the click.
+### The spec didn't say what "the answers" are while answers are still arriving
+**Context**: Answers come from a live Firestore listener, so the store changes after the first render and keeps changing as students work. (Found in the requirements self-review.)
+
+**Decision**: The control is available once the dashboard has loaded, and the file is defined as a snapshot of the answers the dashboard has at the moment of the click.
 
 ---
 
-#### RESOLVED: Link answers had no defined content
-The demo has four `external_link` answers, whose answer is a URL that the dashboard shows as a link. Under the interactive rule they would have become `(response recorded)`. **Fix:** a link answer shows its URL.
+### Link answers had no defined content
+**Context**: The demo has four `external_link` answers, whose answer is a URL that the dashboard shows as a link. Under the interactive rule they would have become `(response recorded)`. (Found in the requirements self-review.)
+
+**Decision**: A link answer shows its URL.
 
 ---
 
-#### RESOLVED: Percent complete was undefined when no questions are visible
-answers ÷ questions divides by zero when the dashboard shows no questions. **Fix:** `Progress (%)` is empty in that case, as report-service does with `nullif`.
+### Percent complete was undefined when no questions are visible
+**Context**: answers ÷ questions divides by zero when the dashboard shows no questions. (Found in the requirements self-review.)
+
+**Decision**: `Progress (%)` is empty in that case, as report-service does with `nullif`.
 
 ---
 
-### Security Engineer
+### Student answers could run as spreadsheet formulas
+**Context**: Open response and interactive text is typed by students, and a cell starting with `=`, `+`, `-` or `@` is evaluated as a formula when the CSV is opened in Excel or Google Sheets (CSV injection). Nothing in the codebase escapes CSV output today, since no CSV code exists. (Found in the requirements self-review.)
 
-#### RESOLVED: Student answers could run as spreadsheet formulas
-Open response and interactive text is typed by students, and a cell starting with `=`, `+`, `-` or `@` is evaluated as a formula when the CSV is opened in Excel or Google Sheets (CSV injection). Nothing in the codebase escapes CSV output today, since no CSV code exists. **Fix:** cells starting with those characters, a tab or a carriage return are prefixed with a single quote, following the OWASP guidance.
-
----
-
-### WCAG Accessibility Expert
-
-#### RESOLVED: The download control wasn't required to be keyboard accessible
-Nothing in the dashboard header can be focused today, and the hamburger menu and its items are `div`s with click handlers. In a narrow window the menu is the only way to download, so a keyboard user couldn't download at all. **Fix:** the header button must be a native button with a visible focus indicator and its label as its accessible name, with the icon hidden from screen readers. The hamburger menu must open from the keyboard, and its Download item must be reachable and activatable from the keyboard. Making the rest of the header's existing controls keyboard accessible remains outside this story.
+**Decision**: Cells starting with those characters, a tab or a carriage return are prefixed with a single quote, following the OWASP guidance.
 
 ---
 
-### QA Engineer
+### The download control wasn't required to be keyboard accessible
+**Context**: Nothing in the dashboard header can be focused today, and the hamburger menu and its items are `div`s with click handlers. In a narrow window the menu is the only way to download, so a keyboard user couldn't download at all. (Found in the requirements self-review.)
 
-#### RESOLVED: The new columns couldn't be exercised with the demo data
-The demo offering and class data have no usernames and no teachers, so the `Username` and `Teachers` columns and the anonymized-username rule would be untestable in development and Cypress. **Fix:** the Technical Notes record that the demo data needs usernames and teachers added.
+**Decision**: The header button must be a native button with a visible focus indicator and its label as its accessible name, with the icon hidden from screen readers. The hamburger menu must open from the keyboard, and its Download item must be reachable and activatable from the keyboard. Making the rest of the header's existing controls keyboard accessible remains outside this story.
 
 ---
 
-### Teacher
+### The new columns couldn't be exercised with the demo data
+**Context**: The demo offering and class data have no usernames and no teachers, so the `Username` and `Teachers` columns and the anonymized-username rule would be untestable in development and Cypress. (Found in the requirements self-review.)
 
-No confirmed issues. Row order and anonymized names in the file match what the dashboard shows, and the date format is one spreadsheets recognize.
+**Decision**: The Technical Notes record that the demo data needs usernames and teachers added.
+
+---
+
+### Build the CSV from Redux selectors or from the rendered components?
+**Context**: The dashboard's components already format answers for display, so the CSV could reuse them.
+**Options considered**:
+- A) A pure function over the Redux state, reusing the selectors and small helpers (`hasResponse`, `getAnswerBadges`, `getFormattedStudentName`, `sortByName`, `countCompletedAnswers`)
+- B) Render the answer components off-screen and read their text
+
+**Decision**: A. The components produce HTML for display and depend on layout, iframes and interactive state history, while the selectors are already pure and tested. A keeps the CSV testable with a `fromJS` state and runs synchronously on click.
+
+---
+
+### How is "fits" detected?
+**Context**: The requirements decide by fit rather than a fixed breakpoint, and the speccing check showed flexbox squeezes the teacher's name instead of overlapping.
+**Options considered**:
+- A) A ResizeObserver on the header, `flex-shrink: 0` on the name, and a measured check (the shown-case and hidden-case formulas above)
+- B) A CSS-only container query or media query
+- C) A fixed window-width breakpoint measured against the demo name
+
+**Decision**: A. The browsers portal-report supports don't all have container queries. A media query can't account for the teacher's name length, and moving the item into the menu needs React to know the result anyway. The existing `@types/resize-observer-browser` dependency already types the native API.
+
+---
+
+### Should the menu toggle become a button inside the existing `div`, or replace it?
+**Context**: The existing Cypress header spec clicks `[data-cy=header-menu]`, and the click-outside logic uses the `div`'s ref.
+**Options considered**:
+- A) Keep the `div` with its `data-cy`, `onClick` and ref, and put a `button` inside it
+- B) Replace the `div` with a `button`
+
+**Decision**: A. Existing tests and the outside-click handling keep working unchanged. Keyboard activation of the inner button fires a `click` that bubbles to the `div`'s handler.
+
+---
+
+### Should Escape close the hamburger menu?
+**Context**: The plan makes the menu reachable from the keyboard: the toggle is a button, and the items are focusable while it's open. It doesn't say how a keyboard user closes it other than activating the toggle or an item. The ARIA menu button pattern closes a menu on Escape.
+**Options considered**:
+- A) Escape closes the open menu and, when focus was inside the list, returns focus to the toggle
+- B) No Escape handling, as planned
+
+**Decision**: A, decided during implementation. It's a few lines on the menu's existing container, reuses the focus-return logic the plan already adds, and a keyboard user who opens the menu by mistake expects Escape to close it. It changes nothing for mouse users.
+
+---
+
+### The rows code didn't type-check
+**Context**: `tsc` under the repo's `strict` settings rejected the `getIn` results used as strings and as a `Map` (`TS2322`, `TS2571`, `TS2345`). (Found in the implementation plan self-review.)
+
+**Decision**: The image-question cells and the answer lookup cast the `getIn` results. With the casts, the only remaining error was `clazzTeacherNames` being unknown, which the first step adds before this one.
+
+---
+
+### `safeFileNamePart` broke the webpack build
+**Context**: The regex's `\u0000-\u001f` range tripped the repo's ESLint `no-control-regex` rule, which the dev server's `eslint-loader` reports as a build error. (Found in the implementation plan self-review.)
+
+**Decision**: Control characters are checked by code point instead.
+
+---
+
+### The Blob URL was revoked too soon
+**Context**: Revoking the object URL right after `click()` can cancel the download in some browsers. FileSaver.js waits 40 seconds for this reason. (Found in the implementation plan self-review.)
+
+**Decision**: Revoke after 40 seconds.
+
+---
+
+### Font loading could leave a stale fit decision
+**Context**: The observer only watched the header, whose size doesn't change when the web font finishes loading and widens the button or the teacher's name. (Found in the implementation plan self-review.)
+
+**Decision**: The observer also watches the name and the button.
+
+---
+
+### The download test relied on `Blob.text()`
+**Context**: The repo's Jest uses jsdom 15.2.1, which has no `Blob.text()`. (Found in the implementation plan self-review.)
+
+**Decision**: The test reads the Blob with `FileReader`, and uses fake timers for the 40-second revoke.
+
+---
+
+### The Cypress keyboard check depended on unverified Cypress behavior
+**Context**: Cypress's `type("{enter}")` simulates key events rather than sending native ones, and whether it activates a button in Cypress 8 couldn't be checked here: the Cypress binary wasn't installed for this session. (Found in the implementation plan self-review.)
+
+**Decision**: The spec checks that the control is a focusable `button` and relies on native button behavior for Enter and Space, so the test doesn't depend on that behavior either way.
+
+---
+
+### Focus was stranded inside the closed menu
+**Context**: With the menu items as buttons, activating Download from the keyboard closes the menu, which sets `aria-hidden` and `tabIndex` -1 on the list, while focus stays on the Download button inside it. (Found in the implementation plan self-review.)
+
+**Decision**: Closing the menu with focus inside it moves focus to the toggle button, with a test.
+
+---
