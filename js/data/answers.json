@@ -189,7 +189,7 @@
     "version": "1"
   },
   {
-    "answer": "test answer 3",
+    "answer": "He said \"it's hot, dry\" and windy,\nthen the fire spread. Café ✓",
     "created": "2019-06-06 14:53:28 UTC",
     "id": "open_response_answer_32",
     "question_id": "open_response_60",
@@ -675,7 +675,7 @@
   {
     "answer": {
       "image_url": "https://ccshutterbug.s3.amazonaws.com/1560247701245-256667.png",
-      "text": "test note 2"
+      "text": "=1+1 isn't a formula"
     },
     "created": "2019-06-06 14:53:28 UTC",
     "id": "image_question_answer_8",

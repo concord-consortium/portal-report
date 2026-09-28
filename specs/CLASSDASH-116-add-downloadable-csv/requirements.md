@@ -380,6 +380,14 @@ The student answers report is built in `report-service/server/lib/report_server/
 
 **Decision**: A. Local time matches what the dashboard's Last Run column shows, and `YYYY-MM-DD HH:MM` sorts correctly and is recognized as a date by Excel and Google Sheets.
 
+### RESOLVED: Does the file need a byte order mark, given most teachers use Macs?
+**Context**: report-service's CSVs have no byte order mark: Athena reports are Athena's own output served from S3, and portal reports are streamed without one, and no one has reported an encoding problem with them. Their users are mostly researchers who open the files in Google Sheets, R or Python, and their columns are mostly IDs, numbers and English prompts. Teachers are more likely to double-click the file into Excel, and student answers are free text with accents, curly quotes and emoji. Excel, on Mac as well as Windows, reads a CSV without a byte order mark in a legacy encoding when it's opened by double-click, so non-ASCII text is garbled (`Café` as `CafÃ©`). Numbers and Google Sheets detect UTF-8 either way and ignore the mark.
+**Options considered**:
+- A) Keep the byte order mark
+- B) Drop it, matching report-service
+
+**Decision**: A, decided by Doug. It costs nothing in Numbers and Google Sheets and keeps Excel from garbling non-ASCII answers. The manual QA checklist's Excel row confirms it on a Mac.
+
 ### RESOLVED: When exactly is the window "too narrow" for the button?
 **Context**: Zeplin shows the two layouts but no breakpoint, and the header has a fixed `min-width` of 1100px.
 **Options considered**:

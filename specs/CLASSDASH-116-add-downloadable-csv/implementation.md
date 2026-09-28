@@ -817,6 +817,14 @@ Where the code departs from the plan above.
 - **Checked in Chromium against the demo data:** the button measures 168px wide. It shows at 1336px and wider and hides at 1334px and narrower, the same going up and down in 2px steps, so it doesn't flip back and forth. The Assignment selector and the teacher's name move continuously across the switch and don't move when the hidden button is removed at 1150px. The name stays one line (32px tall) at every width from 1100px to 1600px. A keyboard-only download from the narrow window's menu worked and returned focus to the toggle.
 - **The `Header` test mocks `img/cc-logo.png` with a proxy.** Images and styles both map to `identity-obj-proxy` in Jest, which throws when React converts the logo's `src` to a string. The mock returns a file name for `src` and each class name as itself. jsdom measures every element as 0 wide, so the tests stub `getBoundingClientRect` for the case where the button fits and use the unstubbed layout for the case where it doesn't.
 
+### Cypress and manual QA
+
+- **The answer link is visited at the end of the header-button download test**, not in a test of its own. Cypress clears aliases between tests, so a later test can't read a link saved with `.as()`. The wide-window tests reload the dashboard in `beforeEach` as a result.
+- **The keyboard check also ran for real in Chromium** (Playwright, outside the Cypress spec): Enter on the menu toggle opened the menu, Tab reached "Download as CSV", Enter saved the file, and focus returned to the toggle.
+- **The new `require("fs")` in `cypress/plugins/index.js` has an `eslint-disable-next-line`** for `@typescript-eslint/no-var-requires`, since the plugins file runs in Node as CommonJS. The existing code-coverage `require` in the same file already fails that rule on `master` and is left alone.
+- **Cypress was run against a dev server on port 8081** (`--config baseUrl=http://localhost:8081`), because another project's dev server was using 8080.
+- **Manual QA status:** the single-activity row of the checklist passed (`?portal-dashboard&resourceType=activity` downloads with `Activity 1` answer headers throughout). The demo sequence's file also parsed back correctly with Python's `csv` module, with a byte order mark, CRLF line endings and 22 answer columns for 19 questions. The Excel, Google Sheets and Numbers rows and the staging-link row are still to do: no spreadsheet app or staging portal launch was available while implementing.
+
 ### Review findings not applied
 
 - **Step 5, "delete the commented-out Print item and its import":** not applied. The plan says the Print block stays commented as it is, and removing a planned-for-later item is outside this story. The block went back to its original untyped form, so it no longer looks like a ready-to-use `MenuItemWithIcon`.
