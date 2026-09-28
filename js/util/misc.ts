@@ -7,6 +7,11 @@ import config, { configBool } from "../config";
 // truncate("this is a sentence", 5) // → "this i…"
 export const truncate = (str: string, size: number) => (str.length > size) ? `${str.substr(0, size - 1)}…` : str;
 
+const BLANK_MARKER = /\[[^\]]+\]/g;
+
+// Replaces each [marker] in a prompt with an underscore blank; a missing prompt gives "".
+export const replaceBlankMarkers = (prompt?: string | null) => (prompt || "").replace(BLANK_MARKER, "__________");
+
 export const parseUrl = (url: string) => {
   const a = document.createElement("a");
   a.href = url;

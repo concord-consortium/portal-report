@@ -2,7 +2,7 @@ import React from "react";
 import { Map, List } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { QuestionFeedbackTextarea } from "./question-feedback-textarea";
-import { feedbackValidForAnswer } from "../../../util/misc";
+import { feedbackValidForAnswer, replaceBlankMarkers } from "../../../util/misc";
 import striptags from "striptags";
 import { renderHTML } from "../../../util/render-html";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
@@ -55,8 +55,7 @@ export const FeedbackQuestionRows: React.FC<IProps> = (props) => {
     const feedback = feedbackData ? feedbackData.get("feedback") : "";
     const feedbackBadge = getFeedbackIcon(feedback, feedbackData, answer);
 
-    const blankRegEx = /\[([^)]+)\]/g;
-    const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
+    const promptText = replaceBlankMarkers(question?.get("prompt"));
 
     return (
       <div className={css.feedbackRowsRow} key={currentQuestionId} data-cy="question-row">

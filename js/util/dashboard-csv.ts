@@ -6,6 +6,7 @@ import { getFormattedStudentName } from "./student-utils";
 import { hasResponse, hasAudioResponse } from "./answer-utils";
 import { htmlToText, formatCsvDate, formatCsvDateTime, safeFileNamePart } from "./csv";
 import { getAnswerLink } from "./answer-link";
+import { replaceBlankMarkers } from "./misc";
 import { RootState } from "../reducers";
 
 type Cell = string | number;
@@ -18,9 +19,6 @@ interface IAnswerColumn {
   question: Map<string, any>;
   cell: AnswerCell;
 }
-
-// A fill-in-the-blank marker such as [blank-1].
-const BLANK_MARKER = /\[[^\]]+\]/g;
 
 const safely = (fn: AnswerCell): AnswerCell => (answer, question, student) => {
   try {
@@ -75,7 +73,7 @@ const columnsForQuestion = (question: Map<string, any>, sourceKey: string): Arra
 
 const promptText = (question: Map<string, any>) => {
   const html = [question.get("drawingPrompt"), question.get("prompt")].filter(Boolean).join(" ");
-  return htmlToText(html).replace(BLANK_MARKER, "__________") || "(no prompt)";
+  return replaceBlankMarkers(htmlToText(html)) || "(no prompt)";
 };
 
 const correctAnswerText = (question: Map<string, any>) => {
