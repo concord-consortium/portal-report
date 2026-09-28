@@ -800,6 +800,10 @@ Where the code departs from the plan above.
 - **`getAnswerBadges` lost its unused `type` variable** once the audio check moved into `hasAudioResponse`.
 - **The tests build the rows in `beforeAll`**, after `?portal-dashboard` is pushed into the URL. Built at `describe` time, the rows were computed before the URL changed and the hidden question was included.
 
+### Saving the file
+
+- **The download test checks the byte order mark in the Blob's raw bytes** (`EF BB BF`, read with `readAsArrayBuffer`). `FileReader.readAsText` decodes the text and drops the mark, so the planned check on the decoded text's first character failed even though the file had it.
+
 ### Review findings not applied
 
 - **Step 2, "return a managed open response's plain-text `answerText` without `htmlToText`":** not applied. The dashboard renders a managed open response's `answerText` as HTML (`renderHTML` in `iframe-answer.tsx`), so converting it with `htmlToText` gives the text the teacher sees. The truncation that prompted the suggestion (a bare `<` in student text) is fixed in `htmlToText` itself.
