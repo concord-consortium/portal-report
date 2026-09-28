@@ -53,7 +53,7 @@ export const getSelectedQuestion = createSelector(
 //   (...)
 // }
 
-function countCompletedAnswers(activityQuestions, answers, student) {
+export function countCompletedAnswers(activityQuestions, answers, student) {
   return activityQuestions.reduce((count, question) => {
     const answer = answers.getIn([question.get("id"), student.get("id")]);
     if (answer &&

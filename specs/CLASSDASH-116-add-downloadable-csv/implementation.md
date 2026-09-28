@@ -793,6 +793,17 @@ Where the code departs from the plan above.
 - **`htmlToText` escapes a bare `<` before `striptags`.** `striptags` treats any `<` as the start of a tag, so student text such as `I <3 science` or `2<5` lost everything after the `<`. A `<` that isn't followed by a letter, `/`, `!` or `?` (so can't start a tag, comment or doctype) is replaced with `&lt;` first, and `DOMParser` decodes it back. Text such as `a<b then c>d` is still read as a tag, as a browser would read it.
 - **The `formatCsvDateTime` test builds its input from a local-time `Date`** instead of setting `process.env.TZ`. Node picked up only the first `TZ` change in a Jest worker, so a test that switched zones was unreliable. A timestamp made with `new Date(2025, 4, 10, 6, 3, 45).toISOString()` must format as `2025-05-10 06:03` in any zone, which checks the UTC-to-local conversion without depending on the machine's zone.
 
+### Dashboard CSV rows
+
+- **An open response whose `answer` is an empty string falls through to `answerText` and the audio check.** The planned `typeof value === "string"` check returned `""` for a student who recorded audio and left the text empty, so the audio link never appeared.
+- **`choiceCell` uses each selected choice's `content` as is.** The plan kept its own copy of the deleted-choice placeholder and matched on id `-1`. `getAnswerTrees` already puts the placeholder text in the deleted choice's `content`, so the CSV now uses that one definition and can't drift from the dashboard.
+- **`getAnswerBadges` lost its unused `type` variable** once the audio check moved into `hasAudioResponse`.
+- **The tests build the rows in `beforeAll`**, after `?portal-dashboard` is pushed into the URL. Built at `describe` time, the rows were computed before the URL changed and the hidden question was included.
+
+### Review findings not applied
+
+- **Step 2, "return a managed open response's plain-text `answerText` without `htmlToText`":** not applied. The dashboard renders a managed open response's `answerText` as HTML (`renderHTML` in `iframe-answer.tsx`), so converting it with `htmlToText` gives the text the teacher sees. The truncation that prompted the suggestion (a bare `<` in student text) is fixed in `htmlToText` itself.
+
 ## Open Questions
 
 <!-- Implementation-focused questions only. Requirements questions go in requirements.md. -->
