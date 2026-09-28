@@ -784,6 +784,15 @@ Checks run while writing this plan, against the dev server's demo data. None of 
 - **Jest environment:** a throwaway spec confirmed that `striptags` followed by `DOMParser` decodes entities under the repo's jsdom, and that `window.history.pushState({}, "", "/?portal-dashboard")` makes `getSequenceTree` apply the dashboard's visibility rule, which the rows tests rely on.
 - **Format rules and browser download:** covered in the requirements spec's Verification section. The rows step's cell rules are the ones that were run there, with the two fixes that run found (unsubmitted required answers empty, blank markers as underscores).
 
+## As built
+
+Where the code departs from the plan above.
+
+### CSV text helpers
+
+- **`htmlToText` escapes a bare `<` before `striptags`.** `striptags` treats any `<` as the start of a tag, so student text such as `I <3 science` or `2<5` lost everything after the `<`. A `<` that isn't followed by a letter, `/`, `!` or `?` (so can't start a tag, comment or doctype) is replaced with `&lt;` first, and `DOMParser` decodes it back. Text such as `a<b then c>d` is still read as a tag, as a browser would read it.
+- **The `formatCsvDateTime` test builds its input from a local-time `Date`** instead of setting `process.env.TZ`. Node picked up only the first `TZ` change in a Jest worker, so a test that switched zones was unreliable. A timestamp made with `new Date(2025, 4, 10, 6, 3, 45).toISOString()` must format as `2025-05-10 06:03` in any zone, which checks the UTC-to-local conversion without depending on the machine's zone.
+
 ## Open Questions
 
 <!-- Implementation-focused questions only. Requirements questions go in requirements.md. -->
