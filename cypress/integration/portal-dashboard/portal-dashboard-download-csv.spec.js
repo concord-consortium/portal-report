@@ -96,6 +96,15 @@ context("Portal Dashboard Download as CSV", () => {
       cy.get("[data-cy=account-owner]").invoke("outerHeight").should("equal", 32);
     });
 
+    it("also offers Download in the hamburger menu while the button is shown", () => {
+      cy.get("[data-cy=download-csv-button]").should("be.visible");
+      cy.get("[data-cy=header-menu]").click();
+      cy.get("[data-cy=download-csv-menu-item]").should("be.visible").click();
+      readDownload().then(({ rows }) => {
+        expect(rows.length).to.equal(9);
+      });
+    });
+
     it("uses a native button that can take focus", () => {
       cy.get("[data-cy=download-csv-button]").should("match", "button").focus().should("have.focus");
     });

@@ -27,7 +27,6 @@ interface IProps {
   hideLastRun?: boolean;
   hideFeedbackBadges?: boolean;
   onDownloadCsv?: () => void;
-  showDownloadCsv?: boolean;
 }
 
 export interface MenuItemWithState {
@@ -108,9 +107,9 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   }
 
   private getIconItems(): MenuItemWithIcon[] {
-    const { onDownloadCsv, showDownloadCsv } = this.props;
+    const { onDownloadCsv } = this.props;
     // The download thunk logs its own event, so this item has no logEvent.
-    const downloadItem: MenuItemWithIcon[] = onDownloadCsv && showDownloadCsv
+    const downloadItem: MenuItemWithIcon[] = onDownloadCsv
       ? [{ MenuItemIcon: DownloadIcon, name: "Download as CSV", dataCy: "download-csv-menu-item", onSelect: onDownloadCsv }]
       : [];
     return [...downloadItem, helpItem];

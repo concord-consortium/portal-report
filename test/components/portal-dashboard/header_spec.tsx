@@ -65,16 +65,16 @@ describe("<Header />", () => {
     });
     afterEach(() => rectSpy.mockRestore());
 
-    it("shows the button and leaves the Download item out of the menu", () => {
-      const { getAllByText, getByRole } = renderHeader({ onDownloadCsv: jest.fn() });
-      expect(getAllByText("Download as CSV")).toHaveLength(1);
+    it("shows the button as a shortcut and keeps the Download item in the menu", () => {
+      const { container, getByRole } = renderHeader({ onDownloadCsv: jest.fn() });
       expect(getByRole("button", { name: "Download as CSV" }).className).not.toContain("downloadButtonHidden");
+      expect(container.querySelector("[data-cy=download-csv-menu-item]")).not.toBeNull();
     });
   });
 
   describe("when the button doesn't fit", () => {
     // jsdom doesn't lay out the page, so every element measures 0 wide and the button can't fit.
-    it("hides the button and moves Download into the menu", () => {
+    it("hides the button, leaving Download in the menu", () => {
       const { container } = renderHeader({ onDownloadCsv: jest.fn() });
       const button = container.querySelector("[data-cy=download-csv-button]") as HTMLElement;
       expect(button.className).toContain("downloadButtonHidden");

@@ -14,7 +14,7 @@ Teachers can download their class's answers for the current assignment as a CSV 
 
 - Show a "Download as CSV" button in the dashboard header between the Assignment selector and the teacher's name, styled per the Zeplin mockup: an outlined button with a download icon and the label "Download as CSV". It looks the same as the view dropdown at the far left of the header, with the same outline, height, text and per-view background, hover and pressed colors.
 - The button is a native button: it can be reached with Tab and activated with Enter or Space, has a visible focus indicator, and its accessible name is its label. The icon is decorative and hidden from screen readers.
-- Show the button whenever the header has room for it without overlapping, squeezing or wrapping the Assignment selector or the teacher's name. When it doesn't, hide the button and show "Download as CSV" as an item in the hamburger menu instead. Because the space depends on the length of the teacher's name, this is decided by fit rather than by a fixed window width. For reference, with the demo teacher's name the button fits at a 1366px-wide window but not at 1300px.
+- "Download as CSV" is always an item in the hamburger menu. The header button is a shortcut to it: show the button whenever the header has room for it without overlapping, squeezing or wrapping the Assignment selector or the teacher's name, and hide it when it doesn't. Because the space depends on the length of the teacher's name, this is decided by fit rather than by a fixed window width. For reference, with the demo teacher's name the button fits at a 1366px-wide window but not at 1300px.
 - The switch updates as the window is resized.
 - When the button isn't shown (a narrow window), the header's layout is unchanged from today: the logo, view dropdown, Assignment selector, teacher's name and menu sit where they do now at every window width.
 - The button never makes the teacher's name wrap, shrink or truncate, and never moves the Assignment selector.
@@ -22,7 +22,7 @@ Teachers can download their class's answers for the current assignment as a CSV 
 - Show the control in all three views: Progress Dashboard, Response Details and Feedback Report.
 - Color the download icon to match the current view: teal for Progress Dashboard, orange for Response Details and green for Feedback Report, the same colors the header's other icons use.
 - Show the control to teachers and to researchers viewing the dashboard. A researcher's download is always anonymized (see Anonymized students).
-- The hamburger menu can be opened from the keyboard, and its "Download as CSV" item can be reached and activated from the keyboard, so a keyboard user can download in a narrow window.
+- The hamburger menu can be opened from the keyboard, and its "Download as CSV" item can be reached and activated from the keyboard, so a keyboard user can download at any window width.
 - The control is available once the dashboard has finished loading the class and the assignment.
 - Clicking the control saves the CSV immediately, with no page navigation, server job or confirmation step. The file holds the answers the dashboard has at the moment of the click. Answers arrive live, so a later download can include newer answers.
 - Log a download event through the dashboard's existing event logging, the same way other header and menu actions are logged.
@@ -235,6 +235,7 @@ Where the code departs from the implementation plan.
 
 ### Hamburger menu
 
+- **"Download as CSV" is always in the menu**, not only when the header button is hidden, at Trudi's request after trying the test branch (see the decision on this below). The menu's `showDownloadCsv` prop was removed, and the item appears whenever the dashboard passes a download handler.
 - **Escape closes the menu** (see the RESOLVED question on Escape below), with a test.
 - **The commented-out Print item stays as the same commented-out object literal**, now on its own since the static `items` array it sat in is gone.
 - **`.menuItem` keeps its existing `width: 210px` and white background** rather than the planned `width: 100%; background: none`. The list is also 210px wide and white, so the result is the same, and the toggle items that share the class are unchanged.
@@ -464,6 +465,14 @@ Where the code departs from the implementation plan.
 
 ---
 
+### Should "Download as CSV" be in the menu only when the header button doesn't fit?
+**Context**: As first built, the menu item appeared only in a narrow window, when the header button was hidden, so the control was in exactly one place at a time. After trying the test branch, Trudi asked: "Is it possible to always have it in the Hamburger Menu and just have it at the top as a shortcut?"
+**Options considered**:
+- A) Only in the menu when the header button doesn't fit
+- B) Always in the menu, with the header button as a shortcut whenever it fits
+
+**Decision**: B, requested by Trudi and agreed by Doug. The download is always in the same place in the menu, whatever the window width, and the header button is a quicker way to it when there's room. The fit check still decides whether the header button is shown.
+
 ### When exactly is the window "too narrow" for the button?
 **Context**: Zeplin shows the two layouts but no breakpoint, and the header has a fixed `min-width` of 1100px.
 **Options considered**:
@@ -540,7 +549,7 @@ Where the code departs from the implementation plan.
 - B) A CSS-only container query or media query
 - C) A fixed window-width breakpoint measured against the demo name
 
-**Decision**: A. The browsers portal-report supports don't all have container queries. A media query can't account for the teacher's name length, and moving the item into the menu needs React to know the result anyway. The existing `@types/resize-observer-browser` dependency already types the native API.
+**Decision**: A. The browsers portal-report supports don't all have container queries. A media query can't account for the teacher's name length, and moving the item into the menu needs React to know the result anyway. The existing `@types/resize-observer-browser` dependency already types the native API. (Since changed: the menu item is now always shown, and React uses the result only to show or hide the header button. See the decision on whether "Download as CSV" should be in the menu only when the header button doesn't fit.)
 
 ---
 

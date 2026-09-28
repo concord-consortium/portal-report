@@ -11,17 +11,12 @@ describe("<HeaderMenuContainer />", () => {
     Array.from(container.querySelectorAll("[data-cy=menu-list] > button")).map(item => item.textContent);
 
   it("has no Download item without a download handler", () => {
-    const { container } = renderMenu({ showDownloadCsv: true });
-    expect(iconItemNames(container)).toEqual(["Help"]);
-  });
-
-  it("has no Download item when the header button is shown instead", () => {
-    const { container } = renderMenu({ onDownloadCsv: jest.fn(), showDownloadCsv: false });
+    const { container } = renderMenu();
     expect(iconItemNames(container)).toEqual(["Help"]);
   });
 
   it("lists the Download item above Help, with a decorative icon", () => {
-    const { container, getByText } = renderMenu({ onDownloadCsv: jest.fn(), showDownloadCsv: true });
+    const { container, getByText } = renderMenu({ onDownloadCsv: jest.fn() });
     expect(iconItemNames(container)).toEqual(["Download as CSV", "Help"]);
     const icon = buttonFor(getByText("Download as CSV")).firstElementChild as Element;
     expect(icon.getAttribute("aria-hidden")).toBe("true");
@@ -29,7 +24,7 @@ describe("<HeaderMenuContainer />", () => {
 
   it("calls the download handler once when the Download item is clicked", () => {
     const onDownloadCsv = jest.fn();
-    const { getByText } = renderMenu({ onDownloadCsv, showDownloadCsv: true });
+    const { getByText } = renderMenu({ onDownloadCsv });
     fireEvent.click(getByText("Download as CSV"));
     expect(onDownloadCsv).toHaveBeenCalledTimes(1);
   });
@@ -44,7 +39,7 @@ describe("<HeaderMenuContainer />", () => {
   });
 
   it("keeps closed menu items out of the tab order and hidden from screen readers", () => {
-    const { container, getByRole } = renderMenu({ onDownloadCsv: jest.fn(), showDownloadCsv: true });
+    const { container, getByRole } = renderMenu({ onDownloadCsv: jest.fn() });
     const list = container.querySelector("[data-cy=menu-list]") as HTMLElement;
     const items = () => Array.from(list.querySelectorAll("button"));
     expect(list.getAttribute("aria-hidden")).toBe("true");
@@ -56,7 +51,7 @@ describe("<HeaderMenuContainer />", () => {
   });
 
   it("returns focus to the toggle after the Download item is activated", () => {
-    const { getByRole, getByText } = renderMenu({ onDownloadCsv: jest.fn(), showDownloadCsv: true });
+    const { getByRole, getByText } = renderMenu({ onDownloadCsv: jest.fn() });
     const toggle = getByRole("button", { name: "Menu" });
     fireEvent.click(toggle);
     const downloadItem = buttonFor(getByText("Download as CSV"));
@@ -69,7 +64,7 @@ describe("<HeaderMenuContainer />", () => {
   });
 
   it("closes with Escape and returns focus to the toggle", () => {
-    const { getByRole, getByText } = renderMenu({ onDownloadCsv: jest.fn(), showDownloadCsv: true });
+    const { getByRole, getByText } = renderMenu({ onDownloadCsv: jest.fn() });
     const toggle = getByRole("button", { name: "Menu" });
     fireEvent.click(toggle);
     const downloadItem = buttonFor(getByText("Download as CSV"));

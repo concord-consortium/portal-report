@@ -113,7 +113,6 @@ export class Header extends React.PureComponent<IProps, IState> {
               hideLastRun={hideLastRun}
               hideFeedbackBadges={hideFeedbackBadges}
               onDownloadCsv={onDownloadCsv}
-              showDownloadCsv={!buttonFits}
             />
           </div>
         </div>
