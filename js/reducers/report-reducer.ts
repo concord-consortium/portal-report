@@ -37,6 +37,7 @@ export interface IReportState {
   type: ReportType;
   nowShowing: ReportType;
   clazzName: string;
+  clazzTeacherNames: List<string>;
   clazzId: number;
   students: Map<any, any>;
   answers: Map<any, any>;
@@ -74,6 +75,7 @@ const INITIAL_REPORT_STATE = RecordFactory<IReportState>({
   type: "class",
   nowShowing: "class",
   clazzName: "",
+  clazzTeacherNames: List(),
   clazzId: -1,
   students: Map({}),
   answers: Map({}),
@@ -115,6 +117,7 @@ export class ReportState extends INITIAL_REPORT_STATE implements IReportState {
   type: ReportType;
   nowShowing: ReportType;
   clazzName: string;
+  clazzTeacherNames: List<string>;
   clazzId: number;
   students: Map<any, any>;
   answers: Map<any, any>;
@@ -188,6 +191,7 @@ export default function report(state = new ReportState({}), action?: any) {
         .set("selectedStudentIds", urlBasedStudentSelection)
         .set("hideControls", hideControls)
         .set("clazzName", data.classInfo.name)
+        .set("clazzTeacherNames", List((data.classInfo.teachers || []).map(t => `${t.firstName} ${t.lastName}`)))
         .set("clazzId", data.classInfo.id)
         .set("students", Map(data.classInfo.students.map(student => [student.id, Map(student)])))
         .set("platformUserId", data.platformUserId)

@@ -7,12 +7,13 @@ import css from "../../../css/portal-dashboard/header.less";
 interface IProps {
   userName: string;
   colorTheme?: ColorTheme;
+  divRef?: React.Ref<HTMLDivElement>;
 }
 export class AccountOwnerDiv extends React.PureComponent <IProps> {
   render() {
-    const { colorTheme, userName } = this.props;
+    const { colorTheme, userName, divRef } = this.props;
     return (
-      <div className={css.accountOwner} data-cy="account-owner">
+      <div className={css.accountOwner} data-cy="account-owner" ref={divRef}>
         <AccountOwnerIcon className={`${css.icon} ${colorTheme ? css[colorTheme] : ""}`} />
         <div className={css.accountOwnerName}>{userName}</div>
       </div>

@@ -8,10 +8,12 @@ import AssignmentIcon from "../../../img/svg-icons/assignment-icon.svg";
 import DashboardIcon from "../../../img/svg-icons/dashboard-icon.svg";
 import GroupIcon from "../../../img/svg-icons/group-icon.svg";
 import FeedbackIcon from "../../../img/svg-icons/feedback-icon.svg";
+import DownloadIcon from "../../../img/svg-icons/download-icon.svg";
 import { ColorTheme, DashboardViewMode } from "../../util/misc";
 import { TrackEventFunction } from "../../actions";
 import { SORT_BY_NAME } from "../../actions/dashboard";
 import { SORT_OPTIONS_CONFIG, SortOption } from "../../reducers/dashboard-reducer";
+import { downloadButtonFits, outerBox } from "./download-button-fit";
 
 import css from "../../../css/portal-dashboard/header.less";
 
@@ -32,17 +34,54 @@ interface IProps {
   compactStudentList?: boolean;
   hideLastRun?: boolean;
   hideFeedbackBadges?: boolean;
+  onDownloadCsv?: () => void;
 }
 
-export class Header extends React.PureComponent<IProps> {
+interface IState {
+  downloadButtonFits: boolean;
+}
+
+export class Header extends React.PureComponent<IProps, IState> {
+  state: IState = { downloadButtonFits: true };
+  private headerRef = React.createRef<HTMLDivElement>();
+  private assignmentRef = React.createRef<HTMLDivElement>();
+  private downloadButtonRef = React.createRef<HTMLButtonElement>();
+  private ownerRef = React.createRef<HTMLDivElement>();
+  private resizeObserver?: ResizeObserver;
+
+  componentDidMount() {
+    // jsdom has no ResizeObserver.
+    if (typeof ResizeObserver !== "undefined") {
+      this.resizeObserver = new ResizeObserver(this.updateDownloadButtonFit);
+      // The name and the button can change width without resizing the header, e.g. when the web font loads.
+      [this.headerRef, this.ownerRef, this.downloadButtonRef].forEach(ref => {
+        if (ref.current) {
+          this.resizeObserver?.observe(ref.current);
+        }
+      });
+    }
+    this.updateDownloadButtonFit();
+  }
+
+  componentDidUpdate(prevProps: IProps) {
+    if (prevProps.userName !== this.props.userName || prevProps.assignmentName !== this.props.assignmentName) {
+      this.updateDownloadButtonFit();
+    }
+  }
+
+  componentWillUnmount() {
+    this.resizeObserver?.disconnect();
+  }
+
   render() {
     const { colorTheme, userName, setCompact, setHideLastRun, setHideFeedbackBadges, trackEvent,
-            isResearcher, clazzName, compactStudentList, hideLastRun, hideFeedbackBadges } = this.props;
+            isResearcher, clazzName, compactStudentList, hideLastRun, hideFeedbackBadges, onDownloadCsv } = this.props;
+    const { downloadButtonFits: buttonFits } = this.state;
     const colorClass = colorTheme ? css[colorTheme] : "";
 
     return (
       <>
-        <div className={`${css.dashboardHeader} ${colorClass}`} data-cy="dashboard-header">
+        <div className={`${css.dashboardHeader} ${colorClass}`} data-cy="dashboard-header" ref={this.headerRef}>
           <div className={css.appInfo}>
             <img src={ccLogoSrc} className={css.logo} data-cy="header-logo"/>
             {this.renderNavigationSelect()}
@@ -51,10 +90,19 @@ export class Header extends React.PureComponent<IProps> {
             <div className={css.assignmentTitle}>
               Assignment:
             </div>
-            {this.renderAssignmentSelect()}
+            <div ref={this.assignmentRef}>
+              {this.renderAssignmentSelect()}
+            </div>
           </div>
           <div className={css.headerRight}>
-            <AccountOwnerDiv userName={userName} colorTheme={colorTheme} />
+            {onDownloadCsv &&
+              <button type="button" ref={this.downloadButtonRef} data-cy="download-csv-button" onClick={onDownloadCsv}
+                      className={`${css.downloadButton} ${colorClass} ${buttonFits ? "" : css.downloadButtonHidden}`}>
+                <DownloadIcon className={`${css.downloadButtonIcon} ${colorClass}`} aria-hidden="true" />
+                <span>Download as CSV</span>
+              </button>
+            }
+            <AccountOwnerDiv userName={userName} colorTheme={colorTheme} divRef={this.ownerRef} />
             <HeaderMenuContainer
               setCompact={setCompact}
               setHideLastRun={setHideLastRun}
@@ -64,6 +112,7 @@ export class Header extends React.PureComponent<IProps> {
               compactStudentList={compactStudentList}
               hideLastRun={hideLastRun}
               hideFeedbackBadges={hideFeedbackBadges}
+              onDownloadCsv={onDownloadCsv}
             />
           </div>
         </div>
@@ -74,6 +123,26 @@ export class Header extends React.PureComponent<IProps> {
         }
       </>
     );
+  }
+
+  private updateDownloadButtonFit = () => {
+    const assignment = this.assignmentRef.current;
+    const owner = this.ownerRef.current;
+    const button = this.downloadButtonRef.current;
+    if (!this.props.onDownloadCsv || !assignment || !owner || !button) {
+      return;
+    }
+    const buttonBox = outerBox(button);
+    const fits = downloadButtonFits({
+      assignmentRight: assignment.getBoundingClientRect().right,
+      ownerOuterLeft: outerBox(owner).left,
+      buttonOuterWidth: buttonBox.width,
+      buttonShown: this.state.downloadButtonFits,
+      buttonOuterLeft: buttonBox.left
+    });
+    if (fits !== this.state.downloadButtonFits) {
+      this.setState({ downloadButtonFits: fits });
+    }
   }
 
   private changeViewMode = (mode: DashboardViewMode) => () => {

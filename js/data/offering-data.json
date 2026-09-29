@@ -8,26 +8,32 @@
   "students": [
     {
       "user_id": 1,
+      "username": "jjenkins",
       "last_run": "2025-05-10T10:03:00Z"
     },
     {
       "user_id": 2,
+      "username": "jarmstrong",
       "last_run": null
     },
     {
       "user_id": 3,
+      "username": "agalloway",
       "last_run": "2025-05-10T10:01:00Z"
     },
     {
       "user_id": 4,
+      "username": "jross",
       "last_run": "2025-05-10T10:04:00Z"
     },
     {
       "user_id": 5,
+      "username": "kcrosby",
       "last_run": null
     },
     {
       "user_id": 6,
+      "username": "jwu",
       "last_run": "2025-05-10T10:03:00Z"
     }
   ]

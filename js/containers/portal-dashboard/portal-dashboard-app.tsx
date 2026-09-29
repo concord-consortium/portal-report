@@ -6,6 +6,7 @@ import { fetchAndObserveData, trackEvent, setAnonymous, TrackEventFunction, Trac
 import { getSortedStudents, getCurrentActivity, getCurrentQuestion, getCurrentStudentId, getStudentProgress,
          getCompactReport, getHideLastRun, getAnonymous, getDashboardSortBy, getHideFeedbackBadges, getIsResearcher
        } from "../../selectors/dashboard-selectors";
+import { downloadDashboardCsv } from "../../actions/download-csv";
 import { Header } from "../../components/portal-dashboard/header";
 import { ClassNav } from "../../components/portal-dashboard/class-nav";
 import { LevelViewer } from "../../components/portal-dashboard/level-viewer";
@@ -62,6 +63,7 @@ interface IProps {
   scoringSettings: ScoringSettings;
   // from mapDispatchToProps
   fetchAndObserveData: () => void;
+  downloadDashboardCsv: () => void;
   setAnonymous: (value: boolean) => void;
   setCompactReport: (value: boolean) => void;
   setHideLastRun: (value: boolean) => void;
@@ -292,7 +294,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
 
   private renderHeader = (assignmentName: string, headerViewMode: DashboardViewMode, setStudentSort: (value: string) => void) => {
     const { sequenceTree, userName, setCompactReport, setHideLastRun, setHideFeedbackBadges, trackEvent, isResearcher,
-            clazzName, sortByMethod, compactReport, hideLastRun, hideFeedbackBadges } = this.props;
+            clazzName, sortByMethod, compactReport, hideLastRun, hideFeedbackBadges, downloadDashboardCsv } = this.props;
     const { viewMode} = this.state;
     const color: ColorTheme = headerViewMode === "ProgressDashboard"
       ? "progress"
@@ -317,6 +319,7 @@ class PortalDashboardApp extends React.PureComponent<IProps, IState> {
           compactStudentList={compactReport}
           hideLastRun={hideLastRun}
           hideFeedbackBadges={hideFeedbackBadges}
+          onDownloadCsv={downloadDashboardCsv}
         />
     );
   }
@@ -421,6 +424,7 @@ function mapStateToProps(state: RootState): Partial<IProps> {
 const mapDispatchToProps = (dispatch: any, ownProps: any): Partial<IProps> => {
   return {
     fetchAndObserveData: () => dispatch(fetchAndObserveData()),
+    downloadDashboardCsv: () => dispatch(downloadDashboardCsv()),
     setAnonymous: (value: boolean) => dispatch(setAnonymous(value)),
     setCompactReport: (value: boolean) => dispatch(setCompactReport(value)),
     setHideLastRun: (value: boolean) => dispatch(setHideLastRun(value)),

@@ -43,6 +43,7 @@ export interface IPortalRawData extends ILTIPartial{
     id: number;
     name: string;
     students: IStudentRawData[];
+    teachers?: IClassTeacherRawData[];
   };
   userType: "teacher" | "learner" | "researcher";
   sourceKey: string;
@@ -55,6 +56,12 @@ export interface IStudentRawData {
   last_name: string;
   last_run: string | null;
   user_id: string;
+  username?: string | null;
+}
+
+export interface IClassTeacherRawData {
+  first_name: string;
+  last_name: string;
 }
 
 export interface IResponse {
@@ -243,29 +250,33 @@ function fakeUserId() {
   return `${userType}@fake.portal`;
 }
 
+// last_run and username come only from the offering API, so copy them onto the matching class students.
+export function mergeOfferingStudentData(offeringData: any, classData: any) {
+  const offeringStudents: Record<string, {last_run?: string | null; username?: string | null}> = {};
+  (offeringData.students || []).forEach((student: any) => {
+    if (student.user_id != null) {
+      offeringStudents[student.user_id] = student;
+    }
+  });
+  (classData.students || []).forEach((student: any) => {
+    const offeringStudent = student.user_id != null && offeringStudents[student.user_id];
+    if (offeringStudent) {
+      if (offeringStudent.last_run !== undefined) {
+        student.last_run = offeringStudent.last_run;
+      }
+      if (offeringStudent.username !== undefined) {
+        student.username = offeringStudent.username;
+      }
+    }
+  });
+}
+
 export function fetchPortalDataAndAuthFirestore(): Promise<IPortalRawData> {
   const offeringPromise = fetchOfferingData();
   const classPromise = fetchClassData();
   return Promise.all([offeringPromise, classPromise]).then(([offeringData, classData]: [any, any]) => {
 
-    // Since the students' last_run timestamp is only available in the offering data, we merge the last_run
-    // field into the class data for streamlined access.
-    const lastRunMap: Record<string, string | null> = {};
-    if (offeringData.students) {
-      offeringData.students.forEach((student: any) => {
-        if (student.user_id && student.last_run !== undefined) {
-          lastRunMap[student.user_id] = student.last_run;
-        }
-      });
-    }
-
-    if (classData.students) {
-      classData.students.forEach((student: any) => {
-        if (student.user_id && lastRunMap[student.user_id] !== undefined) {
-          student.last_run = lastRunMap[student.user_id];
-        }
-      });
-    }
+    mergeOfferingStudentData(offeringData, classData);
 
     const resourceLinkId = offeringData.id.toString();
     const studentId = urlParam("studentId");

@@ -2,6 +2,16 @@
   "class_hash": "Small Class",
   "id": 3,
   "name": "Test Class",
+  "teachers": [
+    {
+      "first_name": "Kristen",
+      "last_name": "Teachername"
+    },
+    {
+      "first_name": "Pat",
+      "last_name": "Coteacher"
+    }
+  ],
   "students": [
     {
       "user_id": 1,

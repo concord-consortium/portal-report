@@ -3,7 +3,7 @@ import MenuIcon from "../../../img/svg-icons/menu-icon.svg";
 import CloseIcon from "../../../img/svg-icons/close-icon.svg";
 // Removed for MVP:
 // import PrintIcon from "../../../img/svg-icons/print-icon.svg";
-// import DownloadIcon from "../../../img/svg-icons/download-icon.svg";
+import DownloadIcon from "../../../img/svg-icons/download-icon.svg";
 import HelpIcon from "../../../img/svg-icons/help-icon.svg";
 import { SvgIcon } from "../../util/svg-icon";
 import { HeaderMenuItem } from "./header-menu-item";
@@ -26,6 +26,7 @@ interface IProps {
   compactStudentList?: boolean;
   hideLastRun?: boolean;
   hideFeedbackBadges?: boolean;
+  onDownloadCsv?: () => void;
 }
 
 export interface MenuItemWithState {
@@ -45,35 +46,30 @@ interface MenuItemWithIcon {
   };
 }
 
-const items: MenuItemWithIcon[] = [
-  {
-    MenuItemIcon: HelpIcon,
-    name: "Help",
-    dataCy: "help-menu-item",
-    onSelect: () => {window.open("https://learn.concord.org/teacher-guide");},
-    logEvent: {
-      action: "OpenHelp"
-    }
-  },
-  // Removed for MVP:
-  /*
-  {
-    MenuItemIcon: DownloadIcon,
-    name: "Download (.csv)",
-    dataCy: "download-menu-item",
-    action: "DOWNLOAD_REPORT"
-  },
-  {
-    MenuItemIcon: PrintIcon,
-    name: "Print",
-    dataCy: "print-menu-item",
-    action: "PRINT_REPORT"
+const helpItem: MenuItemWithIcon = {
+  MenuItemIcon: HelpIcon,
+  name: "Help",
+  dataCy: "help-menu-item",
+  onSelect: () => {window.open("https://learn.concord.org/teacher-guide");},
+  logEvent: {
+    action: "OpenHelp"
   }
-  */
-];
+};
+
+// Removed for MVP:
+/*
+{
+  MenuItemIcon: PrintIcon,
+  name: "Print",
+  dataCy: "print-menu-item",
+  action: "PRINT_REPORT"
+}
+*/
 
 export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
   private divRef = React.createRef<HTMLDivElement>();
+  private toggleRef = React.createRef<HTMLButtonElement>();
+  private menuListRef = React.createRef<HTMLDivElement>();
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -93,16 +89,30 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
 
   render() {
     const { colorTheme } = this.props;
+    const { showMenuItems } = this.state;
     const colorClass = colorTheme ? css[colorTheme] : "";
     return (
-      <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick} ref={this.divRef}>
-        { this.state.showMenuItems
-          ? <CloseIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} />
-          : <MenuIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} />
-        }
+      <div className={css.headerMenu} data-cy="header-menu" onClick={this.handleMenuClick} onKeyDown={this.handleKeyDown}
+           ref={this.divRef}>
+        <button type="button" className={css.menuButton} aria-label="Menu" aria-expanded={showMenuItems}
+                data-cy="header-menu-button" ref={this.toggleRef}>
+          { showMenuItems
+            ? <CloseIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} aria-hidden="true" />
+            : <MenuIcon className={`${css.icon} ${css.menuIcon} ${colorClass}`} aria-hidden="true" />
+          }
+        </button>
         {this.renderMenuItems()}
       </div>
     );
+  }
+
+  private getIconItems(): MenuItemWithIcon[] {
+    const { onDownloadCsv } = this.props;
+    // The download thunk logs its own event, so this item has no logEvent.
+    const downloadItem: MenuItemWithIcon[] = onDownloadCsv
+      ? [{ MenuItemIcon: DownloadIcon, name: "Download as CSV", dataCy: "download-csv-menu-item", onSelect: onDownloadCsv }]
+      : [];
+    return [...downloadItem, helpItem];
   }
 
   private renderMenuItems = () => {
@@ -128,13 +138,14 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
     this.props.setHideFeedbackBadges && itemsWithState.push(
       { name: "Hide feedback badges", onSelect: setHideFeedbackBadges, dataCy: "feedback-menu-item", selected: !!this.props.hideFeedbackBadges });
     return (
-      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list">
+      <div className={`${css.menuList} ${(this.state.showMenuItems ? css.show : "")}`} data-cy="menu-list"
+           aria-hidden={!this.state.showMenuItems} ref={this.menuListRef}>
         <div className={css.topMenu}>
           {itemsWithState && itemsWithState.map((item: MenuItemWithState, i: number) =>
             <HeaderMenuItem key={`item ${i}`} menuItem={item} colorTheme={colorTheme} />
           )}
         </div>
-        {items && items.map((item, i) => {
+        {this.getIconItems().map((item, i) => {
           const onSelect = () => {
             item.onSelect();
             if (item.logEvent) {
@@ -142,10 +153,12 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
             }
           };
           return (
-            <div key={`item ${i}`} className={`${css.menuItem} ${colorClass}`} onClick={onSelect}>
-              <item.MenuItemIcon className={`${css.menuItemIcon} ${colorClass}`} />
+            // The list stays in the DOM while closed (it fades out), so its items leave the tab order then.
+            <button type="button" key={`item ${i}`} className={`${css.menuItem} ${colorClass}`} onClick={onSelect}
+                    tabIndex={this.state.showMenuItems ? 0 : -1}>
+              <item.MenuItemIcon className={`${css.menuItemIcon} ${colorClass}`} aria-hidden="true" />
               <div className={css.menuItemName} data-cy={item.dataCy}>{item.name}</div>
-            </div>
+            </button>
           );
         })}
       </div>
@@ -162,7 +175,17 @@ export class HeaderMenuContainer extends React.PureComponent<IProps, IState> {
     }
   }
 
+  private handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape" && this.state.showMenuItems) {
+      this.showMenuItems(false);
+    }
+  }
+
   private showMenuItems = (value: boolean) => {
+    // Focus inside the closing list would be left on a hidden item, so return it to the toggle.
+    if (!value && this.menuListRef.current?.contains(document.activeElement)) {
+      this.toggleRef.current?.focus();
+    }
     this.setState({ showMenuItems: value });
     // only log when opened
     if (value) {

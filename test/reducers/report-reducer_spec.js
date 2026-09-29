@@ -1,4 +1,4 @@
-import { getReportItemAnswer, registerReportItem } from "../../js/actions";
+import { getReportItemAnswer, registerReportItem, RECEIVE_PORTAL_DATA } from "../../js/actions";
 import report, {ReportState, getLoggingUserName} from "../../js/reducers/report-reducer";
 import iframePhone from "iframe-phone";
 import { Map, fromJS } from "immutable";
@@ -92,5 +92,27 @@ describe("report reducer", () => {
       });
     });
 
+  });
+
+  describe("RECEIVE_PORTAL_DATA", () => {
+    const portalData = (classInfo) => ({
+      offering: { id: 1, teacher: "Kristen Teachername" },
+      classInfo: { id: 3, name: "Test Class", class_hash: "abc", students: [], ...classInfo },
+      userType: "teacher",
+      platformUserId: "1",
+      platformId: "https://example.com",
+      sourceKey: "fake.authoring.system"
+    });
+
+    it("stores the class's teacher names", () => {
+      const teachers = [{ first_name: "Kristen", last_name: "Teachername" }, { first_name: "Pat", last_name: "Coteacher" }];
+      const state = report(new ReportState({}), { type: RECEIVE_PORTAL_DATA, response: portalData({ teachers }) });
+      expect(state.get("clazzTeacherNames").toJS()).toEqual(["Kristen Teachername", "Pat Coteacher"]);
+    });
+
+    it("stores an empty list when the class has no teachers", () => {
+      const state = report(new ReportState({}), { type: RECEIVE_PORTAL_DATA, response: portalData({}) });
+      expect(state.get("clazzTeacherNames").toJS()).toEqual([]);
+    });
   });
 });
