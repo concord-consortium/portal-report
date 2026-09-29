@@ -312,6 +312,13 @@ describe("api helper", () => {
       expect(classData.students).toEqual([{ user_id: 1 }]);
     });
 
+    it("merges a student whose user_id is 0", () => {
+      const offeringData = { students: [{ user_id: 0, last_run: null, username: "zzero" }] };
+      const classData = { students: [{ user_id: 0, first_name: "Zoe" }] };
+      mergeOfferingStudentData(offeringData, classData);
+      expect(classData.students).toEqual([{ user_id: 0, first_name: "Zoe", last_run: null, username: "zzero" }]);
+    });
+
     it("doesn't overwrite a field the offering omits", () => {
       const offeringData = { students: [{ user_id: 1, username: "jjenkins" }] };
       const classData = { students: [{ user_id: 1, last_run: "2025-05-10T10:03:00Z" }] };

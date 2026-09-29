@@ -254,12 +254,12 @@ function fakeUserId() {
 export function mergeOfferingStudentData(offeringData: any, classData: any) {
   const offeringStudents: Record<string, {last_run?: string | null; username?: string | null}> = {};
   (offeringData.students || []).forEach((student: any) => {
-    if (student.user_id) {
+    if (student.user_id != null) {
       offeringStudents[student.user_id] = student;
     }
   });
   (classData.students || []).forEach((student: any) => {
-    const offeringStudent = student.user_id && offeringStudents[student.user_id];
+    const offeringStudent = student.user_id != null && offeringStudents[student.user_id];
     if (offeringStudent) {
       if (offeringStudent.last_run !== undefined) {
         student.last_run = offeringStudent.last_run;
