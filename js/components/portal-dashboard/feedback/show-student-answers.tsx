@@ -4,6 +4,7 @@ import striptags from "striptags";
 import { Map } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { renderHTML } from "../../../util/render-html";
+import { replaceBlankMarkers } from "../../../util/misc";
 import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/feedback/show-student-answers.less";
@@ -33,8 +34,7 @@ export const ShowStudentAnswers: React.FC<IProps> = (props) => {
     const questions = activity.get("questions");
     const rows = questions.map((question: Map<any, any>) => {
       const currentQuestionId = question.get("id");
-      const blankRegEx = /\[([^)]+)\]/g;
-      const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
+      const promptText = replaceBlankMarkers(question?.get("prompt"));
 
       return (
         <div className={css.row} key={currentQuestionId} data-cy="question-row">

@@ -1,6 +1,7 @@
 import React from "react";
 import { Map } from "immutable";
 import { renderHTML } from "../../../util/render-html";
+import { replaceBlankMarkers } from "../../../util/misc";
 import ReportItemIframe from "../report-item-iframe";
 
 import css from "../../../../css/portal-dashboard/questions/multiple-choice-question.less";
@@ -13,8 +14,7 @@ interface IProps {
 export const IframeQuestion: React.FC<IProps> = (props) => {
   const { question, useMinHeight } = props;
   const prompt = question?.get("prompt");
-  const blankRegEx = /\[([^)]+)\]/g;
-  const promptText = prompt?.replace(blankRegEx,'__________');
+  const promptText = replaceBlankMarkers(prompt);
 
   return (
     <div className={css.questionText}>

@@ -3,6 +3,7 @@ import { Map, List } from "immutable";
 import Answer from "../../../containers/portal-dashboard/answer";
 import striptags from "striptags";
 import { renderHTML } from "../../../util/render-html";
+import { replaceBlankMarkers } from "../../../util/misc";
 import { TrackEventFunction } from "../../../actions";
 
 import css from "../../../../css/portal-dashboard/response-details/popup-student-response-list.less";
@@ -30,8 +31,7 @@ export class PopupQuestionAnswerList extends React.PureComponent<IProps> {
     return (
       <div className={css.responseTable} data-cy="popup-response-table">
         {activity.get("questions").map((question: Map<any, any>, i: number) => {
-          const blankRegEx = /\[([^)]+)\]/g;
-          const promptText = question?.get("prompt")?.replace(blankRegEx, '__________');
+          const promptText = replaceBlankMarkers(question?.get("prompt"));
           return (
             <div className={css.listRow} key={`question ${i}`} data-cy="question-row">
               <div className={css.itemWrapper} data-cy="question-wrapper">

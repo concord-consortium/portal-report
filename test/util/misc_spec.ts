@@ -1,5 +1,5 @@
 import { Map } from "immutable";
-import { answerHash, MD5_FOR_UNDEFINED } from "../../js/util/misc";
+import { answerHash, MD5_FOR_UNDEFINED, replaceBlankMarkers } from "../../js/util/misc";
 
 describe("misc util functions", () => {
   it("determines if answer hash is properly generated", () => {
@@ -54,5 +54,22 @@ describe("misc util functions", () => {
     const hash = answerHash(answerDoc);
 
     expect(hash).toEqual(MD5_FOR_UNDEFINED);
+  });
+
+  describe("replaceBlankMarkers", () => {
+    it("shows each fill-in-the-blank marker as a blank", () => {
+      expect(replaceBlankMarkers("The [blank-1](verb) ran")).toBe("The __________(verb) ran");
+    });
+
+    it("keeps the text between consecutive markers", () => {
+      expect(replaceBlankMarkers("Choose [blank-a] or [blank-b]")).toBe("Choose __________ or __________");
+      expect(replaceBlankMarkers("The [blank-1] ran or [blank-2](verb) walked"))
+        .toBe("The __________ ran or __________(verb) walked");
+    });
+
+    it("gives an empty string for a missing prompt", () => {
+      expect(replaceBlankMarkers(undefined)).toBe("");
+      expect(replaceBlankMarkers(null)).toBe("");
+    });
   });
 });
