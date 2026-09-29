@@ -1,4 +1,4 @@
-import { getAnswerLink } from "../../js/util/answer-link";
+import { buildAnswerLink, getAnswerLink } from "../../js/util/answer-link";
 
 describe("getAnswerLink", () => {
   afterEach(() => {
@@ -39,5 +39,26 @@ describe("getAnswerLink", () => {
       const link = getAnswerLink("fake.authoring.system", "mw_interactive_29", "1");
       expect(link).toBe(`${window.location.origin}/?sourceKey=fake.authoring.system&iframeQuestionId=mw_interactive_29&studentId=1`);
     });
+  });
+});
+
+describe("buildAnswerLink", () => {
+  afterEach(() => {
+    window.history.replaceState({}, "Test", "/");
+  });
+
+  it("keeps the launch parameters it is given and adds the question, student and auth-domain", () => {
+    window.history.replaceState({}, "Test", "/branch/master/?class=https://learn.example.org/api/v1/classes/34");
+    const launchParams = new URLSearchParams({ token: "abc", iframeQuestionId: "old_question", studentId: "99" });
+    const params = new URL(buildAnswerLink(launchParams, "mw_interactive_29", 7)).searchParams;
+    expect(params.get("token")).toBe("abc");
+    expect(params.get("iframeQuestionId")).toBe("mw_interactive_29");
+    expect(params.get("studentId")).toBe("7");
+    expect(params.get("auth-domain")).toBe("https://learn.example.org");
+  });
+
+  it("omits auth-domain without a portal launch", () => {
+    const params = new URL(buildAnswerLink(new URLSearchParams(), "mw_interactive_29", 7)).searchParams;
+    expect(params.has("auth-domain")).toBe(false);
   });
 });

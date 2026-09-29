@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
-import queryString from "query-string";
 import { connect } from "react-redux";
 import { List, Map } from "immutable";
 import { IReportItemAnswer, IReportItemAnswerItem, ReportItemsType } from "@concord-consortium/interactive-api-host";
 import { renderHTML } from "../../util/render-html";
+import { buildAnswerLink } from "../../util/answer-link";
 import InteractiveIframe from "./interactive-iframe";
 import { getReportItemAnswer } from "../../actions";
 import { IframeAnswerReportItem } from "./iframe-answer-report-item";
@@ -159,24 +159,13 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     this.setState({reportItemAnswerItems});
   }
 
-  /**
-   * Adds a studentId and iframeQuestionId to the existing url
-   */
   getStandaloneLinkUrl(question: Map<any, any>, answer: Map<any, any>) {
     const { interactiveStateHistoryId } = this.props;
-    const baseUrl = `${window.location.origin}${window.location.pathname}`;
-    const params = queryString.parse(window.location.search);
-    params.studentId = answer.get("platformUserId");
-    params.iframeQuestionId = question.get("id");
-    // Need to get the auth-domain from the class url
-    const clazz = Array.isArray(params.class) ? params.class[0] : params.class;
-    const authDomain = clazz?.split("/api")[0];
-    authDomain && (params["auth-domain"] = authDomain);
+    const launchParams = new URLSearchParams(window.location.search);
     if (interactiveStateHistoryId) {
-      params.interactiveStateHistoryId = interactiveStateHistoryId;
+      launchParams.set("interactiveStateHistoryId", interactiveStateHistoryId);
     }
-    const newSearch = queryString.stringify(params);
-    return `${baseUrl}?${newSearch}`;
+    return buildAnswerLink(launchParams, question.get("id"), answer.get("platformUserId"));
   }
 
   renderLink(options?: {hideViewInNewTab?: boolean; hideViewInline?: boolean}) {

@@ -82,7 +82,7 @@ Answer columns are named `Activity <activity number> Q<question number>`, combin
 
 ### Answer links
 
-- The link has the same form as report-service's: `<portal-report>?auth-domain=<portal>&firebase-app=<app>&sourceKey=<key>&iframeQuestionId=<question id>&class=<class URL>&offering=<offering URL>&studentId=<user id>&answersSourceKey=<key>`. `<portal-report>` is the address the dashboard is running at, and every parameter comes from the dashboard's own launch or state. `firebase-app` and `answersSourceKey` are only included when the dashboard has them.
+- The link has the same parameters as report-service's (their order differs): `<portal-report>?auth-domain=<portal>&firebase-app=<app>&sourceKey=<key>&iframeQuestionId=<question id>&class=<class URL>&offering=<offering URL>&studentId=<user id>&answersSourceKey=<key>`. `<portal-report>` is the address the dashboard is running at, and every parameter comes from the dashboard's own launch or state. `firebase-app` and `answersSourceKey` are only included when the dashboard has them.
 - The link never includes the teacher's `token`. The page signs in through the portal instead, so it only opens for someone with portal access to that class, and a shared file doesn't expose answers to anyone else.
 - Links stay in anonymized downloads. They carry the student's portal user ID, not their name, and open only for people with access to the class.
 
@@ -153,8 +153,9 @@ These checks were run against the dev server's demo data while writing this spec
 
 - report-service builds its `_url` link in `get_columns_for_question` (`report-service/server/lib/report_server/reports/athena/shared_queries.ex`): for `iframe_interactive` only when the student has an answer, and for `open_response` always, because an audio-only answer leaves no text.
 - `iframeQuestionId` switches portal-report to `IframeStandaloneApp` (`js/containers/app.tsx`), which renders that one interactive in report mode with the student's saved state.
-- The portal opens the dashboard with `class`, `offering`, a `token` valid for 2 hours (`rigse` `ExternalReport#url_for_offering`, `ReportTokenValidFor = 2.hours`) and `username`, plus the `sourceKey` and `answersSourceKey` in the report's configured URL. There is no `auth-domain`, so the link derives it from the offering URL's origin. `firebase-app` falls back to portal-report's default when absent (`getFirebaseAppName` in `js/db.ts`).
+- The portal opens the dashboard with `class`, `offering`, a `token` valid for 2 hours (`rigse` `ExternalReport#url_for_offering`, `ReportTokenValidFor = 2.hours`) and `username`, plus the `sourceKey` and `answersSourceKey` in the report's configured URL. There is no `auth-domain`, so the link derives it from the class URL, or the offering URL without one, through `getPortalBaseUrl` in `js/api.ts`, the same way teacher-edition links do. `firebase-app` falls back to portal-report's default when absent (`getFirebaseAppName` in `js/db.ts`).
 - With `auth-domain` set, portal-report runs the portal's OAuth flow (`initializeAuthorization` in `js/api.ts`).
+- `buildAnswerLink` in `js/util/answer-link.ts` builds both this link and the report's "Open in new tab" link (`getStandaloneLinkUrl` in `iframe-answer.tsx`). The new-tab link keeps every launch parameter, token included, because it opens in the teacher's own browser. `getAnswerLink` passes only the parameters listed above.
 
 ### The report-service format
 
