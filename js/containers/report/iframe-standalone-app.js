@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { Map } from "immutable";
+import { Map, is } from "immutable";
 import { fetchAndObserveData } from "../../actions/index";
 import DataFetchError from "../../components/report/data-fetch-error";
 import LoadingIcon from "../../components/report/loading-icon";
@@ -11,6 +11,7 @@ import config from "../../config";
 import { interactiveStateHistoryCache } from "../../util/interactive-state-history-cache";
 import { InteractiveStateHistoryRangeInput } from "../../components/portal-dashboard/interactive-state-history-range-input";
 import { getObjectStorageConfig } from "../../util/object-storage-config";
+import { focusIframe, iframeHasFocus } from "../../util/iframe-focus";
 
 import "../../../css/report/report-app.less";
 import "../../../css/report/iframe-standalone-app.less";
@@ -28,9 +29,21 @@ class IframeStandaloneApp extends PureComponent {
       interactiveStateHistory: null,
       myInteractiveStateHistories: null,
       interactiveStateHistoryId: null,
+      // Bumped each time the student saves a new state, so the iframe remounts with it.
+      latestAnswerVersion: 0,
+      // The interactiveStateHistoryId URL parameter picks the entry the view opens on, and only that.
+      openedUrlHistoryEntry: false,
     };
 
+    this.containerRef = React.createRef();
     this.handleSetInteractiveStateHistoryId = this.handleSetInteractiveStateHistoryId.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.refocusIframe && getIframeKey(prevState) !== getIframeKey(this.state)) {
+      this.refocusIframe = false;
+      focusIframe(this.containerRef.current);
+    }
   }
 
   componentDidMount() {
@@ -68,7 +81,7 @@ class IframeStandaloneApp extends PureComponent {
     );
 
     // see if we need to get a specific interactive state history
-    const interactiveStateHistoryId = config("interactiveStateHistoryId");
+    const interactiveStateHistoryId = !this.state.openedUrlHistoryEntry && config("interactiveStateHistoryId");
     if (interactiveStateHistoryId) {
       // wait until we have interactive state histories loaded, timeout after 15 seconds
       if (interactiveStateHistories.size === 0) {
@@ -87,13 +100,18 @@ class IframeStandaloneApp extends PureComponent {
 
       if (interactiveStateHistory) {
         interactiveStateHistoryCache.get(sourceKey, interactiveStateHistoryId, (error, data) => {
+          // Each props update before the entry has loaded requests it again, and only the first result applies.
+          if (this.state.openedUrlHistoryEntry) {
+            return;
+          }
           if (error) {
             this.setState({ isLoadingAnswer: false, loadingError: `Error fetching interactive state history data for id: '${interactiveStateHistoryId}': ${error.message}`});
           } else {
             this.setState({
               isLoadingAnswer: false,
               answer: Map(data),
-              interactiveStateHistoryId
+              interactiveStateHistoryId,
+              openedUrlHistoryEntry: true
             });
           }
         });
@@ -108,13 +126,18 @@ class IframeStandaloneApp extends PureComponent {
       a.get("platformUserId") === platformUserId
     ).first();
 
-    if (interactiveStateHistoryId) {
-      // isLoadingAnswer will be set false when the interactive state history load completes but we still want to
-      // set the latest answer and myInteractiveStateHistories in state so that the range input has a value
-      // to use when switching back to latest answer
-      this.setState({ latestAnswer: answer, myInteractiveStateHistories });
+    const { latestAnswer, latestAnswerVersion } = this.state;
+    const isNewSave = !!latestAnswer && !!answer && !is(latestAnswer.get("answer"), answer.get("answer"));
+    const nextVersion = isNewSave ? latestAnswerVersion + 1 : latestAnswerVersion;
+
+    if (interactiveStateHistoryId || this.state.interactiveStateHistoryId) {
+      // A history entry is shown or loading: keep it, but record the latest answer and histories for the scrubber.
+      this.setState({ latestAnswer: answer, myInteractiveStateHistories, latestAnswerVersion: nextVersion });
     } else {
-      this.setState({ isLoadingAnswer: false, latestAnswer: answer, answer, myInteractiveStateHistories });
+      this.refocusIframe = isNewSave && iframeHasFocus(this.containerRef.current);
+      this.setState({
+        isLoadingAnswer: false, latestAnswer: answer, answer, myInteractiveStateHistories, latestAnswerVersion: nextVersion
+      });
     }
   }
 
@@ -184,9 +207,9 @@ class IframeStandaloneApp extends PureComponent {
       }
 
       return (
-        <div className="container">
+        <div className="container" ref={this.containerRef}>
           <InteractiveIframe
-            key={`iframe-${answer.get("id")}-${interactiveStateHistoryId || "latest"}`}
+            key={getIframeKey(this.state)}
             src={url}
             state={state}
             answer={answer}
@@ -223,6 +246,10 @@ class IframeStandaloneApp extends PureComponent {
     );
   }
 }
+
+// The iframe only reads its state on mount, so the key changes whenever the state to show does.
+const getIframeKey = ({ answer, interactiveStateHistoryId, latestAnswerVersion }) =>
+  `iframe-${answer?.get("id")}-${interactiveStateHistoryId || `latest-${latestAnswerVersion}`}`;
 
 function mapStateToProps(state) {
   const data = state.get("data");

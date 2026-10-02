@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { List, Map } from "immutable";
+import { List, Map, is } from "immutable";
 import { IReportItemAnswer, IReportItemAnswerItem, ReportItemsType } from "@concord-consortium/interactive-api-host";
 import { renderHTML } from "../../util/render-html";
 import { buildAnswerLink } from "../../util/answer-link";
@@ -9,6 +9,7 @@ import { getReportItemAnswer } from "../../actions";
 import { IframeAnswerReportItem } from "./iframe-answer-report-item";
 import { InteractiveStateHistoryRangeInput } from "../portal-dashboard/interactive-state-history-range-input";
 import { interactiveStateHistoryCache } from "../../util/interactive-state-history-cache";
+import { focusIframe, iframeHasFocus } from "../../util/iframe-focus";
 
 import "../../../css/report/iframe-answer.less";
 
@@ -41,6 +42,11 @@ interface IState {
 }
 
 export class IframeAnswer extends PureComponent<IProps, IState> {
+  // The history entry whose state was last asked for, so a load that finishes after the teacher moves on is dropped.
+  private requestedHistoryId?: string;
+  private contentRef = React.createRef<HTMLDivElement>();
+  private refocusIframe = false;
+
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -65,22 +71,22 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: Readonly<IProps>, nextContext: any): void {
-    const {answer, sourceKey, interactiveStateHistoryId} = this.props;
+    const {answer, sourceKey, interactiveStateHistoryId} = nextProps;
     if (answer.get("type") === "interactive_state") {
+      this.requestedHistoryId = interactiveStateHistoryId;
       if (interactiveStateHistoryId) {
         interactiveStateHistoryCache.get(sourceKey, interactiveStateHistoryId, (error, cachedAnswer) => {
+          if (this.requestedHistoryId !== interactiveStateHistoryId) {
+            return;
+          }
           if (error) {
             this.setState({error});
           } else {
-            this.setState(prev => {
-              return {answerState: cachedAnswer.answer, error: null, answerStateVersion: prev.answerStateVersion + 1};
-            });
+            this.showAnswerState(cachedAnswer.answer);
           }
         });
       } else {
-        this.setState(prev => {
-          return {answerState: answer.get("answer"), error: null, answerStateVersion: prev.answerStateVersion + 1};
-        });
+        this.showAnswerState(answer.get("answer"));
       }
     }
 
@@ -94,6 +100,23 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     if (questionOrAnswerChanged || reportItemAnswerChanged) {
       this.updateReportItemAnswerItems(nextProps);
     }
+  }
+
+  componentDidUpdate(prevProps: IProps, prevState: IState) {
+    if (this.refocusIframe && prevState.answerStateVersion !== this.state.answerStateVersion) {
+      this.refocusIframe = false;
+      focusIframe(this.contentRef.current);
+    }
+  }
+
+  // The iframe only reads its state on mount, so it is remounted only when the state to show changes.
+  showAnswerState(answerState: any) {
+    this.refocusIframe = !is(this.state.answerState, answerState) && iframeHasFocus(this.contentRef.current);
+    this.setState(prev => ({
+      answerState,
+      error: null,
+      answerStateVersion: is(prev.answerState, answerState) ? prev.answerStateVersion : prev.answerStateVersion + 1
+    }));
   }
 
   toggleIframe() {
@@ -208,7 +231,7 @@ export class IframeAnswer extends PureComponent<IProps, IState> {
     }
 
     return (
-      <div className={`iframe-answer-content ${responsive ? "responsive" : ""}`}>
+      <div className={`iframe-answer-content ${responsive ? "responsive" : ""}`} ref={this.contentRef}>
         <InteractiveIframe key={key} src={url} state={state} answer={answer} width={question.get("width")} height={question.get("height")} />
       </div>
     );
