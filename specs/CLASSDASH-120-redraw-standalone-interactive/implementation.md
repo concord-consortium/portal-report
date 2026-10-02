@@ -292,7 +292,7 @@ Each test was run against `master` and against this step. Five fail on `master`;
 - `js/components/report/iframe-answer.tsx`: `UNSAFE_componentWillReceiveProps` reads `nextProps`, a `showAnswerState` method that bumps `answerStateVersion` only on a change, and a `requestedHistoryId` field that guards the cache callback
 - `test/components/report/iframe-answer_spec.js`: four tests in a new `describe` block
 
-**Estimated diff size**: 18 lines added and 8 removed in source; 110 lines added and 1 changed in the test file
+**Estimated diff size**: 20 lines added and 8 removed in source; 115 lines added and 1 changed in the test file
 
 How it works:
 
@@ -371,11 +371,11 @@ index 7aaf5e8..5787b88 100644
    }
 ```
 
-The tests render `IframeAnswer` with `alwaysOpen`, so the iframe shows without clicking "View Work", and read the iframe from the `iframe-phone` mock the same way as the standalone tests. The history state cache is stubbed so that ids starting with `slow` finish loading only when the test calls them, which is how the late-load test holds one load open.
+The tests render `IframeAnswer` with `alwaysOpen`, so the iframe shows without clicking "View Work", and read the iframe from the `iframe-phone` mock the same way as the standalone tests. The history state cache is stubbed so that ids starting with `slow` finish loading only when the test calls them, which is how the late-load test holds one load open. `finishSlowLoads` checks that exactly one load is held before finishing it, so the test cannot pass with nothing arriving late.
 
 ```diff
 diff --git a/test/components/report/iframe-answer_spec.js b/test/components/report/iframe-answer_spec.js
-index 4d45285..4e4a9d4 100644
+index 4d45285..e75df98 100644
 --- a/test/components/report/iframe-answer_spec.js
 +++ b/test/components/report/iframe-answer_spec.js
 @@ -1,7 +1,10 @@
@@ -390,7 +390,7 @@ index 4d45285..4e4a9d4 100644
  
  const getReportItemAnswerMock = jest.fn();
  
-@@ -59,4 +62,110 @@ describe("<IframeAnswer />", () => {
+@@ -59,4 +62,115 @@ describe("<IframeAnswer />", () => {
        expect(params.get("auth-domain")).toBe("https://learn.example.org");
      });
    });
@@ -425,6 +425,11 @@ index 4d45285..4e4a9d4 100644
 +
 +    let view;
 +    let slowLoads;
++    const finishSlowLoads = () => {
++      const loads = slowLoads.splice(0);
++      expect(loads).toHaveLength(1);
++      loads.forEach(finish => finish());
++    };
 +    const update = (answer, interactiveStateHistoryId) => {
 +      view.rerender(renderAnswer(answer, interactiveStateHistoryId));
 +      return settle();
@@ -488,13 +493,13 @@ index 4d45285..4e4a9d4 100644
 +
 +      await update(makeAnswer(3), "slow1");
 +      await update(makeAnswer(3), "h2");
-+      act(() => slowLoads.forEach(finish => finish()));
++      act(() => finishSlowLoads());
 +      await settle();
 +      expect(shownValue()).toBe("history h2");
 +
 +      await update(makeAnswer(3), "slow2");
 +      await update(makeAnswer(3));
-+      act(() => slowLoads.forEach(finish => finish()));
++      act(() => finishSlowLoads());
 +      await settle();
 +      expect(shownValue()).toBe(3);
 +    });
