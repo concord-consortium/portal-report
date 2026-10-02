@@ -18,7 +18,7 @@ Both components' props-to-state logic stays in `UNSAFE_componentWillReceiveProps
 - `js/containers/report/iframe-standalone-app.js`: new `latestAnswerVersion` and `openedUrlHistoryEntry` state, the new-save check, the selected-entry branch, and a `getIframeKey` helper for the key
 - `test/containers/report/iframe-standalone-app_spec.js`: new, six tests
 
-**Estimated diff size**: 22 lines added and 10 removed in source; a new 156-line test file
+**Estimated diff size**: 23 lines added and 10 removed in source; a new 158-line test file
 
 How it works:
 
@@ -85,8 +85,7 @@ index f3e0627..1183525 100644
 +    const nextVersion = isNewSave ? latestAnswerVersion + 1 : latestAnswerVersion;
 +
 +    if (interactiveStateHistoryId || this.state.interactiveStateHistoryId) {
-+      // A history entry is shown, either still loading or chosen with the scrubber. Keep it on screen, but record the
-+      // latest answer and the histories so the range input can offer them and switching back to latest shows them.
++      // A history entry is shown or loading: keep it, but record the latest answer and histories for the scrubber.
 +      this.setState({ latestAnswer: answer, myInteractiveStateHistories, latestAnswerVersion: nextVersion });
      } else {
 -      this.setState({ isLoadingAnswer: false, latestAnswer: answer, answer, myInteractiveStateHistories });
@@ -236,6 +235,8 @@ describe("<IframeStandaloneApp /> when a new state arrives", () => {
     await update(makeProps(makeAnswer("h3", 3), makeHistories(["h1", "h2", "h3"])));
     expect(iframeCount()).toBe(iframesWhileSelected);
     expect(app.state.answer.get("interactiveStateHistoryId")).toBe("h1");
+    expectScrubberOn(0);
+    expect(view.container.querySelector("input[type='range']").max).toBe("2");
 
     act(() => app.handleSetInteractiveStateHistoryId(undefined));
     await settle();
@@ -279,7 +280,7 @@ describe("<IframeStandaloneApp /> when a new state arrives", () => {
 });
 ```
 
-Each test was run against `master` and against this step. Five fail on `master`; the still-loading test fails on both of its checks independently, rendering an iframe during the load and then showing the latest save (3) instead of the entry once it has loaded. "does not redraw when the shown answer's state is unchanged" passes on `master`, because `master` never redraws; it guards the choice of comparison, and fails if the new-save check compares the answer object (another question's save redraws) or the history id (a touch redraws, and the no-history test fails too), both checked by mutating the check. The scrubber assertion was checked the same way: passing the range input a stale history id (always the first entry) fails it on the index, and expecting the previous entry's time fails it on the text.
+Each test was run against `master` and against this step. Five fail on `master`; the still-loading test fails on both of its checks independently, rendering an iframe during the load and then showing the latest save (3) instead of the entry once it has loaded. "does not redraw when the shown answer's state is unchanged" passes on `master`, because `master` never redraws; it guards the choice of comparison, and fails if the new-save check compares the answer object (another question's save redraws) or the history id (a touch redraws, and the no-history test fails too), both checked by mutating the check. The selected-entry test's scrubber checks fail if that branch stops recording the histories. The scrubber assertion was checked the same way: passing the range input a stale history id (always the first entry) fails it on the index, and expecting the previous entry's time fails it on the text.
 
 ---
 
