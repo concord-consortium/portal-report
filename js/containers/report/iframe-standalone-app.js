@@ -100,6 +100,10 @@ class IframeStandaloneApp extends PureComponent {
 
       if (interactiveStateHistory) {
         interactiveStateHistoryCache.get(sourceKey, interactiveStateHistoryId, (error, data) => {
+          // Each props update before the entry has loaded requests it again, and only the first result applies.
+          if (this.state.openedUrlHistoryEntry) {
+            return;
+          }
           if (error) {
             this.setState({ isLoadingAnswer: false, loadingError: `Error fetching interactive state history data for id: '${interactiveStateHistoryId}': ${error.message}`});
           } else {

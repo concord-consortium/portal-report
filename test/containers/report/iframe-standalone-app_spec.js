@@ -146,6 +146,29 @@ describe("<IframeStandaloneApp /> when a new state arrives", () => {
     expect(app.state.interactiveStateHistoryId).toBe(null);
   });
 
+  it("applies the URL's history entry once when it was requested more than once", async () => {
+    window.history.replaceState({}, "Test", "/?iframeQuestionId=q1&studentId=s1&interactiveStateHistoryId=h1");
+    const urlLoads = [];
+    interactiveStateHistoryCache.get.mockImplementation((sourceKey, id, callback) => {
+      urlLoads.push(() => callback(null, makeAnswer(id, `history ${id}`).toJS()));
+    });
+    const props = makeProps(makeAnswer("h2", 2), makeHistories(["h1", "h2"]));
+    await open(props);
+    await update(props);
+    expect(urlLoads).toHaveLength(2);
+
+    act(() => urlLoads[0]());
+    await settle();
+    expect(shownValue()).toBe("history h1");
+
+    act(() => app.handleSetInteractiveStateHistoryId(undefined));
+    await settle();
+    act(() => urlLoads[1]());
+    await settle();
+    expect(shownValue()).toBe(2);
+    expect(app.state.interactiveStateHistoryId).toBe(null);
+  });
+
   it("keeps focus in the interactive across a redraw, and leaves it alone otherwise", async () => {
     await open(makeProps(makeAnswer("h1", 1), makeHistories(["h1"])));
     const firstIframe = view.container.querySelector("iframe");

@@ -55,12 +55,17 @@ When the teacher has deliberately scrubbed back to an older save, a new save add
 - `getIframeKey` keys the iframe `iframe-<answer id>-<history id>` when an entry is selected and `iframe-<answer id>-latest-<latestAnswerVersion>` otherwise. `latestAnswerVersion` goes up when the latest answer's `answer` value differs from the one in state (compared with Immutable's `is`); the first answer to arrive is not a new save.
 - When an entry is selected or the URL's entry is loading, a props update records only the latest answer, the histories and the version, so the selected entry, its spinner while loading, and the `answer` given to the iframe all stay put.
 - `openedUrlHistoryEntry` is set when the URL's entry is shown, and the URL parameter is ignored from then on.
-- No late-load guard is needed: while an entry loads the view renders only the spinner, without the scrubber, so the teacher cannot pick another entry until the load lands. This depends on a props update leaving `isLoadingAnswer` alone during a load.
+- Scrubber picks need no late-load guard: while an entry loads the view renders only the spinner, without the scrubber, so the teacher cannot pick another entry until the load lands. This depends on a props update leaving `isLoadingAnswer` alone during a load.
+- The URL's entry does need one. The history cache does not merge requests still in flight, so each props update before the entry has loaded requests it again, and a later result could land after the teacher has scrubbed away. Its callback does nothing once `openedUrlHistoryEntry` is set.
 
 ### Inline view (`js/components/report/iframe-answer.tsx`)
 
 - `UNSAFE_componentWillReceiveProps` reads `nextProps`. `showAnswerState` bumps `answerStateVersion` only when the state differs.
 - `requestedHistoryId`, an instance field set before each request, drops a cache callback for an entry the teacher has moved away from. It is not a `this.props` check because the cache calls back synchronously on a hit, while `this.props` still holds the previous props.
+
+### Dashboard answer panel (`js/containers/portal-dashboard/answer.tsx`)
+
+- The panel's scrubber stays on screen while an entry loads, and it passes the loaded entry to `IframeAnswer` as its `answer` prop. Its handler keeps the same kind of `requestedHistoryId` guard, cleared when the panel switches to a new student or question, so a late load can neither replace the latest answer after the teacher returns to it nor leave an older entry's data under a newer selection.
 
 ### Focus (`js/util/iframe-focus.ts`)
 
@@ -68,7 +73,7 @@ When the teacher has deliberately scrubbed back to an older save, a new save add
 
 ### Tests
 
-- `test/containers/report/iframe-standalone-app_spec.js` (7 tests) and a `describe` block in `test/components/report/iframe-answer_spec.js` (5 tests) drive the components through the `iframe-phone` mock: a redraw is a new `ParentEndpoint`, and the shown state is the last `initInteractive` it posted. Shared readers live in `test/iframe-test-helpers.js`, including `focusedElement`, which exists because jest crashes printing jsdom's `document.body` in a failure message.
+- `test/containers/report/iframe-standalone-app_spec.js` (8 tests) and a `describe` block in `test/components/report/iframe-answer_spec.js` (5 tests) drive the components through the `iframe-phone` mock: a redraw is a new `ParentEndpoint`, and the shown state is the last `initInteractive` it posted. `test/containers/portal-dashboard/answer_spec.js` (2 tests) covers the panel's late-load guard. Shared readers live in `test/iframe-test-helpers.js`, including `focusedElement`, which exists because jest crashes printing jsdom's `document.body` in a failure message.
 - Each new test fails with the code it covers removed or mutated, except "does not redraw when the shown answer's state is unchanged", which guards the choice of comparison (it fails if the new-save check compares answer objects or history ids).
 - The Cypress standalone spec runs on fake data with no history or live updates, so it was not extended. A manual check on staging follows the Jira reproduction: the standalone view with and without history, scrubbed and URL-opened views, and the inline view for the saving student and for another student's save.
 
@@ -168,7 +173,7 @@ When the teacher has deliberately scrubbed back to an older save, a new save add
 ---
 
 ### Land the work in three steps
-**Context**: The change is 75 added and 20 removed lines of source across two components and a new helper.
+**Context**: The redraw logic of each view and the focus handling are separable concerns.
 **Options considered**:
 - A) One commit
 - B) One step per view, focus included in each
