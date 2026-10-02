@@ -11,6 +11,7 @@ import config from "../../config";
 import { interactiveStateHistoryCache } from "../../util/interactive-state-history-cache";
 import { InteractiveStateHistoryRangeInput } from "../../components/portal-dashboard/interactive-state-history-range-input";
 import { getObjectStorageConfig } from "../../util/object-storage-config";
+import { focusIframe, iframeHasFocus } from "../../util/iframe-focus";
 
 import "../../../css/report/report-app.less";
 import "../../../css/report/iframe-standalone-app.less";
@@ -34,7 +35,15 @@ class IframeStandaloneApp extends PureComponent {
       openedUrlHistoryEntry: false,
     };
 
+    this.containerRef = React.createRef();
     this.handleSetInteractiveStateHistoryId = this.handleSetInteractiveStateHistoryId.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.refocusIframe && getIframeKey(prevState) !== getIframeKey(this.state)) {
+      this.refocusIframe = false;
+      focusIframe(this.containerRef.current);
+    }
   }
 
   componentDidMount() {
@@ -121,6 +130,7 @@ class IframeStandaloneApp extends PureComponent {
       // A history entry is shown or loading: keep it, but record the latest answer and histories for the scrubber.
       this.setState({ latestAnswer: answer, myInteractiveStateHistories, latestAnswerVersion: nextVersion });
     } else {
+      this.refocusIframe = isNewSave && iframeHasFocus(this.containerRef.current);
       this.setState({
         isLoadingAnswer: false, latestAnswer: answer, answer, myInteractiveStateHistories, latestAnswerVersion: nextVersion
       });
@@ -193,7 +203,7 @@ class IframeStandaloneApp extends PureComponent {
       }
 
       return (
-        <div className="container">
+        <div className="container" ref={this.containerRef}>
           <InteractiveIframe
             key={getIframeKey(this.state)}
             src={url}

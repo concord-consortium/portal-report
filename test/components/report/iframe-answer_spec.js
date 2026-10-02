@@ -5,6 +5,7 @@ import { List, Map } from "immutable";
 import iframePhone from "iframe-phone";
 import { IframeAnswer } from "../../../js/components/report/iframe-answer";
 import { interactiveStateHistoryCache } from "../../../js/util/interactive-state-history-cache";
+import { answerState, settle, iframeCount, shownValue, focusedElement } from "../../iframe-test-helpers";
 
 const getReportItemAnswerMock = jest.fn();
 
@@ -65,7 +66,6 @@ describe("<IframeAnswer />", () => {
 
   describe("when the state to show changes", () => {
     const iframeQuestion = Map({ id: "q1", url: "https://interactive.example.com/", displayInIframe: true });
-    const answerState = value => JSON.stringify({ interactiveState: JSON.stringify({ value }) });
     const makeAnswer = value => Map({ id: "answer1", type: "interactive_state", questionId: "q1", answer: answerState(value) });
     const renderAnswer = (answer, interactiveStateHistoryId) => (
       <IframeAnswer
@@ -81,15 +81,6 @@ describe("<IframeAnswer />", () => {
         sourceKey="source"
       />
     );
-
-    // iframe-phone mock is defined in __mocks__/iframe-phone.ts; it answers the phone after 1ms
-    const settle = () => act(() => new Promise(resolve => setTimeout(resolve, 20)));
-    const iframeCount = () => iframePhone._parentInstances.length;
-    const shownValue = () => {
-      const phone = iframePhone._parentInstances[iframeCount() - 1];
-      const inits = phone.post.mock.calls.filter(([type]) => type === "initInteractive");
-      return inits.length > 0 ? inits[inits.length - 1][1].interactiveState.value : undefined;
-    };
 
     let view;
     let slowLoads;
@@ -170,6 +161,23 @@ describe("<IframeAnswer />", () => {
       act(() => finishSlowLoads());
       await settle();
       expect(shownValue()).toBe(3);
+    });
+
+    it("keeps focus in the interactive across a redraw, and leaves it alone otherwise", async () => {
+      view = render(renderAnswer(makeAnswer(1)));
+      await settle();
+      const firstIframe = view.container.querySelector("iframe");
+      firstIframe.focus();
+      expect(focusedElement()).toBe("iframe");
+
+      await update(makeAnswer(2));
+      const secondIframe = view.container.querySelector("iframe");
+      expect(secondIframe).not.toBe(firstIframe);
+      expect(focusedElement()).toBe("iframe");
+
+      secondIframe.blur();
+      await update(makeAnswer(3));
+      expect(focusedElement()).toBe("page");
     });
 
   });

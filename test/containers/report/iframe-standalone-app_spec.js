@@ -5,11 +5,11 @@ import iframePhone from "iframe-phone";
 import IframeStandaloneApp from "../../../js/containers/report/iframe-standalone-app";
 import { interactiveStateHistoryCache } from "../../../js/util/interactive-state-history-cache";
 import { localDateTime } from "../../../js/util/datetime";
+import { answerState, settle, iframeCount, shownValue, focusedElement } from "../../iframe-test-helpers";
 
 const App = IframeStandaloneApp.WrappedComponent;
 
 const report = Map({ questions: Map({ q1: Map({ id: "q1", url: "https://interactive.example.com/" }) }) });
-const answerState = value => JSON.stringify({ interactiveState: JSON.stringify({ value }) });
 const makeAnswer = (historyId, value) => Map({
   id: "answer1", type: "interactive_state", questionId: "q1", platformUserId: "s1",
   interactiveStateHistoryId: historyId, answer: answerState(value)
@@ -24,15 +24,6 @@ const makeProps = (answer, histories, otherAnswer = otherQuestionAnswer) => ({
   fetchAndObserveData: jest.fn(), report, isFetching: false, error: null, sourceKey: "source",
   answers: Map({ answer1: answer, answer2: otherAnswer }), interactiveStateHistories: histories
 });
-
-// iframe-phone mock is defined in __mocks__/iframe-phone.ts; it answers the phone after 1ms
-const settle = () => act(() => new Promise(resolve => setTimeout(resolve, 20)));
-const iframeCount = () => iframePhone._parentInstances.length;
-const shownValue = () => {
-  const phone = iframePhone._parentInstances[iframeCount() - 1];
-  const inits = phone.post.mock.calls.filter(([type]) => type === "initInteractive");
-  return inits.length > 0 ? inits[inits.length - 1][1].interactiveState.value : undefined;
-};
 
 describe("<IframeStandaloneApp /> when a new state arrives", () => {
   let app;
@@ -155,4 +146,19 @@ describe("<IframeStandaloneApp /> when a new state arrives", () => {
     expect(app.state.interactiveStateHistoryId).toBe(null);
   });
 
+  it("keeps focus in the interactive across a redraw, and leaves it alone otherwise", async () => {
+    await open(makeProps(makeAnswer("h1", 1), makeHistories(["h1"])));
+    const firstIframe = view.container.querySelector("iframe");
+    firstIframe.focus();
+    expect(focusedElement()).toBe("iframe");
+
+    await update(makeProps(makeAnswer("h2", 2), makeHistories(["h1", "h2"])));
+    const secondIframe = view.container.querySelector("iframe");
+    expect(secondIframe).not.toBe(firstIframe);
+    expect(focusedElement()).toBe("iframe");
+
+    secondIframe.blur();
+    await update(makeProps(makeAnswer("h3", 3), makeHistories(["h1", "h2", "h3"])));
+    expect(focusedElement()).toBe("page");
+  });
 });
