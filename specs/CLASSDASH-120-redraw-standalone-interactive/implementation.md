@@ -700,7 +700,7 @@ jsdom does not load iframe documents, so the tests check the parent side only (t
 ## Testing
 
 - `npm test` under Node 16, which is also what CI uses (`.github/workflows/ci.yml`). With all three steps, all 255 tests in 42 suites pass, the twelve new ones included; re-measure on the head commit before quoting a count.
-- `npx eslint` on the changed files is clean after each step. `tsc --noEmit` reports no new errors (the two it reports, in `js/api.ts`, are on `master` too). `webpack --mode production` built with the standalone view's changes; rebuild with all three steps before review.
+- `npx eslint` on the changed files is clean after each step. `tsc --noEmit` reports no new errors (the two it reports, in `js/api.ts`, are on `master` too). `webpack --mode production` builds with all three steps.
 - The Cypress standalone spec (`cypress/integration/standalone-iframe.spec.js`) runs on fake data with no history and no live updates, so it cannot exercise this change and is not extended. Its existing tests must still pass.
 - Manual check on staging, following the Jira reproduction: open a student's answer in the standalone view from the Class Dashboard, have the student save, and confirm the interactive redraws with the new state and the scrubber's thumb and timestamp match it. Then scrub to an older marker, have the student save, and confirm the view stays put until the thumb is moved to the last marker. Then open the view from a dashboard scrubbed to an older marker, move to the last marker, have the student save, and confirm the new state shows. Repeat the first check on an activity without interactive state history. On the Class Dashboard, open "View Work" for one student's answer and have that student save: the inline interactive redraws with the new state. Have a different student save: the open interactive does not reload. Scrub to an older marker and back to the last one: the interactive shows the entry, then the latest answer.
 
@@ -727,7 +727,7 @@ jsdom does not load iframe documents, so the tests check the parent side only (t
 **Decision**: A. B silently disables `UNSAFE_componentWillReceiveProps`, which holds both components' answer logic (verified, see above). C needs state shared between two `InteractiveIframe` instances, since the old one unmounts before the new one mounts, and only the parent knows whether a remount is a redraw of the same answer.
 
 ### RESOLVED: Judgment call: three steps
-**Context**: The whole change is 72 added and 20 removed lines of source across three files and a new helper.
+**Context**: The whole change is 75 added and 20 removed lines of source across two components and a new helper.
 **Options considered**:
 - A) One commit
 - B) One step per view, focus included in each
