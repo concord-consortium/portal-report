@@ -29,13 +29,14 @@ class IframeStandaloneApp extends PureComponent {
       interactiveStateHistory: null,
       myInteractiveStateHistories: null,
       interactiveStateHistoryId: null,
-      // Bumped each time the student saves a new state, so the iframe remounts with it.
+      // Bumped each time the student saves a new state, so the iframe remounts with it when the latest answer is shown.
       latestAnswerVersion: 0,
       // The interactiveStateHistoryId URL parameter picks the entry the view opens on, and only that.
       openedUrlHistoryEntry: false,
     };
 
     this.containerRef = React.createRef();
+    this.refocusIframe = false;
     this.handleSetInteractiveStateHistoryId = this.handleSetInteractiveStateHistoryId.bind(this);
   }
 
@@ -100,7 +101,7 @@ class IframeStandaloneApp extends PureComponent {
 
       if (interactiveStateHistory) {
         interactiveStateHistoryCache.get(sourceKey, interactiveStateHistoryId, (error, data) => {
-          // Each props update before the entry has loaded requests it again, and only the first result applies.
+          // Each props update before the entry has loaded requests it again, and only the first successful result applies.
           if (this.state.openedUrlHistoryEntry) {
             return;
           }
