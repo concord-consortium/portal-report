@@ -26,6 +26,9 @@ interface State {
 }
 
 class Answer extends React.PureComponent<ExtendedAnswerProps, State> {
+  // The history entry whose state was last asked for, so a load that finishes after the teacher moves on is dropped.
+  private requestedHistoryId?: string;
+
   constructor(props: ExtendedAnswerProps) {
     super(props);
 
@@ -44,6 +47,7 @@ class Answer extends React.PureComponent<ExtendedAnswerProps, State> {
     const useNewAnswer = newStudent || newQuestion || (newAnswer && !this.state.interactiveStateHistoryId);
 
     if (useNewAnswer) {
+      this.requestedHistoryId = undefined;
       this.setState({ answer: nextProps.currentAnswer, interactiveStateHistoryId: undefined, error: null });
     }
   }
@@ -67,11 +71,15 @@ class Answer extends React.PureComponent<ExtendedAnswerProps, State> {
 
   handleSetInteractiveStateHistoryId = (newId?: string) => {
     const { sourceKey } = this.props;
+    this.requestedHistoryId = newId;
     this.setState({ interactiveStateHistoryId: newId });
 
     if (newId) {
       this.setState({ error: null });
       interactiveStateHistoryCache.get(sourceKey, newId, (err, state) => {
+        if (this.requestedHistoryId !== newId) {
+          return;
+        }
         if (err) {
           this.setState({ error: err });
         } else {
