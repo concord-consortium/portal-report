@@ -2,6 +2,7 @@ import { createSelector } from "reselect";
 import { fromJS, Map as IMap } from "immutable";
 import { compareStudentsByName, feedbackValidForAnswer } from "../util/misc";
 import { getStudentProgress } from "./dashboard-selectors";
+import { addLearnerModeMarker } from "../util/student-utils";
 import {
   AUTOMATIC_SCORE,
   MAX_SCORE_DEFAULT,
@@ -45,7 +46,8 @@ const newFeedback = (activityMap, studentMap, activityStarted) => {
 
 // Add the students realname to the student record.
 const addRealName = (student) => {
-  return student.set("realName", `${student.get("firstName")} ${student.get("lastName")}`);
+  return student.set("realName",
+    addLearnerModeMarker(`${student.get("firstName")} ${student.get("lastName")}`, student.get("isTeacherPreviewStudent")));
 };
 
 // return existing or now activityFeedback for a student

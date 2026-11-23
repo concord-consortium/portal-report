@@ -3,6 +3,7 @@ import ArrowLeftIcon from "../../../img/svg-icons/arrow-left-icon.svg";
 
 import css from "../../../css/portal-dashboard/student-navigator.less";
 import { getFormattedStudentName } from "../../util/student-utils";
+import { StudentNameWithMarker } from "./student-name-with-marker";
 
 
 interface IProps {
@@ -31,13 +32,12 @@ export const StudentNavigator: React.FC<IProps> = (props) => {
 const StudentName: React.FC<IProps> = (props) => {
   const { students, isAnonymous, currentStudentIndex, nameFirst } = props;
   const studentSelected = currentStudentIndex >= 0;
-  const studentName = studentSelected
-                      ? getFormattedStudentName(isAnonymous, students.get(currentStudentIndex))
-                      : "Student Response";
+  const student = studentSelected ? students.get(currentStudentIndex) : undefined;
+  const studentName = student ? getFormattedStudentName(isAnonymous, student) : "Student Response";
 
   return (
     <div className={`${css.title} ${nameFirst ? css.leftMargin : ""}`} data-cy='student-name'>
-      {!nameFirst && <span className={css.studentLabel}>Student: </span>}{studentName}
+      {!nameFirst && <span className={css.studentLabel}>Student: </span>}<StudentNameWithMarker name={studentName} student={student} />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { getFormattedStudentName } from "../../util/student-utils";
+import { StudentNameWithMarker } from "./student-name-with-marker";
 import { DashboardViewMode, ListViewMode } from "../../util/misc";
 import { TrackEventFunction } from "../../actions";
 
@@ -30,7 +31,7 @@ export class StudentNames extends React.PureComponent<IProps> {
                 <div className={css.name}
                      data-cy="student-name"
                      onClick={this.handleOpenQuestionViewForStudent("ResponseDetails", student.get("id"))}>
-                      {formattedName}
+                      <StudentNameWithMarker name={formattedName} student={student} truncate={true} />
                 </div>
               </div>
             </div>

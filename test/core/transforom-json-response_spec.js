@@ -1,4 +1,4 @@
-import { preprocessResourceJSON } from "../../js/core/transform-json-response";
+import { preprocessResourceJSON, preprocessPortalDataJSON } from "../../js/core/transform-json-response";
 import queryString from "query-string";
 
 jest.mock("../../js/api", () => ({
@@ -166,4 +166,22 @@ describe("preprocessResourceJSON helper", () => {
     });
   });
 
+});
+
+describe("preprocessPortalDataJSON helper", () => {
+  const portalData = (students) => ({ classInfo: { students } });
+
+  it("adds (LM) to the names of a teacher's learner mode account only", () => {
+    const { students } = preprocessPortalDataJSON(portalData([
+      { user_id: 1, first_name: "John", last_name: "Jenkins" },
+      { user_id: 2, first_name: "Test", last_name: "Teacher", is_teacher_preview_student: true },
+      { user_id: 3, first_name: "Amy", last_name: "Galloway", is_teacher_preview_student: false },
+    ])).classInfo;
+    expect(students.map(s => [s.name, s.realName])).toEqual([
+      ["John Jenkins", "John Jenkins"],
+      ["Test Teacher (LM)", "Test Teacher (LM)"],
+      ["Amy Galloway", "Amy Galloway"],
+    ]);
+    expect(students[1].isTeacherPreviewStudent).toBe(true);
+  });
 });

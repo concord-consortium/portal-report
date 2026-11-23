@@ -2,6 +2,7 @@ import { normalize, schema } from "normalizr";
 import humps from "humps";
 import { getPortalBaseUrl, IPortalRawData } from "../api";
 import queryString from "query-string";
+import { addLearnerModeMarker } from "../util/student-utils";
 
 export interface IResource {
   id: string;
@@ -83,6 +84,7 @@ export interface IStudentData {
   username?: string | null;
   id: string;
   userId: number;
+  isTeacherPreviewStudent?: boolean;
 }
 export interface IAnswerData {
   id: string;
@@ -210,7 +212,7 @@ export function preprocessPortalDataJSON(portalData: IPortalRawData): IPortalDat
   const camelizedJson = camelizeKeys(portalData) as unknown as IPortalData;
   camelizedJson.classInfo.students.forEach(student => {
     student.id = student.userId.toString();
-    student.name = `${student.firstName} ${student.lastName}`;
+    student.name = addLearnerModeMarker(`${student.firstName} ${student.lastName}`, student.isTeacherPreviewStudent);
     // Provide additional property in student hash, it's useful for anonymization.
     student.realName = student.name;
   });

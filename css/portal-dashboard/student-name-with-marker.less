@@ -1,0 +1,25 @@
+@import "../mixins";
+
+// The name and the marker are flex items, so only the name shrinks and gets the "…".
+// `display: flex` (not `inline-flex`) lets a parent's hover underline reach the text.
+.truncated {
+  display: flex;
+  min-width: 0;
+
+  .baseName {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .marker {
+    flex-shrink: 0;
+    // Keeps the space before "(LM)", which a flex item would otherwise drop.
+    white-space: pre;
+  }
+}
+
+.screenReaderOnly {
+  .screen-reader-only();
+}

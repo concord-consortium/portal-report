@@ -57,6 +57,7 @@ export interface IStudentRawData {
   last_run: string | null;
   user_id: string;
   username?: string | null;
+  is_teacher_preview_student?: boolean;
 }
 
 export interface IClassTeacherRawData {

@@ -1,4 +1,4 @@
-import { getReportItemAnswer, registerReportItem, RECEIVE_PORTAL_DATA } from "../../js/actions";
+import { getReportItemAnswer, registerReportItem, RECEIVE_PORTAL_DATA, RECEIVE_USER_SETTINGS } from "../../js/actions";
 import report, {ReportState, getLoggingUserName} from "../../js/reducers/report-reducer";
 import iframePhone from "iframe-phone";
 import { Map, fromJS } from "immutable";
@@ -113,6 +113,36 @@ describe("report reducer", () => {
     it("stores an empty list when the class has no teachers", () => {
       const state = report(new ReportState({}), { type: RECEIVE_PORTAL_DATA, response: portalData({}) });
       expect(state.get("clazzTeacherNames").toJS()).toEqual([]);
+    });
+  });
+
+  describe("anonymizing a teacher's learner mode account", () => {
+    const students = [
+      { user_id: 1, first_name: "John", last_name: "Jenkins" },
+      { user_id: 2, first_name: "Test", last_name: "Teacher", is_teacher_preview_student: true },
+    ];
+    const loadedState = report(new ReportState({}), {
+      type: RECEIVE_PORTAL_DATA,
+      response: {
+        offering: { id: 1, teacher: "Kristen Teachername" },
+        classInfo: { id: 3, name: "Test Class", class_hash: "abc", students },
+        userType: "teacher",
+        platformUserId: "1",
+        platformId: "https://example.com",
+        sourceKey: "fake.authoring.system"
+      }
+    });
+    const setAnonymous = (state, anonymous) =>
+      report(state, { type: RECEIVE_USER_SETTINGS, response: { anonymous_report: anonymous } });
+    const names = (state) => state.get("students").toList().map(s => s.get("name")).toJS();
+
+    it("keeps the student number and adds (LM) when anonymous is on", () => {
+      expect(names(setAnonymous(loadedState, true))).toEqual(["Student 1", "Student 2 (LM)"]);
+    });
+
+    it("gives back the real name with (LM) when anonymous is turned off", () => {
+      const state = setAnonymous(setAnonymous(loadedState, true), false);
+      expect(names(state)).toEqual(["John Jenkins", "Test Teacher (LM)"]);
     });
   });
 });
