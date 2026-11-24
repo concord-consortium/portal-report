@@ -2,6 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { fromJS } from "immutable";
 import { StudentNames } from "../../../js/components/portal-dashboard/student-names";
+import { shownText } from "../../student-name-test-helpers";
 
 describe("<StudentNames />", () => {
   const students = fromJS([
@@ -20,19 +21,16 @@ describe("<StudentNames />", () => {
         trackEvent={jest.fn()}
       />
     );
-  // Leaves out the text that only screen readers get. Styles map to their own class names in tests.
   const shownNames = (container: HTMLElement) =>
-    Array.from(container.querySelectorAll("[data-cy=student-name]")).map(el => {
-      const copy = el.cloneNode(true) as Element;
-      copy.querySelectorAll(".screenReaderOnly").forEach(hidden => hidden.remove());
-      return copy.textContent;
-    });
+    Array.from(container.querySelectorAll("[data-cy=student-name]")).map(shownText);
 
   it("marks a teacher's learner mode account with (LM), with a tooltip on LM only", () => {
-    const { container, getAllByTitle } = renderStudentNames(false);
+    const { container, getAllByTitle, getByText } = renderStudentNames(false);
     expect(shownNames(container)).toEqual(["Jenkins, John", "Teacher, Test (LM)"]);
     const tooltips = getAllByTitle("Learner Mode user");
     expect(tooltips.map(el => [el.tagName, el.textContent])).toEqual([["ABBR", "LM"]]);
+    // The list cuts off long names. Only the `baseName` part may shrink, so "(LM)" stays visible.
+    expect(getByText("Teacher, Test").className).toBe("baseName");
   });
 
   it("keeps the marker and tooltip when names are anonymized", () => {

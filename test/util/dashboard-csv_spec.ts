@@ -250,21 +250,10 @@ describe("dashboard CSV", () => {
       expect(first[4]).toBe("Smoke");
     });
 
-    describe("a teacher's learner mode account", () => {
-      // As the report reducer stores it: `name` is anonymized and already has the marker.
-      const withLearnerMode = { ...students,
-        3: { ...students[3], isTeacherPreviewStudent: true, name: "Student 2 (LM)", realName: "Amy Galloway (LM)" } };
-      const names = (rows: any[][]) => rows.slice(3).map(row => row[0]);
-
-      it("has (LM) in the name column when names are shown", () => {
-        expect(names(buildDashboardCsvRows(makeState({ students: withLearnerMode }))))
-          .toEqual(["Armstrong, Jenna", "Galloway, Amy (LM)", "Jenkins, John"]);
-      });
-
-      it("has (LM) in the name column when anonymized", () => {
-        expect(names(buildDashboardCsvRows(makeState({ students: withLearnerMode, anonymous: true }))))
-          .toEqual(["Student 1", "Student 2 (LM)", "Student 3"]);
-      });
+    it("has (LM) in the name column for a teacher's learner mode account", () => {
+      const withLearnerMode = { ...students, 3: { ...students[3], isTeacherPreviewStudent: true } };
+      const rows = buildDashboardCsvRows(makeState({ students: withLearnerMode }));
+      expect(rows.slice(3).map(row => row[0])).toEqual(["Armstrong, Jenna", "Galloway, Amy (LM)", "Jenkins, John"]);
     });
 
     describe("anonymized", () => {

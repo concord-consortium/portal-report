@@ -2,15 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { Map } from "immutable";
 import { StudentNameWithMarker } from "../../../js/components/portal-dashboard/student-name-with-marker";
-
-// Styles map to their own class names in tests.
-const textWithout = (element: Element, selector: string) => {
-  const copy = element.cloneNode(true) as Element;
-  copy.querySelectorAll(selector).forEach(el => el.remove());
-  return copy.textContent;
-};
-const shownText = (element: Element) => textWithout(element, ".screenReaderOnly");
-const screenReaderText = (element: Element) => textWithout(element, "[aria-hidden=true]");
+import { screenReaderText, shownText } from "../../student-name-test-helpers";
 
 describe("<StudentNameWithMarker />", () => {
   it("puts the tooltip on LM for a learner mode account", () => {
