@@ -4,6 +4,7 @@ import FeedbackBox from "./feedback-box";
 import ScoreBox from "./score-box";
 import StudentReportLink from "./student-report-link";
 import { isAutoScoring } from "../../util/scoring-constants";
+import { StudentNameWithMarker } from "../portal-dashboard/student-name-with-marker";
 
 export default class ActivityFeedbackRow extends PureComponent {
   constructor(props) {
@@ -146,7 +147,6 @@ export default class ActivityFeedbackRow extends PureComponent {
   render() {
     const { studentActivityFeedback, activityIndex } = this.props;
     const student = studentActivityFeedback.get("student");
-    const name = student.get("realName");
     const started = studentActivityFeedback.get("activityStarted");
     const noFeedbackSection =
       <p>
@@ -160,7 +160,7 @@ export default class ActivityFeedbackRow extends PureComponent {
     return (
       <div className="feedback-row">
         <div className="student-answer">
-          <h3>{name}'s work</h3>
+          <h3><StudentNameWithMarker name={student.get("realName")} student={student} />'s work</h3>
           <p>
             <StudentReportLink activityIndex={activityIndex} student={student} started={started} />
           </p>

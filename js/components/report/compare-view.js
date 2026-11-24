@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { Set } from "immutable";
 import Answer from "./answer";
 import { CompareAnswerRmLinkContainer } from "../../containers/report/compare-answer";
+import { StudentNameWithMarker } from "../portal-dashboard/student-name-with-marker";
 
 import "../../../css/report/compare-view.less";
 
@@ -35,7 +36,7 @@ export default class CompareView extends PureComponent {
           {answers.map(a =>
             <div className={this.answerClassName(a)} key={a.get("id")}>
               <div>
-                <strong>{a.getIn(["student", "name"])}</strong>
+                <strong><StudentNameWithMarker name={a.getIn(["student", "name"])} student={a.get("student")} /></strong>
                 <div className="controls">
                   <CompareAnswerRmLinkContainer answer={a}>Remove</CompareAnswerRmLinkContainer>
                   {" | "}

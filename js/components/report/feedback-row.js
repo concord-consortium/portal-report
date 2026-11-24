@@ -3,6 +3,7 @@ import Answer from "./answer";
 import FeedbackBox from "./feedback-box";
 import ScoreBox from "./score-box";
 import { feedbackValidForAnswer, answerHash } from "../../util/misc";
+import { StudentNameWithMarker } from "../portal-dashboard/student-name-with-marker";
 
 export default class FeedbackRow extends PureComponent {
   constructor(props) {
@@ -92,12 +93,12 @@ export default class FeedbackRow extends PureComponent {
   render() {
     const { answer, question } = this.props;
     const answered = answer.get("answer");
-    const name = answer.get("student").get("realName");
+    const student = answer.get("student");
 
     return (
       <div className="feedback-row">
         <div className="student-answer">
-          <h3>{name}'s Answer</h3>
+          <h3><StudentNameWithMarker name={student.get("realName")} student={student} />'s Answer</h3>
           <Answer answer={answer} question={question} />
         </div>
         { answered ? this.renderFeedbackSection(answer) : null }
