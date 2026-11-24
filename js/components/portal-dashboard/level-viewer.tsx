@@ -82,7 +82,8 @@ export class LevelViewer extends React.PureComponent<IProps> {
     return (
       <div key={activity.get("id")} className={css.animateLevelButton} data-cy="collapsed-activity-button">
         <div className={css.activityButton}>
-          <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}>
+          <div className={css.activityInnerButton} onClick={this.handleActivityButtonClick(activity.get("id"))}
+            data-cy="activity-toggle">
             <div className={css.activityTitle} title={`${idx + 1} ${activity.get("name")}`}>
               <LinesEllipsis
                 text={`${idx + 1}: ${activity.get("name")}`}

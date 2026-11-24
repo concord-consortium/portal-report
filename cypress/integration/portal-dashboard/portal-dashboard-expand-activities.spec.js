@@ -1,5 +1,13 @@
 import { getByCypressTag } from "../../utils";
 
+// A collapsed activity button animates its size for 0.5 seconds. Its click handler is on an inner part,
+// so a click on the button's center while it is still changing size can miss that part. So wait until
+// the button has its collapsed width, then click the inner part.
+const clickFirstCollapsedActivity = () => {
+  cy.get('[data-cy=collapsed-activity-button]').first().should('have.css', 'width', '125px')
+    .find('[data-cy=activity-toggle]').click();
+};
+
 context("Portal Dashboard Activity Buttons",() =>{
     before(()=>{
         cy.visit("/?portal-dashboard");
@@ -17,7 +25,7 @@ context("Portal Dashboard Activity Buttons",() =>{
       cy.get('[data-cy=activity-question-button]').should('be.visible');
       cy.get('[data-cy=activity-question-button]').should('have.length', 7);
       cy.get('[data-cy=activity-question-button]').first().should("contain", "Q1");
-      cy.get('[data-cy=collapsed-activity-button]').first().click();
+      clickFirstCollapsedActivity();
       cy.get('[data-cy=collapsed-activity-button]').should('have.length', 1);
       cy.get('[data-cy=collapsed-activity-button]').first().should("contain", "Report Test Activity 1");
       cy.get('[data-cy=expanded-activity-button]').should('have.length', 1);
@@ -36,7 +44,7 @@ context("Portal Dashboard Activity Buttons",() =>{
         .should('have.attr', 'href')
         .and('include', 'http://app.lara.docker/activities/9');
 
-      cy.get('[data-cy=collapsed-activity-button]').first().click();
+      clickFirstCollapsedActivity();
 
       cy.get('[data-cy=collapsed-activity-button]')
         .first()
