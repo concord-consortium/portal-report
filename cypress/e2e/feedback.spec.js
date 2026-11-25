@@ -19,8 +19,6 @@ describe("Provide Feedback", function() {
       win.firebase = firebase;
     });
 
-    cy.server();
-
     // Return the fake report data
     // cy.route({
     //   method: "GET",
@@ -36,11 +34,7 @@ describe("Provide Feedback", function() {
     // });
 
     // On first load portal-report does a PUT request to save some report settings
-    cy.route({
-      method: "PUT",
-      url: "/",
-      response: {}
-    }).as("putReportSettings");
+    cy.intercept("PUT", "/", {}).as("putReportSettings");
 
     cy.visit("/?token=12345&enableFirestorePersistence=true&clearFirestorePersistence=true");
   });
