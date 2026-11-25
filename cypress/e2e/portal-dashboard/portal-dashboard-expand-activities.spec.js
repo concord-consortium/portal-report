@@ -3,6 +3,7 @@ import { getByCypressTag } from "../../utils";
 // A collapsed activity button animates its size for 0.5 seconds. Its click handler is on an inner part,
 // so a click on the button's center while it is still changing size can miss that part. So wait until
 // the button has its collapsed width, then click the inner part.
+// The width must match `.animateLevelButton` in css/portal-dashboard/level-viewer.less.
 const clickFirstCollapsedActivity = () => {
   cy.get('[data-cy=collapsed-activity-button]').first().should('have.css', 'width', '125px')
     .find('[data-cy=activity-toggle]').click();
