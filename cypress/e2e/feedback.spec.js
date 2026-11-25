@@ -8,8 +8,8 @@ describe("Provide Feedback", function() {
   const feedback = new Feedback();
 
   beforeEach(() => {
-    // cypress currently doesn't handle window.fetch so:
-    // disable browser's fetch this way the fetch polyfill is used which uses XHR
+    // Remove the browser's own fetch before the page loads. Then the whatwg-fetch polyfill, which
+    // isomorphic-fetch loads in js/api.ts, installs its own fetch, which uses XHR.
     cy.on("window:before:load", win => {
       win.fetch = null;
     });
@@ -18,8 +18,6 @@ describe("Provide Feedback", function() {
       // expose firebase to the window to help with debugging tests
       win.firebase = firebase;
     });
-
-    cy.server();
 
     // Return the fake report data
     // cy.route({
@@ -34,13 +32,6 @@ describe("Provide Feedback", function() {
     //   url: "/sample-rubric.json",
     //   response: sampleRubric
     // });
-
-    // On first load portal-report does a PUT request to save some report settings
-    cy.route({
-      method: "PUT",
-      url: "/",
-      response: {}
-    }).as("putReportSettings");
 
     cy.visit("/?token=12345&enableFirestorePersistence=true&clearFirestorePersistence=true");
   });
@@ -332,22 +323,5 @@ describe("Provide Feedback", function() {
     cy.get(".act-feedback-panel").should("contain", "Your work was great!");
     cy.get(".act-feedback-panel .studentScore").should("contain", "7");
     cy.get(".act-feedback-panel .maxScore").should("contain", "17");
-  });
-
-  // with the switch to firestore this test needs to be updated
-  it.skip("Shows error if feedback fails to send", function() {
-    // This is the first put that happens when the UI is initialized
-    cy.wait("@putReportSettings");
-
-    cy.route({
-      method: "PUT",
-      url: "/",
-      status: 403,
-      response: {}
-    });
-
-    cy.get(".question [data-cy=feedbackButton]").first().click();
-    cy.get("[data-cy=feedbackBox]").first().clear().type("Your answer was great!").blur();
-    cy.contains("Connection to server failed");
   });
 });

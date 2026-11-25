@@ -23,7 +23,6 @@ jobs:
           flags: jest
   cypress:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node16.14.2-slim-chrome103-ff102
     strategy:
       # when one test fails, DO NOT cancel the other
       # containers, because this will kill Cypress processes
@@ -35,11 +34,16 @@ jobs:
         containers: [1, 2, 3]
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - uses: cypress-io/github-action@v2
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+      - uses: cypress-io/github-action@v7
         with:
           start: npm start
           wait-on: 'http://localhost:8080'
+          # seconds; the webpack build takes a while
+          wait-on-timeout: 300
           parallel: true
           record: true
         env:
