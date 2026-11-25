@@ -5,6 +5,7 @@ import { AnonymizeStudents } from "../anonymize-students";
 import { getQuestionIcon } from "../../../util/question-utils";
 import Answer from "../../../containers/portal-dashboard/answer";
 import { getFormattedStudentName } from "../../../util/student-utils";
+import { StudentNameWithMarker } from "../student-name-with-marker";
 import SpotlightIcon from "../../../../img/svg-icons/spotlight-icon.svg";
 import AssignmentIcon from "../../../../img/svg-icons/assignment-icon.svg";
 import SmallCloseIcon from "../../../../img/svg-icons/small-close-icon.svg";
@@ -107,7 +108,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
             const fillColorClass = colorGroup != null ? spotlightColors[colorGroup].fill: "";
             return (
               <div className={css.studentRow} key={`student ${i}`} data-cy="student-row">
-                {this.renderStudentNameWrapper(student.get("id"), formattedName, backgroundColorClass, fillColorClass)}
+                {this.renderStudentNameWrapper(student, formattedName, backgroundColorClass, fillColorClass)}
                 <div className={`${css.studentResponse} ${backgroundColorClass}`} data-cy="student-response">
                   <Answer question={currentQuestion} student={student} responsive={false} trackEvent={trackEvent} />
                 </div>
@@ -119,7 +120,8 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
     );
   }
 
-  private renderStudentNameWrapper(studentId: string, formattedName: string, backgroundColorClass: string, fillColorClass: string) {
+  private renderStudentNameWrapper(student: Map<any, any>, formattedName: string, backgroundColorClass: string, fillColorClass: string) {
+    const studentId = student.get("id");
     return (
       <div className={`${css.studentWrapper} ${backgroundColorClass}`}>
         <div onClick={this.handleSelect(studentId)} className={css.spotlightSelectionCheckbox} data-cy="spotlight-selection-checkbox">
@@ -128,7 +130,7 @@ export class SpotlightStudentListDialog extends React.PureComponent<IProps>{
         <div className={css.spotlightBadge} onClick={this.handleSpotlightColorSelect(studentId)} data-cy="spotlight-badge">
           <SpotlightIcon className={`${css.listSpotlightIcon} ${fillColorClass}`} />
         </div>
-        <div className={css.studentName} data-cy="student-name">{formattedName}</div>
+        <div className={css.studentName} data-cy="student-name"><StudentNameWithMarker name={formattedName} student={student} /></div>
       </div>
     );
   }

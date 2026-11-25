@@ -1,5 +1,7 @@
 import React, { PureComponent } from "react";
 import { Map } from "immutable";
+import { getFormattedStudentName } from "../../util/student-utils";
+import { StudentNameWithMarker } from "../portal-dashboard/student-name-with-marker";
 
 import css from "../../../css/dashboard/student-name.less";
 
@@ -21,7 +23,7 @@ export default class StudentName extends PureComponent {
     return (
       <div className={css.studentName + " " + (expanded ? css.expanded : "")} onClick={this.onStudentNameClick} data-cy="studentName">
         <div className={css.content}>
-          { student.get("lastName") }, { student.get("firstName")}
+          <StudentNameWithMarker name={getFormattedStudentName(false, student)} student={student} truncate={true} />
         </div>
       </div>
     );

@@ -3,6 +3,7 @@ import { Map } from "immutable";
 import { ActivityFeedbackTextarea } from "./activity-feedback-textarea";
 import { ActivityFeedbackScore } from "./activity-feedback-score";
 import { getFormattedStudentName } from "../../../util/student-utils";
+import { StudentNameWithMarker } from "../student-name-with-marker";
 import { RubricTableContainer } from "./rubric-table";
 import AwaitingFeedbackActivityBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-activity-badge-icon.svg";
 import GivenFeedbackActivityBadgeIcon from "../../../../img/svg-icons/given-feedback-activity-badge-icon.svg";
@@ -88,7 +89,7 @@ export const ActivityLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             {activityStarted && feedbackBadge}
           </div>
           <div className={css.studentName} data-cy="student-name">
-            {formattedName}
+            <StudentNameWithMarker name={formattedName} student={student} />
           </div>
         </div>
         {!hideLastRun &&

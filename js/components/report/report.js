@@ -4,6 +4,7 @@ import Button from "../common/button";
 
 import "../../../css/report/report.less";
 import Sticky from "react-stickynode";
+import { StudentNameWithMarker } from "../portal-dashboard/student-name-with-marker";
 
 const MAX_STUDENT_REPORTS = 20;
 
@@ -35,12 +36,12 @@ export default class Report extends PureComponent {
     document.title = `${reportTree.get("name")} ${title}`;
   }
 
-  renderReportHeader(clazzName) {
+  renderReportHeader(title) {
     return (
       <Sticky top={0} className="main" activeClass="active">
         <div className="report-header">
           <div className="title">
-            <h1>Report for: {clazzName}</h1>
+            <h1>Report for: {title}</h1>
           </div>
           {this.renderControls()}
         </div>
@@ -77,7 +78,7 @@ export default class Report extends PureComponent {
     }
     return studentsToRender.map(s =>
         <div key={s.get("id")} className="report-content">
-          {this.renderReportHeader(s.get("name"))}
+          {this.renderReportHeader(<StudentNameWithMarker name={s.get("name")} student={s} />)}
           <Sequence sequence={reportTree} reportFor={s} />
         </div>
       );

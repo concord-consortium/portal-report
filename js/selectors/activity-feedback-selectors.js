@@ -43,11 +43,6 @@ const newFeedback = (activityMap, studentMap, activityStarted) => {
   return fromJS(newFeedbackRecord);
 };
 
-// Add the students realname to the student record.
-const addRealName = (student) => {
-  return student.set("realName", `${student.get("firstName")} ${student.get("lastName")}`);
-};
-
 // return existing or now activityFeedback for a student
 // Includes merged student data
 const activityFeedbackFor = (activity, student, feedbacks, progress) => {
@@ -63,8 +58,7 @@ const activityFeedbackFor = (activity, student, feedbacks, progress) => {
 };
 
 const formatStudents = (students) => students
-  .sort((student1, student2) => compareStudentsByName(student1, student2))
-  .map(s => addRealName(s));
+  .sort((student1, student2) => compareStudentsByName(student1, student2));
 
 const getActivitySettings = (feedbackSettings, activity) =>
   feedbackSettings.getIn(["activitySettings", activity.get("id")]) || IMap({});

@@ -4,6 +4,7 @@ import { CompareAnswerCheckboxContainer } from "./compare-answer";
 import ShowCompareContainer from "./show-compare";
 import { connect } from "react-redux";
 import { fromJS, Map } from "immutable";
+import { StudentNameWithMarker } from "../../components/portal-dashboard/student-name-with-marker";
 
 import "../../../css/report/answers-table.less";
 
@@ -84,7 +85,7 @@ function AnswerRow({student, answer, question, feedback, showScore, showFeedback
 
   return (
     <tr>
-      <td>{student.get("name")}</td>
+      <td><StudentNameWithMarker name={student.get("name")} student={student} /></td>
       <td> <Answer answer={answer} question={question} /> </td>
       {feedbackTD}
       {scoreTD}

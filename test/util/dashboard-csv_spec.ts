@@ -250,6 +250,12 @@ describe("dashboard CSV", () => {
       expect(first[4]).toBe("Smoke");
     });
 
+    it("has (LM) in the name column for a teacher's learner mode account", () => {
+      const withLearnerMode = { ...students, 3: { ...students[3], isTeacherPreviewStudent: true } };
+      const rows = buildDashboardCsvRows(makeState({ students: withLearnerMode }));
+      expect(rows.slice(3).map(row => row[0])).toEqual(["Armstrong, Jenna", "Galloway, Amy (LM)", "Jenkins, John"]);
+    });
+
     describe("anonymized", () => {
       const expectAnonymized = (anonRows: any[][]) => {
         const anonStudents = anonRows.slice(3);

@@ -4,6 +4,7 @@ import Answer from "../../../containers/portal-dashboard/answer";
 import { QuestionFeedbackTextarea } from "./question-feedback-textarea";
 import { feedbackValidForAnswer } from "../../../util/misc";
 import { getFormattedStudentName } from "../../../util/student-utils";
+import { StudentNameWithMarker } from "../student-name-with-marker";
 import AwaitingFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/awaiting-feedback-question-badge-icon.svg";
 import GivenFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/given-feedback-question-badge-icon.svg";
 import UpdateFeedbackQuestionBadgeIcon from "../../../../img/svg-icons/update-feedback-question-badge-icon.svg";
@@ -65,7 +66,7 @@ export const QuestionLevelFeedbackStudentRows: React.FC<IProps> = (props) => {
             { answer && feedbackBadge }
           </div>
           <div className={css.studentName} data-cy="student-name">
-            {formattedName}
+            <StudentNameWithMarker name={formattedName} student={student} />
           </div>
         </div>
         {!hideLastRun &&

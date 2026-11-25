@@ -1,6 +1,7 @@
 import Immutable, { Map, List, Set } from "immutable";
 import queryString from "query-string";
 import { RecordFactory } from "../util/record-factory";
+import { addLearnerModeMarker } from "../util/student-utils";
 
 import {
   normalizeResourceJSON,
@@ -401,7 +402,9 @@ function setUserSettings(state: ReportState, response: any) {
 function setAnonymous(state: ReportState, anonymous: boolean) {
   let idx = 1;
   const newStudents = state.get("students")
-    .map(s => s.set("name", anonymous ? `Student ${idx++}` : s.get("realName"))) as Map<any, any>;
+    .map(s => s.set("name", anonymous
+      ? addLearnerModeMarker(`Student ${idx++}`, s.get("isTeacherPreviewStudent"))
+      : s.get("realName"))) as Map<any, any>;
   return state.set("anonymous", anonymous).set("students", newStudents);
 }
 
