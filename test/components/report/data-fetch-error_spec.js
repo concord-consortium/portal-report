@@ -61,5 +61,5 @@ describe("<DataFetchError />", () => {
 
   // The data fetch error also supports an error which is the response from a fetch
   // in this case the error.body is a ReadableStream. This is tested by
-  // cypress/integration/api-error.spec.js
+  // cypress/e2e/api-error.spec.js
 });
